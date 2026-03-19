@@ -1,0 +1,3198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MÉTHODE AXE — Programme de Préparation Mentale</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+:root {
+  --gold: #A8852A;
+  --gold-light: #C9A84C;
+  --gold-dark: #7A6020;
+  --gold-xdark: #5A4418;
+  --gold-faint: rgba(168,133,42,0.07);
+  --bg: #F8F4EE;
+  --bg-2: #F2EDE4;
+  --bg-3: #EAE3D8;
+  --bg-4: #E2D9CC;
+  --bg-card: #FDFAF5;
+  --border: rgba(168,133,42,0.18);
+  --border-strong: rgba(168,133,42,0.32);
+  --white: #1C1510;
+  --white-dim: #5A4E3E;
+  --white-faint: #C8BFB0;
+  --red: #C0392B;
+  --success: #27AE60;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  overflow-x:hidden;
+}
+
+button,.axe-btn,.choice-option,.sacrifice-level,.module-nav-item:not(.locked),
+.intro-btn,select,input[type="range"]{cursor:pointer!important;}
+
+/* ─── INTRO ──────────────────────────────────────────── */
+#intro{
+  position:fixed;inset:0;
+  background:#F5F0E8;
+  z-index:1000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 1.2s ease;
+  pointer-events:all;
+  overflow:hidden;
+}
+#intro::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 50%, rgba(168,133,42,0.1) 0%, transparent 70%);
+  pointer-events:none;
+}
+.intro-axe{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(100px,18vw,200px);
+  color:transparent;
+  -webkit-text-stroke:2px var(--gold-dark);
+  letter-spacing:0.18em;
+  line-height:1;
+  animation:revealText 1.8s ease forwards 0.4s;
+  opacity:0;
+  position:relative;z-index:1;
+}
+@keyframes revealText{
+  from{opacity:0;transform:scaleX(0.85);letter-spacing:0.05em;}
+  to{opacity:1;transform:scaleX(1);letter-spacing:0.18em;}
+}
+.intro-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(12px,1.8vw,18px);
+  letter-spacing:0.45em;
+  text-transform:uppercase;
+  color:#5A4E3E;
+  margin-top:12px;
+  opacity:0;
+  animation:fadeUp 1s ease forwards 1.8s;
+  position:relative;z-index:1;
+}
+.intro-coach-line{
+  font-size:12px;
+  letter-spacing:0.3em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-top:10px;
+  opacity:0;
+  animation:fadeUp 1s ease forwards 2.2s;
+  font-family:'Cormorant Garamond',serif;
+  position:relative;z-index:1;
+}
+.intro-divider{
+  width:1px;height:0;
+  background:linear-gradient(to bottom, var(--gold), transparent);
+  margin:36px auto;
+  animation:growLine 1s ease forwards 2.6s;
+  position:relative;z-index:1;
+}
+@keyframes growLine{to{height:70px;}}
+.intro-btn{
+  opacity:0;
+  animation:fadeUp 1s ease forwards 3s;
+  background:var(--gold);
+  border:none;
+  color:#1C1510;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  padding:16px 52px;
+  transition:background 0.3s;
+  position:relative;z-index:1;
+}
+.intro-btn:hover{background:var(--gold-light);}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ─── HEADER ─────────────────────────────────────────── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(248,244,238,0.97);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 0 var(--border),0 4px 24px rgba(0,0,0,0.06);
+}
+.header-left{display:flex;align-items:center;gap:20px;}
+.logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;letter-spacing:0.25em;
+  color:var(--gold);line-height:1;
+}
+.logo span{
+  font-family:'Cormorant Garamond',serif;
+  font-size:10px;letter-spacing:0.35em;
+  color:var(--white-dim);
+  display:block;text-transform:uppercase;margin-top:2px;
+}
+.header-sep{width:1px;height:28px;background:var(--border);}
+.header-athlete{font-size:11px;color:var(--white-dim);letter-spacing:0.05em;}
+.header-athlete strong{display:block;color:var(--white);font-size:12px;font-weight:400;}
+.header-right{display:flex;align-items:center;gap:12px;}
+.header-month{
+  background:rgba(168,133,42,0.06);
+  border:1px solid var(--border-strong);
+  padding:5px 12px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:11px;letter-spacing:0.2em;color:var(--gold);
+}
+.progress-global{display:flex;gap:4px;align-items:center;}
+.prog-module{
+  width:28px;height:3px;
+  background:var(--white-faint);
+  transition:background 0.4s;
+  border-radius:1px;
+}
+.prog-module.active{background:var(--gold);}
+.prog-module.done{background:var(--gold-dark);}
+
+/* ─── LAYOUT ─────────────────────────────────────────── */
+.main-container{
+  padding-top:68px;
+  display:grid;
+  grid-template-columns:288px 1fr;
+  min-height:100vh;
+}
+
+/* ─── SIDEBAR ────────────────────────────────────────── */
+.sidebar{
+  border-right:1px solid var(--border);
+  background:var(--bg-2);
+  position:sticky;top:68px;
+  height:calc(100vh - 68px);
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+.sidebar::-webkit-scrollbar{width:2px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--gold-xdark);}
+.sidebar::-webkit-scrollbar-track{background:transparent;}
+
+.sidebar-logo-area{
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-tag{
+  font-size:9px;letter-spacing:0.4em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+}
+
+/* Coach card */
+.coach-card{
+  background:var(--bg-3);
+  border:1px solid var(--border-strong);
+  padding:16px;
+  margin-bottom:12px;
+  position:relative;overflow:hidden;
+}
+.coach-card::before{
+  content:'';position:absolute;top:0;left:0;
+  width:2px;height:100%;
+  background:linear-gradient(to bottom,var(--gold),transparent);
+}
+.coach-card-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.coach-avatar{
+  width:38px;height:38px;
+  border:1px solid var(--gold-dark);
+  border-radius:50%;
+  background:var(--bg-3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);
+  flex-shrink:0;
+}
+.coach-name{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:0.15em;color:var(--white);}
+.coach-title{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-top:1px;}
+.coach-cred{
+  font-size:10px;color:var(--white-dim);
+  display:flex;align-items:flex-start;gap:6px;line-height:1.5;margin-bottom:5px;
+}
+.coach-cred::before{content:'—';color:var(--gold-dark);flex-shrink:0;}
+
+/* Next call */
+.call-card{
+  background:linear-gradient(135deg,rgba(168,133,42,0.1),rgba(168,133,42,0.04));
+  border:1px solid var(--border-strong);
+  padding:14px;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.call-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.call-label{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+.call-info{font-size:10px;color:var(--white-dim);line-height:1.5;}
+
+/* Nav */
+.sidebar-nav-section{
+  padding:14px 20px 4px;
+  font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--white-faint);
+}
+.module-nav{}
+.module-nav-item{
+  padding:10px 20px;
+  display:flex;align-items:center;gap:12px;
+  transition:background 0.2s;
+  border-left:2px solid transparent;
+}
+.module-nav-item.active{background:rgba(168,133,42,0.08);border-left-color:var(--gold);}
+.module-nav-item.completed .mod-icon{background:var(--gold);color:#FDFAF5;border-color:var(--gold);}
+.module-nav-item.locked{opacity:0.28;cursor:not-allowed!important;}
+.module-nav-item:not(.locked):hover{background:rgba(168,133,42,0.05);}
+.mod-icon{
+  width:26px;height:26px;border:1px solid var(--gold-dark);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--gold);
+  flex-shrink:0;background:var(--bg-4);transition:all 0.3s;
+}
+.mod-info{flex:1;min-width:0;}
+.mod-name{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--white);}
+.mod-desc{font-size:9px;color:var(--white-dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mod-lock{font-size:10px;color:var(--white-dim);}
+.mod-progress-bar{height:2px;background:rgba(168,133,42,0.1);margin-top:5px;border-radius:1px;overflow:hidden;}
+.mod-progress-fill{height:100%;background:var(--gold);border-radius:1px;width:0%;transition:width 0.5s ease;}
+
+/* Sidebar footer */
+.sidebar-footer{
+  margin-top:auto;
+  padding:16px 20px;
+  border-top:1px solid var(--border);
+}
+.sidebar-footer-line{font-size:10px;color:var(--white-faint);letter-spacing:0.1em;margin-bottom:4px;}
+
+/* ─── CONTENT AREA ───────────────────────────────────── */
+.content-area{
+  padding:52px 72px 80px;
+  background:var(--bg);
+  min-width:0;
+}
+
+/* ─── MODULE HEADER ──────────────────────────────────── */
+.module-view{display:none;}
+.module-view.active{display:block;}
+
+.module-header{
+  margin-bottom:48px;
+  padding-bottom:32px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.module-header::after{
+  content:'';position:absolute;bottom:-1px;left:0;
+  width:60px;height:1px;background:var(--gold);
+}
+.module-tag{
+  font-size:9px;letter-spacing:0.45em;text-transform:uppercase;
+  color:var(--gold-dark);display:block;margin-bottom:16px;
+}
+.module-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(44px,5vw,64px);
+  letter-spacing:0.06em;
+  color:var(--white);
+  line-height:1;
+  margin-bottom:12px;
+}
+.module-subtitle{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-style:italic;
+  color:var(--white-dim);
+  line-height:1.5;
+}
+
+/* ─── SECTION BLOCKS ─────────────────────────────────── */
+.section-block{
+  opacity:0;transform:translateY(16px);
+  transition:opacity 0.5s ease,transform 0.5s ease;
+  margin-bottom:0;
+}
+.section-block.visible{opacity:1;transform:translateY(0);}
+
+/* ─── VIDEO BLOCK ────────────────────────────────────── */
+.video-block{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  overflow:hidden;
+  margin-bottom:40px;
+}
+.video-placeholder{
+  aspect-ratio:16/9;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--bg-3);
+  cursor:pointer;gap:12px;
+}
+.video-placeholder-icon{
+  width:56px;height:56px;
+  border:1px solid var(--gold);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--gold);
+}
+.video-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--white-dim);}
+.video-embed{width:100%;aspect-ratio:16/9;border:none;display:none;}
+.video-url-input{
+  width:100%;background:transparent;border:none;border-top:1px solid var(--border);
+  padding:14px 20px;color:var(--white-dim);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;
+}
+.video-url-input::placeholder{color:var(--white-faint);}
+
+/* ─── COACHING CALL BLOCK ────────────────────────────── */
+.coaching-block{
+  background:linear-gradient(135deg,rgba(168,133,42,0.1),rgba(168,133,42,0.04));
+  border:1px solid var(--border-strong);
+  padding:28px 32px;
+  margin:40px 0;
+  display:flex;align-items:flex-start;gap:22px;
+  position:relative;overflow:hidden;
+}
+.coaching-block::before{
+  content:'COACHING INDIVIDUEL';
+  position:absolute;top:-1px;left:32px;
+  background:var(--gold-dark);color:#FDFAF5;
+  font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:0.3em;
+  padding:3px 10px;
+}
+.coaching-block::after{
+  content:'';position:absolute;top:0;right:0;
+  width:80px;height:100%;
+  background:linear-gradient(to left,rgba(201,168,76,0.04),transparent);
+  pointer-events:none;
+}
+.cb-icon{font-size:28px;flex-shrink:0;margin-top:6px;}
+.cb-body{flex:1;}
+.cb-title{
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.12em;
+  color:var(--gold);margin-bottom:6px;
+}
+.cb-desc{font-size:13px;color:var(--white-dim);line-height:1.7;margin-bottom:12px;}
+.cb-timing{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--gold-dark);
+  border:1px solid rgba(201,168,76,0.2);
+  padding:5px 12px;
+}
+
+/* ─── TEXT BLOCKS ────────────────────────────────────── */
+.axiom{
+  border-left:2px solid var(--gold);
+  padding:20px 28px;
+  background:rgba(168,133,42,0.06);
+  margin:32px 0;
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-style:italic;
+  color:var(--white);line-height:1.6;
+}
+.axiom strong{
+  display:block;font-style:normal;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:10px;letter-spacing:0.4em;
+  color:var(--gold);margin-bottom:8px;
+}
+.text-block{margin:24px 0;}
+.text-block h3{
+  font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.1em;
+  color:var(--white);margin-bottom:10px;
+}
+.text-block p{font-size:14px;color:var(--white-dim);line-height:1.8;}
+.highlight-box{
+  background:rgba(168,133,42,0.06);
+  border-left:2px solid var(--gold-dark);
+  padding:20px 24px;margin:24px 0;
+}
+.highlight-box p{font-size:14px;color:var(--white-dim);line-height:1.7;}
+
+/* ─── CHARTE BLOCK ───────────────────────────────────── */
+.charte-block{
+  background:var(--bg-card);
+  border:1px solid var(--border-strong);
+  padding:36px;margin:40px 0;
+  position:relative;
+}
+.charte-block::before{
+  content:"CHARTE D'ACCOMPAGNEMENT";
+  position:absolute;top:-1px;left:36px;
+  background:var(--gold-dark);color:#FDFAF5;
+  font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:0.3em;
+  padding:3px 10px;
+}
+.charte-title{
+  font-family:'Cormorant Garamond',serif;font-size:24px;
+  color:var(--white);margin-bottom:8px;margin-top:12px;
+}
+.charte-intro{
+  font-size:13px;color:var(--white-dim);line-height:1.7;font-style:italic;
+  margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);
+}
+.charte-cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.charte-col-label{
+  font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:0.2em;
+  margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);
+}
+.charte-col-label.coach{color:var(--gold);}
+.charte-col-label.athlete{color:var(--white-dim);}
+.charte-item{
+  display:flex;gap:8px;font-size:12px;color:var(--white-dim);
+  line-height:1.6;margin-bottom:9px;align-items:flex-start;
+}
+.charte-item-dot{color:var(--gold);flex-shrink:0;font-size:9px;margin-top:4px;}
+
+/* ─── EXERCISE BLOCK ─────────────────────────────────── */
+.exercise-block{
+  background:var(--bg-card);border:1px solid var(--border);
+  padding:36px;box-shadow:0 2px 16px rgba(0,0,0,0.06);
+  margin:40px 0;position:relative;
+}
+.exercise-block::before{
+  content:'EXERCICE';
+  position:absolute;top:-1px;left:36px;
+  background:var(--gold);color:#FDFAF5;
+  font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:0.3em;
+  padding:3px 10px;
+}
+.exercise-title{
+  font-family:'Cormorant Garamond',serif;font-size:22px;
+  margin-bottom:16px;color:var(--white);
+}
+.exercise-instruction{
+  font-size:13px;color:var(--white-dim);margin-bottom:22px;line-height:1.7;font-style:italic;
+}
+
+/* ─── FORM ELEMENTS ──────────────────────────────────── */
+.axe-label{
+  display:block;font-size:10px;letter-spacing:0.25em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:8px;
+}
+.axe-input,.axe-select{
+  width:100%;background:transparent;border:none;
+  border-bottom:1px solid rgba(201,168,76,0.25);
+  padding:14px 0;color:var(--white);
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;
+  outline:none;transition:border-color 0.3s;margin-bottom:24px;
+}
+.axe-input:focus,.axe-select:focus{border-bottom-color:var(--gold);}
+.axe-input::placeholder{color:var(--white-faint);}
+.axe-textarea{
+  width:100%;resize:vertical;min-height:120px;
+  background:rgba(168,133,42,0.04);
+  border:1px solid var(--border-strong);
+  padding:14px;color:var(--white);
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;
+  outline:none;transition:border-color 0.3s;margin-bottom:8px;
+  border-radius:0;
+}
+.axe-textarea:focus{border-color:var(--gold);}
+.axe-textarea::placeholder{color:var(--white-faint);}
+.axe-select{
+  background:var(--bg-3);
+  border:1px solid var(--border-strong);
+  padding:12px 14px;cursor:pointer;appearance:none;
+}
+.axe-select option{background:var(--bg-3);color:var(--white);}
+.char-count{font-size:10px;color:var(--white-faint);text-align:right;margin-bottom:20px;letter-spacing:0.1em;}
+
+/* ─── SLIDER ─────────────────────────────────────────── */
+.slider-container{margin:20px 0 28px;}
+.slider-value{
+  font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold);
+  text-align:center;line-height:1;margin-bottom:8px;
+}
+.axe-range{
+  -webkit-appearance:none;appearance:none;width:100%;height:2px;
+  background:rgba(201,168,76,0.15);outline:none;cursor:pointer;
+}
+.axe-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:18px;height:18px;background:var(--gold);cursor:pointer;
+}
+.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--white-faint);margin-top:8px;letter-spacing:0.05em;}
+
+/* ─── CHOICES ────────────────────────────────────────── */
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
+.choice-option{
+  background:var(--bg-3);border:1px solid var(--border);
+  padding:14px 16px;display:flex;align-items:center;gap:10px;
+  transition:all 0.2s;font-size:13px;color:var(--white-dim);
+}
+.choice-option.selected{background:rgba(168,133,42,0.1);border-color:var(--gold);color:var(--white);}
+.choice-check{
+  width:18px;height:18px;border:1px solid var(--gold-dark);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:transparent;transition:all 0.2s;
+}
+.choice-option.selected .choice-check{color:var(--gold);}
+.choice-text{font-size:12px;line-height:1.4;}
+
+/* ─── SACRIFICE LIST ─────────────────────────────────── */
+.sacrifice-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+.sacrifice-item{
+  display:grid;grid-template-columns:36px 1fr auto;
+  align-items:center;gap:10px;
+  background:rgba(168,133,42,0.04);
+  border:1px solid var(--border);
+  padding:10px 14px;transition:border-color 0.2s;
+}
+.sacrifice-item:focus-within{border-color:rgba(201,168,76,0.3);}
+.sacrifice-num{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;
+  color:var(--gold-xdark);text-align:center;
+}
+.sacrifice-input{
+  background:transparent;border:none;color:var(--white);
+  font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%;
+}
+.sacrifice-input::placeholder{color:var(--white-faint);}
+.btn-levels{display:flex;gap:4px;}
+.sacrifice-level{
+  padding:4px 8px;border:1px solid var(--border);
+  font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--white-dim);background:transparent;transition:all 0.2s;
+}
+.sacrifice-level.active-easy{background:rgba(39,174,96,0.15);border-color:rgba(39,174,96,0.4);color:#27AE60;}
+.sacrifice-level.active-hard{background:rgba(201,168,76,0.15);border-color:rgba(201,168,76,0.4);color:var(--gold);}
+.sacrifice-level.active-extreme{background:rgba(192,57,43,0.15);border-color:rgba(192,57,43,0.4);color:#C0392B;}
+.feedback-msg{
+  font-size:12px;padding:10px 14px;
+  border-left:2px solid var(--gold);background:rgba(168,133,42,0.06);
+  color:var(--white-dim);margin-top:8px;display:none;
+}
+
+/* ─── ENGAGEMENT LIST ────────────────────────────────── */
+.engagement-item{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(168,133,42,0.04);border:1px solid var(--border);
+  padding:12px 16px;margin-bottom:6px;transition:border-color 0.2s;
+}
+.engagement-item:focus-within{border-color:rgba(201,168,76,0.3);}
+.engagement-num{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold-xdark);
+  width:28px;text-align:center;flex-shrink:0;
+}
+.engagement-input{
+  background:transparent;border:none;color:var(--white);
+  font-family:'DM Sans',sans-serif;font-size:13px;
+  outline:none;flex:1;
+}
+.engagement-input::placeholder{color:var(--white-faint);}
+
+/* ─── REFLECTION BLOCK ───────────────────────────────── */
+.reflection-block{
+  background:rgba(168,133,42,0.05);
+  border:1px solid var(--border-strong);
+  padding:28px;margin:24px 0;
+}
+.reflection-prompt{
+  font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;
+  color:var(--white);line-height:1.5;margin-bottom:16px;
+}
+
+/* ─── PILLARS ────────────────────────────────────────── */
+.pillar-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:24px 0;}
+.pillar-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  padding:24px;position:relative;overflow:hidden;
+  transition:border-color 0.3s;
+}
+.pillar-card::before{
+  content:'';position:absolute;top:0;left:0;
+  width:2px;height:30%;background:var(--gold);
+  transition:height 0.4s ease;
+}
+.pillar-card:hover{border-color:rgba(201,168,76,0.3);}
+.pillar-card:hover::before{height:100%;}
+.pillar-title{
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:0.15em;
+  color:var(--gold);margin-bottom:10px;
+}
+.pillar-text{font-size:12px;color:var(--white-dim);line-height:1.7;}
+
+/* ─── OBJECTIF TABLE ─────────────────────────────────── */
+.axe-table{
+  width:100%;border-collapse:collapse;margin-bottom:12px;
+}
+.axe-table th{
+  font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:0.25em;
+  color:var(--gold);padding:10px 14px;text-align:left;
+  background:rgba(168,133,42,0.08);border-bottom:1px solid var(--border-strong);
+}
+.axe-table td{
+  padding:0;border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+.axe-table tr:hover td{background:rgba(168,133,42,0.04);}
+.axe-table input{
+  background:transparent;border:none;color:var(--white);
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;
+  outline:none;width:100%;padding:11px 14px;
+}
+.axe-table input::placeholder{color:var(--white-faint);}
+.axe-table input[type="date"]{cursor:pointer;color-scheme:light;}
+
+/* ─── PACTE PREVIEW ──────────────────────────────────── */
+.pacte-preview{
+  background:var(--bg-card);border:1px solid var(--border-strong);
+  padding:36px;font-family:'Cormorant Garamond',serif;
+}
+.pacte-header{
+  text-align:center;padding-bottom:24px;margin-bottom:24px;
+  border-bottom:1px solid var(--border);
+}
+.pacte-title{
+  font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:0.2em;
+  color:var(--gold);
+}
+.pacte-subtitle{
+  font-size:11px;letter-spacing:0.4em;text-transform:uppercase;
+  color:var(--white-dim);margin-top:6px;
+}
+.pacte-meta{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;
+  margin-bottom:24px;font-size:11px;color:var(--white-dim);
+}
+.pacte-meta-label{
+  font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:0.3em;
+  color:var(--gold);display:block;margin-bottom:4px;
+}
+.pacte-section{margin-bottom:20px;}
+.pacte-section-title{
+  font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:0.25em;
+  color:var(--gold);padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:10px;
+}
+.pacte-field{font-size:14px;color:var(--white-dim);line-height:1.7;}
+.field-value{font-style:italic;}
+.pacte-signature{
+  margin-top:28px;padding-top:24px;border-top:1px solid var(--border);
+  display:grid;grid-template-columns:1fr 1fr;gap:32px;
+}
+.pacte-signature-line{
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;
+  margin-top:28px;padding-top:24px;border-top:1px solid var(--border);
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--white-faint);
+}
+
+/* ─── BUTTONS ────────────────────────────────────────── */
+.axe-btn{
+  background:var(--gold);color:#FDFAF5;
+  border:1px solid var(--gold);
+  font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;
+  letter-spacing:0.25em;text-transform:uppercase;
+  padding:14px 32px;
+  transition:all 0.25s;
+}
+.axe-btn:hover{background:var(--gold-light);border-color:var(--gold-light);}
+.axe-btn-outline{background:transparent;color:var(--gold);border-color:var(--gold);}
+.axe-btn-outline:hover{background:var(--gold);color:#FDFAF5;}
+.btn-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:48px;padding-top:32px;border-top:1px solid var(--border);
+}
+
+/* ─── EMAIL CAPTURE ──────────────────────────────────── */
+.email-capture{
+  background:var(--bg-card);border:1px solid var(--border);
+  padding:28px;margin:32px 0;
+}
+.email-row{display:flex;gap:12px;align-items:center;}
+
+/* ─── TOAST ──────────────────────────────────────────── */
+.toast{
+  position:fixed;top:84px;right:24px;z-index:9999;
+  background:var(--bg-card);border:1px solid var(--border-strong);
+  padding:16px 20px;max-width:320px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.12);
+  transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.toast.show{transform:translateX(0);}
+.toast-title{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:0.2em;color:var(--gold);margin-bottom:4px;}
+.toast-msg{font-size:12px;color:var(--white-dim);line-height:1.5;}
+
+/* ─── VALIDATION BANNER ──────────────────────────────── */
+#validationBanner{
+  position:fixed;bottom:0;left:0;right:0;z-index:9000;
+  background:var(--bg-2);border-top:1px solid var(--red);
+  padding:18px 60px;
+  box-shadow:0 -4px 32px rgba(0,0,0,0.5);
+  transform:translateY(100%);transition:transform 0.4s ease;
+  max-height:50vh;overflow-y:auto;display:block;
+}
+#validationBanner.show{transform:translateY(0);}
+#validationBanner h3{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:0.2em;color:var(--red);margin-bottom:10px;}
+#validationBanner ul{list-style:none;padding:0;}
+#validationBanner li{font-size:12px;color:var(--white-dim);padding:3px 0;padding-left:16px;position:relative;}
+#validationBanner li::before{content:'—';position:absolute;left:0;color:var(--red);}
+.close-banner{float:right;background:none;border:none;color:var(--white-dim);font-size:18px;cursor:pointer;margin-top:-4px;}
+
+/* ─── MODAL RITUEL ───────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(30,25,18,0.7);z-index:8000;
+  display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+}
+.modal-overlay.open{display:flex;}
+.modal-content{
+  background:var(--bg-card);border:1px solid var(--border-strong);
+  padding:40px;max-width:560px;width:90%;position:relative;
+  max-height:80vh;overflow-y:auto;
+}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.15em;color:var(--gold);margin-bottom:6px;}
+.modal-subtitle{font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--white-dim);margin-bottom:28px;}
+.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--white-dim);font-size:20px;cursor:pointer;}
+.ritual-step{background:var(--bg-2);border:1px solid var(--border);padding:20px;margin-bottom:12px;}
+.ritual-step-num{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:0.3em;color:var(--gold);margin-bottom:6px;}
+.ritual-instruction{font-size:13px;color:var(--white-dim);line-height:1.6;}
+.ritual-timer{
+  font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);
+  text-align:center;margin:10px 0;
+}
+.ritual-start-btn{
+  background:var(--gold);border:none;color:#FDFAF5;
+  font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.25em;
+  text-transform:uppercase;padding:10px 20px;margin-top:10px;cursor:pointer;
+}
+
+/* ─── SUCCESS SCREEN ─────────────────────────────────── */
+.success-screen{
+  text-align:center;padding:60px 40px;
+  border:1px solid var(--border);background:var(--bg-card);margin-top:48px;
+}
+.success-icon{
+  font-size:48px;color:var(--gold);margin-bottom:24px;
+  font-family:'Bebas Neue',sans-serif;letter-spacing:0.1em;
+}
+.completion-badge{
+  display:inline-block;
+  border:1px solid rgba(39,174,96,0.3);color:var(--success);
+  font-size:11px;letter-spacing:0.25em;text-transform:uppercase;
+  padding:8px 20px;margin:24px 0;
+}
+
+/* ─── TESTIMONIALS ───────────────────────────────────── */
+.testimonial{
+  background:var(--bg-3);border-left:2px solid var(--gold-dark);
+  padding:22px 26px;margin:20px 0;
+}
+.testimonial-text{
+  font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;
+  color:var(--white);line-height:1.6;margin-bottom:12px;
+}
+.testimonial-author{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dark);}
+
+/* ─── GUARANTEE ──────────────────────────────────────── */
+.guarantee{
+  background:linear-gradient(135deg,rgba(39,174,96,0.08),rgba(39,174,96,0.03));
+  border:1px solid rgba(39,174,96,0.2);
+  padding:22px 26px;margin:24px 0;
+  display:flex;gap:16px;align-items:flex-start;
+}
+.guarantee-icon{font-size:22px;flex-shrink:0;}
+.guarantee-body{font-size:12px;color:var(--white-dim);line-height:1.7;}
+.guarantee-body strong{color:var(--success);}
+
+/* ─── LEGAL FOOTER ───────────────────────────────────── */
+.legal-footer{
+  border-top:1px solid var(--border);
+  padding:24px 72px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg-2);
+}
+.legal-footer p{font-size:10px;color:var(--white-faint);letter-spacing:0.1em;}
+.legal-links{display:flex;gap:20px;}
+.legal-links a{font-size:10px;color:var(--white-dim);text-decoration:none;letter-spacing:0.1em;transition:color 0.2s;}
+.legal-links a:hover{color:var(--gold);}
+
+/* ─── DIVIDER ────────────────────────────────────────── */
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0;}
+
+/* ─── PROGRESS BARS (header) ─────────────────────────── */
+#progressGlobal{display:flex;gap:4px;align-items:center;}
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media(max-width:900px){
+  .main-container{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  header{padding:0 20px;}
+  .content-area{padding:36px 20px 60px;}
+  .pillar-grid,.charte-cols{grid-template-columns:1fr;}
+  .choice-grid{grid-template-columns:1fr;}
+  .pacte-meta{grid-template-columns:1fr 1fr;}
+  .legal-footer{flex-direction:column;gap:12px;padding:20px;}
+}
+</style>
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════ INTRO -->
+<div id="intro">
+  <div class="intro-axe">AXE</div>
+  <div class="intro-sub">Alignement · Exigence · Engagement</div>
+  <div class="intro-coach-line">Programme de préparation mentale — par Fabien</div>
+  <div class="intro-divider"></div>
+  <button class="intro-btn" onclick="openRegisterModal()">ACCÉDER À MON PROGRAMME</button>
+</div>
+
+<!-- ═══════════════════════════════════ MODAL INSCRIPTION -->
+<div id="registerModal" style="
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(28,21,16,0.85);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+">
+  <div style="
+    background:#F5F0E8;
+    border:1px solid rgba(168,133,42,0.35);
+    padding:52px 48px;
+    max-width:460px;width:90%;
+    position:relative;
+    box-shadow:0 24px 80px rgba(0,0,0,0.25);
+  ">
+    <!-- Barre dorée top -->
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#A8852A,transparent)"></div>
+
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:0.45em;color:#A8852A;margin-bottom:20px;text-align:center">
+      MÉTHODE AXE — ACCÈS PROGRAMME
+    </div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;color:#1C1510;text-align:center;margin-bottom:8px;font-weight:400">
+      Bienvenue dans AXE
+    </h2>
+    <p style="font-size:12px;color:#5A4E3E;text-align:center;margin-bottom:36px;line-height:1.7;letter-spacing:0.03em">
+      Ces informations permettent de sauvegarder votre progression et de personnaliser le programme.
+    </p>
+
+    <div style="margin-bottom:20px">
+      <label style="display:block;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#A8852A;margin-bottom:8px">Prénom</label>
+      <input id="reg-prenom" type="text" placeholder="Ex : Thomas" style="
+        width:100%;background:transparent;border:none;
+        border-bottom:1px solid rgba(201,168,76,0.4);
+        padding:12px 0;color:#1C1510;
+        font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;
+        outline:none;transition:border-color 0.3s;
+      " onfocus="this.style.borderBottomColor='#A8852A'" onblur="this.style.borderBottomColor='rgba(201,168,76,0.4)'">
+    </div>
+
+    <div style="margin-bottom:20px">
+      <label style="display:block;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#A8852A;margin-bottom:8px">Nom</label>
+      <input id="reg-nom" type="text" placeholder="Ex : Dupont" style="
+        width:100%;background:transparent;border:none;
+        border-bottom:1px solid rgba(201,168,76,0.4);
+        padding:12px 0;color:#1C1510;
+        font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;
+        outline:none;transition:border-color 0.3s;
+      " onfocus="this.style.borderBottomColor='#A8852A'" onblur="this.style.borderBottomColor='rgba(201,168,76,0.4)'">
+    </div>
+
+    <div style="margin-bottom:32px">
+      <label style="display:block;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#A8852A;margin-bottom:8px">Adresse email</label>
+      <input id="reg-email" type="email" placeholder="votre@email.com" style="
+        width:100%;background:transparent;border:none;
+        border-bottom:1px solid rgba(201,168,76,0.4);
+        padding:12px 0;color:#1C1510;
+        font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;
+        outline:none;transition:border-color 0.3s;
+      " onfocus="this.style.borderBottomColor='#A8852A'" onblur="this.style.borderBottomColor='rgba(201,168,76,0.4)'"
+      onkeydown="if(event.key==='Enter') submitRegister()">
+    </div>
+
+    <div id="reg-error" style="color:#C0392B;font-size:12px;text-align:center;margin-bottom:16px;min-height:18px"></div>
+
+    <button id="reg-submit-btn" onclick="submitRegister()" style="
+      width:100%;background:#A8852A;border:none;
+      color:#1C1510;font-family:'DM Sans',sans-serif;
+      font-size:11px;font-weight:500;letter-spacing:0.3em;
+      text-transform:uppercase;padding:18px;
+      cursor:pointer;transition:background 0.3s;
+    " onmouseover="this.style.background='#C9A84C'" onmouseout="this.style.background='#A8852A'">
+      ACCÉDER À MON PROGRAMME
+    </button>
+
+    <p style="font-size:10px;color:#C8BFB0;text-align:center;margin-top:16px;letter-spacing:0.05em">
+      Vos données sont utilisées uniquement pour votre suivi avec Fabien.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ MAIN APP -->
+<div id="app" style="display:none">
+
+  <header>
+    <div class="header-left">
+      <div class="logo">AXE<span>Préparation mentale · Fabien</span></div>
+      <div class="header-sep"></div>
+      <div class="header-athlete" id="headerAthlete" style="display:none">
+        <strong id="headerAthleteName"></strong>
+        <span id="headerAthleteInfo"></span>
+      </div>
+    </div>
+    <div id="progressGlobal">
+      <div class="prog-module active" data-mod="0"></div>
+      <div class="prog-module" data-mod="1"></div>
+      <div class="prog-module" data-mod="2"></div>
+      <div class="prog-module" data-mod="3"></div>
+      <div class="prog-module" data-mod="4"></div>
+      <div class="prog-module" data-mod="5"></div>
+    </div>
+    <div class="header-right">
+      <div id="syncStatus" style="font-size:10px;letter-spacing:0.1em;color:var(--white-faint);min-width:120px;text-align:right"></div>
+      <div class="header-month" id="headerMonth">MOIS 1 / 12</div>
+      <button class="axe-btn axe-btn-outline" style="padding:9px 18px;font-size:10px" onclick="openModal()">⬡ RITUEL AXE</button>
+    </div>
+  </header>
+
+  <div class="main-container">
+
+    <!-- ════════════════════════════════════ SIDEBAR -->
+    <nav class="sidebar">
+      <div class="sidebar-logo-area">
+        <div class="sidebar-tag">Programme · 12 mois</div>
+
+        <!-- Coach card -->
+        <div class="coach-card">
+          <div class="coach-card-top">
+            <div class="coach-avatar">F</div>
+            <div>
+              <div class="coach-name">FABIEN</div>
+              <div class="coach-title">Préparateur mental certifié</div>
+            </div>
+          </div>
+          <div class="coach-cred">Appel individuel après chaque module</div>
+          <div class="coach-cred">Disponible 6j/7 entre les séances</div>
+          <div class="coach-cred">Programme adapté à votre sport</div>
+          <div class="coach-cred">+8 ans d'accompagnement d'athlètes</div>
+        </div>
+
+        <!-- Next call -->
+        <div class="call-card" id="sidebarCall">
+          <div class="call-icon">📞</div>
+          <div>
+            <div class="call-label">Votre prochain appel</div>
+            <div class="call-info" id="sidebarCallInfo">Complétez le module actuel pour programmer votre appel avec Fabien.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav-section">Modules du programme</div>
+      <div class="module-nav" id="moduleNav"></div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-line">97 € / mois · Engagement 12 mois</div>
+        <button onclick="openContactModal()" style="
+          width:100%;margin-top:10px;
+          background:transparent;
+          border:1px solid var(--border-strong);
+          color:var(--gold);
+          font-family:'DM Sans',sans-serif;
+          font-size:10px;font-weight:500;
+          letter-spacing:0.2em;text-transform:uppercase;
+          padding:10px 14px;cursor:pointer;
+          transition:all 0.2s;display:flex;align-items:center;gap:8px;justify-content:center;
+        " onmouseover="this.style.background='rgba(168,133,42,0.08)'" onmouseout="this.style.background='transparent'">
+          ✉ Poser une question à Fabien
+        </button>
+      </div>
+    </nav>
+
+    <!-- ═══════════════════════════════ CONTENT AREA -->
+    <main class="content-area">
+
+      <!-- ══════════════════════════════ MODULE 0 : PROFILAGE -->
+      <div class="module-view active" id="mod-0">
+        <div class="module-header">
+          <span class="module-tag">Phase 1 · Séance 1 · Mois 1</span>
+          <h1 class="module-title">PROFILAGE</h1>
+          <p class="module-subtitle">La vérité de qui tu es aujourd'hui</p>
+        </div>
+
+        <div class="section-block visible">
+          <div class="video-block">
+            <div class="video-placeholder" id="vid0-placeholder">
+              <div class="video-placeholder-icon">▶</div>
+              <div class="video-label">Message d'introduction — Méthode AXE</div>
+            </div>
+            <iframe class="video-embed" id="vid0-embed" allowfullscreen></iframe>
+            <input class="video-url-input" placeholder="▶  Collez ici l'URL YouTube ou Vimeo de votre vidéo d'introduction..." onchange="loadVideo(this, 'vid0')" />
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="charte-block">
+            <h2 class="charte-title">Charte d'accompagnement AXE</h2>
+            <p class="charte-intro">Ce programme n'est pas un simple e-learning. C'est un accompagnement individuel sur 12 mois. Voici les engagements mutuels entre vous et votre coach.</p>
+            <div class="charte-cols">
+              <div>
+                <div class="charte-col-label coach">Ce que Fabien s'engage à faire</div>
+                <div class="charte-item"><span class="charte-item-dot">◆</span><span>Vous appeler personnellement après chaque module complété</span></div>
+                <div class="charte-item"><span class="charte-item-dot">◆</span><span>Lire l'intégralité de vos réponses avant chaque appel</span></div>
+                <div class="charte-item"><span class="charte-item-dot">◆</span><span>Adapter le suivi à votre sport, votre niveau, votre réalité</span></div>
+                <div class="charte-item"><span class="charte-item-dot">◆</span><span>Rester disponible par message 6j/7 entre les séances</span></div>
+                <div class="charte-item"><span class="charte-item-dot">◆</span><span>Ne jamais vous juger — seulement vous confronter à la vérité</span></div>
+                <div class="charte-item"><span class="charte-item-dot">◆</span><span>12 mois complets d'accompagnement sans réduction de présence</span></div>
+              </div>
+              <div>
+                <div class="charte-col-label athlete">Ce que vous vous engagez à faire</div>
+                <div class="charte-item"><span class="charte-item-dot" style="color:var(--white-dim)">◆</span><span>Répondre honnêtement, sans filtre ni autocensure</span></div>
+                <div class="charte-item"><span class="charte-item-dot" style="color:var(--white-dim)">◆</span><span>Compléter chaque module avant l'appel programmé</span></div>
+                <div class="charte-item"><span class="charte-item-dot" style="color:var(--white-dim)">◆</span><span>Être disponible aux créneaux d'appel convenus ensemble</span></div>
+                <div class="charte-item"><span class="charte-item-dot" style="color:var(--white-dim)">◆</span><span>Appliquer les décisions prises — pas seulement les noter</span></div>
+                <div class="charte-item"><span class="charte-item-dot" style="color:var(--white-dim)">◆</span><span>Revenir au Pacte AXE en cas de doute ou déviation</span></div>
+                <div class="charte-item"><span class="charte-item-dot" style="color:var(--white-dim)">◆</span><span>Signaler tout blocage sans attendre le prochain appel</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="axiom">
+            <strong>PRINCIPE AXE</strong>
+            AXE ne commence pas par l'objectif. Elle commence par toi. Ce que tu es. Ce que tu ressens. Ce que tu esquives.
+          </div>
+          <div class="text-block">
+            <h3>Pourquoi le profilage ?</h3>
+            <p>Beaucoup de sportifs démarrent un programme avec une image floue d'eux-mêmes. Ils savent ce qu'ils veulent atteindre, mais ne savent pas encore ce qui les en empêche réellement. Le profilage AXE ne cherche pas à te motiver. Il cherche à révéler la vérité de ta situation actuelle, avec précision, sans complaisance.</p>
+          </div>
+          <div class="highlight-box">
+            <p>Ce module n'est pas un test. Il n'y a pas de bonne réponse. Il y a seulement <strong>ta réponse vraie</strong> — celle que tu n'as peut-être jamais formulée à voix haute.</p>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">1 — Qui es-tu en ce moment ?</h2>
+            <p class="exercise-instruction">Réponds honnêtement. Ces réponses resteront la base de ton engagement tout au long du programme.</p>
+
+            <label class="axe-label">Ton prénom et nom</label>
+            <input class="axe-input" id="p-nom" placeholder="Ex : Thomas Dupont" oninput="updatePacte(); updateHeaderAthlete()">
+
+            <label class="axe-label">Ton sport / discipline</label>
+            <input class="axe-input" id="p-sport" placeholder="Ex : MMA, Football, Natation..." oninput="updatePacte(); updateHeaderAthlete()">
+
+            <label class="axe-label">Ton niveau actuel</label>
+            <select class="axe-select" id="p-niveau" onchange="updatePacte()">
+              <option value="">— Sélectionner —</option>
+              <option>Débutant / Loisir</option>
+              <option>Amateur confirmé</option>
+              <option>Régional / Départemental</option>
+              <option>National</option>
+              <option>International / Pro</option>
+            </select>
+
+            <label class="axe-label">Décris ta situation sportive actuelle</label>
+            <textarea class="axe-textarea" id="p-situation" placeholder="Où en es-tu réellement ? Quelle est ta régularité ? Quels sont tes derniers résultats ?" oninput="updatePacte(); countChars(this, 'p-situation-count', 500)"></textarea>
+            <div class="char-count" id="p-situation-count">0 / 500</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">2 — Qu'est-ce qui te ressemble le plus ?</h2>
+            <p class="exercise-instruction">Sélectionne la réponse qui te correspond le mieux pour chaque question.</p>
+
+            <label class="axe-label">Comment tu te sens mentalement en ce moment ?</label>
+            <div class="choice-grid" data-group="mental">
+              <div class="choice-option" onclick="selectChoice(this, 'mental')"><div class="choice-check">✓</div><div class="choice-text">Motivé mais inconstant — j'ai des hauts et des bas</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'mental')"><div class="choice-check">✓</div><div class="choice-text">Déterminé et stable — je maintiens mon niveau</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'mental')"><div class="choice-check">✓</div><div class="choice-text">En manque d'énergie — j'ai besoin de relance</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'mental')"><div class="choice-check">✓</div><div class="choice-text">Confus — je ne sais plus vraiment ce que je veux</div></div>
+            </div>
+
+            <label class="axe-label" style="margin-top:20px">Ton rapport à la discipline au quotidien ?</label>
+            <div class="choice-grid" data-group="discipline">
+              <div class="choice-option" onclick="selectChoice(this, 'discipline')"><div class="choice-check">✓</div><div class="choice-text">Structuré — je suis mon plan coûte que coûte</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'discipline')"><div class="choice-check">✓</div><div class="choice-text">Émotionnel — je m'entraîne quand j'en ai envie</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'discipline')"><div class="choice-check">✓</div><div class="choice-text">En construction — j'essaie de m'améliorer</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'discipline')"><div class="choice-check">✓</div><div class="choice-text">Variable — parfois très discipliné, souvent pas</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="reflection-block">
+            <div class="reflection-prompt">"Pourquoi n'as-tu pas encore changé ce que tu sais qu'il faudrait changer ?"</div>
+            <label class="axe-label">Ta réponse honnête</label>
+            <textarea class="axe-textarea" id="p-resistance" placeholder="Prends le temps. C'est peut-être la première fois que tu te poses vraiment cette question." oninput="updatePacte(); countChars(this, 'p-resistance-count', 800)" style="min-height:160px"></textarea>
+            <div class="char-count" id="p-resistance-count">0 / 800</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="coaching-block">
+            <div class="cb-icon">📞</div>
+            <div class="cb-body">
+              <div class="cb-title">Appel de bienvenue — Fabien vous appelle</div>
+              <div class="cb-desc">Une fois ce module validé, Fabien prendra contact avec vous dans les 48h pour un appel de 30 à 45 minutes. Il aura lu l'intégralité de vos réponses. L'objectif : poser les bases de votre accompagnement, comprendre votre contexte réel, et calibrer les modules suivants à votre situation.</div>
+              <div class="cb-timing">⏱ Durée estimée : 30–45 min · Dans les 48h après validation</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="email-capture">
+            <label class="axe-label">Votre email — pour recevoir le récapitulatif et coordonner l'appel</label>
+            <div class="email-row">
+              <input class="axe-input" id="user-email-0" placeholder="votre@email.com" type="email" style="margin-bottom:0;flex:1" oninput="syncEmail(this)">
+            </div>
+            <p style="font-size:11px;color:var(--white-dim);margin-top:10px;line-height:1.6">Un récapitulatif de vos réponses sera envoyé à Fabien dès la validation. Il vous contactera à cette adresse pour fixer le créneau d'appel.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <div></div>
+          <button class="axe-btn" onclick="completeModule(0)">VALIDER CE MODULE →</button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════ MODULE 1 : OBJECTIF -->
+      <div class="module-view" id="mod-1">
+        <div class="module-header">
+          <span class="module-tag">Phase 1 · Séance 2 · Mois 1–2</span>
+          <h1 class="module-title">LA VÉRITÉ<br>DE L'OBJECTIF</h1>
+          <p class="module-subtitle">Détruire le fantasme pour révéler le réel</p>
+        </div>
+
+        <div class="section-block visible">
+          <div class="video-block">
+            <div class="video-placeholder" id="vid1-placeholder">
+              <div class="video-placeholder-icon">▶</div>
+              <div class="video-label">Séance 2 — La vérité de l'objectif</div>
+            </div>
+            <iframe class="video-embed" id="vid1-embed" allowfullscreen></iframe>
+            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid1')" />
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="axiom">
+            <strong>POINT AXE</strong>
+            Tant que l'objectif est flou, aucun sacrifice n'est légitime. Le problème n'est jamais la difficulté — c'est l'inconscience du prix à payer.
+          </div>
+          <div class="text-block">
+            <h3>L'objectif idéalisé vs l'objectif réel</h3>
+            <p>La plupart des athlètes portent deux objectifs simultanément : celui qu'ils affichent — ambitieux, chargé d'émotion — et celui qu'ils accepteraient réellement de payer de leur confort, de leur temps, de leur vie sociale. Ce module a pour but de faire converger ces deux objectifs en un seul : précis, honnête, assumé.</p>
+          </div>
+          <div class="pillar-grid">
+            <div class="pillar-card">
+              <div class="pillar-title">Clarté</div>
+              <div class="pillar-text">Voir clairement le coût réel de l'objectif. Identifier ce qui devra être abandonné. Pas d'illusion — seulement la vérité du niveau visé.</div>
+            </div>
+            <div class="pillar-card">
+              <div class="pillar-title">Précision</div>
+              <div class="pillar-text">Un objectif vague n'exige aucun sacrifice. Un objectif précis, daté, mesuré exige tout. La précision est le début du courage.</div>
+            </div>
+            <div class="pillar-card">
+              <div class="pillar-title">Cohérence</div>
+              <div class="pillar-text">L'objectif doit être cohérent avec ce que tu es prêt à vivre réellement. Pas ce que tu rêves — ce que tu acceptes vraiment.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">Tableau de vérité — Tes objectifs de saison</h2>
+            <p class="exercise-instruction">Formule chaque objectif avec précision. Le module Stabilité se débloquera automatiquement à la date la plus éloignée que tu auras renseignée ici.</p>
+            <table class="axe-table" id="objectifTable">
+              <thead>
+                <tr>
+                  <th style="width:48px">#</th>
+                  <th>OBJECTIF PRÉCIS</th>
+                  <th style="width:170px">DATE LIMITE</th>
+                </tr>
+              </thead>
+              <tbody id="objectifTableBody"></tbody>
+            </table>
+            <div id="objectif-unlock-info" style="margin-top:10px;font-size:11px;color:var(--white-dim);font-style:italic;min-height:20px"></div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="slider-container">
+            <label class="axe-label">Sur 10, à quel point cet objectif est réellement ta priorité absolue ?</label>
+            <div class="slider-value" id="prioVal">7</div>
+            <input type="range" class="axe-range" min="1" max="10" value="7" oninput="document.getElementById('prioVal').textContent = this.value; updatePacte()">
+            <div class="slider-labels"><span>Pas vraiment</span><span>Objectif secondaire</span><span>Priorité absolue</span></div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">Questions frontales AXE</h2>
+            <p class="exercise-instruction">Ces questions sont conçues pour provoquer une prise de conscience. Réponds sans filtre.</p>
+
+            <label class="axe-label">Pourquoi cet objectif et pas un autre ?</label>
+            <textarea class="axe-textarea" id="q-pourquoi" placeholder="Quelle est la vraie raison ? Est-ce pour toi ? Pour les autres ? Pour prouver quelque chose ?" oninput="countChars(this, 'q-pourquoi-count', 400)"></textarea>
+            <div class="char-count" id="q-pourquoi-count">0 / 400</div>
+
+            <label class="axe-label">Que se passe-t-il si tu échoues ?</label>
+            <textarea class="axe-textarea" id="q-echec" placeholder="Formule clairement ce qui se passe concrètement dans ta vie si tu n'atteins pas cet objectif." oninput="countChars(this, 'q-echec-count', 400)"></textarea>
+            <div class="char-count" id="q-echec-count">0 / 400</div>
+
+            <label class="axe-label">À qui veux-tu prouver quelque chose ?</label>
+            <div class="choice-grid" data-group="prouver">
+              <div class="choice-option" onclick="selectChoice(this, 'prouver')"><div class="choice-check">✓</div><div class="choice-text">À moi-même avant tout</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'prouver')"><div class="choice-check">✓</div><div class="choice-text">À ma famille / entourage</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'prouver')"><div class="choice-check">✓</div><div class="choice-text">À mes adversaires / concurrents</div></div>
+              <div class="choice-option" onclick="selectChoice(this, 'prouver')"><div class="choice-check">✓</div><div class="choice-text">Je n'ai rien à prouver à personne</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="coaching-block">
+            <div class="cb-icon">📞</div>
+            <div class="cb-body">
+              <div class="cb-title">Appel post-objectif — Analyse avec Fabien</div>
+              <div class="cb-desc">Fabien analysera ton tableau d'objectifs avant l'appel. L'échange portera sur la cohérence de tes ambitions avec ta situation réelle, et sur la clarification de ce que ce niveau exige vraiment.</div>
+              <div class="cb-timing">⏱ Durée estimée : 40–50 min · Sur rendez-vous</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="email-capture">
+            <label class="axe-label">Votre email</label>
+            <div class="email-row">
+              <input class="axe-input" id="user-email-1" placeholder="votre@email.com" type="email" style="margin-bottom:0;flex:1" oninput="syncEmail(this)">
+            </div>
+            <p style="font-size:11px;color:var(--white-dim);margin-top:10px">Un récapitulatif sera envoyé à Fabien dès validation pour préparer votre appel.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="axe-btn axe-btn-outline" onclick="goModule(0)">← RETOUR</button>
+          <button class="axe-btn" onclick="completeModule(1)">VALIDER CE MODULE →</button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════ MODULE 2 : LE COÛT -->
+      <div class="module-view" id="mod-2">
+        <div class="module-header">
+          <span class="module-tag">Phase 1 · Séance 3 · Mois 2–3</span>
+          <h1 class="module-title">LE COÛT<br>RÉEL</h1>
+          <p class="module-subtitle">Transformer le sacrifice abstrait en décisions précises</p>
+        </div>
+
+        <div class="section-block visible">
+          <div class="video-block">
+            <div class="video-placeholder" id="vid2-placeholder">
+              <div class="video-placeholder-icon">▶</div>
+              <div class="video-label">Séance 3 — L'identification du coût</div>
+            </div>
+            <iframe class="video-embed" id="vid2-embed" allowfullscreen></iframe>
+            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid2')" />
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="axiom">
+            <strong>POINT AXE</strong>
+            Le renoncement n'est pas une privation. C'est une stratégie de performance. Le coût n'est pas ce que tu perds malgré toi — c'est ce que tu choisis volontairement de laisser.
+          </div>
+          <div class="text-block">
+            <h3>Pourquoi identifier le coût ?</h3>
+            <p>La majorité des athlètes qui s'effondrent mentalement en milieu de saison ne s'effondrent pas à cause de l'effort physique. Ils s'effondrent parce qu'ils n'avaient jamais réellement accepté ce que ce niveau leur coûterait. La surprise de la fatigue, du sacrifice social, des renoncements quotidiens — tout cela devient insupportable quand ce n'est pas anticipé.</p>
+          </div>
+          <div class="text-block">
+            <p>AXE inverse cette logique. Plutôt que de découvrir le coût en cours de route, tu le définis maintenant. Tu le mesures. Tu l'ordonnes. Et tu décides consciemment si tu l'acceptes. Ce choix change tout.</p>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">Tes 50 renoncements</h2>
+            <p class="exercise-instruction">Liste les éléments de ta vie actuelle qui ne seront plus compatibles avec ton objectif. Pour chaque élément, indique ton niveau de résistance. Minimum 10 renoncements requis.</p>
+            <div class="sacrifice-list" id="sacrificeList"></div>
+            <div id="sacrificeFeedback" class="feedback-msg"></div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">Tableau des résistances</h2>
+            <p class="exercise-instruction">Classe tes résistances selon leur nature profonde.</p>
+
+            <label class="axe-label">Ce qui te rassure aujourd'hui (et que tu risques de perdre)</label>
+            <textarea class="axe-textarea" id="r-confort" placeholder="Ex : mes sorties du vendredi, mes longues nuits de sommeil, mes weekends libres..." oninput="updatePacte(); countChars(this, 'r-confort-count', 400)"></textarea>
+            <div class="char-count" id="r-confort-count">0 / 400</div>
+
+            <label class="axe-label">Ce que tu n'as pas envie de lâcher (même si tu sais que c'est nécessaire)</label>
+            <textarea class="axe-textarea" id="r-peur" placeholder="Sois brutal avec toi-même. Qu'est-ce qui te retient vraiment ?" oninput="updatePacte(); countChars(this, 'r-peur-count', 400)"></textarea>
+            <div class="char-count" id="r-peur-count">0 / 400</div>
+
+            <label class="axe-label">Ce que tu redoutes si tu t'engages pleinement</label>
+            <textarea class="axe-textarea" id="r-crainte" placeholder="L'isolement ? La peur d'échouer après avoir tout donné ? Le regard des autres ?" oninput="updatePacte(); countChars(this, 'r-crainte-count', 400)"></textarea>
+            <div class="char-count" id="r-crainte-count">0 / 400</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="reflection-block">
+            <div class="reflection-prompt">"Qu'est-ce que tu sais déjà, mais que tu continues de repousser ?"</div>
+            <label class="axe-label">Nomme-le clairement</label>
+            <textarea class="axe-textarea" id="p-renoncements" placeholder="C'est souvent la réponse la plus puissante de tout le programme. Prends le temps de la formuler." oninput="updatePacte(); countChars(this, 'p-renoncements-count', 600)" style="min-height:140px"></textarea>
+            <div class="char-count" id="p-renoncements-count">0 / 600</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="coaching-block">
+            <div class="cb-icon">📞</div>
+            <div class="cb-body">
+              <div class="cb-title">Appel post-coût — Confrontation bienveillante</div>
+              <div class="cb-desc">Fabien lira tes 50 renoncements avant l'appel. C'est souvent l'échange le plus puissant du programme : identifier ce que l'athlète esquive réellement, distinguer les vraies résistances des fausses, et fixer les limites non négociables de la saison.</div>
+              <div class="cb-timing">⏱ Durée estimée : 45–60 min · Sur rendez-vous</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="email-capture">
+            <label class="axe-label">Votre email</label>
+            <div class="email-row">
+              <input class="axe-input" id="user-email-2" placeholder="votre@email.com" type="email" style="margin-bottom:0;flex:1" oninput="syncEmail(this)">
+            </div>
+            <p style="font-size:11px;color:var(--white-dim);margin-top:10px">Vos 50 renoncements seront transmis à Fabien pour préparer l'appel.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="axe-btn axe-btn-outline" onclick="goModule(1)">← RETOUR</button>
+          <button class="axe-btn" onclick="completeModule(2)">VALIDER CE MODULE →</button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════ MODULE 3 : PACTE -->
+      <div class="module-view" id="mod-3">
+        <div class="module-header">
+          <span class="module-tag">Phase 1 · Séance 4 · Mois 3</span>
+          <h1 class="module-title">LE PACTE<br>AXE</h1>
+          <p class="module-subtitle">La fin de la négociation intérieure</p>
+        </div>
+
+        <div class="section-block visible">
+          <div class="video-block">
+            <div class="video-placeholder" id="vid3-placeholder">
+              <div class="video-placeholder-icon">▶</div>
+              <div class="video-label">Séance 4 — La signature du Pacte AXE</div>
+            </div>
+            <iframe class="video-embed" id="vid3-embed" allowfullscreen></iframe>
+            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid3')" />
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="axiom">
+            <strong>POINT AXE</strong>
+            À partir de ce module, le doute n'est plus une excuse. C'est un rappel du pacte. Passer de "je vais essayer" à "j'ai choisi."
+          </div>
+          <div class="text-block">
+            <h3>Ce que signifie signer le Pacte</h3>
+            <p>Le Pacte AXE n'est pas un document administratif. C'est l'acte mental le plus important du programme. En le signant, tu ne fais pas une promesse à ton coach. Tu te fais une promesse à toi-même, devant ce que tu sais de toi. Et c'est exactement pour cela que ça fonctionne.</p>
+          </div>
+          <div class="highlight-box">
+            <p>Le Pacte servira de référence mentale <strong>toute la saison</strong>. Avant chaque compétition importante, tu reviendras à ce document. Il te rappellera ce que tu as choisi — et pourquoi tu as choisi de souffrir.</p>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">Comportements non négociables</h2>
+            <p class="exercise-instruction">Ces 10 comportements constituent la base minimale de ta cohérence. Indépendamment de ta motivation du jour, tu les maintiens. Minimum 5 requis.</p>
+            <label class="axe-label">Liste tes 10 comportements non négociables cette saison</label>
+            <div id="engagementList"></div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">Prévisualisation du Pacte AXE</h2>
+            <p class="exercise-instruction">Voici ton Pacte AXE tel qu'il sera généré. Lis-le à voix haute avant de valider.</p>
+            <div class="pacte-preview" id="pactePreview"></div>
+
+            <div class="slider-container" style="margin-top:36px">
+              <label class="axe-label">Niveau d'engagement ressenti après lecture de ton Pacte</label>
+              <div class="slider-value" id="engageVal">8</div>
+              <input type="range" class="axe-range" min="1" max="10" value="8" oninput="document.getElementById('engageVal').textContent = this.value">
+              <div class="slider-labels"><span>Je ne suis pas prêt</span><span>Prêt à certaines conditions</span><span>Engagement total</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="reflection-block">
+            <div class="reflection-prompt">"Je suis prêt à signer ce Pacte parce que…"</div>
+            <textarea class="axe-textarea" id="p-engagement" placeholder="Termine cette phrase. C'est ta déclaration d'engagement." oninput="updatePacte(); countChars(this, 'p-engagement-count', 600)" style="min-height:120px"></textarea>
+            <div class="char-count" id="p-engagement-count">0 / 600</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="coaching-block">
+            <div class="cb-icon">📞</div>
+            <div class="cb-body">
+              <div class="cb-title">Appel de signature — Le Pacte lu à voix haute</div>
+              <div class="cb-desc">Cet appel est le plus solennel du programme. Fabien lira ton Pacte avec toi. L'objectif : ancrer l'engagement, vérifier la solidité de chaque ligne, et t'aider à comprendre pourquoi ce pacte va tenir dans les moments difficiles.</div>
+              <div class="cb-timing">⏱ Durée estimée : 45–60 min · Appel de signature</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="email-capture">
+            <label class="axe-label">Votre email</label>
+            <div class="email-row">
+              <input class="axe-input" id="user-email-3" placeholder="votre@email.com" type="email" style="margin-bottom:0;flex:1" oninput="syncEmail(this)">
+            </div>
+            <p style="font-size:11px;color:var(--white-dim);margin-top:10px">Ton Pacte complet sera envoyé à Fabien. Tu recevras également le PDF signé par email.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="axe-btn axe-btn-outline" onclick="goModule(2)">← RETOUR</button>
+          <button class="axe-btn" onclick="completeModule(3)" id="signBtn">✍ SIGNER ET TÉLÉCHARGER LE PACTE</button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════ MODULE 4 : STABILITÉ -->
+      <div class="module-view" id="mod-4">
+        <div class="module-header">
+          <span class="module-tag">Phase 2 · Séance 1 · À la date de ton objectif</span>
+          <h1 class="module-title">STABILITÉ<br>SOUS PRESSION</h1>
+          <p class="module-subtitle">Maintenir l'alignement quand la motivation chute</p>
+        </div>
+
+        <div class="section-block visible">
+          <div class="video-block">
+            <div class="video-placeholder" id="vid4-placeholder">
+              <div class="video-placeholder-icon">▶</div>
+              <div class="video-label">Séance 5 — Stabilité et pression compétitive</div>
+            </div>
+            <iframe class="video-embed" id="vid4-embed" allowfullscreen></iframe>
+            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid4')" />
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="axiom">
+            <strong>POINT AXE</strong>
+            La discipline n'est pas une émotion. C'est un choix répété. L'énergie mentale est libérée pour la performance — pas pour le doute.
+          </div>
+          <div class="text-block">
+            <h3>La fatigue mentale : le vrai adversaire</h3>
+            <p>Le mental s'épuise rarement à cause de l'effort physique. Il s'épuise à cause de la négociation permanente. Chaque micro-négociation consomme une énergie mentale précieuse — celle que tu aurais pu utiliser pour performer. AXE supprime la négociation. Le Pacte a décidé à ta place.</p>
+          </div>
+          <div class="pillar-grid">
+            <div class="pillar-card">
+              <div class="pillar-title">La question test</div>
+              <div class="pillar-text" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;line-height:1.6">"As-tu changé d'objectif ?"<br><br>Si non → continue.<br>Si oui → reviens au Pacte.</div>
+            </div>
+            <div class="pillar-card">
+              <div class="pillar-title">Le rappel du choix</div>
+              <div class="pillar-text" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;line-height:1.6">"As-tu renoncé à tes engagements ?"<br><br>Si non → continue.<br>Si oui → identifie l'écart.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">Indicateurs d'alignement</h2>
+            <p class="exercise-instruction">Évalue honnêtement ta situation actuelle par rapport aux engagements du Pacte.</p>
+
+            <label class="axe-label">Volume d'entraînement — Alignement avec le Pacte</label>
+            <div class="slider-container">
+              <div class="slider-value" id="align1Val">5</div>
+              <input type="range" class="axe-range" min="1" max="10" value="5" oninput="document.getElementById('align1Val').textContent = this.value">
+              <div class="slider-labels"><span>Rupture totale</span><span>Partiellement</span><span>Alignement total</span></div>
+            </div>
+
+            <label class="axe-label">Hygiène de vie — Alignement avec le Pacte</label>
+            <div class="slider-container">
+              <div class="slider-value" id="align2Val">5</div>
+              <input type="range" class="axe-range" min="1" max="10" value="5" oninput="document.getElementById('align2Val').textContent = this.value">
+              <div class="slider-labels"><span>Rupture totale</span><span>Partiellement</span><span>Alignement total</span></div>
+            </div>
+
+            <label class="axe-label">Discipline mentale quotidienne</label>
+            <div class="slider-container">
+              <div class="slider-value" id="align3Val">5</div>
+              <input type="range" class="axe-range" min="1" max="10" value="5" oninput="document.getElementById('align3Val').textContent = this.value">
+              <div class="slider-labels"><span>Rupture totale</span><span>Partiellement</span><span>Alignement total</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="reflection-block">
+            <div class="reflection-prompt">"Qu'est-ce qui a créé le plus de résistance ces dernières semaines ?"</div>
+            <textarea class="axe-textarea" id="reflect-pression" placeholder="Décris précisément les moments où tu as négocié avec toi-même, où tu as dévié..." oninput="countChars(this, 'reflect-pression-count', 600)" style="min-height:140px"></textarea>
+            <div class="char-count" id="reflect-pression-count">0 / 600</div>
+          </div>
+
+          <div class="reflection-block" style="margin-top:20px">
+            <div class="reflection-prompt">"Quelle décision dois-tu prendre maintenant pour te réaligner ?"</div>
+            <textarea class="axe-textarea" id="reflect-decision" placeholder="Une décision concrète, immédiate, mesurable." oninput="countChars(this, 'reflect-decision-count', 400)" style="min-height:100px"></textarea>
+            <div class="char-count" id="reflect-decision-count">0 / 400</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="coaching-block">
+            <div class="cb-icon">📞</div>
+            <div class="cb-body">
+              <div class="cb-title">Appel de stabilisation — Analyse des écarts</div>
+              <div class="cb-desc">Cet appel intervient à la date clé de ton objectif. Fabien analysera tes indicateurs d'alignement et tes réponses de réflexion. L'objectif : identifier ce qui a résisté, recalibrer si nécessaire, et renforcer les fondations pour la seconde partie de l'accompagnement.</div>
+              <div class="cb-timing">⏱ Durée estimée : 40–50 min · Appel de mi-parcours</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="email-capture">
+            <label class="axe-label">Votre email</label>
+            <div class="email-row">
+              <input class="axe-input" id="user-email-4" placeholder="votre@email.com" type="email" style="margin-bottom:0;flex:1" oninput="syncEmail(this)">
+            </div>
+            <p style="font-size:11px;color:var(--white-dim);margin-top:10px">Tes indicateurs d'alignement seront transmis à Fabien pour préparer l'appel de mi-parcours.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="axe-btn axe-btn-outline" onclick="goModule(3)">← RETOUR</button>
+          <button class="axe-btn" onclick="completeModule(4)">VALIDER CE MODULE →</button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════ MODULE 5 : BILAN -->
+      <div class="module-view" id="mod-5">
+        <div class="module-header">
+          <span class="module-tag">Phase 2 · Séance 2 · Mois 10–12</span>
+          <h1 class="module-title">VÉRITÉ<br>DU PARCOURS</h1>
+          <p class="module-subtitle">Le bilan n'est pas sur le résultat — c'est sur l'alignement</p>
+        </div>
+
+        <div class="section-block visible">
+          <div class="video-block">
+            <div class="video-placeholder" id="vid5-placeholder">
+              <div class="video-placeholder-icon">▶</div>
+              <div class="video-label">Séance 6 — Bilan et maturité mentale</div>
+            </div>
+            <iframe class="video-embed" id="vid5-embed" allowfullscreen></iframe>
+            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid5')" />
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="axiom">
+            <strong>POINT AXE FINAL</strong>
+            AXE ne promet pas la réussite. Elle garantit la lucidité. Le bilan n'est pas basé sur le résultat, mais sur le niveau d'alignement maintenu.
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="exercise-block">
+            <h2 class="exercise-title">Grille de bilan AXE</h2>
+            <p class="exercise-instruction">Évalue chaque dimension de ton engagement sur la saison.</p>
+
+            <label class="axe-label">Mes renoncements ont été respectés</label>
+            <div class="choice-grid" data-group="bilan1">
+              <div class="choice-option" onclick="selectChoice(this,'bilan1')"><div class="choice-check">✓</div><div class="choice-text">🟢 Alignement total — j'ai tenu tous mes renoncements</div></div>
+              <div class="choice-option" onclick="selectChoice(this,'bilan1')"><div class="choice-check">✓</div><div class="choice-text">🟡 Alignement partiel — quelques écarts maîtrisés</div></div>
+              <div class="choice-option" onclick="selectChoice(this,'bilan1')"><div class="choice-check">✓</div><div class="choice-text">🔴 Rupture — j'ai beaucoup négocié avec moi-même</div></div>
+            </div>
+
+            <label class="axe-label" style="margin-top:24px">Mes comportements non négociables</label>
+            <div class="choice-grid" data-group="bilan2">
+              <div class="choice-option" onclick="selectChoice(this,'bilan2')"><div class="choice-check">✓</div><div class="choice-text">🟢 Maintenus — indépendamment de la motivation</div></div>
+              <div class="choice-option" onclick="selectChoice(this,'bilan2')"><div class="choice-check">✓</div><div class="choice-text">🟡 Partiellement — variables selon mon état</div></div>
+              <div class="choice-option" onclick="selectChoice(this,'bilan2')"><div class="choice-check">✓</div><div class="choice-text">🔴 Rompus — la motivation a dicté mes actions</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="reflection-block">
+            <div class="reflection-prompt">"Qu'est-ce que cette saison m'a appris sur moi ?"</div>
+            <textarea class="axe-textarea" id="bilan-apprentissage" placeholder="Formule clairement ce que tu as découvert — sur tes forces, tes limites, ta vraie nature sous pression." oninput="countChars(this, 'bilan-apprentissage-count', 800)" style="min-height:160px"></textarea>
+            <div class="char-count" id="bilan-apprentissage-count">0 / 800</div>
+          </div>
+
+          <div class="reflection-block" style="margin-top:20px">
+            <div class="reflection-prompt">"Décision : poursuivre, ajuster, ou renoncer ?"</div>
+            <div class="choice-grid" data-group="decision" style="margin:14px 0 20px">
+              <div class="choice-option" onclick="selectChoice(this,'decision')"><div class="choice-check">✓</div><div class="choice-text">🔥 POURSUIVRE — j'augmente mon niveau d'exigence</div></div>
+              <div class="choice-option" onclick="selectChoice(this,'decision')"><div class="choice-check">✓</div><div class="choice-text">🔄 AJUSTER — je recalibre l'objectif et le coût</div></div>
+              <div class="choice-option" onclick="selectChoice(this,'decision')"><div class="choice-check">✓</div><div class="choice-text">⚡ RENONCER — en toute lucidité et cohérence</div></div>
+            </div>
+            <label class="axe-label">Justifie ta décision</label>
+            <textarea class="axe-textarea" id="bilan-decision" placeholder="Pourquoi cette décision ? Qu'est-ce qui te guide ?" oninput="countChars(this, 'bilan-decision-count', 600)" style="min-height:120px"></textarea>
+            <div class="char-count" id="bilan-decision-count">0 / 600</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="coaching-block">
+            <div class="cb-icon">📞</div>
+            <div class="cb-body">
+              <div class="cb-title">Appel de bilan — Clôture des 12 mois</div>
+              <div class="cb-desc">Le dernier appel du programme est le plus stratégique. Fabien fera avec vous un bilan complet de l'année : ce qui a tenu, ce qui a cédé, et ce que cela révèle de votre profil mental. À l'issue de cet appel, une recommandation claire : continuer, transformer la méthode, ou capitaliser sur ce qui a été construit.</div>
+              <div class="cb-timing">⏱ Durée estimée : 60 min · Appel de clôture 12 mois</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="email-capture">
+            <label class="axe-label">Votre email</label>
+            <div class="email-row">
+              <input class="axe-input" id="user-email-5" placeholder="votre@email.com" type="email" style="margin-bottom:0;flex:1" oninput="syncEmail(this)">
+            </div>
+            <p style="font-size:11px;color:var(--white-dim);margin-top:10px">Ton bilan complet sera transmis à Fabien pour préparer l'appel de clôture.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="axe-btn axe-btn-outline" onclick="goModule(4)">← RETOUR</button>
+          <button class="axe-btn" onclick="completeModule(5)" style="background:var(--gold)">✦ TERMINER LE PROGRAMME AXE</button>
+        </div>
+
+        <!-- Final success -->
+        <div id="finalSuccess" style="display:none">
+          <hr class="divider">
+          <div class="success-screen">
+            <div class="success-icon">✦</div>
+            <h2 style="font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:0.1em;margin-bottom:16px">PROGRAMME ACCOMPLI</h2>
+            <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:var(--white-dim);margin-bottom:32px;line-height:1.6">Tu n'as pas simplement suivi un programme.<br>Tu as regardé la vérité en face.</p>
+            <div class="completion-badge">✓ MÉTHODE AXE — 12 MOIS · PROGRAMME COMPLET</div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:40px 0;text-align:left">
+              <div class="testimonial">
+                <div class="testimonial-text">"La méthode m'a appris à arrêter de négocier avec moi-même. J'ai gagné mon championnat régional 4 mois après la signature du Pacte."</div>
+                <div class="testimonial-author">Lucas M. — Judo · Niveau régional</div>
+              </div>
+              <div class="testimonial">
+                <div class="testimonial-text">"Les appels de Fabien sont ce qui m'a fait tenir. Il avait lu mes réponses, il connaissait mes vraies résistances avant même que je les formule."</div>
+                <div class="testimonial-author">Sarah K. — Triathlon · Amateur confirmée</div>
+              </div>
+              <div class="testimonial">
+                <div class="testimonial-text">"J'avais essayé trois autres coachs. AXE est le seul programme où j'ai vraiment compris pourquoi je sabotais mes préparations."</div>
+                <div class="testimonial-author">Rayan D. — Football · National 2</div>
+              </div>
+            </div>
+
+            <div class="guarantee" style="text-align:left;margin-bottom:32px">
+              <div class="guarantee-icon">🛡</div>
+              <div class="guarantee-body"><strong>Engagement Fabien :</strong> Si tu as complété les 6 modules honnêtement et suivi les appels de coaching, et que tu n'as pas observé de progrès mesurable sur ta discipline mentale, Fabien s'engage à te proposer 2 mois supplémentaires d'accompagnement sans frais.</div>
+            </div>
+
+            <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+              <button class="axe-btn" onclick="downloadPacte()">⬇ TÉLÉCHARGER MON PACTE AXE</button>
+              <button class="axe-btn axe-btn-outline" onclick="openModal()">⬡ RITUEL AXE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal" style="display:none;align-items:center;justify-content:center">
+  <div class="modal-content" style="max-width:480px;width:90%">
+    <button class="modal-close" onclick="closeContactModal()">✕</button>
+    <div class="modal-title">POSER UNE QUESTION</div>
+    <div class="modal-subtitle">Fabien vous répondra personnellement</div>
+
+    <div style="margin-bottom:16px">
+      <label class="axe-label">Votre prénom</label>
+      <input class="axe-input" id="contact-nom" placeholder="Ex : Thomas" style="margin-bottom:0">
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label class="axe-label">Votre email (pour recevoir la réponse)</label>
+      <input class="axe-input" id="contact-email" type="email" placeholder="votre@email.com" style="margin-bottom:0">
+    </div>
+
+    <div style="margin-bottom:24px">
+      <label class="axe-label">Votre question</label>
+      <textarea class="axe-textarea" id="contact-message" placeholder="Pose ta question librement. Fabien la lira avant votre prochain appel ou y répondra directement par email." style="min-height:120px;margin-bottom:0"></textarea>
+    </div>
+
+    <button class="axe-btn" style="width:100%" onclick="sendContactEmail()">✉ ENVOYER À FABIEN</button>
+    <div id="contact-feedback" style="margin-top:12px;font-size:12px;text-align:center;min-height:18px"></div>
+  </div>
+</div>
+
+<!-- Legal footer -->
+  <footer class="legal-footer">
+    <p>© 2026 Méthode AXE — Fabien Pinton · Préparation mentale de performance</p>
+    <div class="legal-links">
+      <a href="#" onclick="return false">Mentions légales</a>
+      <a href="#" onclick="return false">CGV</a>
+      <a href="#" onclick="return false">Politique de confidentialité</a>
+      <a href="mailto:f.pinton@outlook.fr">Contact</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-title" id="toast-title"></div>
+  <div class="toast-msg" id="toast-msg"></div>
+</div>
+
+<!-- VALIDATION BANNER -->
+<div id="validationBanner">
+  <button class="close-banner" onclick="hideValidation()">✕</button>
+  <h3 id="validationTitle">CHAMPS REQUIS AVANT DE CONTINUER</h3>
+  <ul id="validationList"></ul>
+</div>
+
+<!-- MODAL RITUEL -->
+<div class="modal-overlay" id="rituelModal" style="display:none">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">RITUEL AXE</div>
+    <div class="modal-subtitle">Protocole de préparation mentale · 5 minutes</div>
+
+    <div class="ritual-step" id="ritual-1" style="display:block">
+      <div class="ritual-step-num">ÉTAPE 01 · RESPIRATION</div>
+      <div class="ritual-instruction">Ferme les yeux. Inspire profondément pendant 4 secondes. Retiens 4 secondes. Expire 4 secondes. Répète 4 fois.</div>
+      <div class="ritual-timer" id="ritTimer">64</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="ritual-start-btn" onclick="startRitualTimer(1,'ritTimer',64)">DÉMARRER</button>
+        <button class="ritual-start-btn" style="background:transparent;border:1px solid var(--border-strong);color:var(--gold)" onclick="nextRitual(2)">SUIVANT →</button>
+      </div>
+    </div>
+
+    <div class="ritual-step" id="ritual-2" style="display:none">
+      <div class="ritual-step-num">ÉTAPE 02 · VISUALISATION</div>
+      <div class="ritual-instruction">Visualise-toi en train de performer à ton niveau optimal. Pas de résultat — seulement le processus. Chaque geste, chaque décision. Tu exécutes.</div>
+      <div class="ritual-timer" id="ritTimer2">120</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="ritual-start-btn" onclick="startRitualTimer(2,'ritTimer2',120)">DÉMARRER</button>
+        <button class="ritual-start-btn" style="background:transparent;border:1px solid var(--border-strong);color:var(--gold)" onclick="nextRitual(3)">SUIVANT →</button>
+      </div>
+    </div>
+
+    <div class="ritual-step" id="ritual-3" style="display:none">
+      <div class="ritual-step-num">ÉTAPE 03 · ANCRAGE</div>
+      <div class="ritual-instruction">Ouvre les yeux. Respiration calme. Rappelle-toi ton Pacte AXE. Ne vois plus que l'objectif devant toi.</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.15em;color:var(--gold);text-align:center;margin-top:16px;margin-bottom:16px">✦ RITUEL AXE ACCOMPLI</div>
+      <button class="ritual-start-btn" style="width:100%" onclick="closeModal()">FERMER</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// VÉRIFICATION ACCÈS
+// ============================================================
+// ADMIN BYPASS — Accès administrateur sans paiement
+// Pour accéder : ouvrir le fichier avec ?admin=AXE-Fabien-2026 dans l'URL
+// ============================================================
+const ADMIN_URL_KEY = "AXE-Fabien-2026"; // paramètre URL secret
+
+(async function checkAccess() {
+  const params = new URLSearchParams(window.location.search);
+  const token  = params.get("token");
+  const adminKey = params.get("admin");
+
+  // ── BYPASS ADMIN : URL secrète ──────────────────────────
+  if (adminKey === ADMIN_URL_KEY) {
+    sessionStorage.setItem("axe-admin", "true");
+    sessionStorage.setItem("axe-token", "admin-bypass");
+    sessionStorage.setItem("axe-email", "admin@axe.fr");
+    return; // accès immédiat, programme se charge normalement
+  }
+
+  // ── ACCÈS NORMAL : pas de token → accès refusé ─────────
+  if (!token) {
+    document.body.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;
+        height:100vh;background:#0D0B08;font-family:'DM Sans',sans-serif;
+        flex-direction:column;gap:20px;text-align:center;padding:40px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;
+          color:#C9A84C;letter-spacing:0.1em;">AXE</div>
+        <p style="color:#8A7E6E;font-size:12px;letter-spacing:0.25em;
+          text-transform:uppercase;">Accès non autorisé</p>
+        <p style="color:#5A4E3E;font-size:12px;max-width:360px;line-height:1.7;">
+          Ce programme est accessible uniquement via le lien reçu après paiement.
+        </p>
+      </div>`;
+    return;
+  }
+
+  // ── VÉRIFICATION SUPABASE (utilisateurs normaux) ────────
+  const res = await fetch(
+    'https://mgssdkjfiriggbuhvirb.supabase.co/rest/v1/athletes' +
+    '?token=eq.' + token + '&select=email,subscription_status,access_until&limit=1',
+    { headers: {
+      'apikey': 'sb_publishable_mYdat4wuOZv9-DHLR851Nw_KtgtMw_P',
+      'Authorization': 'Bearer sb_publishable_mYdat4wuOZv9-DHLR851Nw_KtgtMw_P'
+    }}
+  );
+  const data = await res.json();
+
+  if (!data || data.length === 0) {
+    document.body.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;
+        height:100vh;background:#0D0B08;font-family:'DM Sans',sans-serif;
+        flex-direction:column;gap:20px;text-align:center;padding:40px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;
+          color:#C9A84C;letter-spacing:0.1em;">AXE</div>
+        <p style="color:#C0392B;font-size:12px;letter-spacing:0.2em;">
+          Lien invalide ou expiré.
+        </p>
+      </div>`;
+    return;
+  }
+
+  const athlete = data[0];
+
+  const now          = new Date();
+  const accessUntil  = athlete.access_until ? new Date(athlete.access_until) : null;
+  const isActive     = athlete.subscription_status === "active";
+  const notExpired   = accessUntil ? accessUntil > now : false;
+
+  if (!isActive || !notExpired) {
+    document.body.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;
+        height:100vh;background:#0D0B08;font-family:'DM Sans',sans-serif;
+        flex-direction:column;gap:20px;text-align:center;padding:40px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;
+          color:#C9A84C;letter-spacing:0.1em;">AXE</div>
+        <p style="color:#C0392B;font-size:12px;letter-spacing:0.2em;
+          text-transform:uppercase;">Abonnement inactif</p>
+        <p style="color:#5A4E3E;font-size:12px;max-width:360px;line-height:1.7;">
+          Ton accès à la Méthode AXE a été suspendu.<br>
+          Pour réactiver ton programme, contacte Fabien.
+        </p>
+        <a href="mailto:f.pinton@outlook.fr" style="
+          color:#C9A84C;font-size:11px;letter-spacing:0.25em;
+          text-transform:uppercase;text-decoration:none;
+          border:1px solid rgba(201,168,76,0.3);padding:12px 28px;
+          margin-top:8px;">
+          CONTACTER FABIEN →
+        </a>
+      </div>`;
+    return;
+  }
+
+  // Accès valide — on continue
+  sessionStorage.setItem("axe-token", token);
+  sessionStorage.setItem("axe-email", athlete.email);
+})();
+
+// ============================================================
+// STATE
+// ============================================================
+const state = {
+  currentModule: 0,
+  completedModules: [],
+  userEmail: '',
+  pacte: {
+    nom: '', sport: '', niveau: '', objectif: '', objectifsTable: [], situation: '',
+    renoncements: '', comportements: '', engagement: '',
+    resistanceConfort: '', resistancePeur: '', resistanceCrainte: '',
+    date: new Date().toLocaleDateString('fr-FR')
+  },
+  // MODIFIÉ : 50 renoncements
+  sacrifices: Array.from({ length: 50 }, () => ({ text: '', level: '' })),
+  // MODIFIÉ : 10 comportements non négociables
+  engagements: Array(10).fill('')
+};
+
+// Restauration depuis localStorage
+try {
+  const saved = localStorage.getItem('axe-state');
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    if (parsed.pacte) {
+      Object.assign(state.pacte, parsed.pacte);
+      if (!Array.isArray(state.pacte.objectifsTable)) state.pacte.objectifsTable = [];
+    }
+    if (parsed.currentModule !== undefined) state.currentModule = parsed.currentModule;
+    if (parsed.completedModules) state.completedModules = parsed.completedModules;
+    if (parsed.userEmail) state.userEmail = parsed.userEmail;
+    if (parsed.sacrifices && Array.isArray(parsed.sacrifices)) {
+      parsed.sacrifices.forEach((s, i) => {
+        if (s && i < 50) state.sacrifices[i] = { text: s.text || '', level: s.level || '' };
+      });
+    }
+    if (parsed.engagements && Array.isArray(parsed.engagements)) {
+      // MODIFIÉ : idx < 10
+      parsed.engagements.forEach((e, i) => { if (i < 10) state.engagements[i] = e || ''; });
+    }
+  }
+} catch(e) {}
+
+// ============================================================
+// SUPABASE CONFIG
+// ============================================================
+const SUPABASE_URL = 'https://mgssdkjfiriggbuhvirb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_mYdat4wuOZv9-DHLR851Nw_KtgtMw_P';
+
+let _syncTimeout = null;
+
+function setSyncStatus(status, msg) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  const map = {
+    saving: { icon: '⏳', color: 'var(--gold-dark)', text: msg || 'Sauvegarde...' },
+    saved:  { icon: '✓',  color: 'var(--success)',  text: msg || 'Sauvegardé' },
+    error:  { icon: '⚠',  color: 'var(--red)',      text: msg || 'Erreur sync' },
+    idle:   { icon: '',   color: 'var(--white-faint)', text: '' }
+  };
+  const s = map[status] || map.idle;
+  el.textContent = s.icon + (s.text ? ' ' + s.text : '');
+  el.style.color = s.color;
+  if (status === 'saved') setTimeout(() => setSyncStatus('idle'), 3500);
+}
+
+async function syncToSupabase() {
+  const email = state.userEmail;
+  if (!email || !email.includes('@')) return;
+  setSyncStatus('saving');
+  try {
+    state._updated = new Date().toISOString();
+    localStorage.setItem('axe-updated', state._updated);
+    const res = await fetch(SUPABASE_URL + '/rest/v1/athletes?on_conflict=email', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
+      },
+      body: JSON.stringify({ email, updated_at: state._updated, state: JSON.stringify(state) })
+    });
+    if (res.ok || res.status === 201 || res.status === 200) {
+      setSyncStatus('saved', 'Sauvegardé en ligne');
+    } else {
+      console.warn('[AXE Sync]', res.status, await res.text());
+      setSyncStatus('error', 'Erreur sync');
+    }
+  } catch(e) {
+    console.warn('[AXE Sync]', e.message);
+    setSyncStatus('error', 'Hors ligne — sauvegardé en local');
+  }
+}
+
+async function loadFromSupabase(email) {
+  if (!email || !email.includes('@')) return null;
+  try {
+    const res = await fetch(
+      SUPABASE_URL + '/rest/v1/athletes?email=eq.' + encodeURIComponent(email) + '&select=state,updated_at&limit=1',
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data && data.length > 0 && data[0].state) {
+      return typeof data[0].state === 'string' ? JSON.parse(data[0].state) : data[0].state;
+    }
+  } catch(e) { console.warn('[AXE Load]', e.message); }
+  return null;
+}
+
+async function tryCloudRestore(email) {
+  if (!email || !email.includes('@')) return false;
+  setSyncStatus('saving', 'Restauration...');
+  const cloudState = await loadFromSupabase(email);
+  if (!cloudState) { setSyncStatus('idle'); return false; }
+  applyRestoredState(cloudState);
+  restoreAllFields();
+  buildObjectifTable();
+  buildSacrificeList();
+  buildEngagementList();
+  buildNav();
+  updatePacte();
+  updateHeaderAthlete();
+  showModule(state.currentModule);
+  setSyncStatus('saved', 'Données restaurées depuis le cloud ✓');
+  return true;
+}
+
+function applyRestoredState(parsed) {
+  if (parsed.pacte) {
+    Object.assign(state.pacte, parsed.pacte);
+    if (!Array.isArray(state.pacte.objectifsTable)) state.pacte.objectifsTable = [];
+  }
+  if (parsed.currentModule !== undefined) state.currentModule = parsed.currentModule;
+  if (parsed.completedModules) state.completedModules = parsed.completedModules;
+  if (parsed.userEmail) state.userEmail = parsed.userEmail;
+  if (parsed.sacrifices && Array.isArray(parsed.sacrifices)) {
+    parsed.sacrifices.forEach((s, i) => {
+      if (s && i < 50) state.sacrifices[i] = { text: s.text || '', level: s.level || '' };
+    });
+  }
+  if (parsed.engagements && Array.isArray(parsed.engagements)) {
+    parsed.engagements.forEach((e, i) => { if (i < 10) state.engagements[i] = e || ''; });
+  }
+}
+
+function saveState() {
+  // 1. Local immédiat (fonctionne même hors ligne)
+  try { localStorage.setItem('axe-state', JSON.stringify(state)); } catch(e) {}
+  // 2. Cloud avec debounce 1.5s
+  if (_syncTimeout) clearTimeout(_syncTimeout);
+  _syncTimeout = setTimeout(() => syncToSupabase(), 1500);
+}
+
+// ============================================================
+// MODULES CONFIG
+// ============================================================
+const modules = [
+  { title: 'PROFILAGE',   desc: "Qui es-tu aujourd'hui ?" },
+  { title: "L'OBJECTIF",  desc: 'La vérité du projet' },
+  { title: 'LE COÛT',     desc: 'Identification du sacrifice' },
+  { title: 'LE PACTE',    desc: 'Signature & engagement' },
+  { title: 'STABILITÉ',   desc: 'Sous pression' },
+  { title: 'LE BILAN',    desc: 'Vérité du parcours' },
+];
+
+// ============================================================
+// EMAIL SYNC
+// ============================================================
+function syncEmail(inputEl) {
+  const newEmail = inputEl.value.trim();
+  const wasEmpty = !state.userEmail || !state.userEmail.includes('@');
+  state.userEmail = newEmail;
+  for (let i = 0; i <= 5; i++) {
+    const el = document.getElementById('user-email-' + i);
+    if (el && el !== inputEl) el.value = newEmail;
+  }
+  saveState();
+  // Si c'est la première fois qu'un email valide est saisi, tenter restore cloud
+  if (wasEmpty && newEmail.includes('@')) {
+    tryCloudRestore(newEmail);
+  }
+}
+
+function getCurrentEmail() {
+  return state.userEmail;
+}
+
+// ============================================================
+// REGISTER MODAL
+// ============================================================
+function openRegisterModal() {
+  const modal = document.getElementById('registerModal');
+  modal.style.display = 'flex';
+  try {
+    const saved = localStorage.getItem('axe-state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.pacte && parsed.pacte.nom) {
+        const parts = parsed.pacte.nom.trim().split(' ');
+        if (parts.length >= 2) {
+          document.getElementById('reg-prenom').value = parts[0];
+          document.getElementById('reg-nom').value = parts.slice(1).join(' ');
+        } else {
+          document.getElementById('reg-prenom').value = parsed.pacte.nom;
+        }
+      }
+      if (parsed.userEmail) document.getElementById('reg-email').value = parsed.userEmail;
+    }
+  } catch(e) {}
+  setTimeout(() => document.getElementById('reg-prenom').focus(), 100);
+}
+
+async function submitRegister() {
+  const prenom = document.getElementById('reg-prenom').value.trim();
+  const nom    = document.getElementById('reg-nom').value.trim();
+  const email  = document.getElementById('reg-email').value.trim();
+  const errEl  = document.getElementById('reg-error');
+  const btn    = document.getElementById('reg-submit-btn');
+  errEl.textContent = '';
+  if (!prenom) { errEl.textContent = "Merci d'indiquer votre prénom."; return; }
+  if (!nom)    { errEl.textContent = "Merci d'indiquer votre nom."; return; }
+  if (!email || !email.includes('@')) { errEl.textContent = 'Adresse email invalide.'; return; }
+
+  const fullName = prenom + ' ' + nom;
+  state.userEmail = email;
+  state.pacte.nom = fullName;
+
+  btn.textContent = 'CHARGEMENT...';
+  btn.style.opacity = '0.7';
+  btn.style.cursor = 'not-allowed';
+
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/athletes?on_conflict=email', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
+      },
+      body: JSON.stringify({ email, prenom, nom, updated_at: new Date().toISOString(), state: JSON.stringify(state) })
+    });
+  } catch(e) { console.warn('[AXE Register]', e.message); }
+
+  const cloudState = await loadFromSupabase(email);
+  if (cloudState) {
+    applyRestoredState(cloudState);
+    if (!state.pacte.nom) state.pacte.nom = fullName;
+    if (!state.userEmail) state.userEmail = email;
+  }
+
+  try { localStorage.setItem('axe-state', JSON.stringify(state)); } catch(e) {}
+  document.getElementById('registerModal').style.display = 'none';
+  startApp();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function startApp() {
+  document.getElementById('intro').style.opacity = '0';
+  setTimeout(async () => {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    buildNav();
+    buildSacrificeList();
+    buildEngagementList();
+    buildObjectifTable();
+    restoreAllFields();
+    showModule(state.currentModule);
+    updatePacte();
+    updateHeaderAthlete();
+    // Si un email est déjà connu, tenter de restaurer depuis le cloud
+    if (state.userEmail && state.userEmail.includes('@')) {
+      tryCloudRestore(state.userEmail);
+    }
+  }, 1000);
+}
+
+function restoreAllFields() {
+  const fieldMap = {
+    'p-nom': 'nom', 'p-sport': 'sport',
+    'p-situation': 'situation', 'p-renoncements': 'renoncements',
+    'p-engagement': 'engagement', 'r-confort': 'resistanceConfort',
+    'r-peur': 'resistancePeur', 'r-crainte': 'resistanceCrainte'
+  };
+  Object.entries(fieldMap).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el && state.pacte[key]) {
+      el.value = state.pacte[key];
+      const counterId = id + '-count';
+      const counterEl = document.getElementById(counterId);
+      if (counterEl) {
+        const max = parseInt(counterEl.textContent.split('/')[1]) || 800;
+        counterEl.textContent = el.value.length + ' / ' + max;
+      }
+    }
+  });
+  const extraFields = ['q-pourquoi', 'q-echec', 'reflect-pression', 'reflect-decision',
+                       'bilan-apprentissage', 'bilan-decision'];
+  extraFields.forEach(id => {
+    const savedVal = localStorage.getItem('axe-field-' + id);
+    if (savedVal) {
+      const el = document.getElementById(id);
+      if (el) el.value = savedVal;
+    }
+  });
+  const lvlEl = document.getElementById('p-niveau');
+  if (lvlEl && state.pacte.niveau) lvlEl.value = state.pacte.niveau;
+  if (state.userEmail) {
+    for (let i = 0; i <= 5; i++) {
+      const el = document.getElementById('user-email-' + i);
+      if (el) el.value = state.userEmail;
+    }
+  }
+}
+
+function buildNav() {
+  const nav = document.getElementById('moduleNav');
+  nav.innerHTML = '';
+  modules.forEach((m, i) => {
+    const isCompleted = state.completedModules.includes(i);
+    const isActive = i === state.currentModule;
+    const standardLocked = i > 0 && !state.completedModules.includes(i - 1) && !state.completedModules.includes(i);
+    // Module 4 : verrou date supplémentaire
+    const dateLocked = i === 4 && !state.completedModules.includes(4) && !isModule4DateUnlocked() && state.completedModules.includes(3);
+    const isLocked = standardLocked || dateLocked;
+    const cls = ['module-nav-item', isActive ? 'active' : '', isCompleted ? 'completed' : '', isLocked ? 'locked' : ''].filter(Boolean).join(' ');
+    const icon = isCompleted ? '&#10003;' : (i + 1);
+
+    let lockLabel = '';
+    if (dateLocked) {
+      const farthest = getFarthestObjectifDate();
+      if (farthest && !isNaN(farthest)) {
+        const dateStr = farthest.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+        lockLabel = `<div class="mod-lock" style="font-size:9px;letter-spacing:0.05em;color:var(--gold-dark)">📅 ${dateStr}</div>`;
+      } else {
+        lockLabel = '<div class="mod-lock">&#128274;</div>';
+      }
+    } else if (standardLocked) {
+      lockLabel = '<div class="mod-lock">&#128274;</div>';
+    }
+
+    const bar = `<div class="mod-progress-bar"><div class="mod-progress-fill" id="modprog-${i}"></div></div>`;
+
+    const div = document.createElement('div');
+    div.className = cls;
+    div.innerHTML = `<div class="mod-icon">${icon}</div>
+      <div class="mod-info"><div class="mod-name">${m.title}</div>
+      <div class="mod-desc">${m.desc}</div>${bar}</div>${lockLabel}`;
+
+    if (!isLocked) {
+      div.addEventListener('click', () => goModule(i));
+      div.style.cursor = 'pointer';
+    }
+    nav.appendChild(div);
+  });
+}
+
+function updateHeaderProgress() {
+  document.querySelectorAll('#progressGlobal .prog-module').forEach((el, i) => {
+    el.classList.remove('active', 'completed');
+    if (state.completedModules.includes(i)) el.classList.add('completed');
+    else if (i === state.currentModule) el.classList.add('active');
+  });
+}
+
+// ============================================================
+// OBJECTIF TABLE — objectif précis + date
+// ============================================================
+function buildObjectifTable() {
+  const tbody = document.getElementById('objectifTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  // Initialise 5 lignes si vide
+  if (!state.pacte.objectifsTable || state.pacte.objectifsTable.length === 0) {
+    state.pacte.objectifsTable = Array.from({ length: 5 }, () => ({ texte: '', date: '' }));
+  }
+  // Toujours afficher 5 lignes minimum
+  while (state.pacte.objectifsTable.length < 5) {
+    state.pacte.objectifsTable.push({ texte: '', date: '' });
+  }
+
+  state.pacte.objectifsTable.forEach((obj, i) => {
+    const tr = document.createElement('tr');
+
+    const tdNum = document.createElement('td');
+    tdNum.style.cssText = 'font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--gold-dark);text-align:center';
+    tdNum.textContent = String(i + 1).padStart(2, '0');
+
+    const tdText = document.createElement('td');
+    const inpText = document.createElement('input');
+    inpText.placeholder = 'Ex : Gagner le championnat régional de MMA…';
+    inpText.value = obj.texte || '';
+    inpText.dataset.idx = i;
+    inpText.dataset.field = 'texte';
+    inpText.addEventListener('input', function() {
+      state.pacte.objectifsTable[parseInt(this.dataset.idx)].texte = this.value;
+      updatePacte();
+      saveState();
+      updateUnlockInfo();
+    });
+
+    const tdDate = document.createElement('td');
+    const inpDate = document.createElement('input');
+    inpDate.type = 'date';
+    inpDate.value = obj.date || '';
+    inpDate.dataset.idx = i;
+    inpDate.dataset.field = 'date';
+    inpDate.style.cssText = 'background:transparent;border:none;color:#1A1612;font-family:DM Sans,sans-serif;font-size:13px;outline:none;width:100%;cursor:pointer';
+    inpDate.addEventListener('change', function() {
+      state.pacte.objectifsTable[parseInt(this.dataset.idx)].date = this.value;
+      updatePacte();
+      saveState();
+      updateUnlockInfo();
+      buildNav(); // refresh lock status in sidebar
+    });
+
+    tdText.appendChild(inpText);
+    tdDate.appendChild(inpDate);
+    tr.appendChild(tdNum);
+    tr.appendChild(tdText);
+    tr.appendChild(tdDate);
+    tbody.appendChild(tr);
+  });
+
+  updateUnlockInfo();
+}
+
+function getFarthestObjectifDate() {
+  if (!state.pacte.objectifsTable) return null;
+  const dates = state.pacte.objectifsTable
+    .map(o => o.date)
+    .filter(d => d && d.trim())
+    .map(d => new Date(d));
+  if (dates.length === 0) return null;
+  return new Date(Math.max(...dates));
+}
+
+function isModule4DateUnlocked() {
+  const farthest = getFarthestObjectifDate();
+  if (!farthest) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  farthest.setHours(0, 0, 0, 0);
+  return today >= farthest;
+}
+
+function updateUnlockInfo() {
+  const el = document.getElementById('objectif-unlock-info');
+  if (!el) return;
+  const farthest = getFarthestObjectifDate();
+  if (!farthest || isNaN(farthest)) {
+    el.innerHTML = '';
+    return;
+  }
+  const opts = { day: 'numeric', month: 'long', year: 'numeric' };
+  const dateStr = farthest.toLocaleDateString('fr-FR', opts);
+  if (isModule4DateUnlocked()) {
+    el.innerHTML = `<span style="color:var(--success)">✓ La date objectif (${dateStr}) est atteinte — le module Stabilité est accessible.</span>`;
+  } else {
+    el.innerHTML = `<span style="color:var(--gold)">⏳ Le module <strong>Stabilité</strong> se débloquera le <strong>${dateStr}</strong> — ta date objectif la plus éloignée.</span>`;
+  }
+}
+
+// ============================================================
+// SACRIFICE LIST — 50 lignes
+// ============================================================
+function buildSacrificeList() {
+  const container = document.getElementById('sacrificeList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // MODIFIÉ : boucle jusqu'à 50
+  for (let i = 0; i < 50; i++) {
+    const sac = state.sacrifices[i];
+    const div = document.createElement('div');
+    div.className = 'sacrifice-item';
+    div.id = 'sac-' + i;
+
+    const numEl = document.createElement('div');
+    numEl.className = 'sacrifice-num';
+    numEl.textContent = String(i + 1).padStart(2, '0');
+
+    const inp = document.createElement('input');
+    inp.className = 'sacrifice-input';
+    inp.placeholder = "Ce que j'accepte de laisser...";
+    inp.value = sac.text || '';
+    inp.dataset.idx = i;
+    inp.addEventListener('input', function () {
+      state.sacrifices[parseInt(this.dataset.idx)].text = this.value;
+      updatePacte();
+      saveState();
+    });
+
+    const btnWrap = document.createElement('div');
+    btnWrap.className = 'btn-levels';
+    btnWrap.style.cssText = 'display:flex;gap:6px';
+
+    const levels = [
+      { key: 'easy', label: 'SUPPORTABLE', activeClass: 'active-easy' },
+      { key: 'hard', label: 'DIFFICILE', activeClass: 'active-hard' },
+      { key: 'extreme', label: 'EXTRÊME', activeClass: 'active-extreme' }
+    ];
+
+    levels.forEach(lv => {
+      const btn = document.createElement('button');
+      btn.className = 'sacrifice-level ' + lv.key;
+      if (sac.level === lv.key) btn.classList.add(lv.activeClass);
+      btn.textContent = lv.label;
+      btn.dataset.idx = i;
+      btn.dataset.key = lv.key;
+      btn.dataset.activeClass = lv.activeClass;
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.idx);
+        const key = this.dataset.key;
+        const ac = this.dataset.activeClass;
+        state.sacrifices[idx].level = key;
+        const item = document.getElementById('sac-' + idx);
+        item.querySelectorAll('.sacrifice-level').forEach(b => {
+          b.classList.remove('active-easy', 'active-hard', 'active-extreme');
+        });
+        this.classList.add(ac);
+        updatePacte();
+        saveState();
+      });
+      btnWrap.appendChild(btn);
+    });
+
+    div.appendChild(numEl);
+    div.appendChild(inp);
+    div.appendChild(btnWrap);
+    container.appendChild(div);
+  }
+}
+
+// ============================================================
+// ENGAGEMENT LIST — 10 comportements non négociables
+// ============================================================
+function buildEngagementList() {
+  const container = document.getElementById('engagementList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // MODIFIÉ : boucle jusqu'à 10
+  for (let i = 0; i < 10; i++) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'margin-bottom:12px;display:flex;align-items:center;gap:16px';
+
+    const num = document.createElement('div');
+    num.style.cssText = 'font-family:Bebas Neue,sans-serif;font-size:20px;color:var(--gold-dark);width:28px;flex-shrink:0';
+    num.textContent = i + 1;
+
+    const inp = document.createElement('input');
+    inp.className = 'axe-input';
+    inp.style.cssText = 'margin-bottom:0;flex:1';
+    inp.placeholder = 'Ex: Entraîner 5x par semaine sans exception...';
+    inp.value = state.engagements[i] || '';
+    inp.dataset.idx = i;
+    inp.addEventListener('input', function () {
+      state.engagements[parseInt(this.dataset.idx)] = this.value;
+      updatePacte();
+      saveState();
+    });
+
+    wrap.appendChild(num);
+    wrap.appendChild(inp);
+    container.appendChild(wrap);
+  }
+}
+
+// ============================================================
+// PACTE LIVE UPDATE
+// ============================================================
+function updatePacte() {
+  const _read = (id) => { const el = document.getElementById(id); return el ? el.value : null; };
+  const _set = (id, key) => { const v = _read(id); if (v !== null) state.pacte[key] = v; };
+
+  _set('p-nom', 'nom');
+  _set('p-sport', 'sport');
+  _set('p-niveau', 'niveau');
+  _set('p-situation', 'situation');
+  _set('p-renoncements', 'renoncements');
+  _set('p-engagement', 'engagement');
+  _set('r-confort', 'resistanceConfort');
+  _set('r-peur', 'resistancePeur');
+  _set('r-crainte', 'resistanceCrainte');
+
+  // Reconstruit le texte objectif depuis le tableau
+  if (state.pacte.objectifsTable) {
+    const filled = state.pacte.objectifsTable.filter(o => o.texte && o.texte.trim());
+    state.pacte.objectif = filled.map(o => `${o.texte}${o.date ? ' — ' + new Date(o.date).toLocaleDateString('fr-FR') : ''}`).join('\n');
+  }
+
+  ['q-pourquoi', 'q-echec', 'reflect-pression', 'reflect-decision', 'bilan-apprentissage', 'bilan-decision'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value) localStorage.setItem('axe-field-' + id, el.value);
+  });
+
+  // Renoncements — tous les 50
+  const sacList = state.sacrifices
+    .filter(s => s && s.text && s.text.trim())
+    .map((s, i) => `${i + 1}. ${s.text} <em style="color:${s.level === 'easy' ? '#27ae60' : s.level === 'hard' ? '#e67e22' : '#c0392b'}">[${s.level === 'easy' ? 'Supportable' : s.level === 'hard' ? 'Difficile' : 'Extrême'}]</em>`)
+    .join('<br>');
+
+  // Comportements — tous les 10
+  const engList = state.engagements.filter(e => e && e.trim()).map((e, i) => `${i + 1}. ${e}`).join('<br>');
+
+  const preview = document.getElementById('pactePreview');
+  if (!preview) return;
+
+  preview.innerHTML = `
+    <div class="pacte-header">
+      <div class="pacte-title">PACTE AXE</div>
+      <div class="pacte-subtitle">Alignement · Exigence · Engagement</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-bottom:32px;font-size:12px;color:var(--white-dim)">
+      <div><div style="color:var(--gold);letter-spacing:0.2em;font-size:10px;margin-bottom:4px">ATHLÈTE</div>
+        <div style="color:var(--white)">${state.pacte.nom || '—'}</div></div>
+      <div><div style="color:var(--gold);letter-spacing:0.2em;font-size:10px;margin-bottom:4px">SPORT</div>
+        <div style="color:var(--white)">${state.pacte.sport || '—'}</div></div>
+      <div><div style="color:var(--gold);letter-spacing:0.2em;font-size:10px;margin-bottom:4px">DATE</div>
+        <div style="color:var(--white)">${state.pacte.date}</div></div>
+    </div>
+    <div class="pacte-section">
+      <div class="pacte-section-title">1 — MES OBJECTIFS DE SAISON</div>
+      ${(() => {
+        const rows = (state.pacte.objectifsTable || []).filter(o => o.texte && o.texte.trim());
+        if (!rows.length) return '<div class="pacte-field"><em style="opacity:0.4">À compléter dans le module 2</em></div>';
+        return `<table style="width:100%;border-collapse:collapse;font-size:13px">
+          <tr style="border-bottom:1px solid var(--border)">
+            <th style="text-align:left;color:var(--gold);font-family:Bebas Neue,sans-serif;letter-spacing:0.15em;font-size:11px;padding:8px 12px 8px 0;font-weight:normal">OBJECTIF</th>
+            <th style="text-align:left;color:var(--gold);font-family:Bebas Neue,sans-serif;letter-spacing:0.15em;font-size:11px;padding:8px 0;font-weight:normal;width:160px">DATE LIMITE</th>
+          </tr>
+          ${rows.map(o => `<tr style="border-bottom:1px solid rgba(168,133,42,0.07)">
+            <td style="padding:10px 12px 10px 0;color:var(--white);font-style:italic">${o.texte}</td>
+            <td style="padding:10px 0;color:var(--gold-dark);font-family:Bebas Neue,sans-serif;letter-spacing:0.08em;font-size:13px">${o.date ? new Date(o.date).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}) : '—'}</td>
+          </tr>`).join('')}
+        </table>`;
+      })()}
+    </div>
+    <div class="pacte-section">
+      <div class="pacte-section-title">2 — MES 50 RENONCEMENTS</div>
+      <div class="pacte-field">${sacList || '<em style="opacity:0.4">À compléter dans le module 3</em>'}</div>
+      ${state.pacte.renoncements ? `<div class="pacte-field" style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.05)"><em>"${state.pacte.renoncements}"</em></div>` : ''}
+    </div>
+    <div class="pacte-section">
+      <div class="pacte-section-title">3 — MES 10 COMPORTEMENTS NON NÉGOCIABLES</div>
+      <div class="pacte-field">${engList || '<em style="opacity:0.4">À compléter dans ce module</em>'}</div>
+    </div>
+    <div class="pacte-section">
+      <div class="pacte-section-title">4 — MON ENGAGEMENT</div>
+      <div class="pacte-field"><em>"${state.pacte.engagement || 'Je suis prêt à signer ce Pacte parce que...'}"</em></div>
+      <div class="pacte-field" style="margin-top:16px;font-size:12px;line-height:1.8;color:var(--white-dim)">
+        Je reconnais que personne ne peut se sacrifier à ma place. La discipline est un choix, non une émotion. Les écarts répétés sont un renoncement implicite à mon objectif. Je m'engage à revenir à ce pacte chaque fois que le doute apparaît.
+      </div>
+    </div>
+    <div class="pacte-signature-line">
+      <div>Signature de l'athlète<br><br><br><br><span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--white)">${state.pacte.nom || '...............'}</span></div>
+      <div>Date de signature<br><br><br><br><span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--white)">${state.pacte.date}</span></div>
+    </div>
+  `;
+
+  saveState();
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showModule(idx) {
+  document.querySelectorAll('.module-view').forEach(el => el.classList.remove('active'));
+  const mod = document.getElementById('mod-' + idx);
+  if (mod) mod.classList.add('active');
+  state.currentModule = idx;
+  buildNav();
+  updateHeaderProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(animateSections, 100);
+  saveState();
+  const emailEl = document.getElementById('user-email-' + idx);
+  if (emailEl && state.userEmail) emailEl.value = state.userEmail;
+}
+
+function goModule(idx) {
+  const isLocked = idx > 0 && !state.completedModules.includes(idx - 1) && !state.completedModules.includes(idx);
+  if (isLocked) {
+    showToast('MODULE VERROUILLÉ', "Complète d'abord le module précédent pour débloquer celui-ci.");
+    return;
+  }
+  // Module 4 (Stabilité) : verrou supplémentaire basé sur la date objectif la plus éloignée
+  if (idx === 4 && !state.completedModules.includes(4) && !isModule4DateUnlocked()) {
+    const farthest = getFarthestObjectifDate();
+    if (farthest && !isNaN(farthest)) {
+      const dateStr = farthest.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+      showToast('MODULE VERROUILLÉ JUSQU\'AU ' + dateStr.toUpperCase(), `Ce module se débloque le ${dateStr}, ta date objectif la plus éloignée.`);
+    } else {
+      showToast('MODULE VERROUILLÉ', "Renseigne au moins une date objectif dans le module 2 pour débloquer ce module.");
+    }
+    return;
+  }
+  showModule(idx);
+}
+
+// ============================================================
+// VALIDATION
+// ============================================================
+function validateModule(idx) {
+  const errors = [];
+
+  const req = (id, label) => {
+    const el = document.getElementById(id);
+    if (!el || !el.value || el.value.trim().length < 10) errors.push(label);
+    else el.style.borderBottomColor = 'var(--success)';
+  };
+  const reqShort = (id, label) => {
+    const el = document.getElementById(id);
+    if (!el || !el.value || el.value.trim().length < 2) errors.push(label);
+    else el.style.borderBottomColor = 'var(--success)';
+  };
+  const reqSelect = (id, label) => {
+    const el = document.getElementById(id);
+    if (!el || !el.value) errors.push(label);
+  };
+  const reqChoice = (group, label) => {
+    if (!document.querySelector(`[data-group="${group}"] .choice-option.selected`)) errors.push(label);
+  };
+  const reqSacrifices = (min) => {
+    const filled = state.sacrifices.filter(s => s && s.text && s.text.trim().length > 2);
+    const leveled = filled.filter(s => s.level);
+    if (filled.length < min) errors.push(`Au moins ${min} renoncements doivent être remplis`);
+    else if (leveled.length < filled.length) errors.push('Chaque renoncement doit avoir un niveau (Supportable / Difficile / Extrême)');
+  };
+  const reqEngagements = (min) => {
+    const filled = state.engagements.filter(e => e && e.trim().length > 5);
+    if (filled.length < min) errors.push(`Au moins ${min} comportements non négociables doivent être remplis`);
+  };
+  const reqTableRow = (label) => {
+    // Table de réalité supprimée — validation ignorée
+  };
+
+  switch (idx) {
+    case 0:
+      reqShort('p-nom', 'Ton nom et prénom');
+      reqShort('p-sport', 'Ton sport / discipline');
+      reqSelect('p-niveau', 'Ton niveau actuel');
+      req('p-situation', 'Ta situation sportive actuelle (min. 10 caractères)');
+      reqChoice('mental', 'Comment tu te sens mentalement');
+      reqChoice('discipline', 'Ton rapport à la discipline');
+      req('p-resistance', "Pourquoi tu n'as pas encore changé (min. 10 caractères)");
+      if (!state.userEmail || !state.userEmail.includes('@')) errors.push('Ton adresse email');
+      break;
+    case 1:
+      // Validation du tableau objectif : au moins 1 objectif avec texte ET date
+      {
+        const filledWithDate = (state.pacte.objectifsTable || []).filter(o => o.texte && o.texte.trim().length > 5 && o.date && o.date.trim());
+        const filledNoDate = (state.pacte.objectifsTable || []).filter(o => o.texte && o.texte.trim().length > 5 && (!o.date || !o.date.trim()));
+        if (filledWithDate.length === 0) errors.push('Au moins un objectif précis avec une date est requis');
+        else if (filledNoDate.length > 0) errors.push('Chaque objectif renseigné doit avoir une date limite');
+      }
+      reqTableRow('Le tableau de réalité doit être entièrement rempli');
+      req('q-pourquoi', 'Pourquoi cet objectif (min. 10 caractères)');
+      req('q-echec', "Ce qui se passe si tu échoues (min. 10 caractères)");
+      reqChoice('prouver', 'À qui veux-tu prouver quelque chose');
+      break;
+    case 2:
+      // Min 10 renoncements remplis sur les 50
+      reqSacrifices(10);
+      req('r-confort', "Ce qui te rassure aujourd'hui (min. 10 caractères)");
+      req('r-peur', "Ce que tu n'as pas envie de lâcher (min. 10 caractères)");
+      req('r-crainte', "Ce que tu redoutes si tu t'engages (min. 10 caractères)");
+      req('p-renoncements', 'Ce que tu sais mais repousses (min. 10 caractères)');
+      break;
+    case 3:
+      // Min 5 comportements remplis sur les 10
+      reqEngagements(5);
+      req('p-engagement', "Ta déclaration d'engagement (min. 10 caractères)");
+      break;
+    case 4:
+      req('reflect-pression', 'Ce qui a créé de la résistance (min. 10 caractères)');
+      req('reflect-decision', 'Ta décision de réalignement (min. 10 caractères)');
+      break;
+    case 5:
+      reqChoice('bilan1', 'Évaluation de tes renoncements');
+      reqChoice('bilan2', 'Évaluation de tes comportements non négociables');
+      req('bilan-apprentissage', "Ce que la saison t'a appris (min. 10 caractères)");
+      reqChoice('decision', 'Ta décision : poursuivre, ajuster ou renoncer');
+      req('bilan-decision', 'Justification de ta décision (min. 10 caractères)');
+      break;
+  }
+
+  return errors;
+}
+
+function hideValidation() {
+  const banner = document.getElementById('validationBanner');
+  if (banner) banner.classList.remove('show');
+}
+
+function highlightErrors(errors) {
+  const banner = document.getElementById('validationBanner');
+  const list = document.getElementById('validationList');
+  const title = document.getElementById('validationTitle');
+  if (!banner || !list) return;
+  if (title) title.textContent = `${errors.length} CHAMP${errors.length > 1 ? 'S' : ''} OBLIGATOIRE${errors.length > 1 ? 'S' : ''} MANQUANT${errors.length > 1 ? 'S' : ''}`;
+  list.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+  banner.classList.add('show');
+  setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+}
+
+function closeBanner() {
+  hideValidation();
+}
+
+function hideValidation() {
+  const banner = document.getElementById('validationBanner');
+  if (banner) banner.classList.remove('show');
+  if (window._bannerTimeout) clearTimeout(window._bannerTimeout);
+}
+
+function completeModule(idx) {
+  const errors = validateModule(idx);
+  if (errors.length > 0) {
+    highlightErrors(errors);
+    showToast(`${errors.length} CHAMP${errors.length > 1 ? 'S' : ''} MANQUANT${errors.length > 1 ? 'S' : ''}`, 'Complète tous les champs obligatoires pour continuer.');
+    return;
+  }
+
+  if (!state.completedModules.includes(idx)) {
+    state.completedModules.push(idx);
+  }
+
+  sendEmailNotification(idx);
+  saveState();
+
+  if (idx === 3) {
+    downloadPacte().then(() => {
+      buildNav();
+      // Vérification du verrou date pour la Stabilité
+      if (!isModule4DateUnlocked()) {
+        const farthest = getFarthestObjectifDate();
+        if (farthest && !isNaN(farthest)) {
+          const dateStr = farthest.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+          showToast(
+            'PACTE SIGNÉ ✓ — STABILITÉ VERROUILLÉE',
+            `Ton Pacte est généré. Le module Stabilité se débloquera le ${dateStr}, date de ton objectif.`
+          );
+        } else {
+          showToast('PACTE SIGNÉ ✓', 'Ton Pacte est généré. Le module Stabilité se débloquera à la date de ton objectif.');
+        }
+        // Stay on current module — don't navigate to 4
+      } else {
+        showToast('MODULE COMPLÉTÉ ✓', 'Pacte généré. Module Stabilité débloqué.');
+        setTimeout(() => showModule(4), 1400);
+      }
+    });
+    return;
+  }
+
+  if (idx === 5) {
+    document.getElementById('finalSuccess').style.display = 'block';
+    document.getElementById('finalSuccess').scrollIntoView({ behavior: 'smooth' });
+    sendEmailNotification(5, true);
+    showToast('PROGRAMME TERMINÉ ✦', 'Félicitations — ton parcours AXE est complet.');
+    return;
+  }
+
+  // Pour le module suivant, vérifier le verrou date si c'est la Stabilité
+  const nextIdx = idx + 1;
+  if (nextIdx === 4 && !isModule4DateUnlocked()) {
+    const farthest = getFarthestObjectifDate();
+    buildNav();
+    if (farthest && !isNaN(farthest)) {
+      const dateStr = farthest.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+      showToast(
+        'MODULE COMPLÉTÉ ✓ — STABILITÉ VERROUILLÉE',
+        `Module validé. Le module Stabilité se débloquera le ${dateStr}, ta date objectif.`
+      );
+    } else {
+      showToast('MODULE COMPLÉTÉ ✓', 'Renseigne une date objectif dans le module 2 pour débloquer la Stabilité.');
+    }
+    return;
+  }
+
+  showToast('MODULE COMPLÉTÉ ✓', `Module ${idx + 1} validé. Le suivant est maintenant débloqué.`);
+  buildNav();
+  setTimeout(() => showModule(nextIdx), 1200);
+}
+
+// ============================================================
+// ANIMATIONS
+// ============================================================
+function animateSections() {
+  document.querySelectorAll('.module-view.active .section-block').forEach((block, i) => {
+    block.classList.remove('visible');
+    setTimeout(() => block.classList.add('visible'), i * 150);
+  });
+}
+
+// ============================================================
+// CHAR COUNTER
+// ============================================================
+function countChars(el, counterId, max) {
+  const count = el.value.length;
+  const counter = document.getElementById(counterId);
+  if (counter) {
+    counter.textContent = count + ' / ' + max;
+    counter.style.color = count > max * 0.9 ? 'var(--gold)' : 'var(--white-dim)';
+  }
+}
+
+// ============================================================
+// CHOICE SELECTION
+// ============================================================
+function selectChoice(el, group) {
+  document.querySelectorAll(`[data-group="${group}"] .choice-option`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ============================================================
+// VIDEO LOADER
+// ============================================================
+function loadVideo(input, prefix) {
+  let url = input.value.trim();
+  if (!url) return;
+  url = url.replace(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11}).*/, 'https://www.youtube.com/embed/$1');
+  url = url.replace(/(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(\d+).*/, 'https://player.vimeo.com/video/$1');
+  const embed = document.getElementById(prefix + '-embed');
+  const placeholder = document.getElementById(prefix + '-placeholder');
+  if (embed) {
+    embed.src = url;
+    embed.style.display = 'block';
+  }
+  if (placeholder) placeholder.style.display = 'none';
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let _toastTimeout = null;
+function showToast(title, msg, duration = 3500) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-title').textContent = title;
+  document.getElementById('toast-msg').textContent = msg;
+  toast.classList.add('show');
+  if (_toastTimeout) clearTimeout(_toastTimeout);
+  _toastTimeout = setTimeout(() => toast.classList.remove('show'), duration);
+}
+
+// ============================================================
+// RITUEL MODAL
+// ============================================================
+let ritualTimers = {};
+
+function openModal() {
+  // Reset all steps
+  ['ritual-1','ritual-2','ritual-3'].forEach((id,i) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = i === 0 ? 'block' : 'none';
+  });
+  Object.values(ritualTimers).forEach(clearInterval);
+  ritualTimers = {};
+  // Reset timers display
+  ['ritTimer','ritTimer2'].forEach((id,i) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = [64,120][i];
+  });
+  document.getElementById('rituelModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('rituelModal').style.display = 'none';
+  Object.values(ritualTimers).forEach(clearInterval);
+  ritualTimers = {};
+}
+
+function nextRitual(step) {
+  Object.values(ritualTimers).forEach(clearInterval);
+  ritualTimers = {};
+  ['ritual-1','ritual-2','ritual-3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const stepEl = document.getElementById('ritual-' + step);
+  if (stepEl) stepEl.style.display = 'block';
+}
+
+function startRitualTimer(step, elId, seconds) {
+  let s = seconds;
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.textContent = s;
+  ritualTimers[step] = setInterval(() => {
+    s--;
+    el.textContent = Math.max(0, s);
+    if (s <= 0) {
+      clearInterval(ritualTimers[step]);
+      delete ritualTimers[step];
+    }
+  }, 1000);
+}
+
+// ============================================================
+// EMAIL NOTIFICATION — Formspree → f.pinton@outlook.fr
+// ============================================================
+async function sendEmailNotification(moduleIdx, isFinal = false) {
+  const email = getCurrentEmail();
+  const summary = buildEmailSummary(moduleIdx);
+  const subject = isFinal
+    ? `[AXE] Programme terminé — ${state.pacte.nom || 'Athlète'}`
+    : `[AXE] Module ${moduleIdx + 1} complété — ${state.pacte.nom || 'Athlète'}`;
+
+  try {
+    await fetch('https://formspree.io/f/xreygbaz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: subject,
+        _replyto: email || 'inconnu@axe.fr',
+        athlete: state.pacte.nom || 'Non renseigné',
+        sport: state.pacte.sport || 'Non renseigné',
+        email_athlete: email || 'Non renseigné',
+        module: `Module ${moduleIdx + 1} — ${['Profilage','Objectif','Coût','Pacte','Stabilité','Bilan'][moduleIdx]}`,
+        message: summary,
+      })
+    });
+  } catch(e) {
+    console.warn('[AXE Formspree]', e.message);
+  }
+}
+
+function buildEmailSummary(moduleIdx) {
+  const labels = ['Profilage', 'Objectif', 'Coût', 'Pacte', 'Stabilité', 'Bilan'];
+  let text = `=== MÉTHODE AXE — Module ${moduleIdx + 1} : ${labels[moduleIdx]} ===\n\n`;
+  text += `Athlète : ${state.pacte.nom || 'Non renseigné'}\n`;
+  text += `Sport : ${state.pacte.sport || 'Non renseigné'}\n`;
+  text += `Email : ${getCurrentEmail() || 'Non renseigné'}\n`;
+  text += `Date : ${new Date().toLocaleString('fr-FR')}\n\n`;
+  if (state.pacte.objectif) text += `OBJECTIFS DE SAISON :\n${state.pacte.objectif}\n\n`;
+  if (state.pacte.situation) text += `SITUATION ACTUELLE : ${state.pacte.situation}\n\n`;
+  if (state.pacte.renoncements) text += `CE QU'IL REPORTE : ${state.pacte.renoncements}\n\n`;
+  const sacList = state.sacrifices.filter(s => s && s.text).map(s => `- ${s.text} [${s.level}]`).join('\n');
+  if (sacList) text += `50 RENONCEMENTS :\n${sacList}\n\n`;
+  const engList = state.engagements.filter(e => e).map((e, i) => `${i + 1}. ${e}`).join('\n');
+  if (engList) text += `10 COMPORTEMENTS NON NÉGOCIABLES :\n${engList}\n\n`;
+  return text;
+}
+
+// ============================================================
+// PDF DOWNLOAD
+// ============================================================
+async function downloadPacte() {
+  showToast('GÉNÉRATION DU PACTE...', 'Ton document est en cours de création.');
+  return new Promise(async (resolve) => {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+      doc.setFillColor(10, 10, 10);
+      doc.rect(0, 0, 210, 297, 'F');
+
+      doc.setDrawColor(201, 168, 76);
+      doc.setLineWidth(0.5);
+      doc.line(20, 18, 190, 18);
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(36);
+      doc.setTextColor(201, 168, 76);
+      doc.text('PACTE AXE', 105, 35, { align: 'center' });
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(150, 140, 120);
+      doc.text('ALIGNEMENT · EXIGENCE · ENGAGEMENT', 105, 43, { align: 'center' });
+      doc.line(20, 48, 190, 48);
+
+      doc.setFontSize(8);
+      doc.setTextColor(201, 168, 76);
+      doc.text('ATHLÈTE', 20, 58);
+      doc.text('SPORT', 90, 58);
+      doc.text('DATE', 155, 58);
+
+      doc.setTextColor(245, 240, 232);
+      doc.setFontSize(11);
+      doc.text(state.pacte.nom || '—', 20, 64);
+      doc.text(state.pacte.sport || '—', 90, 64);
+      doc.text(state.pacte.date, 155, 64);
+
+      doc.setDrawColor(50, 45, 35);
+      doc.line(20, 70, 190, 70);
+
+      let y = 80;
+
+      const addSection = (title, content) => {
+        if (y > 260) { doc.addPage(); doc.setFillColor(10, 10, 10); doc.rect(0, 0, 210, 297, 'F'); y = 20; }
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(201, 168, 76);
+        doc.text(title, 20, y);
+        doc.setDrawColor(80, 65, 25);
+        doc.line(20, y + 2, 190, y + 2);
+        y += 8;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(184, 176, 160);
+        const lines = doc.splitTextToSize(content || '—', 170);
+        lines.forEach(line => {
+          if (y > 275) { doc.addPage(); doc.setFillColor(10, 10, 10); doc.rect(0, 0, 210, 297, 'F'); y = 20; }
+          doc.text(line, 20, y);
+          y += 6;
+        });
+        y += 8;
+      };
+
+      const objText = (state.pacte.objectifsTable || [])
+        .filter(o => o.texte && o.texte.trim())
+        .map((o, i) => `${i+1}. ${o.texte}${o.date ? ' — ' + new Date(o.date).toLocaleDateString('fr-FR') : ''}`)
+        .join('\n') || 'Non renseigné';
+      addSection('1 — MES OBJECTIFS DE SAISON', objText);
+
+      // 50 renoncements dans le PDF
+      const sacText = state.sacrifices.filter(s => s && s.text)
+        .map((s, i) => `${i + 1}. ${s.text} [${s.level === 'easy' ? 'Supportable' : s.level === 'hard' ? 'Difficile' : 'Extrême'}]`)
+        .join('\n') || 'Non renseigné';
+      addSection("2 — MES 50 RENONCEMENTS", sacText);
+      if (state.pacte.renoncements) addSection('   CE QUE JE SAIS MAIS REPOUSSAIS', state.pacte.renoncements);
+
+      // 10 comportements dans le PDF
+      const engText = state.engagements.filter(e => e).map((e, i) => `${i + 1}. ${e}`).join('\n') || 'Non renseigné';
+      addSection('3 — MES 10 COMPORTEMENTS NON NÉGOCIABLES', engText);
+      addSection('4 — MON ENGAGEMENT', state.pacte.engagement || 'Non renseigné');
+
+      const resp = "Je reconnais que personne ne peut se sacrifier à ma place. La discipline est un choix, non une émotion. Les écarts répétés sont un renoncement implicite à mon objectif. Je m'engage à revenir à ce pacte chaque fois que le doute apparaît.";
+      addSection('5 — MA RESPONSABILITÉ', resp);
+
+      y = Math.max(y, 240);
+      doc.setDrawColor(80, 65, 25);
+      doc.line(20, y, 95, y);
+      doc.line(115, y, 190, y);
+      doc.setFontSize(8);
+      doc.setTextColor(100, 90, 70);
+      doc.text("Signature de l'athlète", 20, y + 6);
+      doc.text('Date', 115, y + 6);
+      doc.setFontSize(10);
+      doc.setTextColor(245, 240, 232);
+      doc.text(state.pacte.nom || '', 20, y + 14);
+      doc.text(state.pacte.date, 115, y + 14);
+
+      doc.setDrawColor(201, 168, 76);
+      doc.line(20, 285, 190, 285);
+      doc.setFontSize(7);
+      doc.setTextColor(80, 70, 50);
+      doc.text('MÉTHODE AXE — Préparation mentale de performance', 105, 291, { align: 'center' });
+
+      doc.save(`PACTE_AXE_${(state.pacte.nom || 'athlete').replace(/\s+/g, '_')}.pdf`);
+      showToast('PACTE TÉLÉCHARGÉ ✓', 'Ton Pacte AXE est prêt. Garde-le. Lis-le avant chaque compétition.');
+      resolve(true);
+    } catch (e) {
+      console.error(e);
+      showToast('ERREUR', 'Impossible de générer le PDF. Vérifiez la connexion.');
+      resolve(false);
+    }
+  });
+}
+
+
+// ============================================================
+// HEADER ATHLETE DISPLAY
+// ============================================================
+function updateHeaderAthlete() {
+  const nom = document.getElementById('p-nom');
+  const sport = document.getElementById('p-sport');
+  const headerAthlete = document.getElementById('headerAthlete');
+  const headerName = document.getElementById('headerAthleteName');
+  const headerInfo = document.getElementById('headerAthleteInfo');
+  if (!headerAthlete) return;
+  const nomVal = (nom && nom.value) ? nom.value.trim() : (state.pacte.nom || '');
+  const sportVal = (sport && sport.value) ? sport.value.trim() : (state.pacte.sport || '');
+  if (nomVal) {
+    headerAthlete.style.display = 'block';
+    headerName.textContent = nomVal;
+    headerInfo.textContent = sportVal ? sportVal + ' · ' + (state.pacte.niveau || '') : '';
+  }
+  // Update month badge
+  const badge = document.getElementById('headerMonth');
+  if (badge) {
+    const completed = state.completedModules.length;
+    const monthMap = [1, 2, 4, 6, 9, 11];
+    const month = monthMap[Math.min(completed, monthMap.length - 1)] || 1;
+    badge.textContent = 'MOIS ' + month + ' / 12';
+  }
+  // Update sidebar call info
+  updateSidebarCall();
+}
+
+function updateSidebarCall() {
+  const el = document.getElementById('sidebarCallInfo');
+  if (!el) return;
+  const completed = state.completedModules.length;
+  const callMessages = [
+    'Module 1 validé — Fabien vous appellera dans les 48h pour l\'appel de bienvenue.',
+    'Module 2 validé — Fabien vous appellera pour analyser vos objectifs de saison.',
+    'Module 3 validé — Fabien vous appellera pour l\'appel de confrontation sur le coût réel.',
+    'Module 4 validé — Appel de signature du Pacte AXE programmé avec Fabien.',
+    'Module 5 validé — Appel de stabilisation de mi-parcours avec Fabien.',
+    'Programme terminé — Appel de bilan et clôture des 12 mois avec Fabien.',
+  ];
+  if (completed > 0 && completed <= callMessages.length) {
+    el.textContent = callMessages[completed - 1];
+  } else {
+    el.textContent = 'Complétez le module actuel pour programmer votre appel avec Fabien.';
+  }
+}
+
+// ============================================================
+// CONTACT MODAL
+// ============================================================
+function openContactModal() {
+  const modal = document.getElementById('contactModal');
+  modal.style.display = 'flex';
+  // Pré-remplir avec les infos connues
+  const nomEl = document.getElementById('contact-nom');
+  const emailEl = document.getElementById('contact-email');
+  if (nomEl && state.pacte.nom && !nomEl.value) nomEl.value = state.pacte.nom;
+  if (emailEl && state.userEmail && !emailEl.value) emailEl.value = state.userEmail;
+}
+
+function closeContactModal() {
+  document.getElementById('contactModal').style.display = 'none';
+  document.getElementById('contact-feedback').textContent = '';
+}
+
+async function sendContactEmail() {
+  const nom = document.getElementById('contact-nom').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const message = document.getElementById('contact-message').value.trim();
+  const feedback = document.getElementById('contact-feedback');
+  const btn = document.querySelector('#contactModal .axe-btn');
+
+  if (!nom) { feedback.style.color = 'var(--red)'; feedback.textContent = "Merci d'indiquer ton prénom."; return; }
+  if (!email || !email.includes('@')) { feedback.style.color = 'var(--red)'; feedback.textContent = 'Adresse email invalide.'; return; }
+  if (message.length < 10) { feedback.style.color = 'var(--red)'; feedback.textContent = 'La question doit faire au moins 10 caractères.'; return; }
+
+  const sport = state.pacte.sport || 'Non renseigné';
+  const niveau = state.pacte.niveau || 'Non renseigné';
+  const moduleActuel = ['Profilage', 'Objectif', 'Coût', 'Pacte', 'Stabilité', 'Bilan'][state.currentModule] || '';
+  const progression = state.completedModules.length + '/6 modules validés';
+
+  // UI : chargement
+  if (btn) { btn.textContent = 'ENVOI EN COURS...'; btn.style.opacity = '0.7'; btn.disabled = true; }
+  feedback.textContent = '';
+
+  try {
+    const res = await fetch('https://formspree.io/f/xreygbaz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: `[AXE] Question de ${nom} — ${sport}`,
+        _replyto: email,
+        athlete: nom,
+        email_athlete: email,
+        sport: sport,
+        niveau: niveau,
+        module_actuel: moduleActuel,
+        progression: progression,
+        message: message,
+      })
+    });
+
+    if (res.ok) {
+      feedback.style.color = 'var(--success)';
+      feedback.textContent = '✓ Message envoyé — Fabien vous répondra directement par email.';
+      document.getElementById('contact-message').value = '';
+      document.getElementById('contact-nom').value = '';
+      setTimeout(() => closeContactModal(), 2500);
+    } else {
+      throw new Error('Formspree error ' + res.status);
+    }
+  } catch(e) {
+    feedback.style.color = 'var(--red)';
+    feedback.textContent = "Erreur d'envoi. Contactez Fabien directement : f.pinton@outlook.fr";
+  } finally {
+    if (btn) { btn.textContent = '✉ ENVOYER À FABIEN'; btn.style.opacity = '1'; btn.disabled = false; }
+  }
+}
+
+// ============================================================
+// INIT ON LOAD
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.section-block').forEach(el => observer.observe(el));
+});
+</script>
+</body>
+</html>
