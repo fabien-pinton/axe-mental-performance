@@ -102,8 +102,7 @@ button,.axe-btn,.choice-option,.sacrifice-level,.module-nav-item:not(.locked),
 }
 @keyframes growLine{to{height:70px;}}
 .intro-btn{
-  opacity:0;
-  animation:fadeUp 1s ease forwards 3s;
+  opacity:1;
   background:var(--gold);
   border:none;
   color:#1C1510;
@@ -114,7 +113,9 @@ button,.axe-btn,.choice-option,.sacrifice-level,.module-nav-item:not(.locked),
   text-transform:uppercase;
   padding:16px 52px;
   transition:background 0.3s;
-  position:relative;z-index:1;
+  position:relative;z-index:10;
+  cursor:pointer;
+  margin-top:8px;
 }
 .intro-btn:hover{background:var(--gold-light);}
 
@@ -842,7 +843,7 @@ header{
   <div class="intro-sub">Alignement · Exigence · Engagement</div>
   <div class="intro-coach-line">Programme de préparation mentale — par Fabien</div>
   <div class="intro-divider"></div>
-  <button class="intro-btn" onclick="openRegisterModal()">ACCÉDER À MON PROGRAMME</button>
+  <button class="intro-btn" id="introBtn">ACCÉDER À MON PROGRAMME</button>
 </div>
 
 <!-- ═══════════════════════════════════ MODAL INSCRIPTION -->
@@ -977,7 +978,7 @@ header{
         <div class="call-card" id="sidebarCall">
           <div class="call-icon">📞</div>
           <div>
-            <div class="call-label">Votre prochain appel</div>
+            <div class="call-label">Validez votre module pour planifier votre visioconférence avec Fabien</div>
             <div class="call-info" id="sidebarCallInfo">Complétez le module actuel pour programmer votre appel avec Fabien.</div>
           </div>
         </div>
@@ -1017,12 +1018,11 @@ header{
 
         <div class="section-block visible">
           <div class="video-block">
-            <div class="video-placeholder" id="vid0-placeholder">
+            <div class="video-placeholder" id="vid0-placeholder" style="display:none">
               <div class="video-placeholder-icon">▶</div>
               <div class="video-label">Message d'introduction — Méthode AXE</div>
             </div>
-            <iframe class="video-embed" id="vid0-embed" allowfullscreen></iframe>
-            <input class="video-url-input" placeholder="▶  Collez ici l'URL YouTube ou Vimeo de votre vidéo d'introduction..." onchange="loadVideo(this, 'vid0')" />
+            <iframe class="video-embed" id="vid0-embed" src="https://www.youtube.com/embed/LuLpRjtpLR4" allowfullscreen style="display:block"></iframe>
           </div>
         </div>
 
@@ -1130,9 +1130,9 @@ header{
           <div class="coaching-block">
             <div class="cb-icon">📞</div>
             <div class="cb-body">
-              <div class="cb-title">Appel de bienvenue — Fabien vous appelle</div>
-              <div class="cb-desc">Une fois ce module validé, Fabien prendra contact avec vous dans les 48h pour un appel de 30 à 45 minutes. Il aura lu l'intégralité de vos réponses. L'objectif : poser les bases de votre accompagnement, comprendre votre contexte réel, et calibrer les modules suivants à votre situation.</div>
-              <div class="cb-timing">⏱ Durée estimée : 30–45 min · Dans les 48h après validation</div>
+              <div class="cb-title">Appel Module 1 — Profilage</div>
+              <div class="cb-desc">Une fois ce module validé, réservez votre appel. Fabien aura lu l'intégralité de vos réponses. L'objectif : poser les bases, comprendre votre contexte réel, calibrer les modules suivants.</div>
+              <div class="cb-timing">⏱ Durée estimée : 30–45 min · Le module 2 se débloque le lendemain de votre appel</div>
             </div>
           </div>
         </div>
@@ -1163,12 +1163,11 @@ header{
 
         <div class="section-block visible">
           <div class="video-block">
-            <div class="video-placeholder" id="vid1-placeholder">
+            <div class="video-placeholder" id="vid1-placeholder" style="display:none">
               <div class="video-placeholder-icon">▶</div>
               <div class="video-label">Séance 2 — La vérité de l'objectif</div>
             </div>
-            <iframe class="video-embed" id="vid1-embed" allowfullscreen></iframe>
-            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid1')" />
+            <iframe class="video-embed" id="vid1-embed" src="https://www.youtube.com/embed/Y63D4K3DfZU" allowfullscreen style="display:block"></iframe>
           </div>
         </div>
 
@@ -1251,7 +1250,7 @@ header{
           <div class="coaching-block">
             <div class="cb-icon">📞</div>
             <div class="cb-body">
-              <div class="cb-title">Appel post-objectif — Analyse avec Fabien</div>
+              <div class="cb-title">Appel Module 2 — Objectif</div>
               <div class="cb-desc">Fabien analysera ton tableau d'objectifs avant l'appel. L'échange portera sur la cohérence de tes ambitions avec ta situation réelle, et sur la clarification de ce que ce niveau exige vraiment.</div>
               <div class="cb-timing">⏱ Durée estimée : 40–50 min · Sur rendez-vous</div>
             </div>
@@ -1284,12 +1283,11 @@ header{
 
         <div class="section-block visible">
           <div class="video-block">
-            <div class="video-placeholder" id="vid2-placeholder">
+            <div class="video-placeholder" id="vid2-placeholder" style="display:none">
               <div class="video-placeholder-icon">▶</div>
               <div class="video-label">Séance 3 — L'identification du coût</div>
             </div>
-            <iframe class="video-embed" id="vid2-embed" allowfullscreen></iframe>
-            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid2')" />
+            <iframe class="video-embed" id="vid2-embed" src="https://www.youtube.com/embed/OWIxKmDUpdc" allowfullscreen style="display:block"></iframe>
           </div>
         </div>
 
@@ -1348,7 +1346,7 @@ header{
           <div class="coaching-block">
             <div class="cb-icon">📞</div>
             <div class="cb-body">
-              <div class="cb-title">Appel post-coût — Confrontation bienveillante</div>
+              <div class="cb-title">Appel Module 3 — Le Coût</div>
               <div class="cb-desc">Fabien lira tes 50 renoncements avant l'appel. C'est souvent l'échange le plus puissant du programme : identifier ce que l'athlète esquive réellement, distinguer les vraies résistances des fausses, et fixer les limites non négociables de la saison.</div>
               <div class="cb-timing">⏱ Durée estimée : 45–60 min · Sur rendez-vous</div>
             </div>
@@ -1381,12 +1379,11 @@ header{
 
         <div class="section-block visible">
           <div class="video-block">
-            <div class="video-placeholder" id="vid3-placeholder">
+            <div class="video-placeholder" id="vid3-placeholder" style="display:none">
               <div class="video-placeholder-icon">▶</div>
               <div class="video-label">Séance 4 — La signature du Pacte AXE</div>
             </div>
-            <iframe class="video-embed" id="vid3-embed" allowfullscreen></iframe>
-            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid3')" />
+            <iframe class="video-embed" id="vid3-embed" src="https://www.youtube.com/embed/wVNPTBk4B20" allowfullscreen style="display:block"></iframe>
           </div>
         </div>
 
@@ -1440,9 +1437,10 @@ header{
           <div class="coaching-block">
             <div class="cb-icon">📞</div>
             <div class="cb-body">
-              <div class="cb-title">Appel de signature — Le Pacte lu à voix haute</div>
+              <div class="cb-title">Appel Module 4 — Le Pacte</div>
               <div class="cb-desc">Cet appel est le plus solennel du programme. Fabien lira ton Pacte avec toi. L'objectif : ancrer l'engagement, vérifier la solidité de chaque ligne, et t'aider à comprendre pourquoi ce pacte va tenir dans les moments difficiles.</div>
-              <div class="cb-timing">⏱ Durée estimée : 45–60 min · Appel de signature</div>
+              <div class="cb-timing">⏱ Durée estimée : 45–60 min · Le module 5 se débloque à votre date objectif
+              <button onclick="openBooking(3)" style="margin-top:14px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;background:var(--gold);color:#FDFAF5;border:none;padding:12px 28px;cursor:pointer;">RÉSERVER MON APPEL →</button></div>
             </div>
           </div>
         </div>
@@ -1473,12 +1471,11 @@ header{
 
         <div class="section-block visible">
           <div class="video-block">
-            <div class="video-placeholder" id="vid4-placeholder">
+            <div class="video-placeholder" id="vid4-placeholder" style="display:none">
               <div class="video-placeholder-icon">▶</div>
               <div class="video-label">Séance 5 — Stabilité et pression compétitive</div>
             </div>
-            <iframe class="video-embed" id="vid4-embed" allowfullscreen></iframe>
-            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid4')" />
+            <iframe class="video-embed" id="vid4-embed" src="https://www.youtube.com/embed/BWFVB78ACpE" allowfullscreen style="display:block"></iframe>
           </div>
         </div>
 
@@ -1549,9 +1546,10 @@ header{
           <div class="coaching-block">
             <div class="cb-icon">📞</div>
             <div class="cb-body">
-              <div class="cb-title">Appel de stabilisation — Analyse des écarts</div>
+              <div class="cb-title">Appel Module 5 — Stabilité</div>
               <div class="cb-desc">Cet appel intervient à la date clé de ton objectif. Fabien analysera tes indicateurs d'alignement et tes réponses de réflexion. L'objectif : identifier ce qui a résisté, recalibrer si nécessaire, et renforcer les fondations pour la seconde partie de l'accompagnement.</div>
-              <div class="cb-timing">⏱ Durée estimée : 40–50 min · Appel de mi-parcours</div>
+              <div class="cb-timing">⏱ Durée estimée : 40–50 min · Le module 6 se débloque le lendemain de votre appel
+              <button onclick="openBooking(4)" style="margin-top:14px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;background:var(--gold);color:#FDFAF5;border:none;padding:12px 28px;cursor:pointer;">RÉSERVER MON APPEL →</button></div>
             </div>
           </div>
         </div>
@@ -1582,12 +1580,11 @@ header{
 
         <div class="section-block visible">
           <div class="video-block">
-            <div class="video-placeholder" id="vid5-placeholder">
+            <div class="video-placeholder" id="vid5-placeholder" style="display:none">
               <div class="video-placeholder-icon">▶</div>
               <div class="video-label">Séance 6 — Bilan et maturité mentale</div>
             </div>
-            <iframe class="video-embed" id="vid5-embed" allowfullscreen></iframe>
-            <input class="video-url-input" placeholder="▶  Collez ici l'URL de votre vidéo pour cette séance..." onchange="loadVideo(this, 'vid5')" />
+            <iframe class="video-embed" id="vid5-embed" src="https://www.youtube.com/embed/3fP-7UZjyWE" allowfullscreen style="display:block"></iframe>
           </div>
         </div>
 
@@ -1643,9 +1640,10 @@ header{
           <div class="coaching-block">
             <div class="cb-icon">📞</div>
             <div class="cb-body">
-              <div class="cb-title">Appel de bilan — Clôture des 12 mois</div>
+              <div class="cb-title">Appel Module 6 — Bilan Final</div>
               <div class="cb-desc">Le dernier appel du programme est le plus stratégique. Fabien fera avec vous un bilan complet de l'année : ce qui a tenu, ce qui a cédé, et ce que cela révèle de votre profil mental. À l'issue de cet appel, une recommandation claire : continuer, transformer la méthode, ou capitaliser sur ce qui a été construit.</div>
-              <div class="cb-timing">⏱ Durée estimée : 60 min · Appel de clôture 12 mois</div>
+              <div class="cb-timing">⏱ Durée estimée : 60 min · À réserver après validation du module
+              <button onclick="openBooking(5)" style="margin-top:14px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;background:var(--gold);color:#FDFAF5;border:none;padding:12px 28px;cursor:pointer;">RÉSERVER MON APPEL DE BILAN →</button></div>
             </div>
           </div>
         </div>
@@ -1739,7 +1737,7 @@ header{
       <a href="#" onclick="return false">Mentions légales</a>
       <a href="#" onclick="return false">CGV</a>
       <a href="#" onclick="return false">Politique de confidentialité</a>
-      <a href="mailto:f.pinton@outlook.fr">Contact</a>
+      <a href="/cdn-cgi/l/email-protection#b7d199c7ded9c3d8d9f7d8c2c3dbd8d8dc99d1c5">Contact</a>
     </div>
   </footer>
 
@@ -1801,97 +1799,109 @@ header{
 // ADMIN BYPASS — Accès administrateur sans paiement
 // Pour accéder : ouvrir le fichier avec ?admin=AXE-Fabien-2026 dans l'URL
 // ============================================================
-const ADMIN_URL_KEY = "AXE-Fabien-2026"; // paramètre URL secret
+const ADMIN_URL_KEY = "AXE-Fabien-2026";
+const SUPABASE_URL_CHECK = 'https://mgssdkjfiriggbuhvirb.supabase.co';
+const SUPABASE_KEY_CHECK = 'sb_publishable_mYdat4wuOZv9-DHLR851Nw_KtgtMw_P';
+
+function showAccessDenied(msg, sub) {
+  document.body.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;
+      height:100vh;background:#0A0806;font-family:'DM Sans',sans-serif;
+      flex-direction:column;gap:20px;text-align:center;padding:40px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;
+        color:#C9A84C;letter-spacing:0.15em;">AXE</div>
+      <div style="width:40px;height:1px;background:#C9A84C;opacity:0.4;margin:0 auto;"></div>
+      <p style="color:#8A7E6E;font-size:11px;letter-spacing:0.3em;
+        text-transform:uppercase;margin-top:8px;">${msg}</p>
+      <p style="color:#5A4E3E;font-size:13px;max-width:360px;line-height:1.8;">${sub}</p>
+      <a href="https://fabien-pinton.fr" style="
+        color:#C9A84C;font-size:10px;letter-spacing:0.25em;
+        text-transform:uppercase;text-decoration:none;
+        border:1px solid rgba(201,168,76,0.25);padding:14px 32px;
+        margin-top:12px;transition:border-color 0.3s;">
+        ← Retour au site
+      </a>
+    </div>`;
+}
 
 (async function checkAccess() {
   const params = new URLSearchParams(window.location.search);
-  const token  = params.get("token");
   const adminKey = params.get("admin");
+  const token    = params.get("token");
+  const sessionOk = sessionStorage.getItem("axe-token");
 
-  // ── BYPASS ADMIN : URL secrète ──────────────────────────
+  // ── 1. BYPASS ADMIN ───────────────────────────────────────
   if (adminKey === ADMIN_URL_KEY) {
+    // Reset complet — repart de zéro à chaque test admin
+    localStorage.clear();
+    sessionStorage.clear();
     sessionStorage.setItem("axe-admin", "true");
     sessionStorage.setItem("axe-token", "admin-bypass");
     sessionStorage.setItem("axe-email", "admin@axe.fr");
-    return; // accès immédiat, programme se charge normalement
+    return; // accès immédiat
   }
 
-  // ── ACCÈS NORMAL : pas de token → accès refusé ─────────
+  // ── 2. SESSION DÉJÀ VALIDÉE (navigation interne) ──────────
+  if (sessionOk) return;
+
+  // ── 3. TOKEN STRIPE REQUIS ────────────────────────────────
   if (!token) {
-    document.body.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;
-        height:100vh;background:#0D0B08;font-family:'DM Sans',sans-serif;
-        flex-direction:column;gap:20px;text-align:center;padding:40px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;
-          color:#C9A84C;letter-spacing:0.1em;">AXE</div>
-        <p style="color:#8A7E6E;font-size:12px;letter-spacing:0.25em;
-          text-transform:uppercase;">Accès non autorisé</p>
-        <p style="color:#5A4E3E;font-size:12px;max-width:360px;line-height:1.7;">
-          Ce programme est accessible uniquement via le lien reçu après paiement.
-        </p>
-      </div>`;
+    showAccessDenied(
+      "Accès réservé",
+      "Ce programme est accessible uniquement après paiement.<br>Si vous êtes déjà client, utilisez le lien reçu par email."
+    );
     return;
   }
 
-  // ── VÉRIFICATION SUPABASE (utilisateurs normaux) ────────
-  const res = await fetch(
-    'https://mgssdkjfiriggbuhvirb.supabase.co/rest/v1/athletes' +
-    '?token=eq.' + token + '&select=email,subscription_status,access_until&limit=1',
-    { headers: {
-      'apikey': 'sb_publishable_mYdat4wuOZv9-DHLR851Nw_KtgtMw_P',
-      'Authorization': 'Bearer sb_publishable_mYdat4wuOZv9-DHLR851Nw_KtgtMw_P'
-    }}
-  );
-  const data = await res.json();
+  // ── 4. VÉRIFICATION SUPABASE ──────────────────────────────
+  try {
+    const res = await fetch(
+  SUPABASE_URL_CHECK + '/rest/v1/athletes' +
+  '?token=eq.' + encodeURIComponent(token) +
+  '&select=e-mail,statut_abonnement,accès_jusqu\'à&limit=1',
+      { headers: {
+        'apikey': SUPABASE_KEY_CHECK,
+        'Authorization': 'Bearer ' + SUPABASE_KEY_CHECK
+      }}
+    );
+    const data = await res.json();
 
-  if (!data || data.length === 0) {
-    document.body.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;
-        height:100vh;background:#0D0B08;font-family:'DM Sans',sans-serif;
-        flex-direction:column;gap:20px;text-align:center;padding:40px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;
-          color:#C9A84C;letter-spacing:0.1em;">AXE</div>
-        <p style="color:#C0392B;font-size:12px;letter-spacing:0.2em;">
-          Lien invalide ou expiré.
-        </p>
-      </div>`;
-    return;
+    if (!data || data.length === 0) {
+      showAccessDenied(
+        "Lien invalide",
+        "Ce lien d'accès n'est pas reconnu.<br>Contactez Fabien si vous pensez qu'il s'agit d'une erreur."
+      );
+      return;
+    }
+
+    const session = data[0];
+    const now = new Date();
+    const accessUntil = session.access_until ? new Date(session.access_until) : null;
+
+    if (session.status !== 'active' || (accessUntil && accessUntil < now)) {
+      showAccessDenied(
+        "Abonnement inactif",
+        "Votre accès à la Méthode AXE a été suspendu.<br>Pour le réactiver, contactez Fabien."
+      );
+      return;
+    }
+
+    // Accès validé — stocker en session pour la navigation
+    sessionStorage.setItem("axe-token", token);
+    sessionStorage.setItem("axe-email", session.email || '');
+
+  } catch(e) {
+    // Si Supabase est injoignable (réseau), on laisse passer avec le token
+    // La vérification sera tentée au prochain chargement
+    if (token) {
+      sessionStorage.setItem("axe-token", token);
+    } else {
+      showAccessDenied(
+        "Erreur de connexion",
+        "Impossible de vérifier votre accès. Réessayez dans quelques instants."
+      );
+    }
   }
-
-  const athlete = data[0];
-
-  const now          = new Date();
-  const accessUntil  = athlete.access_until ? new Date(athlete.access_until) : null;
-  const isActive     = athlete.subscription_status === "active";
-  const notExpired   = accessUntil ? accessUntil > now : false;
-
-  if (!isActive || !notExpired) {
-    document.body.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;
-        height:100vh;background:#0D0B08;font-family:'DM Sans',sans-serif;
-        flex-direction:column;gap:20px;text-align:center;padding:40px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;
-          color:#C9A84C;letter-spacing:0.1em;">AXE</div>
-        <p style="color:#C0392B;font-size:12px;letter-spacing:0.2em;
-          text-transform:uppercase;">Abonnement inactif</p>
-        <p style="color:#5A4E3E;font-size:12px;max-width:360px;line-height:1.7;">
-          Ton accès à la Méthode AXE a été suspendu.<br>
-          Pour réactiver ton programme, contacte Fabien.
-        </p>
-        <a href="mailto:f.pinton@outlook.fr" style="
-          color:#C9A84C;font-size:11px;letter-spacing:0.25em;
-          text-transform:uppercase;text-decoration:none;
-          border:1px solid rgba(201,168,76,0.3);padding:12px 28px;
-          margin-top:8px;">
-          CONTACTER FABIEN →
-        </a>
-      </div>`;
-    return;
-  }
-
-  // Accès valide — on continue
-  sessionStorage.setItem("axe-token", token);
-  sessionStorage.setItem("axe-email", athlete.email);
 })();
 
 // ============================================================
@@ -2127,29 +2137,38 @@ async function submitRegister() {
   btn.style.opacity = '0.7';
   btn.style.cursor = 'not-allowed';
 
-  try {
-    await fetch(SUPABASE_URL + '/rest/v1/athletes?on_conflict=email', {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'resolution=merge-duplicates,return=minimal'
-      },
-      body: JSON.stringify({ email, prenom, nom, updated_at: new Date().toISOString(), state: JSON.stringify(state) })
-    });
-  } catch(e) { console.warn('[AXE Register]', e.message); }
-
-  const cloudState = await loadFromSupabase(email);
-  if (cloudState) {
-    applyRestoredState(cloudState);
-    if (!state.pacte.nom) state.pacte.nom = fullName;
-    if (!state.userEmail) state.userEmail = email;
-  }
-
+  // Sauvegarde locale immédiate — ne bloque jamais
   try { localStorage.setItem('axe-state', JSON.stringify(state)); } catch(e) {}
+
+  // Fermer la modale et lancer l'app immédiatement
   document.getElementById('registerModal').style.display = 'none';
   startApp();
+
+  // Cloud en arrière-plan — silencieux si échec
+  setTimeout(async () => {
+    try {
+      const cloudState = await Promise.race([
+        loadFromSupabase(email),
+        new Promise(r => setTimeout(() => r(null), 4000))
+      ]);
+      if (cloudState) {
+        applyRestoredState(cloudState);
+        restoreAllFields();
+        buildNav();
+        updatePacte();
+      }
+      fetch(SUPABASE_URL + '/rest/v1/athletes?on_conflict=email', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates,return=minimal'
+        },
+        body: JSON.stringify({ email, prenom, nom, updated_at: new Date().toISOString(), state: JSON.stringify(state) })
+      }).catch(() => {});
+    } catch(e) {}
+  }, 100);
 }
 
 // ============================================================
@@ -2172,7 +2191,7 @@ function startApp() {
     if (state.userEmail && state.userEmail.includes('@')) {
       tryCloudRestore(state.userEmail);
     }
-  }, 1000);
+  }, 300);
 }
 
 function restoreAllFields() {
@@ -2219,38 +2238,36 @@ function buildNav() {
   modules.forEach((m, i) => {
     const isCompleted = state.completedModules.includes(i);
     const isActive = i === state.currentModule;
-    const standardLocked = i > 0 && !state.completedModules.includes(i - 1) && !state.completedModules.includes(i);
-    // Module 4 : verrou date supplémentaire
-    const dateLocked = i === 4 && !state.completedModules.includes(4) && !isModule4DateUnlocked() && state.completedModules.includes(3);
+    const prevCompleted = i === 0 || state.completedModules.includes(i - 1);
+    const prevBookingOk = i === 0 || isBookingUnlocked(i - 1);
+    const isAdmin = sessionStorage.getItem('axe-admin') === 'true';
+    const standardLocked = !isAdmin && !isCompleted && !(prevCompleted && prevBookingOk);
+    const dateLocked = !isAdmin && i === 4 && !isCompleted && !isModule4DateUnlocked() && state.completedModules.includes(3);
     const isLocked = standardLocked || dateLocked;
     const cls = ['module-nav-item', isActive ? 'active' : '', isCompleted ? 'completed' : '', isLocked ? 'locked' : ''].filter(Boolean).join(' ');
     const icon = isCompleted ? '&#10003;' : (i + 1);
-
     let lockLabel = '';
     if (dateLocked) {
       const farthest = getFarthestObjectifDate();
       if (farthest && !isNaN(farthest)) {
-        const dateStr = farthest.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
-        lockLabel = `<div class="mod-lock" style="font-size:9px;letter-spacing:0.05em;color:var(--gold-dark)">📅 ${dateStr}</div>`;
-      } else {
-        lockLabel = '<div class="mod-lock">&#128274;</div>';
-      }
+        const ds = farthest.toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' });
+        lockLabel = `<div class="mod-lock" style="font-size:9px;color:var(--gold-dark)">📅 ${ds}</div>`;
+      } else { lockLabel = '<div class="mod-lock">&#128274;</div>'; }
+    } else if (standardLocked && state.completedModules.includes(i-1) && !isBookingUnlocked(i-1)) {
+      const ud = getUnlockDateStr(i-1);
+      lockLabel = ud
+        ? `<div class="mod-lock" style="font-size:9px;color:var(--gold-dark)">📅 ${ud}</div>`
+        : `<div class="mod-lock" style="font-size:9px;color:var(--gold-dark)">📞 Appel requis</div>`;
     } else if (standardLocked) {
       lockLabel = '<div class="mod-lock">&#128274;</div>';
     }
-
     const bar = `<div class="mod-progress-bar"><div class="mod-progress-fill" id="modprog-${i}"></div></div>`;
-
     const div = document.createElement('div');
     div.className = cls;
     div.innerHTML = `<div class="mod-icon">${icon}</div>
       <div class="mod-info"><div class="mod-name">${m.title}</div>
       <div class="mod-desc">${m.desc}</div>${bar}</div>${lockLabel}`;
-
-    if (!isLocked) {
-      div.addEventListener('click', () => goModule(i));
-      div.style.cursor = 'pointer';
-    }
+    if (!isLocked) { div.addEventListener('click', () => goModule(i)); div.style.cursor = 'pointer'; }
     nav.appendChild(div);
   });
 }
@@ -2580,13 +2597,14 @@ function showModule(idx) {
 }
 
 function goModule(idx) {
-  const isLocked = idx > 0 && !state.completedModules.includes(idx - 1) && !state.completedModules.includes(idx);
+  const isAdmin = sessionStorage.getItem('axe-admin') === 'true';
+  const isLocked = !isAdmin && idx > 0 && !state.completedModules.includes(idx - 1) && !state.completedModules.includes(idx);
   if (isLocked) {
     showToast('MODULE VERROUILLÉ', "Complète d'abord le module précédent pour débloquer celui-ci.");
     return;
   }
   // Module 4 (Stabilité) : verrou supplémentaire basé sur la date objectif la plus éloignée
-  if (idx === 4 && !state.completedModules.includes(4) && !isModule4DateUnlocked()) {
+  if (!isAdmin && idx === 4 && !state.completedModules.includes(4) && !isModule4DateUnlocked()) {
     const farthest = getFarthestObjectifDate();
     if (farthest && !isNaN(farthest)) {
       const dateStr = farthest.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -2715,6 +2733,102 @@ function hideValidation() {
   if (window._bannerTimeout) clearTimeout(window._bannerTimeout);
 }
 
+
+// ============================================================
+// TIDYCAL — Liens de réservation par module
+// ============================================================
+const TIDYCAL_LINKS = [
+  'https://tidycal.com/fpinton/appel-suivi-module-1-profilage',
+  'https://tidycal.com/fpinton/appel-suivi-module-2-objectif',
+  'https://tidycal.com/fpinton/appel-suivi-module-3-cout',
+  'https://tidycal.com/fpinton/appel-suivi-module-4-pacte',
+  'https://tidycal.com/fpinton/appel-suivi-module-5-stabilite',
+  'https://tidycal.com/fpinton/appel-suivi-module-6-bilan',
+];
+const MODULE_LABELS = [
+  'Module 1 — Profilage','Module 2 — Objectif','Module 3 — Coût',
+  'Module 4 — Pacte','Module 5 — Stabilité','Module 6 — Bilan',
+];
+
+function isBookingUnlocked(idx) {
+  const booked = localStorage.getItem('axe-booking-done-' + idx);
+  if (!booked) return false;
+  const d = new Date(booked);
+  d.setDate(d.getDate() + 1);
+  d.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  return today >= d;
+}
+function markBookingDone(idx) {
+  if (!localStorage.getItem('axe-booking-done-' + idx))
+    localStorage.setItem('axe-booking-done-' + idx, new Date().toISOString());
+}
+function getUnlockDateStr(idx) {
+  const booked = localStorage.getItem('axe-booking-done-' + idx);
+  if (!booked) return null;
+  const d = new Date(booked);
+  d.setDate(d.getDate() + 1);
+  return d.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+}
+
+function openBooking(idx) {
+  markBookingDone(idx);
+  let modal = document.getElementById('bookingModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'bookingModal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(10,8,6,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+    modal.innerHTML = `
+      <div style="width:100%;max-width:780px;background:#1A1612;border:1px solid rgba(168,133,42,0.25);border-top:2px solid #A8852A;position:relative;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid rgba(168,133,42,0.1);">
+          <div>
+            <span style="font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:#A8852A;">Réserver votre appel</span>
+            <div id="bookingModalTitle" style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.08em;color:#F7F3EC;margin-top:2px;"></div>
+          </div>
+          <button onclick="closeBookingModal()" style="background:none;border:1px solid rgba(168,133,42,0.3);color:#A8852A;font-size:18px;cursor:pointer;padding:6px 12px;line-height:1;">✕</button>
+        </div>
+        <div style="height:540px;overflow:hidden;">
+          <iframe id="bookingFrame" src="" style="width:100%;height:100%;border:none;" allow="fullscreen"></iframe>
+        </div>
+        <div style="padding:14px 24px;border-top:1px solid rgba(168,133,42,0.1);text-align:center;">
+          <p style="font-size:11px;color:rgba(247,243,236,0.35);margin-bottom:10px;">Une fois votre créneau sélectionné dans le calendrier, confirmez ci-dessous.</p>
+          <button onclick="confirmBooking()" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;background:#A8852A;color:#FDFAF5;border:none;padding:12px 32px;cursor:pointer;">J'AI RÉSERVÉ MON CRÉNEAU →</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+  document.getElementById('bookingModalTitle').textContent = MODULE_LABELS[idx];
+  document.getElementById('bookingFrame').src = TIDYCAL_LINKS[idx];
+  modal._currentIdx = idx;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBookingModal() {
+  const modal = document.getElementById('bookingModal');
+  if (modal) { modal.style.display = 'none'; document.getElementById('bookingFrame').src = ''; }
+  document.body.style.overflow = '';
+}
+
+function confirmBooking() {
+  const modal = document.getElementById('bookingModal');
+  const idx = modal._currentIdx;
+  closeBookingModal();
+  markBookingDone(idx);
+  buildNav();
+  updateSidebarCall();
+  const unlockDate = getUnlockDateStr(idx);
+  const nextName = idx < 5 ? MODULE_LABELS[idx + 1] : null;
+  if (idx === 3 && !isModule4DateUnlocked()) {
+    const farthest = getFarthestObjectifDate();
+    const ds = farthest ? farthest.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : 'la date de votre objectif';
+    showToast('APPEL RÉSERVÉ ✓', `Appel confirmé. Le module Stabilité se débloquera le ${ds}.`, 5000);
+    return;
+  }
+  if (idx === 5) { showToast('APPEL RÉSERVÉ ✓ — PROGRAMME TERMINÉ ✦', 'Votre dernier appel est confirmé.', 5000); return; }
+  showToast('APPEL RÉSERVÉ ✓', `${nextName ? nextName + ' se débloquera le ' + unlockDate + '.' : ''}`, 5000);
+}
+
 function completeModule(idx) {
   const errors = validateModule(idx);
   if (errors.length > 0) {
@@ -2722,66 +2836,28 @@ function completeModule(idx) {
     showToast(`${errors.length} CHAMP${errors.length > 1 ? 'S' : ''} MANQUANT${errors.length > 1 ? 'S' : ''}`, 'Complète tous les champs obligatoires pour continuer.');
     return;
   }
-
-  if (!state.completedModules.includes(idx)) {
-    state.completedModules.push(idx);
-  }
-
+  if (!state.completedModules.includes(idx)) state.completedModules.push(idx);
   sendEmailNotification(idx);
   saveState();
 
   if (idx === 3) {
     downloadPacte().then(() => {
       buildNav();
-      // Vérification du verrou date pour la Stabilité
-      if (!isModule4DateUnlocked()) {
-        const farthest = getFarthestObjectifDate();
-        if (farthest && !isNaN(farthest)) {
-          const dateStr = farthest.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-          showToast(
-            'PACTE SIGNÉ ✓ — STABILITÉ VERROUILLÉE',
-            `Ton Pacte est généré. Le module Stabilité se débloquera le ${dateStr}, date de ton objectif.`
-          );
-        } else {
-          showToast('PACTE SIGNÉ ✓', 'Ton Pacte est généré. Le module Stabilité se débloquera à la date de ton objectif.');
-        }
-        // Stay on current module — don't navigate to 4
-      } else {
-        showToast('MODULE COMPLÉTÉ ✓', 'Pacte généré. Module Stabilité débloqué.');
-        setTimeout(() => showModule(4), 1400);
-      }
+      setTimeout(() => openBooking(3), 800);
     });
     return;
   }
-
   if (idx === 5) {
     document.getElementById('finalSuccess').style.display = 'block';
     document.getElementById('finalSuccess').scrollIntoView({ behavior: 'smooth' });
     sendEmailNotification(5, true);
-    showToast('PROGRAMME TERMINÉ ✦', 'Félicitations — ton parcours AXE est complet.');
+    showToast('PROGRAMME TERMINÉ ✦', 'Réservez maintenant votre appel de bilan final.');
+    setTimeout(() => openBooking(5), 1200);
     return;
   }
-
-  // Pour le module suivant, vérifier le verrou date si c'est la Stabilité
-  const nextIdx = idx + 1;
-  if (nextIdx === 4 && !isModule4DateUnlocked()) {
-    const farthest = getFarthestObjectifDate();
-    buildNav();
-    if (farthest && !isNaN(farthest)) {
-      const dateStr = farthest.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-      showToast(
-        'MODULE COMPLÉTÉ ✓ — STABILITÉ VERROUILLÉE',
-        `Module validé. Le module Stabilité se débloquera le ${dateStr}, ta date objectif.`
-      );
-    } else {
-      showToast('MODULE COMPLÉTÉ ✓', 'Renseigne une date objectif dans le module 2 pour débloquer la Stabilité.');
-    }
-    return;
-  }
-
-  showToast('MODULE COMPLÉTÉ ✓', `Module ${idx + 1} validé. Le suivant est maintenant débloqué.`);
   buildNav();
-  setTimeout(() => showModule(nextIdx), 1200);
+  showToast('MODULE COMPLÉTÉ ✓', 'Réservez maintenant votre appel pour débloquer le module suivant.');
+  setTimeout(() => openBooking(idx), 800);
 }
 
 // ============================================================
@@ -3095,7 +3171,7 @@ function updateSidebarCall() {
   if (!el) return;
   const completed = state.completedModules.length;
   const callMessages = [
-    'Module 1 validé — Fabien vous appellera dans les 48h pour l\'appel de bienvenue.',
+    'Module 1 validé — Fabien vous appellera pour l\'appel de bienvenue.',
     'Module 2 validé — Fabien vous appellera pour analyser vos objectifs de saison.',
     'Module 3 validé — Fabien vous appellera pour l\'appel de confrontation sur le coût réel.',
     'Module 4 validé — Appel de signature du Pacte AXE programmé avec Fabien.',
@@ -3184,13 +3260,29 @@ async function sendContactEmail() {
 // ============================================================
 // INIT ON LOAD
 // ============================================================
-document.addEventListener('DOMContentLoaded', () => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+document.addEventListener('DOMContentLoaded', function() {
+  // Bouton intro — branché après chargement complet du DOM
+  var introBtn = document.getElementById('introBtn');
+  if (introBtn) {
+    introBtn.addEventListener('click', function() {
+      openRegisterModal();
+    });
+  }
+
+  // Animations sections
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
       if (entry.isIntersecting) entry.target.classList.add('visible');
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.section-block').forEach(function(el) {
+    observer.observe(el);
+  });
+});
+</script>
 
+
+  });
   document.querySelectorAll('.section-block').forEach(el => observer.observe(el));
 });
 </script>
