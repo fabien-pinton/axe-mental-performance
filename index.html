@@ -1309,6 +1309,21 @@ footer::before {
   .float-btn { font-size: 10px; padding: 12px 18px; }
 }
 </style>
+<!-- Event snippet for Contact conversion page -->
+<script>
+function gtag_report_conversion(url) {
+  var callback = function () {
+    if (typeof(url) != 'undefined') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion', {
+      'send_to': 'AW-17960470630/8Hd6CPWIw_obEOaQnPRC',
+      'event_callback': callback
+  });
+  return false;
+}
+</script>
 </head>
 <body>
 
@@ -1632,7 +1647,7 @@ footer::before {
             <li style="padding:13px 0;border-bottom:1px solid rgba(168,133,42,0.1);font-size:14px;color:rgba(247,243,236,0.7);display:flex;gap:14px;align-items:center;"><span style="color:var(--gold);font-size:10px;flex-shrink:0">◆</span>Appel individuel avec Fabien après chaque module</li>
             <li style="padding:13px 0;font-size:14px;color:rgba(247,243,236,0.7);display:flex;gap:14px;align-items:center;"><span style="color:var(--gold);font-size:10px;flex-shrink:0">◆</span>Accès au Rituel AXE — protocole d'ancrage avant performance</li>
           </ul>
-          <a href="https://buy.stripe.com/dRmcN48q062G0yN9NI8IU02" target="_blank"
+          <a href="https://buy.stripe.com/dRmcN48q062G0yN9NI8IU02" onclick="return gtag_report_conversion('https://buy.stripe.com/dRmcN48q062G0yN9NI8IU02')" target="_blank"
              style="display:block;text-align:center;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.35em;text-transform:uppercase;background:var(--gold);color:var(--ink);text-decoration:none;padding:20px;transition:background 0.3s;"
              onmouseover="this.style.background='var(--gold-light)'" onmouseout="this.style.background='var(--gold)'">
             ACCÉDER AU PROGRAMME AXE →
