@@ -1,0 +1,7 @@
+[build]
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/webhook/stripe"
+  to = "/.netlify/functions/stripe-webhook"
+  status = 200
