@@ -546,7 +546,7 @@ async function doSubmit(){
   const btn=document.getElementById('subBtn');
   btn.disabled=true;btn.textContent='Envoi en cours…';
   if(CFG.WEBHOOK&&!CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
-    try{await fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){console.warn(e);}
+    try{await fetch(CFG.WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){console.warn(e);}
   }
   try{localStorage.setItem('axe_payload',JSON.stringify(payload));}catch(e){}
   if(typeof gtag!=='undefined')gtag('event','begin_checkout',{currency:'EUR',value:9});
