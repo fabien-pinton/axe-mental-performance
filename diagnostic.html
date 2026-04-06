@@ -546,7 +546,7 @@ async function doSubmit(){
   const btn=document.getElementById('subBtn');
   btn.disabled=true;btn.textContent='Envoi en cours…';
   // Sauvegarder pour après paiement
-  try{localStorage.setItem('axe_payload',JSON.stringify(payload));}catch(e){}
+  try{sessionStorage.setItem('axe_payload',JSON.stringify(payload));localStorage.setItem('axe_payload',JSON.stringify(payload));}catch(e){}
   // Envoyer le lead MAINTENANT (avant paiement) → Airtable + Brevo liste
   if(CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
     try{
@@ -577,12 +577,13 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(typeof fbq!=='undefined')fbq('track','Purchase',{value:9,currency:'EUR'});
     // Envoyer le rapport après paiement confirmé
     try{
-      const saved=localStorage.getItem('axe_payload');
+      const saved=localStorage.getItem('axe_payload')||sessionStorage.getItem('axe_payload');
       if(saved && CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
         const parsed = JSON.parse(saved);
         parsed.type = 'payment';
-        fetch(CFG.WEBHOOK, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(parsed)});
-        localStorage.removeItem('axe_payload');
+        const blob=new Blob([JSON.stringify(parsed)],{type:'application/json'});
+        navigator.sendBeacon(CFG.WEBHOOK, blob);
+        localStorage.removeItem('axe_payload');sessionStorage.removeItem('axe_payload');
       }
     }catch(e){console.warn(e);}
     return;
