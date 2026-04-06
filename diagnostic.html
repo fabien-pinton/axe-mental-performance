@@ -217,7 +217,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 /* ─── CONFIG ─── */
 const CFG = {
   STRIPE:    "https://buy.stripe.com/3cI6oG9u4dv895j4to8IU03",
-  WEBHOOK:   "https://hook.eu1.make.com/ivpgzvl5sx0kcgjxuxh9wxe5p6jskljt",
+  WEBHOOK:   "https://hook.eu1.make.com/96f7c0lxqk82tnxjt9gsqvs460q58ow8",
   CALL:      "https://calendly.com/fabien-pinton/decouverte",
   ELEARNING: "https://buy.stripe.com/dRmcN48q062G0yN9NI8IU02",
 };
@@ -551,8 +551,7 @@ async function doSubmit(){
   if(CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
     try{
       const leadPayload = {type:'lead', name, email, sport, level, profileName:prof.name, profile:prof.id, timestamp:new Date().toISOString()};
-      const blob = new Blob([JSON.stringify(leadPayload)], {type:'application/json'});
-      navigator.sendBeacon(CFG.WEBHOOK, blob);
+      await fetch(CFG.WEBHOOK, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(leadPayload)});
     }catch(e){console.warn(e);}
   }
   if(typeof gtag!=='undefined')gtag('event','begin_checkout',{currency:'EUR',value:9});
