@@ -550,7 +550,7 @@ async function doSubmit(){
   // Envoyer le lead MAINTENANT (avant paiement) → Airtable + Brevo liste
   if(CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
     try{
-      const leadPayload = {type:'lead', name, email, sport, level, profileName:prof.name, profile:prof.id, timestamp:new Date().toISOString()};
+      const answersFlat = {}; Q.forEach((q,i)=>{ answersFlat[`question_${i+1}`] = ans[i]!==null ? q.opts[ans[i]].t : null; }); const leadPayload = {type:'lead', name, email, sport, level, profileName:prof.name, profile:prof.id, timestamp:new Date().toISOString(), ...answersFlat};
       await fetch(CFG.WEBHOOK, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(leadPayload)});
     }catch(e){console.warn(e);}
   }
