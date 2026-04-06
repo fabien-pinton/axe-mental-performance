@@ -545,7 +545,16 @@ async function doSubmit(){
   };
   const btn=document.getElementById('subBtn');
   btn.disabled=true;btn.textContent='Envoi en cours…';
+  // Sauvegarder pour après paiement
   try{localStorage.setItem('axe_payload',JSON.stringify(payload));}catch(e){}
+  // Envoyer le lead MAINTENANT (avant paiement) → Airtable + Brevo liste
+  if(CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
+    try{
+      const leadPayload = {type:'lead', name, email, sport, level, profileName:prof.name, profile:prof.id, timestamp:new Date().toISOString()};
+      const blob = new Blob([JSON.stringify(leadPayload)], {type:'application/json'});
+      navigator.sendBeacon(CFG.WEBHOOK, blob);
+    }catch(e){console.warn(e);}
+  }
   if(typeof gtag!=='undefined')gtag('event','begin_checkout',{currency:'EUR',value:9});
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout',{value:9,currency:'EUR'});
   if(CFG.STRIPE && CFG.STRIPE.includes('buy.stripe.com') && !CFG.STRIPE.includes('VOTRE_LIEN_STRIPE')){
@@ -567,11 +576,13 @@ window.addEventListener('DOMContentLoaded',()=>{
     sc.style.display='flex';sc.style.flexDirection='column';sc.style.alignItems='center';
     if(typeof gtag!=='undefined')gtag('event','conversion',{send_to:'AW-17960470630',value:9,currency:'EUR'});
     if(typeof fbq!=='undefined')fbq('track','Purchase',{value:9,currency:'EUR'});
-    // Envoyer les données au webhook Make uniquement après paiement confirmé
+    // Envoyer le rapport après paiement confirmé
     try{
       const saved=localStorage.getItem('axe_payload');
       if(saved && CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
-        const blob=new Blob([saved],{type:'application/json'});
+        const parsed = JSON.parse(saved);
+        parsed.type = 'payment';
+        const blob=new Blob([JSON.stringify(parsed)],{type:'application/json'});
         navigator.sendBeacon(CFG.WEBHOOK, blob);
         localStorage.removeItem('axe_payload');
       }
