@@ -217,7 +217,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 /* ─── CONFIG ─── */
 const CFG = {
   STRIPE:    "https://buy.stripe.com/3cI6oG9u4dv895j4to8IU03",
-  WEBHOOK:   "https://hook.eu1.make.com/n9ox3jx83rr739b515upo5781yq82124",
+  WEBHOOK:   "https://hook.eu1.make.com/ivpgzvl5sx0kcgjxuxh9wxe5p6jskljt",
   CALL:      "https://calendly.com/fabien-pinton/decouverte",
   ELEARNING: "https://buy.stripe.com/dRmcN48q062G0yN9NI8IU02",
 };
@@ -545,9 +545,6 @@ async function doSubmit(){
   };
   const btn=document.getElementById('subBtn');
   btn.disabled=true;btn.textContent='Envoi en cours…';
-  if(CFG.WEBHOOK&&!CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
-    try{await fetch(CFG.WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(e){console.warn(e);}
-  }
   try{localStorage.setItem('axe_payload',JSON.stringify(payload));}catch(e){}
   if(typeof gtag!=='undefined')gtag('event','begin_checkout',{currency:'EUR',value:9});
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout',{value:9,currency:'EUR'});
@@ -570,6 +567,15 @@ window.addEventListener('DOMContentLoaded',()=>{
     sc.style.display='flex';sc.style.flexDirection='column';sc.style.alignItems='center';
     if(typeof gtag!=='undefined')gtag('event','conversion',{send_to:'AW-17960470630',value:9,currency:'EUR'});
     if(typeof fbq!=='undefined')fbq('track','Purchase',{value:9,currency:'EUR'});
+    // Envoyer les données au webhook Make uniquement après paiement confirmé
+    try{
+      const saved=localStorage.getItem('axe_payload');
+      if(saved && CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
+        const blob=new Blob([saved],{type:'application/json'});
+        navigator.sendBeacon(CFG.WEBHOOK, blob);
+        localStorage.removeItem('axe_payload');
+      }
+    }catch(e){console.warn(e);}
     return;
   }
   render();
