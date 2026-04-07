@@ -557,6 +557,14 @@ async function doSubmit(){
   if(typeof gtag!=='undefined')gtag('event','begin_checkout',{currency:'EUR',value:9});
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout',{value:9,currency:'EUR'});
   if(CFG.STRIPE && CFG.STRIPE.includes('buy.stripe.com') && !CFG.STRIPE.includes('VOTRE_LIEN_STRIPE')){
+    // Envoyer le webhook payment MAINTENANT avec keepalive — avant redirection Stripe
+    // C'est le seul moment fiable : localStorage/sessionStorage non fiables sur Safari/iOS au retour
+    if(CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
+      try{
+        const paymentPayload={type:'payment',name,email,sport,level,profileName:prof.name,profile:prof.id,rapport:buildReport(prof,pct,name,sport,level),scores:pct,timestamp:new Date().toISOString()};
+        fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paymentPayload),keepalive:true}).catch(()=>{});
+      }catch(e){console.warn(e);}
+    }
     const p=new URLSearchParams({prefilled_email:email});
     window.location.href=CFG.STRIPE+(CFG.STRIPE.includes('?')?'&':'?')+p;
   } else {
