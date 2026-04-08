@@ -155,7 +155,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
         <div class="rt-row"><div class="rt-name">Compétitivité</div><div class="rt-track"><div class="rt-fill" id="rb5"></div></div><div class="rt-pct">??%</div></div>
       </div>
       <div class="rt-profile">
-        <div class="rt-profile-lbl">Profil dominant identifié</div>
+        <div class="rt-profile-lbl">Votre profil mental identifié</div>
         <div class="rt-profile-name" id="rtProfileName">—</div>
       </div>
       <div class="rt-unlock">⟳ Rapport complet débloqué après paiement</div>
@@ -484,13 +484,12 @@ function showForm(){
 /* ─── RAPPORT TEXTE (envoyé au webhook) ─── */
 function buildReport(prof,pct,name,sport,level){
   const lvls={loisir:'Loisir',amateur:'Amateur compétitif',regional:'Niveau régional',national:'Niveau national',elite:'Élite / Professionnel'};
-  const sec=Object.entries(pct).sort((a,b)=>a[1]-b[1])[1];
-  const secProf=PROFILES[sec[0]];
   return [
     `=== VOTRE RAPPORT MENTAL AXE — ${name.toUpperCase()} ===`,
     `Sport : ${sport} | Niveau : ${lvls[level]||level} | Date : ${new Date().toLocaleDateString('fr-FR')}`,
     ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `VOTRE PROFIL DOMINANT : ${prof.name.toUpperCase()}`,
+    `VOTRE PROFIL : ${prof.name.toUpperCase()}`,
+    `Ce profil représente votre frein mental principal — c'est sur lui que tout le travail se concentre.`,
     prof.headline,``,prof.desc,
     ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
     `VOS 5 SCORES`,
@@ -499,15 +498,14 @@ function buildReport(prof,pct,name,sport,level){
     `Confiance en soi    : ${pct.confiance}%`,
     `Rapport au plaisir  : ${pct.plaisir}%`,
     `Compétitivité       : ${pct.compet}%`,
+    ``,
+    `➜ Votre dimension la plus faible détermine votre profil et les exercices ci-dessous.`,
     ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
     `VOS FORCES`,prof.forces,
     ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
     `VOS 3 EXERCICES PERSONNALISÉS`,
+    `(Conçus spécifiquement pour votre profil ${prof.name})`,
     ...prof.axes.map((a,i)=>`\n${i+1}. ${a.t.toUpperCase()}\n${a.d}`),
-    ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `DIMENSION SECONDAIRE À TRAVAILLER : ${secProf.name} (${sec[1]}%)`,
-    secProf.headline,
-    `Conseil prioritaire : ${secProf.axes[0].t} — ${secProf.axes[0].d}`,
     ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
     `LA MÉTHODE AXE ET VOUS`,prof.axeMethod,
     ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
