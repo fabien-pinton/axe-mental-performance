@@ -481,44 +481,124 @@ function showForm(){
   if(typeof fbq!=='undefined') fbq('track','AddToCart',{value:9,currency:'EUR'});
 }
 
-/* ─── RAPPORT TEXTE (envoyé au webhook) ─── */
+/* ─── RAPPORT HTML PREMIUM (envoyé au webhook) ─── */
 function buildReport(prof,pct,name,sport,level){
   const lvls={loisir:'Loisir',amateur:'Amateur compétitif',regional:'Niveau régional',national:'Niveau national',elite:'Élite / Professionnel'};
-  return [
-    `=== VOTRE RAPPORT MENTAL AXE — ${name.toUpperCase()} ===`,
-    `Sport : ${sport} | Niveau : ${lvls[level]||level} | Date : ${new Date().toLocaleDateString('fr-FR')}`,
-    ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `VOTRE PROFIL : ${prof.name.toUpperCase()}`,
-    `Ce profil représente votre frein mental principal — c'est sur lui que tout le travail se concentre.`,
-    prof.headline,``,prof.desc,
-    ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `VOS 5 SCORES`,
-    `Gestion du stress   : ${pct.stress}%`,
-    `Rapport à la peur   : ${pct.peur}%`,
-    `Confiance en soi    : ${pct.confiance}%`,
-    `Rapport au plaisir  : ${pct.plaisir}%`,
-    `Compétitivité       : ${pct.compet}%`,
-    ``,
-    `➜ Votre dimension la plus faible détermine votre profil et les exercices ci-dessous.`,
-    ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `VOS FORCES`,prof.forces,
-    ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `VOS 3 EXERCICES PERSONNALISÉS`,
-    `(Conçus spécifiquement pour votre profil ${prof.name})`,
-    ...prof.axes.map((a,i)=>`\n${i+1}. ${a.t.toUpperCase()}\n${a.d}`),
-    ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `LA MÉTHODE AXE ET VOUS`,prof.axeMethod,
-    ``,`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `POUR ALLER PLUS LOIN`,
-    `◆ Programme E-Learning AXE Mental Performance`,
-    `  6 modules · Vidéos exclusives · Suivi individuel`,
-    `  → ${CFG.ELEARNING}`,``,
-    `◆ Appel Découverte Gratuit — 30 min avec Fabien`,
-    `  → ${CFG.CALL}`,``,
-    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `"Ne limite pas tes défis, défie tes limites."`,
-    `FABIEN PINTON · contact@fabien-pinton.fr · 07.72.28.94.57`
-  ].join('\n');
+  const date = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  const firstName = name.split(' ')[0].toUpperCase();
+  const lastName = name.split(' ').slice(1).join(' ').toUpperCase();
+
+  // Déterminer les classes de score
+  const scoreEntries = [
+    {label:'Gestion du stress', key:'stress', val:pct.stress},
+    {label:'Rapport à la peur', key:'peur', val:pct.peur},
+    {label:'Confiance en soi', key:'confiance', val:pct.confiance},
+    {label:'Rapport au plaisir', key:'plaisir', val:pct.plaisir},
+    {label:'Compétitivité', key:'compet', val:pct.compet},
+  ];
+  const minVal = Math.min(...scoreEntries.map(s=>s.val));
+  const maxVal = Math.max(...scoreEntries.map(s=>s.val));
+
+  const scoresHTML = scoreEntries.map(s=>{
+    const isWeak = s.val === minVal;
+    const isStrong = s.val === maxVal;
+    const cls = isWeak ? 'weak' : isStrong ? 'strong' : '';
+    const tag = isWeak ? '<span class="score-tag weak">À travailler</span>' : isStrong ? '<span class="score-tag strong">Force</span>' : '';
+    return `<div class="score-row">
+      <div class="score-name">${s.label}${tag}</div>
+      <div class="score-track"><div class="score-fill ${cls}" style="width:${s.val}%"><div class="score-dot"></div></div></div>
+      <div class="score-pct ${cls}">${s.val}%</div>
+    </div>`;
+  }).join('');
+
+  const exosHTML = prof.axes.map((a,i)=>`
+    <div class="exo-card">
+      <div class="exo-num">0${i+1}</div>
+      <div class="exo-title">${a.t}</div>
+      <div class="exo-desc">${a.d}</div>
+    </div>`).join('');
+
+  const answersHTML = Q.map((q,i)=>`
+    <div class="rep-card">
+      <div class="rep-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="rep-body">
+        <div class="rep-cat">${q.cat}</div>
+        <div class="rep-ans">${ans[i]!==null ? q.opts[ans[i]].t : '—'}</div>
+      </div>
+    </div>`).join('');
+
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Rapport Mental AXE — ${name}</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"><style>:root{--gold:#A8852A;--gold-l:#C9A84C;--gold-d:#7A6020;--cream:#F7F3EC;--cream2:#FDFAF5;--cream3:#F0EBE0;--cream4:#E8E1D4;--ink:#1A1612;--inkd:#5A5040;--inkf:#8A7D6A;--bdr:rgba(168,133,42,0.18);--red:#C0392B;--green:#2E7D52;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'DM Sans',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);}.header{background:var(--ink);padding:48px 60px 40px;position:relative;overflow:hidden;}.header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}.header::after{content:'AXE';position:absolute;right:-20px;top:-30px;font-family:'Bebas Neue',sans-serif;font-size:220px;letter-spacing:-0.05em;color:rgba(168,133,42,0.06);line-height:1;pointer-events:none;}.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;}.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.25em;color:var(--gold);}.logo-sub{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.3em;color:rgba(247,243,236,.3);text-transform:uppercase;margin-top:2px;}.badge{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:rgba(247,243,236,.2);border:1px solid rgba(247,243,236,.1);padding:6px 14px;}.header-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,8vw,90px);letter-spacing:.04em;color:var(--cream);line-height:.9;margin-bottom:16px;}.header-name span{color:var(--gold-l);}.header-meta{display:flex;gap:32px;flex-wrap:wrap;}.meta-item{display:flex;flex-direction:column;gap:3px;}.meta-label{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:rgba(247,243,236,.25);}.meta-value{font-size:13px;color:rgba(247,243,236,.7);font-weight:400;}.main{max-width:860px;margin:0 auto;padding:60px 40px 100px;}.section{margin-bottom:56px;}.section-label{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;}.section-label::after{content:'';flex:1;height:1px;background:var(--bdr);}.profil-card{background:var(--ink);padding:40px 44px;position:relative;overflow:hidden;}.profil-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),transparent);}.profil-card-bg{position:absolute;right:-20px;bottom:-20px;font-family:'Bebas Neue',sans-serif;font-size:140px;color:rgba(168,133,42,0.07);line-height:1;pointer-events:none;letter-spacing:-.03em;}.profil-eyebrow{font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}.profil-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,6vw,60px);letter-spacing:.04em;color:var(--cream);line-height:1;margin-bottom:16px;}.profil-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3vw,24px);font-style:italic;font-weight:300;color:var(--gold-l);margin-bottom:24px;line-height:1.4;}.profil-desc{font-size:14px;line-height:1.75;color:rgba(247,243,236,.65);max-width:600px;}.profil-desc strong{color:var(--gold-l);}.scores-grid{display:flex;flex-direction:column;gap:18px;}.score-row{display:grid;grid-template-columns:180px 1fr 56px;align-items:center;gap:16px;}.score-name{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--inkd);}.score-track{height:3px;background:var(--cream4);position:relative;}.score-fill{height:100%;position:relative;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));}.score-fill.weak{background:linear-gradient(90deg,#8B2500,#C0392B);}.score-fill.strong{background:linear-gradient(90deg,#1a5c36,var(--green));}.score-dot{position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--gold-l);}.score-fill.weak .score-dot{background:#C0392B;}.score-fill.strong .score-dot{background:var(--green);}.score-pct{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.05em;color:var(--gold);text-align:right;}.score-pct.weak{color:var(--red);}.score-pct.strong{color:var(--green);}.score-tag{display:inline-block;font-size:7px;letter-spacing:.3em;text-transform:uppercase;padding:2px 8px;margin-left:10px;vertical-align:middle;}.score-tag.weak{background:rgba(192,57,43,.1);color:var(--red);border:1px solid rgba(192,57,43,.2);}.score-tag.strong{background:rgba(46,125,82,.1);color:var(--green);border:1px solid rgba(46,125,82,.2);}.scores-legend{display:flex;gap:24px;margin-top:20px;flex-wrap:wrap;}.legend-item{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--inkf);letter-spacing:.1em;}.legend-dot{width:8px;height:8px;border-radius:50%;}.forces-card{background:var(--cream2);border:1px solid var(--bdr);padding:32px 36px;}.forces-icon{font-size:24px;margin-bottom:16px;}.forces-text{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;font-weight:400;color:var(--inkd);line-height:1.7;}.exercices-grid{display:flex;flex-direction:column;gap:24px;}.exo-card{background:var(--cream2);border:1px solid var(--bdr);padding:32px 36px;position:relative;border-left:3px solid var(--gold);}.exo-num{position:absolute;top:24px;right:28px;font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:.04em;color:rgba(168,133,42,.08);line-height:1;}.exo-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.1em;color:var(--gold);margin-bottom:14px;}.exo-desc{font-size:14px;line-height:1.8;color:var(--inkd);max-width:580px;}.methode-card{background:var(--cream3);border:1px solid var(--bdr);padding:36px 40px;}.methode-text{font-size:14px;line-height:1.85;color:var(--inkd);}.methode-text strong{color:var(--gold);font-weight:600;}.reponses-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}.rep-card{background:var(--cream2);border:1px solid var(--bdr);padding:14px 18px;display:flex;gap:12px;}.rep-num{font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(168,133,42,.35);min-width:24px;line-height:1.2;}.rep-cat{font-size:7px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}.rep-ans{font-size:12px;color:var(--inkd);line-height:1.5;}.citation-block{border-left:2px solid var(--gold);padding:10px 0 10px 28px;margin:32px 0;}.citation-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;font-weight:300;color:var(--inkd);line-height:1.55;}.citation-author{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:8px;}.divider{height:1px;background:var(--bdr);margin:48px 0;}.cta-block{background:var(--ink);padding:44px 48px;position:relative;overflow:hidden;text-align:center;}.cta-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}.cta-title{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:.05em;color:var(--cream);margin-bottom:12px;}.cta-sub{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:rgba(247,243,236,.55);margin-bottom:36px;line-height:1.5;}.cta-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;}.cta-btn{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:16px 32px;}.cta-btn.outline{background:transparent;border:1px solid rgba(168,133,42,.4);color:var(--gold-l);}.footer{background:var(--ink);border-top:1px solid rgba(168,133,42,.1);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.2em;color:var(--gold);}.footer-info{font-size:11px;color:rgba(247,243,236,.25);text-align:right;line-height:1.7;}@media(max-width:600px){.main{padding:40px 20px 80px;}.header{padding:36px 24px 32px;}.score-row{grid-template-columns:120px 1fr 48px;}.reponses-grid{grid-template-columns:1fr;}}</style></head><body>
+<div class="header">
+  <div class="header-top">
+    <div><div class="logo">FABIEN PINTON</div><div class="logo-sub">Préparateur Mental · Méthode AXE</div></div>
+    <div class="badge">Rapport Personnel · Confidentiel</div>
+  </div>
+  <div class="header-name">${firstName}<br><span>${lastName}</span></div>
+  <div class="header-meta">
+    <div class="meta-item"><div class="meta-label">Date du diagnostic</div><div class="meta-value">${date}</div></div>
+    <div class="meta-item"><div class="meta-label">Questions analysées</div><div class="meta-value">20 / 20</div></div>
+    <div class="meta-item"><div class="meta-label">Sport · Niveau</div><div class="meta-value">${sport} · ${lvls[level]||level}</div></div>
+    <div class="meta-item"><div class="meta-label">Profil identifié</div><div class="meta-value">${prof.name}</div></div>
+  </div>
+</div>
+<div class="main">
+  <div class="section">
+    <div class="section-label">Votre profil mental</div>
+    <div class="profil-card">
+      <div class="profil-card-bg">${prof.id.toUpperCase()}</div>
+      <div class="profil-eyebrow">Profil identifié · Frein mental principal</div>
+      <div class="profil-name">${prof.name}</div>
+      <div class="profil-headline">« ${prof.headline} »</div>
+      <div class="profil-desc">${prof.desc} Ce n'est pas un manque de talent — c'est un frein mental précis, identifiable, et surtout <strong>entièrement travaillable</strong>.</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-label">Vos 5 scores — Analyse dimensionnelle</div>
+    <div class="scores-grid">${scoresHTML}</div>
+    <div class="scores-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Dimension à travailler</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold-l)"></div>Dimension intermédiaire</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Force identifiée</div>
+    </div>
+  </div>
+  <div class="citation-block">
+    <div class="citation-text">${firstName.charAt(0)+firstName.slice(1).toLowerCase()}, vos scores révèlent votre profil exact. La dimension la plus basse est votre frein principal — c'est précisément là que se joue votre prochain palier de performance.</div>
+    <div class="citation-author">— Analyse Fabien Pinton · Méthode AXE</div>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-label">Vos forces — Ce qui est déjà là</div>
+    <div class="forces-card">
+      <div class="forces-icon">◆</div>
+      <div class="forces-text">${prof.forces}</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-label">Vos 3 exercices personnalisés — Plan d'action</div>
+    <div class="exercices-grid">${exosHTML}</div>
+  </div>
+  <div class="section">
+    <div class="section-label">La méthode AXE et vous</div>
+    <div class="methode-card"><div class="methode-text">${prof.axeMethod}</div></div>
+  </div>
+  <div class="section">
+    <div class="section-label">Détail de vos réponses — 20 questions</div>
+    <div class="reponses-grid">${answersHTML}</div>
+  </div>
+  <div class="cta-block">
+    <div class="cta-title">La suite avec Fabien</div>
+    <div class="cta-sub">Ce diagnostic est un point de départ. Le vrai travail commence ici.</div>
+    <div class="cta-links">
+      <a href="${CFG.ELEARNING}" class="cta-btn">Programme E-Learning AXE →</a>
+      <a href="${CFG.CALL}" class="cta-btn outline">Appel Découverte Gratuit 30 min</a>
+    </div>
+  </div>
+</div>
+<div class="footer">
+  <div class="footer-logo">FABIEN PINTON · Méthode AXE</div>
+  <div class="footer-info">contact@fabien-pinton.fr · 07.72.28.94.57</div>
+</div>
+</body></html>`;
 }
 
 /* ─── SUBMIT ─── */
@@ -533,18 +613,9 @@ async function doSubmit(){
   err.style.display='none';
   const pct=calcScores();
   const prof=getProfile(pct);
-  const payload={
-    name,email,sport,level,
-    profile:prof.id,profileName:prof.name,
-    scores:pct,
-    rapport:buildReport(prof,pct,name,sport,level),
-    answers:Q.map((q,i)=>({question:q.text,category:q.cat,answerIndex:ans[i],answerText:ans[i]!==null?q.opts[ans[i]].t:null})),
-    timestamp:new Date().toISOString(),source:window.location.href,
-  };
+  const rapportHTML=buildReport(prof,pct,name,sport,level);
   const btn=document.getElementById('subBtn');
   btn.disabled=true;btn.textContent='Envoi en cours…';
-  // Sauvegarder pour après paiement
-  try{sessionStorage.setItem('axe_payload',JSON.stringify(payload));localStorage.setItem('axe_payload',JSON.stringify(payload));}catch(e){}
   // Envoyer le lead MAINTENANT (avant paiement) → Airtable + Brevo liste
   if(CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
     try{
@@ -556,10 +627,9 @@ async function doSubmit(){
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout',{value:9,currency:'EUR'});
   if(CFG.STRIPE && CFG.STRIPE.includes('buy.stripe.com') && !CFG.STRIPE.includes('VOTRE_LIEN_STRIPE')){
     // Envoyer le webhook payment MAINTENANT avec keepalive — avant redirection Stripe
-    // C'est le seul moment fiable : localStorage/sessionStorage non fiables sur Safari/iOS au retour
     if(CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
       try{
-        const paymentPayload={type:'payment',name,email,sport,level,profileName:prof.name,profile:prof.id,rapport:buildReport(prof,pct,name,sport,level),scores:pct,timestamp:new Date().toISOString()};
+        const paymentPayload={type:'payment',name,email,sport,level,profileName:prof.name,profile:prof.id,rapport:rapportHTML,scores:pct,timestamp:new Date().toISOString()};
         fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paymentPayload),keepalive:true}).catch(()=>{});
       }catch(e){console.warn(e);}
     }
@@ -581,17 +651,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     sc.style.display='flex';sc.style.flexDirection='column';sc.style.alignItems='center';
     if(typeof gtag!=='undefined')gtag('event','conversion',{send_to:'AW-17960470630',value:9,currency:'EUR'});
     if(typeof fbq!=='undefined')fbq('track','Purchase',{value:9,currency:'EUR'});
-    // Envoyer le rapport après paiement confirmé
-    try{
-      const saved=localStorage.getItem('axe_payload')||sessionStorage.getItem('axe_payload');
-      if(saved && CFG.WEBHOOK && !CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
-        const parsed = JSON.parse(saved);
-        parsed.type = 'payment';
-        const blob=new Blob([JSON.stringify(parsed)],{type:'application/json'});
-        navigator.sendBeacon(CFG.WEBHOOK, blob);
-        localStorage.removeItem('axe_payload');sessionStorage.removeItem('axe_payload');
-      }
-    }catch(e){console.warn(e);}
     return;
   }
   render();
