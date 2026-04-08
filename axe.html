@@ -1858,7 +1858,7 @@ function showAccessDenied(msg, sub) {
     const res = await fetch(
   SUPABASE_URL_CHECK + '/rest/v1/athletes' +
   '?token=eq.' + encodeURIComponent(token) +
-  '&select=e-mail,statut_abonnement,accès_jusqu\'à&limit=1',
+  '&select=email,subscription_status,access_until&limit=1',
       { headers: {
         'apikey': SUPABASE_KEY_CHECK,
         'Authorization': 'Bearer ' + SUPABASE_KEY_CHECK
@@ -1878,7 +1878,7 @@ function showAccessDenied(msg, sub) {
     const now = new Date();
     const accessUntil = session.access_until ? new Date(session.access_until) : null;
 
-    if (session.status !== 'active' || (accessUntil && accessUntil < now)) {
+    if (session.subscription_status !== 'active' || (accessUntil && accessUntil < now)) {
       showAccessDenied(
         "Abonnement inactif",
         "Votre accès à la Méthode AXE a été suspendu.<br>Pour le réactiver, contactez Fabien."
