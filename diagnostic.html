@@ -453,12 +453,9 @@ function calcScores(){
 }
 
 function getProfile(pct){
-  // Profil = dimension avec le score le plus BAS (= problème principal)
+  // Profil = toujours la dimension avec le score le plus BAS (= frein principal à travailler)
   const sorted = Object.entries(pct).sort((a,b)=>a[1]-b[1]);
   const lowestKey = sorted[0][0];
-  const lowestVal = sorted[0][1];
-  // Si tout est > 70%, profil par compétitivité (athlète équilibré mais hypercompétiteur)
-  if(lowestVal > 70) return PROFILES[sorted[sorted.length-1][0]] || PROFILES.compet;
   return PROFILES[lowestKey];
 }
 
