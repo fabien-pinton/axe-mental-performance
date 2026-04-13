@@ -8,25 +8,16 @@
 <meta property="og:title" content="Quel est votre profil mental de sportif ?">
 <meta property="og:description" content="20 questions. 5 profils possibles. Un rapport fait pour vous seul. 9€ — Méthode AXE par Fabien Pinton.">
 <meta property="og:image" content="https://fabien-pinton.fr/og-diagnostic.jpg">
-
-<!-- Google Tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9LL33EDPP"></script>
 <script>
-  window.dataLayer=window.dataLayer||[];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js',new Date());
-  gtag('config','G-E9LL33EDPP');
-  gtag('config','AW-17960470630');
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-E9LL33EDPP');gtag('config','AW-17960470630');
 </script>
-<!-- Facebook Pixel -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','26122160607379448');
-fbq('track','PageView');
+fbq('init','26122160607379448');fbq('track','PageView');
 </script>
-
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 <style>
 :root{
   --gold:#A8852A;--gold-l:#C9A84C;--gold-d:#7A6020;
@@ -37,324 +28,182 @@ fbq('track','PageView');
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);overflow-x:hidden;}
-::-webkit-scrollbar{width:3px;}
-::-webkit-scrollbar-thumb{background:var(--gold);}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--gold);}
 
 /* NAV */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 60px;
-  background:rgba(247,243,236,0.95);backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--bdr);
-  transition:padding .3s;
-}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 60px;background:rgba(247,243,236,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);transition:padding .3s;}
 nav.sc{padding:12px 60px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 .nlogo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.2em;color:var(--gold);text-decoration:none;}
 .nlogo span{display:block;font-family:'Cormorant Garamond',serif;font-size:9px;letter-spacing:.3em;color:var(--inkd);text-transform:uppercase;}
-.ncta{
-  font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;
-  letter-spacing:.25em;text-transform:uppercase;
-  background:var(--gold);color:var(--cream2);
-  border:none;padding:12px 28px;cursor:pointer;
-  text-decoration:none;display:inline-block;
-  transition:all .3s;
-}
+.ncta{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:12px 28px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .3s;}
 .ncta:hover{background:var(--gold-d);transform:translateY(-1px);}
 @media(max-width:640px){nav{padding:14px 20px;}nav.sc{padding:10px 20px;}.ncta{padding:10px 18px;font-size:9px;}}
 
 /* HERO */
-.hero{
-  min-height:100vh;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:110px 24px 80px;
-  position:relative;overflow:hidden;
-  background:var(--ink);
-}
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 70% 50% at 15% 50%,rgba(168,133,42,0.12) 0%,transparent 65%),
-    radial-gradient(ellipse 50% 70% at 85% 20%,rgba(168,133,42,0.07) 0%,transparent 65%);
-  pointer-events:none;
-}
-/* grain overlay */
-.hero::after{
-  content:'';position:absolute;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  opacity:.4;pointer-events:none;
-}
-
-.hero-eyebrow{
-  font-size:9px;letter-spacing:.55em;text-transform:uppercase;
-  color:var(--gold-l);border:1px solid rgba(168,133,42,.3);
-  padding:6px 20px;margin-bottom:40px;
-  position:relative;z-index:1;
-  animation:fadeUp .8s ease both .2s;
-}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:110px 24px 80px;position:relative;overflow:hidden;background:var(--ink);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 50%,rgba(168,133,42,0.12) 0%,transparent 65%),radial-gradient(ellipse 50% 70% at 85% 20%,rgba(168,133,42,0.07) 0%,transparent 65%);pointer-events:none;}
+.hero::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");opacity:.4;pointer-events:none;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-
-.hero-h1{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(58px,10vw,130px);
-  line-height:.9;letter-spacing:.03em;
-  text-align:center;color:var(--cream2);
-  max-width:1000px;position:relative;z-index:1;
-  animation:fadeUp .9s ease both .4s;
-}
-.hero-h1 em{
-  color:transparent;
-  -webkit-text-stroke:2px var(--gold);
-  font-style:normal;
-}
-.hero-h1 .small-line{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(20px,3vw,34px);
-  font-weight:300;font-style:italic;
-  letter-spacing:.04em;
-  color:rgba(247,243,236,.55);
-  display:block;margin-top:8px;
-}
-
-.hero-sub{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(16px,2.2vw,22px);
-  font-style:italic;color:rgba(247,243,236,.6);
-  text-align:center;max-width:560px;line-height:1.6;
-  margin-top:32px;position:relative;z-index:1;
-  animation:fadeUp 1s ease both .6s;
-}
-
-/* PROFILES TEASER */
-.profiles-teaser{
-  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
-  margin-top:44px;position:relative;z-index:1;
-  animation:fadeUp 1s ease both .75s;
-}
-.ptag{
-  font-size:9px;letter-spacing:.3em;text-transform:uppercase;
-  padding:5px 14px;border:1px solid rgba(168,133,42,.25);
-  color:rgba(247,243,236,.4);
-  transition:all .3s;
-}
+.hero-eyebrow{font-size:9px;letter-spacing:.55em;text-transform:uppercase;color:var(--gold-l);border:1px solid rgba(168,133,42,.3);padding:6px 20px;margin-bottom:40px;position:relative;z-index:1;animation:fadeUp .8s ease both .2s;}
+.hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(58px,10vw,130px);line-height:.9;letter-spacing:.03em;text-align:center;color:var(--cream2);max-width:1000px;position:relative;z-index:1;animation:fadeUp .9s ease both .4s;}
+.hero-h1 em{color:transparent;-webkit-text-stroke:2px var(--gold);font-style:normal;}
+.hero-h1 .small-line{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,34px);font-weight:300;font-style:italic;letter-spacing:.04em;color:rgba(247,243,236,.75);display:block;margin-top:8px;}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.2vw,22px);font-style:italic;color:rgba(247,243,236,.75);text-align:center;max-width:560px;line-height:1.6;margin-top:32px;position:relative;z-index:1;animation:fadeUp 1s ease both .6s;}
+.profiles-teaser{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:44px;position:relative;z-index:1;animation:fadeUp 1s ease both .75s;}
+.ptag{font-size:9px;letter-spacing:.3em;text-transform:uppercase;padding:5px 14px;border:1px solid rgba(168,133,42,.25);color:rgba(247,243,236,.65);transition:all .3s;}
 .ptag:hover{border-color:var(--gold);color:var(--gold-l);}
-
-.hero-cta-wrap{
-  margin-top:52px;text-align:center;
-  position:relative;z-index:1;
-  animation:fadeUp 1s ease both .9s;
-}
-.hero-btn{
-  display:inline-flex;flex-direction:column;align-items:center;gap:7px;
-  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;
-  letter-spacing:.35em;text-transform:uppercase;
-  background:var(--gold);color:var(--ink);
-  border:none;padding:22px 56px;cursor:pointer;
-  position:relative;overflow:hidden;
-  transition:all .35s;text-decoration:none;
-}
-.hero-btn::before{
-  content:'';
-  position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
-  transition:left .5s;
-}
+.hero-cta-wrap{margin-top:52px;text-align:center;position:relative;z-index:1;animation:fadeUp 1s ease both .9s;}
+.hero-btn{display:inline-flex;flex-direction:column;align-items:center;gap:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;background:var(--gold);color:var(--ink);border:none;padding:22px 56px;cursor:pointer;position:relative;overflow:hidden;transition:all .35s;text-decoration:none;}
+.hero-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .5s;}
 .hero-btn:hover::before{left:100%;}
 .hero-btn:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 20px 48px rgba(168,133,42,.35);}
 .hero-btn-price{font-size:10px;letter-spacing:.2em;color:rgba(26,22,18,.6);font-weight:400;}
-.hero-sub2{
-  margin-top:18px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(247,243,236,.65);
-}
-
-/* GOLD LINE */
+.hero-sub2{margin-top:18px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.65);}
 .gline{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-
-/* SECTION — PROBLÈMES */
-.s-prob{background:var(--cream2);padding:80px 24px;}
-.s-prob-inner{max-width:860px;margin:0 auto;}
-.stag{font-size:9px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
-.sh2{
-  font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,68px);
-  letter-spacing:.05em;color:var(--ink);line-height:.95;margin-bottom:20px;
-}
+.stag{font-size:9px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:block;}
+.sh2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,68px);letter-spacing:.05em;color:var(--ink);line-height:.95;margin-bottom:20px;}
 .sh2 em{color:var(--gold);font-style:normal;}
-.ssub{
-  font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.2vw,21px);
-  font-style:italic;color:var(--inkd);line-height:1.6;max-width:540px;
-}
-.problems-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  background:var(--bdr);margin-top:52px;
-}
-.prob-card{background:var(--cream2);padding:36px 30px;}
-.prob-icon{font-size:28px;margin-bottom:16px;}
-.prob-title{
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;
-  color:var(--ink);margin-bottom:10px;
-}
-.prob-desc{font-size:13px;color:var(--inkd);line-height:1.65;}
-.prob-highlight{
-  display:inline-block;margin-top:10px;font-size:10px;letter-spacing:.25em;
-  text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold);
-  padding-bottom:2px;
-}
-@media(max-width:700px){.problems-grid{grid-template-columns:1fr;}}
+.ssub{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.2vw,21px);font-style:italic;color:var(--inkd);line-height:1.6;max-width:560px;}
 
-/* SECTION — PROFILS */
-.s-profiles{background:var(--ink);padding:80px 24px;}
-.s-profiles-inner{max-width:960px;margin:0 auto;}
-.s-profiles .stag{color:var(--gold-l);}
-.s-profiles .sh2{color:var(--cream2);}
-.s-profiles .ssub{color:rgba(247,243,236,.55);}
+/* ROUGE — résultat immédiat (cerveau instinctif) */
+.s-rouge{background:var(--ink);padding:80px 24px;}
+.s-rouge-inner{max-width:900px;margin:0 auto;}
+.s-rouge .sh2{color:var(--cream2);}
+.s-rouge .ssub{color:rgba(247,243,236,.8);}
+.s-rouge .stag{color:var(--gold-l);}
+.rouge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(168,133,42,.15);margin-top:52px;}
+.rouge-card{background:var(--ink);padding:32px 28px;border-bottom:2px solid transparent;transition:border-color .3s;}
+.rouge-card:hover{border-bottom-color:var(--gold);}
+.rouge-num{font-family:'Bebas Neue',sans-serif;font-size:56px;color:rgba(168,133,42,.15);line-height:1;margin-bottom:8px;}
+.rouge-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;color:var(--cream2);margin-bottom:10px;}
+.rouge-desc{font-size:13px;color:rgba(247,243,236,.8);line-height:1.65;}
+.rouge-result{display:inline-block;margin-top:12px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:2px;}
+@media(max-width:700px){.rouge-grid{grid-template-columns:1fr;}}
 
-.profiles-grid{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
-  margin-top:52px;
-}
-.profile-card{
-  border:1px solid rgba(168,133,42,.2);
-  padding:28px 20px;
-  position:relative;overflow:hidden;
-  transition:all .3s;cursor:default;
-}
-.profile-card::before{
-  content:'';
-  position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  transform:scaleX(0);transition:transform .4s;
-}
-.profile-card:hover{border-color:rgba(168,133,42,.5);background:rgba(168,133,42,.04);}
-.profile-card:hover::before{transform:scaleX(1);}
-.profile-num{
-  font-family:'Bebas Neue',sans-serif;font-size:52px;
-  color:rgba(168,133,42,.12);line-height:1;margin-bottom:8px;
-}
-.profile-name{
-  font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.1em;
-  color:var(--gold);line-height:1.15;margin-bottom:10px;
-}
-.profile-desc{font-size:12px;color:rgba(247,243,236,.5);line-height:1.6;}
-.profile-hidden{
-  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
-  color:rgba(168,133,42,.4);margin-top:14px;
-  border-top:1px solid rgba(168,133,42,.1);padding-top:12px;
-}
-@media(max-width:900px){.profiles-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:500px){.profiles-grid{grid-template-columns:1fr;}}
+/* BLEU — méthode & données (cerveau rationnel) */
+.s-bleu{background:var(--cream2);padding:80px 24px;}
+.methode-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;max-width:900px;margin:48px auto 0;}
+@media(max-width:700px){.methode-grid{grid-template-columns:1fr;}}
+.methode-schema{background:var(--ink);padding:32px;position:relative;}
+.methode-schema::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
+.schema-row{display:flex;align-items:flex-start;gap:16px;padding:12px 0;border-bottom:1px solid rgba(168,133,42,.1);}
+.schema-row:last-child{border-bottom:none;}
+.schema-step{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);min-width:36px;line-height:1;}
+.schema-text{font-size:13px;color:rgba(247,243,236,.85);line-height:1.5;padding-top:4px;}
+.schema-text strong{color:var(--gold-l);font-weight:500;}
+.methode-content h3{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,48px);letter-spacing:.05em;color:var(--ink);line-height:.95;margin-bottom:20px;}
+.methode-content h3 em{color:var(--gold);font-style:normal;}
+.methode-content p{font-size:14px;color:var(--inkd);line-height:1.75;margin-bottom:16px;}
+.methode-stats{display:flex;gap:32px;margin-top:28px;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:.05em;color:var(--gold);line-height:1;}
+.stat-lbl{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--inkf);margin-top:4px;}
 
-/* SECTION — MÉTHODE / RAPPORT */
-.s-report{background:var(--cream3);padding:80px 24px;}
-.s-report-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
-.report-visual{
-  background:var(--ink);padding:36px;
-  position:relative;
-}
-.report-visual::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));
-}
-.rv-label{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
-.rv-bars{display:flex;flex-direction:column;gap:14px;}
-.rv-row{display:flex;align-items:center;gap:12px;}
-.rv-name{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.4);min-width:90px;}
-.rv-track{flex:1;height:2px;background:rgba(255,255,255,.07);}
-.rv-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold));transition:width 1.5s cubic-bezier(.4,0,.2,1);}
-.rv-pct{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);min-width:38px;text-align:right;}
-.rv-profile{
-  margin-top:24px;padding-top:20px;border-top:1px solid rgba(168,133,42,.15);
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;
-  color:var(--gold-l);
-}
-.rv-profile span{display:block;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.3);margin-bottom:4px;}
-.rv-blur{filter:blur(4px);user-select:none;}
-@media(max-width:700px){.s-report-inner{grid-template-columns:1fr;}.report-visual{order:-1;}}
-
-.report-content .stag{margin-bottom:16px;}
-.report-items{margin-top:32px;display:flex;flex-direction:column;gap:16px;}
-.ri{display:flex;gap:16px;align-items:flex-start;}
-.ri-dot{
-  min-width:6px;height:6px;border-radius:50%;background:var(--gold);
-  margin-top:6px;flex-shrink:0;
-}
-.ri-text{font-size:14px;color:var(--inkd);line-height:1.65;}
-.ri-text strong{color:var(--ink);font-weight:500;}
-
-/* SECTION — SOCIAL PROOF */
-.s-proof{background:var(--cream2);padding:72px 24px;}
-.s-proof-inner{max-width:860px;margin:0 auto;}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bdr);margin-top:44px;}
+/* VERT — empathie & reconnaissance (cerveau relationnel) */
+.s-vert{background:var(--cream3);padding:80px 24px;}
+.s-vert-inner{max-width:860px;margin:0 auto;}
+.scene-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(19px,2.8vw,26px);font-style:italic;color:var(--ink);line-height:1.5;border-left:3px solid var(--gold);padding:20px 0 20px 32px;margin:40px 0;}
+.scene-desc{font-size:15px;color:var(--inkd);line-height:1.8;max-width:640px;}
+.scene-desc strong{color:var(--ink);font-weight:500;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bdr);margin-top:48px;}
 .testi-card{background:var(--cream2);padding:32px 28px;}
 .testi-stars{color:var(--gold);font-size:11px;letter-spacing:3px;margin-bottom:12px;}
-.testi-q{
-  font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;
-  color:var(--inkd);line-height:1.6;margin-bottom:14px;
-}
+.testi-q{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--inkd);line-height:1.6;margin-bottom:14px;}
 .testi-a{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);}
 @media(max-width:700px){.testi-grid{grid-template-columns:1fr;}}
 
-/* SECTION — CTA FINAL */
-.s-cta{
-  background:var(--ink);padding:100px 24px;
-  position:relative;overflow:hidden;
-}
-.s-cta::before{
-  content:'AXE';
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(200px,30vw,400px);
-  color:rgba(168,133,42,.04);
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  letter-spacing:.1em;white-space:nowrap;
-  pointer-events:none;
-}
+/* JAUNE — transformation & potentiel (cerveau visionnaire) */
+.s-jaune{background:var(--ink);padding:80px 24px;}
+.s-jaune-inner{max-width:900px;margin:0 auto;}
+.s-jaune .sh2{color:var(--cream2);}
+.s-jaune .ssub{color:rgba(247,243,236,.8);}
+.s-jaune .stag{color:var(--gold-l);}
+.before-after{display:grid;grid-template-columns:1fr 1fr;gap:2px;max-width:860px;margin:48px auto 0;}
+@media(max-width:640px){.before-after{grid-template-columns:1fr;gap:8px;}}
+.ba-col{padding:32px;}
+.ba-col.before{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);}
+.ba-col.after{background:rgba(168,133,42,.08);border:1px solid rgba(168,133,42,.25);}
+.ba-label{font-size:9px;letter-spacing:.4em;text-transform:uppercase;margin-bottom:20px;display:block;}
+.ba-col.before .ba-label{color:rgba(247,243,236,.4);}
+.ba-col.after .ba-label{color:var(--gold);}
+.ba-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;}
+.ba-dot{min-width:6px;height:6px;border-radius:50%;margin-top:7px;flex-shrink:0;}
+.ba-col.before .ba-dot{background:rgba(247,243,236,.25);}
+.ba-col.after .ba-dot{background:var(--gold);}
+.ba-text{font-size:13px;line-height:1.65;}
+.ba-col.before .ba-text{color:rgba(247,243,236,.6);}
+.ba-col.after .ba-text{color:rgba(247,243,236,.88);}
+
+/* PROFILS */
+.s-profiles{background:var(--cream2);padding:80px 24px;}
+.s-profiles-inner{max-width:960px;margin:0 auto;}
+.profiles-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:52px;}
+.profile-card{border:1px solid var(--bdr);padding:28px 20px;position:relative;overflow:hidden;transition:all .3s;background:var(--cream);}
+.profile-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .4s;}
+.profile-card:hover{border-color:rgba(168,133,42,.5);background:rgba(168,133,42,.03);}
+.profile-card:hover::before{transform:scaleX(1);}
+.profile-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:rgba(168,133,42,.12);line-height:1;margin-bottom:8px;}
+.profile-name{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.1em;color:var(--gold);line-height:1.15;margin-bottom:10px;}
+.profile-desc{font-size:12px;color:var(--inkd);line-height:1.6;}
+.profile-hidden{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(168,133,42,.5);margin-top:14px;border-top:1px solid var(--bdr);padding-top:12px;}
+@media(max-width:900px){.profiles-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.profiles-grid{grid-template-columns:1fr;}}
+
+/* RAPPORT */
+.s-report{background:var(--cream3);padding:80px 24px;}
+.s-report-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+@media(max-width:700px){.s-report-inner{grid-template-columns:1fr;}}
+.report-visual{background:var(--ink);padding:36px;position:relative;}
+.report-visual::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
+.rv-label{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.rv-bars{display:flex;flex-direction:column;gap:14px;}
+.rv-row{display:flex;align-items:center;gap:12px;}
+.rv-name{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.7);min-width:90px;}
+.rv-track{flex:1;height:2px;background:rgba(255,255,255,.07);}
+.rv-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold));transition:width 1.5s cubic-bezier(.4,0,.2,1);}
+.rv-pct{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);min-width:38px;text-align:right;}
+.rv-blur{filter:blur(4px);user-select:none;}
+.rv-profile{margin-top:24px;padding-top:20px;border-top:1px solid rgba(168,133,42,.15);font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;color:var(--gold-l);}
+.rv-profile span{display:block;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.6);margin-bottom:4px;}
+.report-items{margin-top:32px;display:flex;flex-direction:column;gap:16px;}
+.ri{display:flex;gap:16px;align-items:flex-start;}
+.ri-dot{min-width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:6px;flex-shrink:0;}
+.ri-text{font-size:14px;color:var(--inkd);line-height:1.65;}
+.ri-text strong{color:var(--ink);font-weight:500;}
+
+/* CTA */
+.s-cta{background:var(--ink);padding:100px 24px;position:relative;overflow:hidden;}
+.s-cta::before{content:'AXE';font-family:'Bebas Neue',sans-serif;font-size:clamp(200px,30vw,400px);color:rgba(168,133,42,.04);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);letter-spacing:.1em;white-space:nowrap;pointer-events:none;}
 .s-cta-inner{max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1;}
 .s-cta .stag{color:var(--gold-l);}
-.s-cta-h{
-  font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,88px);
-  letter-spacing:.04em;color:var(--cream2);line-height:.95;margin:16px 0 24px;
-}
-.s-cta-sub{
-  font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;
-  color:rgba(247,243,236,.5);line-height:1.55;max-width:500px;margin:0 auto;
-}
-.s-cta-btn{
-  display:inline-flex;flex-direction:column;align-items:center;gap:8px;
-  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;
-  letter-spacing:.35em;text-transform:uppercase;
-  background:var(--gold);color:var(--ink);
-  border:none;padding:24px 60px;cursor:pointer;
-  margin-top:48px;transition:all .35s;text-decoration:none;
-  position:relative;overflow:hidden;
-}
-.s-cta-btn::after{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
-}
+.s-cta-h{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,88px);letter-spacing:.04em;color:var(--cream2);line-height:.95;margin:16px 0 24px;}
+.s-cta-sub{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:rgba(247,243,236,.75);line-height:1.55;max-width:500px;margin:0 auto;}
+.s-cta-btn{display:inline-flex;flex-direction:column;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;background:var(--gold);color:var(--ink);border:none;padding:24px 60px;cursor:pointer;margin-top:48px;transition:all .35s;text-decoration:none;position:relative;overflow:hidden;}
+.s-cta-btn::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);}
 .s-cta-btn:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 24px 60px rgba(168,133,42,.4);}
 .s-cta-price{font-size:11px;font-weight:400;letter-spacing:.2em;color:rgba(26,22,18,.55);}
 .s-cta-note{margin-top:20px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.65);}
+.s-cta-reassure{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:24px;}
+.reassure-item{font-size:11px;color:rgba(247,243,236,.55);display:flex;align-items:center;gap:6px;}
+.reassure-item::before{content:'✦';color:var(--gold);font-size:9px;}
 
 /* FAQ */
 .s-faq{background:var(--cream);padding:72px 24px;}
 .s-faq-inner{max-width:640px;margin:0 auto;}
 .faq-item{border-bottom:1px solid var(--bdr);}
-.faq-q{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:18px 0;cursor:pointer;font-size:14px;font-weight:400;color:var(--ink);user-select:none;
-}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 0;cursor:pointer;font-size:14px;font-weight:400;color:var(--ink);user-select:none;}
 .faq-q::after{content:'+';color:var(--gold);font-size:22px;font-weight:300;transition:transform .3s;}
 .faq-item.open .faq-q::after{transform:rotate(45deg);}
 .faq-a{max-height:0;overflow:hidden;font-size:13px;color:var(--inkd);line-height:1.7;transition:max-height .4s ease,padding .3s;}
-.faq-item.open .faq-a{max-height:220px;padding-bottom:18px;}
+.faq-item.open .faq-a{max-height:240px;padding-bottom:18px;}
 
 /* FOOTER */
 footer{background:var(--ink);padding:28px 24px;text-align:center;}
-footer a{color:rgba(247,243,236,.3);font-size:11px;text-decoration:none;margin:0 12px;}
+footer a{color:rgba(247,243,236,.5);font-size:11px;text-decoration:none;margin:0 12px;}
 footer a:hover{color:var(--gold);}
-footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(247,243,236,.15);}
+footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(247,243,236,.25);}
 
-/* SCROLL REVEAL */
+/* REVEAL */
 .reveal{opacity:1;transform:translateY(0);transition:opacity .7s ease,transform .7s ease;}
 .js-reveal{opacity:0;transform:translateY(20px);}
 .js-reveal.vis{opacity:1;transform:translateY(0);}
@@ -362,32 +211,19 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
 </head>
 <body>
 
-<!-- NAV -->
 <nav id="nav">
-  <a href="https://fabien-pinton.fr" class="nlogo">
-    FABIEN PINTON
-    <span>Préparateur Mental · Méthode AXE</span>
-  </a>
+  <a href="https://fabien-pinton.fr" class="nlogo">FABIEN PINTON<span>Préparateur Mental · Méthode AXE</span></a>
   <a href="diagnostic.html" class="ncta">Faire le diagnostic — 9€</a>
 </nav>
 
-<!-- ══════════════════════════════════════════ -->
-<!-- HERO                                        -->
-<!-- ══════════════════════════════════════════ -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-eyebrow">Diagnostic Mental · Méthode AXE · Fabien Pinton</div>
-
   <h1 class="hero-h1">
-    VOTRE MENTAL<br>
-    <em>VOUS FREINE</em><br>
+    VOTRE MENTAL<br><em>VOUS FREINE</em><br>
     <span class="small-line">sans que vous sachiez exactement pourquoi.</span>
   </h1>
-
-  <p class="hero-sub">
-    20 questions pour identifier votre profil mental exact —
-    et recevoir un rapport personnalisé avec les bons leviers à activer.
-  </p>
-
+  <p class="hero-sub">20 questions. 5 profils possibles. Un rapport personnalisé — avec les exercices exacts adaptés à votre frein mental.</p>
   <div class="profiles-teaser">
     <div class="ptag">Hyperstressé</div>
     <div class="ptag">Bloqué par la peur</div>
@@ -395,79 +231,157 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
     <div class="ptag">Chercheur de plaisir</div>
     <div class="ptag">Hypercompétiteur</div>
   </div>
-
   <div class="hero-cta-wrap">
     <a href="diagnostic.html" class="hero-btn">
       DÉCOUVRIR MON PROFIL MENTAL
       <span class="hero-btn-price">Rapport personnalisé · 9€ seulement</span>
     </a>
-    <p class="hero-sub2">✦ 20 questions · Rapport email · Paiement sécurisé Stripe</p>
+    <p class="hero-sub2">✦ 20 questions · Résultat immédiat · Paiement sécurisé Stripe</p>
   </div>
 </section>
-
 <div class="gline"></div>
 
-<!-- ══════════════════════════════════════════ -->
-<!-- PROBLÈMES                                   -->
-<!-- ══════════════════════════════════════════ -->
-<section class="s-prob">
-  <div class="s-prob-inner">
-    <div class="stag reveal">Ce que vivent la plupart des sportifs</div>
-    <h2 class="sh2 reveal">VOUS AVEZ LE <em>NIVEAU</em>.<br>PAS TOUJOURS LE <em>MENTAL</em>.</h2>
-    <p class="ssub reveal">
-      La technique est là. La condition physique aussi.
-      Mais en compétition, quelque chose déraille. Ce quelque chose a un nom — et un profil.
-    </p>
-
-    <div class="problems-grid">
-      <div class="prob-card reveal">
-        <div class="prob-icon">🔥</div>
-        <div class="prob-title">La pression vous dévore</div>
-        <div class="prob-desc">Avant la compétition, votre mental s'emballe. Vous ne dormez pas, vous ruminez. Le jour J, vous n'êtes plus vous-même.</div>
-        <div class="prob-highlight">Profil : Hyperstressé</div>
+<!-- ROUGE — Ce que vous obtenez, maintenant -->
+<section class="s-rouge">
+  <div class="s-rouge-inner">
+    <span class="stag reveal">Ce que vous obtenez · Immédiatement</span>
+    <h2 class="sh2 reveal">20 QUESTIONS.<br>UN RAPPORT <em>FAIT POUR VOUS</em>.<br>9€.</h2>
+    <p class="ssub reveal">Résultat dans votre boîte mail en quelques minutes. Des exercices concrets adaptés à votre frein exact — pas des conseils génériques.</p>
+    <div class="rouge-grid">
+      <div class="rouge-card reveal">
+        <div class="rouge-num">01</div>
+        <div class="rouge-title">Votre profil identifié</div>
+        <div class="rouge-desc">Parmi 5 profils mentaux, l'algorithme identifie le vôtre avec précision et explique vos mécanismes de blocage spécifiques.</div>
+        <div class="rouge-result">Résultat précis →</div>
       </div>
-      <div class="prob-card reveal">
-        <div class="prob-icon">🧊</div>
-        <div class="prob-title">La peur vous paralyse</div>
-        <div class="prob-desc">Peur de décevoir, peur de l'échec, peur du jugement. Vous jouez en dessous de votre niveau parce qu'une partie de vous veut éviter le risque.</div>
-        <div class="prob-highlight">Profil : Bloqué par la peur</div>
+      <div class="rouge-card reveal">
+        <div class="rouge-num">02</div>
+        <div class="rouge-title">3 exercices concrets</div>
+        <div class="rouge-desc">Pas des conseils génériques. Des exercices choisis selon votre profil dominant, applicables seul, dès ce soir.</div>
+        <div class="rouge-result">Action immédiate →</div>
       </div>
-      <div class="prob-card reveal">
-        <div class="prob-icon">📉</div>
-        <div class="prob-title">Vous ne vous faites pas confiance</div>
-        <div class="prob-desc">Une erreur et tout s'effondre. Votre confiance est fragile, conditionnelle, dépendante du regard des autres.</div>
-        <div class="prob-highlight">Profil : Déficit de confiance</div>
-      </div>
-      <div class="prob-card reveal">
-        <div class="prob-icon">🎮</div>
-        <div class="prob-title">Vous cherchez le plaisir, pas la victoire</div>
-        <div class="prob-desc">La compétition vous stresse parce que l'enjeu tue votre jeu. Vous n'êtes pas fait pour la pression — ou vous n'avez pas encore les outils.</div>
-        <div class="prob-highlight">Profil : Chercheur de plaisir</div>
-      </div>
-      <div class="prob-card reveal">
-        <div class="prob-icon">⚔️</div>
-        <div class="prob-title">Vous êtes obsédé par le résultat</div>
-        <div class="prob-desc">L'hypercompétitivité vous brûle. Vous exigez trop de vous-même. La défaite est insupportable. Vous performez sous la contrainte, pas dans la fluidité.</div>
-        <div class="prob-highlight">Profil : Hypercompétiteur</div>
+      <div class="rouge-card reveal">
+        <div class="rouge-num">03</div>
+        <div class="rouge-title">Vos 5 scores détaillés</div>
+        <div class="rouge-desc">Stress, peur, confiance, plaisir, compétitivité — chaque dimension analysée, chaque interaction expliquée.</div>
+        <div class="rouge-result">Analyse complète →</div>
       </div>
     </div>
   </div>
 </section>
-
 <div class="gline"></div>
 
-<!-- ══════════════════════════════════════════ -->
-<!-- LES 5 PROFILS                               -->
-<!-- ══════════════════════════════════════════ -->
+<!-- BLEU — La méthode, la structure, les preuves -->
+<section class="s-bleu">
+  <div style="max-width:900px;margin:0 auto;">
+    <span class="stag reveal">Comment ça fonctionne · La méthode</span>
+    <h2 class="sh2 reveal">UNE APPROCHE <em>SCIENTIFIQUE</em><br>DU MENTAL SPORTIF.</h2>
+  </div>
+  <div class="methode-grid">
+    <div class="methode-schema reveal">
+      <div class="schema-row">
+        <div class="schema-step">1</div>
+        <div class="schema-text"><strong>20 questions comportementales</strong> — avant, pendant et après la compétition.</div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-step">2</div>
+        <div class="schema-text"><strong>Algorithme d'analyse</strong> — croise vos réponses sur 5 dimensions psychologiques distinctes.</div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-step">3</div>
+        <div class="schema-text"><strong>Profil dominant identifié</strong> — parmi 5 profils précis avec leurs mécanismes propres.</div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-step">4</div>
+        <div class="schema-text"><strong>Rapport généré sur mesure</strong> — exercices et plan adaptés à votre profil exact. Pas un rapport générique.</div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-step">5</div>
+        <div class="schema-text"><strong>Envoi par email immédiat</strong> — dans les minutes suivant le paiement. Satisfait ou remboursé 7 jours.</div>
+      </div>
+    </div>
+    <div class="methode-content reveal">
+      <h3>LA MÉTHODE <em>AXE</em></h3>
+      <p>Alignement. Exigence. Engagement. Trois piliers construits sur 10 ans de terrain avec des sportifs de tous niveaux — du loisir au professionnel.</p>
+      <p>Le diagnostic n'est pas un quiz de magazine. C'est un outil de mesure précis, fondé sur la psychologie du sport et les neurosciences de la performance.</p>
+      <p>Chaque rapport est généré algorithmiquement selon vos réponses — il n'existe pas deux rapports identiques.</p>
+      <div class="methode-stats">
+        <div class="stat"><div class="stat-num">5</div><div class="stat-lbl">Profils distincts</div></div>
+        <div class="stat"><div class="stat-num">20</div><div class="stat-lbl">Questions ciblées</div></div>
+        <div class="stat"><div class="stat-num">9€</div><div class="stat-lbl">Rapport complet</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="gline"></div>
+
+<!-- VERT — La reconnaissance, "c'est moi ça" -->
+<section class="s-vert">
+  <div class="s-vert-inner">
+    <span class="stag reveal">Ce que vous vivez · Vous vous reconnaissez ?</span>
+    <h2 class="sh2 reveal">VOUS AVEZ LE NIVEAU.<br>EN COMPÉTITION, <em>C'EST PLUS VOUS</em>.</h2>
+    <div class="scene-quote reveal">
+      « T'arrives sur le site. Ça va. T'échauffes. Ça va.<br>
+      Et là, 10 minutes avant le départ — quelque chose change.<br>
+      Ton corps se crispe. Ta tête part dans tous les sens.<br>
+      T'es là physiquement. Mais t'es plus vraiment toi. »
+    </div>
+    <p class="scene-desc reveal">Ce n'est pas de la faiblesse. Ce n'est pas un manque de travail.<br><strong>C'est un profil mental non identifié</strong> — et ça se corrige avec les bons outils, pas avec plus d'entraînement.</p>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-q">"J'ai compris pour la première fois ce qui me bloquait vraiment en compétition. Le rapport était précis, honnête — pas de vague."</div>
+        <div class="testi-a">Hugo R. — BMX</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-q">"Mon profil était hypercompétiteur. Je ne voulais pas le croire. Mais les exercices m'ont changé. Je performe mieux depuis que j'ai lâché cette tension."</div>
+        <div class="testi-a">Lucas B. — VTT</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-q">"9€ pour enfin savoir pourquoi je me bloquais. Les exercices du rapport, je les fais encore. Simple, efficace, juste."</div>
+        <div class="testi-a">Maëva L. — Triathlon</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="gline"></div>
+
+<!-- JAUNE — La transformation, le potentiel -->
+<section class="s-jaune">
+  <div class="s-jaune-inner">
+    <span class="stag reveal">Ce qui devient possible</span>
+    <h2 class="sh2 reveal">ET SI VOTRE VRAI NIVEAU<br><em>SORTAIT ENFIN</em> EN COMPÉTITION ?</h2>
+    <p class="ssub reveal">Imaginez performer en compétition comme à l'entraînement. Pas un rêve — le résultat d'un travail mental ciblé sur le bon frein.</p>
+  </div>
+  <div class="before-after">
+    <div class="ba-col before reveal">
+      <span class="ba-label">Avant le diagnostic</span>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous performez bien à l'entraînement — pas en compétition</div></div>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous ne comprenez pas pourquoi vous vous bloquez</div></div>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous travaillez plus dur — sans résultat sur le mental</div></div>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous cherchez au mauvais endroit depuis des mois</div></div>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">La frustration s'accumule à chaque compétition</div></div>
+    </div>
+    <div class="ba-col after reveal">
+      <span class="ba-label">Après le diagnostic</span>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous savez exactement quel est votre frein mental et pourquoi</div></div>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous avez 3 exercices concrets adaptés à votre situation précise</div></div>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous travaillez le bon levier — pas le mauvais</div></div>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous commencez à performer en compétition comme à l'entraînement</div></div>
+      <div class="ba-item"><div class="ba-dot"></div><div class="ba-text">Vous construisez une confiance durable — pas conditionnelle</div></div>
+    </div>
+  </div>
+</section>
+<div class="gline"></div>
+
+<!-- LES 5 PROFILS -->
 <section class="s-profiles">
   <div class="s-profiles-inner">
-    <div class="stag reveal">Le cœur du diagnostic</div>
+    <span class="stag reveal">Le cœur du diagnostic</span>
     <h2 class="sh2 reveal">5 PROFILS MENTAUX.<br>UN SEUL EST <em>LE VÔTRE</em>.</h2>
-    <p class="ssub reveal">
-      Après 20 questions, l'analyse révèle votre profil dominant — et vous donne
-      un rapport construit spécifiquement pour lui.
-    </p>
-
+    <p class="ssub reveal">Après 20 questions, l'analyse révèle votre profil dominant — et vous donne un rapport construit spécifiquement pour lui.</p>
     <div class="profiles-grid">
       <div class="profile-card reveal">
         <div class="profile-num">01</div>
@@ -502,136 +416,63 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
     </div>
   </div>
 </section>
-
 <div class="gline"></div>
 
-<!-- ══════════════════════════════════════════ -->
-<!-- CE QUE CONTIENT LE RAPPORT                 -->
-<!-- ══════════════════════════════════════════ -->
+<!-- APERÇU RAPPORT -->
 <section class="s-report">
   <div class="s-report-inner">
     <div class="report-visual reveal" id="reportViz">
       <div class="rv-label">Aperçu rapport · Exemple</div>
       <div class="rv-bars">
-        <div class="rv-row">
-          <div class="rv-name">Stress</div>
-          <div class="rv-track"><div class="rv-fill" id="b1" style="width:0%"></div></div>
-          <div class="rv-pct rv-blur">81%</div>
-        </div>
-        <div class="rv-row">
-          <div class="rv-name">Peur</div>
-          <div class="rv-track"><div class="rv-fill" id="b2" style="width:0%"></div></div>
-          <div class="rv-pct rv-blur">47%</div>
-        </div>
-        <div class="rv-row">
-          <div class="rv-name">Confiance</div>
-          <div class="rv-track"><div class="rv-fill" id="b3" style="width:0%"></div></div>
-          <div class="rv-pct rv-blur">62%</div>
-        </div>
-        <div class="rv-row">
-          <div class="rv-name">Plaisir</div>
-          <div class="rv-track"><div class="rv-fill" id="b4" style="width:0%"></div></div>
-          <div class="rv-pct rv-blur">73%</div>
-        </div>
-        <div class="rv-row">
-          <div class="rv-name">Compétitivité</div>
-          <div class="rv-track"><div class="rv-fill" id="b5" style="width:0%"></div></div>
-          <div class="rv-pct rv-blur">55%</div>
-        </div>
+        <div class="rv-row"><div class="rv-name">Stress</div><div class="rv-track"><div class="rv-fill" id="b1" style="width:0%"></div></div><div class="rv-pct rv-blur">81%</div></div>
+        <div class="rv-row"><div class="rv-name">Peur</div><div class="rv-track"><div class="rv-fill" id="b2" style="width:0%"></div></div><div class="rv-pct rv-blur">47%</div></div>
+        <div class="rv-row"><div class="rv-name">Confiance</div><div class="rv-track"><div class="rv-fill" id="b3" style="width:0%"></div></div><div class="rv-pct rv-blur">62%</div></div>
+        <div class="rv-row"><div class="rv-name">Plaisir</div><div class="rv-track"><div class="rv-fill" id="b4" style="width:0%"></div></div><div class="rv-pct rv-blur">73%</div></div>
+        <div class="rv-row"><div class="rv-name">Compétitivité</div><div class="rv-track"><div class="rv-fill" id="b5" style="width:0%"></div></div><div class="rv-pct rv-blur">55%</div></div>
       </div>
-      <div class="rv-profile">
-        <span>Profil dominant identifié</span>
-        <span class="rv-blur">L'Hyperstressé</span>
-      </div>
+      <div class="rv-profile"><span>Profil dominant identifié</span><span class="rv-blur">L'Hyperstressé</span></div>
     </div>
-
-    <div class="report-content">
-      <div class="stag reveal">Votre rapport personnalisé</div>
-      <h2 class="sh2 reveal">UN RAPPORT<br>FAIT <em>POUR VOUS</em>.</h2>
+    <div class="reveal">
+      <span class="stag">Votre rapport personnalisé</span>
+      <h2 class="sh2">UN RAPPORT<br>FAIT <em>POUR VOUS</em>.</h2>
       <div class="report-items">
-        <div class="ri reveal">
-          <div class="ri-dot"></div>
-          <div class="ri-text"><strong>Votre profil dominant</strong> — identifié parmi 5 possibilités, avec une explication précise de vos mécanismes mentaux.</div>
-        </div>
-        <div class="ri reveal">
-          <div class="ri-dot"></div>
-          <div class="ri-text"><strong>Vos 5 scores</strong> — stress, peur, confiance, plaisir et compétitivité — avec leur interaction et ce qu'ils révèlent.</div>
-        </div>
-        <div class="ri reveal">
-          <div class="ri-dot"></div>
-          <div class="ri-text"><strong>3 exercices concrets</strong> — adaptés à votre profil, applicables seul, dès ce soir.</div>
-        </div>
-        <div class="ri reveal">
-          <div class="ri-dot"></div>
-          <div class="ri-text"><strong>La méthode AXE</strong> — comment elle s'applique à votre situation spécifique.</div>
-        </div>
-        <div class="ri reveal">
-          <div class="ri-dot"></div>
-          <div class="ri-text"><strong>La suite</strong> — lien vers votre programme approfondi à 27€ (adapté à votre profil) et l'appel découverte gratuit si vous voulez aller plus loin.</div>
-        </div>
+        <div class="ri"><div class="ri-dot"></div><div class="ri-text"><strong>Votre profil dominant</strong> — identifié parmi 5 possibilités, avec une explication précise de vos mécanismes mentaux.</div></div>
+        <div class="ri"><div class="ri-dot"></div><div class="ri-text"><strong>Vos 5 scores</strong> — stress, peur, confiance, plaisir et compétitivité — avec leur interaction et ce qu'ils révèlent.</div></div>
+        <div class="ri"><div class="ri-dot"></div><div class="ri-text"><strong>3 exercices concrets</strong> — adaptés à votre profil, applicables seul, dès ce soir.</div></div>
+        <div class="ri"><div class="ri-dot"></div><div class="ri-text"><strong>La méthode AXE</strong> — comment elle s'applique à votre situation spécifique.</div></div>
+        <div class="ri"><div class="ri-dot"></div><div class="ri-text"><strong>La suite</strong> — lien vers votre programme approfondi à 27€ et l'appel découverte gratuit si vous voulez aller plus loin.</div></div>
       </div>
     </div>
   </div>
 </section>
-
 <div class="gline"></div>
 
-<!-- ══════════════════════════════════════════ -->
-<!-- TÉMOIGNAGES                                 -->
-<!-- ══════════════════════════════════════════ -->
-<section class="s-proof">
-  <div class="s-proof-inner">
-    <div class="stag reveal">Témoignages</div>
-    <h2 class="sh2 reveal">ILS ONT <em>COMPRIS</em><br>LEUR MENTAL.</h2>
-    <div class="testi-grid">
-      <div class="testi-card reveal">
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-q">"J'ai compris pour la première fois ce qui me bloquait vraiment en compétition. Le rapport était précis, honnête — pas de vague."</div>
-        <div class="testi-a">Hugo R. — BMX</div>
-      </div>
-      <div class="testi-card reveal">
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-q">"Mon profil était hypercompétiteur. Je ne voulais pas le croire. Mais les exercices m'ont changé. Je performe mieux depuis que j'ai lâché cette tension."</div>
-        <div class="testi-a">Lucas B. — VTT</div>
-      </div>
-      <div class="testi-card reveal">
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-q">"9€ pour enfin savoir pourquoi je me bloquais. Les exercices du rapport, je les fais encore. Simple, efficace, juste."</div>
-        <div class="testi-a">Maëva L. — Triathlon</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="gline"></div>
-
-<!-- ══════════════════════════════════════════ -->
-<!-- CTA FINAL                                   -->
-<!-- ══════════════════════════════════════════ -->
+<!-- CTA FINAL -->
 <section class="s-cta">
   <div class="s-cta-inner">
-    <div class="stag">Prêt à savoir ?</div>
+    <span class="stag">Prêt à savoir ?</span>
     <h2 class="s-cta-h">20 QUESTIONS.<br>VOTRE VÉRITÉ.</h2>
-    <p class="s-cta-sub">
-      Arrêtez de performer à l'instinct.<br>
-      Connaître son profil mental, c'est le premier vrai avantage compétitif.
-    </p>
+    <p class="s-cta-sub">Arrêtez de performer à l'instinct.<br>Connaître son profil mental, c'est le premier vrai avantage compétitif.</p>
     <a href="diagnostic.html" class="s-cta-btn">
       COMMENCER MON DIAGNOSTIC
       <span class="s-cta-price">Rapport personnalisé · Paiement sécurisé · 9€</span>
     </a>
     <p class="s-cta-note">✦ Résultat par email · Satisfait ou remboursé 7 jours</p>
+    <div class="s-cta-reassure">
+      <span class="reassure-item">Résultat en quelques minutes</span>
+      <span class="reassure-item">CB · Apple Pay · Google Pay</span>
+      <span class="reassure-item">Rapport unique, non générique</span>
+      <span class="reassure-item">Remboursé si insatisfait 7 jours</span>
+    </div>
   </div>
 </section>
-
 <div class="gline"></div>
 
 <!-- FAQ -->
 <section class="s-faq">
   <div class="s-faq-inner">
-    <div class="stag reveal" style="text-align:center;display:block;">Questions fréquentes</div>
+    <span class="stag reveal" style="text-align:center;">Questions fréquentes</span>
     <h2 class="sh2 reveal" style="text-align:center;margin-bottom:32px;">FAQ</h2>
-
     <div class="faq-item">
       <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">C'est quoi exactement ce diagnostic ?</div>
       <div class="faq-a">20 questions sur votre comportement mental avant, pendant et après la compétition. L'algorithme identifie votre profil dominant parmi 5 possibles, puis génère un rapport qui lui est entièrement adapté — pas un rapport générique.</div>
@@ -652,6 +493,10 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
       <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">Et si je veux aller plus loin après le rapport ?</div>
       <div class="faq-a">Le rapport contient un lien vers votre programme approfondi à 27€ — 6 semaines d'exercices adaptés exactement à votre profil — et un lien pour réserver un appel découverte gratuit de 30 minutes avec moi directement.</div>
     </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">Pourquoi 9€ et pas gratuit ?</div>
+      <div class="faq-a">Un diagnostic gratuit n'engage à rien et se zappe en 30 secondes. 9€ vous engage à lire votre rapport, appliquer les exercices, et prendre votre mental au sérieux. C'est voulu. C'est le prix d'un café — et ça change une compétition.</div>
+    </div>
   </div>
 </section>
 
@@ -665,33 +510,16 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
   <p>Méthode AXE Mental Performance © 2026 · Fabien Pinton Préparateur Mental</p>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// Nav scroll
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',scrollY>60));
-
-// Scroll reveal — éléments visibles par défaut, animés seulement si JS disponible
 document.querySelectorAll('.reveal').forEach(el=>el.classList.add('js-reveal'));
 const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');ro.unobserve(x.target);}});},{threshold:.08,rootMargin:'0px 0px -20px 0px'});
 document.querySelectorAll('.js-reveal').forEach(el=>ro.observe(el));
-
-// Animate demo bars
-const barObs=new IntersectionObserver(e=>{if(e[0].isIntersecting){
-  setTimeout(()=>{
-    document.getElementById('b1').style.width='81%';
-    document.getElementById('b2').style.width='47%';
-    document.getElementById('b3').style.width='62%';
-    document.getElementById('b4').style.width='73%';
-    document.getElementById('b5').style.width='55%';
-  },300);
-  barObs.disconnect();
-}},{threshold:.3});
-const viz=document.getElementById('reportViz');
-if(viz)barObs.observe(viz);
-
-// Facebook Pixel events
-document.querySelector('.hero-btn')?.addEventListener('click',()=>{
-  if(typeof fbq!=='undefined')fbq('track','Lead');
-  if(typeof gtag!=='undefined')gtag('event','click_hero_cta',{event_category:'landing'});
-});
-document.querySelector('.s-cta-btn')?.addEventListener('click',()=>{
-  if(typeof fbq!==
+const barObs=new IntersectionObserver(e=>{if(e[0].isIntersecting){setTimeout(()=>{document.getElementById('b1').style.width='81%';document.getElementById('b2').style.width='47%';document.getElementById('b3').style.width='62%';document.getElementById('b4').style.width='73%';document.getElementById('b5').style.width='55%';},300);barObs.disconnect();}},{threshold:.3});
+const viz=document.getElementById('reportViz');if(viz)barObs.observe(viz);
+document.querySelector('.hero-btn')?.addEventListener('click',()=>{if(typeof fbq!=='undefined')fbq('track','Lead');if(typeof gtag!=='undefined')gtag('event','click_hero_cta',{event_category:'landing'});});
+document.querySelector('.s-cta-btn')?.addEventListener('click',()=>{if(typeof fbq!=='undefined')fbq('track','Lead');if(typeof gtag!=='undefined')gtag('event','click_cta_final',{event_category:'landing'});});
+</script>
+</body>
+</html>
