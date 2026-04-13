@@ -164,7 +164,7 @@ nav.sc{padding:12px 60px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 .hero-btn-price{font-size:10px;letter-spacing:.2em;color:rgba(26,22,18,.6);font-weight:400;}
 .hero-sub2{
   margin-top:18px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(247,243,236,.2);
+  color:rgba(247,243,236,.65);
 }
 
 /* GOLD LINE */
@@ -333,7 +333,7 @@ nav.sc{padding:12px 60px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 }
 .s-cta-btn:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 24px 60px rgba(168,133,42,.4);}
 .s-cta-price{font-size:11px;font-weight:400;letter-spacing:.2em;color:rgba(26,22,18,.55);}
-.s-cta-note{margin-top:20px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.18);}
+.s-cta-note{margin-top:20px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.65);}
 
 /* FAQ */
 .s-faq{background:var(--cream);padding:72px 24px;}
@@ -355,8 +355,9 @@ footer a:hover{color:var(--gold);}
 footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(247,243,236,.15);}
 
 /* SCROLL REVEAL */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;}
-.reveal.vis{opacity:1;transform:translateY(0);}
+.reveal{opacity:1;transform:translateY(0);transition:opacity .7s ease,transform .7s ease;}
+.js-reveal{opacity:0;transform:translateY(20px);}
+.js-reveal.vis{opacity:1;transform:translateY(0);}
 </style>
 </head>
 <body>
@@ -389,9 +390,8 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
 
   <div class="profiles-teaser">
     <div class="ptag">Hyperstressé</div>
-    <div class="ptag">Paralysé par la peur</div>
-    <div class="ptag">Manque de confiance</div>
-    <div class="ptag">Excès de confiance</div>
+    <div class="ptag">Bloqué par la peur</div>
+    <div class="ptag">Déficit de confiance</div>
     <div class="ptag">Chercheur de plaisir</div>
     <div class="ptag">Hypercompétiteur</div>
   </div>
@@ -423,7 +423,7 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
       <div class="prob-card reveal">
         <div class="prob-icon">🔥</div>
         <div class="prob-title">La pression vous dévore</div>
-        <div class="prob-desc">Avant la compétition, votre mental s'emballe. Vous ne dormez pas, vous ruminezr. Le jour J, vous n'êtes plus vous-même.</div>
+        <div class="prob-desc">Avant la compétition, votre mental s'emballe. Vous ne dormez pas, vous ruminez. Le jour J, vous n'êtes plus vous-même.</div>
         <div class="prob-highlight">Profil : Hyperstressé</div>
       </div>
       <div class="prob-card reveal">
@@ -437,12 +437,6 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
         <div class="prob-title">Vous ne vous faites pas confiance</div>
         <div class="prob-desc">Une erreur et tout s'effondre. Votre confiance est fragile, conditionnelle, dépendante du regard des autres.</div>
         <div class="prob-highlight">Profil : Déficit de confiance</div>
-      </div>
-      <div class="prob-card reveal">
-        <div class="prob-icon">🎯</div>
-        <div class="prob-title">Trop sûr de vous… parfois</div>
-        <div class="prob-desc">Vous fonctionnez bien quand ça va. Mais dès que les choses résistent, l'arrogance se retourne contre vous. Vous sous-estimez l'adversité.</div>
-        <div class="prob-highlight">Profil : Excès de confiance</div>
       </div>
       <div class="prob-card reveal">
         <div class="prob-icon">🎮</div>
@@ -573,7 +567,7 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
         </div>
         <div class="ri reveal">
           <div class="ri-dot"></div>
-          <div class="ri-text"><strong>La suite</strong> — lien vers l'e-learning et l'appel découverte si vous voulez aller plus loin.</div>
+          <div class="ri-text"><strong>La suite</strong> — lien vers votre programme approfondi à 27€ (adapté à votre profil) et l'appel découverte gratuit si vous voulez aller plus loin.</div>
         </div>
       </div>
     </div>
@@ -656,7 +650,7 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="this.closest('.faq-item').classList.toggle('open')">Et si je veux aller plus loin après le rapport ?</div>
-      <div class="faq-a">Le rapport contient un lien pour l'e-learning AXE (programme complet en 6 modules) et un lien pour réserver un appel découverte gratuit de 30 minutes avec moi directement.</div>
+      <div class="faq-a">Le rapport contient un lien vers votre programme approfondi à 27€ — 6 semaines d'exercices adaptés exactement à votre profil — et un lien pour réserver un appel découverte gratuit de 30 minutes avec moi directement.</div>
     </div>
   </div>
 </section>
@@ -665,7 +659,7 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
   <div>
     <a href="https://fabien-pinton.fr">Accueil</a>
     <a href="diagnostic.html">Diagnostic</a>
-    <a href="/cdn-cgi/l/email-protection#72111d1c06131106321413101b171c5f021b1c061d1c5c1400">Contact</a>
+    <a href="mailto:contact@fabien-pinton.fr">Contact</a>
     <a href="https://www.instagram.com/fabien_pinton" target="_blank">Instagram</a>
   </div>
   <p>Méthode AXE Mental Performance © 2026 · Fabien Pinton Préparateur Mental</p>
@@ -675,9 +669,10 @@ footer p{margin-top:12px;font-size:9px;letter-spacing:.25em;text-transform:upper
 // Nav scroll
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',scrollY>60));
 
-// Scroll reveal
+// Scroll reveal — éléments visibles par défaut, animés seulement si JS disponible
+document.querySelectorAll('.reveal').forEach(el=>el.classList.add('js-reveal'));
 const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');ro.unobserve(x.target);}});},{threshold:.08,rootMargin:'0px 0px -20px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+document.querySelectorAll('.js-reveal').forEach(el=>ro.observe(el));
 
 // Animate demo bars
 const barObs=new IntersectionObserver(e=>{if(e[0].isIntersecting){
