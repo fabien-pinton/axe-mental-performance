@@ -190,7 +190,7 @@ footer p{font-size:10px;color:var(--inkf);letter-spacing:.12em;}
   <a href="#" class="nlogo">AXE<span>Méthode · Fabien Pinton</span></a>
   <div class="nav-r">
     <span class="nav-badge">L'Hypercompétiteur</span>
-    <a href="axe.html" class="nav-cta">Méthode AXE Complète</a>
+    <a href="https://buy.stripe.com/fZu8wObCcdv895j4to8IU0e" class="nav-cta">Programme Premium 347€</a>
   </div>
 </nav>
 
@@ -391,7 +391,8 @@ footer p{font-size:10px;color:var(--inkf);letter-spacing:.12em;}
   </div>
   <div class="tnote">Durée totale : ~01:12</div>
 </div>
-<script>PT['0-2']={phases:[{l:'Inspire',d:4},{l:'Expire',d:8}],cycles:6,iv:null,running:false};</script>
+<script>if(typeof PT === "undefined") var PT = {};
+PT['0-2']={phases:[{l:'Inspire',d:4},{l:'Expire',d:8}],cycles:6,iv:null,running:false};</script>
               <div class="echk">
                 <div class="chk" id="cb-0-2" onclick="check('0-2')"></div>
                 <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
@@ -602,10 +603,11 @@ footer p{font-size:10px;color:var(--inkf);letter-spacing:.12em;}
     <p class="cta-sub">Ce programme est une étape. Voici les deux prochaines.</p>
     <div class="cta-duo">
       <div class="cta-duo-card cta-duo-main">
-        <div class="cta-duo-label">Programme complet</div>
-        <div class="cta-duo-name">MÉTHODE AXE</div>
-        <div class="cta-duo-desc">6 modules complets. Accompagnement par Fabien Pinton. Le programme qui a transformé des dizaines de sportifs.</div>
-        <a href="axe.html" class="cta-duo-btn cta-duo-btn-gold">DÉCOUVRIR LA MÉTHODE AXE →</a>
+        <div class="cta-duo-label">⭐ Recommandé · Programme Premium</div>
+        <div class="cta-duo-name">PROGRAMME<br>PREMIUM AXE</div>
+        <div class="cta-duo-desc">4 modules personnalisés · 4 RDV avec Fabien · Système de déblocage progressif · Pacte final · Accès à vie.<br><br><strong style="color:var(--gold-l);">Tout ce qu'il te faut pour transformer durablement ton mental en compétition.</strong></div>
+        <a href="https://buy.stripe.com/fZu8wObCcdv895j4to8IU0e" class="cta-duo-btn cta-duo-btn-gold">ACCÉDER AU PROGRAMME PREMIUM — 347€ →</a>
+      </div>
       </div>
       <div class="cta-duo-card">
         <div class="cta-duo-label">Gratuit · 30 minutes</div>
@@ -617,6 +619,11 @@ footer p{font-size:10px;color:var(--inkf);letter-spacing:.12em;}
   </div>
 </section>
 
+<div style="background:var(--cream3);border-top:1px solid var(--bdr);padding:28px 48px;text-align:center;">
+  <div style="font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Votre avis compte</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--inkd);margin-bottom:16px;line-height:1.6;">Ce programme vous a aidé ? Laissez un avis Google — ça aide d'autres sportifs à me trouver.</p>
+  <a href="https://g.page/r/CXtpS9ZcTZk-EBM/review" target="_blank" style="display:inline-block;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:var(--gold);color:var(--ink);text-decoration:none;padding:12px 28px;">⭐ LAISSER UN AVIS GOOGLE →</a>
+</div>
 <footer><p>Méthode AXE Mental Performance © 2026 · Fabien Pinton Préparateur Mental · Rapport personnel et non transférable</p></footer>
 
 <script>
@@ -646,7 +653,7 @@ function resetTimer(id, dur) {
 }
 
 // ── Timers phases ──
-const PT = {};
+if(typeof PT === "undefined") var PT = {};
 function startPhase(id) {
   const t = PT[id];
   if (!t || t.running) return;

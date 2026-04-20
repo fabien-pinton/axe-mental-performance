@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme Premium AXE — Le Sans Confiance</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#A8852A;--gold-l:#C9A84C;--gold-d:#7A6020;--gold-xl:#F5EDD8;
+  --cream:#F7F3EC;--cream2:#FDFAF5;--cream3:#F0EBE0;--cream4:#E8E1D4;
+  --ink:#1A1612;--inkd:#5A5040;--inkf:#8A7D6A;
+  --bdr:rgba(168,133,42,0.18);--bdr2:rgba(168,133,42,0.32);
+  --ok:#2E7D52;--red:#C0392B;
+  --locked:#CCBBAA;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--gold);}
+
+/* PROGRESS BAR */
+#pbar{position:fixed;top:0;left:0;right:0;z-index:101;height:3px;pointer-events:none;}
+#pfill{height:3px;background:var(--gold);width:0%;transition:width .15s;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 52px;background:rgba(247,243,236,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--bdr);transition:padding .3s;}
+nav.sc{padding:10px 52px;box-shadow:0 4px 28px rgba(0,0,0,.07);}
+.nlogo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.2em;color:var(--gold);text-decoration:none;}
+.nlogo span{display:block;font-family:'Cormorant Garamond',serif;font-size:8px;letter-spacing:.32em;color:var(--inkd);text-transform:uppercase;}
+.nav-badge{font-size:9px;letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--bdr2);padding:5px 14px;color:var(--gold);}
+
+.pdf-btn{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:transparent;border:2px solid var(--gold);color:var(--gold);padding:14px 32px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:12px;transition:all .3s;}
+.pdf-btn:hover{background:var(--gold);color:var(--ink);}
+.pdf-btn.disabled{opacity:.3;cursor:not-allowed;}
+
+@media(max-width:640px){nav{padding:12px 18px;}}
+
+/* HERO */
+.hero{min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:110px 24px 80px;background:var(--ink);position:relative;overflow:hidden;text-align:center;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 15% 50%,rgba(60,160,100,.12) 0%,transparent 65%),radial-gradient(ellipse 50% 65% at 85% 20%,rgba(168,133,42,.08) 0%,transparent 65%);pointer-events:none;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.h-eye{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold-l);border:1px solid rgba(168,133,42,.3);padding:5px 18px;margin-bottom:28px;display:inline-block;animation:fadeUp .7s ease both .2s;position:relative;z-index:1;}
+.h-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,11vw,130px);line-height:.86;letter-spacing:.04em;color:var(--cream2);position:relative;z-index:1;animation:fadeUp .8s ease both .4s;}
+.h-name em{color:transparent;-webkit-text-stroke:2px var(--gold);font-style:normal;}
+.h-tag{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.9vw,21px);font-style:italic;color:rgba(247,243,236,.85);max-width:540px;line-height:1.65;margin:20px auto 0;position:relative;z-index:1;animation:fadeUp .8s ease both .6s;}
+.h-price{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,60px);color:var(--gold-l);margin-top:32px;position:relative;z-index:1;animation:fadeUp .8s ease both .8s;}
+.h-price span{font-family:'DM Sans',sans-serif;font-size:14px;color:rgba(247,243,236,.5);letter-spacing:.2em;text-transform:uppercase;display:block;margin-top:4px;}
+
+/* MODULE NAV */
+.mod-nav{background:var(--ink);padding:0;border-bottom:1px solid rgba(168,133,42,.15);position:sticky;top:52px;z-index:99;display:flex;overflow-x:auto;}
+.mod-nav::-webkit-scrollbar{height:2px;}
+.mod-nav-item{flex:1;min-width:120px;padding:16px 20px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;transition:all .3s;position:relative;}
+.mod-nav-item.active{border-bottom-color:var(--gold);}
+.mod-nav-item.locked{cursor:not-allowed;opacity:.4;}
+.mod-nav-item .mn-num{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.1em;color:var(--gold);}
+.mod-nav-item.locked .mn-num{color:var(--locked);}
+.mod-nav-item .mn-label{font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.6);margin-top:2px;}
+.mod-nav-item .mn-lock{font-size:14px;margin-top:4px;}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:60px 32px 120px;}
+
+/* MODULE PANEL */
+.mod-panel{display:none;}
+.mod-panel.active{display:block;}
+.mod-locked-overlay{background:var(--ink);border:1px solid var(--bdr2);padding:60px 40px;text-align:center;margin-top:40px;}
+.mod-locked-overlay h2{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gold);margin-bottom:16px;}
+.mod-locked-overlay p{font-size:14px;color:rgba(247,243,236,.7);line-height:1.7;max-width:500px;margin:0 auto 28px;}
+.unlock-info{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:rgba(247,243,236,.35);margin-top:16px;}
+
+/* MODULE HEADER */
+.mod-header{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--bdr);}
+.mod-eyebrow{font-size:9px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.mod-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,80px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;}
+.mod-title em{color:var(--gold);font-style:normal;}
+.mod-intro{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.2vw,21px);font-style:italic;color:var(--inkd);line-height:1.65;max-width:660px;}
+.mod-objective{background:var(--ink);padding:24px 32px;margin-top:28px;border-left:3px solid var(--gold);}
+.mod-objective-label{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.mod-objective-text{font-size:14px;color:rgba(247,243,236,.88);line-height:1.65;}
+
+/* SECTION LABEL */
+.slabel{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--bdr);}
+
+/* EXERCICE CARD */
+.exo-section{margin-bottom:48px;}
+.exo-card{background:var(--cream2);border:1px solid var(--bdr);padding:32px 36px;margin-bottom:16px;position:relative;border-left:3px solid var(--gold);}
+.exo-num{position:absolute;top:20px;right:24px;font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(168,133,42,.07);line-height:1;}
+.exo-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;color:var(--gold);margin-bottom:8px;}
+.exo-duration{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--inkf);margin-bottom:14px;}
+.exo-desc{font-size:14px;line-height:1.8;color:var(--inkd);margin-bottom:16px;}
+.exo-steps{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.exo-steps li{font-size:13px;color:var(--inkd);line-height:1.6;padding-left:20px;position:relative;}
+.exo-steps li::before{content:'→';position:absolute;left:0;color:var(--gold);}
+
+/* TIMER */
+.timer-block{background:var(--ink);padding:20px 24px;margin-top:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.tdisp{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.1em;color:var(--gold-l);min-width:100px;}
+.tdisp.run{color:var(--ok);}
+.tdisp.warn{color:var(--red);}
+.tdisp.done{color:var(--ok);}
+.timer-btns{display:flex;gap:8px;}
+.tbtn{font-size:9px;letter-spacing:.25em;text-transform:uppercase;border:none;padding:10px 20px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;transition:all .25s;}
+.tbtn-start{background:var(--gold);color:var(--ink);}
+.tbtn-reset{background:transparent;border:1px solid rgba(168,133,42,.35);color:var(--gold-l);}
+
+/* CHECK SYSTEM */
+.check-btn{display:flex;align-items:center;gap:12px;margin-top:16px;cursor:pointer;padding:12px 18px;border:1px solid var(--bdr);background:transparent;width:100%;transition:all .3s;font-family:'DM Sans',sans-serif;}
+.check-btn:hover{border-color:var(--gold);background:rgba(168,133,42,.04);}
+.check-box{width:20px;height:20px;border:2px solid var(--bdr2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;font-size:12px;}
+.check-btn.on .check-box{background:var(--ok);border-color:var(--ok);color:white;}
+.check-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkd);}
+.check-btn.on .check-label{color:var(--ok);}
+
+/* PROGRESS */
+.prog-section{background:var(--ink);padding:24px 32px;margin-bottom:48px;}
+.prog-label{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.prog-track{height:3px;background:rgba(255,255,255,.08);margin-bottom:8px;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width .5s ease;}
+.prog-stat{font-size:11px;color:rgba(247,243,236,.5);letter-spacing:.1em;}
+
+/* INSIGHT CARD */
+.insight{background:var(--cream3);border:1px solid var(--bdr);padding:28px 32px;margin-bottom:16px;}
+.insight-icon{font-size:22px;margin-bottom:12px;}
+.insight-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em;color:var(--gold);margin-bottom:8px;}
+.insight-text{font-size:14px;line-height:1.75;color:var(--inkd);}
+
+/* JOURNAL */
+.journal-block{margin-bottom:48px;}
+.journal-q{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:10px;line-height:1.5;}
+.journal-ta{width:100%;border:1px solid var(--bdr);background:var(--cream2);padding:16px 20px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);resize:vertical;min-height:100px;outline:none;transition:border .3s;}
+.journal-ta:focus{border-color:var(--gold);}
+.journal-save{font-size:9px;letter-spacing:.25em;text-transform:uppercase;background:var(--gold);color:var(--ink);border:none;padding:10px 24px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;}
+
+/* RDV BLOCK */
+.rdv-block{background:var(--ink);padding:40px 44px;text-align:center;position:relative;overflow:hidden;margin-top:48px;}
+.rdv-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
+.rdv-eyebrow{font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.rdv-title{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:.05em;color:var(--cream2);margin-bottom:12px;}
+.rdv-desc{font-size:14px;color:rgba(247,243,236,.75);line-height:1.7;max-width:520px;margin:0 auto 28px;}
+.rdv-btn{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--ink);text-decoration:none;padding:16px 40px;transition:all .3s;}
+.rdv-btn:hover{background:var(--gold-l);}
+.rdv-note{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.3);margin-top:16px;}
+
+/* PACTE */
+.pacte-block{background:var(--ink);padding:48px 44px;text-align:center;position:relative;overflow:hidden;margin-bottom:48px;}
+.pacte-block::before{content:'AXE';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:200px;color:rgba(168,133,42,.04);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;letter-spacing:.2em;}
+.pacte-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,80px);letter-spacing:.05em;color:var(--cream2);margin-bottom:16px;position:relative;z-index:1;}
+.pacte-title em{color:var(--gold);font-style:normal;}
+.pacte-text{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:rgba(247,243,236,.8);line-height:1.7;max-width:580px;margin:0 auto 32px;position:relative;z-index:1;}
+.pacte-items{display:flex;flex-direction:column;gap:12px;max-width:500px;margin:0 auto 36px;text-align:left;position:relative;z-index:1;}
+.pacte-item{display:flex;gap:16px;align-items:flex-start;}
+.pacte-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:6px;flex-shrink:0;}
+.pacte-item-text{font-size:14px;color:rgba(247,243,236,.8);line-height:1.65;}
+.pacte-sign{background:transparent;border:2px solid var(--gold);color:var(--gold-l);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.2em;padding:18px 48px;cursor:pointer;transition:all .4s;margin-top:8px;width:100%;max-width:400px;}
+.pacte-sign:hover{background:var(--gold);color:var(--ink);}
+.pacte-sign.signed{background:var(--ok);border-color:var(--ok);color:white;cursor:default;}
+.pacte-date{font-size:11px;color:rgba(247,243,236,.3);letter-spacing:.2em;margin-top:12px;}
+
+/* CTA FINAL */
+.cta-final{background:var(--cream3);border:1px solid var(--bdr);padding:40px 44px;text-align:center;margin-top:48px;}
+.cta-final-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.05em;color:var(--ink);margin-bottom:12px;}
+.cta-final-text{font-size:14px;color:var(--inkd);line-height:1.7;margin-bottom:24px;}
+.cta-final-btn{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:var(--gold);color:var(--ink);text-decoration:none;padding:14px 36px;}
+
+/* UNLOCK DATE */
+.unlock-date-block{background:var(--cream2);border:1px solid var(--bdr);padding:20px 28px;margin-bottom:32px;display:flex;align-items:center;gap:16px;}
+.unlock-date-icon{font-size:24px;}
+.unlock-date-text{font-size:13px;color:var(--inkd);line-height:1.5;}
+.unlock-date-text strong{color:var(--gold);font-weight:600;}
+.unlock-date-input{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;}
+.unlock-date-input input{border:1px solid var(--bdr);background:var(--cream);padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;}
+.unlock-date-input input:focus{border-color:var(--gold);}
+.unlock-date-input button{font-size:9px;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--ink);border:none;padding:8px 20px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+
+.pdf-btn{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:transparent;border:2px solid var(--gold);color:var(--gold);padding:14px 32px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:12px;transition:all .3s;}
+.pdf-btn:hover{background:var(--gold);color:var(--ink);}
+.pdf-btn.disabled{opacity:.3;cursor:not-allowed;}
+
+@media(max-width:640px){
+  .main{padding:40px 18px 100px;}
+  .exo-card{padding:24px 20px;}
+  .rdv-block{padding:32px 24px;}
+  .pacte-block{padding:40px 24px;}
+}
+</style>
+</head>
+<body>
+
+<div id="pbar"><div id="pfill"></div></div>
+
+<nav id="nav">
+  <a href="https://fabien-pinton.fr" class="nlogo">FABIEN PINTON<span>Préparateur Mental · Méthode AXE</span></a>
+  <div class="nav-badge">Programme Premium · Le Sans Confiance</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="h-eye">Programme Premium · Méthode AXE · 347€</div>
+  <h1 class="h-name">LE SANS<br><em>CONFIANCE</em></h1>
+  <p class="h-tag">4 modules pour construire une confiance solide et durable — indépendante des résultats et du regard des autres. Un accompagnement personnalisé avec Fabien Pinton à chaque étape.</p>
+  <div class="h-price">4 MODULES · 4 RDV · RÉSULTATS DURABLES<span>Accès à vie · Progression sauvegardée</span></div>
+</section>
+
+<!-- MODULE NAV -->
+<div class="mod-nav" id="modNav">
+  <div class="mod-nav-item active" onclick="showMod(0)" id="mn0">
+    <div class="mn-num">01</div>
+    <div class="mn-label">Comprendre</div>
+  </div>
+  <div class="mod-nav-item locked" onclick="tryUnlock(1)" id="mn1">
+    <div class="mn-num">02</div>
+    <div class="mn-label">Réguler</div>
+    <div class="mn-lock">🔒</div>
+  </div>
+  <div class="mod-nav-item locked" onclick="tryUnlock(2)" id="mn2">
+    <div class="mn-num">03</div>
+    <div class="mn-label">Ancrer</div>
+    <div class="mn-lock">🔒</div>
+  </div>
+  <div class="mod-nav-item locked" onclick="tryUnlock(3)" id="mn3">
+    <div class="mn-num">04</div>
+    <div class="mn-label">Le Pacte</div>
+    <div class="mn-lock">🔒</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- MODULE 1 — COMPRENDRE                             -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="mod-panel active" id="mod0">
+
+  <div class="prog-section">
+    <div class="prog-label">Progression Module 1</div>
+    <div class="prog-track"><div class="prog-fill" id="pf-0" style="width:0%"></div></div>
+    <div class="prog-stat"><span id="done-0">0</span> / <span id="tot-0">0</span> exercices complétés</div>
+  </div>
+
+  <div class="mod-header">
+    <div class="mod-eyebrow">Module 01 — Débloqué immédiatement</div>
+    <h2 class="mod-title">COMPRENDRE<br>VOTRE <em>CONFIANCE</em></h2>
+    <p class="mod-intro">Votre confiance n'est pas absente — elle est fragile parce qu'elle repose sur les mauvaises bases. Ce module identifie exactement sur quoi elle repose actuellement et comment la reconstruire sur des fondations solides.</p>
+    <div class="mod-objective">
+      <div class="mod-objective-label">Objectif du module</div>
+      <div class="mod-objective-text">Identifier la source réelle de votre manque de confiance, comprendre vos schémas de pensée auto-sabotants, et poser les bases d'une confiance intrinsèque.</div>
+    </div>
+  </div>
+
+  <div class="exo-section">
+    <div class="slabel">Exercice 1 — La cartographie du stress</div>
+    <div class="exo-card">
+      <div class="exo-num">01</div>
+      <div class="exo-title">Diagnostiquer votre confiance actuelle</div>
+      <div class="exo-duration">⏱ 20 minutes · À faire dans les 48h</div>
+      <div class="exo-desc">Votre confiance actuelle dépend de facteurs extérieurs — résultats, approbation, conditions. Cet exercice vous permet de voir exactement de quoi elle dépend — et de commencer à l'en libérer.</div>
+      <ul class="exo-steps">
+        <li>Répondez honnêtement : ma confiance monte quand... (listez 5 situations)</li>
+        <li>Ma confiance baisse quand... (listez 5 situations)</li>
+        <li>Analysez : sur 10 facteurs listés, combien dépendent de vous ? Combien dépendent des autres ?</li>
+        <li>Conclusion : votre confiance est à X% externe et à Y% interne. Ce pourcentage va évoluer.</li>
+      </ul>
+      <div class="journal-block" style="margin-top:20px;">
+        <div class="journal-q">Ma confiance monte quand :</div>
+        <textarea class="journal-ta" id="j1a" placeholder="1. &#10;2. &#10;3. &#10;4. &#10;5."></textarea>
+        <div class="journal-q" style="margin-top:12px;">Ma confiance baisse quand :</div>
+        <textarea class="journal-ta" id="j1b" placeholder="1. &#10;2. &#10;3. &#10;4. &#10;5."></textarea>
+        <button class="journal-save" onclick="saveJournal('j1')">Enregistrer mes réponses</button>
+      </div>
+      <button class="check-btn" id="cb-m1e1" onclick="check('s1e1')">
+        <div class="check-box"></div>
+        <div class="check-label">Exercice complété</div>
+      </button>
+    </div>
+
+    <div class="slabel">Exercice 2 — Les 3 déclencheurs</div>
+    <div class="exo-card">
+      <div class="exo-num">02</div>
+      <div class="exo-title">Le journal des victoires</div>
+      <div class="exo-duration">⏱ 15 minutes · À faire seul, au calme</div>
+      <div class="exo-desc">La confiance durable se construit sur des preuves réelles. Pas sur des affirmations — sur des faits vécus. Ce journal commence à collecter ces preuves.</div>
+      <ul class="exo-steps">
+        <li>Pensez aux 6 derniers mois. Listez 10 moments — même petits — où vous avez bien performé, bien géré, bien réagi.</li>
+        <li>Pour chaque moment : qu'est-ce que ça prouve sur vous en tant que sportif ?</li>
+        <li>Identifiez le fil directeur : quelle qualité revient dans la plupart de vos victoires ?</li>
+        <li>C'est votre force principale. Nommez-la : "Ma force principale est..."</li>
+      </ul>
+      <div class="journal-block" style="margin-top:20px;">
+        <div class="journal-q">Mes 10 victoires (même petites) :</div>
+        <textarea class="journal-ta" id="j2" placeholder="1. &#10;2. &#10;3."></textarea>
+        <div class="journal-q" style="margin-top:12px;">Ma force principale identifiée :</div>
+        <textarea class="journal-ta" id="j2b" placeholder="Ma force principale est..."></textarea>
+        <button class="journal-save" onclick="saveJournal('j2')">Enregistrer mes réponses</button>
+      </div>
+      <button class="check-btn" id="cb-m1e2" onclick="check('s1e2')">
+        <div class="check-box"></div>
+        <div class="check-label">Exercice complété</div>
+      </button>
+    </div>
+
+    <div class="slabel">Exercice 3 — Le journal de compétition</div>
+    <div class="exo-card">
+      <div class="exo-num">03</div>
+      <div class="exo-title">Construire votre banque de confiance</div>
+      <div class="exo-duration">⏱ 5 minutes par jour · Pendant 7 jours</div>
+      <div class="exo-desc">La confiance se construit par accumulation de preuves. Cette banque de confiance grandit chaque jour — et devient votre ancre mentale en compétition.</div>
+      <ul class="exo-steps">
+        <li>Chaque soir pendant 7 jours : notez UNE chose que vous avez bien faite aujourd'hui. Sportive ou non.</li>
+        <li>Notez : qu'est-ce que ça dit de vous ?</li>
+        <li>Notez votre niveau de confiance du soir (0-10) et ce qui l'a influencé.</li>
+        <li>À J7 : relisez tout. Votre confiance augmente-t-elle ? Quels jours ? Pourquoi ?</li>
+      </ul>
+      <div class="timer-block">
+        <div class="tdisp" id="td-m1t3">05:00</div>
+        <div class="timer-btns">
+          <button class="tbtn tbtn-start" onclick="startTimer('s1t3',300)">Démarrer</button>
+          <button class="tbtn tbtn-reset" onclick="resetTimer('s1t3',300)">Reset</button>
+        </div>
+      </div>
+      <button class="check-btn" id="cb-m1e3" onclick="check('s1e3')">
+        <div class="check-box"></div>
+        <div class="check-label">J'ai complété les 7 jours de banque de confiance</div>
+      </button>
+    </div>
+
+    <div class="slabel">Pour aller plus loin — Insights clés</div>
+    <div class="insight">
+      <div class="insight-icon">🧠</div>
+      <div class="insight-title">La confiance externe vs interne</div>
+      <div class="insight-text">La confiance externe dépend des résultats, du regard des autres, des conditions. Elle monte et descend au gré des événements. La confiance interne dépend de votre processus, de vos valeurs, de votre engagement. Elle est stable parce qu'elle est sous votre contrôle. L'objectif de ce programme : déplacer votre confiance de l'externe vers l'interne.</div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">⚡</div>
+      <div class="insight-title">La confiance se construit, elle ne se trouve pas</div>
+      <div class="insight-text">Attendre de se sentir confiant pour agir est une erreur. La confiance vient après l'action, pas avant. Agir malgré le doute, observer que ça fonctionne, engranger la preuve — c'est le cycle de construction de la confiance réelle. C'est ce qu'on installe dans le module 2.</div>
+    </div>
+  </div>
+
+  <div class="rdv-block">
+    <div class="rdv-eyebrow">Fin du Module 01 · Prochaine étape</div>
+    <div class="rdv-title">RÉSERVEZ VOTRE RDV<br>AVEC FABIEN</div>
+    <div class="rdv-desc">Avant de passer au Module 2, un échange de 30 minutes avec Fabien pour valider votre cartographie, affiner vos déclencheurs et préparer le travail de régulation.</div>
+    <a href="https://tidycal.com/fpinton/rdv-module-1-axe-premium" class="rdv-btn" target="_blank">RÉSERVER MON RDV MODULE 1 →</a>
+    <div class="rdv-note">✦ Le Module 2 se débloque à J+1 après votre RDV</div>
+
+    <div class="unlock-date-block" style="margin-top:28px;text-align:left;">
+      <div class="unlock-date-icon">📅</div>
+      <div class="unlock-date-text">
+        <strong>Entrez la date de votre RDV Module 1</strong> pour programmer le déblocage automatique du Module 2.
+        <div class="unlock-date-input">
+          <input type="date" id="rdv1-date" />
+          <button onclick="setUnlock(1)">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- MODULE 2 — RÉGULER                                -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="mod-panel" id="mod1">
+
+  <div class="prog-section">
+    <div class="prog-label">Progression Module 2</div>
+    <div class="prog-track"><div class="prog-fill" id="pf-1" style="width:0%"></div></div>
+    <div class="prog-stat"><span id="done-1">0</span> / <span id="tot-1">0</span> exercices complétés</div>
+  </div>
+
+  <div class="mod-header">
+    <div class="mod-eyebrow">Module 02 — Débloqué après RDV Module 1</div>
+    <h2 class="mod-title">CONSTRUIRE<br>VOTRE <em>CONFIANCE</em></h2>
+    <p class="mod-intro">Vous avez identifié les bases de votre confiance actuelle. Maintenant vous la reconstruisez sur des fondations solides — des preuves réelles, un processus maîtrisé, une identité affirmée.</p>
+    <div class="mod-objective">
+      <div class="mod-objective-label">Objectif du module</div>
+      <div class="mod-objective-text">Installer un processus quotidien de construction de la confiance, développer votre dialogue intérieur de soutien, et créer les conditions d'une performance sans dépendance au résultat.</div>
+    </div>
+  </div>
+
+  <div class="exo-section">
+    <div class="slabel">Exercice 1 — La cohérence cardiaque</div>
+    <div class="exo-card">
+      <div class="exo-num">01</div>
+      <div class="exo-title">Le protocole des petites victoires quotidiennes</div>
+      <div class="exo-duration">⏱ 5 minutes · Chaque soir pendant 21 jours</div>
+      <div class="exo-desc">La confiance se construit par accumulation de petites preuves, pas par un seul grand exploit. Ce protocole quotidien crée un flux constant de preuves de votre compétence.</div>
+      <ul class="exo-steps">
+        <li>Chaque soir : notez 1 chose que vous avez accomplie aujourd'hui. Elle doit être vérifiable et dépendre de vous.</li>
+        <li>Notez ce que ça prouve sur vous. Ex: 'J'ai maintenu mon effort malgré la fatigue → je suis quelqu'un de persévérant.'</li>
+        <li>Relisez vos 7 dernières preuves avant chaque compétition.</li>
+        <li>Au bout de 21 jours : vous avez 21 preuves concrètes de votre compétence. C'est votre bouclier mental.</li>
+      </ul>
+      <div class="timer-block">
+        <div class="tdisp" id="td-m2t1">05:00</div>
+        <div class="timer-btns">
+          <button class="tbtn tbtn-start" onclick="startTimer('s2t1',300)">Démarrer session</button>
+          <button class="tbtn tbtn-reset" onclick="resetTimer('s2t1',300)">Reset</button>
+        </div>
+      </div>
+      <button class="check-btn" id="cb-m2e1" onclick="check('s2e1')">
+        <div class="check-box"></div>
+        <div class="check-label">Protocole des 21 jours complété</div>
+      </button>
+    </div>
+
+    <div class="slabel">Exercice 2 — Le dialogue intérieur de soutien</div>
+    <div class="exo-card">
+      <div class="exo-num">02</div>
+      <div class="exo-title">Remplacer le critique intérieur</div>
+      <div class="exo-duration">⏱ 10 minutes · À faire chaque semaine</div>
+      <div class="exo-desc">Votre critique intérieur mine votre confiance en permanence. Cet exercice l'identifie et le remplace par un soutien intérieur authentique.</div>
+      <ul class="exo-steps">
+        <li>Identifiez une phrase que votre critique intérieur dit souvent. Ex: 'Tu n'es pas à la hauteur.'</li>
+        <li>Demandez-vous : est-ce que je dirais ça à un ami dans la même situation ? Non ? Pourquoi je me le dis à moi ?</li>
+        <li>Reformulez la phrase comme un entraîneur bienveillant mais honnête. Ex: 'Tu as eu du mal aujourd'hui, et tu as quand même continué.'</li>
+        <li>Répétez la reformulation 3 fois. Observez la différence dans votre état.</li>
+        <li>Créez une phrase de soutien personnelle pour les moments difficiles. Gardez-la accessible.</li>
+      </ul>
+      <div class="timer-block">
+        <div class="tdisp" id="td-m2t2">02:00</div>
+        <div class="timer-btns">
+          <button class="tbtn tbtn-start" onclick="startTimer('s2t2',120)">Pratiquer</button>
+          <button class="tbtn tbtn-reset" onclick="resetTimer('s2t2',120)">Reset</button>
+        </div>
+      </div>
+      <button class="check-btn" id="cb-m2e2" onclick="check('s2e2')">
+        <div class="check-box"></div>
+        <div class="check-label">Dialogue de soutien créé et utilisé</div>
+      </button>
+    </div>
+
+    <div class="slabel">Exercice 3 — La préparation mentale pré-compétition</div>
+    <div class="exo-card">
+      <div class="exo-num">03</div>
+      <div class="exo-title">Activer sa confiance avant de compétir</div>
+      <div class="exo-duration">⏱ 10 minutes · La veille de chaque compétition</div>
+      <div class="exo-desc">La confiance ne se trouve pas — elle s'active. Cet exercice crée un protocole d'activation de votre confiance avant chaque compétition.</div>
+      <ul class="exo-steps">
+        <li>Relisez vos 7 dernières preuves de compétence dans votre journal.</li>
+        <li>Rappelez-vous votre meilleure performance. Revivez-la en détail pendant 2 minutes.</li>
+        <li>Lisez votre dialogue de soutien à voix haute ou mentalement.</li>
+        <li>Définissez UNE intention de processus pour demain. Une seule chose sur laquelle vous allez vous concentrer.</li>
+      </ul>
+      <div class="timer-block">
+        <div class="tdisp" id="td-m2t3">08:00</div>
+        <div class="timer-btns">
+          <button class="tbtn tbtn-start" onclick="startTimer('s2t3',480)">Démarrer le scan</button>
+          <button class="tbtn tbtn-reset" onclick="resetTimer('s2t3',480)">Reset</button>
+        </div>
+      </div>
+      <button class="check-btn" id="cb-m2e3" onclick="check('s2e3')">
+        <div class="check-box"></div>
+        <div class="check-label">Protocole activé avant ma dernière compétition</div>
+      </button>
+    </div>
+
+    <div class="insight">
+      <div class="insight-icon">💡</div>
+      <div class="insight-title">Pourquoi la confiance vient après l'action</div>
+      <div class="insight-text">La plupart des sportifs attendent de se sentir confiant avant d'agir. C'est une erreur fondamentale. Le neuroscientifique Andrew Huberman l'explique : c'est l'action qui génère la dopamine — pas l'attente. Agissez d'abord, la confiance suit. Pas l'inverse. Chaque action produit une preuve. Chaque preuve construit la confiance. C'est un cycle vertueux que vous enclenchez maintenant.</div>
+    </div>
+  </div>
+
+  <div class="rdv-block">
+    <div class="rdv-eyebrow">Fin du Module 02 · Prochaine étape</div>
+    <div class="rdv-title">RÉSERVEZ VOTRE RDV<br>AVEC FABIEN</div>
+    <div class="rdv-desc">Bilan de vos 3 techniques, ajustements personnalisés selon votre retour d'expérience, et préparation du Module 3 sur l'ancrage mental.</div>
+    <a href="https://tidycal.com/fpinton/rdv-module-2-axe-premium" class="rdv-btn" target="_blank">RÉSERVER MON RDV MODULE 2 →</a>
+    <div class="rdv-note">✦ Le Module 3 se débloque à J+1 après votre RDV</div>
+    <div class="unlock-date-block" style="margin-top:28px;text-align:left;">
+      <div class="unlock-date-icon">📅</div>
+      <div class="unlock-date-text">
+        <strong>Entrez la date de votre RDV Module 2</strong>
+        <div class="unlock-date-input">
+          <input type="date" id="rdv2-date" />
+          <button onclick="setUnlock(2)">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- MODULE 3 — ANCRER                                 -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="mod-panel" id="mod2">
+
+  <div class="prog-section">
+    <div class="prog-label">Progression Module 3</div>
+    <div class="prog-track"><div class="prog-fill" id="pf-2" style="width:0%"></div></div>
+    <div class="prog-stat"><span id="done-2">0</span> / <span id="tot-2">0</span> exercices complétés</div>
+  </div>
+
+  <div class="mod-header">
+    <div class="mod-eyebrow">Module 03 — Débloqué après RDV Module 2</div>
+    <h2 class="mod-title">STABILISER<br>VOTRE <em>CONFIANCE</em></h2>
+    <p class="mod-intro">Construire la confiance ne suffit pas. Il faut la stabiliser — la rendre indépendante des résultats, du regard des autres, des conditions extérieures. Ce module installe cette stabilité durable.</p>
+    <div class="mod-objective">
+      <div class="mod-objective-label">Objectif du module</div>
+      <div class="mod-objective-text">Développer une confiance qui résiste aux échecs, construire une identité stable de sportif compétent, et créer un système de récupération rapide après les contre-performances.</div>
+    </div>
+  </div>
+
+  <div class="exo-section">
+    <div class="slabel">Exercice 1 — Le rituel pré-compétition</div>
+    <div class="exo-card">
+      <div class="exo-num">01</div>
+      <div class="exo-title">La confiance après l'échec</div>
+      <div class="exo-duration">⏱ 20 minutes · Après chaque contre-performance</div>
+      <div class="exo-desc">Votre confiance s'effondre après un échec parce que vous n'avez pas de protocole de récupération. Cet exercice construit ce protocole — pour que chaque échec devienne une information utile plutôt qu'un verdict.</div>
+      <ul class="exo-steps">
+        <li>Dans les 24h après un résultat décevant : notez les faits objectifs. Pas votre interprétation — les faits.</li>
+        <li>Identifiez 1 chose que vous avez bien faite malgré le résultat décevant.</li>
+        <li>Identifiez 1 chose à améliorer pour la prochaine fois. Une seule, concrète.</li>
+        <li>Fermez le dossier mentalement : 'J'ai appris ce que j'avais à apprendre. Je passe à la suite.'</li>
+      </ul>
+      <div class="journal-block" style="margin-top:20px;">
+        <div class="journal-q">Mon protocole de récupération après une contre-performance :</div>
+        <textarea class="journal-ta" id="j3" placeholder="Faits objectifs : &#10;Ce que j'ai bien fait : &#10;Ce que j'améliore : &#10;Phrase de clôture :"></textarea>
+        <button class="journal-save" onclick="saveJournal('j3')">Enregistrer mon protocole</button>
+      </div>
+      <button class="check-btn" id="cb-m3e1" onclick="check('s3e1')">
+        <div class="check-box"></div>
+        <div class="check-label">Protocole de récupération utilisé après ma dernière contre-performance</div>
+      </button>
+    </div>
+
+    <div class="slabel">Exercice 2 — La visualisation de performance</div>
+    <div class="exo-card">
+      <div class="exo-num">02</div>
+      <div class="exo-title">La visualisation de la confiance</div>
+      <div class="exo-duration">⏱ 10 minutes · 3 fois par semaine et la veille de chaque compétition</div>
+      <div class="exo-desc">Votre cerveau stocke vos meilleures performances. Cet exercice les réactive et les renforce — pour que votre cerveau y ait accès facilement sous pression.</div>
+      <ul class="exo-steps">
+        <li>Fermez les yeux. Rappelez-vous votre meilleure performance ever. Revivez-la dans les moindres détails.</li>
+        <li>Ressentez ce que vous ressentiez à ce moment. La fluidité, la force, la certitude.</li>
+        <li>Transportez ces sensations dans votre prochaine compétition. Votre corps les connaît — il peut les retrouver.</li>
+        <li>Visualisez UN moment de doute — et voyez-vous consulter votre banque de preuves et reprendre confiance.</li>
+        <li>Terminez sur la sensation de confiance solide. Pas d'euphorie — de solidité. Gardez-la 30 secondes.</li>
+      </ul>
+      <div class="timer-block">
+        <div class="tdisp" id="td-m3t2">10:00</div>
+        <div class="timer-btns">
+          <button class="tbtn tbtn-start" onclick="startTimer('s3t2',600)">Démarrer la visualisation</button>
+          <button class="tbtn tbtn-reset" onclick="resetTimer('s3t2',600)">Reset</button>
+        </div>
+      </div>
+      <button class="check-btn" id="cb-m3e2" onclick="check('s3e2')">
+        <div class="check-box"></div>
+        <div class="check-label">Pratique hebdomadaire installée</div>
+      </button>
+    </div>
+
+    <div class="slabel">Exercice 3 — Le mantra de performance</div>
+    <div class="exo-card">
+      <div class="exo-num">03</div>
+      <div class="exo-title">Construire votre identité de sportif compétent</div>
+      <div class="exo-duration">⏱ 20 minutes de conception · Usage quotidien</div>
+      <div class="exo-desc">Votre identité de sportif est le socle de votre confiance. Si vous vous voyez comme quelqu'un d'incompétent, aucune technique ne fonctionnera durablement. Cette identité se construit — sur des preuves réelles.</div>
+      <ul class="exo-steps">
+        <li>Relisez votre banque de preuves des 2 derniers modules. Quelles qualités reviennent ?</li>
+        <li>Formulez votre identité de sportif en 1 phrase. Elle doit être vraie et prouvable — pas idéale.</li>
+        <li>Testez : quand vous la lisez, vous reconnaissez-vous vraiment ? Si oui, c'est la bonne.</li>
+        <li>Répétez votre identité chaque matin et renforcez-la avec une nouvelle preuve chaque semaine.</li>
+      </ul>
+      <div class="journal-block" style="margin-top:20px;">
+        <div class="journal-q">Mon identité de sportif compétent :</div>
+        <textarea class="journal-ta" id="j4" style="min-height:60px;" placeholder="Je suis un sportif qui..."></textarea>
+        <button class="journal-save" onclick="saveJournal('j4')">Enregistrer mon identité</button>
+      </div>
+      <button class="check-btn" id="cb-m3e3" onclick="check('s3e3')">
+        <div class="check-box"></div>
+        <div class="check-label">Identité définie et renforcée chaque semaine</div>
+      </button>
+    </div>
+
+    <div class="insight">
+      <div class="insight-icon">🏆</div>
+      <div class="insight-title">La confiance comme compétence</div>
+      <div class="insight-text">Le rituel active ce qu'on appelle en neurosciences le "priming" — il prépare votre cerveau à accéder à un état spécifique. Comme une clé qui ouvre une serrure. Plus vous répétez le rituel dans le même état mental, plus l'association neuronale se renforce. Au bout de 6 semaines de pratique régulière, le rituel déclenche automatiquement l'état de performance.</div>
+    </div>
+  </div>
+
+  <div class="rdv-block">
+    <div class="rdv-eyebrow">Fin du Module 03 · Dernière étape</div>
+    <div class="rdv-title">RÉSERVEZ VOTRE RDV<br>AVEC FABIEN</div>
+    <div class="rdv-desc">Bilan de vos ancres mentales, validation de votre rituel, de votre visualisation et de votre mantra. Préparation du Module 4 — Le Pacte.</div>
+    <a href="https://tidycal.com/fpinton/rdv-module-3-axe-premium" class="rdv-btn" target="_blank">RÉSERVER MON RDV MODULE 3 →</a>
+    <div class="rdv-note">✦ Le Module 4 — Le Pacte — se débloque à J+1 après votre RDV</div>
+    <div class="unlock-date-block" style="margin-top:28px;text-align:left;">
+      <div class="unlock-date-icon">📅</div>
+      <div class="unlock-date-text">
+        <strong>Entrez la date de votre RDV Module 3</strong>
+        <div class="unlock-date-input">
+          <input type="date" id="rdv3-date" />
+          <button onclick="setUnlock(3)">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- MODULE 4 — LE PACTE                               -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="mod-panel" id="mod3">
+
+  <div class="mod-header">
+    <div class="mod-eyebrow">Module 04 — Le Pacte · Étape finale</div>
+    <h2 class="mod-title">LE<br><em>PACTE</em></h2>
+    <p class="mod-intro">Vous avez compris votre stress, appris à le réguler, construit vos ancres mentales. Ce dernier module scelle tout. C'est votre engagement envers vous-même — la promesse que vous faites à l'athlète que vous êtes en train de devenir.</p>
+  </div>
+
+  <div class="pacte-block">
+    <div class="pacte-title">MON <em>PACTE</em><br>MENTAL</div>
+    <p class="pacte-text">Je m'engage envers moi-même. Pas envers un résultat. Pas envers un classement. Envers la façon dont je vais me comporter — avant, pendant et après la compétition.</p>
+    <div class="pacte-items">
+      <div class="pacte-item">
+        <div class="pacte-dot"></div>
+        <div class="pacte-item-text">Je collecte chaque jour une preuve de ma compétence et je la note dans ma banque de confiance.</div>
+      </div>
+      <div class="pacte-item">
+        <div class="pacte-dot"></div>
+        <div class="pacte-item-text">Je me juge sur mon processus et mon engagement — pas sur mes résultats ni sur le regard des autres.</div>
+      </div>
+      <div class="pacte-item">
+        <div class="pacte-dot"></div>
+        <div class="pacte-item-text">Après chaque contre-performance, j'applique mon protocole de récupération dans les 24h.</div>
+      </div>
+      <div class="pacte-item">
+        <div class="pacte-dot"></div>
+        <div class="pacte-item-text">Je remplace mon critique intérieur par mon soutien intérieur — systématiquement.</div>
+      </div>
+      <div class="pacte-item">
+        <div class="pacte-dot"></div>
+        <div class="pacte-item-text">Je suis un sportif compétent dont la confiance grandit chaque semaine grâce à des preuves réelles.</div>
+      </div>
+    </div>
+    <button class="pacte-sign" id="pacte-btn" onclick="signPacte()">SIGNER MON PACTE</button>
+    <div class="pacte-date" id="pacte-date"></div>
+    <div style="margin-top:16px;">
+      <button class="pdf-btn" id="pdf-btn" onclick="downloadPacte()">📄 TÉLÉCHARGER MON PACTE EN PDF</button>
+      <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.25);margin-top:8px;" id="pdf-note">Disponible après signature du Pacte</div>
+    </div>
+  </div>
+
+  <div class="journal-block">
+    <div class="slabel">Ma lettre à mon futur moi</div>
+    <div class="journal-q">Écrivez une lettre à la version de vous-même dans 3 mois. Celle qui a appliqué ce programme, qui a tenu ses engagements. Que voulez-vous lui dire ?</div>
+    <textarea class="journal-ta" id="j-lettre" style="min-height:180px;" placeholder="Dans 3 mois, tu..."></textarea>
+    <button class="journal-save" onclick="saveJournal('j-lettre')">Enregistrer ma lettre</button>
+  </div>
+
+  <div class="rdv-block">
+    <div class="rdv-eyebrow">Programme complété · RDV final</div>
+    <div class="rdv-title">SÉANCE FINALE<br>AVEC FABIEN</div>
+    <div class="rdv-desc">Vous avez terminé le Programme Premium AXE. Cette dernière séance est votre bilan complet — ce que vous avez accompli, ce qui a changé, et la route pour aller encore plus loin.</div>
+    <a href="https://tidycal.com/fpinton/seance-finale-axe-premium" class="rdv-btn" target="_blank">RÉSERVER MA SÉANCE FINALE →</a>
+    <div class="rdv-note">✦ Séance de 45 minutes · Bilan complet · Plan pour la suite</div>
+  </div>
+
+  <div class="cta-final">
+    <div class="cta-final-title">🏆 PROGRAMME TERMINÉ</div>
+    <div class="cta-final-text">Vous avez accompli quelque chose que la plupart des sportifs ne feront jamais — travailler leur mental avec la même rigueur que leur physique. Ce que vous avez appris ici vous appartient pour toujours.</div>
+    <a href="https://g.page/r/CXtpS9ZcTZk-EBM/review" target="_blank" class="cta-final-btn">⭐ LAISSER UN AVIS GOOGLE</a>
+  </div>
+
+</div>
+
+</div><!-- /main -->
+
+<footer style="background:var(--ink);padding:24px;text-align:center;">
+  <p style="font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(247,243,236,.25);">Méthode AXE Mental Performance © 2026 · Fabien Pinton · Programme personnel et non transférable</p>
+</footer>
+
+<script>
+
+// ── Airtable sync
+const AT_TOKEN = 'patg5isGmARIuXKPs.84da331a81b21649f7ce184cd1d5f22d65f7242cef0484b2e94bf54cd451694d';
+const AT_BASE = 'appy5uS5tkLA3h7gt';
+const AT_TABLE = 'tblOIuJq1dTZL2IXV';
+
+async function syncToAirtable(fields){
+  try{
+    await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${AT_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ fields })
+    });
+  } catch(e) { console.log('Airtable sync error:', e); }
+}
+
+function getProfileName(){
+  return document.querySelector('.nav-badge').textContent.replace('Programme Premium · ','');
+}
+
+// ── Storage key
+const KEY = 'axe_premium_sans_confiance';
+const DATA = JSON.parse(localStorage.getItem(KEY) || '{}');
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(DATA)); }catch(e){} }
+
+// ── Module unlock system
+function getUnlockDates(){
+  return DATA.unlocks || {};
+}
+function setUnlock(modIdx){
+  const input = document.getElementById('rdv'+ modIdx +'-date');
+  if(!input || !input.value) return;
+  const rdvDate = new Date(input.value);
+  rdvDate.setDate(rdvDate.getDate() + 1); // J+1
+  if(!DATA.unlocks) DATA.unlocks = {};
+  DATA.unlocks[modIdx] = rdvDate.toISOString().split('T')[0];
+  save();
+  checkUnlocks();
+  alert('✅ Module '+(modIdx+1)+' se débloquera le ' + rdvDate.toLocaleDateString('fr-FR'));
+}
+function checkUnlocks(){
+  const today = new Date().toISOString().split('T')[0];
+  const unlocks = DATA.unlocks || {};
+  for(let i=1; i<=3; i++){
+    if(unlocks[i] && unlocks[i] <= today){
+      const mn = document.getElementById('mn'+i);
+      if(mn && mn.classList.contains('locked')){
+        mn.classList.remove('locked');
+        mn.querySelector('.mn-lock') && mn.querySelector('.mn-lock').remove();
+      }
+    }
+  }
+}
+
+function tryUnlock(idx){
+  const unlocks = DATA.unlocks || {};
+  const today = new Date().toISOString().split('T')[0];
+  if(unlocks[idx] && unlocks[idx] <= today){
+    showMod(idx);
+  } else if(unlocks[idx]){
+    alert('🔒 Ce module se débloque le ' + new Date(unlocks[idx]).toLocaleDateString('fr-FR'));
+  } else {
+    alert('🔒 Ce module se débloque à J+1 après votre RDV avec Fabien.\nRéservez votre RDV depuis le module précédent.');
+  }
+}
+
+function showMod(idx){
+  document.querySelectorAll('.mod-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  document.querySelectorAll('.mod-nav-item').forEach((n,i) => {
+    if(i===idx){ n.classList.add('active'); n.classList.remove('locked'); }
+    else if(!n.classList.contains('locked') && i!==idx){ n.classList.remove('active'); }
+    else { n.classList.remove('active'); }
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── Checks
+const CK = DATA.checks || {};
+function check(id){
+  const b = document.getElementById('cb-'+id);
+  CK[id] = !CK[id];
+  b.classList.toggle('on', CK[id]);
+  b.querySelector('.check-box').textContent = CK[id] ? '✓' : '';
+  DATA.checks = CK;
+  save();
+  updProg();
+updatePdfBtn();
+}
+function updProg(){
+  for(let gi=0; gi<4; gi++){
+    const panel = document.getElementById('mod'+gi);
+    if(!panel) continue;
+    const btns = panel.querySelectorAll('.check-btn');
+    const done = Array.from(btns).filter(b => b.classList.contains('on')).length;
+    const fill = document.getElementById('pf-'+gi);
+    const dEl = document.getElementById('done-'+gi);
+    const tEl = document.getElementById('tot-'+gi);
+    if(fill) fill.style.width = (btns.length>0 ? Math.round(done/btns.length*100):0)+'%';
+    if(dEl) dEl.textContent = done;
+    if(tEl) tEl.textContent = btns.length;
+  }
+}
+
+// ── Restore checks
+Object.keys(CK).forEach(id => {
+  const b = document.getElementById('cb-'+id);
+  if(b && CK[id]){ b.classList.add('on'); b.querySelector('.check-box').textContent='✓'; }
+});
+
+// ── Journal
+const JN = DATA.journal || {};
+function saveJournal(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  JN[id] = el.value;
+  DATA.journal = JN;
+  save();
+  const btn = el.nextElementSibling;
+  if(btn){ const orig=btn.textContent; btn.textContent='✓ Enregistré'; setTimeout(()=>btn.textContent=orig,2000); }
+}
+Object.keys(JN).forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.value = JN[id];
+});
+
+// ── Pacte
+
+function signPacte(){
+  const btn = document.getElementById('pacte-btn');
+  const dateEl = document.getElementById('pacte-date');
+  if(btn.classList.contains('signed')) return;
+  btn.classList.add('signed');
+  btn.textContent = '✓ PACTE SIGNÉ';
+  const now = new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'});
+  dateEl.textContent = 'Signé le ' + now;
+  DATA.pacte = now;
+  save();
+  updatePdfBtn();
+  
+  // Sync to Airtable
+  const lettre = (DATA.journal && DATA.journal['j-lettre']) ? DATA.journal['j-lettre'] : '';
+  syncToAirtable({
+    'Email': DATA.email || 'inconnu',
+    'Profil': getProfileName(),
+    'Pacte signé': true,
+    'Date pacte': new Date().toISOString().split('T')[0],
+    'Lettre futur moi': lettre
+  });
+}
+
+if(DATA.pacte){
+  const btn = document.getElementById('pacte-btn');
+  const dateEl = document.getElementById('pacte-date');
+  if(btn){ btn.classList.add('signed'); btn.textContent='✓ PACTE SIGNÉ'; }
+  if(dateEl) dateEl.textContent = 'Signé le ' + DATA.pacte;
+}
+
+// ── Timers
+const ST={};
+function startTimer(id,dur){
+  if(ST[id]) clearInterval(ST[id].iv);
+  let rem=dur;
+  const d=document.getElementById('td-'+id);
+  d.className='tdisp run';
+  function tick(){
+    const m=Math.floor(rem/60),s=rem%60;
+    d.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    if(rem<=10&&rem>0) d.className='tdisp warn';
+    if(rem<=0){ clearInterval(ST[id].iv); d.textContent='TERMINÉ ✓'; d.className='tdisp done'; beep(); return; }
+    rem--;
+  }
+  tick(); ST[id]={iv:setInterval(tick,1000)};
+}
+function resetTimer(id,dur){
+  if(ST[id]) clearInterval(ST[id].iv);
+  const d=document.getElementById('td-'+id);
+  const m=Math.floor(dur/60),s=dur%60;
+  d.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  d.className='tdisp';
+}
+function beep(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.value=880;
+    g.gain.setValueAtTime(0.25,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.35);
+    o.start(ctx.currentTime);o.stop(ctx.currentTime+0.35);
+  }catch(e){}
+}
+
+// ── Scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('sc',scrollY>60);
+  const h=document.body.scrollHeight-window.innerHeight;
+  document.getElementById('pfill').style.width=(h>0?scrollY/h*100:0)+'%';
+});
+
+
+// ── PDF Download
+function downloadPacte(){
+  if(!DATA.pacte){ alert('Signez votre Pacte avant de le télécharger.'); return; }
+  
+  const profileName = document.querySelector('.nav-badge').textContent.replace('Programme Premium · ','');
+  const signDate = DATA.pacte;
+  const lettre = (DATA.journal && DATA.journal['j-lettre']) ? DATA.journal['j-lettre'] : '(Non renseignée)';
+  
+  const pacteItems = document.querySelectorAll('.pacte-item-text');
+  let engagements = '';
+  pacteItems.forEach((el,i) => {
+    engagements += `<tr><td style="padding:10px 16px;border-bottom:1px solid #E8E1D4;vertical-align:top;width:24px;font-family:'Georgia',serif;color:#A8852A;font-size:16px;">◆</td><td style="padding:10px 16px;border-bottom:1px solid #E8E1D4;font-size:13px;color:#5A5040;line-height:1.6;">${el.textContent}</td></tr>`;
+  });
+
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+  body{margin:0;padding:0;background:#F7F3EC;font-family:Georgia,serif;}
+  .page{max-width:680px;margin:0 auto;padding:60px 48px;background:#F7F3EC;}
+  .header{background:#1A1612;padding:40px 44px;text-align:center;position:relative;}
+  .header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7A6020,#C9A84C,#7A6020);}
+  .logo{font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:20px;}
+  .title{font-size:52px;letter-spacing:.08em;color:#F7F3EC;font-family:Georgia,serif;font-weight:300;margin-bottom:8px;}
+  .title em{color:#C9A84C;font-style:italic;}
+  .subtitle{font-size:13px;color:rgba(247,243,236,.6);letter-spacing:.25em;text-transform:uppercase;}
+  .profile-badge{display:inline-block;border:1px solid rgba(168,133,42,.4);padding:6px 20px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#C9A84C;margin-top:16px;}
+  .section{margin:40px 0;}
+  .section-label{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+  .section-label::after{content:'';flex:1;height:1px;background:rgba(168,133,42,.2);}
+  table{width:100%;border-collapse:collapse;background:#FDFAF5;border:1px solid rgba(168,133,42,.18);}
+  .citation{border-left:3px solid #A8852A;padding:16px 24px;margin:32px 0;background:#FDFAF5;}
+  .citation p{font-size:16px;font-style:italic;color:#5A5040;line-height:1.65;margin:0;}
+  .lettre-block{background:#FDFAF5;border:1px solid rgba(168,133,42,.18);padding:28px 32px;}
+  .lettre-text{font-size:13px;color:#5A5040;line-height:1.8;white-space:pre-wrap;}
+  .signature{margin-top:48px;text-align:center;border-top:1px solid rgba(168,133,42,.2);padding-top:32px;}
+  .sig-name{font-size:28px;font-style:italic;color:#1A1612;margin-bottom:8px;}
+  .sig-date{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#A8852A;}
+  .footer{background:#1A1612;padding:20px 44px;text-align:center;margin-top:40px;}
+  .footer p{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.3);margin:0;}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="logo">Fabien Pinton · Préparateur Mental · Méthode AXE</div>
+    <div class="title">MON <em>PACTE</em><br>MENTAL</div>
+    <div class="subtitle">Programme Premium · Accès à vie</div>
+    <div class="profile-badge">${profileName}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Mes engagements</div>
+    <table>${engagements}</table>
+  </div>
+
+  <div class="citation">
+    <p>Je m'engage envers moi-même. Pas envers un résultat. Pas envers un classement. Envers la façon dont je vais me comporter — avant, pendant et après la compétition.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Ma lettre à mon futur moi</div>
+    <div class="lettre-block">
+      <div class="lettre-text">${lettre}</div>
+    </div>
+  </div>
+
+  <div class="signature">
+    <div class="sig-name">Signé et engagé</div>
+    <div class="sig-date">Le ${signDate} · Programme AXE · ${profileName}</div>
+  </div>
+
+  <div class="footer">
+    <p>Méthode AXE Mental Performance © 2026 · Fabien Pinton · fabien-pinton.fr</p>
+  </div>
+</div>
+</body>
+</html>`;
+
+  // Open in new window and print to PDF
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  win.onload = function(){ win.focus(); win.print(); };
+}
+
+// Enable PDF button when pacte is signed
+function updatePdfBtn(){
+  const btn = document.getElementById('pdf-btn');
+  const note = document.getElementById('pdf-note');
+  if(!btn) return;
+  if(DATA.pacte){
+    btn.classList.remove('disabled');
+    if(note) note.style.display='none';
+  } else {
+    btn.classList.add('disabled');
+  }
+}
+
+
+// ── Email popup at start
+function checkEmail(){
+  if(!DATA.email){
+    const email = prompt('Pour sauvegarder votre progression, entrez votre email :');
+    if(email && email.includes('@')){
+      DATA.email = email;
+      save();
+      syncToAirtable({
+        'Email': email,
+        'Profil': getProfileName(),
+        'Date achat': new Date().toISOString().split('T')[0]
+      });
+    }
+  }
+}
+
+// ── Init
+checkUnlocks();
+checkEmail();
+updProg();
+updatePdfBtn();
+
+// Restore unlock dates
+const unlocks = DATA.unlocks || {};
+[1,2,3].forEach(i => {
+  const input = document.getElementById('rdv'+i+'-date');
+  if(input && unlocks[i]){
+    const d = new Date(unlocks[i]);
+    d.setDate(d.getDate()-1);
+    input.value = d.toISOString().split('T')[0];
+  }
+});
+</script>
+</body>
+</html>
