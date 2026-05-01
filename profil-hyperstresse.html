@@ -3,183 +3,143 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profil Hyperstressé — Rapport Approfondi AXE</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Programme AXE — L'Hyperstressé</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --gold:#A8852A;--gold-l:#C9A84C;--gold-d:#7A6020;--gold-xl:#F5EDD8;
+  --gold:#A8852A;--gold-l:#C9A84C;--gold-d:#7A6020;
   --cream:#F7F3EC;--cream2:#FDFAF5;--cream3:#F0EBE0;--cream4:#E8E1D4;
   --ink:#1A1612;--inkd:#5A5040;--inkf:#8A7D6A;
   --bdr:rgba(168,133,42,0.18);--bdr2:rgba(168,133,42,0.32);
-  --ok:#2E7D52;--hot:#8B4513;
+  --profil:#C0392B;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);overflow-x:hidden;}
 ::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--gold);}
 
-/* ── PROGRESS ── */
-#pbar{position:fixed;top:0;left:0;right:0;z-index:101;height:3px;pointer-events:none;}
-#pfill{height:3px;background:var(--gold);width:0%;transition:width .15s;}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(247,243,236,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--bdr);transition:padding .3s;}
+nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
+.nlogo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.2em;color:var(--gold);text-decoration:none;}
+.nlogo span{display:block;font-size:8px;letter-spacing:.28em;color:var(--inkd);font-weight:300;font-family:'DM Sans',sans-serif;}
+.nav-badge{font-size:9px;letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--bdr2);padding:5px 14px;color:var(--gold);}
+@media(max-width:640px){nav{padding:12px 18px;}}
 
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 52px;background:rgba(247,243,236,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--bdr);transition:padding .3s;}
-nav.sc{padding:10px 52px;box-shadow:0 4px 28px rgba(0,0,0,.07);}
-.nlogo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.2em;color:var(--gold);text-decoration:none;}
-.nlogo span{display:block;font-family:'Cormorant Garamond',serif;font-size:8px;letter-spacing:.32em;color:var(--inkd);text-transform:uppercase;}
-.nav-r{display:flex;align-items:center;gap:20px;}
-.nav-badge{font-size:9px;letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--bdr2);padding:5px 14px;color:var(--gold);font-family:'DM Sans',sans-serif;}
-.nav-cta{font-size:9px;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--ink);border:none;padding:8px 20px;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:background .25s;}
-.nav-cta:hover{background:var(--gold-d);color:var(--cream2);}
-@media(max-width:640px){nav{padding:12px 18px;}nav.sc{padding:9px 18px;}.nav-r{gap:10px;}}
+/* PROGRESS */
+#pbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:200;pointer-events:none;background:var(--cream4);}
+#pfill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));width:0%;transition:width .2s;}
 
-/* ── HERO ── */
-.hero{min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:110px 24px 80px;background:var(--ink);position:relative;overflow:hidden;text-align:center;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 15% 50%,rgba(200,60,60,.12) 0%,transparent 65%), radial-gradient(ellipse 50% 65% at 85% 20%,rgba(168,133,42,.08) 0%,transparent 65%);pointer-events:none;}
-.hero::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.35;pointer-events:none;}
-.h-eye{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold-l);border:1px solid rgba(168,133,42,.3);padding:5px 18px;margin-bottom:28px;display:inline-block;animation:fadeUp .7s ease both .2s;position:relative;z-index:1;}
-.h-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,11.5vw,140px);line-height:.86;letter-spacing:.04em;color:var(--cream2);position:relative;z-index:1;animation:fadeUp .8s ease both .4s;}
-.h-name em{color:transparent;-webkit-text-stroke:2px var(--gold);font-style:normal;}
-.h-tag{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.9vw,21px);font-style:italic;color:rgba(247,243,236,.85);max-width:540px;line-height:1.65;margin:20px auto 0;position:relative;z-index:1;animation:fadeUp .8s ease both .6s;}
-.h-scores{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:36px;position:relative;z-index:1;animation:fadeUp .8s ease both .8s;}
-.sp{display:flex;flex-direction:column;align-items:center;gap:4px;border:1px solid rgba(168,133,42,.2);padding:12px 16px;min-width:78px;}
-.sp-l{font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(247,243,236,.65);}
-.sp-v{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.05em;color:var(--gold-l);}
-.sp-b{width:52px;height:2px;background:rgba(168,133,42,.1);border-radius:2px;overflow:hidden;}
-.sp-f{height:100%;background:var(--gold);transition:width 1.4s ease;}
+/* HERO */
+.hero{background:var(--cream2);padding:100px 80px 80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 80% 50%,rgba(168,133,42,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:900px;margin:0 auto;}
+.hero-profil-tag{font-size:9px;letter-spacing:.45em;text-transform:uppercase;color:var(--profil);margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.hero-profil-tag::before{content:'';width:36px;height:1px;background:var(--profil);}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,8vw,96px);letter-spacing:.04em;color:var(--ink);line-height:.88;margin-bottom:20px;}
+.hero-title em{color:var(--gold);font-style:normal;}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.2vw,23px);font-style:italic;color:var(--inkd);line-height:1.6;max-width:640px;margin-bottom:32px;}
 
-/* ── SHARED SECTION ── */
-.gline{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-section{padding:76px 24px;}
-.si{max-width:840px;margin:0 auto;}
-.stag{font-size:9px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block;}
-.sh2{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5.2vw,62px);letter-spacing:.05em;line-height:.93;margin-bottom:20px;}
-.sh2 em{color:var(--gold);font-style:normal;}
-.lead{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.8vw,20px);font-style:italic;color:var(--inkd);line-height:1.7;margin-bottom:28px;}
-.body-p{font-size:14px;color:var(--inkd);line-height:1.8;margin-bottom:14px;}
+/* MANTRA */
+.mantra-band{background:var(--ink);padding:32px 80px;text-align:center;}
+.mantra-label{font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.mantra-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,32px);font-style:italic;color:var(--cream2);letter-spacing:.02em;}
 
-/* ── MÉCANISME ── */
-.mec-s{background:var(--cream2);}
-.mec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:28px;}
-.mc{border:1px solid var(--bdr);padding:22px 18px;background:var(--cream);position:relative;overflow:hidden;}
-.mc::before{content:attr(data-n);position:absolute;top:8px;right:14px;font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(168,133,42,.06);line-height:1;}
-.mc h3{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
-.mc p{font-size:13px;color:var(--inkd);line-height:1.75;}
+/* PROCESS INTRO */
+.process-intro{background:var(--cream3);padding:60px 80px;}
+.pi-inner{max-width:900px;margin:0 auto;}
+.pi-label{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold-d);margin-bottom:16px;}
+.pi-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4vw,52px);letter-spacing:.04em;color:var(--ink);margin-bottom:16px;}
+.pi-title em{color:var(--gold);font-style:normal;}
+.pi-desc{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,1.8vw,19px);font-style:italic;color:var(--inkd);line-height:1.7;max-width:680px;}
 
-/* ── DEEP (dark bg) ── */
-.deep-s{background:var(--ink);}
-.deep-s .sh2{color:var(--cream2);}
-.deep-s .lead{color:rgba(247,243,236,.85);}
-.deep-s .stag{color:var(--gold-l);}
-.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px;}
-@media(max-width:580px){.d-grid{grid-template-columns:1fr;}}
-.db{border:1px solid rgba(168,133,42,.2);padding:20px;}
-.db h4{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-l);margin-bottom:10px;}
-.db ul{list-style:none;}
-.db li{font-size:13px;color:rgba(247,243,236,.85);line-height:1.72;padding-left:14px;position:relative;margin-bottom:4px;}
-.db li::before{content:'—';position:absolute;left:0;color:var(--gold);font-size:11px;}
-.trigs{margin-top:28px;}
-.trig{border-left:2px solid var(--gold);padding:13px 16px;margin-bottom:10px;background:rgba(168,133,42,.04);}
-.trig strong{font-size:13px;color:var(--cream2);font-weight:500;display:block;margin-bottom:3px;}
-.trig span{font-size:13px;color:rgba(247,243,236,.85);}
+/* AGE TAGS */
+.age-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
+.age-tag{font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:6px 16px;border:1px solid var(--bdr2);color:var(--inkf);}
+.age-tag.active{background:var(--gold);border-color:var(--gold);color:var(--cream2);}
 
-/* ── SEMAINES ── */
-.wk-s{background:var(--cream2);}
-.wk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:26px;}
-.wk{border:1px solid var(--bdr);padding:20px;background:var(--cream);position:relative;}
-.wk-badge{position:absolute;top:12px;right:12px;font-size:8px;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--bdr);padding:2px 8px;color:var(--inkf);}
-.wk h3{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.07em;margin-bottom:2px;}
-.wk-sub{font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:11px;}
-.wk ul{list-style:none;}
-.wk li{font-size:12px;color:var(--inkd);line-height:1.65;padding-left:12px;position:relative;margin-bottom:3px;}
-.wk li::before{content:'·';position:absolute;left:0;color:var(--gold);}
+/* SEMAINES */
+.semaines{max-width:900px;margin:0 auto;padding:60px 80px;}
+.semaine{margin-bottom:32px;border:1px solid var(--bdr);background:var(--cream2);position:relative;}
+.semaine.locked{opacity:.5;pointer-events:none;}
+.lock-overlay{position:absolute;inset:0;background:rgba(247,243,236,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;}
+.lock-icon{font-size:32px;margin-bottom:8px;}
+.lock-overlay p{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--inkf);}
+.sem-header{padding:28px 36px;border-bottom:1px solid var(--bdr);}
+.sem-num{font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.sem-titre{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:var(--ink);margin-bottom:8px;}
+.sem-objectif{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--inkd);line-height:1.6;}
+.exos{padding:28px 36px;display:flex;flex-direction:column;gap:20px;}
+.exo{display:grid;grid-template-columns:48px 1fr;gap:20px;padding:24px;background:var(--cream3);border-left:3px solid var(--gold);}
+.exo-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(168,133,42,.2);line-height:1;}
+.exo-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em;color:var(--gold-d);margin-bottom:8px;}
+.exo-desc{font-size:14px;color:var(--inkd);line-height:1.75;margin-bottom:14px;}
+.exo-focus{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:var(--cream2);border-left:2px solid var(--gold);}
+.focus-label{font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);flex-shrink:0;margin-top:2px;}
+.focus-text{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--inkd);line-height:1.5;}
+.btn-unlock{display:block;width:100%;margin:16px 36px 28px;width:calc(100% - 72px);font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:14px;cursor:pointer;transition:all .3s;font-family:'DM Sans',sans-serif;}
+.btn-unlock:hover{background:var(--gold-d);}
 
-/* ── EXERCICES ── */
-.exo-s{background:var(--cream);}
-.etabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:32px;}
-.etab{font-size:9px;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--bdr);padding:8px 16px;cursor:pointer;background:none;color:var(--inkf);transition:all .22s;font-family:'DM Sans',sans-serif;}
-.etab.on{background:var(--gold);color:var(--ink);border-color:var(--gold);}
-.etab:hover:not(.on){border-color:var(--gold-l);color:var(--gold);}
-.epanel{display:none;}.epanel.on{display:block;}
+/* ── NOTES & PDF ── */
+.note-section{margin-top:20px;padding:20px 24px;background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold-d);}
+.note-label{font-size:8px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px;}
+.note-ta{width:100%;border:1px solid var(--bdr);background:var(--cream3);padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);resize:vertical;min-height:80px;outline:none;transition:border .3s;line-height:1.6;}
+.note-ta:focus{border-color:var(--gold);}
+.note-save{font-size:9px;letter-spacing:.22em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:8px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:6px;transition:background .3s;}
+.note-save:hover{background:var(--gold-d);}
+.pdf-download-btn{display:flex;align-items:center;gap:10px;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:transparent;border:1px solid var(--bdr2);color:var(--gold-d);padding:10px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;margin:16px 36px 0;width:calc(100% - 72px);justify-content:center;transition:all .3s;}
+.pdf-download-btn:hover{background:var(--gold);color:var(--cream2);border-color:var(--gold);}
+@media print{
+  nav,#pbar,.btn-unlock,.pdf-download-btn,.note-save,.cta-section,.avis-section,footer,.semaine.locked{display:none!important;}
+  .note-ta{border:none;background:transparent;padding:0;min-height:0;resize:none;font-size:12px;}
+  .note-section{border:none;border-top:1px solid #ddd;padding:8px 0;}
+  body{background:white;}
+  .semaine{border:1px solid #ddd;margin-bottom:16px;page-break-inside:avoid;}
+  .exo{background:#f9f6f1;border-left:3px solid #A8852A;}
+  .mantra-band{background:#1A1612;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .hero{background:#FDFAF5;}
+}
 
-.ecard{border:1px solid var(--bdr);background:var(--cream2);margin-bottom:14px;overflow:hidden;}
-.ehead{display:flex;align-items:center;gap:14px;padding:18px 22px;cursor:pointer;user-select:none;}
-.enum{font-family:'Bebas Neue',sans-serif;font-size:34px;color:rgba(168,133,42,.2);line-height:1;min-width:36px;}
-.emeta{flex:1;}
-.etitle{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
-.etags{display:flex;gap:5px;flex-wrap:wrap;}
-.etag{font-size:8px;letter-spacing:.16em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--bdr);color:var(--inkf);}
-.etog{width:26px;height:26px;border:1px solid var(--bdr2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--gold);transition:transform .28s;flex-shrink:0;}
-.ecard.open .etog{transform:rotate(45deg);}
-.ebody{display:none;padding:0 22px 22px;}
-.ecard.open .ebody{display:block;}
-.edesc{font-size:14px;color:var(--inkd);line-height:1.8;margin-bottom:14px;}
-.ewhy{background:rgba(168,133,42,.06);border-left:3px solid var(--gold);padding:11px 14px;margin-bottom:14px;font-size:13px;color:var(--inkd);line-height:1.7;font-style:italic;}
-.esteps{counter-reset:s;margin-bottom:18px;}
-.step{counter-increment:s;display:flex;gap:12px;align-items:flex-start;margin-bottom:11px;}
-.step::before{content:counter(s);font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);min-width:22px;line-height:1.2;}
-.step p{font-size:13px;color:var(--inkd);line-height:1.7;padding-top:2px;}
-.step p strong{color:var(--ink);font-weight:600;}
+@media(max-width:640px){
+  .hero{padding:100px 24px 60px;}
+  .mantra-band{padding:28px 24px;}
+  .process-intro{padding:48px 24px;}
+  .semaines{padding:40px 24px;}
+  .exo{grid-template-columns:1fr;}
+  .exo-num{display:none;}
+  .sem-header{padding:20px 20px;}
+  .exos{padding:16px 20px;}
+  .btn-unlock{margin:12px 20px 20px;width:calc(100% - 40px);}
+}
 
-/* ── TIMER ── */
-.tzone{border:1px solid var(--bdr2);padding:18px;text-align:center;background:var(--cream);margin-top:4px;}
-.tlbl{font-size:8px;letter-spacing:.36em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
-.tdisp{font-family:'Bebas Neue',sans-serif;font-size:50px;letter-spacing:.08em;color:var(--ink);line-height:1;margin-bottom:12px;transition:color .3s;}
-.tdisp.run{color:var(--gold);}.tdisp.done{color:var(--ok);}.tdisp.warn{color:var(--hot);}
-.tctrl{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;}
-.tbtn{font-size:9px;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--bdr2);padding:8px 18px;cursor:pointer;background:none;color:var(--ink);font-family:'DM Sans',sans-serif;transition:all .22s;}
-.tbtn.pri{background:var(--gold);color:var(--ink);border-color:var(--gold);}
-.tbtn:hover{border-color:var(--gold);color:var(--gold);}
-.tbtn.pri:hover{background:var(--gold-d);color:var(--cream2);}
-.tphs{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
-.phd{font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--bdr);color:var(--inkf);transition:all .3s;}
-.phd.on{background:var(--gold);color:var(--ink);border-color:var(--gold);}
-.phd.dn{background:rgba(168,133,42,.12);color:var(--gold);}
-.tnote{font-size:11px;color:var(--inkf);margin-top:7px;font-style:italic;}
+/* CTA DUO */
+.cta-section{background:var(--cream3);padding:60px 80px;}
+.cta-inner{max-width:900px;margin:0 auto;}
+.cta-label{font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4.5vw,56px);letter-spacing:.04em;color:var(--ink);margin-bottom:12px;line-height:.9;}
+.cta-title em{color:var(--gold);font-style:normal;}
+.cta-sub{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:32px;max-width:600px;}
+.cta-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:640px){.cta-cards{grid-template-columns:1fr;}}
+.cta-card{background:var(--cream2);border:1px solid var(--bdr);padding:28px 28px;}
+.cta-card.featured{background:var(--ink);border-color:transparent;}
+.cc-tag{font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;}
+.cta-card.featured .cc-tag{color:var(--gold-l);}
+.cc-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.06em;color:var(--ink);margin-bottom:10px;}
+.cta-card.featured .cc-name{color:var(--cream2);}
+.cc-desc{font-size:13px;color:var(--inkd);line-height:1.7;margin-bottom:20px;}
+.cta-card.featured .cc-desc{color:rgba(247,243,236,.8);}
+.cc-price{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold);margin-bottom:4px;}
+.cc-sub{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkf);margin-bottom:20px;}
+.cta-card.featured .cc-sub{color:rgba(247,243,236,.35);}
+.cc-btn{display:block;text-align:center;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:14px;transition:all .3s;}
+.cc-btn:hover{background:var(--gold-d);}
+.cc-btn.outline{background:transparent;border:1px solid var(--bdr2);color:var(--gold);}
+.cc-btn.outline:hover{border-color:var(--gold);background:rgba(168,133,42,.05);}
 
-/* ── CHECK ── */
-.echk{display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--bdr);}
-.chk{width:22px;height:22px;border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;flex-shrink:0;font-size:13px;}
-.chk.on{background:var(--gold);border-color:var(--gold);}
-.chk-l{font-size:11px;color:var(--inkf);}
-
-/* ── PROG ── */
-.prog-s{background:var(--cream3);}
-.prog-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px;}
-.prog-tt{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3.8vw,42px);letter-spacing:.05em;}
-.prog-ct{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4.2vw,50px);font-style:italic;color:var(--gold);}
-.pbars{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
-.prow{background:var(--cream2);padding:13px 16px;border:1px solid var(--bdr);}
-.prow-l{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkf);margin-bottom:6px;}
-.prow-b{height:3px;background:var(--cream4);border-radius:2px;overflow:hidden;margin-bottom:5px;}
-.prow-f{height:100%;background:var(--gold);border-radius:2px;transition:width .5s ease;}
-.prow-s{font-size:11px;color:var(--inkd);}
-
-/* ── CTA ── */
-.cta-s{background:var(--ink);padding:90px 24px;text-align:center;}
-.cta-in{max-width:600px;margin:0 auto;}
-.cta-h{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,8.5vw,105px);line-height:.86;letter-spacing:.04em;color:var(--cream2);margin-bottom:16px;}
-.cta-h em{color:transparent;-webkit-text-stroke:2px var(--gold);font-style:normal;}
-.cta-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.8vw,19px);font-style:italic;color:rgba(247,243,236,.85);margin-bottom:34px;line-height:1.65;}
-.cta-duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:left;}
-.cta-duo-card{border:1px solid rgba(168,133,42,.22);padding:28px 24px;display:flex;flex-direction:column;gap:12px;}
-.cta-duo-main{border-color:var(--gold);background:rgba(168,133,42,.07);}
-.cta-duo-label{font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);}
-.cta-duo-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.07em;color:var(--cream2);line-height:1.05;}
-.cta-duo-desc{font-size:13px;line-height:1.7;color:rgba(247,243,236,.85);flex:1;}
-.cta-duo-btn{display:block;text-align:center;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;text-decoration:none;padding:13px 18px;transition:all .25s;}
-.cta-duo-btn-gold{background:var(--gold);color:var(--ink);}
-.cta-duo-btn-gold:hover{background:var(--gold-l);}
-.cta-duo-btn-outline{background:transparent;border:1px solid rgba(168,133,42,.35);color:var(--gold-l);}
-.cta-duo-btn-outline:hover{border-color:var(--gold);color:var(--gold);}
-@media(max-width:580px){.cta-duo{grid-template-columns:1fr;}}
-
-footer{background:var(--cream4);padding:26px 24px;text-align:center;}
-footer p{font-size:10px;color:var(--inkf);letter-spacing:.12em;}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
-.rv.vi{opacity:1;transform:none;}
+/* AVIS */
+.avis-section{padding:40px 80px;text-align:center;background:var(--cream2);}
+.avis-section a{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:12px 28px;}
 </style>
 </head>
 <body>
@@ -187,586 +147,366 @@ footer p{font-size:10px;color:var(--inkf);letter-spacing:.12em;}
 <div id="pbar"><div id="pfill"></div></div>
 
 <nav id="nav">
-  <a href="#" class="nlogo">AXE<span>Méthode · Fabien Pinton</span></a>
-  <div class="nav-r">
-    <span class="nav-badge">L'Hyperstressé</span>
-    <a href="https://buy.stripe.com/7sY7sK8q03Uy81fbVQ8IU0a" class="nav-cta">Programme Premium 347€</a>
-  </div>
+  <a href="https://fabien-pinton.fr" class="nlogo">FABIEN PINTON<span>Méthode AXE · Préparation Mentale</span></a>
+  <div class="nav-badge">L'Hyperstressé</div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="h-eye">Rapport Approfondi · Méthode AXE · Fabien Pinton</div>
-  <h1 class="h-name">L'HYPER<br><em>STRESSÉ</em></h1>
-  <p class="h-tag">Tu sens la pression monter avant même de commencer. Ton corps se crispe, ton esprit s'emballe — et tu n'arrives plus à accéder à ce que tu sais faire.</p>
-  <div class="h-scores">
-      <div class="sp">
-        <span class="sp-l">Stress</span>
-        <div class="sp-v">88</div>
-        <div class="sp-b"><div class="sp-f" data-v="88" style="width:0%"></div></div>
-      </div>
-      <div class="sp">
-        <span class="sp-l">Peur</span>
-        <div class="sp-v">52</div>
-        <div class="sp-b"><div class="sp-f" data-v="52" style="width:0%"></div></div>
-      </div>
-      <div class="sp">
-        <span class="sp-l">Confiance</span>
-        <div class="sp-v">41</div>
-        <div class="sp-b"><div class="sp-f" data-v="41" style="width:0%"></div></div>
-      </div>
-      <div class="sp">
-        <span class="sp-l">Plaisir</span>
-        <div class="sp-v">34</div>
-        <div class="sp-b"><div class="sp-f" data-v="34" style="width:0%"></div></div>
-      </div>
-      <div class="sp">
-        <span class="sp-l">Compétitivité</span>
-        <div class="sp-v">63</div>
-        <div class="sp-b"><div class="sp-f" data-v="63" style="width:0%"></div></div>
-      </div></div>
-</section>
-<div class="gline"></div>
-
-<!-- MÉCANISME -->
-<section class="mec-s">
-  <div class="si">
-    <span class="stag rv">Ce qui se passe en toi</span>
-    <h2 class="sh2 rv">POURQUOI TON <em>CORPS</em> TE TRAHIT.</h2>
-    <p class="lead rv">Ce que tu vis n'est pas une faiblesse de caractère. C'est une réponse neurobiologique automatique que ton cerveau a appris à déclencher. Et ce qui s'apprend peut se reprogrammer.</p>
-    <div class="mec-grid rv">
-      <div class="mc" data-n="01">
-        <h3>Le hijack amygdalien</h3><p>Ton amygdale interprète la compétition comme une menace réelle et court-circuite ton cortex préfrontal — le siège du calme, du jugement et de l'automatisme. Tu n'accèdes plus à ce que tu sais faire.</p>
-      </div>
-      <div class="mc" data-n="02">
-        <h3>Le pic de cortisol</h3><p>Au-delà d'un seuil critique, le cortisol bloque l'accès à ta mémoire musculaire. Tu sur-réfléchis chaque geste que tu réalises normalement sans y penser. C'est neurologique, pas mental.</p>
-      </div>
-      <div class="mc" data-n="03">
-        <h3>La boucle d'anticipation</h3><p>Ton cerveau simule en boucle les scénarios négatifs pour 'se préparer'. Cette simulation crée un état de stress avant que la menace existe — et épuise tes ressources mentales avant le départ.</p>
-      </div>
-      <div class="mc" data-n="04">
-        <h3>Le piège identitaire</h3><p>Tu t'es construit une identité autour de la performance. Chaque compétition devient un test de ta valeur. Cette fusion identité/résultat amplifie chaque enjeu et transforme une course en verdict personnel.</p>
-      </div></div>
+  <div class="hero-inner">
+    <div class="hero-profil-tag">Programme AXE · L'Hyperstressé · 6 semaines</div>
+    <h1 class="hero-title">COMMENT<br>ATTEINDRE<br><em>L'OBJECTIF.</em></h1>
+    <p class="hero-sub">Ton stress vient du résultat que tu imagines. Pas de ce que tu fais.<br><br>Tu performes à l'entraînement. Mais dès que l'enjeu monte, quelque chose change. Ton corps se crispe, ta tête anticipe le résultat — et tu n'es plus vraiment présent à ce que tu fais.</p>
   </div>
 </section>
-<div class="gline"></div>
 
-<!-- DEEP -->
-<section class="deep-s">
-  <div class="si">
-    <span class="stag rv">Analyse précise de ton profil</span>
-    <h2 class="sh2 rv">TON PROFIL <em>PRÉCIS</em>.</h2>
-    <p class="lead rv">L'Hyperstressé n'est pas quelqu'un de fragile. C'est souvent le sportif le plus investi, le plus rigoureux, le plus exigeant envers lui-même. C'est précisément pour ça qu'il se bloque.</p>
-    <div class="d-grid rv">
-      <div class="db"><h4>Tes forces réelles</h4><ul><li>Niveau d'investissement très élevé à l'entraînement</li><li>Capacité d'analyse fine de ses propres performances</li><li>Haute conscience corporelle — tu ressens tout</li><li>Motivation intrinsèque forte et durable</li><li>Rigueur et régularité dans le travail quotidien</li></ul></div>
-      <div class="db"><h4>Tes freins identifiés</h4><ul><li>Hyper-vigilance aux signaux corporels (tremblement, cœur, souffle)</li><li>Tendance au scénario catastrophe avant compétition</li><li>Difficulté à lâcher prise et faire confiance au corps</li><li>Récupération lente après une mauvaise performance</li><li>Sensibilité excessive au regard extérieur</li></ul></div>
-    </div>
-    <div class="trigs rv">
-      <span class="stag" style="color:var(--gold-l);margin-top:28px">Tes déclencheurs identifiés</span>
-      
-      <div class="trig">
-        <strong>La veille de compétition</strong><span>Ton stress monte souvent la veille, pas le matin. La nuit d'avant est clé — ton cerveau tourne à plein régime et tu dors mal, ce qui dégrade ta performance le lendemain.</span>
-      </div>
-      <div class="trig">
-        <strong>Les premières secondes</strong><span>Le départ est ton moment critique. Les 10 premières secondes en compétition définissent souvent l'état mental de toute la séquence qui suit.</span>
-      </div>
-      <div class="trig">
-        <strong>Le regard des autres</strong><span>La présence de ton entraîneur, de tes parents, ou de rivaux spécifiques amplifie ton stress de façon disproportionnée par rapport à l'enjeu réel.</span>
-      </div>
-      <div class="trig">
-        <strong>L'enjeu symbolique</strong><span>Certaines compétitions 'comptent plus' dans ta tête — finales, retours après blessure, confrontations importantes. Ces enjeux symboliques triplent ta réponse de stress.</span>
-      </div>
+<!-- MANTRA -->
+<div class="mantra-band">
+  <div class="mantra-label">Ton mantra de compétition</div>
+  <div class="mantra-text">"Ce que je fais maintenant. Rien d'autre."</div>
+</div>
+
+<!-- PROCESS INTRO -->
+<section class="process-intro">
+  <div class="pi-inner">
+    <div class="pi-label">Le fil conducteur des 6 semaines</div>
+    <h2 class="pi-title">FOCUS <em>PROCESSUS.</em><br>PAS RÉSULTAT.</h2>
+    <p class="pi-desc">Ton stress est alimenté par une chose précise : tu penses au résultat à venir au lieu de faire ce que tu sais faire maintenant. Ce programme t'apprend à couper ce circuit d'anticipation et à rester dans l'action.</p>
+    <div class="age-tags">
+      <div class="age-tag">12-15 ans — Fais ce que tu sais faire. Le reste suit tout seul.</div>
+      <div class="age-tag">15-18 ans — Ta sélection se joue sur ton jeu — pas sur le classement du moment.</div>
+      <div class="age-tag">18-25 ans — 3 intentions de jeu. Rien d'autre ne compte pendant la compétition.</div>
+      <div class="age-tag">25+ — Tu as l'expérience. Fais confiance à ce que ton corps sait faire.</div>
     </div>
   </div>
 </section>
-<div class="gline"></div>
 
 <!-- SEMAINES -->
-<section class="wk-s">
-  <div class="si">
-    <span class="stag rv">Ton programme</span>
-    <h2 class="sh2 rv">6 SEMAINES POUR <em>TRANSFORMER</em> TON MENTAL.</h2>
-    <p class="lead rv">Voici ton plan sur 6 semaines. Chaque semaine a un objectif précis. Tu construis de bas en haut — ne saute pas d'étape, chacune prépare la suivante.</p>
-    <div class="wk-grid rv">
-      <div class="wk">
-        <div class="wk-badge">Fondation</div>
-        <h3>Sem. 1–2</h3>
-        <div class="wk-sub">Conscience & Détection</div>
-        <ul><li>Identifier tes 3 signaux corporels de stress spécifiques</li><li>Tenir un journal des situations déclenchantes</li><li>Apprendre la respiration 4-7-8 en conditions neutres</li></ul>
-      </div>
-      <div class="wk">
-        <div class="wk-badge">Construction</div>
-        <h3>Sem. 3–4</h3>
-        <div class="wk-sub">Régulation & Ancrage</div>
-        <ul><li>Pratiquer la cohérence cardiaque quotidiennement</li><li>Intégrer un rituel pré-compétition fixe et reproductible</li><li>Travailler la visualisation guidée de compétition</li></ul>
-      </div>
-      <div class="wk">
-        <div class="wk-badge">Intégration</div>
-        <h3>Sem. 5–6</h3>
-        <div class="wk-sub">Exposition & Transfert</div>
-        <ul><li>Simuler les conditions de compétition à l'entraînement</li><li>Tester le protocole de régulation en entraînement-pression</li><li>Ancrage sensoriel pré-départ à systématiser</li></ul>
-      </div></div>
-  </div>
-</section>
-<div class="gline"></div>
-
-<!-- EXERCICES -->
-<section class="exo-s" id="exercices">
-  <div class="si">
-    <span class="stag rv">Les exercices</span>
-    <h2 class="sh2 rv">TON PROTOCOLE <em>COMPLET</em>.</h2>
-    <p class="lead rv">Ces 9 exercices sont ordonnés. Commence par le 1er, maîtrise-le sur une semaine, puis passe au suivant. Chaque exercice prépare le suivant.</p>
-    <div class="etabs rv"><button class="etab  on" onclick="tab(0)">Sem. 1–2 · Conscience</button><button class="etab" onclick="tab(1)">Sem. 3–4 · Régulation</button><button class="etab" onclick="tab(2)">Sem. 5–6 · Intégration</button></div>
-    <div class="epanel  on" id="ep-0">
-          <div class="ecard" id="ec-0-0">
-            <div class="ehead" onclick="tog('0-0')">
-              <div class="enum">01</div>
-              <div class="emeta">
-                <div class="etitle">Scan corporel du stress</div>
-                <div class="etags"><span class="etag">5 min</span><span class="etag">Quotidien</span><span class="etag">Semaine 1</span></div>
-              </div>
-              <div class="etog">+</div>
-            </div>
-            <div class="ebody">
-              <p class="edesc">Apprends à reconnaître tes signaux de stress AVANT qu'ils te submergent. Tu ne peux pas gérer ce que tu ne détectes pas encore.</p>
-              <div class="ewhy">💡 L'Hyperstressé réagit souvent quand c'est déjà trop tard — quand le cortisol est à son pic. Cet exercice avance ta fenêtre de détection de plusieurs minutes, ce qui te donne le temps d'agir.</div>
-              <div class="esteps"><div class='step'><p><strong>Installe-toi</strong> assis ou allongé dans un endroit calme. Ferme les yeux.</p></div><div class='step'><p><strong>Parcours mentalement</strong> ton corps de la tête aux pieds. Question simple : « Où est la tension ? »</p></div><div class='step'><p><strong>Note les 3 zones</strong> où tu ressens le plus de tension (nuque, mâchoire, poitrine, ventre, mains...).</p></div><div class='step'><p><strong>Attribue un score</strong> de 0 à 10 à chaque zone. Répète chaque matin pendant 7 jours. Note dans un carnet pour créer ta carte personnelle du stress.</p></div></div>
-              
-<div class="tzone">
-  <div class="tlbl">Scan corporel</div>
-  <div class="tdisp" id="td-0-0">05:00</div>
-  <div class="tctrl">
-    <button class="tbtn pri" onclick="startTimer('0-0',300)">Démarrer</button>
-    <button class="tbtn" onclick="resetTimer('0-0',300)">Réinitialiser</button>
-  </div>
-  <div class="tnote">Prépare-toi avant de lancer</div>
-</div>
-              <div class="echk">
-                <div class="chk" id="cb-0-0" onclick="check('0-0')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
-              </div>
-            </div>
+<div class="semaines">
+  
+        <div class="semaine active" id="s0">
+          
+          <div class="sem-header">
+            <div class="sem-num">Semaine 01</div>
+            <div class="sem-titre">Identifier le déclencheur</div>
+            <div class="sem-objectif">Comprendre exactement à quel moment tu bascules du 'je fais' au 'et si ça tourne mal'.</div>
           </div>
-          <div class="ecard" id="ec-0-1">
-            <div class="ehead" onclick="tog('0-1')">
-              <div class="enum">02</div>
-              <div class="emeta">
-                <div class="etitle">Journal des déclencheurs</div>
-                <div class="etags"><span class="etag">10 min</span><span class="etag">Après compétition</span><span class="etag">Semaine 1–2</span></div>
-              </div>
-              <div class="etog">+</div>
-            </div>
-            <div class="ebody">
-              <p class="edesc">Identifier avec précision quelles situations déclenchent ton stress. En réalité, 3-4 situations représentent 80% de ton stress.</p>
-              <div class="ewhy">💡 En cartographiant tes déclencheurs exacts, tu passes d'une peur vague et diffuse à des cibles précises et traitables. On ne peut corriger que ce qu'on peut nommer.</div>
-              <div class="esteps"><div class='step'><p><strong>Juste après</strong> chaque entraînement ou compétition stressante, prends 10 minutes.</p></div><div class='step'><p><strong>Réponds à 4 questions :</strong> (1) Quel moment précis m'a stressé ? (2) Qui était présent ? (3) Que me disais-je à ce moment ? (4) Comment mon corps a réagi ?</p></div><div class='step'><p><strong>Cherche les patterns</strong> après 5 entrées : quels mots reviennent ? Quelles personnes ? Quels contextes ?</p></div><div class='step'><p><strong>Identifie tes 3 déclencheurs principaux</strong> et donne-leur un nom court. Ex : « Le regard de l'entraîneur ».</p></div></div>
-              
-              <div class="echk">
-                <div class="chk" id="cb-0-1" onclick="check('0-1')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
+          <div class="exos">
+            <div class="exo">
+              <div class="exo-num">01</div>
+              <div class="exo-body">
+                <div class="exo-title">La cartographie du glissement</div>
+                <div class="exo-desc">Après ta prochaine compétition ou entraînement intense, note le moment précis où tu as arrêté de penser à ce que tu faisais pour penser à ce qui pourrait arriver. C'est ton point de bascule. Le connaître, c'est déjà pouvoir l'anticiper.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Quand est-ce que je passe de 'je fais' à 'et si' ?</span>
+                </div>
               </div>
             </div>
+            <div class="exo">
+              <div class="exo-num">02</div>
+              <div class="exo-body">
+                <div class="exo-title">Le scan des 3 secondes</div>
+                <div class="exo-desc">Avant chaque action importante à l'entraînement : 3 secondes, une respiration, puis une seule question : 'qu'est-ce que je dois faire maintenant ?' Pas 'est-ce que ça va marcher'. Juste 'qu'est-ce que je fais'. Entraîne-toi à ça jusqu'à ce que ça devienne automatique.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Une seule question. Un seul moment. Ce que je fais maintenant.</span>
+                </div>
+              </div>
+            </div></div>
+          
+          <div class="note-section">
+            <div class="note-label">📝 Mes notes sur cette semaine</div>
+            <textarea class="note-ta" id="note-0" placeholder="Note ici tes observations, tes difficultés, ce qui a bien marché..."></textarea>
+            <button class="note-save" onclick="saveNote(0)">Enregistrer mes notes</button>
           </div>
-          <div class="ecard" id="ec-0-2">
-            <div class="ehead" onclick="tog('0-2')">
-              <div class="enum">03</div>
-              <div class="emeta">
-                <div class="etitle">Respiration 4-7-8</div>
-                <div class="etags"><span class="etag">4 min</span><span class="etag">2× par jour</span><span class="etag">Semaine 1–2</span></div>
-              </div>
-              <div class="etog">+</div>
-            </div>
-            <div class="ebody">
-              <p class="edesc">La technique la plus efficace pour réduire le cortisol en moins de 4 minutes. À maîtriser en conditions neutres AVANT de l'utiliser en compétition.</p>
-              <div class="ewhy">💡 Cette respiration active directement le système nerveux parasympathique — le frein naturel de ton réflexe de stress. C'est le seul levier physiologique que tu peux actionner volontairement en quelques secondes.</div>
-              <div class="esteps"><div class='step'><p><strong>Expire complètement</strong> par la bouche avec un souffle audible.</p></div><div class='step'><p><strong>Inspire par le nez</strong> silencieusement en comptant jusqu'à 4.</p></div><div class='step'><p><strong>Retiens ta respiration</strong> en comptant jusqu'à 7.</p></div><div class='step'><p><strong>Expire par la bouche</strong> complètement en comptant jusqu'à 8 avec un souffle sonore. Répète 4 cycles. Fais 2 répétitions par jour.</p></div></div>
-              
-<div class="tzone">
-  <div class="tlbl">Respiration 4-7-8 · 4 cycles</div>
-  <div class="tdisp" id="td-0-2">Prêt</div>
-  <div class="tphs"><div class="phd" id="0-2-p0">Inspire 4s</div><div class="phd" id="0-2-p1">Retiens 7s</div><div class="phd" id="0-2-p2">Expire 8s</div></div>
-  <div class="tctrl">
-    <button class="tbtn pri" onclick="startPhase('0-2')">Démarrer</button>
-    <button class="tbtn" onclick="stopPhase('0-2')">Arrêter</button>
-  </div>
-  <div class="tnote">Durée totale : ~01:16</div>
-</div>
-<script>if(typeof PT === "undefined") var PT = {};
-PT['0-2']={phases:[{l:'Inspire',d:4},{l:'Retiens',d:7},{l:'Expire',d:8}],cycles:4,iv:null,running:false};</script>
-              <div class="echk">
-                <div class="chk" id="cb-0-2" onclick="check('0-2')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
-              </div>
-            </div>
-          </div></div><div class="epanel" id="ep-1">
-          <div class="ecard" id="ec-1-0">
-            <div class="ehead" onclick="tog('1-0')">
-              <div class="enum">01</div>
-              <div class="emeta">
-                <div class="etitle">Cohérence cardiaque 365</div>
-                <div class="etags"><span class="etag">5 min</span><span class="etag">3× par jour</span><span class="etag">Semaine 3–4</span></div>
-              </div>
-              <div class="etog">+</div>
-            </div>
-            <div class="ebody">
-              <p class="edesc">3 fois par jour, 6 respirations par minute, pendant 5 minutes. Ce protocole réduit le cortisol de base et stabilise ta variabilité cardiaque — ton marqueur de résistance au stress.</p>
-              <div class="ewhy">💡 Pratiquée régulièrement, la cohérence cardiaque abaisse ton niveau de stress de base. En compétition, ton cortisol part d'un niveau plus bas — tu as plus de marge avant de décrocher.</div>
-              <div class="esteps"><div class='step'><p><strong>Inspire pendant 5 secondes</strong> par le nez, ventre qui se gonfle en premier.</p></div><div class='step'><p><strong>Expire pendant 5 secondes</strong> par la bouche, ventre qui se dégonfle.</p></div><div class='step'><p><strong>Maintiens ce rythme</strong> 6 respirations/min pendant exactement 5 minutes.</p></div><div class='step'><p><strong>Pratique 3 fois par jour :</strong> au réveil, avant un repas, le soir. Le timing précis compte.</p></div></div>
-              
-<div class="tzone">
-  <div class="tlbl">Cohérence cardiaque · 30 cycles</div>
-  <div class="tdisp" id="td-1-0">Prêt</div>
-  <div class="tphs"><div class="phd" id="1-0-p0">Inspire 5s</div><div class="phd" id="1-0-p1">Expire 5s</div></div>
-  <div class="tctrl">
-    <button class="tbtn pri" onclick="startPhase('1-0')">Démarrer</button>
-    <button class="tbtn" onclick="stopPhase('1-0')">Arrêter</button>
-  </div>
-  <div class="tnote">Durée totale : ~05:00</div>
-</div>
-<script>if(typeof PT === "undefined") var PT = {};
-PT['1-0']={phases:[{l:'Inspire',d:5},{l:'Expire',d:5}],cycles:30,iv:null,running:false};</script>
-              <div class="echk">
-                <div class="chk" id="cb-1-0" onclick="check('1-0')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
-              </div>
-            </div>
+          <button class="pdf-download-btn" onclick="downloadSemaine(0)">📄 Télécharger ma Semaine 1 — Identifier le déclencheur en PDF</button>
+          <button class="btn-unlock" onclick="unlockNext(0)">J'ai complété cette semaine →</button>
+        </div>
+        <div class="semaine locked" id="s1">
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
+          <div class="sem-header">
+            <div class="sem-num">Semaine 02</div>
+            <div class="sem-titre">Installer le focus processus</div>
+            <div class="sem-objectif">Remplacer le focus résultat par 3 intentions de jeu concrètes avant chaque compétition.</div>
           </div>
-          <div class="ecard" id="ec-1-1">
-            <div class="ehead" onclick="tog('1-1')">
-              <div class="enum">02</div>
-              <div class="emeta">
-                <div class="etitle">Rituel pré-compétition</div>
-                <div class="etags"><span class="etag">15 min</span><span class="etag">Avant chaque compétition</span><span class="etag">Semaine 3–4</span></div>
-              </div>
-              <div class="etog">+</div>
-            </div>
-            <div class="ebody">
-              <p class="edesc">Construire une séquence fixe, identique, rituelle que tu exécutes avant chaque compétition. Le rituel signale à ton cerveau : « Je maîtrise ce contexte ».</p>
-              <div class="ewhy">💡 L'incertitude est le carburant du stress. Un rituel élimine l'incertitude des 15 minutes avant le départ — ton cerveau cesse de simuler les catastrophes car il sait ce qui va se passer.</div>
-              <div class="esteps"><div class='step'><p><strong>Définis ta séquence en 5 étapes fixes :</strong> ex. (1) Musique spécifique, (2) 5 min mobilité, (3) Respiration 4-7-8 ×4, (4) Mot d'ancrage, (5) Visualisation 2 min.</p></div><div class='step'><p><strong>Teste ce rituel à l'entraînement</strong> pendant 2 semaines — pas seulement en compétition. Il doit être automatisé avant.</p></div><div class='step'><p><strong>Ne change jamais la séquence.</strong> L'efficacité vient de la répétition identique. Zéro improvisation.</p></div></div>
-              
-<div class="tzone">
-  <div class="tlbl">Rituel pré-compétition</div>
-  <div class="tdisp" id="td-1-1">15:00</div>
-  <div class="tctrl">
-    <button class="tbtn pri" onclick="startTimer('1-1',900)">Démarrer</button>
-    <button class="tbtn" onclick="resetTimer('1-1',900)">Réinitialiser</button>
-  </div>
-  <div class="tnote">Prépare-toi avant de lancer</div>
-</div>
-              <div class="echk">
-                <div class="chk" id="cb-1-1" onclick="check('1-1')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
+          <div class="exos">
+            <div class="exo">
+              <div class="exo-num">01</div>
+              <div class="exo-body">
+                <div class="exo-title">Les 3 intentions de jeu</div>
+                <div class="exo-desc">La veille de chaque compétition, écris 3 choses que tu veux faire — pas obtenir, faire. Ex: 'je maintiens mon rythme en début de course', 'je reste dans ma ligne', 'j'applique ma technique de départ'. Ces 3 intentions remplacent le résultat comme objectif.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Ce que je veux FAIRE. Pas ce que je veux OBTENIR.</span>
+                </div>
               </div>
             </div>
+            <div class="exo">
+              <div class="exo-num">02</div>
+              <div class="exo-body">
+                <div class="exo-title">Le reset entre les actions</div>
+                <div class="exo-desc">Entre chaque action ou phase de compétition : souffle fort par la bouche une fois, fixe un point devant toi 2 secondes, puis ramène-toi à tes 3 intentions. Cette séquence de 5 secondes coupe le circuit d'anticipation anxieuse.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Après chaque action — reset. Revenir aux intentions.</span>
+                </div>
+              </div>
+            </div></div>
+          
+        </div>
+        <div class="semaine locked" id="s2">
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
+          <div class="sem-header">
+            <div class="sem-num">Semaine 03</div>
+            <div class="sem-titre">Ancrer le processus sous pression</div>
+            <div class="sem-objectif">Tenir le focus processus même quand la pression monte au maximum.</div>
           </div>
-          <div class="ecard" id="ec-1-2">
-            <div class="ehead" onclick="tog('1-2')">
-              <div class="enum">03</div>
-              <div class="emeta">
-                <div class="etitle">Visualisation de compétition</div>
-                <div class="etags"><span class="etag">8 min</span><span class="etag">3× par semaine</span><span class="etag">Semaine 4</span></div>
-              </div>
-              <div class="etog">+</div>
-            </div>
-            <div class="ebody">
-              <p class="edesc">Simuler mentalement, avec tous tes sens, une compétition réussie. Ton cerveau ne fait pas la différence entre une expérience vécue et une expérience parfaitement imaginée.</p>
-              <div class="ewhy">💡 La visualisation crée des traces neurales de « compétition réussie ». Plus tu accumules ces traces, plus ton cerveau traite la compétition comme un contexte familier — et moins il déclenche l'alarme.</div>
-              <div class="esteps"><div class='step'><p><strong>Allonge-toi</strong> confortablement. 3 respirations lentes pour entrer en détente.</p></div><div class='step'><p><strong>Visualise le lieu :</strong> sons, odeurs, lumière, température. Sois très précis — cerveau familiarisé = cerveau non alarmé.</p></div><div class='step'><p><strong>Vis le moment clé</strong> avec fluidité. Ressens les sensations dans ton corps.</p></div><div class='step'><p><strong>Intègre un moment de stress contrôlé :</strong> ressens la pression, puis utilise ta respiration pour la réguler. Entraîne-toi à gérer le stress dans la visualisation aussi.</p></div></div>
-              
-<div class="tzone">
-  <div class="tlbl">Visualisation</div>
-  <div class="tdisp" id="td-1-2">08:00</div>
-  <div class="tctrl">
-    <button class="tbtn pri" onclick="startTimer('1-2',480)">Démarrer</button>
-    <button class="tbtn" onclick="resetTimer('1-2',480)">Réinitialiser</button>
-  </div>
-  <div class="tnote">Prépare-toi avant de lancer</div>
-</div>
-              <div class="echk">
-                <div class="chk" id="cb-1-2" onclick="check('1-2')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
+          <div class="exos">
+            <div class="exo">
+              <div class="exo-num">01</div>
+              <div class="exo-body">
+                <div class="exo-title">La visualisation processus</div>
+                <div class="exo-desc">10 min avant de dormir, 3 fois par semaine : visualise ta prochaine compétition. Mais visualise tes ACTIONS — pas le résultat. Vois-toi exécuter tes 3 intentions. Ressens la satisfaction de bien faire — pas de bien finir. Ton cerveau programme ce que tu répètes.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Je visualise ce que je FAIS. Pas ce que j'OBTIENS.</span>
+                </div>
               </div>
             </div>
-          </div></div><div class="epanel" id="ep-2">
-          <div class="ecard" id="ec-2-0">
-            <div class="ehead" onclick="tog('2-0')">
-              <div class="enum">01</div>
-              <div class="emeta">
-                <div class="etitle">Simulation pression</div>
-                <div class="etags"><span class="etag">Variable</span><span class="etag">À l'entraînement</span><span class="etag">Semaine 5</span></div>
+            <div class="exo">
+              <div class="exo-num">02</div>
+              <div class="exo-body">
+                <div class="exo-title">Le test sous pression artificielle</div>
+                <div class="exo-desc">À l'entraînement, crée de la pression : public de 3 personnes, chrono visible, mini-enjeu avec un partenaire. Utilise ton protocole de focus processus dans cette situation. L'exposition entraîne la résistance. Ce que tu répètes sous pression légère devient automatique sous pression forte.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">S'entraîner sous pression pour tenir le processus sous pression.</span>
+                </div>
               </div>
-              <div class="etog">+</div>
-            </div>
-            <div class="ebody">
-              <p class="edesc">Créer artificiellement de la pression à l'entraînement pour exposer ton cerveau aux conditions de compétition. Tu entraînes la gestion du stress comme tu entraînes un geste technique.</p>
-              <div class="ewhy">💡 Tu ne peux pas apprendre à nager en lisant un livre. De la même façon, tu ne peux pas apprendre à gérer le stress en compétition sans t'y exposer de façon contrôlée.</div>
-              <div class="esteps"><div class='step'><p><strong>Demande à ton entraîneur</strong> d'introduire des contraintes : public, chrono, compétiteurs présents, enjeux annoncés.</p></div><div class='step'><p><strong>Avant chaque simulation :</strong> applique ton rituel pré-compétition complet.</p></div><div class='step'><p><strong>Après :</strong> note ton niveau de stress sur 10 au départ, et son évolution pendant.</p></div><div class='step'><p><strong>Augmente progressivement</strong> : semaine 5 = pression légère, semaine 6 = conditions proches du réel.</p></div></div>
-              
-              <div class="echk">
-                <div class="chk" id="cb-2-0" onclick="check('2-0')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
-              </div>
-            </div>
+            </div></div>
+          
+        </div>
+        <div class="semaine locked" id="s3">
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
+          <div class="sem-header">
+            <div class="sem-num">Semaine 04</div>
+            <div class="sem-titre">Le rituel de compétition</div>
+            <div class="sem-objectif">Créer un rituel pré-compétition qui installe le focus processus avant même le départ.</div>
           </div>
-          <div class="ecard" id="ec-2-1">
-            <div class="ehead" onclick="tog('2-1')">
-              <div class="enum">02</div>
-              <div class="emeta">
-                <div class="etitle">Ancrage sensoriel</div>
-                <div class="etags"><span class="etag">2 min</span><span class="etag">Avant chaque départ</span><span class="etag">Semaine 5–6</span></div>
+          <div class="exos">
+            <div class="exo">
+              <div class="exo-num">01</div>
+              <div class="exo-body">
+                <div class="exo-title">Construire ton rituel en 3 temps</div>
+                <div class="exo-desc">Ton rituel doit couvrir 3 moments : la veille (lire tes 3 intentions), le matin (cohérence cardiaque 5 min + répéter tes intentions à voix haute), et les 10 min avant le départ (musique + respiration + regard sur un point fixe + tes intentions). Identique à chaque fois. La répétition crée le réflexe.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Même séquence. À chaque fois. Le cerveau reconnaît et s'installe.</span>
+                </div>
               </div>
-              <div class="etog">+</div>
-            </div>
-            <div class="ebody">
-              <p class="edesc">Créer un ancrage physique — un geste, une pression, une sensation — qui active instantanément ton état de calme-focus. À déclencher dans les grilles, 30 secondes avant le départ.</p>
-              <div class="ewhy">💡 Un ancrage bien conditionné court-circuite la réponse de stress en 3 secondes. C'est ton outil de compétition le plus précieux à long terme.</div>
-              <div class="esteps"><div class='step'><p><strong>Choisis ton ancrage :</strong> pression pouce-index, toucher d'un point précis sur ta cuisse, trois clignements lents. Simple, discret, répétable.</p></div><div class='step'><p><strong>Conditionne l'ancrage :</strong> pendant 2 semaines, déclenche-le UNIQUEMENT quand tu es dans un état de calme-focus optimal.</p></div><div class='step'><p><strong>En compétition :</strong> dans les grilles, ancrage + 2 respirations 4-7-8. Séquence fixe et automatique.</p></div></div>
-              
-<div class="tzone">
-  <div class="tlbl">Ancrage sensoriel</div>
-  <div class="tdisp" id="td-2-1">02:00</div>
-  <div class="tctrl">
-    <button class="tbtn pri" onclick="startTimer('2-1',120)">Démarrer</button>
-    <button class="tbtn" onclick="resetTimer('2-1',120)">Réinitialiser</button>
-  </div>
-  <div class="tnote">Prépare-toi avant de lancer</div>
-</div>
-              <div class="echk">
-                <div class="chk" id="cb-2-1" onclick="check('2-1')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
-              </div>
-            </div>
+            </div></div>
+          
+        </div>
+        <div class="semaine locked" id="s4">
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
+          <div class="sem-header">
+            <div class="sem-num">Semaine 05</div>
+            <div class="sem-titre">La récupération après erreur</div>
+            <div class="sem-objectif">Revenir au processus en moins de 10 secondes après une erreur.</div>
           </div>
-          <div class="ecard" id="ec-2-2">
-            <div class="ehead" onclick="tog('2-2')">
-              <div class="enum">03</div>
-              <div class="emeta">
-                <div class="etitle">Débrief post-compétition</div>
-                <div class="etags"><span class="etag">20 min</span><span class="etag">Dans les 2h après</span><span class="etag">Semaine 5–6</span></div>
+          <div class="exos">
+            <div class="exo">
+              <div class="exo-num">01</div>
+              <div class="exo-body">
+                <div class="exo-title">Le protocole Reset</div>
+                <div class="exo-desc">Après une erreur en compétition — exactement dans cet ordre : 1. Souffle fort par la bouche (expulse physiquement la tension). 2. Un seul mot : 'Suivant'. 3. Ramène-toi à tes intentions. En 10 secondes. Pas d'analyse pendant la compétition. L'analyse c'est après. Pendant : seulement le présent.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Souffle. Suivant. Revenir aux intentions. 10 secondes.</span>
+                </div>
               </div>
-              <div class="etog">+</div>
             </div>
-            <div class="ebody">
-              <p class="edesc">Un protocole structuré pour transformer chaque compétition en apprentissage, et éviter la spirale d'auto-critique qui réalimente le stress futur.</p>
-              <div class="ewhy">💡 L'Hyperstressé a tendance à ruminer les échecs et minimiser les réussites. Ce débrief force un équilibre cognitif qui protège contre les schémas d'anticipation négative.</div>
-              <div class="esteps"><div class='step'><p><strong>Attend 2 heures</strong> après la compétition. Laisse l'émotion retomber avant d'analyser.</p></div><div class='step'><p><strong>Réussites (5 min) :</strong> 3 choses qui ont bien fonctionné — même dans une mauvaise performance, il y en a toujours.</p></div><div class='step'><p><strong>Points à corriger (5 min) :</strong> 2 points précis et actionnables. Pas « j'ai mal géré le stress » mais « ma respiration s'est emballée dans les grilles ».</p></div><div class='step'><p><strong>Intention (5 min) :</strong> une seule phrase d'intention concrète et actionnée par toi pour la prochaine fois.</p></div></div>
-              
-<div class="tzone">
-  <div class="tlbl">Débrief post-compétition</div>
-  <div class="tdisp" id="td-2-2">20:00</div>
-  <div class="tctrl">
-    <button class="tbtn pri" onclick="startTimer('2-2',1200)">Démarrer</button>
-    <button class="tbtn" onclick="resetTimer('2-2',1200)">Réinitialiser</button>
-  </div>
-  <div class="tnote">Prépare-toi avant de lancer</div>
+            <div class="exo">
+              <div class="exo-num">02</div>
+              <div class="exo-body">
+                <div class="exo-title">L'erreur comme information — pas comme verdict</div>
+                <div class="exo-desc">Une erreur te donne une information sur ce que tu dois ajuster dans TON PROCESSUS — pas sur ta valeur. 'J'ai raté parce que je pensais au résultat' est une information utile. 'Je suis nul' n'est pas une information — c'est un bruit. Apprends à distinguer les deux immédiatement.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Chaque erreur = une info sur mon processus. Rien d'autre.</span>
+                </div>
+              </div>
+            </div></div>
+          
+        </div>
+        <div class="semaine locked" id="s5">
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
+          <div class="sem-header">
+            <div class="sem-num">Semaine 06</div>
+            <div class="sem-titre">Automatiser le processus</div>
+            <div class="sem-objectif">Rendre le focus processus automatique — qu'il se déclenche sans effort sous pression maximale.</div>
+          </div>
+          <div class="exos">
+            <div class="exo">
+              <div class="exo-num">01</div>
+              <div class="exo-body">
+                <div class="exo-title">Le bilan des 6 semaines</div>
+                <div class="exo-desc">Reprends tes 3 intentions des 6 dernières semaines de compétition. Calcule ton score moyen de tenue du processus. Est-ce qu'il a progressé ? Sur quelles intentions tu as le mieux tenu ? Sur lesquelles tu glisses encore vers le résultat ? C'est ton plan pour les 6 prochaines semaines.</div>
+                <div class="exo-focus">
+                  <span class="focus-label">Focus processus</span>
+                  <span class="focus-text">Mon processus s'améliore semaine après semaine. Les données le prouvent.</span>
+                </div>
+              </div>
+            </div></div>
+          
+        </div>
 </div>
-              <div class="echk">
-                <div class="chk" id="cb-2-2" onclick="check('2-2')"></div>
-                <span class="chk-l">Marquer comme pratiqué aujourd'hui</span>
-              </div>
-            </div>
-          </div></div>
-  </div>
-</section>
-<div class="gline"></div>
-
-<!-- PROGRESSION -->
-<section class="prog-s">
-  <div class="si">
-    <div class="prog-hd">
-      <div><span class="stag">Ton avancement</span><div class="prog-tt">PROGRESSION</div></div>
-      <div class="prog-ct"><span id="done-c">0</span>&thinsp;/&thinsp;<span id="tot-c">0</span></div>
-    </div>
-    <div class="pbars">
-      <div class="prow">
-        <div class="prow-l">Sem. 1–2 · Conscience</div>
-        <div class="prow-b"><div class="prow-f" id="pf-0"></div></div>
-        <div class="prow-s" id="ps-0">0 / 3 exercices</div>
-      </div>
-      <div class="prow">
-        <div class="prow-l">Sem. 3–4 · Régulation</div>
-        <div class="prow-b"><div class="prow-f" id="pf-1"></div></div>
-        <div class="prow-s" id="ps-1">0 / 3 exercices</div>
-      </div>
-      <div class="prow">
-        <div class="prow-l">Sem. 5–6 · Intégration</div>
-        <div class="prow-b"><div class="prow-f" id="pf-2"></div></div>
-        <div class="prow-s" id="ps-2">0 / 3 exercices</div>
-      </div></div>
-  </div>
-</section>
-<div class="gline"></div>
 
 <!-- CTA -->
-<section class="cta-s">
-  <div class="cta-in">
-    <span class="stag" style="color:var(--gold-l)">Tu veux aller encore plus loin ?</span>
-    <h2 class="cta-h">LA SUITE<br><em>AVEC FABIEN</em></h2>
-    <p class="cta-sub">Ce programme est une étape. Voici les deux prochaines.</p>
-    <div class="cta-duo">
-      <div class="cta-duo-card cta-duo-main">
-        <div class="cta-duo-label">⭐ Recommandé · Programme Premium</div>
-        <div class="cta-duo-name">PROGRAMME<br>PREMIUM AXE</div>
-        <div class="cta-duo-desc">4 modules personnalisés · 4 RDV avec Fabien · Système de déblocage progressif · Pacte final · Accès à vie.<br><br><strong style="color:var(--gold-l);">Tout ce qu'il te faut pour transformer durablement ton mental en compétition.</strong></div>
-        <a href="https://buy.stripe.com/7sY7sK8q03Uy81fbVQ8IU0a" class="cta-duo-btn cta-duo-btn-gold">ACCÉDER AU PROGRAMME PREMIUM — 347€ →</a>
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-label">Prochaine étape</div>
+    <h2 class="cta-title">TU VEUX ALLER<br><em>PLUS LOIN ?</em></h2>
+    <p class="cta-sub">Le Programme Premium va encore plus loin — 4 modules personnalisés, 4 RDV directs avec Fabien, un accompagnement sur mesure selon ton profil et ton âge.</p>
+    <div class="cta-cards">
+      <div class="cta-card featured">
+        <div class="cc-tag">⭐ Recommandé — Programme Premium</div>
+        <div class="cc-name">PROGRAMME<br>PREMIUM AXE</div>
+        <div class="cc-desc">4 modules · 4 RDV avec Fabien · Focus processus poussé à l'extrême · Pacte final · Accès à vie.</div>
+        <div class="cc-price">397€</div>
+        <div class="cc-sub">Paiement unique · Accès à vie</div>
+        <a href="https://buy.stripe.com/7sY7sK8q03Uy81fbVQ8IU0a" class="cc-btn">ACCÉDER AU PREMIUM →</a>
       </div>
-      </div>
-      <div class="cta-duo-card">
-        <div class="cta-duo-label">Gratuit · 30 minutes</div>
-        <div class="cta-duo-name">APPEL DÉCOUVERTE</div>
-        <div class="cta-duo-desc">Un appel direct avec Fabien Pinton pour voir comment la méthode AXE s'applique à ta situation et tes objectifs spécifiques.</div>
-        <a href="https://tidycal.com/fpinton/appel-decouverte" class="cta-duo-btn cta-duo-btn-outline">RÉSERVER MON APPEL GRATUIT →</a>
+      <div class="cta-card">
+        <div class="cc-tag">Appel découverte</div>
+        <div class="cc-name">PARLER AVEC<br>FABIEN</div>
+        <div class="cc-desc">30 minutes pour faire le point sur ton profil, tes blocages, et la meilleure voie pour avancer.</div>
+        <div class="cc-price">Gratuit</div>
+        <div class="cc-sub">30 min · Visioconférence</div>
+        <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" class="cc-btn outline">RÉSERVER MON APPEL →</a>
       </div>
     </div>
   </div>
 </section>
 
-<div style="background:var(--cream3);border-top:1px solid var(--bdr);padding:28px 48px;text-align:center;">
-  <div style="font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Votre avis compte</div>
-  <p style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--inkd);margin-bottom:16px;line-height:1.6;">Ce programme vous a aidé ? Laissez un avis Google — ça aide d'autres sportifs à me trouver.</p>
-  <a href="https://g.page/r/CXtpS9ZcTZk-EBM/review" target="_blank" style="display:inline-block;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:var(--gold);color:var(--ink);text-decoration:none;padding:12px 28px;">⭐ LAISSER UN AVIS GOOGLE →</a>
-</div>
-<footer><p>Méthode AXE Mental Performance © 2026 · Fabien Pinton Préparateur Mental · Rapport personnel et non transférable</p></footer>
+<!-- AVIS -->
+<section class="avis-section">
+  <a href="https://g.page/r/CXtpS9ZcTZk-EBM/review" target="_blank">⭐ Ce programme vous a aidé ? Laissez un avis Google →</a>
+</section>
+
+<footer style="background:var(--cream3);border-top:1px solid var(--bdr);padding:20px 48px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.2em;color:var(--gold);">FABIEN PINTON · MÉTHODE AXE</div>
+  <div style="font-size:9px;letter-spacing:.15em;color:var(--inkf);">contact@fabien-pinton.fr · 07.72.28.94.57</div>
+</footer>
 
 <script>
-// ── Timers simples ──
-const ST = {};
-function startTimer(id, dur) {
-  if (ST[id]) clearInterval(ST[id].iv);
-  let rem = dur;
-  const d = document.getElementById('td-' + id);
-  d.className = 'tdisp run';
-  function tick() {
-    const m = Math.floor(rem/60), s = rem%60;
-    d.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-    if (rem <= 10 && rem > 0) { d.className = 'tdisp warn'; }
-    if (rem <= 0) { clearInterval(ST[id].iv); d.textContent = 'TERMINÉ ✓'; d.className = 'tdisp done'; beep(); return; }
-    rem--;
-  }
-  tick();
-  ST[id] = { iv: setInterval(tick, 1000) };
-}
-function resetTimer(id, dur) {
-  if (ST[id]) clearInterval(ST[id].iv);
-  const d = document.getElementById('td-' + id);
-  const m = Math.floor(dur/60), s = dur%60;
-  d.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-  d.className = 'tdisp';
-}
+// Progress bar
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('sc',scrollY>60);
+  const h=document.body.scrollHeight-window.innerHeight;
+  document.getElementById('pfill').style.width=(h>0?scrollY/h*100:0)+'%';
+});
 
-// ── Timers phases ──
-if(typeof PT === "undefined") var PT = {};
-function startPhase(id) {
-  const t = PT[id];
-  if (!t || t.running) return;
-  t.running = true;
-  let cy = 0, pi = 0, rem = t.phases[0].d;
-  const d = document.getElementById('td-' + id);
-  d.className = 'tdisp run';
-  document.getElementById(id + '-p0').classList.add('on');
-  function tick() {
-    d.textContent = t.phases[pi].l.toUpperCase() + ' — ' + rem + 's';
-    if (rem <= 0) {
-      document.getElementById(id + '-p' + pi).classList.replace('on','dn');
-      pi++;
-      if (pi >= t.phases.length) { pi = 0; cy++; t.phases.forEach((_,i) => { const e = document.getElementById(id+'-p'+i); if(e){e.classList.remove('on','dn');} }); }
-      if (cy >= t.cycles) { clearInterval(t.iv); t.running = false; d.textContent = 'TERMINÉ ✓'; d.className = 'tdisp done'; beep(); return; }
-      rem = t.phases[pi].d;
-      const e = document.getElementById(id + '-p' + pi);
-      if(e) e.classList.add('on');
-      beep();
+// Semaine unlock
+const DATA = JSON.parse(localStorage.getItem('axe_profil_stress')||'{"unlocked":[0]}');
+function save(){ try{localStorage.setItem('axe_profil_stress',JSON.stringify(DATA));}catch(e){} }
+
+function renderLocks(){
+  document.querySelectorAll('.semaine').forEach((s,i)=>{
+    if(DATA.unlocked.includes(i)){
+      s.classList.remove('locked');
+      s.classList.add('active');
     }
-    rem--;
+  });
+}
+
+function unlockNext(i){
+  if(!DATA.unlocked.includes(i+1)){
+    DATA.unlocked.push(i+1);
+    save();
+    renderLocks();
+    const next=document.getElementById('s'+(i+1));
+    if(next) next.scrollIntoView({behavior:'smooth',block:'start'});
   }
-  tick();
-  t.iv = setInterval(tick, 1000);
-}
-function stopPhase(id) {
-  const t = PT[id];
-  if (!t) return;
-  if (t.iv) clearInterval(t.iv);
-  t.running = false;
-  const d = document.getElementById('td-' + id);
-  d.textContent = 'Prêt';
-  d.className = 'tdisp';
-  t.phases.forEach((_,i) => { const e = document.getElementById(id+'-p'+i); if(e){e.classList.remove('on','dn');} });
 }
 
-function beep() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.frequency.value = 880;
-    g.gain.setValueAtTime(0.25, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-    o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.35);
-  } catch(e) {}
+renderLocks();
+
+// ── NOTES & PDF ──
+function saveNote(sid){
+  const ta=document.getElementById('note-'+sid);
+  if(!ta)return;
+  DATA['note_'+sid]=ta.value;
+  save();
+  const btn=ta.parentElement.querySelector('.note-save');
+  const orig=btn.textContent;
+  btn.textContent='✓ Enregistré';
+  setTimeout(()=>btn.textContent=orig,2000);
 }
 
-// ── Tabs ──
-function tab(i) {
-  document.querySelectorAll('.etab').forEach((t,j) => t.classList.toggle('on', i===j));
-  document.querySelectorAll('.epanel').forEach((p,j) => p.classList.toggle('on', i===j));
-}
-
-// ── Accordion ──
-function tog(id) { document.getElementById('ec-' + id).classList.toggle('open'); }
-
-// ── Check & progress ──
-const CK = JSON.parse(localStorage.getItem('axe_ck_hyperstresse') || '{}');
-function check(id) {
-  const b = document.getElementById('cb-' + id);
-  CK[id] = !CK[id];
-  b.classList.toggle('on', CK[id]);
-  b.textContent = CK[id] ? '✓' : '';
-  try { localStorage.setItem('axe_ck_hyperstresse', JSON.stringify(CK)); } catch(e) {}
-  updProg();
-}
-function updProg() {
-  let tot = 0, done = 0;
-  document.querySelectorAll('.chk').forEach(b => {
-    tot++;
-    if (b.classList.contains('on')) done++;
-  });
-  document.getElementById('done-c').textContent = done;
-  document.getElementById('tot-c').textContent = tot;
-  document.querySelectorAll('.prow').forEach((row, gi) => {
-    const cards = row.closest('.pbars') ? null : null; // handled per-group
-  });
-  // per group
-  document.querySelectorAll('.epanel').forEach((panel, gi) => {
-    const checks = panel.querySelectorAll('.chk');
-    const d = Array.from(checks).filter(c => c.classList.contains('on')).length;
-    const fill = document.getElementById('pf-' + gi);
-    const stat = document.getElementById('ps-' + gi);
-    if (fill) fill.style.width = (checks.length > 0 ? Math.round(d/checks.length*100) : 0) + '%';
-    if (stat) stat.textContent = d + ' / ' + checks.length + ' exercices';
+function restoreNotes(){
+  document.querySelectorAll('.note-ta').forEach(ta=>{
+    const sid=ta.id.replace('note-','');
+    if(DATA['note_'+sid]) ta.value=DATA['note_'+sid];
   });
 }
 
-// ── Restore checks ──
-document.querySelectorAll('.chk').forEach(b => {
-  const id = b.id.replace('cb-', '');
-  if (CK[id]) { b.classList.add('on'); b.textContent = '✓'; }
-});
+function downloadSemaine(sid){
+  saveNote(sid);
+  const sem=document.getElementById('s'+sid);
+  if(!sem)return;
+  const titre=sem.querySelector('.sem-titre')?.textContent||'Semaine '+(sid+1);
+  const objectif=sem.querySelector('.sem-objectif')?.textContent||'';
+  const note=DATA['note_'+sid]||'';
+  let exosHtml='';
+  sem.querySelectorAll('.exo').forEach((e,i)=>{
+    const t=e.querySelector('.exo-title')?.textContent||'';
+    const d=e.querySelector('.exo-desc')?.textContent||'';
+    const f=e.querySelector('.focus-text')?.textContent||'';
+    exosHtml+=`<div style="margin-bottom:20px;padding:16px 20px;background:#F9F6F1;border-left:3px solid #A8852A;">
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#7A6020;margin-bottom:6px;">Exercice ${i+1}</div>
+      <div style="font-size:15px;font-weight:600;color:#A8852A;margin-bottom:8px;">${t}</div>
+      <div style="font-size:13px;color:#5A5040;line-height:1.75;margin-bottom:10px;">${d}</div>
+      <div style="font-size:11px;font-style:italic;color:#7A6020;border-left:2px solid #A8852A;padding-left:10px;">Focus : ${f}</div>
+    </div>`;
+  });
+  const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+<style>
+  body{font-family:'Georgia',serif;background:#F7F3EC;margin:0;color:#1A1612;}
+  .page{max-width:680px;margin:0 auto;padding:0;}
+  .hdr{background:#1A1612;padding:36px 44px;text-align:center;}
+  .hdr-logo{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:10px;font-family:Arial,sans-serif;}
+  .hdr-week{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.5);font-family:Arial,sans-serif;}
+  .hdr-titre{font-size:36px;font-weight:bold;letter-spacing:.05em;color:#F7F3EC;margin:8px 0 4px;}
+  .hdr-obj{font-size:13px;font-style:italic;color:rgba(247,243,236,.7);line-height:1.6;}
+  .body{padding:40px 44px;}
+  .section-label{font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:#A8852A;margin-bottom:16px;border-bottom:1px solid rgba(168,133,42,.2);padding-bottom:6px;font-family:Arial,sans-serif;}
+  .note-box{background:#FDFAF5;border:1px solid rgba(168,133,42,.2);padding:20px 24px;white-space:pre-wrap;font-size:13px;color:#5A5040;line-height:1.8;min-height:60px;}
+  .ftr{background:#1A1612;padding:14px 44px;text-align:center;}
+  .ftr p{font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:rgba(247,243,236,.3);margin:0;font-family:Arial,sans-serif;}
+</style></head><body><div class="page">
+  <div class="hdr">
+    <div class="hdr-logo">Fabien Pinton · Méthode AXE · Préparation Mentale</div>
+    <div class="hdr-week">Semaine ${sid+1} · Programme AXE</div>
+    <div class="hdr-titre">${titre}</div>
+    <div class="hdr-obj">${objectif}</div>
+  </div>
+  <div class="body">
+    <div class="section-label">Exercices de la semaine</div>
+    ${exosHtml}
+    <div class="section-label" style="margin-top:28px;">Mes notes</div>
+    <div class="note-box">${note||'(aucune note enregistrée)'}</div>
+  </div>
+  <div class="ftr"><p>Méthode AXE Mental Performance © 2026 · Fabien Pinton · fabien-pinton.fr</p></div>
+</div></body></html>`;
+  const win=window.open('','_blank');
+  win.document.write(html);win.document.close();
+  win.onload=()=>{win.focus();win.print();};
+}
 
-// ── Scroll ──
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('sc', scrollY > 60);
-  const h = document.body.scrollHeight - window.innerHeight;
-  document.getElementById('pfill').style.width = (h > 0 ? scrollY/h*100 : 0) + '%';
-});
+restoreNotes();
 
-// ── Reveal ──
-const ro = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting){x.target.classList.add('vi');ro.unobserve(x.target);} }), {threshold:.08, rootMargin:'0px 0px -20px 0px'});
-document.querySelectorAll('.rv').forEach(el => ro.observe(el));
-
-// ── Score bars ──
-setTimeout(() => document.querySelectorAll('.sp-f').forEach(el => { el.style.width = el.dataset.v + '%'; }), 500);
-
-updProg();
 </script>
 </body>
 </html>
