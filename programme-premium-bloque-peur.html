@@ -144,22 +144,83 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   .prdv-block{padding:32px 24px;}
   .ppacte{padding:40px 24px;}
 }
+
+/* ── SÉLECTEUR D'ÂGE ── */
+.age-modal-overlay{position:fixed;inset:0;background:rgba(26,22,18,0.92);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;}
+.age-modal{background:var(--cream2);max-width:560px;width:100%;position:relative;overflow:hidden;}
+.age-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
+.age-modal-header{background:var(--ink);padding:32px 36px;}
+.age-modal-tag{font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.age-modal-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.06em;color:var(--cream2);line-height:.95;margin-bottom:8px;}
+.age-modal-sub{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:rgba(247,243,236,.7);line-height:1.6;}
+.age-modal-body{padding:28px 36px;}
+.age-modal-label{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold-d);margin-bottom:16px;}
+.age-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.age-card{border:1px solid var(--bdr2);padding:16px 18px;cursor:pointer;transition:all .25s;background:var(--cream3);}
+.age-card:hover{border-color:var(--gold);background:rgba(168,133,42,.06);}
+.age-card.sel{border-color:var(--gold);background:rgba(168,133,42,.1);border-width:2px;}
+.age-card-num{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;color:var(--gold);margin-bottom:4px;}
+.age-card-desc{font-size:11px;color:var(--inkd);line-height:1.5;}
+.age-modal-note{font-size:10px;color:var(--inkf);margin-bottom:20px;line-height:1.6;font-style:italic;}
+.age-modal-btn{width:100%;background:var(--gold);border:none;color:var(--cream2);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.2em;padding:16px;cursor:pointer;transition:background .3s;}
+.age-modal-btn:hover{background:var(--gold-d);}
+.age-modal-btn:disabled{opacity:.4;cursor:not-allowed;}
+.age-change-btn{font-size:9px;letter-spacing:.22em;text-transform:uppercase;background:transparent;border:1px solid var(--bdr2);color:var(--gold-d);padding:5px 14px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:12px;transition:all .3s;}
+.age-change-btn:hover{border-color:var(--gold);color:var(--gold);}
+@media(max-width:640px){.age-cards{grid-template-columns:1fr;}.age-modal-header{padding:24px 20px;}.age-modal-body{padding:20px 20px;}}
+
 </style>
 </head>
 <body>
+
+<!-- SÉLECTEUR D'ÂGE -->
+<div class="age-modal-overlay" id="ageOverlay">
+  <div class="age-modal">
+    <div class="age-modal-header">
+      <div class="age-modal-tag">Personnalisation · Étape importante</div>
+      <div class="age-modal-title">QUELLE EST<br>TA TRANCHE D'ÂGE ?</div>
+      <div class="age-modal-sub">Les exercices, le mantra et les adaptations sont différents selon ton âge. Cette sélection permet de personnaliser entièrement ton programme.</div>
+    </div>
+    <div class="age-modal-body">
+      <div class="age-modal-label">Sélectionne ta tranche d'âge</div>
+      <div class="age-cards">
+        <div class="age-card" onclick="selectAge('12-15')">
+          <div class="age-card-num">12 — 15 ans</div>
+          <div class="age-card-desc">Jeune compétiteur · Premières compétitions sérieuses</div>
+        </div>
+        <div class="age-card" onclick="selectAge('15-18')">
+          <div class="age-card-num">15 — 18 ans</div>
+          <div class="age-card-desc">Sport-études · Sélections · Pression de résultat</div>
+        </div>
+        <div class="age-card" onclick="selectAge('18-25')">
+          <div class="age-card-num">18 — 25 ans</div>
+          <div class="age-card-desc">Performance · Compétition régulière · Objectifs élevés</div>
+        </div>
+        <div class="age-card" onclick="selectAge('25+')">
+          <div class="age-card-num">25 ans & plus</div>
+          <div class="age-card-desc">Expérimenté · Régularité · Long terme</div>
+        </div>
+      </div>
+      <div class="age-modal-note">Tu pourras modifier cette sélection à tout moment en cliquant sur ton âge affiché en haut du programme.</div>
+      <button class="age-modal-btn" id="ageContinueBtn" onclick="confirmAge()" disabled>ACCÉDER À MON PROGRAMME →</button>
+    </div>
+  </div>
+</div>
+
 
 <div id="pbar"><div id="pfill"></div></div>
 
 <nav id="nav">
   <a href="https://fabien-pinton.fr" class="nlogo">FABIEN PINTON<span>Méthode AXE · Préparation Mentale</span></a>
   <div class="nav-badge">Programme Premium · Le Bloqué par la Peur</div>
+  <button class="age-change-btn" id="ageBadge" onclick="openAgeSelector()">Âge non défini</button>
 </nav>
 
 <!-- HERO -->
 <section class="phero">
   <div class="phero-eye">Programme Premium AXE · 397€ · Le Bloqué par la Peur</div>
   <h1 class="phero-title">COMMENT<br>ATTEINDRE<br><em>L'OBJECTIF.</em></h1>
-  <p class="phero-mantra">"Je joue mon jeu. Peu importe ce qui suit."<br><br>Ta peur du résultat te fait jouer pour ne pas perdre. Joue pour gagner.</p>
+  <p class="phero-mantra" id="mainMantra">"Je joue mon jeu. Peu importe ce qui suit."<br><br>Ta peur du résultat te fait jouer pour ne pas perdre. Joue pour gagner.</p>
   <div class="phero-process">4 modules · 4 RDV avec Fabien · Focus processus au cœur de chaque module</div>
 </section>
 
@@ -677,6 +738,78 @@ function downloadModule(mid){
 }
 
 restoreModNotes();
+
+checkUnlocks();
+
+const AGE_MANTRAS = {"12-15": "Joue ton jeu. Pas celui que tu crois que les autres veulent voir.", "15-18": "Le sélectionneur voit ton jeu — pas ton classement. Joue à fond.", "18-25": "Ton engagement est ton seul levier. Le résultat en découle.", "25+": "Des années de retenue. C"est fini. Joue ton jeu pour de bon."};
+
+// ── SÉLECTEUR D'ÂGE ──
+let selectedAge = DATA.age || null;
+
+function selectAge(age) {
+  selectedAge = age;
+  document.querySelectorAll('.age-card').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('.age-card').forEach(c => {
+    if (c.querySelector('.age-card-num').textContent.includes(age.replace('+','').trim().split('-')[0])) {
+      c.classList.add('sel');
+    }
+  });
+  // Fix for 25+
+  if (age === '25+') {
+    document.querySelectorAll('.age-card').forEach(c => {
+      if (c.querySelector('.age-card-num').textContent.includes('25 ans')) c.classList.add('sel');
+    });
+  }
+  document.getElementById('ageContinueBtn').disabled = false;
+}
+
+function confirmAge() {
+  if (!selectedAge) return;
+  DATA.age = selectedAge;
+  save();
+  document.getElementById('ageOverlay').style.display = 'none';
+  applyAgeContent();
+  updateAgeDisplay();
+}
+
+function openAgeSelector() {
+  document.getElementById('ageOverlay').style.display = 'flex';
+  // Re-select current age
+  if (DATA.age) selectAge(DATA.age);
+}
+
+function updateAgeDisplay() {
+  const labels = {'12-15':'12-15 ans','15-18':'15-18 ans','18-25':'18-25 ans','25+':'25 ans & +'};
+  const badge = document.getElementById('ageBadge');
+  if (badge && DATA.age) badge.textContent = labels[DATA.age] || DATA.age;
+}
+
+// Apply age-specific content
+function applyAgeContent() {
+  if (!DATA.age) return;
+  // Update age tags highlighting
+  document.querySelectorAll('.age-tag').forEach(tag => {
+    tag.classList.remove('active');
+    if (tag.textContent.startsWith(DATA.age)) tag.classList.add('active');
+  });
+  // Update mantra if age-specific versions exist
+  const mantras = AGE_MANTRAS[DATA.age];
+  if (mantras) {
+    const mantraEl = document.getElementById('mainMantra');
+    if (mantraEl) mantraEl.textContent = '"' + mantras + '"';
+  }
+}
+
+// Show overlay on load if no age set
+window.addEventListener('load', () => {
+  if (!DATA.age) {
+    document.getElementById('ageOverlay').style.display = 'flex';
+  } else {
+    document.getElementById('ageOverlay').style.display = 'none';
+    applyAgeContent();
+    updateAgeDisplay();
+  }
+});
 
 checkUnlocks();
 </script>
