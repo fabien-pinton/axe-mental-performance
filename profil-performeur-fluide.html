@@ -168,48 +168,44 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 </style>
 </head>
 <body>
-
-<!-- SÉLECTEUR D'ÂGE -->
-<div class="age-modal-overlay" id="ageOverlay">
-  <div class="age-modal">
-    <div class="age-modal-header">
-      <div class="age-modal-tag">Personnalisation · Étape importante</div>
-      <div class="age-modal-title">QUELLE EST<br>TA TRANCHE D'ÂGE ?</div>
-      <div class="age-modal-sub">Les exercices, le mantra et les adaptations sont différents selon ton âge. Cette sélection permet de personnaliser entièrement ton programme.</div>
-    </div>
-    <div class="age-modal-body">
-      <div class="age-modal-label">Sélectionne ta tranche d'âge</div>
-      <div class="age-cards">
-        <div class="age-card" onclick="selectAge('12-15')">
-          <div class="age-card-num">12 — 15 ans</div>
-          <div class="age-card-desc">Jeune compétiteur · Premières compétitions sérieuses</div>
-        </div>
-        <div class="age-card" onclick="selectAge('15-18')">
-          <div class="age-card-num">15 — 18 ans</div>
-          <div class="age-card-desc">Sport-études · Sélections · Pression de résultat</div>
-        </div>
-        <div class="age-card" onclick="selectAge('18-25')">
-          <div class="age-card-num">18 — 25 ans</div>
-          <div class="age-card-desc">Performance · Compétition régulière · Objectifs élevés</div>
-        </div>
-        <div class="age-card" onclick="selectAge('25+')">
-          <div class="age-card-num">25 ans & plus</div>
-          <div class="age-card-desc">Expérimenté · Régularité · Long terme</div>
-        </div>
-      </div>
-      <div class="age-modal-note">Tu pourras modifier cette sélection à tout moment en cliquant sur ton âge affiché en haut du programme.</div>
-      <button class="age-modal-btn" id="ageContinueBtn" onclick="confirmAge()" disabled>ACCÉDER À MON PROGRAMME →</button>
-    </div>
-  </div>
+<div id="AX_OV" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(20,16,12,0.95);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;">
+<div style="background:#FDFAF5;max-width:480px;width:100%;border-top:4px solid #A8852A;">
+<div style="background:#1A1612;padding:22px 26px;">
+<div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:6px;">Personnalisation du programme</div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#F7F3EC;letter-spacing:.04em;margin-bottom:6px;">QUELLE EST TA TRANCHE D'AGE ?</div>
+<div style="font-size:12px;color:rgba(247,243,236,.65);">Les exercices sont adaptes selon ton age.</div>
 </div>
-
+<div style="padding:18px 26px;">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+<div id="AX_A" onclick="AX_pick('12-15')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">12 - 15 ans</div>
+<div style="font-size:10px;color:#5A5040;margin-top:3px;">Jeune competiteur</div>
+</div>
+<div id="AX_B" onclick="AX_pick('15-18')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">15 - 18 ans</div>
+<div style="font-size:10px;color:#5A5040;margin-top:3px;">Sport-etudes</div>
+</div>
+<div id="AX_C" onclick="AX_pick('18-25')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">18 - 25 ans</div>
+<div style="font-size:10px;color:#5A5040;margin-top:3px;">Performance</div>
+</div>
+<div id="AX_D" onclick="AX_pick('25+')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
+<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">25 ans et plus</div>
+<div style="font-size:10px;color:#5A5040;margin-top:3px;">Experimente</div>
+</div>
+</div>
+<div style="font-size:10px;color:#8A7D6A;font-style:italic;margin-bottom:14px;">Tu pourras modifier ton age via le bouton en haut.</div>
+<div id="AX_BTN" onclick="AX_go()" style="background:#A8852A;color:#FDFAF5;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.18em;padding:14px;text-align:center;cursor:pointer;opacity:0.35;transition:opacity .3s;">ACCEDER A MON PROGRAMME</div>
+</div>
+</div>
+</div>
 
 <div id="pbar"><div id="pfill"></div></div>
 
 <nav id="nav">
   <a href="https://fabien-pinton.fr" class="nlogo">FABIEN PINTON<span>Méthode AXE · Préparation Mentale</span></a>
   <div class="nav-badge">Le Performeur Fluide</div>
-  <button class="age-change-btn" id="ageBadge" onclick="openAgeSelector()">Âge non défini</button>
+<span id="AX_BADGE" onclick="AX_open()" style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(168,133,42,.35);color:#7A6020;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:8px;vertical-align:middle;">Age</span>
 </nav>
 
 <!-- HERO -->
@@ -224,7 +220,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <!-- MANTRA -->
 <div class="mantra-band">
   <div class="mantra-label">Ton mantra de compétition</div>
-  <div class="mantra-text" id="mainMantra">"Je fais ce que j'aime faire. Le score vient après."</div>
+  <div class="mantra-text" id="AX_MANTRA">"Je fais ce que j'aime faire. Le score vient après."</div>
 </div>
 
 <!-- PROCESS INTRO -->
@@ -233,12 +229,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
     <div class="pi-label">Le fil conducteur des 6 semaines</div>
     <h2 class="pi-title">FOCUS <em>PROCESSUS.</em><br>PAS RÉSULTAT.</h2>
     <p class="pi-desc">Ce qui tue ton plaisir en compétition, c'est le focus sur le résultat. Quand tu penses au score, tu n'es plus dans le jeu — tu es dans l'évaluation. Le focus processus te remet dans le jeu. Et dans le jeu, tu es excellent.</p>
-    <div class="age-tags">
-      <div class="age-tag">12-15 ans — Joue pour le jeu. Pas pour le résultat. C'est là que t'es au mieux.</div>
-      <div class="age-tag">15-18 ans — Ton jeu naturel est ton meilleur argument pour la sélection.</div>
-      <div class="age-tag">18-25 ans — Le plaisir de jeu est ta stratégie — pas un luxe.</div>
-      <div class="age-tag">25+ — Tu savais jouer. Tu le sais encore. Le focus processus te reconnecte à ça.</div>
-    </div>
+    <div id="AX_AGE_PHRASE" style="margin-top:24px;background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:16px 20px;font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--gold-d);display:none;"></div>
   </div>
 </section>
 
@@ -466,75 +457,7 @@ function unlockNext(i){
     save();
     renderLocks();
 
-const AGE_MANTRAS = {"12-15": "Joue pour le jeu. Pas pour le résultat. C"est là que t"es au mieux.", "15-18": "Ton jeu naturel est ton meilleur argument pour la sélection.", "18-25": "Le plaisir de jeu est ta stratégie — pas un luxe.", "25+": "Tu savais jouer. Tu le sais encore. Le focus processus te reconnecte."};
 
-// ── SÉLECTEUR D'ÂGE ──
-let selectedAge = DATA.age || null;
-
-function selectAge(age) {
-  selectedAge = age;
-  document.querySelectorAll('.age-card').forEach(c => c.classList.remove('sel'));
-  document.querySelectorAll('.age-card').forEach(c => {
-    if (c.querySelector('.age-card-num').textContent.includes(age.replace('+','').trim().split('-')[0])) {
-      c.classList.add('sel');
-    }
-  });
-  // Fix for 25+
-  if (age === '25+') {
-    document.querySelectorAll('.age-card').forEach(c => {
-      if (c.querySelector('.age-card-num').textContent.includes('25 ans')) c.classList.add('sel');
-    });
-  }
-  document.getElementById('ageContinueBtn').disabled = false;
-}
-
-function confirmAge() {
-  if (!selectedAge) return;
-  DATA.age = selectedAge;
-  save();
-  document.getElementById('ageOverlay').style.display = 'none';
-  applyAgeContent();
-  updateAgeDisplay();
-}
-
-function openAgeSelector() {
-  document.getElementById('ageOverlay').style.display = 'flex';
-  // Re-select current age
-  if (DATA.age) selectAge(DATA.age);
-}
-
-function updateAgeDisplay() {
-  const labels = {'12-15':'12-15 ans','15-18':'15-18 ans','18-25':'18-25 ans','25+':'25 ans & +'};
-  const badge = document.getElementById('ageBadge');
-  if (badge && DATA.age) badge.textContent = labels[DATA.age] || DATA.age;
-}
-
-// Apply age-specific content
-function applyAgeContent() {
-  if (!DATA.age) return;
-  // Update age tags highlighting
-  document.querySelectorAll('.age-tag').forEach(tag => {
-    tag.classList.remove('active');
-    if (tag.textContent.startsWith(DATA.age)) tag.classList.add('active');
-  });
-  // Update mantra if age-specific versions exist
-  const mantras = AGE_MANTRAS[DATA.age];
-  if (mantras) {
-    const mantraEl = document.getElementById('mainMantra');
-    if (mantraEl) mantraEl.textContent = '"' + mantras + '"';
-  }
-}
-
-// Show overlay on load if no age set
-window.addEventListener('load', () => {
-  if (!DATA.age) {
-    document.getElementById('ageOverlay').style.display = 'flex';
-  } else {
-    document.getElementById('ageOverlay').style.display = 'none';
-    applyAgeContent();
-    updateAgeDisplay();
-  }
-});
 
     const next=document.getElementById('s'+(i+1));
     if(next) next.scrollIntoView({behavior:'smooth',block:'start'});
@@ -618,5 +541,51 @@ function downloadSemaine(sid){
 restoreNotes();
 
 </script>
+<script>
+var AX_age=null;
+var AX_ids={"12-15":"AX_A","15-18":"AX_B","18-25":"AX_C","25+":"AX_D"};
+var AX_m={"12-15":"Joue pour le jeu. Pas pour le résultat. C'est là que t'es au mieux.","15-18":"Ton jeu naturel est ton meilleur argument pour la sélection.","18-25":"Le plaisir de jeu est ta stratégie — pas un luxe.","25+":"Tu savais jouer. Tu le sais encore. Le focus processus te reconnecte à ça."};
+function AX_pick(age){
+  AX_age=age;
+  ["AX_A","AX_B","AX_C","AX_D"].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.style.border="2px solid #E8E1D4";
+  });
+  var s=document.getElementById(AX_ids[age]);
+  if(s)s.style.border="2px solid #A8852A";
+  var btn=document.getElementById("AX_BTN");
+  if(btn)btn.style.opacity="1";
+}
+function AX_go(){
+  if(!AX_age)return;
+  try{DATA.age=AX_age;save();}catch(e){}
+  document.getElementById("AX_OV").style.display="none";
+  var b=document.getElementById("AX_BADGE");
+  if(b)b.textContent=AX_age;
+  var mt=document.getElementById("AX_MANTRA");
+  if(mt&&AX_m[AX_age])mt.textContent='"'+AX_m[AX_age]+'"';
+  var ph=document.getElementById("AX_AGE_PHRASE");
+  if(ph&&AX_m[AX_age]){ph.textContent=AX_m[AX_age];ph.style.display="block";}
+  window.scrollTo(0,0);
+}
+function AX_open(){
+  document.getElementById("AX_OV").style.display="flex";
+  if(AX_age)AX_pick(AX_age);
+}
+window.addEventListener("load",function(){
+  var ov=document.getElementById("AX_OV");
+  if(!ov)return;
+  try{
+    if(DATA&&DATA.age){
+      ov.style.display="none";
+      AX_pick(DATA.age);
+      AX_age=DATA.age;
+      var b=document.getElementById("AX_BADGE");
+      if(b)b.textContent=DATA.age;
+    }else{ov.style.display="flex";}
+  }catch(e){ov.style.display="flex";}
+});
+</script>
+
 </body>
 </html>
