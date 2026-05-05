@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','26122160607379448');
+fbq('track','PageView');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Programme Premium AXE — Le Bloqué par la Peur</title>
@@ -628,7 +638,19 @@ function downloadPacte(){
   ${DATA.lettre?'<div class="section"><div class="section-label">Ma lettre à mon futur moi</div><div class="lettre">'+DATA.lettre+'</div></div>':''}
   <div class="sig"><div class="sig-name">Signé et engagé</div><div class="sig-date">Le ${DATA.pacte} · Programme AXE · Le Bloqué par la Peur</div></div>
   <div class="ftr"><p>Méthode AXE Mental Performance © 2026 · Fabien Pinton</p></div>
-  </div></body></html>`;
+  </div>
+<script>
+// Déclenche Purchase Meta Pixel quand l'utilisateur clique sur le bouton d'achat premium
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if(typeof fbq !== 'undefined') fbq('track', 'Purchase', {value: 397.00, currency: 'EUR'});
+      if(typeof gtag !== 'undefined') gtag('event', 'conversion', {'send_to': 'AW-17960470630/8Hd6CPWIw_obEOaQnPRC', 'value': 397, 'currency': 'EUR'});
+    });
+  });
+});
+</script>
+</body></html>`;
   const win=window.open('','_blank');
   win.document.write(html);win.document.close();
   win.onload=()=>{win.focus();win.print();};
@@ -727,7 +749,19 @@ function downloadModule(mid){
     <div class="note-box">${note||'(aucune note enregistrée)'}</div>
   </div>
   <div class="ftr"><p>Méthode AXE Mental Performance © 2026 · Fabien Pinton · Programme Premium · fabien-pinton.fr</p></div>
-</div></body></html>`;
+</div>
+<script>
+// Déclenche Purchase Meta Pixel quand l'utilisateur clique sur le bouton d'achat premium
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if(typeof fbq !== 'undefined') fbq('track', 'Purchase', {value: 397.00, currency: 'EUR'});
+      if(typeof gtag !== 'undefined') gtag('event', 'conversion', {'send_to': 'AW-17960470630/8Hd6CPWIw_obEOaQnPRC', 'value': 397, 'currency': 'EUR'});
+    });
+  });
+});
+</script>
+</body></html>`;
   const win=window.open('','_blank');
   win.document.write(html);win.document.close();
   win.onload=()=>{win.focus();win.print();};
@@ -785,5 +819,17 @@ window.addEventListener("load",function(){
 });
 </script>
 
+
+<script>
+// Déclenche Purchase Meta Pixel quand l'utilisateur clique sur le bouton d'achat premium
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if(typeof fbq !== 'undefined') fbq('track', 'Purchase', {value: 397.00, currency: 'EUR'});
+      if(typeof gtag !== 'undefined') gtag('event', 'conversion', {'send_to': 'AW-17960470630/8Hd6CPWIw_obEOaQnPRC', 'value': 397, 'currency': 'EUR'});
+    });
+  });
+});
+</script>
 </body>
 </html>

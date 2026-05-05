@@ -672,6 +672,10 @@ async function submit(){
       await fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(leadPayload)});
     }
     if(CFG.STRIPE&&CFG.STRIPE.includes('buy.stripe.com')){
+        // Meta Pixel Purchase event
+        if(typeof fbq!=='undefined') fbq('track','Purchase',{value:14,currency:'EUR'});
+        // Google Ads conversion
+        if(typeof gtag!=='undefined') gtag('event','conversion',{'send_to':'AW-17960470630/8Hd6CPWIw_obEOaQnPRC','value':14,'currency':'EUR'});
       if(CFG.WEBHOOK&&!CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
         fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paymentPayload),keepalive:true}).catch(()=>{});
       }
