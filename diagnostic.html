@@ -654,6 +654,26 @@ async function submit(){
     age_tranche:selectedAge,
     age_label:AGE_LABELS[selectedAge],
     scores:pct,reponses:ans,
+    question_1:ans[0]!==undefined?ans[0]:null,
+    question_2:ans[1]!==undefined?ans[1]:null,
+    question_3:ans[2]!==undefined?ans[2]:null,
+    question_4:ans[3]!==undefined?ans[3]:null,
+    question_5:ans[4]!==undefined?ans[4]:null,
+    question_6:ans[5]!==undefined?ans[5]:null,
+    question_7:ans[6]!==undefined?ans[6]:null,
+    question_8:ans[7]!==undefined?ans[7]:null,
+    question_9:ans[8]!==undefined?ans[8]:null,
+    question_10:ans[9]!==undefined?ans[9]:null,
+    question_11:ans[10]!==undefined?ans[10]:null,
+    question_12:ans[11]!==undefined?ans[11]:null,
+    question_13:ans[12]!==undefined?ans[12]:null,
+    question_14:ans[13]!==undefined?ans[13]:null,
+    question_15:ans[14]!==undefined?ans[14]:null,
+    question_16:ans[15]!==undefined?ans[15]:null,
+    question_17:ans[16]!==undefined?ans[16]:null,
+    question_18:ans[17]!==undefined?ans[17]:null,
+    question_19:ans[18]!==undefined?ans[18]:null,
+    question_20:ans[19]!==undefined?ans[19]:null,
     timestamp:new Date().toISOString()
   };
 
@@ -672,10 +692,6 @@ async function submit(){
       await fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(leadPayload)});
     }
     if(CFG.STRIPE&&CFG.STRIPE.includes('buy.stripe.com')){
-        // Meta Pixel Purchase event
-        if(typeof fbq!=='undefined') fbq('track','Purchase',{value:14,currency:'EUR'});
-        // Google Ads conversion
-        if(typeof gtag!=='undefined') gtag('event','conversion',{'send_to':'AW-17960470630/8Hd6CPWIw_obEOaQnPRC','value':14,'currency':'EUR'});
       if(CFG.WEBHOOK&&!CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
         fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paymentPayload),keepalive:true}).catch(()=>{});
       }
