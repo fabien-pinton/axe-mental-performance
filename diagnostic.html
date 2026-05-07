@@ -724,7 +724,28 @@ async function submit(){
 function buildRapport(name,prof,pct,desc,exos,ageKey){
   const ageLbl=AGE_LABELS[ageKey]||'';
   const scoreNames={stress:'Gestion du stress',peur:'Rapport à la peur',confiance:'Confiance en soi',plaisir:'Rapport au plaisir',compet:'Compétitivité'};
-  const sorted=Object.entries(pct).sort((a,b)=>b[1]-a[1]);
+  // Scores triés du plus bas au plus haut (le plus bas = profil dominant)
+  const sorted=Object.entries(pct).sort((a,b)=>a[1]-b[1]);
+
+  // Mantras par profil et par âge
+  const MANTRAS={
+    stress:{default:"Ce que je fais maintenant. Rien d\'autre.",'12-15':"Fais ce que tu sais faire. Le reste suit tout seul.",'15-18':"Ta sélection se joue sur ton jeu — pas sur le classement.",'18-25':"3 intentions de jeu. Rien d\'autre ne compte.",'25+':"Fais confiance à ce que ton corps sait faire."},
+    peur:{default:"Je joue mon jeu. Peu importe ce qui suit.",'12-15':"Joue ton jeu. Pas celui que les autres veulent voir.",'15-18':"Le sélectionneur voit ton jeu — pas ton classement.",'18-25':"Ton engagement est ton seul levier.",'25+':"Des années de retenue. C\'est fini. Joue ton jeu."},
+    confiance:{default:"Je me juge sur ce que je fais. Pas sur ce que j\'obtiens.",'12-15':"Fais de ton mieux. Ton mieux est toujours là.",'15-18':"Le sélectionneur voit ton engagement. Engage-toi à fond.",'18-25':"Juge-toi sur ce que tu fais. Pas sur ce que tu obtiens.",'25+':"Commence à te juger sur le processus."},
+    plaisir:{default:"Je fais ce que j\'aime faire. Le score vient après.",'12-15':"Joue pour le jeu. Pas pour le résultat.",'15-18':"Ton jeu naturel est ton meilleur argument.",'18-25':"Le plaisir de jeu est ta stratégie — pas un luxe.",'25+':"Tu savais jouer. Tu le sais encore."},
+    compet:{default:"Je fais mon meilleur jeu. Le reste est hors de mon contrôle.",'12-15':"Exige de toi de bien jouer. Le score vient tout seul.",'15-18':"Ton exigence est une arme. Dirige-la vers ton jeu.",'18-25':"L\'obsession du résultat te freine. Le focus jeu te libère.",'25+':"L\'exigence juste libère. L\'exigence toxique consume."},
+  };
+  const POSITIF={
+    stress:{default:"Tu as un vrai potentiel — la preuve, tu performes bien à l\'entraînement. Ton stress n\'est pas une faiblesse, c\'est de l\'énergie mal dirigée. Redirigée, elle devient un moteur puissant.",'12-15':"Tu t\'investis vraiment dans ton sport et tu veux progresser pour les bonnes raisons. Ces bases sont solides. Le stress se travaille très bien à ton âge.",'15-18':"Ton niveau de sérieux est une vraie force. Le stress pre-compétition prouve que tu t\'engages vraiment. Il manque juste les bons outils.",'25+':"Des années d\'expérience sont une vraie ressource. Ce travail mental va s\'appuyer sur tout ça."},
+    peur:{default:"La peur est le signe que tu tiens profondément à ce que tu fais. C\'est une bonne nouvelle. Ce travail va transformer cette peur en carburant.",'12-15':"Tu veux vraiment bien faire — c\'est pour ça que tu as peur de décevoir. Cette motivation est une vraie force.",'15-18':"Tu as le niveau — tes résultats à l\'entraînement le prouvent. Ce travail va te permettre d\'exprimer ce niveau en compétition.",'25+':"Tu as persisté malgré les blocages — c\'est une force mentale réelle. Ce travail va libérer le potentiel que tu as toujours eu."},
+    confiance:{default:"Tu as le potentiel — la preuve, quand ça va bien tu performes. La confiance conditionnelle n\'est pas une fatalité. Avec les bons outils, elle devient stable.",'12-15':"Tu es motivé et tu veux progresser — c\'est la base. La confiance se construit, elle ne tombe pas du ciel.",'15-18':"Tu es dans une période charnière — normal que la confiance fluctue. Ce que tu construis maintenant va te servir pendant des années.",'25+':"Tu as surmonté des difficultés dans ta carrière — c\'est une preuve de résilience réelle."},
+    plaisir:{default:"Ton moteur intrinsèque — l\'amour de ton sport — est une ressource rare et précieuse. C\'est exactement ce sur quoi ce travail va s\'appuyer.",'12-15':"Tu aimes vraiment ton sport — ça se voit. C\'est la meilleure base qui soit.",'15-18':"Ton jeu naturel est excellent — tes performances sans pression le prouvent. L\'objectif c\'est de le rendre disponible en compétition aussi.",'25+':"Tu as gardé la passion après tout ce temps — c\'est extraordinaire."},
+    compet:{default:"Ton niveau d\'exigence est une ressource exceptionnelle. L\'objectif n\'est pas de l\'éteindre — c\'est de la diriger au bon endroit.",'12-15':"Vouloir gagner autant c\'est une vraie qualité rare à ton âge. Ce travail va te rendre plus efficace et plus fluide.",'15-18':"Ton exigence est impressionnante. Apprendre à la canaliser maintenant va faire une énorme différence sur ta carrière.",'25+':"Des années d\'exigence ont construit un sportif solide. Ce travail va affiner ça sans rien enlever à ta compétitivité."},
+  };
+
+  const mantra = (MANTRAS[prof.id]&&(MANTRAS[prof.id][ageKey]||MANTRAS[prof.id].default))||'';
+  const positif = (POSITIF[prof.id]&&(POSITIF[prof.id][ageKey]||POSITIF[prof.id].default))||'';
+
   const scoresHTML=sorted.map(([k,v])=>`
     <div style="display:grid;grid-template-columns:180px 1fr 56px;align-items:center;gap:16px;margin-bottom:18px;">
       <div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#5A5040;">${scoreNames[k]}</div>
@@ -735,7 +756,11 @@ function buildRapport(name,prof,pct,desc,exos,ageKey){
     <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,0.18);padding:28px 32px;margin-bottom:16px;border-left:3px solid #A8852A;position:relative;">
       <div style="position:absolute;top:20px;right:24px;font-family:'Bebas Neue',sans-serif;font-size:56px;color:rgba(168,133,42,.07);line-height:1;">${String(i+1).padStart(2,'0')}</div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.1em;color:#A8852A;margin-bottom:10px;">${e.t}</div>
-      <div style="font-size:14px;line-height:1.8;color:#5A5040;">${e.d}</div>
+      <div style="font-size:14px;line-height:1.8;color:#5A5040;margin-bottom:12px;">${e.d}</div>
+      <div style="padding:10px 14px;background:#F0EBE0;border-left:2px solid #A8852A;">
+        <span style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:#7A6020;">Focus processus — </span>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:#5A5040;">${e.focus||''}</span>
+      </div>
     </div>`).join('');
 
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Rapport Mental AXE — ${name}</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"></head><body style="font-family:'DM Sans',sans-serif;font-weight:300;background:#F7F3EC;color:#1A1612;margin:0;padding:0;">
@@ -768,6 +793,16 @@ function buildRapport(name,prof,pct,desc,exos,ageKey){
   <div style="background:#F0EBE0;border:1px solid rgba(168,133,42,.18);padding:32px 36px;margin-bottom:32px;border-left:3px solid #A8852A;">
     <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:10px;">La méthode AXE</div>
     <div style="font-size:14px;line-height:1.8;color:#5A5040;">${prof.axeMethod}</div>
+  </div>
+  <div style="background:#F0EBE0;border:1px solid rgba(168,133,42,.18);padding:28px 32px;margin-bottom:24px;border-left:3px solid #A8852A;">
+    <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:10px;">Ce qui est positif dans ton profil</div>
+    <div style="font-size:14px;line-height:1.8;color:#5A5040;">${positif}</div>
+  </div>
+  <div style="background:#1A1612;padding:28px 32px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);"></div>
+    <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:10px;">Ton mantra de compétition · ${ageLbl}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:#F7F3EC;margin-bottom:10px;">"${mantra}"</div>
+    <div style="font-size:12px;color:rgba(247,243,236,.55);line-height:1.6;">Répète-le sur la ligne de départ. Après une erreur. Après une défaite. C'est ton ancre.</div>
   </div>
   <div style="background:#1A1612;padding:48px 44px;text-align:center;position:relative;overflow:hidden;">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7A6020,#C9A84C,#7A6020);"></div>
