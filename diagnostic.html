@@ -682,7 +682,7 @@ async function submit(){
   const rapportHTML=buildRapport(fn,prof,pct,desc,exos,ageKey);
 
   const paymentPayload={
-    type:'payment_intent',name:fn,email:em,
+    type:'payment',name:fn,email:em,
     profil:prof.name,profileName:prof.name,profil_id:prof.id,
     age_tranche:selectedAge,
     rapport:rapportHTML,
