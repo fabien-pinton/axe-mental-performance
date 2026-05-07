@@ -648,32 +648,49 @@ async function submit(){
   const desc = prof.desc[ageKey] || prof.desc.default;
   const exos = prof.exos[ageKey] || prof.exos.default;
 
+  // Construire les réponses textuelles pour Airtable
+  const reponsesTxt={};
+  Q.forEach((q,i)=>{
+    if(ans[i]!==null && q.opts[ans[i]]) {
+      reponsesTxt['question_'+(i+1)] = q.opts[ans[i]].t;
+    } else {
+      reponsesTxt['question_'+(i+1)] = '';
+    }
+  });
+
   const leadPayload={
     type:'lead',name:fn,email:em,
     profil:prof.name,profil_id:prof.id,
+    profil_detecte:prof.name,
     age_tranche:selectedAge,
     age_label:AGE_LABELS[selectedAge],
-    scores:pct,reponses:ans,
-    question_1:ans[0]!==undefined?ans[0]:null,
-    question_2:ans[1]!==undefined?ans[1]:null,
-    question_3:ans[2]!==undefined?ans[2]:null,
-    question_4:ans[3]!==undefined?ans[3]:null,
-    question_5:ans[4]!==undefined?ans[4]:null,
-    question_6:ans[5]!==undefined?ans[5]:null,
-    question_7:ans[6]!==undefined?ans[6]:null,
-    question_8:ans[7]!==undefined?ans[7]:null,
-    question_9:ans[8]!==undefined?ans[8]:null,
-    question_10:ans[9]!==undefined?ans[9]:null,
-    question_11:ans[10]!==undefined?ans[10]:null,
-    question_12:ans[11]!==undefined?ans[11]:null,
-    question_13:ans[12]!==undefined?ans[12]:null,
-    question_14:ans[13]!==undefined?ans[13]:null,
-    question_15:ans[14]!==undefined?ans[14]:null,
-    question_16:ans[15]!==undefined?ans[15]:null,
-    question_17:ans[16]!==undefined?ans[16]:null,
-    question_18:ans[17]!==undefined?ans[17]:null,
-    question_19:ans[18]!==undefined?ans[18]:null,
-    question_20:ans[19]!==undefined?ans[19]:null,
+    scores:pct,
+    scores_stress:pct.stress,
+    scores_peur:pct.peur,
+    scores_confiance:pct.confiance,
+    scores_plaisir:pct.plaisir,
+    scores_compet:pct.compet,
+    reponses:ans,
+    question_1:reponsesTxt.question_1,
+    question_2:reponsesTxt.question_2,
+    question_3:reponsesTxt.question_3,
+    question_4:reponsesTxt.question_4,
+    question_5:reponsesTxt.question_5,
+    question_6:reponsesTxt.question_6,
+    question_7:reponsesTxt.question_7,
+    question_8:reponsesTxt.question_8,
+    question_9:reponsesTxt.question_9,
+    question_10:reponsesTxt.question_10,
+    question_11:reponsesTxt.question_11,
+    question_12:reponsesTxt.question_12,
+    question_13:reponsesTxt.question_13,
+    question_14:reponsesTxt.question_14,
+    question_15:reponsesTxt.question_15,
+    question_16:reponsesTxt.question_16,
+    question_17:reponsesTxt.question_17,
+    question_18:reponsesTxt.question_18,
+    question_19:reponsesTxt.question_19,
+    question_20:reponsesTxt.question_20,
     timestamp:new Date().toISOString()
   };
 
@@ -683,7 +700,7 @@ async function submit(){
     type:'payment_intent',name:fn,email:em,
     profil:prof.name,profil_id:prof.id,
     age_tranche:selectedAge,
-    rapport_html:rapportHTML,
+    rapport:rapportHTML,
     scores:pct,timestamp:new Date().toISOString()
   };
 
