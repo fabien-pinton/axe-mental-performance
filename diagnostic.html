@@ -18,33 +18,66 @@
   --cream:#F7F3EC;--cream2:#FDFAF5;--cream3:#F0EBE0;--cream4:#E8E1D4;
   --ink:#1A1612;--inkd:#5A5040;--inkf:#8A7D6A;
   --bdr:rgba(168,133,42,0.18);--bdr2:rgba(168,133,42,0.32);
-  --green:#2E7D52;--red:#C0392B;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);overflow-x:hidden;min-height:100vh;}
 
-/* ── PROGRESS ── */
 #prog-bar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--cream4);z-index:200;}
 #prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));width:0%;transition:width .4s ease;}
 
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(247,243,236,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--bdr);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(247,243,236,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--bdr);}
 .nlogo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.2em;color:var(--gold);text-decoration:none;}
 .nlogo span{display:block;font-family:'DM Sans',sans-serif;font-size:8px;letter-spacing:.32em;color:var(--inkd);text-transform:uppercase;font-weight:300;}
 #prog-counter{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--inkf);}
 @media(max-width:640px){nav{padding:12px 18px;}}
 
-/* ── WRAPPER ── */
 .wrap{max-width:640px;margin:0 auto;padding:100px 24px 80px;}
 
-/* ── STEP AGE ── */
-.age-screen{text-align:center;}
+/* ── LANDING (écran de vente) ── */
+.landing-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.landing-eyebrow::before,.landing-eyebrow::after{content:'';width:32px;height:1px;background:var(--gold);}
+.landing-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,8vw,76px);letter-spacing:.04em;color:var(--ink);line-height:.92;margin-bottom:20px;}
+.landing-title em{color:var(--gold);font-style:normal;}
+.landing-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.2vw,21px);font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:40px;}
+.landing-promise{background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:32px;}
+.landing-promise-title{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.landing-items{display:flex;flex-direction:column;gap:10px;}
+.landing-item{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--inkd);line-height:1.6;}
+.landing-item::before{content:'✦';color:var(--gold);font-size:10px;margin-top:3px;flex-shrink:0;}
+.landing-cta-block{background:var(--ink);padding:36px 40px;text-align:center;position:relative;overflow:hidden;}
+.landing-cta-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
+.landing-price{font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--gold);letter-spacing:.05em;line-height:1;}
+.landing-price-label{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.4);margin-bottom:20px;}
+.landing-btn{display:inline-block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:18px 48px;cursor:pointer;border:none;transition:background .3s;width:100%;text-align:center;}
+.landing-btn:hover{background:var(--gold-d);}
+.landing-secure{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.3);margin-top:14px;}
+
+/* ── GATE (email avant diagnostic) ── */
+#step-gate{display:none;}
+.gate-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.gate-eyebrow::before,.gate-eyebrow::after{content:'';width:24px;height:1px;background:var(--gold);}
+.gate-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,56px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;}
+.gate-title em{color:var(--gold);font-style:normal;}
+.gate-sub{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:32px;}
+.gate-confirm{background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:18px 22px;margin-bottom:28px;font-size:13px;color:var(--inkd);line-height:1.6;}
+.gate-confirm strong{color:var(--gold);font-weight:500;}
+.gate-fields{display:flex;flex-direction:column;gap:14px;margin-bottom:20px;}
+.gate-field{display:flex;flex-direction:column;gap:6px;}
+.gate-field label{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--inkd);}
+.gate-field input{border:1px solid var(--bdr2);background:var(--cream2);padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border .3s;}
+.gate-field input:focus{border-color:var(--gold);}
+.gate-btn{display:block;width:100%;text-align:center;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;background:var(--gold);color:var(--cream2);padding:17px;border:none;cursor:pointer;transition:background .3s;}
+.gate-btn:hover{background:var(--gold-d);}
+.gate-note{font-size:10px;letter-spacing:.15em;color:var(--inkf);text-align:center;margin-top:12px;}
+
+/* ── AGE ── */
+#step-age{display:none;}
 .age-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:14px;}
 .age-eyebrow::before,.age-eyebrow::after{content:'';width:32px;height:1px;background:var(--gold);}
-.age-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,72px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;}
+.age-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,72px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;text-align:center;}
 .age-title em{color:var(--gold);font-style:normal;}
-.age-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2vw,19px);font-style:italic;color:var(--inkd);line-height:1.65;max-width:480px;margin:0 auto 48px;}
+.age-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2vw,19px);font-style:italic;color:var(--inkd);line-height:1.65;max-width:480px;margin:0 auto 40px;text-align:center;}
 .age-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:560px;margin:0 auto;}
 .age-card{background:var(--cream2);border:2px solid var(--bdr);padding:24px 20px;cursor:pointer;transition:all .3s;text-align:left;}
 .age-card:hover{border-color:var(--gold);transform:translateY(-2px);}
@@ -52,8 +85,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .age-card-range{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.06em;color:var(--gold);margin-bottom:6px;}
 .age-card-label{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--inkf);margin-bottom:10px;}
 .age-card-desc{font-size:12px;color:var(--inkd);line-height:1.6;}
-.age-note{margin-top:32px;font-size:11px;letter-spacing:.15em;color:var(--inkf);font-style:italic;}
-.btn-start{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:16px 40px;cursor:pointer;transition:all .3s;margin-top:32px;opacity:.4;pointer-events:none;}
+.age-note{margin-top:28px;font-size:11px;letter-spacing:.15em;color:var(--inkf);font-style:italic;text-align:center;}
+.btn-start{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:16px 40px;cursor:pointer;transition:all .3s;margin-top:28px;display:block;width:100%;max-width:560px;margin-left:auto;margin-right:auto;opacity:.4;pointer-events:none;}
 .btn-start.active{opacity:1;pointer-events:auto;}
 .btn-start.active:hover{background:var(--gold-d);}
 @media(max-width:480px){.age-cards{grid-template-columns:1fr;}}
@@ -65,7 +98,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .q-cat{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--inkf);margin-bottom:20px;border-left:2px solid var(--gold);padding-left:10px;}
 .q-text{font-family:'Cormorant Garamond',serif;font-size:clamp(19px,2.8vw,25px);font-weight:600;line-height:1.35;color:var(--ink);margin-bottom:32px;}
 .opts{display:flex;flex-direction:column;gap:10px;}
-.opt{background:transparent;border:1px solid var(--bdr);padding:14px 18px;cursor:pointer;text-align:left;display:flex;gap:14px;align-items:flex-start;transition:all .25s;font-family:'DM Sans',sans-serif;}
+.opt{background:transparent;border:1px solid var(--bdr);padding:14px 18px;cursor:pointer;text-align:left;display:flex;gap:14px;align-items:flex-start;transition:all .25s;font-family:'DM Sans',sans-serif;width:100%;}
 .opt:hover{border-color:var(--bdr2);background:rgba(168,133,42,.03);}
 .opt.sel{border-color:var(--gold);background:rgba(168,133,42,.06);}
 .opt-l{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;color:var(--gold);min-width:20px;margin-top:1px;}
@@ -79,30 +112,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .btn-next:disabled{opacity:.35;cursor:not-allowed;}
 @media(max-width:640px){.q-card{padding:28px 20px;}}
 
-/* ── FORM ── */
-#step-form{display:none;}
-.form-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,56px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;}
-.form-title em{color:var(--gold);font-style:normal;}
-.form-sub{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:32px;}
-.preview{background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:32px;}
-.preview-label{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
-.preview-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:var(--ink);}
-.preview-age{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkf);margin-top:4px;}
-.scores-mini{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
-.sm-row{display:grid;grid-template-columns:140px 1fr 44px;gap:12px;align-items:center;}
-.sm-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkd);}
-.sm-track{height:2px;background:var(--cream4);}
-.sm-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width 1s ease;}
-.sm-pct{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);text-align:right;}
-.form-fields{display:flex;flex-direction:column;gap:16px;margin-bottom:24px;}
-.field{display:flex;flex-direction:column;gap:6px;}
-.field label{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--inkd);}
-.field input{border:1px solid var(--bdr2);background:var(--cream2);padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border .3s;}
-.field input:focus{border-color:var(--gold);}
-.sub-btn{display:block;width:100%;text-align:center;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;background:var(--gold);color:var(--cream2);padding:18px;border:none;cursor:pointer;transition:all .3s;position:relative;}
-.sub-btn:hover{background:var(--gold-d);}
-.sub-note{font-size:10px;letter-spacing:.15em;color:var(--inkf);text-align:center;margin-top:12px;}
-@media(max-width:500px){.sm-row{grid-template-columns:100px 1fr 36px;}}
+/* ── CONFIRMATION ── */
+#step-confirm{display:none;text-align:center;}
+.confirm-icon{font-size:48px;margin-bottom:20px;}
+.confirm-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,64px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;}
+.confirm-title em{color:var(--gold);font-style:normal;}
+.confirm-sub{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:32px;}
+.confirm-box{background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:28px 32px;text-align:left;margin-bottom:24px;}
+.confirm-box-label{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.confirm-box-profil{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:var(--ink);}
+.confirm-box-age{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkf);margin-top:4px;margin-bottom:16px;}
+.confirm-scores{display:flex;flex-direction:column;gap:10px;}
+.cs-row{display:grid;grid-template-columns:140px 1fr 44px;gap:12px;align-items:center;}
+.cs-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkd);}
+.cs-track{height:2px;background:var(--cream4);}
+.cs-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width 1s ease;width:0%;}
+.cs-pct{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);text-align:right;}
+.confirm-email-msg{background:rgba(168,133,42,.06);border:1px solid var(--bdr);padding:20px 24px;font-size:13px;color:var(--inkd);line-height:1.7;text-align:center;}
+.confirm-email-msg strong{color:var(--gold);font-weight:500;}
+.confirm-next{background:var(--ink);padding:32px 36px;text-align:center;position:relative;overflow:hidden;margin-top:24px;}
+.confirm-next::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
+.confirm-next-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.05em;color:var(--cream2);margin-bottom:8px;}
+.confirm-next-sub{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:rgba(247,243,236,.7);margin-bottom:20px;line-height:1.6;}
+.confirm-next-btn{display:inline-block;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--ink);text-decoration:none;padding:14px 32px;}
 </style>
 </head>
 <body>
@@ -116,41 +148,80 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 
 <div class="wrap">
 
-<!-- ══ ÉTAPE 0 — SÉLECTION ÂGE ══ -->
-<div id="step-age" class="age-screen">
-  <div class="age-eyebrow">Diagnostic Mental · Méthode AXE</div>
-  <h1 class="age-title">QUEL EST<br>TON <em>PROFIL</em><br>MENTAL ?</h1>
-  <p class="age-sub">20 questions pour identifier exactement ce qui te bloque en compétition. Le diagnostic et ton rapport sont adaptés à ta tranche d'âge.</p>
+<!-- ══ ÉCRAN 0 — LANDING / VENTE ══ -->
+<div id="step-landing">
+  <div class="landing-eyebrow">Diagnostic Mental · Méthode AXE</div>
+  <h1 class="landing-title">QUEL EST<br>TON <em>PROFIL</em><br>MENTAL ?</h1>
+  <p class="landing-sub">20 questions pour identifier exactement ce qui te bloque en compétition. Rapport personnalisé adapté à ton âge. Reçu directement dans ta boîte mail.</p>
 
+  <div class="landing-promise">
+    <div class="landing-promise-title">Ce que tu reçois</div>
+    <div class="landing-items">
+      <div class="landing-item">Ton profil mental exact parmi 5 profils identifiés (L'Hyperstressé, Le Bloqué par la Peur, Le Sans Confiance, Le Performeur Fluide, L'Hypercompétiteur)</div>
+      <div class="landing-item">Tes scores sur 5 dimensions : gestion du stress, rapport à la peur, confiance en soi, rapport au plaisir, compétitivité</div>
+      <div class="landing-item">3 exercices concrets personnalisés adaptés à ton profil ET à ta tranche d'âge — à faire cette semaine</div>
+      <div class="landing-item">Un rapport PDF complet dans ta boîte mail dans les minutes qui suivent</div>
+    </div>
+  </div>
+
+  <div class="landing-cta-block">
+    <div class="landing-price">14€</div>
+    <div class="landing-price-label">Paiement unique · Accès immédiat</div>
+    <button class="landing-btn" onclick="goToGate()">COMMENCER MON DIAGNOSTIC →</button>
+    <div class="landing-secure">✦ Paiement sécurisé · Rapport en quelques minutes</div>
+  </div>
+</div>
+
+<!-- ══ ÉCRAN 1 — GATE (infos avant le quiz) ══ -->
+<div id="step-gate">
+  <div class="gate-eyebrow">Étape 1 sur 3 · Tes informations</div>
+  <h2 class="gate-title">OÙ ENVOYER<br>TON <em>RAPPORT</em> ?</h2>
+  <p class="gate-sub">Entre tes informations. Ton rapport PDF personnalisé t'y sera envoyé dès que tu auras terminé le diagnostic.</p>
+  <div class="gate-confirm">
+    Après avoir rempli ce formulaire, tu seras redirigé vers le <strong>paiement sécurisé (14€)</strong> puis tu accèderas directement au diagnostic.
+  </div>
+  <div class="gate-fields">
+    <div class="gate-field"><label>Prénom</label><input type="text" id="gfn" placeholder="Ton prénom" autocomplete="given-name"></div>
+    <div class="gate-field"><label>Nom</label><input type="text" id="gln" placeholder="Ton nom" autocomplete="family-name"></div>
+    <div class="gate-field"><label>Email</label><input type="email" id="gem" placeholder="ton@email.fr" autocomplete="email"></div>
+    <div class="gate-field"><label>Ton sport</label><input type="text" id="gsport" placeholder="Ex : Football, Tennis, BMX..." autocomplete="off"></div>
+  </div>
+  <button class="gate-btn" onclick="submitGate()">ACCÉDER AU PAIEMENT — 14€ →</button>
+  <p class="gate-note">✦ Paiement sécurisé Stripe · Tu reviens ensuite faire le diagnostic</p>
+</div>
+
+<!-- ══ ÉCRAN 2 — SÉLECTION ÂGE ══ -->
+<div id="step-age">
+  <div class="age-eyebrow">Étape 2 sur 3 · Ton profil</div>
+  <h2 class="age-title">TA TRANCHE<br>D'<em>ÂGE</em></h2>
+  <p class="age-sub">Le diagnostic et tes exercices sont entièrement adaptés à ta situation selon ton âge.</p>
   <div class="age-cards">
-    <div class="age-card" onclick="selectAge('12-15')" id="ac-12">
+    <div class="age-card" onclick="selectAge('12-15')" id="ac-12-15">
       <div class="age-card-range">12 — 15 ANS</div>
       <div class="age-card-label">Jeune compétiteur</div>
       <div class="age-card-desc">Premiers enjeux de compétition, pression du regard des pairs, plaisir avant résultat.</div>
     </div>
-    <div class="age-card" onclick="selectAge('15-18')" id="ac-15">
+    <div class="age-card" onclick="selectAge('15-18')" id="ac-15-18">
       <div class="age-card-range">15 — 18 ANS</div>
       <div class="age-card-label">Sport-études · Sélection</div>
       <div class="age-card-desc">Pression des résultats pour intégrer une structure, regard de l'entraîneur, identité sportive forte.</div>
     </div>
-    <div class="age-card" onclick="selectAge('18-25')" id="ac-18">
+    <div class="age-card" onclick="selectAge('18-25')" id="ac-18-25">
       <div class="age-card-range">18 — 25 ANS</div>
       <div class="age-card-label">Performance maximale</div>
       <div class="age-card-desc">Passage amateur vers compétition sérieuse, pression externe accrue, enjeux concrets.</div>
     </div>
-    <div class="age-card" onclick="selectAge('25+')" id="ac-25">
+    <div class="age-card" onclick="selectAge('25+')" id="ac-25+">
       <div class="age-card-range">25 ANS +</div>
       <div class="age-card-label">Sportif expérimenté</div>
       <div class="age-card-desc">Blessures mentales accumulées, conciliation sport et vie, recherche de durabilité.</div>
     </div>
   </div>
-
   <div class="age-note">Cette information adapte tes questions, ton rapport et tes exercices.</div>
-  <br>
   <button class="btn-start" id="btn-start" onclick="startQuiz()">COMMENCER LE DIAGNOSTIC →</button>
 </div>
 
-<!-- ══ ÉTAPE 1 — QUIZ ══ -->
+<!-- ══ ÉCRAN 3 — QUIZ ══ -->
 <div id="step-quiz">
   <div id="qzone"></div>
   <div class="nav-btns">
@@ -159,46 +230,49 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
   </div>
 </div>
 
-<!-- ══ ÉTAPE 2 — FORMULAIRE ══ -->
-<div id="step-form">
-  <h2 class="form-title">TON <em>PROFIL</em><br>SE DESSINE.</h2>
-  <p class="form-sub">Entre ton prénom et ton email pour recevoir ton rapport complet — adapté à ton profil et à ton âge.</p>
-  <div class="preview">
-    <div class="preview-label">Profil détecté</div>
-    <div class="preview-name" id="rtProfileName">—</div>
-    <div class="preview-age" id="rtAgeBadge">—</div>
-    <div class="scores-mini" id="scoresMini"></div>
+<!-- ══ ÉCRAN 4 — CONFIRMATION ══ -->
+<div id="step-confirm">
+  <div class="confirm-icon">✦</div>
+  <h2 class="confirm-title">TON RAPPORT<br>EST EN <em>ROUTE</em></h2>
+  <p class="confirm-sub">Ton rapport PDF personnalisé est en cours d'envoi. Vérifie ta boîte mail dans les prochaines minutes.</p>
+  <div class="confirm-box">
+    <div class="confirm-box-label">Profil détecté</div>
+    <div class="confirm-box-profil" id="cfProfileName">—</div>
+    <div class="confirm-box-age" id="cfAgeBadge">—</div>
+    <div class="confirm-scores" id="cfScores"></div>
   </div>
-  <div class="form-fields">
-    <div class="field"><label>Prénom</label><input type="text" id="fn" placeholder="Ton prénom" autocomplete="given-name"></div>
-    <div class="field"><label>Email</label><input type="email" id="em" placeholder="ton@email.fr" autocomplete="email"></div>
+  <div class="confirm-email-msg">Rapport envoyé à <strong id="cfEmail">—</strong><br>Vérifie aussi tes spams si tu ne le vois pas dans 5 minutes.</div>
+  <div class="confirm-next">
+    <div class="confirm-next-title">ALLER PLUS LOIN</div>
+    <div class="confirm-next-sub">Ton rapport PDF est un premier diagnostic. Pour aller vraiment plus loin, réserve un appel gratuit avec Fabien.</div>
+    <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" class="confirm-next-btn">APPEL DÉCOUVERTE GRATUIT →</a>
   </div>
-  <button class="sub-btn" onclick="submit()">RECEVOIR MON RAPPORT — 14€ →</button>
-  <p class="sub-note">✦ Rapport dans ta boîte mail · Paiement sécurisé Stripe · Accès immédiat</p>
 </div>
 
 </div><!-- /wrap -->
 
 <script>
-// ══ CONFIG ══
 const CFG = {
   STRIPE: "https://buy.stripe.com/3cI6oG9u4dv895j4to8IU03",
   WEBHOOK: "https://hook.eu1.make.com/96f7c0lxqk82tnxjt9gsqvs460q58ow8",
   CALL: "https://tidycal.com/fpinton/appel-decouverte",
   DEEP: {
-    stress:    "https://buy.stripe.com/6oUdR8gWw0Im3KZf828IU09",
-    peur:      "https://buy.stripe.com/28EfZg5dO1Mqdlz8JE8IU08",
-    confiance: "https://buy.stripe.com/00wcN4dKk4YC2GVbVQ8IU07",
-    plaisir:   "https://buy.stripe.com/7sY8wO21C62G4P35xs8IU06",
-    compet:    "https://buy.stripe.com/dRmcN4ay8bn0bdr8JE8IU05",
-  },
-  DEEP_NAMES: {
-    stress:"L'Hyperstressé", peur:"Le Bloqué par la Peur",
-    confiance:"Le Sans Confiance", plaisir:"Le Performeur Fluide", compet:"L'Hypercompétiteur"
+    stress:"https://buy.stripe.com/6oUdR8gWw0Im3KZf828IU09",
+    peur:"https://buy.stripe.com/28EfZg5dO1Mqdlz8JE8IU08",
+    confiance:"https://buy.stripe.com/00wcN4dKk4YC2GVbVQ8IU07",
+    plaisir:"https://buy.stripe.com/7sY8wO21C62G4P35xs8IU06",
+    compet:"https://buy.stripe.com/dRmcN4ay8bn0bdr8JE8IU05",
   }
 };
 
-// ══ QUESTIONS COMMUNES (base 20) ══
+const AGE_LABELS = {
+  '12-15':'12 — 15 ans · Jeune compétiteur',
+  '15-18':'15 — 18 ans · Sport-études & Sélection',
+  '18-25':'18 — 25 ans · Performance maximale',
+  '25+':'25 ans & plus · Sportif expérimenté',
+};
+
+// ══ QUESTIONS ══
 const Q_BASE = [
   {cat:"Gestion du stress",text:"La nuit avant une compétition importante, comment dors-tu ?",opts:[
     {t:"Comme d'habitude — ma routine est rodée.",s:{stress:4,peur:3,confiance:3,plaisir:3,compet:3}},
@@ -322,33 +396,29 @@ const Q_BASE = [
   ]},
 ];
 
-// ══ ADAPTATIONS PAR ÂGE ══
-// Remplace certains libellés de questions selon l'âge
 const AGE_TWEAKS = {
-  '12-15': {
-    // Questions plus simples, vocabulaire jeune
-    0: {text:"La veille d'une compétition, comment tu dors ?", opts:[
+  '12-15':{
+    0:{text:"La veille d'une compétition, comment tu dors ?",opts:[
       {t:"Bien — j'ai mes habitudes et ça marche.",s:{stress:4,peur:3,confiance:3,plaisir:3,compet:3}},
       {t:"Un peu moins mais ça ne change pas grand chose.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
       {t:"Mal — j'arrête pas de penser à la compet.",s:{stress:1,peur:2,confiance:2,plaisir:2,compet:2}},
       {t:"Je dors presque pas — le stress est trop fort.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
     ]},
-    4: {text:"Quand t'as une action importante à faire, tu penses d'abord à :", opts:[
+    4:{text:"Quand t'as une action importante à faire, tu penses d'abord à :",opts:[
       {t:"Ce que je dois faire — le geste, le plan.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
       {t:"L'occasion de montrer ce que je sais faire.",s:{stress:3,peur:4,confiance:3,plaisir:4,compet:3}},
       {t:"Ce qui pourrait mal se passer si je rate.",s:{stress:2,peur:1,confiance:2,plaisir:2,compet:2}},
       {t:"Ce que vont penser mes potes, mon coach, mes parents.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
     ]},
   },
-  '25+': {
-    // Questions plus profondes pour adultes expérimentés
-    8: {text:"D'où vient principalement ta confiance avant une compétition ?",opts:[
+  '25+':{
+    8:{text:"D'où vient principalement ta confiance avant une compétition ?",opts:[
       {t:"De mon vécu et de mes années de pratique — je me connais.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
       {t:"De mes dernières performances — si ça allait bien, je suis confiant.",s:{stress:3,peur:3,confiance:2,plaisir:3,compet:3}},
       {t:"Du regard de mon entourage — j'ai besoin d'être validé.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
       {t:"Elle est fragile — l'expérience ne l'a pas vraiment stabilisée.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
     ]},
-    13: {text:"Pourquoi je continue le sport en compétition ?",opts:[
+    13:{text:"Pourquoi je continue le sport en compétition ?",opts:[
       {t:"Pour le plaisir et le dépassement — c'est viscéral.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
       {t:"Pour progresser encore et atteindre mes objectifs.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
       {t:"Par habitude et par peur de lâcher quelque chose.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
@@ -357,11 +427,9 @@ const AGE_TWEAKS = {
   }
 };
 
-// ══ PROFILS ══
 const PROFILES = {
   stress:{
-    id:"stress",name:"L'Hyperstressé",
-    headline:"Le stress te vole ton vrai niveau.",
+    id:"stress",name:"L'Hyperstressé",headline:"Le stress te vole ton vrai niveau.",
     desc:{
       default:"Tu as les capacités. Mais avant et pendant la compétition, l'anxiété prend plus de place que ton jeu. Tu rumines, tu dors mal, et le jour J tu n'es plus tout à fait toi-même.",
       '12-15':"T'as clairement le niveau. Mais le soir avant la compet, ta tête tourne. Et le matin du départ, ton ventre se serre. C'est normal — et ça se travaille.",
@@ -393,8 +461,7 @@ const PROFILES = {
     axeMethod:"Dans la méthode AXE, ton profil travaille d'abord l'Alignement (A) — réconcilier ce que tu ressens avec ce que tu es réellement capable de faire. Ton potentiel réel est nettement supérieur à ce que tu montres sous pression.",
   },
   peur:{
-    id:"peur",name:"Le Bloqué par la Peur",
-    headline:"La peur te retient exactement là où tu veux aller.",
+    id:"peur",name:"Le Bloqué par la Peur",headline:"La peur te retient exactement là où tu veux aller.",
     desc:{
       default:"Ce n'est pas un manque de technique ni de condition physique. C'est un frein invisible et puissant : peur de rater, peur de décevoir, peur du jugement des autres. Tu joues en retrait, tu ne t'engages jamais totalement — et tu le sais.",
       '12-15':"T'as le niveau. Mais t'as peur de te planter devant tes potes, ton coach, tes parents. Du coup tu te retiens. Tu joues à la sécurité. Et au fond tu sais que c'est pas ton vrai jeu.",
@@ -426,8 +493,7 @@ const PROFILES = {
     axeMethod:"La méthode AXE travaille ici l'Engagement (E) — s'engager pleinement malgré le risque perçu. Ton blocage est un mécanisme de protection que ton cerveau a construit. Il était utile. Il ne l'est plus.",
   },
   confiance:{
-    id:"confiance",name:"Le Sans Confiance",
-    headline:"Ta confiance est conditionnelle. Elle doit devenir fondamentale.",
+    id:"confiance",name:"Le Sans Confiance",headline:"Ta confiance est conditionnelle. Elle doit devenir fondamentale.",
     desc:{
       default:"Tu performes correctement quand ça va. Mais dès que les résultats résistent, ta confiance s'effondre. Elle est externe — dépendante du regard des autres, des dernières performances, de l'humeur de ton entourage.",
       '12-15':"Tu es bon quand ça va bien. Mais dès qu'il y a une difficulté, le doute arrive vite. Et souvent c'est ce que dit ton coach ou tes parents qui fait monter ou descendre ta confiance. C'est très courant à ton âge.",
@@ -459,8 +525,7 @@ const PROFILES = {
     axeMethod:"Dans la méthode AXE, l'Alignement (A) est ton travail prioritaire — mettre en cohérence ce que tu vaux réellement et ce que tu crois valoir. L'écart entre les deux est ton plafond de verre.",
   },
   plaisir:{
-    id:"plaisir",name:"Le Performeur Fluide",
-    headline:"L'enjeu tue ton jeu. Il ne devrait pas.",
+    id:"plaisir",name:"Le Performeur Fluide",headline:"L'enjeu tue ton jeu. Il ne devrait pas.",
     desc:{
       default:"Ton moteur est intrinsèque et authentique — tu aimes profondément ton sport. C'est une force rare. Mais quand l'enjeu monte, la pression de résultat écrase ce plaisir naturel, et tes performances chutent avec lui.",
       '12-15':"T'adores ton sport. À l'entraînement ou avec des potes, tu joues vraiment bien. Mais en compétition, quelque chose change. Le plaisir disparaît. Et ton niveau aussi. C'est pas une fatalité.",
@@ -492,8 +557,7 @@ const PROFILES = {
     axeMethod:"La méthode AXE travaille ici l'Exigence (X) — une exigence tournée vers le jeu et le processus, pas vers le résultat. Tu dois apprendre à performer sans éteindre ce qui te fait aimer ton sport.",
   },
   compet:{
-    id:"compet",name:"L'Hypercompétiteur",
-    headline:"Tu brûles d'une flamme qui risque de te consumer.",
+    id:"compet",name:"L'Hypercompétiteur",headline:"Tu brûles d'une flamme qui risque de te consumer.",
     desc:{
       default:"La victoire est ton oxygène. Tu ne te pardonnes rien. Chaque défaite est une blessure. Cette exigence extrême génère une tension chronique dans ton corps et ton mental qui finit par brider tes performances — trop de crispation, pas assez de fluidité.",
       '12-15':"Tu veux gagner — vraiment. Et quand tu perds, ça te bouffe. Tu te repasses le match dans la tête et tu t'en veux. C'est une qualité rare. Mais si tu apprends pas à gérer ça, ça risque de te peser de plus en plus avec les années.",
@@ -526,35 +590,75 @@ const PROFILES = {
   },
 };
 
-// ══ LABELS D'ÂGE ══
-const AGE_LABELS = {
-  '12-15': '12 — 15 ans · Jeune compétiteur',
-  '15-18': '15 — 18 ans · Sport-études & Sélection',
-  '18-25': '18 — 25 ans · Performance maximale',
-  '25+':   '25 ans & plus · Sportif expérimenté',
-};
-
 // ══ ÉTAT ══
+let userFirstName = '';
+let userEmail = '';
 let selectedAge = null;
 let Q = [];
 let cur = 0;
 let ans = [];
 
-// ══ SÉLECTION ÂGE ══
+// ══ ÉCRAN LANDING ══
+function goToGate(){
+  document.getElementById('step-landing').style.display='none';
+  document.getElementById('step-gate').style.display='block';
+  window.scrollTo(0,0);
+}
+
+// ══ GATE ══
+let userLastName = '';
+let userSport = '';
+
+function submitGate(){
+  const fn = document.getElementById('gfn').value.trim();
+  const ln = document.getElementById('gln').value.trim();
+  const em = document.getElementById('gem').value.trim();
+  const sport = document.getElementById('gsport').value.trim();
+  if(!fn || !ln || !em || !em.includes('@') || !sport){
+    alert('Merci de remplir tous les champs.');
+    return;
+  }
+  userFirstName = fn;
+  userLastName = ln;
+  userEmail = em;
+  userSport = sport;
+  sessionStorage.setItem('axe_fn', fn);
+  sessionStorage.setItem('axe_ln', ln);
+  sessionStorage.setItem('axe_em', em);
+  sessionStorage.setItem('axe_sport', sport);
+  const params = new URLSearchParams({
+    prefilled_email: em,
+    client_reference_id: 'diag_' + Date.now()
+  });
+  window.location.href = CFG.STRIPE + (CFG.STRIPE.includes('?') ? '&' : '?') + params;
+}
+
+// ══ RETOUR DE STRIPE ══
+function checkReturnFromStripe(){
+  const p = new URLSearchParams(window.location.search);
+  if(p.get('paid') === '1'){
+    userFirstName = sessionStorage.getItem('axe_fn') || '';
+    userLastName  = sessionStorage.getItem('axe_ln') || '';
+    userEmail     = sessionStorage.getItem('axe_em') || '';
+    userSport     = sessionStorage.getItem('axe_sport') || '';
+    document.getElementById('step-landing').style.display='none';
+    document.getElementById('step-age').style.display='block';
+    window.scrollTo(0,0);
+    if(typeof fbq!=='undefined') fbq('track','Purchase',{value:14,currency:'EUR'});
+    if(typeof gtag!=='undefined') gtag('event','purchase',{value:14,currency:'EUR'});
+  }
+}
+
+// ══ ÂGE ══
 function selectAge(age){
   selectedAge = age;
   document.querySelectorAll('.age-card').forEach(c=>c.classList.remove('sel'));
-  document.getElementById('ac-'+age.replace('+',''))?.classList.add('sel') ||
-  document.querySelectorAll('.age-card').forEach((c,i)=>{
-    if(['12-15','15-18','18-25','25+'][i]===age) c.classList.add('sel');
-  });
-  const btn = document.getElementById('btn-start');
-  btn.classList.add('active');
-
-  // Build questions with age tweaks
+  const card = document.getElementById('ac-'+age);
+  if(card) card.classList.add('sel');
+  document.getElementById('btn-start').classList.add('active');
   Q = Q_BASE.map((q,i)=>{
     const tw = AGE_TWEAKS[age]?.[i];
-    return tw ? {...q, ...tw} : q;
+    return tw ? {...q,...tw} : q;
   });
   ans = new Array(Q.length).fill(null);
 }
@@ -588,10 +692,10 @@ function render(){
 }
 
 function pick(i){ ans[cur]=i; render(); }
-function next(){ if(ans[cur]===null)return; if(cur<Q.length-1){cur++;window.scrollTo(0,0);render();}else showForm(); }
+function next(){ if(ans[cur]===null)return; if(cur<Q.length-1){cur++;window.scrollTo(0,0);render();}else finishQuiz(); }
 function prev(){ if(cur>0){cur--;window.scrollTo(0,0);render();} }
 
-// ══ SCORES ══
+// ══ SCORES & PROFIL ══
 function calcScores(){
   const d={stress:0,peur:0,confiance:0,plaisir:0,compet:0};
   const mx={stress:0,peur:0,confiance:0,plaisir:0,compet:0};
@@ -609,173 +713,204 @@ function getProfile(pct){
   return PROFILES[sorted[0][0]];
 }
 
-// ══ FORMULAIRE ══
-function showForm(){
+// ══ FIN DU QUIZ ══
+async function finishQuiz(){
   document.getElementById('step-quiz').style.display='none';
-  document.getElementById('step-form').style.display='block';
+  document.getElementById('step-confirm').style.display='block';
   window.scrollTo(0,0);
-  const pct=calcScores();
-  const prof=getProfile(pct);
-  document.getElementById('rtProfileName').textContent=prof.name;
-  document.getElementById('rtAgeBadge').textContent=AGE_LABELS[selectedAge]||'';
-  const names={stress:'Gestion du stress',peur:'Blocage par la peur',confiance:'Confiance en soi',plaisir:'Rapport au plaisir',compet:'Compétitivité'};
-  document.getElementById('scoresMini').innerHTML=Object.entries(pct).map(([k,v])=>`
-    <div class="sm-row">
-      <div class="sm-label">${names[k]}</div>
-      <div class="sm-track"><div class="sm-fill" style="width:0%" id="sf-${k}"></div></div>
-      <div class="sm-pct">${v}%</div>
-    </div>`).join('');
-  setTimeout(()=>Object.entries(pct).forEach(([k,v])=>{
-    const el=document.getElementById('sf-'+k);
-    if(el) el.style.width=v+'%';
-  }),300);
-  if(typeof gtag!=='undefined') gtag('event','quiz_complete',{event_category:'diagnostic'});
-  if(typeof fbq!=='undefined') fbq('track','AddToCart',{value:14,currency:'EUR'});
-}
 
-// ══ SOUMISSION ══
-async function submit(){
-  const fn=document.getElementById('fn').value.trim();
-  const em=document.getElementById('em').value.trim();
-  if(!fn||!em||!em.includes('@')){alert('Prénom et email valides requis.');return;}
-  const pct=calcScores();
-  const prof=getProfile(pct);
-  const btn=document.querySelector('.sub-btn');
-  btn.textContent='Envoi en cours...';btn.disabled=true;
-
-  // Adapt description and exercises to age
+  const pct = calcScores();
+  const prof = getProfile(pct);
   const ageKey = selectedAge;
   const desc = prof.desc[ageKey] || prof.desc.default;
   const exos = prof.exos[ageKey] || prof.exos.default;
 
-  const leadPayload={
-    type:'lead',name:fn,email:em,
-    profil:prof.name,profileName:prof.name,profil_id:prof.id,
-    age_tranche:selectedAge,
-    age_label:AGE_LABELS[selectedAge],
-    scores:pct,
-    reponses:ans,
-    profil_detecte:prof.name,
-    question_1:Q[0]&&ans[0]!==null?Q[0].opts[ans[0]].t:'',
-    question_2:Q[1]&&ans[1]!==null?Q[1].opts[ans[1]].t:'',
-    question_3:Q[2]&&ans[2]!==null?Q[2].opts[ans[2]].t:'',
-    question_4:Q[3]&&ans[3]!==null?Q[3].opts[ans[3]].t:'',
-    question_5:Q[4]&&ans[4]!==null?Q[4].opts[ans[4]].t:'',
-    question_6:Q[5]&&ans[5]!==null?Q[5].opts[ans[5]].t:'',
-    question_7:Q[6]&&ans[6]!==null?Q[6].opts[ans[6]].t:'',
-    question_8:Q[7]&&ans[7]!==null?Q[7].opts[ans[7]].t:'',
-    question_9:Q[8]&&ans[8]!==null?Q[8].opts[ans[8]].t:'',
-    question_10:Q[9]&&ans[9]!==null?Q[9].opts[ans[9]].t:'',
-    question_11:Q[10]&&ans[10]!==null?Q[10].opts[ans[10]].t:'',
-    question_12:Q[11]&&ans[11]!==null?Q[11].opts[ans[11]].t:'',
-    question_13:Q[12]&&ans[12]!==null?Q[12].opts[ans[12]].t:'',
-    question_14:Q[13]&&ans[13]!==null?Q[13].opts[ans[13]].t:'',
-    question_15:Q[14]&&ans[14]!==null?Q[14].opts[ans[14]].t:'',
-    question_16:Q[15]&&ans[15]!==null?Q[15].opts[ans[15]].t:'',
-    question_17:Q[16]&&ans[16]!==null?Q[16].opts[ans[16]].t:'',
-    question_18:Q[17]&&ans[17]!==null?Q[17].opts[ans[17]].t:'',
-    question_19:Q[18]&&ans[18]!==null?Q[18].opts[ans[18]].t:'',
-    question_20:Q[19]&&ans[19]!==null?Q[19].opts[ans[19]].t:'',
-    timestamp:new Date().toISOString()
+  // Affiche l'écran de confirmation
+  document.getElementById('cfProfileName').textContent = prof.name;
+  document.getElementById('cfAgeBadge').textContent = AGE_LABELS[selectedAge] || '';
+  document.getElementById('cfEmail').textContent = userEmail;
+  document.getElementById('prog-counter').textContent = 'Rapport envoyé';
+  document.getElementById('prog-fill').style.width = '100%';
+
+  const scoreNames={stress:'Gestion du stress',peur:'Blocage par la peur',confiance:'Confiance en soi',plaisir:'Rapport au plaisir',compet:'Compétitivité'};
+  document.getElementById('cfScores').innerHTML=Object.entries(pct).map(([k,v])=>`
+    <div class="cs-row">
+      <div class="cs-label">${scoreNames[k]}</div>
+      <div class="cs-track"><div class="cs-fill" id="csf-${k}"></div></div>
+      <div class="cs-pct">${v}%</div>
+    </div>`).join('');
+  setTimeout(()=>Object.entries(pct).forEach(([k,v])=>{
+    const el=document.getElementById('csf-'+k);
+    if(el) el.style.width=v+'%';
+  }),300);
+
+  // Construit le rapport HTML (pour Make → PDF)
+  const rapportHTML = buildRapportHTML(userFirstName, prof, pct, desc, exos, ageKey);
+
+  // Envoie au webhook Make
+  const reponses = {};
+  Q.forEach((q,i)=>{ reponses['question_'+String(i+1).padStart(2,'0')] = ans[i]!==null ? q.opts[ans[i]].t : ''; });
+
+  const payload = {
+    prenom: userFirstName,
+    nom: userLastName,
+    nom_complet: userFirstName + ' ' + userLastName,
+    email: userEmail,
+    sport: userSport,
+    profil: prof.name,
+    profil_id: prof.id,
+    age_tranche: selectedAge,
+    age_label: AGE_LABELS[selectedAge] || '',
+    scores: pct,
+    reponses: reponses,
+    rapport_html: rapportHTML,
+    timestamp: new Date().toISOString(),
+    // Champs pour le template email Brevo (params)
+    params: {
+      firstName: userFirstName,
+      lastName: userLastName,
+      sport: userSport,
+      profilName: prof.name,
+      headline: prof.headline,
+      description: desc,
+      scoreStress: pct.stress,
+      scorePeur: pct.peur,
+      scoreConfiance: pct.confiance,
+      scorePlaisir: pct.plaisir,
+      scoreCompet: pct.compet,
+      exo1Titre: exos[0].t,
+      exo1Desc: exos[0].d,
+      exo2Titre: exos[1].t,
+      exo2Desc: exos[1].d,
+      exo3Titre: exos[2].t,
+      exo3Desc: exos[2].d,
+      axeMethod: prof.axeMethod,
+      lienProgramme: CFG.DEEP[prof.id] || 'https://fabien-pinton.fr',
+    }
   };
 
-  const rapportHTML=buildRapport(fn,prof,pct,desc,exos,ageKey);
-
-  const paymentPayload={
-    type:'payment',name:fn,email:em,
-    profil:prof.name,profileName:prof.name,profil_id:prof.id,
-    age_tranche:selectedAge,
-    rapport:rapportHTML,
-    scores:pct,timestamp:new Date().toISOString()
-  };
-
-  try{
-    if(CFG.WEBHOOK&&!CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
-      await fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(leadPayload)});
-    }
-    if(CFG.STRIPE&&CFG.STRIPE.includes('buy.stripe.com')){
-      if(CFG.WEBHOOK&&!CFG.WEBHOOK.includes('VOTRE_WEBHOOK')){
-        fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paymentPayload),keepalive:true}).catch(()=>{});
-      }
-      const p=new URLSearchParams({prefilled_email:em,client_reference_id:prof.id+'_'+selectedAge.replace('+','plus')+'_'+Date.now()});
-      window.location.href=CFG.STRIPE+(CFG.STRIPE.includes('?')?'&':'?')+p;
-    }else{
-      btn.textContent='RECEVOIR MON RAPPORT — 14€ →';btn.disabled=false;
-    }
-  }catch(e){btn.textContent='RECEVOIR MON RAPPORT — 14€ →';btn.disabled=false;}
+  try {
+    await fetch(CFG.WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+  } catch(e) {
+    console.error('Webhook error:', e);
+  }
 }
 
-// ══ RAPPORT ══
-function buildRapport(name,prof,pct,desc,exos,ageKey){
-  const ageLbl=AGE_LABELS[ageKey]||'';
+// ══ RAPPORT HTML (envoyé à Make pour conversion PDF) ══
+function buildRapportHTML(name, prof, pct, desc, exos, ageKey){
+  const ageLbl = AGE_LABELS[ageKey] || '';
+  const date = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
   const scoreNames={stress:'Gestion du stress',peur:'Rapport à la peur',confiance:'Confiance en soi',plaisir:'Rapport au plaisir',compet:'Compétitivité'};
-  const sorted=Object.entries(pct).sort((a,b)=>b[1]-a[1]);
-  const scoresHTML=sorted.map(([k,v])=>`
-    <div style="display:grid;grid-template-columns:180px 1fr 56px;align-items:center;gap:16px;margin-bottom:18px;">
-      <div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#5A5040;">${scoreNames[k]}</div>
-      <div style="height:3px;background:#E8E1D4;"><div style="height:100%;width:${v}%;background:linear-gradient(90deg,#7A6020,#C9A84C);"></div></div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#A8852A;text-align:right;">${v}%</div>
-    </div>`).join('');
-  const exosHTML=exos.map((e,i)=>`
-    <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,0.18);padding:28px 32px;margin-bottom:16px;border-left:3px solid #A8852A;position:relative;">
-      <div style="position:absolute;top:20px;right:24px;font-family:'Bebas Neue',sans-serif;font-size:56px;color:rgba(168,133,42,.07);line-height:1;">${String(i+1).padStart(2,'0')}</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.1em;color:#A8852A;margin-bottom:10px;">${e.t}</div>
+  const sorted = Object.entries(pct).sort((a,b)=>b[1]-a[1]);
+
+  const scoresHTML = sorted.map(([k,v])=>`
+    <tr>
+      <td style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#5A5040;padding:10px 0;border-bottom:1px solid #F0EBE0;width:180px;">${scoreNames[k]}</td>
+      <td style="padding:10px 16px 10px 0;border-bottom:1px solid #F0EBE0;">
+        <div style="height:4px;background:#E8E1D4;border-radius:2px;">
+          <div style="height:100%;width:${v}%;background:#A8852A;border-radius:2px;"></div>
+        </div>
+      </td>
+      <td style="font-family:'Georgia',serif;font-size:20px;font-weight:700;color:#A8852A;padding:10px 0;border-bottom:1px solid #F0EBE0;white-space:nowrap;width:50px;">${v}%</td>
+    </tr>`).join('');
+
+  const exosHTML = exos.map((e,i)=>`
+    <div style="border-left:3px solid #A8852A;padding:20px 24px;margin-bottom:16px;background:#FDFAF5;">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8852A;font-weight:700;margin-bottom:8px;">Exercice ${i+1} · ${e.t}</div>
       <div style="font-size:14px;line-height:1.8;color:#5A5040;">${e.d}</div>
     </div>`).join('');
 
-  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Rapport Mental AXE — ${name}</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"></head><body style="font-family:'DM Sans',sans-serif;font-weight:300;background:#F7F3EC;color:#1A1612;margin:0;padding:0;">
-<div style="background:#1A1612;padding:48px 60px 40px;position:relative;overflow:hidden;">
-  <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7A6020,#C9A84C,#7A6020);"></div>
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.25em;color:#A8852A;margin-bottom:8px;">FABIEN PINTON · MÉTHODE AXE</div>
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,8vw,80px);letter-spacing:.04em;color:#F7F3EC;line-height:.9;margin-bottom:8px;">${name.toUpperCase()}</div>
-  <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.5);">${ageLbl}</div>
-  <div style="margin-top:20px;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(247,243,236,.4);">Rapport personnel · ${new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})}</div>
-</div>
-<div style="max-width:820px;margin:0 auto;padding:60px 40px 100px;">
-  <div style="margin-bottom:48px;">
-    <div style="font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:16px;">Profil détecté · Adapté à ta tranche d'âge</div>
-    <div style="background:#1A1612;padding:36px 40px;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7A6020,#C9A84C,transparent);"></div>
-      <div style="font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:#A8852A;margin-bottom:10px;">Ton profil principal</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,56px);letter-spacing:.04em;color:#F7F3EC;margin-bottom:12px;">${prof.name}</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:#C9A84C;margin-bottom:20px;">${prof.headline}</div>
-      <div style="font-size:14px;line-height:1.75;color:rgba(247,243,236,.9);">${desc}</div>
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Rapport Mental AXE — ${name}</title>
+<style>
+  body{font-family:Georgia,serif;background:#F7F3EC;color:#1A1612;margin:0;padding:0;}
+  @media print{body{background:#fff;}}
+</style>
+</head>
+<body>
+
+<!-- EN-TÊTE -->
+<div style="background:#fff;border-bottom:3px solid #A8852A;padding:36px 60px 28px;">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:8px;">Fabien Pinton · Méthode AXE Mental Performance</div>
+      <div style="font-family:Georgia,serif;font-size:36px;font-weight:700;color:#1A1612;letter-spacing:1px;margin-bottom:4px;">${name.charAt(0).toUpperCase()+name.slice(1)}</div>
+      <div style="font-size:12px;color:#8A7D6A;letter-spacing:1px;">${ageLbl}</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:10px;color:#8A7D6A;margin-bottom:4px;">Rapport personnel</div>
+      <div style="font-size:11px;color:#5A5040;font-weight:700;">${date}</div>
+      <div style="font-size:9px;color:#A8852A;letter-spacing:2px;text-transform:uppercase;margin-top:8px;">Confidentiel</div>
     </div>
   </div>
-  <div style="margin-bottom:48px;">
-    <div style="font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:20px;">Tes scores · 5 dimensions</div>
-    ${scoresHTML}
+</div>
+
+<!-- CORPS -->
+<div style="max-width:760px;margin:0 auto;padding:48px 60px 80px;">
+
+  <!-- SECTION PROFIL -->
+  <div style="margin-bottom:40px;">
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;border-bottom:1px solid #E8E1D4;padding-bottom:8px;margin-bottom:24px;">Profil détecté</div>
+    <div style="border-left:3px solid #A8852A;padding:24px 28px;background:#fff;">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8852A;margin-bottom:8px;">Ton profil principal</div>
+      <div style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#1A1612;margin-bottom:6px;">${prof.name}</div>
+      <div style="font-family:Georgia,serif;font-size:16px;font-style:italic;color:#A8852A;margin-bottom:16px;">${prof.headline}</div>
+      <div style="font-size:14px;line-height:1.85;color:#5A5040;">${desc}</div>
+    </div>
   </div>
-  <div style="margin-bottom:48px;">
-    <div style="font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:20px;">3 exercices adaptés · À faire cette semaine</div>
+
+  <!-- SECTION SCORES -->
+  <div style="margin-bottom:40px;">
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;border-bottom:1px solid #E8E1D4;padding-bottom:8px;margin-bottom:24px;">Tes scores · 5 dimensions</div>
+    <table style="width:100%;border-collapse:collapse;">${scoresHTML}</table>
+  </div>
+
+  <!-- SECTION EXERCICES -->
+  <div style="margin-bottom:40px;">
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;border-bottom:1px solid #E8E1D4;padding-bottom:8px;margin-bottom:24px;">3 exercices personnalisés · À faire cette semaine</div>
     ${exosHTML}
   </div>
-  <div style="background:#F0EBE0;border:1px solid rgba(168,133,42,.18);padding:32px 36px;margin-bottom:32px;border-left:3px solid #A8852A;">
-    <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:10px;">La méthode AXE</div>
-    <div style="font-size:14px;line-height:1.8;color:#5A5040;">${prof.axeMethod}</div>
+
+  <!-- MÉTHODE AXE -->
+  <div style="border:1px solid #E8E1D4;border-left:3px solid #A8852A;padding:24px 28px;margin-bottom:40px;background:#fff;">
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:10px;">La méthode AXE · Alignement · Exigence · Engagement</div>
+    <div style="font-size:14px;line-height:1.85;color:#5A5040;">${prof.axeMethod}</div>
   </div>
-  <div style="background:#1A1612;padding:48px 44px;text-align:center;position:relative;overflow:hidden;">
+
+  <!-- PROCHAINE ÉTAPE -->
+  <div style="background:#1A1612;padding:40px 44px;text-align:center;position:relative;">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7A6020,#C9A84C,#7A6020);"></div>
-    <div style="font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:#A8852A;margin-bottom:12px;">Prochaine étape</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.05em;color:#F7F3EC;margin-bottom:12px;">PROGRAMME APPROFONDI</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:rgba(247,243,236,.8);margin-bottom:28px;line-height:1.6;">6 semaines d'exercices adaptés à ton profil ${prof.name} et à ta tranche d'âge ${ageLbl}. Plan semaine par semaine. Accès immédiat.</div>
-    <a href="${CFG.DEEP[prof.id]||'https://fabien-pinton.fr'}" style="display:inline-block;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:#A8852A;color:#FDFAF5;text-decoration:none;padding:16px 40px;">ACCÉDER À MON PROGRAMME — 37€ →</a>
-    <div style="margin-top:16px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.3);">Ou parle directement avec Fabien :</div>
-    <a href="${CFG.CALL}" style="display:inline-block;margin-top:10px;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:#C9A84C;text-decoration:none;padding:10px 24px;border:1px solid rgba(168,133,42,.35);">APPEL DÉCOUVERTE GRATUIT →</a>
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:12px;">Prochaine étape</div>
+    <div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#F7F3EC;margin-bottom:10px;">Aller plus loin avec Fabien</div>
+    <div style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:rgba(247,243,236,.75);margin-bottom:24px;line-height:1.7;">Ce rapport est un premier diagnostic. Pour un travail en profondeur sur ton profil ${prof.name}, réserve un appel découverte gratuit.</div>
+    <div style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:#A8852A;color:#FDFAF5;padding:14px 36px;">tidycal.com/fpinton/appel-decouverte</div>
+    <div style="margin-top:16px;font-size:11px;color:rgba(247,243,236,.4);">Ou contacte Fabien directement : contact@fabien-pinton.fr · 07.72.28.94.57</div>
   </div>
-  <div style="text-align:center;margin-top:28px;">
-    <a href="https://g.page/r/CXtpS9ZcTZk-EBM/review" target="_blank" style="display:inline-block;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:#A8852A;color:#FDFAF5;text-decoration:none;padding:12px 28px;">⭐ LAISSER UN AVIS GOOGLE →</a>
-  </div>
+
 </div>
-<div style="background:#1A1612;border-top:1px solid rgba(168,133,42,.1);padding:24px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.2em;color:#A8852A;">FABIEN PINTON · MÉTHODE AXE</div>
-  <div style="font-size:11px;color:rgba(247,243,236,.5);text-align:right;line-height:1.7;">contact@fabien-pinton.fr · 07.72.28.94.57<br>Rapport personnel et non transférable</div>
+
+<!-- PIED DE PAGE -->
+<div style="background:#fff;border-top:1px solid #E8E1D4;padding:16px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+  <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8852A;">Méthode AXE · Fabien Pinton · 2026</div>
+  <div style="font-size:11px;color:#8A7D6A;">contact@fabien-pinton.fr · 07.72.28.94.57 · fabien-pinton.fr</div>
 </div>
-</body></html>`;
+
+</body>
+</html>`;
 }
 
-// init
-document.getElementById('step-age').style.display='block';
+// ══ INIT ══
+document.addEventListener('DOMContentLoaded', function(){
+  checkReturnFromStripe();
+});
 </script>
 </body>
 </html>
