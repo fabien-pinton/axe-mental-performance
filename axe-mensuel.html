@@ -931,14 +931,198 @@ function showToast(title, msg) {
   }
   if (sessionOk) return;
   if (!token) {
+    document.body.style.overflow = 'auto';
     document.body.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#F5F0E8;flex-direction:column;gap:20px;text-align:center;padding:40px;font-family:'DM Sans',sans-serif;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:#C9A84C;letter-spacing:.15em;">AXE</div>
-        <div style="width:40px;height:1px;background:#C9A84C;opacity:.4;margin:0 auto;"></div>
-        <p style="color:#8A7E6E;font-size:11px;letter-spacing:.3em;text-transform:uppercase;">Accès réservé</p>
-        <p style="color:#5A4E3E;font-size:13px;max-width:360px;line-height:1.8;">Ce programme est accessible uniquement aux abonnés AXE Mensuel. Si vous êtes déjà abonné, utilisez le lien reçu par email.</p>
-        <a href="https://fabien-pinton.fr" style="color:#C9A84C;font-size:10px;letter-spacing:.25em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(201,168,76,.25);padding:14px 32px;margin-top:12px;">← Retour au site</a>
-      </div>`;
+<div style="font-family:'DM Sans',sans-serif;background:#F7F3EC;color:#1C1510;min-height:100vh;overflow-x:hidden;">
+
+  <!-- NAV -->
+  <nav style="position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 52px;background:rgba(247,243,236,.97);backdrop-filter:blur(18px);border-bottom:1px solid rgba(168,133,42,.18);">
+    <a href="https://fabien-pinton.fr" style="text-decoration:none;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.22em;color:#A8852A;">AXE</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:#5A4E3E;">Préparation Mentale</div>
+    </a>
+    <a href="https://fabien-pinton.fr/diagnostic.html" style="font-size:9px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:#A8852A;color:#FDFAF5;text-decoration:none;padding:10px 22px;">COMMENCER — 14€ →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section style="background:#F2EDE4;padding:100px 80px 80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 100% 50%,rgba(168,133,42,.07) 0%,transparent 70%);pointer-events:none;"></div>
+    <div style="position:relative;z-index:1;">
+      <div style="font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:20px;display:flex;align-items:center;gap:12px;"><span style="display:inline-block;width:32px;height:1px;background:#A8852A;"></span>Après le Programme Premium</div>
+      <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,7vw,88px);line-height:.88;letter-spacing:.04em;color:#1C1510;margin-bottom:20px;">LE PROCESSUS<br><span style="color:#A8852A;">CONTINUE.</span></h1>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2vw,22px);font-style:italic;color:#5A4E3E;line-height:1.65;max-width:480px;margin-bottom:36px;">Tu as installé les bases. Maintenant tu les approfondis — mois après mois — jusqu'à ce que le focus processus soit automatique en compétition.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+        <a href="https://fabien-pinton.fr/diagnostic.html" style="font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:#A8852A;color:#FDFAF5;text-decoration:none;padding:16px 36px;">COMMENCER PAR LE DIAGNOSTIC →</a>
+        <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#A8852A;text-decoration:none;border:1px solid rgba(168,133,42,.35);padding:15px 28px;">Appel découverte gratuit</a>
+      </div>
+    </div>
+    <!-- Stat block -->
+    <div style="position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,.18);border-top:3px solid #A8852A;padding:28px 24px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:#A8852A;line-height:1;">4</div>
+        <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:#5A4E3E;margin-top:6px;">Modules chaque mois</div>
+      </div>
+      <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,.18);border-top:3px solid #A8852A;padding:28px 24px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:#A8852A;line-height:1;">1</div>
+        <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:#5A4E3E;margin-top:6px;">RDV débrief avec Fabien</div>
+      </div>
+      <div style="background:#1A1612;border:1px solid rgba(168,133,42,.18);border-top:3px solid #A8852A;padding:28px 24px;grid-column:1/-1;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:#A8852A;line-height:1;">24€</div>
+        <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.5);margin-top:6px;">Par mois · Résiliable à tout moment</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CE QUE TU REÇOIS -->
+  <section style="padding:100px 80px;background:#F7F3EC;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:14px;display:flex;align-items:center;gap:12px;"><span style="display:inline-block;width:32px;height:1px;background:#A8852A;"></span>Chaque mois</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,64px);letter-spacing:.04em;color:#1C1510;margin-bottom:48px;line-height:.9;">CE QUE TU<br><span style="color:#A8852A;">REÇOIS.</span></h2>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <!-- Item 1 -->
+        <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,.18);border-left:3px solid #A8852A;padding:32px 28px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:rgba(168,133,42,.12);line-height:1;margin-bottom:12px;">01</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;color:#A8852A;margin-bottom:10px;">4 NOUVEAUX MODULES</div>
+          <div style="font-size:13px;color:#5A4E3E;line-height:1.75;">Chaque mois, 4 modules inédits avec des exercices approfondis. Pas de répétition — chaque mois approfondit la couche suivante du travail mental.</div>
+        </div>
+        <!-- Item 2 -->
+        <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,.18);border-left:3px solid #A8852A;padding:32px 28px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:rgba(168,133,42,.12);line-height:1;margin-bottom:12px;">02</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;color:#A8852A;margin-bottom:10px;">ADAPTÉ À TON PROFIL</div>
+          <div style="font-size:13px;color:#5A4E3E;line-height:1.75;">Exercices calibrés selon ton profil mental (Hyperstressé, Bloqué par la peur, Sans confiance, Performeur Fluide, Hypercompétiteur) ET ta tranche d'âge.</div>
+        </div>
+        <!-- Item 3 -->
+        <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,.18);border-left:3px solid #A8852A;padding:32px 28px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:rgba(168,133,42,.12);line-height:1;margin-bottom:12px;">03</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;color:#A8852A;margin-bottom:10px;">1 RDV DÉBRIEF PAR MODULE</div>
+          <div style="font-size:13px;color:#5A4E3E;line-height:1.75;">30 minutes avec Fabien après chaque module pour valider ta progression, ajuster le travail en temps réel et débloquer le module suivant.</div>
+        </div>
+        <!-- Item 4 -->
+        <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,.18);border-left:3px solid #A8852A;padding:32px 28px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:rgba(168,133,42,.12);line-height:1;margin-bottom:12px;">04</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;color:#A8852A;margin-bottom:10px;">PDF TÉLÉCHARGEABLES</div>
+          <div style="font-size:13px;color:#5A4E3E;line-height:1.75;">Chaque module est téléchargeable en PDF avec tes exercices et tes notes. Tu l'emmènes en déplacement, en compétition, sans connexion internet.</div>
+        </div>
+        <!-- Item 5 -->
+        <div style="background:#FDFAF5;border:1px solid rgba(168,133,42,.18);border-left:3px solid #A8852A;padding:32px 28px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:rgba(168,133,42,.12);line-height:1;margin-bottom:12px;">05</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;color:#A8852A;margin-bottom:10px;">PROGRESSION SAUVEGARDÉE</div>
+          <div style="font-size:13px;color:#5A4E3E;line-height:1.75;">Tes notes, tes modules complétés et ta progression sont sauvegardés automatiquement — en local et dans le cloud. Tu reprends exactement là où tu en es.</div>
+        </div>
+        <!-- Item 6 — Prix -->
+        <div style="background:#1A1612;border:1px solid rgba(168,133,42,.25);border-left:3px solid #A8852A;padding:32px 28px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#A8852A;line-height:1;margin-bottom:8px;">24€</div>
+          <div style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(247,243,236,.5);margin-bottom:14px;">Par mois</div>
+          <div style="font-size:13px;color:rgba(247,243,236,.7);line-height:1.75;margin-bottom:16px;">Résiliable à tout moment. Accès réservé aux alumni du Programme Premium.</div>
+          <a href="https://fabien-pinton.fr/diagnostic.html" style="display:inline-block;font-size:9px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:#A8852A;color:#1C1510;text-decoration:none;padding:12px 22px;">COMMENCER →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LES 4 MODULES DU MOIS -->
+  <section style="padding:100px 80px;background:#F0EBE0;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:14px;display:flex;align-items:center;gap:12px;"><span style="display:inline-block;width:32px;height:1px;background:#A8852A;"></span>Structure du mois</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,64px);letter-spacing:.04em;color:#1C1510;margin-bottom:16px;line-height:.9;">LES 4 MODULES<br><span style="color:#A8852A;">DE CE MOIS.</span></h2>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5A4E3E;line-height:1.65;max-width:600px;margin-bottom:56px;">Chaque mois suit une progression logique — des bases aux automatismes. Tu travailles un axe par module, validé avec Fabien avant de passer au suivant.</p>
+
+      <!-- Timeline modules -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;">
+        <div style="position:absolute;top:44px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,#7A6020,#C9A84C,#7A6020);"></div>
+        ${['INSTALLER LE PROCESSUS','PERFORMER SOUS PRESSION','RÉGULARITÉ & DURABILITÉ','LE MENTAL DU CHAMPION'].map((title,i)=>`
+        <div style="padding:0 16px;text-align:center;position:relative;">
+          <div style="width:88px;height:88px;border-radius:50%;background:${i===0?'#A8852A':'#FDFAF5'};border:2px solid rgba(168,133,42,.35);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;position:relative;z-index:1;">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.1em;color:${i===0?'#FDFAF5':'#A8852A'};">0${i+1}</span>
+          </div>
+          <div style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:#A8852A;margin-bottom:8px;">Module 0${i+1}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.06em;color:#1C1510;line-height:1.1;">${title}</div>
+        </div>`).join('')}
+      </div>
+
+      <!-- Détail module 1 en avant -->
+      <div style="margin-top:56px;background:#FDFAF5;border:1px solid rgba(168,133,42,.18);border-top:3px solid #A8852A;padding:40px;">
+        <div style="font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:10px;">Exemple · Module 01 · Ce mois</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:#1C1510;margin-bottom:14px;">INSTALLER LE PROCESSUS</div>
+        <p style="font-size:14px;color:#5A4E3E;line-height:1.75;max-width:720px;margin-bottom:24px;">Poser la fondation du focus processus dans ta pratique quotidienne. Apprendre à te concentrer sur ce que tu contrôles — tes actions — plutôt que sur ce que tu espères — le résultat. Trois exercices adaptés à ton profil et ton âge, à appliquer immédiatement.</p>
+        <div style="background:#1A1612;padding:20px 28px;display:inline-block;">
+          <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.4);margin-bottom:8px;">Ton mantra du module</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#F5F0E8;">"Ce que je fais maintenant. Rien d'autre."</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMMENT ÇA FONCTIONNE -->
+  <section style="padding:100px 80px;background:#F7F3EC;">
+    <div style="max-width:900px;margin:0 auto;">
+      <div style="font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:14px;display:flex;align-items:center;gap:12px;"><span style="display:inline-block;width:32px;height:1px;background:#A8852A;"></span>Le rythme mensuel</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,64px);letter-spacing:.04em;color:#1C1510;margin-bottom:56px;line-height:.9;">COMMENT<br><span style="color:#A8852A;">ÇA MARCHE.</span></h2>
+
+      <div style="display:grid;grid-template-columns:1fr;gap:0;">
+        ${[
+          ['Tu démarres le module','Accède à tes 3 exercices personnalisés selon ton profil et ton âge. Lis, pratique, note tes observations dans le journal intégré.'],
+          ['Tu travailles 1 à 2 semaines','Applique les exercices en compétition et à l\\'entraînement. Utilise le journal pour noter ce qui marche, ce qui résiste.'],
+          ['Tu réserves ton RDV débrief','30 minutes avec Fabien pour valider ta progression, ajuster ce qui ne fonctionne pas encore et préparer le module suivant.'],
+          ['Le module suivant se débloque','À J+1 de ton RDV, le module suivant s\\'ouvre automatiquement. Chaque module est validé avant d\\'être approfondi.'],
+          ['Tu complètes les 4 modules','Fin de mois. Le mois suivant, 4 nouveaux modules t\\'attendent avec des exercices plus profonds sur les mêmes thèmes.'],
+        ].map(([t,d],i)=>`
+        <div style="display:grid;grid-template-columns:60px 1fr;gap:24px;padding:28px 0;border-bottom:1px solid rgba(168,133,42,.12);align-items:start;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:rgba(168,133,42,.2);line-height:1;">0${i+1}</div>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em;color:#A8852A;margin-bottom:6px;">${t.toUpperCase()}</div>
+            <div style="font-size:14px;color:#5A4E3E;line-height:1.75;">${d}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <!-- CITATION FABIEN -->
+  <section style="padding:80px;background:#1A1612;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#A8852A,transparent);"></div>
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+      <div style="font-size:9px;letter-spacing:.45em;text-transform:uppercase;color:#A8852A;margin-bottom:24px;">Fabien Pinton · Préparateur Mental</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(20px,2.8vw,28px);font-style:italic;color:#F5F0E8;line-height:1.65;margin-bottom:24px;">"Le travail mental n'est pas un sprint. Ce sont des couches. Chaque mois, tu installes la suivante — jusqu'à ce que le processus devienne aussi naturel que respirer sous pression."</p>
+      <div style="width:40px;height:1px;background:#A8852A;margin:0 auto;"></div>
+    </div>
+  </section>
+
+  <!-- RÉSERVÉ AUX ALUMNI -->
+  <section style="padding:100px 80px;background:#F2EDE4;">
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+      <div style="font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:20px;">Accès</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,64px);letter-spacing:.04em;color:#1C1510;margin-bottom:20px;line-height:.9;">RÉSERVÉ AUX<br><span style="color:#A8852A;">ALUMNI PREMIUM.</span></h2>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5A4E3E;line-height:1.65;max-width:580px;margin:0 auto 40px;">L'AXE Mensuel est accessible uniquement après le Programme Premium — parce que les bases doivent être en place pour aller plus loin. Tu n'as pas encore fait le Programme Premium ?</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a href="https://fabien-pinton.fr/diagnostic.html" style="font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:#A8852A;color:#FDFAF5;text-decoration:none;padding:16px 36px;">COMMENCER PAR LE DIAGNOSTIC — 14€ →</a>
+        <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#A8852A;text-decoration:none;border:1px solid rgba(168,133,42,.35);padding:15px 28px;">Appel découverte gratuit</a>
+      </div>
+      <p style="font-size:11px;color:#8A7E6E;margin-top:20px;letter-spacing:.1em;">Déjà abonné ? Accède à ton programme via le lien reçu par email.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:#1A1612;padding:28px 80px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(168,133,42,.12);">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.2em;color:#A8852A;">FABIEN PINTON · MÉTHODE AXE</div>
+    <div style="font-size:10px;color:rgba(247,243,236,.3);letter-spacing:.1em;">Préparateur Mental · contact@fabien-pinton.fr</div>
+  </footer>
+
+  <style>
+    @media(max-width:768px){
+      section[style*="padding:100px 80px"]{padding:60px 24px !important;}
+      section[style*="padding:80px"]{padding:60px 24px !important;}
+      section[style*="padding:100px 80px;background:#F2EDE4"]{padding:60px 24px !important;}
+      nav[style]{padding:14px 20px !important;}
+      footer[style]{padding:20px 24px !important;flex-direction:column;gap:10px;text-align:center;}
+      [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important;}
+      [style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr !important;}
+      [style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr 1fr !important;}
+    }
+  </style>
+</div>`;
     return;
   }
   try {
