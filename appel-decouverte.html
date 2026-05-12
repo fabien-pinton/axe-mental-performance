@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appel Découverte Gratuit — Fabien Pinton · Préparateur Mental</title>
+  <meta name="description" content="30 minutes pour comprendre ce qui bloque ton mental en compétition. Appel découverte gratuit avec Fabien Pinton.">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #A8852A;
+      --gold-l: #C9A84C;
+      --gold-d: #7A6020;
+      --gold-xl: #F5EDD8;
+      --cream: #F7F3EC;
+      --cream2: #FDFAF5;
+      --cream3: #F0EBE0;
+      --ink: #1A1612;
+      --inkd: #5A5040;
+      --inkf: #8A7D6A;
+      --bdr: rgba(168,133,42,0.18);
+      --bdr2: rgba(168,133,42,0.32);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: .4;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    /* ── NAV ── */
+    nav {
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--bdr);
+      background: rgba(247,243,236,.92);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-logo-main {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: .2em;
+      color: var(--gold);
+    }
+
+    .nav-logo-sub {
+      font-size: 9px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--inkf);
+    }
+
+    .nav-badge {
+      font-size: 9px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--inkf);
+      border: 1px solid var(--bdr);
+      padding: 6px 14px;
+    }
+
+    /* ── MAIN ── */
+    main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 640px;
+      position: relative;
+    }
+
+    /* Ligne dorée décorative */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: 0;
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      font-size: 9px;
+      letter-spacing: .5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .eyebrow::after {
+      content: '';
+      display: block;
+      flex: 1;
+      height: 1px;
+      background: var(--bdr2);
+    }
+
+    /* ── TITRE ── */
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 10vw, 80px);
+      line-height: .88;
+      letter-spacing: .03em;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    /* ── SOUS-TITRE ── */
+    .subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(17px, 2.2vw, 21px);
+      font-style: italic;
+      color: var(--inkd);
+      line-height: 1.65;
+      margin-bottom: 48px;
+      max-width: 520px;
+    }
+
+    /* ── LISTE CE QU'ON FAIT ── */
+    .what {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 48px;
+      border: 1px solid var(--bdr);
+      border-top: 3px solid var(--gold);
+      background: var(--cream2);
+    }
+
+    .what-item {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 16px;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--bdr);
+      align-items: start;
+    }
+
+    .what-item:last-child { border-bottom: none; }
+
+    .what-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+
+    .what-text {
+      font-size: 13px;
+      color: var(--inkd);
+      line-height: 1.75;
+      padding-top: 2px;
+    }
+
+    /* ── CTA ── */
+    .cta-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cta-btn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: var(--cream2);
+      padding: 20px 40px;
+      transition: background .2s, transform .15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-btn:hover {
+      background: var(--gold-d);
+      transform: translateY(-1px);
+    }
+
+    .cta-sub {
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: .15em;
+      color: var(--inkf);
+    }
+
+    /* ── SÉPARATEUR ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--bdr2), transparent);
+      margin: 56px 0;
+    }
+
+    /* ── AVIS GOOGLE ── */
+    .avis-label {
+      font-size: 9px;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--inkf);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .google-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stars { color: #F4B400; font-size: 13px; letter-spacing: 1px; }
+
+    .avis-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .avis-card {
+      background: var(--cream2);
+      border: 1px solid var(--bdr);
+      border-left: 3px solid var(--gold);
+      padding: 20px 20px 16px;
+    }
+
+    .avis-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px;
+      letter-spacing: .06em;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .avis-meta {
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--inkf);
+      margin-bottom: 10px;
+    }
+
+    .avis-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--inkd);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .avis-verify {
+      font-size: 9px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      opacity: .8;
+    }
+
+    .avis-verify:hover { opacity: 1; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 20px 48px;
+      border-top: 1px solid var(--bdr);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: .18em;
+      color: var(--gold);
+    }
+
+    .footer-contact {
+      font-size: 10px;
+      letter-spacing: .1em;
+      color: var(--inkf);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card > * {
+      animation: fadeUp .6s ease both;
+    }
+
+    .eyebrow  { animation-delay: .05s; }
+    h1        { animation-delay: .12s; }
+    .subtitle { animation-delay: .20s; }
+    .what     { animation-delay: .28s; }
+    .cta-wrap { animation-delay: .36s; }
+    .divider  { animation-delay: .44s; }
+    .avis-label { animation-delay: .50s; }
+    .avis-grid  { animation-delay: .56s; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      nav { padding: 16px 20px; }
+      .nav-badge { display: none; }
+      main { padding: 56px 20px; }
+      footer { padding: 16px 20px; flex-direction: column; text-align: center; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <a href="https://fabien-pinton.fr" class="nav-logo">
+      <span class="nav-logo-main">AXE</span>
+      <span class="nav-logo-sub">Préparation Mentale</span>
+    </a>
+    <span class="nav-badge">Appel gratuit · 30 min</span>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+    <div class="card">
+
+      <div class="eyebrow">Fabien Pinton · Préparateur Mental</div>
+
+      <h1>30 MINUTES<br>POUR <em>TOUT</em><br>COMPRENDRE.</h1>
+
+      <p class="subtitle">
+        Ce qui bloque ton mental en compétition a un nom précis. En 30 minutes, on l'identifie — et tu repars avec des pistes concrètes.
+      </p>
+
+      <!-- Ce qu'on fait pendant l'appel -->
+      <div class="what">
+        <div class="what-item">
+          <span class="what-num">01</span>
+          <span class="what-text">On identifie ton profil mental parmi les 5 profils qui reviennent systématiquement chez les sportifs.</span>
+        </div>
+        <div class="what-item">
+          <span class="what-num">02</span>
+          <span class="what-text">On comprend exactement ce qui se passe dans ta tête le jour J — et pourquoi ça ne se passe pas à l'entraînement.</span>
+        </div>
+        <div class="what-item">
+          <span class="what-num">03</span>
+          <span class="what-text">Tu repars avec 2-3 pistes concrètes adaptées à ton profil, applicables dès la semaine suivante.</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-wrap">
+        <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" rel="noopener" class="cta-btn">
+          RÉSERVER MON APPEL GRATUIT →
+        </a>
+        <p class="cta-sub">Gratuit · 30 min · Visioconférence · Aucun engagement</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Avis Google -->
+      <div class="avis-label">
+        <div class="google-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          <span class="stars">★★★★★</span>
+        </div>
+        Avis Google · vérifiables
+      </div>
+
+      <div class="avis-grid">
+
+        <div class="avis-card">
+          <div class="avis-name">Valérie VILLARD</div>
+          <div class="avis-meta">Il y a 2 semaines · 1 avis Google</div>
+          <p class="avis-text">Je recommande Fabien comme coach mental. De part son professionnalisme, son écoute et sa bienveillance mon fils arrive mieux à gérer son stress et travail sa confiance en lui. Ses conseils sont pertinents, motivants et toujours adaptés à sa situation.</p>
+          <a href="https://www.google.com/maps/contrib/102741539305924737646/reviews?hl=fr" target="_blank" rel="noopener" class="avis-verify">Vérifier cet avis →</a>
+        </div>
+
+        <div class="avis-card">
+          <div class="avis-name">Elliott Busca</div>
+          <div class="avis-meta">Il y a 4 semaines · Local Guide · 120 avis</div>
+          <p class="avis-text">J'ai fait appel à Fabien cette année. La prestation est top, il est très professionnel et ses analyses sont bonnes. Ses conseils sont précieux, je recommande à 100%.</p>
+          <a href="https://www.google.com/maps/contrib/101472384597474222600/reviews?hl=fr" target="_blank" rel="noopener" class="avis-verify">Vérifier cet avis →</a>
+        </div>
+
+        <div class="avis-card">
+          <div class="avis-name">Enzo ROQUE</div>
+          <div class="avis-meta">Il y a 3 semaines · 2 avis Google</div>
+          <p class="avis-text">Questionnaire clair et pertinent, il permet déjà de mieux comprendre certains blocages.</p>
+          <a href="https://www.google.com/maps/contrib/113735466958256897314/reviews?hl=fr" target="_blank" rel="noopener" class="avis-verify">Vérifier cet avis →</a>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-name">FABIEN PINTON · MÉTHODE AXE</span>
+    <span class="footer-contact">contact@fabien-pinton.fr</span>
+  </footer>
+
+</div>
+</body>
+</html>
