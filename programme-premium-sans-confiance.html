@@ -557,9 +557,87 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 </footer>
 
 <script>
-const KEY='axe_prem_confiance';
-const DATA=JSON.parse(localStorage.getItem(KEY)||'{"unlocks":{},"pacte":null,"lettre":""}');
-function save(){try{localStorage.setItem(KEY,JSON.stringify(DATA));}catch(e){}}
+// ── AIRTABLE CONFIG ──
+const AT_TOKEN = 'patloD32aT93ZuJMA.dcc731bb73bd7cb2de3d3cdf66f164e9a36a00de73aab3a0b868899e3b8c45fa';
+const AT_BASE  = 'appLQTD1lgEmXjSDB';
+const AT_TABLE = 'tblegbO0k0qHa1Lxh';
+const urlParams = new URLSearchParams(window.location.search);
+const CLIENT_TOKEN = urlParams.get('token') || null;
+let AT_RECORD_ID = null;
+let DATA = {unlocks:{}, pacte:null, lettre:''};
+let saveTimer = null;
+
+async function atGet() {
+  if (!CLIENT_TOKEN) return null;
+  try {
+    const enc = encodeURIComponent(CLIENT_TOKEN);
+    const url = `https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}?filterByFormula=Token%3D%22${enc}%22`;
+    const r = await fetch(url, {headers:{'Authorization':'Bearer '+AT_TOKEN}});
+    const d = await r.json();
+    if (d.records && d.records.length > 0) {
+      AT_RECORD_ID = d.records[0].id;
+      return d.records[0].fields;
+    }
+  } catch(e) {}
+  return null;
+}
+
+async function atPatch(fields) {
+  if (!AT_RECORD_ID) return;
+  try {
+    await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}/${AT_RECORD_ID}`, {
+      method: 'PATCH',
+      headers: {'Authorization':'Bearer '+AT_TOKEN,'Content-Type':'application/json'},
+      body: JSON.stringify({fields})
+    });
+  } catch(e) {}
+}
+
+function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(pushToAirtable, 2000); }
+
+async function pushToAirtable() {
+  const fields = { Derniere_activite: new Date().toISOString().split('T')[0] };
+  if (DATA.unlocks && Object.keys(DATA.unlocks).length) fields['Modules_completes'] = JSON.stringify(DATA.unlocks);
+  for (let i = 0; i <= 3; i++) { const v = DATA['note_m'+i]; if (v !== undefined) fields['Notes_M'+(i+1)] = v; }
+  if (DATA.lettre) fields['Notes_M4'] = (fields['Notes_M4']||'') + '\n---LETTRE---\n' + DATA.lettre;
+  await atPatch(fields);
+  showSaveInd();
+}
+
+function showSaveInd() {
+  let ind = document.getElementById('axe-save-ind');
+  if (!ind) {
+    ind = document.createElement('div');
+    ind.id = 'axe-save-ind';
+    ind.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#A8852A;color:#FDFAF5;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;';
+    document.body.appendChild(ind);
+  }
+  ind.textContent = '✓ Sauvegardé';
+  ind.style.opacity = '1';
+  setTimeout(() => ind.style.opacity = '0', 2000);
+}
+
+async function initAirtable() {
+  if (!CLIENT_TOKEN) { checkUnlocks(); restoreModNotes(); return; }
+  const fields = await atGet();
+  if (fields) {
+    if (fields.Modules_completes) { try { DATA.unlocks = JSON.parse(fields.Modules_completes); } catch(e) {} }
+    for (let i = 0; i <= 3; i++) { const v = fields['Notes_M'+(i+1)]; if (v) DATA['note_m'+i] = v; }
+  }
+  checkUnlocks();
+  restoreModNotes();
+}
+
+function restoreModNotes() {
+  for (let i = 0; i <= 3; i++) {
+    const ta = document.getElementById('modnote-'+i);
+    if (ta && DATA['note_m'+i]) ta.value = DATA['note_m'+i];
+  }
+  const lt = document.getElementById('j-lettre');
+  if (lt && DATA.lettre) lt.value = DATA.lettre;
+}
+
+function save(){ scheduleSave(); }
 
 function setUnlock(idx){
   const inp=document.getElementById('rdv'+idx+'-date');
@@ -570,6 +648,7 @@ function setUnlock(idx){
   save();checkUnlocks();
   alert('✅ Module '+(idx+1)+' se débloque le '+d.toLocaleDateString('fr-FR'));
 }
+
 function checkUnlocks(){
   const today=new Date().toISOString().split('T')[0];
   [1,2,3].forEach(i=>{
@@ -579,17 +658,20 @@ function checkUnlocks(){
     }
   });
 }
+
 function tryUnlock(idx){
   const today=new Date().toISOString().split('T')[0];
   if(DATA.unlocks[idx]&&DATA.unlocks[idx]<=today){showMod(idx);}
   else if(DATA.unlocks[idx]){alert('🔒 Ce module se débloque le '+new Date(DATA.unlocks[idx]).toLocaleDateString('fr-FR'));}
   else{alert('🔒 Ce module se débloque à J+1 après votre RDV avec Fabien.');}
 }
+
 function showMod(idx){
   document.querySelectorAll('.pmod').forEach((p,i)=>p.classList.toggle('active',i===idx));
   document.querySelectorAll('.pmn-item').forEach((n,i)=>{n.classList.toggle('active',i===idx);if(i!==idx)n.classList.remove('active');});
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
 function signPacte(){
   const btn=document.getElementById('pacte-btn');
   if(btn.classList.contains('signed'))return;
@@ -598,56 +680,22 @@ function signPacte(){
   document.getElementById('pacte-date').textContent='Signé le '+now;
   DATA.pacte=now;save();
 }
+
 function saveLettre(){
   const ta=document.getElementById('j-lettre');
   DATA.lettre=ta.value;save();
   const btn=ta.nextElementSibling;const o=btn.textContent;btn.textContent='✓ Enregistré';setTimeout(()=>btn.textContent=o,2000);
 }
-function downloadPacte(){
-  if(!DATA.pacte){alert('Signez votre Pacte avant de le télécharger.');return;}
-  const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;background:#F7F3EC;margin:0;padding:0;}
-  .page{max-width:680px;margin:0 auto;padding:60px 48px;}
-  .hdr{background:#1A1612;padding:40px 44px;text-align:center;}
-  .hdr-logo{font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:16px;}
-  .hdr-title{font-size:52px;letter-spacing:.06em;color:#F7F3EC;font-weight:bold;}
-  .hdr-title em{color:#C9A84C;font-style:italic;}
-  .hdr-sub{font-size:13px;color:rgba(247,243,236,.5);margin-top:8px;letter-spacing:.2em;}
-  .profil-badge{display:inline-block;border:1px solid rgba(168,133,42,.4);padding:5px 18px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#C9A84C;margin-top:14px;}
-  .section{margin:36px 0;}
-  .section-label{font-size:8px;letter-spacing:.5em;text-transform:uppercase;color:#A8852A;margin-bottom:16px;border-bottom:1px solid rgba(168,133,42,.2);padding-bottom:8px;}
-  .item{display:flex;gap:14px;margin-bottom:12px;align-items:flex-start;}
-  .item-dot{width:7px;height:7px;border-radius:50%;background:#A8852A;margin-top:6px;flex-shrink:0;}
-  .item-text{font-size:13px;color:#5A5040;line-height:1.6;}
-  .lettre{background:#FDFAF5;border:1px solid rgba(168,133,42,.18);padding:24px 28px;white-space:pre-wrap;font-size:13px;color:#5A5040;line-height:1.8;}
-  .sig{text-align:center;margin-top:40px;border-top:1px solid rgba(168,133,42,.2);padding-top:28px;}
-  .sig-name{font-size:26px;font-style:italic;color:#1A1612;}
-  .sig-date{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#A8852A;margin-top:6px;}
-  .ftr{background:#1A1612;padding:18px 44px;text-align:center;}
-  .ftr p{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.3);margin:0;}
-  </style></head><body><div class="page">
-  <div class="hdr"><div class="hdr-logo">Fabien Pinton · Méthode AXE · Préparation Mentale</div>
-  <div class="hdr-title">MON <em>PACTE</em> DE PROCESSUS</div>
-  <div class="hdr-sub">Programme Premium · Accès à vie</div>
-  <div class="profil-badge">Le Sans Confiance</div></div>
-  <div class="section"><div class="section-label">Mes engagements de processus</div>
-  <div class="item"><div class="item-dot"></div><div class="item-text">Avant chaque compétition, je définis mes 3 intentions de jeu. Ce sont mes vrais objectifs.</div></div>
-  <div class="item"><div class="item-dot"></div><div class="item-text">Je me juge sur mon processus — pas sur mon classement. Mon score de processus est mon vrai résultat.</div></div>
-  <div class="item"><div class="item-dot"></div><div class="item-text">Après chaque erreur, j'applique mon reset en 10 secondes. Pas d'analyse pendant la compétition.</div></div>
-  <div class="item"><div class="item-dot"></div><div class="item-text">Je suis l'athlète qui travaille son mental avec la même rigueur que son physique.</div></div>
-  <div class="item"><div class="item-dot"></div><div class="item-text">Je me juge sur ce que je fais. Pas sur ce que j'obtiens.</div></div></div>
-  ${DATA.lettre?'<div class="section"><div class="section-label">Ma lettre à mon futur moi</div><div class="lettre">'+DATA.lettre+'</div></div>':''}
-  <div class="sig"><div class="sig-name">Signé et engagé</div><div class="sig-date">Le ${DATA.pacte} · Programme AXE · Le Sans Confiance</div></div>
-  <div class="ftr"><p>Méthode AXE Mental Performance © 2026 · Fabien Pinton</p></div>
-  </div>
-<script>
-// Déclenche Purchase Meta Pixel quand l'utilisateur clique sur le bouton d'achat premium
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      if(typeof fbq !== 'undefined') fbq('track', 'Purchase', {value: 397.00, currency: 'EUR'});
-      if(typeof gtag !== 'undefined') gtag('event', 'conversion', {'send_to': 'AW-17960470630/8Hd6CPWIw_obEOaQnPRC', 'value': 397, 'currency': 'EUR'});
-    });
-  });
+
+document.addEventListener('DOMContentLoaded',()=>{
+  // Autosave on modnote typing
+  for(let i=0;i<=3;i++){
+    const ta=document.getElementById('modnote-'+i);
+    if(ta) ta.addEventListener('input',()=>{ DATA['note_m'+i]=ta.value; scheduleSave(); });
+  }
+  const lt=document.getElementById('j-lettre');
+  if(lt) lt.addEventListener('input',()=>{ DATA.lettre=lt.value; scheduleSave(); });
+  initAirtable();
 });
 </script>
 </body></html>`;

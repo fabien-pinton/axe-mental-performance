@@ -463,6 +463,86 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 </footer>
 
 <script>
+// ── AIRTABLE CONFIG ──
+const AT_TOKEN = 'patloD32aT93ZuJMA.dcc731bb73bd7cb2de3d3cdf66f164e9a36a00de73aab3a0b868899e3b8c45fa';
+const AT_BASE  = 'appLQTD1lgEmXjSDB';
+const AT_TABLE = 'tblegbO0k0qHa1Lxh';
+const urlParams = new URLSearchParams(window.location.search);
+const CLIENT_TOKEN = urlParams.get('token') || null;
+let AT_RECORD_ID = null;
+let DATA = {unlocked:[0]};
+let saveTimer = null;
+
+async function atGet() {
+  if (!CLIENT_TOKEN) return null;
+  try {
+    const enc = encodeURIComponent(CLIENT_TOKEN);
+    const url = `https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}?filterByFormula=Token%3D%22${enc}%22`;
+    const r = await fetch(url, {headers:{'Authorization':'Bearer '+AT_TOKEN}});
+    const d = await r.json();
+    if (d.records && d.records.length > 0) {
+      AT_RECORD_ID = d.records[0].id;
+      return d.records[0].fields;
+    }
+  } catch(e) {}
+  return null;
+}
+
+async function atPatch(fields) {
+  if (!AT_RECORD_ID) return;
+  try {
+    await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}/${AT_RECORD_ID}`, {
+      method: 'PATCH',
+      headers: {'Authorization':'Bearer '+AT_TOKEN,'Content-Type':'application/json'},
+      body: JSON.stringify({fields})
+    });
+  } catch(e) {}
+}
+
+function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(pushToAirtable, 2000); }
+
+async function pushToAirtable() {
+  const fields = {
+    Semaines_completees: DATA.unlocked.join(','),
+    Derniere_activite: new Date().toISOString().split('T')[0]
+  };
+  for (let i = 0; i <= 5; i++) {
+    if (DATA['note_'+i] !== undefined) fields['Notes_S'+(i+1)] = DATA['note_'+i];
+  }
+  if (AX_age) fields['Age'] = AX_age;
+  await atPatch(fields);
+  showSaveInd();
+}
+
+function showSaveInd() {
+  let ind = document.getElementById('axe-save-ind');
+  if (!ind) {
+    ind = document.createElement('div');
+    ind.id = 'axe-save-ind';
+    ind.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#A8852A;color:#FDFAF5;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;';
+    document.body.appendChild(ind);
+  }
+  ind.textContent = '✓ Sauvegardé';
+  ind.style.opacity = '1';
+  setTimeout(() => ind.style.opacity = '0', 2000);
+}
+
+async function initAirtable() {
+  if (!CLIENT_TOKEN) { renderLocks(); restoreNotes(); return; }
+  const fields = await atGet();
+  if (fields) {
+    if (fields.Semaines_completees) {
+      const nums = fields.Semaines_completees.split(',').map(Number).filter(n => !isNaN(n));
+      DATA.unlocked = nums.length ? nums : [0];
+      if (!DATA.unlocked.includes(0)) DATA.unlocked.unshift(0);
+    }
+    for (let i = 0; i <= 5; i++) { const v = fields['Notes_S'+(i+1)]; if (v) DATA['note_'+i] = v; }
+    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
+  }
+  renderLocks();
+  restoreNotes();
+}
+
 // Progress bar
 window.addEventListener('scroll',()=>{
   document.getElementById('nav').classList.toggle('sc',scrollY>60);
@@ -470,16 +550,11 @@ window.addEventListener('scroll',()=>{
   document.getElementById('pfill').style.width=(h>0?scrollY/h*100:0)+'%';
 });
 
-// Semaine unlock
-const DATA = JSON.parse(localStorage.getItem('axe_profil_peur')||'{"unlocked":[0]}');
-function save(){ try{localStorage.setItem('axe_profil_peur',JSON.stringify(DATA));}catch(e){} }
+function save(){ scheduleSave(); }
 
 function renderLocks(){
   document.querySelectorAll('.semaine').forEach((s,i)=>{
-    if(DATA.unlocked.includes(i)){
-      s.classList.remove('locked');
-      s.classList.add('active');
-    }
+    if(DATA.unlocked.includes(i)){ s.classList.remove('locked'); s.classList.add('active'); }
   });
 }
 
@@ -488,17 +563,11 @@ function unlockNext(i){
     DATA.unlocked.push(i+1);
     save();
     renderLocks();
-
-
-
     const next=document.getElementById('s'+(i+1));
     if(next) next.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 
-renderLocks();
-
-// ── NOTES & PDF ──
 function saveNote(sid){
   const ta=document.getElementById('note-'+sid);
   if(!ta)return;
@@ -517,62 +586,15 @@ function restoreNotes(){
   });
 }
 
-function downloadSemaine(sid){
-  saveNote(sid);
-  const sem=document.getElementById('s'+sid);
-  if(!sem)return;
-  const titre=sem.querySelector('.sem-titre')?.textContent||'Semaine '+(sid+1);
-  const objectif=sem.querySelector('.sem-objectif')?.textContent||'';
-  const note=DATA['note_'+sid]||'';
-  let exosHtml='';
-  sem.querySelectorAll('.exo').forEach((e,i)=>{
-    const t=e.querySelector('.exo-title')?.textContent||'';
-    const d=e.querySelector('.exo-desc')?.textContent||'';
-    const f=e.querySelector('.focus-text')?.textContent||'';
-    exosHtml+=`<div style="margin-bottom:20px;padding:16px 20px;background:#F9F6F1;border-left:3px solid #A8852A;">
-      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#7A6020;margin-bottom:6px;">Exercice ${i+1}</div>
-      <div style="font-size:15px;font-weight:600;color:#A8852A;margin-bottom:8px;">${t}</div>
-      <div style="font-size:13px;color:#5A5040;line-height:1.75;margin-bottom:10px;">${d}</div>
-      <div style="font-size:11px;font-style:italic;color:#7A6020;border-left:2px solid #A8852A;padding-left:10px;">Focus : ${f}</div>
-    </div>`;
-  });
-  const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
-<style>
-  body{font-family:'Georgia',serif;background:#F7F3EC;margin:0;color:#1A1612;}
-  .page{max-width:680px;margin:0 auto;padding:0;}
-  .hdr{background:#1A1612;padding:36px 44px;text-align:center;}
-  .hdr-logo{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:#A8852A;margin-bottom:10px;font-family:Arial,sans-serif;}
-  .hdr-week{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.5);font-family:Arial,sans-serif;}
-  .hdr-titre{font-size:36px;font-weight:bold;letter-spacing:.05em;color:#F7F3EC;margin:8px 0 4px;}
-  .hdr-obj{font-size:13px;font-style:italic;color:rgba(247,243,236,.7);line-height:1.6;}
-  .body{padding:40px 44px;}
-  .section-label{font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:#A8852A;margin-bottom:16px;border-bottom:1px solid rgba(168,133,42,.2);padding-bottom:6px;font-family:Arial,sans-serif;}
-  .note-box{background:#FDFAF5;border:1px solid rgba(168,133,42,.2);padding:20px 24px;white-space:pre-wrap;font-size:13px;color:#5A5040;line-height:1.8;min-height:60px;}
-  .ftr{background:#1A1612;padding:14px 44px;text-align:center;}
-  .ftr p{font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:rgba(247,243,236,.3);margin:0;font-family:Arial,sans-serif;}
-</style></head><body><div class="page">
-  <div class="hdr">
-    <div class="hdr-logo">Fabien Pinton · Méthode AXE · Préparation Mentale</div>
-    <div class="hdr-week">Semaine ${sid+1} · Programme AXE</div>
-    <div class="hdr-titre">${titre}</div>
-    <div class="hdr-obj">${objectif}</div>
-  </div>
-  <div class="body">
-    <div class="section-label">Exercices de la semaine</div>
-    ${exosHtml}
-    <div class="section-label" style="margin-top:28px;">Mes notes</div>
-    <div class="note-box">${note||'(aucune note enregistrée)'}</div>
-  </div>
-  <div class="ftr"><p>Méthode AXE Mental Performance © 2026 · Fabien Pinton · fabien-pinton.fr</p></div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      if(typeof fbq !== 'undefined') fbq('track', 'Purchase', {value: 37.00, currency: 'EUR'});
-      if(typeof gtag !== 'undefined') gtag('event', 'conversion', {'send_to': 'AW-17960470630/8Hd6CPWIw_obEOaQnPRC', 'value': 37, 'currency': 'EUR'});
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.note-ta').forEach(ta=>{
+    ta.addEventListener('input',()=>{
+      const sid=ta.id.replace('note-','');
+      DATA['note_'+sid]=ta.value;
+      scheduleSave();
     });
   });
+  initAirtable();
 });
 </script>
 </body></html>`;
