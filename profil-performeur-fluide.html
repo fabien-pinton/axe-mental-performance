@@ -71,7 +71,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 /* SEMAINES */
 .semaines{max-width:900px;margin:0 auto;padding:60px 80px;}
 .semaine{margin-bottom:32px;border:1px solid var(--bdr);background:var(--cream2);position:relative;}
-.semaine.locked{opacity:.5;pointer-events:none;}
+.semaine.locked{opacity:.5;pointer-events:none;position:relative;}
 .lock-overlay{position:absolute;inset:0;background:rgba(247,243,236,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;}
 .lock-icon{font-size:32px;margin-bottom:8px;}
 .lock-overlay p{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--inkf);}
@@ -337,6 +337,14 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
               </div>
             </div></div>
           
+
+          <div class="sem-note">
+            <div class="note-label">Mes notes — Semaine 2</div>
+            <textarea class="note-ta" id="note-1" placeholder="Note tes observations, tes difficultés, ce qui a bien marché..."></textarea>
+            <button class="note-save" onclick="saveNote(1)">Enregistrer mes notes</button>
+          </div>
+          <button class="pdf-download-btn" onclick="downloadSemaine(1)">📄 Télécharger ma Semaine 2 — Le focus jeu en compétition en PDF</button>
+          <button class="btn-unlock" onclick="unlockNext(1)">J'ai complété cette semaine →</button>
         </div>
         <div class="semaine locked" id="s2">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
@@ -358,6 +366,14 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
               </div>
             </div></div>
           
+
+          <div class="sem-note">
+            <div class="note-label">Mes notes — Semaine 3</div>
+            <textarea class="note-ta" id="note-2" placeholder="Note tes observations, tes difficultés, ce qui a bien marché..."></textarea>
+            <button class="note-save" onclick="saveNote(2)">Enregistrer mes notes</button>
+          </div>
+          <button class="pdf-download-btn" onclick="downloadSemaine(2)">📄 Télécharger ma Semaine 3 — Protéger le plaisir sous pression en PDF</button>
+          <button class="btn-unlock" onclick="unlockNext(2)">J'ai complété cette semaine →</button>
         </div>
         <div class="semaine locked" id="s3">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
@@ -379,6 +395,14 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
               </div>
             </div></div>
           
+
+          <div class="sem-note">
+            <div class="note-label">Mes notes — Semaine 4</div>
+            <textarea class="note-ta" id="note-3" placeholder="Note tes observations, tes difficultés, ce qui a bien marché..."></textarea>
+            <button class="note-save" onclick="saveNote(3)">Enregistrer mes notes</button>
+          </div>
+          <button class="pdf-download-btn" onclick="downloadSemaine(3)">📄 Télécharger ma Semaine 4 — Régularité sans dépendre du plaisir en PDF</button>
+          <button class="btn-unlock" onclick="unlockNext(3)">J'ai complété cette semaine →</button>
         </div>
         <div class="semaine locked" id="s4">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
@@ -400,6 +424,14 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
               </div>
             </div></div>
           
+
+          <div class="sem-note">
+            <div class="note-label">Mes notes — Semaine 5</div>
+            <textarea class="note-ta" id="note-4" placeholder="Note tes observations, tes difficultés, ce qui a bien marché..."></textarea>
+            <button class="note-save" onclick="saveNote(4)">Enregistrer mes notes</button>
+          </div>
+          <button class="pdf-download-btn" onclick="downloadSemaine(4)">📄 Télécharger ma Semaine 5 — Le jeu comme stratégie en PDF</button>
+          <button class="btn-unlock" onclick="unlockNext(4)">J'ai complété cette semaine →</button>
         </div>
         <div class="semaine locked" id="s5">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
@@ -561,7 +593,12 @@ function save(){ scheduleSave(); }
 
 function renderLocks(){
   document.querySelectorAll('.semaine').forEach((s,i)=>{
-    if(DATA.unlocked.includes(i)){ s.classList.remove('locked'); s.classList.add('active'); }
+    if(DATA.unlocked.includes(i)){
+      s.classList.remove('locked');
+      s.classList.add('active');
+      const overlay = s.querySelector('.lock-overlay');
+      if(overlay) overlay.style.display = 'none';
+    }
   });
 }
 
