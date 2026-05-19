@@ -914,29 +914,9 @@ main { padding: 28px 32px; max-width: 1440px; margin: 0 auto; }
     </div>
   </div>
 
-  <!-- Config Airtable -->
-  <div class="panel mt">
-    <div class="panel-title">🔗 Connexion Airtable</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div>
-        <label style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px;">Clé API Airtable</label>
-        <input id="cfg-key" type="text" placeholder="patXXXXXX..." style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:2px;color:var(--text);font-family:var(--font-mono);font-size:13px;padding:8px 12px;outline:none;" onchange="saveCfg()">
-      </div>
-      <div>
-        <label style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px;">ID Base Airtable</label>
-        <input id="cfg-base" type="text" placeholder="appXXXXXX..." style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:2px;color:var(--text);font-family:var(--font-mono);font-size:13px;padding:8px 12px;outline:none;" onchange="saveCfg()">
-      </div>
-    </div>
-    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-      <button class="btn-primary" onclick="testAirtable()">Tester la connexion</button>
-      <span id="cfg-status" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);"></span>
-    </div>
-  </div>
 </div>
 
 </main>
-
-<div class="toast" id="toast">✓ Enregistré</div>
 
 <script>
 // ====================================================
@@ -1379,23 +1359,13 @@ function loadStats() {
 // ====================================================
 // AIRTABLE SYNC
 // ====================================================
-function atKey()   { return ls('cfg-key') || ''; }
-function atBase()  { return ls('cfg-base') || ''; }
-function atTable() { return 'Stats'; }
+function atKey()   { return 'pat93rBUpnJYyt8kq.4d09d95873c23014c10ec3911071cfdf62a4c4fde0bcbb093628f8ba81c77cbc'; }
+function atBase()  { return 'app9jrLnpAZ9G7Zu4'; }
+function atTable() { return 'tbl7bo5ZVpIR93jJA'; }
 
-function saveCfg() {
-  const k = document.getElementById('cfg-key');
-  const b = document.getElementById('cfg-base');
-  if (k) lsSet('cfg-key', k.value);
-  if (b) lsSet('cfg-base', b.value);
-}
 
-function loadCfg() {
-  const k = document.getElementById('cfg-key');
-  const b = document.getElementById('cfg-base');
-  if (k) { const v = ls('cfg-key'); if (v) k.value = v; }
-  if (b) { const v = ls('cfg-base'); if (v) b.value = v; }
-}
+
+
 
 async function syncToAirtable(sessKey) {
   const apiKey = atKey(), baseId = atBase(), table = atTable();
@@ -1518,7 +1488,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadStats();
   updateProgress();
   loadJM();
-  loadCfg();
 });
 </script>
 </body>
