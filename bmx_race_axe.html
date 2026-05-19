@@ -2425,9 +2425,9 @@ function updateProgress() {
 // ====================================================
 // AIRTABLE SYNC
 // ====================================================
-function atKey()   { return localStorage.getItem('at-api-key') || ''; }
-function atBase()  { return localStorage.getItem('at-base-id') || ''; }
-function atTable() { return localStorage.getItem('at-table-name') || 'Seances BMX'; }
+function atKey()   { return 'patt4Upd1EtkXSk1G.3629f6f42b0abb70a5e6e740d5fe2a1a2e6b5e3b95e3d52bec0b11ca46eb5724'; }
+function atBase()  { return 'appZ8NBkxi1rvijnr'; }
+function atTable() { return 'Programme Robin'; }
 
 async function syncToAirtable(sessKey) {
   const apiKey = atKey(), baseId = atBase(), table = atTable();
@@ -2449,6 +2449,7 @@ async function syncToAirtable(sessKey) {
   }));
 
   const fields = {
+    'Nom'               : 'PINTON Robin',
     'Date seance'       : sessKey,
     'Phase'             : phase.toUpperCase(),
     'Type'              : isLundi ? 'Lundi - Posterieure' : 'Jeudi - Poussee',
@@ -2511,9 +2512,9 @@ function toast(msg) {
 
 
 function testAirtable() {
-  const apiKey = localStorage.getItem('at-api-key') || '';
-  const baseId = localStorage.getItem('at-base-id') || '';
-  const table  = localStorage.getItem('at-table-name') || 'Seances BMX';
+  const apiKey = atKey();
+  const baseId = atBase();
+  const table  = atTable();
   const status = document.getElementById('cfg-status');
   if (!apiKey || !baseId) { status.style.color='#f87171'; status.textContent='Remplis la clé API et l\'ID de la base.'; return; }
   status.style.color='var(--muted)'; status.textContent='Test en cours...';
@@ -2528,12 +2529,7 @@ function testAirtable() {
 }
 
 function loadCfg() {
-  ['at-api-key','at-base-id','at-table-name'].forEach((k,i) => {
-    const ids = ['cfg-key','cfg-base','cfg-table'];
-    const el = document.getElementById(ids[i]);
-    const v = localStorage.getItem(k);
-    if (el && v) el.value = v;
-  });
+  
 }
 // ====================================================
 // INIT
