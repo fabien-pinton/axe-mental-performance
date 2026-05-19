@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMX RACE · Programme Lorine</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #F7F3EC;
+  --panel:    #F0EBE0;
+  --card:     #FDFAF5;
+  --border:   rgba(168,133,42,0.18);
+  --line:     rgba(168,133,42,0.12);
+  --gold:     #A8852A;
+  --gold2:    #C9A84C;
+  --gold3:    #7A6020;
+  --red:      #C0392B;
+  --green:    #2E7D32;
+  --blue:     #1565C0;
+  --cyan:     #0277BD;
+  --pink:     #C2185B;
+  --muted:    #8A7D6A;
+  --text:     #1A1612;
+  --text2:    #5A5040;
+  --radius:   2px;
+  --font-hd:  'Bebas Neue', sans-serif;
+  --font-ui:  'DM Sans', sans-serif;
+  --font-mono:'Cormorant Garamond', serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+header {
+  background: #1A1612;
+  border-bottom: 2px solid var(--gold);
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 16px rgba(26,22,18,0.12);
+}
+
+.logo { display: flex; align-items: center; gap: 14px; }
+.logo-mark {
+  width: 40px; height: 40px;
+  background: var(--gold);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-hd); font-size: 14px; color: #000; flex-shrink: 0;
+}
+.logo-text { font-family: var(--font-hd); font-size: 22px; letter-spacing: 3px; color: #F7F3EC; }
+.logo-sub { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+
+.header-stats { display: flex; gap: 32px; align-items: center; }
+.h-stat { text-align: right; }
+.h-stat-val { font-family: var(--font-hd); font-size: 20px; color: var(--gold); letter-spacing: 1px; }
+.h-stat-lbl { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+.header-sep { width: 1px; height: 30px; background: var(--border); }
+
+nav {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex; gap: 0;
+  overflow-x: auto;
+}
+nav::-webkit-scrollbar { height: 0; }
+
+.nav-btn {
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 13px 20px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.nav-btn:hover { color: var(--text2); }
+.nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+main { padding: 28px 32px; max-width: 1440px; margin: 0 auto; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+.panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+}
+.panel-title {
+  font-family: var(--font-hd); font-size: 16px; letter-spacing: 2px;
+  color: var(--gold); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.panel-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+
+.sh {
+  display: flex; align-items: baseline; gap: 14px;
+  margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.sh-title { font-family: var(--font-hd); font-size: 32px; letter-spacing: 3px; color: var(--text); }
+.sh-tag {
+  font-family: var(--font-mono); font-size: 10px; color: var(--gold); letter-spacing: 2px;
+  border: 1px solid rgba(240,180,41,0.4); padding: 3px 8px; border-radius: 2px;
+}
+
+/* COUNTDOWN UNIQUE */
+.countdown-hero {
+  background: #1A1612;
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 24px;
+}
+.cd-hero-left { flex: 1; }
+.cd-hero-label {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px;
+}
+.cd-hero-title { font-family: var(--font-hd); font-size: 28px; letter-spacing: 3px; color: #F7F3EC; }
+.cd-hero-sub { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+.cd-hero-right { display: flex; align-items: baseline; gap: 8px; }
+.cd-hero-num { font-family: var(--font-hd); font-size: 80px; color: var(--gold); line-height: 1; }
+.cd-hero-unit { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; }
+.cd-hero-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 12px; overflow: hidden; }
+.cd-hero-fill { height: 100%; background: linear-gradient(to right, var(--gold), var(--gold2)); border-radius: 2px; transition: width 1s ease; }
+
+/* TLIMLEINE */
+.tl { position: relative; padding-left: 28px; }
+.tl::before {
+  content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(to bottom, var(--gold), var(--pink), var(--green));
+}
+.tl-item { position: relative; margin-bottom: 28px; }
+.tl-dot {
+  position: absolute; left: -24px; top: 5px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--gold); border: 2px solid var(--bg);
+}
+.tl-dot.red { background: var(--red); }
+.tl-dot.green { background: var(--green); }
+.tl-dot.blue { background: var(--blue); }
+.tl-dot.pink { background: var(--pink); }
+.tl-dot.trophy {
+  width: 16px; height: 16px; left: -26px; top: 3px;
+  background: var(--gold); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 0; border: none;
+}
+.tl-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.tl-phase {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px;
+  padding: 2px 8px; border-radius: 2px; font-weight: 600;
+}
+.ph-base  { background: rgba(240,180,41,0.15); color: var(--gold); border: 1px solid rgba(240,180,41,0.3); }
+.ph-build { background: rgba(59,130,246,0.15); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+.ph-recup { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+.ph-peak  { background: rgba(232,52,26,0.15); color: var(--red); border: 1px solid rgba(232,52,26,0.3); }
+.ph-taper { background: rgba(6,182,212,0.15); color: var(--cyan); border: 1px solid rgba(6,182,212,0.3); }
+.ph-race  { background: var(--gold); color: #000; border: none; }
+
+.tl-name { font-family: var(--font-ui); font-size: 16px; font-weight: 700; letter-spacing: 1px; color: var(--text); }
+.tl-dates { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+.tl-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* SEMAINE TYPE */
+.week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.wday {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 6px; text-align: center;
+}
+.wday-name { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.wday-type { font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.wday.muscu { border-color: var(--gold); background: rgba(240,180,41,0.05); }
+.wday.muscu .wday-type { color: var(--gold); }
+.wday.club { border-color: var(--blue); background: rgba(59,130,246,0.05); }
+.wday.club .wday-type { color: var(--blue); }
+.wday.piste { border-color: var(--cyan); background: rgba(6,182,212,0.05); }
+.wday.piste .wday-type { color: var(--cyan); }
+.wday.repos .wday-type { color: var(--muted); }
+.wday-sub { font-family: var(--font-mono); font-size: 9px; color: var(--muted); margin-top: 4px; }
+
+/* SESSIONS */
+.sess-selector { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.sess-tab {
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--muted); font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: all 0.15s;
+}
+.sess-tab:hover { border-color: var(--gold); color: var(--text2); }
+.sess-tab.active { background: var(--gold); border-color: var(--gold); color: #000; font-weight: 700; }
+.sess-tab.done-tab { border-color: var(--green); color: var(--green); }
+.sess-tab.done-tab.active { background: var(--green); color: #000; }
+.sess-tab.future-locked { opacity: 0.28; cursor: not-allowed; pointer-events: none; filter: grayscale(1); }
+.sess-tab.next-available { border-color: var(--gold); color: var(--gold); }
+
+.sess-content { display: none; }
+.sess-content.active { display: block; }
+
+.sess-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.sess-header {
+  background: var(--panel); border-bottom: 1px solid var(--border);
+  padding: 14px 20px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.sess-date { font-family: var(--font-hd); font-size: 24px; letter-spacing: 2px; color: var(--gold); }
+.sess-meta { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-top: 2px; }
+.sess-body { padding: 20px; }
+
+.cat-div {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--muted);
+  margin: 20px 0 10px; display: flex; align-items: center; gap: 10px;
+}
+.cat-div::before { content: '//'; color: var(--gold); margin-right: 4px; }
+.cat-div::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.ex-block {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s;
+}
+.ex-block.done { border-color: var(--green); }
+
+.ex-head {
+  padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+  cursor: pointer; background: rgba(168,133,42,0.04); user-select: none;
+}
+.ex-head:hover { background: rgba(168,133,42,0.06); }
+
+.ex-check {
+  width: 20px; height: 20px; border: 1.5px solid var(--border); border-radius: 50%;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; transition: all 0.15s; cursor: pointer;
+}
+.ex-block.done .ex-check { background: var(--green); border-color: var(--green); color: #000; }
+
+.ex-name { font-family: var(--font-ui); font-size: 15px; font-weight: 700; letter-spacing: 0.5px; flex: 1; }
+.ex-badge {
+  font-family: var(--font-mono); font-size: 11px; color: var(--gold);
+  background: rgba(240,180,41,0.1); border: 1px solid rgba(240,180,41,0.25);
+  padding: 3px 10px; border-radius: 2px; white-space: nowrap;
+}
+.ex-chevron { color: var(--muted); font-size: 12px; transition: transform 0.2s; flex-shrink: 0; }
+.ex-block.open .ex-chevron { transform: rotate(180deg); }
+
+.ex-body {
+  display: none; padding: 14px 16px 16px 48px; border-top: 1px solid var(--border);
+}
+.ex-block.open .ex-body { display: block; }
+
+.ex-desc { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 10px; }
+
+/* PRESCRIPTION BLOC */
+.presc-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0;
+}
+.presc-cell {
+  border-radius: 2px; padding: 10px 14px; text-align: center;
+}
+.presc-cell-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.presc-cell-val { font-family: var(--font-hd); font-size: 20px; line-height: 1.1; }
+
+.tip-box {
+  background: rgba(240,180,41,0.05); border-left: 2px solid var(--gold);
+  padding: 8px 12px; font-size: 13px; color: var(--text2);
+  border-radius: 0 2px 2px 0; margin: 10px 0; line-height: 1.6;
+}
+.tip-box strong { color: var(--gold); }
+.tip-box.bmx { border-left-color: var(--red); background: rgba(232,52,26,0.05); }
+.tip-box.bmx strong { color: var(--red); }
+.tip-box.info { border-left-color: var(--blue); background: rgba(21,101,192,0.05); }
+.tip-box.info strong { color: var(--blue); }
+
+.vid-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #cc0000; color: #fff; text-decoration: none;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 2px; margin: 8px 0; transition: opacity 0.15s;
+}
+.vid-btn:hover { opacity: 0.85; }
+
+/* BILAN */
+.bilan {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px; margin-top: 24px;
+}
+.bilan-title { font-family: var(--font-hd); font-size: 16px; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; }
+.bilan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.rating-row { margin-bottom: 12px; }
+.rating-lbl { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+.stars { display: flex; gap: 5px; }
+.star { font-size: 22px; cursor: pointer; color: var(--border); transition: color 0.1s; user-select: none; }
+.star.on { color: var(--gold); }
+.star.red.on { color: var(--red); }
+.star.pink.on { color: var(--pink); }
+
+.bilan-ta {
+  width: 100%; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text); font-family: var(--font-ui);
+  font-size: 13px; padding: 10px 12px; resize: vertical; min-height: 80px;
+  outline: none; transition: border-color 0.2s; margin-bottom: 10px;
+}
+.bilan-ta:focus { border-color: var(--gold); }
+
+.btn-primary {
+  background: var(--gold); color: #000; border: none;
+  font-family: var(--font-hd); font-size: 14px; letter-spacing: 2px;
+  padding: 9px 22px; border-radius: 2px; cursor: pointer; transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-done {
+  background: var(--green); color: #000; border: none;
+  font-family: var(--font-hd); font-size: 14px; letter-spacing: 2px;
+  padding: 9px 22px; border-radius: 2px; cursor: pointer;
+}
+
+/* STATS */
+.stat-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px; text-align: center;
+}
+.stat-val { font-family: var(--font-hd); font-size: 44px; color: var(--gold); line-height: 1; display: block; }
+.stat-unit { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.stat-lbl { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-top: 4px; }
+.stat-input-big {
+  font-family: var(--font-hd); font-size: 44px; color: var(--gold);
+  background: none; border: none; outline: none; width: 100%; text-align: center;
+  -moz-appearance: textfield;
+}
+.stat-input-big::placeholder { color: var(--border); }
+.stat-input-big::-webkit-inner-spin-button { display: none; }
+
+.prog-wrap { margin-bottom: 14px; }
+.prog-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.prog-name { font-size: 13px; font-weight: 600; }
+.prog-val { font-family: var(--font-mono); font-size: 12px; color: var(--gold); }
+.prog-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(to right, var(--gold), var(--pink)); border-radius: 3px; transition: width 1.2s ease; }
+
+/* MENTAL */
+.ment-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+}
+.ment-title { font-family: var(--font-hd); font-size: 20px; letter-spacing: 2px; color: var(--cyan); margin-bottom: 4px; }
+.ment-sub { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
+.ment-step { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+.ment-num { font-family: var(--font-hd); font-size: 20px; color: var(--cyan); line-height: 1; flex-shrink: 0; width: 26px; }
+.ment-txt { font-size: 14px; color: var(--text); line-height: 1.6; }
+.ment-quote {
+  background: rgba(6,182,212,0.06); border-left: 2px solid var(--cyan);
+  padding: 10px 14px; font-style: italic; font-size: 14px; color: var(--text2);
+  margin: 14px 0; border-radius: 0 2px 2px 0;
+}
+
+.mental-section { display: none; }
+.mental-section.active { display: block; }
+
+.info { background: rgba(240,180,41,0.06); border: 1px solid rgba(240,180,41,0.25); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--text2); margin-bottom: 16px; display: flex; gap: 10px; }
+.info-icon { font-size: 16px; flex-shrink: 0; line-height: 1.5; }
+
+.all-sess-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+.ass-item {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px; cursor: pointer; transition: border-color 0.15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.ass-item:hover { border-color: var(--gold); }
+.ass-item.today { border-color: var(--gold); background: rgba(240,180,41,0.05); }
+.ass-item.done-sess { border-color: var(--green); }
+.ass-d { font-family: var(--font-ui); font-size: 14px; font-weight: 700; }
+.ass-ph { font-family: var(--font-mono); font-size: 9px; letter-spacing: 1px; color: var(--muted); }
+.ass-icon { font-size: 14px; }
+
+.start-step {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.start-num { font-family: var(--font-hd); font-size: 28px; color: var(--gold); line-height: 1; flex-shrink: 0; width: 32px; }
+.start-name { font-family: var(--font-ui); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.start-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--green); color: #000; font-family: var(--font-hd);
+  font-size: 15px; letter-spacing: 2px; padding: 10px 20px; border-radius: 2px;
+  z-index: 9999; transform: translateY(60px); opacity: 0; transition: all 0.25s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+.mb { margin-bottom: 16px; }
+.mt { margin-top: 16px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.rest-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--border); margin-top: 10px; }
+.rest-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; flex-shrink: 0; }
+.rest-val { font-family: var(--font-hd); font-size: 16px; color: var(--gold); min-width: 48px; }
+.rest-btn { background: rgba(240,180,41,0.12); border: 1px solid rgba(240,180,41,0.3); color: var(--gold); font-family: var(--font-mono); font-size: 10px; padding: 4px 12px; cursor: pointer; border-radius: 2px; }
+.rest-btn.running { color: var(--red); border-color: var(--red); background: rgba(232,52,26,0.12); }
+.rest-countdown { font-family: var(--font-hd); font-size: 22px; color: var(--red); display: none; }
+.rest-countdown.active { display: block; }
+
+/* OBJECTIFS CARDS */
+.obj-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; text-align: center; border-top: 3px solid var(--gold);
+}
+.obj-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+.obj-title { font-family: var(--font-hd); font-size: 16px; letter-spacing: 2px; color: var(--gold); margin-bottom: 6px; }
+.obj-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+@media (max-width: 700px) {
+  header { padding: 0 16px; }
+  main { padding: 16px; }
+  .g2, .g3, .g4 { grid-template-columns: 1fr; }
+  .week-grid { grid-template-columns: repeat(4, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">BMX</div>
+    <div>
+      <div class="logo-text">BMX RACE</div>
+      <div class="logo-sub">Programme 2026 · challenge</div>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="h-stat">
+      <div class="h-stat-val" id="hd-days">—</div>
+      <div class="h-stat-lbl">Jours restants</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-btn active" onclick="showTab('planning',this)">📅 Planning</button>
+  <button class="nav-btn" onclick="showTab('seances',this)">⚡ Séances</button>
+  <button class="nav-btn" onclick="showTab('start',this)">🚀 Start</button>
+  <button class="nav-btn" onclick="showTab('mental',this)">🧠 Mental</button>
+  <button class="nav-btn" onclick="showTab('stats',this)">📊 Mes Stats</button>
+</nav>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- TAB : PLANNING -->
+<!-- ================================================================ -->
+<div class="tab-content active" id="tab-planning">
+  <div class="sh">
+    <span class="sh-title">Planification</span>
+    <span class="sh-tag">Challenge 100 Jours · 2026</span>
+  </div>
+
+  <!-- Décompte unique 100 jours -->
+  <div class="countdown-hero">
+    <div class="cd-hero-left">
+      <div class="cd-hero-label">🎯 Décompte Challenge</div>
+      <div class="cd-hero-title">100 JOURS DE PROGRESSION</div>
+      <div class="cd-hero-sub" id="cd-end-date">Début : —</div>
+      <div class="cd-hero-bar" style="margin-top: 16px;">
+        <div class="cd-hero-fill" id="cd-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="cd-hero-right">
+      <div class="cd-hero-num" id="cd-jours">—</div>
+      <div class="cd-hero-unit">jours</div>
+    </div>
+  </div>
+
+  <!-- Objectifs du programme -->
+  <div class="g4 mb">
+    <div class="obj-card" style="border-top-color:var(--red);">
+      <span class="obj-icon">⚡</span>
+      <div class="obj-title" style="color:var(--red);">VÉLOCITÉ</div>
+      <div class="obj-desc">Pédaler plus vite. Enchaîner les coups de pédale en douceur et en rythme.</div>
+    </div>
+    <div class="obj-card" style="border-top-color:var(--blue);">
+      <span class="obj-icon">⏱</span>
+      <div class="obj-title" style="color:var(--blue);">RÉACTION</div>
+      <div class="obj-desc">Partir le plus vite possible dès le signal. Train ton système nerveux.</div>
+    </div>
+    <div class="obj-card" style="border-top-color:var(--pink);">
+      <span class="obj-icon">💥</span>
+      <div class="obj-title" style="color:var(--pink);">PUISSANCE</div>
+      <div class="obj-desc">Pousser fort sur les pédales. Développer l'explosivité sans charge.</div>
+    </div>
+    <div class="obj-card" style="border-top-color:var(--green);">
+      <span class="obj-icon">🚀</span>
+      <div class="obj-title" style="color:var(--green);">ACCÉLÉRATION</div>
+      <div class="obj-desc">Passer 0 à vitesse max le plus vite possible. L'objectif numéro 1 en BMX.</div>
+    </div>
+  </div>
+
+  <!-- Semaine type -->
+  <div class="panel mb">
+    <div class="panel-title">📆 Semaine type</div>
+    <div class="week-grid">
+      <div class="wday muscu">
+        <div class="wday-name">Lun</div>
+        <div class="wday-type">SÉANCE A</div>
+        <div class="wday-sub">Vélocité + Réaction</div>
+      </div>
+      <div class="wday club">
+        <div class="wday-name">Mar</div>
+        <div class="wday-type">CLUB</div>
+        <div class="wday-sub">Vélo · piste</div>
+      </div>
+      <div class="wday club">
+        <div class="wday-name">Mer</div>
+        <div class="wday-type">CLUB</div>
+        <div class="wday-sub">Vélo · piste</div>
+      </div>
+      <div class="wday muscu">
+        <div class="wday-name">Jeu</div>
+        <div class="wday-type">SÉANCE B</div>
+        <div class="wday-sub">Puissance + Accéléra.</div>
+      </div>
+      <div class="wday club">
+        <div class="wday-name">Ven</div>
+        <div class="wday-type">CLUB</div>
+        <div class="wday-sub">Vélo · piste</div>
+      </div>
+      <div class="wday piste">
+        <div class="wday-name">Sam</div>
+        <div class="wday-type">PISTE</div>
+        <div class="wday-sub">Starts chrono</div>
+      </div>
+      <div class="wday repos">
+        <div class="wday-name">Dim</div>
+        <div class="wday-type">REPOS</div>
+        <div class="wday-sub">Récup</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted);">Séances A et B : aucune charge. Exercices au poids du corps uniquement. Durée : 30-40 min maximum.</div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="panel">
+    <div class="panel-title">🗓 Périodisation 100 jours</div>
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <span class="tl-phase ph-base">PHASE 1 — ACTIVATION</span>
+          <span class="tl-name">Apprendre les gestes</span>
+          <span class="tl-dates">Semaines 1→4 · 8 séances</span>
+        </div>
+        <div class="tl-desc">On apprend les exercices sans se presser. Technique correcte avant la vitesse. Exercices de coordination et d'équilibre. Temps de réaction : clap & go simple. Découverte des appuis au sol.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue"></div>
+        <div class="tl-header">
+          <span class="tl-phase ph-build">PHASE 2 — PROGRESSION</span>
+          <span class="tl-name">Accélérer les gestes</span>
+          <span class="tl-dates">Semaines 5→9 · 10 séances</span>
+        </div>
+        <div class="tl-desc">On garde la bonne technique MAIS on accélère l'exécution. Réaction plus rapide, sauts plus dynamiques. Introduction des exercices chronométrés. Objectif : battre ses propres temps.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-header">
+          <span class="tl-phase ph-peak">PHASE 3 — PERFORMANCE</span>
+          <span class="tl-name">Tout à fond</span>
+          <span class="tl-dates">Semaines 10→14 · 10 séances</span>
+        </div>
+        <div class="tl-desc">On donne tout. Vitesse maximum sur chaque exercice. Réaction la plus rapide possible. Mesures et records personnels. Lien direct avec les performances sur la piste.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--cyan)"></div>
+        <div class="tl-header">
+          <span class="tl-phase ph-taper">PHASE 4 — LÉGÈRETÉ</span>
+          <span class="tl-name">Corps frais pour la compet</span>
+          <span class="tl-dates">Semaine 15 · 2 séances légères</span>
+        </div>
+        <div class="tl-desc">Volume réduit. Exercices courts. On garde le rythme sans fatiguer. Le corps se recharge. Tu arrives en compétition à 100% de fraîcheur.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot trophy"></div>
+        <div class="tl-header">
+          <span class="tl-phase ph-race">🏆 CHALLENGE</span>
+          <span class="tl-name" style="color:var(--gold)">Jour 100 — Compétition</span>
+        </div>
+        <div class="tl-desc">100 jours de travail. Une Lorine plus rapide, plus explosive, plus sûre d'elle au gate.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB : SÉANCES -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-seances">
+  <div class="sh">
+    <span class="sh-title">Séances</span>
+    <span class="sh-tag">Vélocité · Réaction · Puissance · Accélération</span>
+  </div>
+  <div class="info">
+    <span class="info-icon">💡</span>
+    <div><strong>Pas de charge !</strong> Tous les exercices sont au poids du corps. Le but : entraîner le <strong>système nerveux</strong> — c'est lui qui décide de la vitesse de tes pédales et de ta réaction au gate.</div>
+  </div>
+
+  <!-- Navigation séances -->
+  <div id="sessTabs" class="sess-selector"></div>
+  <div id="sessContents"></div>
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB : START -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-start">
+  <div class="sh">
+    <span class="sh-title">Start &amp; Gate</span>
+    <span class="sh-tag">Position · Réaction · 1er coup de pédale</span>
+  </div>
+
+  <div class="info">
+    <span class="info-icon">🚀</span>
+    <div>Le start, c'est <strong style="color:var(--text)">30 à 40% du résultat</strong> en BMX Race. Partir 0,3 seconde plus vite = prendre une longueur de vélo d'avance = souvent gagner la manche.</div>
+  </div>
+
+  <div class="g2 mb">
+    <div class="panel">
+      <div class="panel-title">Position au gate — Les 5 clés</div>
+      <div class="start-step">
+        <div class="start-num">1</div>
+        <div class="start-body">
+          <div class="start-name">Pédale avant</div>
+          <div class="start-desc">Pédale avant à <strong>1h30</strong> (légèrement devant le haut). Pied à plat. Talon pas trop bas. La jambe arrière est prête comme un ressort, pas contractée.</div>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-num">2</div>
+        <div class="start-body">
+          <div class="start-name">Hanches en avant</div>
+          <div class="start-desc">Hanches <strong>poussées vers l'avant</strong>, au-dessus de la roue avant. Corps penché en avant. Dos droit. Cette tension crée l'explosion.</div>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-num">3</div>
+        <div class="start-body">
+          <div class="start-name">Bras tendus-prêts</div>
+          <div class="start-desc">Bras légèrement fléchis, coudes un peu écartés. Bras en tension vers l'arrière, prêts à tirer. Le guidon part <strong>en même temps</strong> que la pédale.</div>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-num">4</div>
+        <div class="start-body">
+          <div class="start-name">Le regard</div>
+          <div class="start-desc">Tête basse MAIS <strong>regard sur la 1ère bosse</strong> — pas vers le sol, pas vers le guidon. Le regard commande la direction et l'équilibre.</div>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-num">5</div>
+        <div class="start-body">
+          <div class="start-name">La respiration</div>
+          <div class="start-desc"><strong>Inspire fort</strong> → épaules qui montent → expire fort → épaules basses. Corps détendu mais prêt. 3 respirations avant le signal.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title" style="color:var(--red)">Le 1er coup de pédale</div>
+      <div class="start-step">
+        <div class="start-num">1</div>
+        <div class="start-body">
+          <div class="start-name">Réagir au bon signal</div>
+          <div class="start-desc">Tu réagis au son ET au visuel du gate. Ne PAS partir avant (pénalité). Entraîner ton temps de réaction avec les exercices de séance : c'est ça qui fait la différence.</div>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-num">2</div>
+        <div class="start-body">
+          <div class="start-name">Tout en même temps</div>
+          <div class="start-desc">Pédale qui pousse + bras qui tirent + hanches qui avancent — <strong>tout au même instant</strong>. C'est cette synchronisation parfaite qui crée l'effet catapulte.</div>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-num">3</div>
+        <div class="start-body">
+          <div class="start-name">Les 3 premiers coups</div>
+          <div class="start-desc">Les 3 premiers coups de pédales sont les plus importants. <strong>Rapides et ronds</strong>, pas de carré. Corps bas. Ne pas se redresser trop vite.</div>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-num">4</div>
+        <div class="start-body">
+          <div class="start-name">Regard 2 bosses en avance</div>
+          <div class="start-desc">Dès que tu es lancée, le regard se projette <strong>2 bosses devant toi</strong>. Jamais sur la bosse actuelle. Anticiper = ne jamais perdre de vitesse.</div>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="start-num">5</div>
+        <div class="start-body">
+          <div class="start-name">Filmer chaque start !</div>
+          <div class="start-desc">Téléphone sur trépied, vue de côté, au niveau du sol. Regarde les <strong>0,5 premières secondes</strong>. C'est là que tout se joue.</div>
+        </div>
+      </div>
+
+      <div class="tip-box bmx" style="margin-top:14px;">
+        <strong>⚡ Exercices de réaction des séances :</strong><br>
+        · Drop start (quelqu'un crie GO) × 10 à chaque séance piste<br>
+        · Clap jump : sauter en squat sur un clap de mains — 3×8<br>
+        · Sprint 5m sur signal sonore — 6× en fin de séance B
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">🎬 Vidéos à regarder</div>
+    <div class="g3">
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+        <a class="vid-btn" style="display:block;margin:0;border-radius:0;justify-content:center;text-align:center;" href="https://www.youtube.com/results?search_query=BMX+race+gate+start+slow+motion+technique" target="_blank">▶ Gate Start Slow Motion</a>
+        <div style="padding:12px;font-size:12px;color:var(--text2);">Regarde la synchronisation pédale/bras/hanches au ralenti.</div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+        <a class="vid-btn" style="display:block;margin:0;border-radius:0;justify-content:center;text-align:center;" href="https://www.youtube.com/results?search_query=BMX+race+junior+girl+start+gate+technique" target="_blank">▶ Girls Junior Gates</a>
+        <div style="padding:12px;font-size:12px;color:var(--text2);">Des starts de filles juniors de haut niveau — observe les positions.</div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+        <a class="vid-btn" style="display:block;margin:0;border-radius:0;justify-content:center;text-align:center;" href="https://www.youtube.com/results?search_query=BMX+race+first+straight+technique+junior+girl" target="_blank">▶ 1ère Ligne Junior</a>
+        <div style="padding:12px;font-size:12px;color:var(--text2);">Gestion du bas de rampe et enchaînement des bosses.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB : MENTAL -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-mental">
+  <div class="sh">
+    <span class="sh-title">Préparation Mentale</span>
+    <span class="sh-tag">Confiance · Concentration · Routines</span>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;" id="mentalSubNav">
+    <button class="sess-tab active" onclick="showMental('m-gate',this)">🚀 Avant le gate</button>
+    <button class="sess-tab" onclick="showMental('m-conf',this)">💪 Confiance</button>
+    <button class="sess-tab" onclick="showMental('m-visu',this)">🎯 Visualisation</button>
+    <button class="sess-tab" onclick="showMental('m-journal',this)">📓 Journal</button>
+  </div>
+
+  <!-- AVANT LE GATE -->
+  <div class="mental-section active" id="m-gate">
+    <div class="ment-card">
+      <div class="ment-title">Ma routine avant le gate — Protocole PIED</div>
+      <div class="ment-sub">60 secondes avant le départ · À chaque entraînement et compétition · Toujours pareil</div>
+      <div class="ment-step"><div class="ment-num">P</div><div class="ment-txt"><strong>Posture :</strong> Mains sur le guidon. Inspire fort, épaules qui montent → expire fort, épaules qui tombent. Répète 2×. Corps décontracté = corps explosif.</div></div>
+      <div class="ment-step"><div class="ment-num">I</div><div class="ment-txt"><strong>Image :</strong> Ferme les yeux 4 secondes. Visualise ton départ parfait : gate qui descend → corps qui explose → 3 coups de pédales rapides → 1ère bosse passée à toute vitesse.</div></div>
+      <div class="ment-step"><div class="ment-num">E</div><div class="ment-txt"><strong>Émotion :</strong> Cherche la sensation d'énergie dans tes jambes. L'adrénaline c'est normal — c'est ton corps qui se prépare, pas de la peur. Souris. Tu VEUX partir.</div></div>
+      <div class="ment-step"><div class="ment-num">D</div><div class="ment-txt"><strong>Déclencheur :</strong> Ton mot-clé secret, toujours le même. Exemples : <em>"FEU"</em> / <em>"NOW"</em> / <em>"BOUM"</em>. Ce mot coupe les pensées parasites. Le dire dans ta tête = mode action pure.</div></div>
+      <div class="ment-quote">"Le gate descend. Mon corps sait quoi faire. Je fonce."</div>
+    </div>
+    <div class="ment-card">
+      <div class="ment-title" style="color:var(--gold)">Si tu hésites au gate</div>
+      <div class="ment-sub">C'est normal — voilà comment y remédier</div>
+      <div class="ment-step"><div class="ment-num">1</div><div class="ment-txt"><strong>C'est le cerveau qui freine :</strong> L'hésitation vient d'une pensée parasite dans les 0,5 sec avant. La solution : occuper ton cerveau avec ton mot-clé. Un seul signal = action pure.</div></div>
+      <div class="ment-step"><div class="ment-num">2</div><div class="ment-txt"><strong>Drill réaction :</strong> À l'entraînement, fais 5 starts sur GO crié par quelqu'un d'autre — pas toi qui décides. Ton cerveau apprend à réagir sans réfléchir.</div></div>
+      <div class="ment-step"><div class="ment-num">3</div><div class="ment-txt"><strong>Reset rapide :</strong> Si tu rates un start, pas de discours négatif. → Expire fort → secoue les bras → dis ton mot-clé → reprends position. Remise à zéro en 5 secondes.</div></div>
+    </div>
+  </div>
+
+  <!-- CONFIANCE -->
+  <div class="mental-section" id="m-conf" style="display:none;">
+    <div class="ment-card">
+      <div class="ment-title">Construire sa confiance</div>
+      <div class="ment-sub">La confiance ne vient pas du talent — elle vient de la répétition</div>
+      <div class="ment-step"><div class="ment-num">1</div><div class="ment-txt"><strong>Note tes réussites :</strong> Après chaque séance, écris 1 chose que tu as bien faite. Une seule. Pas besoin que ce soit parfait. Juste quelque chose de mieux qu'avant.</div></div>
+      <div class="ment-step"><div class="ment-num">2</div><div class="ment-txt"><strong>Parle-toi bien :</strong> Si tu rates, dis "je travaille encore ça" plutôt que "je suis nulle". La façon dont tu te parles change vraiment comment ton corps performe.</div></div>
+      <div class="ment-step"><div class="ment-num">3</div><div class="ment-txt"><strong>Compare-toi à toi :</strong> La seule question qui compte : "Est-ce que je suis meilleure qu'il y a 2 semaines ?" Si oui, tu gagnes. Les autres, c'est secondaire.</div></div>
+      <div class="ment-step"><div class="ment-num">4</div><div class="ment-txt"><strong>Ton corps est prêt :</strong> 100 jours de travail ne mentent pas. Quand tu arrives en compét, tout ce que tu as fait est dans tes jambes. Fais confiance au travail.</div></div>
+      <div class="ment-quote">"Je ne suis pas parfaite, mais je progresse. Et ça, c'est tout ce qui compte."</div>
+    </div>
+  </div>
+
+  <!-- VISUALISATION -->
+  <div class="mental-section" id="m-visu" style="display:none;">
+    <div class="ment-card">
+      <div class="ment-title">Visualisation — Le film dans ta tête</div>
+      <div class="ment-sub">5 minutes avant de dormir · Ou juste avant une séance</div>
+      <div class="ment-step"><div class="ment-num">1</div><div class="ment-txt"><strong>Trouve le calme :</strong> Allongée, yeux fermés. Respire doucement 5 fois. Laisse le corps se détendre complètement.</div></div>
+      <div class="ment-step"><div class="ment-num">2</div><div class="ment-txt"><strong>Le film :</strong> Imagine-toi sur la piste, au gate. Tu sens le guidon, tu entends les bruits, tu vois la piste. Tout en détail. En COULEUR.</div></div>
+      <div class="ment-step"><div class="ment-num">3</div><div class="ment-txt"><strong>Le départ parfait :</strong> Gate qui descend → explosion → 3 coups de pédales ronds et rapides → corps bas → 1ère bosse à pleine vitesse. Ressens la vitesse dans ton corps.</div></div>
+      <div class="ment-step"><div class="ment-num">4</div><div class="ment-txt"><strong>Terminer en gagnante :</strong> Franchis la ligne en tête. Ressens la satisfaction. C'est TON film — tu gagnes à chaque fois.</div></div>
+      <div class="ment-quote">"Le cerveau ne fait pas la différence entre le réel et le très bien imaginé. Chaque visualisation est un entraînement gratuit."</div>
+    </div>
+  </div>
+
+  <!-- JOURNAL -->
+  <div class="mental-section" id="m-journal" style="display:none;">
+    <div class="ment-card">
+      <div class="ment-title">Mon journal mental</div>
+      <div class="ment-sub">Après chaque séance piste · Honnête, sans jugement</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Ce qui s'est bien passé</div>
+          <textarea class="bilan-ta" id="jm-1" placeholder="Starts réussis, moments de vitesse, éléments maîtrisés..."></textarea>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;margin-top:12px;">Ce que je veux améliorer</div>
+          <textarea class="bilan-ta" id="jm-2" placeholder="Un seul truc à travailler la prochaine fois..."></textarea>
+        </div>
+        <div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Comment je me suis sentie</div>
+          <textarea class="bilan-ta" id="jm-3" placeholder="Énergie, stress, plaisir, frustration... tout est ok à ressentir."></textarea>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;margin-top:12px;">Mon mot-clé du jour</div>
+          <textarea class="bilan-ta" id="jm-4" placeholder="Le mot que j'utiliserai au prochain gate..."></textarea>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">CONFIANCE</div>
+          <div class="stars" id="jm-stars-conf"><span class="star" onclick="jmRate('conf',1)">★</span><span class="star" onclick="jmRate('conf',2)">★</span><span class="star" onclick="jmRate('conf',3)">★</span><span class="star" onclick="jmRate('conf',4)">★</span><span class="star" onclick="jmRate('conf',5)">★</span></div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">PLAISIR / MOTIVATION</div>
+          <div class="stars" id="jm-stars-plaisir"><span class="star pink" onclick="jmRate('plaisir',1)">★</span><span class="star pink" onclick="jmRate('plaisir',2)">★</span><span class="star pink" onclick="jmRate('plaisir',3)">★</span><span class="star pink" onclick="jmRate('plaisir',4)">★</span><span class="star pink" onclick="jmRate('plaisir',5)">★</span></div>
+        </div>
+        <button class="btn-primary" onclick="saveJM()" style="margin-left:auto;">Enregistrer le journal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB : STATS -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-stats">
+  <div class="sh">
+    <span class="sh-title">Mes Stats</span>
+    <span class="sh-tag">Records · Progression · Mesures</span>
+  </div>
+
+  <div class="g3 mb">
+    <div class="stat-card">
+      <label style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px;">Broad Jump (saut loin)</label>
+      <input class="stat-input-big" type="number" step="1" id="s-broad" placeholder="—" onchange="sv('s-broad')">
+      <div class="stat-unit">cm · record</div>
+    </div>
+    <div class="stat-card">
+      <label style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px;">Sprint 10m (temps)</label>
+      <input class="stat-input-big" type="number" step="0.01" id="s-sprint" placeholder="—" onchange="sv('s-sprint')">
+      <div class="stat-unit">secondes · meilleur</div>
+    </div>
+    <div class="stat-card">
+      <label style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px;">Sauts verticaux (hauteur)</label>
+      <input class="stat-input-big" type="number" step="1" id="s-jump" placeholder="—" onchange="sv('s-jump')">
+      <div class="stat-unit">cm · record</div>
+    </div>
+    <div class="stat-card">
+      <label style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px;">Vélocité pédales (30 sec)</label>
+      <input class="stat-input-big" type="number" step="1" id="s-velo" placeholder="—" onchange="sv('s-velo')">
+      <div class="stat-unit">tours · record</div>
+    </div>
+    <div class="stat-card">
+      <label style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px;">Temps de réaction (app)</label>
+      <input class="stat-input-big" type="number" step="1" id="s-reaction" placeholder="—" onchange="sv('s-reaction')">
+      <div class="stat-unit">ms · meilleur</div>
+    </div>
+    <div class="stat-card">
+      <label style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px;">Poids de corps</label>
+      <input class="stat-input-big" type="number" step="0.1" id="s-bw" placeholder="—" onchange="sv('s-bw')">
+      <div class="stat-unit">kg</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">📈 Objectifs Challenge 100 jours</div>
+    <div class="prog-wrap">
+      <div class="prog-head"><span class="prog-name">Séances complétées</span><span class="prog-val" id="pv-sess">0/30</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="pf-sess" style="width:0%"></div></div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-head"><span class="prog-name">Broad Jump (objectif : +20 cm)</span><span class="prog-val" id="pv-broad">Non mesuré</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="pf-broad" style="width:5%"></div></div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-head"><span class="prog-name">Sprint 10m (objectif : amélioration)</span><span class="prog-val" id="pv-sprint">Non mesuré</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="pf-sprint" style="width:5%"></div></div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-head"><span class="prog-name">Réaction (objectif : &lt; 200ms)</span><span class="prog-val" id="pv-react">Non mesuré</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="pf-react" style="width:5%"></div></div>
+    </div>
+  </div>
+
+  <!-- Config Airtable -->
+  <div class="panel mt">
+    <div class="panel-title">🔗 Connexion Airtable</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div>
+        <label style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px;">Clé API Airtable</label>
+        <input id="cfg-key" type="text" placeholder="patXXXXXX..." style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:2px;color:var(--text);font-family:var(--font-mono);font-size:13px;padding:8px 12px;outline:none;" onchange="saveCfg()">
+      </div>
+      <div>
+        <label style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px;">ID Base Airtable</label>
+        <input id="cfg-base" type="text" placeholder="appXXXXXX..." style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:2px;color:var(--text);font-family:var(--font-mono);font-size:13px;padding:8px 12px;outline:none;" onchange="saveCfg()">
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="testAirtable()">Tester la connexion</button>
+      <span id="cfg-status" style="font-family:var(--font-mono);font-size:12px;color:var(--muted);"></span>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="toast" id="toast">✓ Enregistré</div>
+
+<script>
+// ====================================================
+// CONSTANTES
+// ====================================================
+const START_DATE = new Date('2026-05-19'); // Aujourd'hui = jour 1
+const END_DATE   = new Date(START_DATE);
+END_DATE.setDate(END_DATE.getDate() + 99); // Jour 100
+const TODAY = new Date();
+
+// ====================================================
+// NAV & TABS
+// ====================================================
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ====================================================
+// COUNTDOWN 100 JOURS
+// ====================================================
+function buildCountdown() {
+  const msPerDay = 86400000;
+  const total = Math.round((END_DATE - START_DATE) / msPerDay); // 99 jours restants après J1
+  const elapsed = Math.max(0, Math.floor((TODAY - START_DATE) / msPerDay));
+  const remaining = Math.max(0, total - elapsed);
+  const pct = Math.min(100, Math.round((elapsed / total) * 100));
+
+  const cdEl = document.getElementById('cd-jours');
+  const fillEl = document.getElementById('cd-fill');
+  const subEl = document.getElementById('cd-end-date');
+  const hdEl = document.getElementById('hd-days');
+
+  if (cdEl) cdEl.textContent = remaining;
+  if (fillEl) fillEl.style.width = pct + '%';
+  if (hdEl) hdEl.textContent = remaining + 'J';
+  if (subEl) {
+    const opts = { day:'numeric', month:'long', year:'numeric' };
+    subEl.textContent = `Début : ${START_DATE.toLocaleDateString('fr-FR', opts)} · Fin : ${END_DATE.toLocaleDateString('fr-FR', opts)}`;
+  }
+}
+
+// ====================================================
+// PROGRAMME DES SÉANCES
+// ====================================================
+function getAllSessions() {
+  const sessions = [];
+  let d = new Date(START_DATE);
+  const end = new Date(END_DATE);
+  while (d <= end) {
+    if (d.getDay() === 1 || d.getDay() === 4) sessions.push(new Date(d)); // Lundi & Jeudi
+    d.setDate(d.getDate() + 1);
+  }
+  return sessions;
+}
+
+function fmtKey(d) {
+  return d.toISOString().slice(0, 10);
+}
+
+function fmtDate(d) {
+  const jours = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  const mois = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  return jours[d.getDay()] + ' ' + d.getDate() + ' ' + mois[d.getMonth()];
+}
+
+function getPhase(date) {
+  const t = date.getTime();
+  const s = START_DATE.getTime();
+  const weeks = (t - s) / (7 * 86400000);
+  if (weeks < 4)  return 'activation';
+  if (weeks < 9)  return 'progression';
+  if (weeks < 14) return 'performance';
+  return 'légèreté';
+}
+
+function phaseLabel(phase) {
+  const map = {
+    'activation': ['ACTIVATION', 'ph-base'],
+    'progression': ['PROGRESSION', 'ph-build'],
+    'performance': ['PERFORMANCE', 'ph-peak'],
+    'légèreté': ['LÉGÈRETÉ', 'ph-taper'],
+  };
+  return map[phase] || ['—', ''];
+}
+
+// ====================================================
+// EXERCICES — SÉANCE A (LUNDI) · VÉLOCITÉ + RÉACTION
+// ====================================================
+function sessA(phase) {
+  const isIntro = phase === 'activation';
+  return [
+    { cat: 'ÉCHAUFFEMENT · 5 min', items: [
+      { id:'ea1', n:'Footing léger + skipping', badge:'5 min', rest:null,
+        desc:'Trottiner doucement dans la salle ou sur place. Puis lever les genoux en rythme (skipping bas). Démarre à faible intensité, monte progressivement. Corps qui se réveille.',
+        tip:'✅ Objectif : transpirer légèrement, pas être essoufflée. C\'est l\'échauffement, pas la séance.',
+      },
+      { id:'ea2', n:'Rotations des chevilles, genoux, hanches', badge:'2 × 10 chaque articulation', rest:null,
+        desc:'En cercles doux. Chevilles, puis genoux, puis hanches. 10 rotations dans chaque sens. Ne pas forcer. Juste ouvrir les articulations.',
+        tip:'✅ Indispensable pour la vélocité. Des chevilles raides = des pédales moins rapides.',
+      },
+    ]},
+    { cat: 'VÉLOCITÉ · Vitesse de pédalage', items: [
+      { id:'v1', n:'Pédalage accéléré sur home-trainer', badge: isIntro ? '3 × 20 sec maxi' : '4 × 30 sec maxi', rest:'90 sec',
+        desc:'Sur home-trainer ou ergomètre. Pédaler le plus vite possible pendant le temps indiqué — genre sprint de pédales. Résistance très légère (presque rien). Récupération complète entre les séries. BUT : battre son record de tours.',
+        tip:'⚡ Ce n\'est pas la force qui compte ici — c\'est la vitesse pure des jambes. Pense à des jambes légères, pas lourdes.',
+      },
+      { id:'v2', n:'Claquement de mains + pédale', badge:'3 × 10 répétitions', rest:'60 sec',
+        desc:'Assis sur le vélo à l\'arrêt ou en légère marche. Quelqu\'un claque les mains → tu pédales 3 coups ULTRA rapides, le plus vite possible. Puis stop. Récupère. Recommence. Travaille le démarrage instantané.',
+        tip:'⚡ C\'est exactement le geste du gate : signal sonore → explosion de pédales.',
+      },
+      { id:'v3', n:'Saut à la corde rapide', badge: isIntro ? '3 × 30 sec' : '4 × 45 sec', rest:'60 sec',
+        desc:'Corde à sauter classique. Aller le plus vite possible avec les pieds — petits sauts rapides. Ne pas sauter haut, sauter vite. Si tu n\'as pas de corde : imite le mouvement sur place (jumping jack rapide).',
+        tip:'✅ Entraîne la vélocité des pieds et la coordination. Les pédales les plus rapides partent des chevilles et des pieds.',
+      },
+    ]},
+    { cat: 'TEMPS DE RÉACTION · Système nerveux', items: [
+      { id:'r1', n:'Clap & sprint 5m', badge:'6 répétitions · repos complet', rest:null,
+        desc:'En position de départ (légèrement fléchie, poids sur l\'avant). Quelqu\'un claque les mains (ou klaxon, bip) → SPRINT MAXIMUM 5 mètres. Repos complet 90 sec. NE PAS anticiper. Focus total sur la réaction au signal.',
+        tip:'⚡ C\'est le drill de réaction numéro 1. Chaque répétition est maximale — si tu es fatiguée, tu t\'arrêtes.',
+      },
+      { id:'r2', n:'Rattraper la balle tombante', badge:'3 × 10 tentatives', rest:'30 sec',
+        desc:'Partenaire tient une balle à hauteur d\'épaule. Sans prévenir, il la lâche → tu la rattrapes avant qu\'elle touche le sol. Distance : 50 cm. Augmente la distance si c\'est trop facile. Travaille la réaction visuelle pure.',
+        tip:'✅ Simple mais très efficace pour le temps de réaction. Les études montrent une amélioration rapide avec ce drill.',
+      },
+      { id:'r3', n:'Application temps de réaction', badge:`${isIntro ? '5 min' : '8 min'} de jeu`, rest:null,
+        desc:'Téléphone : application "Reaction Time" ou "Human Benchmark". Toucher l\'écran le plus vite possible quand le signal apparaît. Note ton meilleur temps. Objectif : descendre sous 200ms. C\'est ton temps de réaction pur.',
+        tip:'✅ Mesurable, amusant, et directement lié à la performance au gate. Note ton record dans l\'onglet Stats.',
+      },
+    ]},
+    { cat: 'FIN · Étirements doux', items: [
+      { id:'ea-fin', n:'Étirements statiques jambes et dos', badge:'5 min', rest:null,
+        desc:'Quadriceps, ischio-jambiers, mollets. 20-30 sec chaque groupe. Respiration lente. Pas de douleur. Le but c\'est de récupérer, pas de progresser en étirements maintenant.',
+        tip:'✅ Toujours terminer par des étirements. C\'est aussi un entraînement.',
+      },
+    ]},
+  ];
+}
+
+// ====================================================
+// EXERCICES — SÉANCE B (JEUDI) · PUISSANCE + ACCÉLÉRATION
+// ====================================================
+function sessB(phase) {
+  const isIntro = phase === 'activation';
+  return [
+    { cat: 'ÉCHAUFFEMENT · 5 min', items: [
+      { id:'eb1', n:'Échauffement dynamique', badge:'5 min', rest:null,
+        desc:'Tour de terrain en trottinant. Puis : montées de genoux, talons-fesses, fentes marchées, bras en moulin. Corps qui se prépare à l\'explosivité.',
+        tip:'✅ Échauffement dynamique obligatoire avant les exercices de puissance.',
+      },
+    ]},
+    { cat: 'PUISSANCE · Explosivité sans charge', items: [
+      { id:'p1', n:'Squat jump (saut en squat)', badge: isIntro ? '3 × 5 répétitions' : '4 × 6 répétitions', rest:'90 sec',
+        desc:'Descends en squat (cuisses presque parallèles) → explose vers le haut le plus haut possible → réception douce sur la plante des pieds → enchaîne immédiatement. Bras qui aident en montant. Mesure la hauteur si tu peux (scotch sur le mur).',
+        tip:'⚡ Le squat jump est l\'exercice roi de l\'explosivité BMX. C\'est exactement le geste du premier coup de pédale — extension rapide et totale des jambes.',
+      },
+      { id:'p2', n:'Broad jump (saut en longueur)', badge:'4 × 3 sauts · mesurer', rest:'60 sec',
+        desc:'Pieds joints. Légère flexion de genoux, bras en arrière → saute le plus loin possible → réception sur 2 pieds. Mesure la distance en cm. Note ton record dans Stats. Si tu progresses ici, tu progresses au gate.',
+        tip:'⚡ MESURE OBLIGATOIRE. C\'est ton indicateur de puissance directe. Note la distance à chaque séance.',
+      },
+      { id:'p3', n:'Fentes sautées', badge: isIntro ? '2 × 8 (4 chaque jambe)' : '3 × 10 (5 chaque jambe)', rest:'90 sec',
+        desc:'Position de fente (une jambe devant, l\'autre derrière) → saute → change de jambe dans les airs → réception en fente, jambes inversées. Si trop difficile : fentes alternées sans saut.',
+        tip:'✅ Développe la puissance asymétrique — exactement comme le pédalage.',
+      },
+    ]},
+    { cat: 'ACCÉLÉRATION · Explosive linéaire', items: [
+      { id:'a1', n:'Sprint départ accroupi — 10m', badge:'6 sprints · repos 90 sec', rest:null,
+        desc:'Accroupie, une main au sol. Sur signal → sprint maximal 10 mètres. Repos complet. Chronomètre si possible. Chaque sprint est à 100%. Jamais moins. Si la fatigue arrive, tu t\'arrêtes.',
+        tip:'⚡ Position accroupie = position similaire au gate BMX. Travaille exactement le même pattern moteur.',
+      },
+      { id:'a2', n:'Sprint côté — shuffle + accélération', badge: isIntro ? '3 × (3 shuffles + sprint 5m)' : '4 × (4 shuffles + sprint 5m)', rest:'60 sec',
+        desc:'Déplacement latéral rapide (3-4 pas de côté) → changement de direction → sprint ligne droite 5m. Travaille la réactivité directionnelle et le premier pas explosif.',
+        tip:'✅ Améliore l\'agilité et la réactivité — qualités cruciales en course pour se battre en groupe.',
+      },
+      { id:'a3', n:'Départ sur bip sonore — 3 allures', badge:'9 répétitions (3 × 3 allures)', rest:'45 sec',
+        desc:'Au signal : 1 sprint MAXI 5m. 2ème signal : sprint 70%. 3ème signal : sprint 40%. Toujours départ arrêté. Entraîne le cerveau à doser l\'accélération selon le besoin.',
+        tip:'✅ La course BMX demande des accélérations à des intensités variées — pas toujours 100%.',
+      },
+    ]},
+    { cat: 'GAINAGE · Stabilité de base', items: [
+      { id:'g1', n:'Planche classique', badge: isIntro ? '3 × 20 sec' : '3 × 40 sec', rest:'30 sec',
+        desc:'Appui sur les avant-bras, corps aligné de la tête aux pieds. Dos plat, ventre rentré. Respire normalement. Ne pas laisser les hanches tomber. Si 40 sec trop long : fractionne en 2 × 20 sec.',
+        tip:'✅ Un bon gainage = un corps stable sur le vélo = moins d\'énergie gaspillée en oscillations.',
+      },
+      { id:'g2', n:'Superman (allongée sur le ventre)', badge:'3 × 12 répétitions · hold 2 sec', rest:'30 sec',
+        desc:'Allongée face au sol. Lever simultanément bras, tête et jambes → tenir 2 secondes → redescendre doucement. Nuque neutre (regard vers le sol). C\'est exactement la position en bas de rampe BMX.',
+        tip:'✅ Renforce la chaîne postérieure complète — dos, fessiers, nuque. Très important pour tenir en position basse sur la piste.',
+      },
+    ]},
+    { cat: 'FIN · Récupération', items: [
+      { id:'eb-fin', n:'Étirements + respiration calme', badge:'5 min', rest:null,
+        desc:'Étirements des quadriceps, ischio-jambiers, mollets, fléchisseurs de hanche. 3 respirations profondes. Bilan mental : qu\'est-ce qui s\'est bien passé ?',
+        tip:'✅ La récupération fait partie de l\'entraînement. Ne pas la négliger.',
+      },
+    ]},
+  ];
+}
+
+// ====================================================
+// RENDU EXERCICE
+// ====================================================
+function renderExercise(ex, key) {
+  const isDone = ls('ex-' + key + '-' + ex.id);
+
+  const restHtml = ex.rest ? `<div class="rest-row">
+    <span class="rest-label">⏱ RÉCUP</span>
+    <span class="rest-val">${ex.rest}</span>
+    <button class="rest-btn" onclick="startRest(this,'${key}-${ex.id}',${ex.rest.includes('min') ? parseInt(ex.rest)*60 : parseInt(ex.rest)})">▶ START</button>
+    <span class="rest-countdown" id="rc-${key}-${ex.id}"></span>
+  </div>` : '';
+
+  const tipCls = ex.tip ? (ex.tip.startsWith('⚡') ? 'bmx' : 'info') : '';
+
+  return `<div class="ex-block ${isDone?'done':''}" id="ex-${key}-${ex.id}">
+    <div class="ex-head" onclick="tog('ex-${key}-${ex.id}')">
+      <div class="ex-check" onclick="event.stopPropagation();ck('ex-${key}-${ex.id}','${key}','${ex.id}')">✓</div>
+      <div class="ex-name">${ex.n}</div>
+      <div class="ex-badge">${ex.badge}</div>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body">
+      <div class="ex-desc">${ex.desc}</div>
+      ${ex.tip ? `<div class="tip-box ${tipCls}"><strong>${ex.tip.slice(0,2)}</strong> ${ex.tip.slice(3)}</div>` : ''}
+      ${restHtml}
+    </div>
+  </div>`;
+}
+
+function renderBilan(key) {
+  const b = lsJ('bl-' + key) || { en:0, plaisir:0, note:'' };
+  return `<div class="bilan">
+    <div class="bilan-title">// BILAN DE SÉANCE</div>
+    <div class="bilan-grid">
+      <div>
+        <div class="rating-row">
+          <div class="rating-lbl">Énergie ressentie</div>
+          <div class="stars" id="st-en-${key}">${[1,2,3,4,5].map(n=>`<span class="star ${b.en>=n?'on':''}" onclick="rate('${key}','en',${n})">★</span>`).join('')}</div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-lbl">Plaisir / Motivation</div>
+          <div class="stars" id="st-plaisir-${key}">${[1,2,3,4,5].map(n=>`<span class="star pink ${b.plaisir>=n?'on':''}" onclick="rate('${key}','plaisir',${n})">★</span>`).join('')}</div>
+        </div>
+      </div>
+      <div>
+        <div class="rating-lbl" style="margin-bottom:6px;">Notes libres</div>
+        <textarea class="bilan-ta" id="bl-note-${key}" placeholder="Ce que j'ai réussi, ce que j'ai du mal, comment je me suis sentie...">${b.note||''}</textarea>
+        <button class="btn-primary" onclick="saveBilan('${key}')">Enregistrer le bilan</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSession(sess, isActive, idx) {
+  const key = fmtKey(sess);
+  const isLundi = sess.getDay() === 1;
+  const phase = getPhase(sess);
+  const [phLbl, phCls] = phaseLabel(phase);
+
+  const categories = isLundi ? sessA(phase) : sessB(phase);
+  const isDoneS = ls('session-done-' + key);
+
+  let body = '';
+  categories.forEach(cat => {
+    body += `<div class="cat-div">${cat.cat}</div>`;
+    cat.items.forEach(ex => { body += renderExercise(ex, key); });
+  });
+  body += renderBilan(key);
+
+  return `<div class="sess-content ${isActive?'active':''}" id="sc-${key}">
+    <div class="sess-card">
+      <div class="sess-header">
+        <div>
+          <div class="sess-date">${fmtDate(sess)} 2026</div>
+          <div class="sess-meta">${isLundi?'SÉANCE A · VÉLOCITÉ + RÉACTION':'SÉANCE B · PUISSANCE + ACCÉLÉRATION'} &nbsp;|&nbsp; <span class="tl-phase ${phCls}">${phLbl}</span></div>
+        </div>
+        <button class="${isDoneS?'btn-done':'btn-primary'}" onclick="markDone('${key}')" id="sd-${key}">
+          ${isDoneS ? '✓ Séance complétée' : 'Valider la séance'}
+        </button>
+      </div>
+      <div class="sess-body">${body}</div>
+    </div>
+  </div>`;
+}
+
+function buildSeances() {
+  const sessions = getAllSessions();
+  const tabs = document.getElementById('sessTabs');
+  const contents = document.getElementById('sessContents');
+
+  let tabsHtml = '', contHtml = '';
+  const todayKey = fmtKey(TODAY);
+  const nextIdx = sessions.findIndex(s => fmtKey(s) >= todayKey);
+
+  sessions.forEach((s, i) => {
+    const key = fmtKey(s);
+    const isDoneS = ls('session-done-' + key);
+    const isNext = i === nextIdx;
+    const isLocked = i > nextIdx && nextIdx >= 0;
+    const isActive = isNext;
+
+    let cls = '';
+    if (isDoneS) cls += ' done-tab';
+    if (isActive) cls += ' active';
+    if (isLocked) cls += ' future-locked';
+    if (isNext && !isDoneS) cls += ' next-available';
+
+    const prefix = isDoneS ? '✓ ' : isNext ? '⚡ ' : isLocked ? '🔒 ' : '';
+    const handler = isLocked ? '' : `onclick="selSess('${key}')"`;
+    const title = isLocked ? `title="Disponible le ${fmtDate(s)}"` : '';
+
+    tabsHtml += `<button class="sess-tab${cls}" id="stb-${key}" ${handler} ${title}>${prefix}${fmtDate(s)}</button>`;
+    if (!isLocked) {
+      contHtml += renderSession(s, isActive, isActive ? 0 : 1);
+    }
+  });
+
+  tabs.innerHTML = tabsHtml;
+  contents.innerHTML = contHtml;
+}
+
+function buildAllSessGrid() {}
+
+function selSess(key) {
+  document.querySelectorAll('.sess-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.sess-tab').forEach(t => t.classList.remove('active'));
+  const c = document.getElementById('sc-' + key);
+  const t = document.getElementById('stb-' + key);
+  if (c) c.classList.add('active');
+  if (t) { t.classList.add('active'); t.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); }
+}
+
+function tog(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+function ck(blockId, sessKey, exId) {
+  const el = document.getElementById(blockId);
+  if (!el) return;
+  el.classList.toggle('done');
+  const done = el.classList.contains('done');
+  if (exId) { done ? lsSet('ex-' + sessKey + '-' + exId, '1') : lsDel('ex-' + sessKey + '-' + exId); }
+  toast(done ? '✓ Exercice validé' : 'Décoché');
+}
+
+function markDone(key) {
+  lsSet('session-done-' + key, '1');
+  const btn = document.getElementById('sd-' + key);
+  if (btn) { btn.textContent = '✓ Séance complétée'; btn.className = 'btn-done'; }
+  const tab = document.getElementById('stb-' + key);
+  if (tab) tab.classList.add('done-tab');
+  toast('🏆 Séance validée !');
+  updateProgress();
+  syncToAirtable(key);
+}
+
+function rate(key, field, val) {
+  const b = lsJ('bl-' + key) || { en:0, plaisir:0, note:'' };
+  b[field] = val;
+  lsSetJ('bl-' + key, b);
+  const container = document.getElementById('st-' + field + '-' + key);
+  if (!container) return;
+  container.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('on', i < val));
+}
+
+function saveBilan(key) {
+  const b = lsJ('bl-' + key) || { en:0, plaisir:0, note:'' };
+  const ta = document.getElementById('bl-note-' + key);
+  if (ta) b.note = ta.value;
+  lsSetJ('bl-' + key, b);
+  toast('💾 Bilan enregistré !');
+  syncToAirtable(key);
+}
+
+function sv(id) {
+  const el = document.getElementById(id);
+  if (el) lsSet(id, el.value);
+}
+
+function showMental(id, btn) {
+  document.querySelectorAll('.mental-section').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('#mentalSubNav .sess-tab').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'block';
+  if (btn) btn.classList.add('active');
+}
+
+const jmRatings = {};
+function jmRate(field, val) {
+  jmRatings[field] = val;
+  const container = document.getElementById('jm-stars-' + field);
+  if (!container) return;
+  container.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('on', i < val));
+}
+
+function saveJM() {
+  ['jm-1','jm-2','jm-3','jm-4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) lsSet(id, el.value);
+  });
+  lsSetJ('jm-ratings', jmRatings);
+  toast('🧠 Journal mental enregistré !');
+}
+
+function loadJM() {
+  ['jm-1','jm-2','jm-3','jm-4'].forEach(id => {
+    const el = document.getElementById(id);
+    const v = ls(id);
+    if (el && v) el.value = v;
+  });
+  const r = lsJ('jm-ratings') || {};
+  ['conf','plaisir'].forEach(f => {
+    if (r[f]) {
+      jmRatings[f] = r[f];
+      const c = document.getElementById('jm-stars-' + f);
+      if (c) c.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('on', i < r[f]));
+    }
+  });
+}
+
+function updateProgress() {
+  const sessions = getAllSessions();
+  const done = sessions.filter(s => ls('session-done-' + fmtKey(s))).length;
+  const pf = document.getElementById('pf-sess');
+  const pv = document.getElementById('pv-sess');
+  if (pf) pf.style.width = Math.round((done/sessions.length)*100) + '%';
+  if (pv) pv.textContent = `${done}/${sessions.length}`;
+}
+
+function loadStats() {
+  ['s-broad','s-sprint','s-jump','s-velo','s-reaction','s-bw'].forEach(id => {
+    const el = document.getElementById(id);
+    const v = ls(id);
+    if (el && v) el.value = v;
+  });
+}
+
+// ====================================================
+// AIRTABLE SYNC
+// ====================================================
+function atKey()   { return ls('cfg-key') || ''; }
+function atBase()  { return ls('cfg-base') || ''; }
+function atTable() { return 'Stats'; }
+
+function saveCfg() {
+  const k = document.getElementById('cfg-key');
+  const b = document.getElementById('cfg-base');
+  if (k) lsSet('cfg-key', k.value);
+  if (b) lsSet('cfg-base', b.value);
+}
+
+function loadCfg() {
+  const k = document.getElementById('cfg-key');
+  const b = document.getElementById('cfg-base');
+  if (k) { const v = ls('cfg-key'); if (v) k.value = v; }
+  if (b) { const v = ls('cfg-base'); if (v) b.value = v; }
+}
+
+async function syncToAirtable(sessKey) {
+  const apiKey = atKey(), baseId = atBase(), table = atTable();
+  if (!apiKey || !baseId) return;
+
+  const bilan  = lsJ('bl-' + sessKey) || {};
+  const jm     = lsJ('jm-ratings') || {};
+  const isDone = !!ls('session-done-' + sessKey);
+
+  const sessions  = getAllSessions();
+  const sessDate  = sessions.find(s => fmtKey(s) === sessKey);
+  const phase     = sessDate ? getPhase(sessDate) : '';
+  const isLundi   = sessDate ? sessDate.getDay() === 1 : false;
+
+  const fields = {
+    'Nom'               : 'LORINE',
+    'Date seance'       : sessKey,
+    'Phase'             : phase.toUpperCase(),
+    'Type'              : isLundi ? 'Lundi - Vélocité + Réaction' : 'Jeudi - Puissance + Accélération',
+    'Seance validee'    : isDone,
+    'Energie 5'         : bilan.en || 0,
+    'Plaisir 5'         : bilan.plaisir || 0,
+    'Notes bilan'       : bilan.note || '',
+    'Confiance 5'       : jm.conf || 0,
+    'Motivation 5'      : jm.plaisir || 0,
+    'Broad Jump cm'     : parseInt(ls('s-broad') || 0),
+    'Sprint 10m sec'    : parseFloat(ls('s-sprint') || 0),
+    'Reaction ms'       : parseInt(ls('s-reaction') || 0),
+  };
+
+  const url = 'https://api.airtable.com/v0/' + baseId + '/' + encodeURIComponent(table);
+  try {
+    const searchRes = await fetch(url + '?filterByFormula={Date seance}="' + sessKey + '"&maxRecords=1',
+      { headers: { Authorization: 'Bearer ' + apiKey } });
+    const searchData = await searchRes.json();
+    if (searchData.records && searchData.records.length > 0) {
+      await fetch(url + '/' + searchData.records[0].id, {
+        method: 'PATCH',
+        headers: { Authorization: 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields }),
+      });
+    } else {
+      await fetch(url, {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields }),
+      });
+    }
+    toast('☁ Synchronisé Airtable');
+  } catch(e) { console.error('Airtable:', e); }
+}
+
+function testAirtable() {
+  const apiKey = atKey(), baseId = atBase(), table = atTable();
+  const status = document.getElementById('cfg-status');
+  if (!apiKey || !baseId) { status.style.color='#f87171'; status.textContent='Remplis la clé API et l\'ID de la base.'; return; }
+  status.style.color='var(--muted)'; status.textContent='Test en cours...';
+  fetch('https://api.airtable.com/v0/' + baseId + '/' + encodeURIComponent(table) + '?maxRecords=1',
+    { headers: { Authorization: 'Bearer ' + apiKey } })
+    .then(r => r.json())
+    .then(d => {
+      if (d.error) { status.style.color='#f87171'; status.textContent='Erreur : ' + d.error.message; }
+      else { status.style.color='var(--green)'; status.textContent='Connexion OK — base trouvée !'; }
+    })
+    .catch(() => { status.style.color='#f87171'; status.textContent='Erreur réseau.'; });
+}
+
+// ====================================================
+// LOCALSTORAGE
+// ====================================================
+function ls(k) { return localStorage.getItem(k); }
+function lsSet(k, v) { localStorage.setItem(k, v); }
+function lsDel(k) { localStorage.removeItem(k); }
+function lsJ(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
+function lsSetJ(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// REST TIMER
+const restTimers = {};
+function startRest(btn, id, seconds) {
+  if (restTimers[id]) {
+    clearInterval(restTimers[id]); delete restTimers[id];
+    btn.textContent = '▶ START'; btn.classList.remove('running');
+    const cd = document.getElementById('rc-' + id);
+    if (cd) { cd.classList.remove('active'); cd.textContent = ''; }
+    return;
+  }
+  let r = seconds;
+  btn.textContent = '■ STOP'; btn.classList.add('running');
+  const cd = document.getElementById('rc-' + id);
+  if (cd) cd.classList.add('active');
+  function tick() {
+    if (r <= 0) {
+      clearInterval(restTimers[id]); delete restTimers[id];
+      btn.textContent = '✓ GO'; btn.classList.remove('running');
+      if (cd) { cd.textContent = ''; cd.classList.remove('active'); }
+      if (navigator.vibrate) navigator.vibrate([200,100,200]);
+      return;
+    }
+    const m = Math.floor(r / 60), s = r % 60;
+    if (cd) cd.textContent = m > 0 ? m + ':' + String(s).padStart(2, '0') : s + 's';
+    r--;
+  }
+  tick();
+  restTimers[id] = setInterval(tick, 1000);
+}
+
+// ====================================================
+// INIT
+// ====================================================
+document.addEventListener('DOMContentLoaded', () => {
+  buildCountdown();
+  buildSeances();
+  loadStats();
+  updateProgress();
+  loadJM();
+  loadCfg();
+});
+</script>
+</body>
+</html>
