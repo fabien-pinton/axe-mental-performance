@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Diagnostic Mental AXE — Méthode Fabien Pinton</title>
-<meta name="description" content="20 questions pour identifier votre profil mental exact. Rapport personnalisé adapté à votre âge. Méthode AXE. 14€.">
+<meta name="description" content="25 questions pour identifier votre profil mental exact. Rapport personnalisé adapté à votre âge. Méthode AXE. 14€.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9LL33EDPP"></script>
@@ -152,7 +152,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 <div id="step-landing">
   <div class="landing-eyebrow">Diagnostic Mental · Méthode AXE</div>
   <h1 class="landing-title">QUEL EST<br>TON <em>PROFIL</em><br>MENTAL ?</h1>
-  <p class="landing-sub">20 questions pour identifier exactement ce qui te bloque en compétition. Rapport personnalisé adapté à ton âge. Reçu directement dans ta boîte mail.</p>
+  <p class="landing-sub">25 questions pour identifier exactement ce qui te bloque en compétition. Rapport personnalisé adapté à ton âge. Reçu directement dans ta boîte mail.</p>
 
   <div class="landing-promise">
     <div class="landing-promise-title">Ce que tu reçois</div>
@@ -206,16 +206,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
       <div class="age-card-label">Sport-études · Sélection</div>
       <div class="age-card-desc">Pression des résultats pour intégrer une structure, regard de l'entraîneur, identité sportive forte.</div>
     </div>
-    <div class="age-card" onclick="selectAge('18-25')" id="ac-18-25">
-      <div class="age-card-range">18 — 25 ANS</div>
-      <div class="age-card-label">Performance maximale</div>
-      <div class="age-card-desc">Passage amateur vers compétition sérieuse, pression externe accrue, enjeux concrets.</div>
-    </div>
-    <div class="age-card" onclick="selectAge('25+')" id="ac-25+">
-      <div class="age-card-range">25 ANS +</div>
-      <div class="age-card-label">Sportif expérimenté</div>
-      <div class="age-card-desc">Blessures mentales accumulées, conciliation sport et vie, recherche de durabilité.</div>
-    </div>
+
   </div>
   <div class="age-note">Cette information adapte tes questions, ton rapport et tes exercices.</div>
   <button class="btn-start" id="btn-start" onclick="startQuiz()">COMMENCER LE DIAGNOSTIC →</button>
@@ -268,8 +259,6 @@ const CFG = {
 const AGE_LABELS = {
   '12-15':'12 — 15 ans · Jeune compétiteur',
   '15-18':'15 — 18 ans · Sport-études & Sélection',
-  '18-25':'18 — 25 ans · Performance maximale',
-  '25+':'25 ans & plus · Sportif expérimenté',
 };
 
 // ══ QUESTIONS ══
@@ -394,6 +383,36 @@ const Q_BASE = [
     {t:"Hésiterais — je ne sais pas par où commencer.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
     {t:"En aurais vraiment besoin — c'est clairement mon frein principal.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}},
   ]},
+  {cat:"Gestion du stress",text:"Quand un entraîneur ou un parent te met de la pression juste avant de compétir, tu :",opts:[
+    {t:"Restes centré — leur pression ne change pas mon état.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+    {t:"L'entends mais tu arrives à te recentrer sur toi.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+    {t:"Ressens un surcroît de tension qui perturbe ta concentration.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+    {t:"Te déstabilises complètement — leur pression te bloque.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
+  ]},
+  {cat:"Rapport à la peur",text:"Quand tu dois essayer un geste nouveau ou risqué en compétition, tu :",opts:[
+    {t:"Le tentes sans hésiter — c'est en compétition qu'on progresse.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:4}},
+    {t:"L'essaies si la situation s'y prête.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+    {t:"Préfères rester sur ce que tu maîtrises — trop risqué.",s:{stress:2,peur:1,confiance:2,plaisir:2,compet:2}},
+    {t:"N'oses jamais — et tu le regrettes après.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
+  ]},
+  {cat:"Confiance en soi",text:"Quand tu commets une erreur technique que tu fais normalement bien, tu te dis :",opts:[
+    {t:"Ça arrive — je reste concentré sur la suite.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+    {t:"C'est agaçant mais je gère.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+    {t:"Je commence à douter de moi pour le reste de la compétition.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
+    {t:"Tout s'effondre — je ne suis plus capable de rien.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}},
+  ]},
+  {cat:"Rapport au plaisir",text:"Au fond, ce que tu préfères dans ton sport c'est :",opts:[
+    {t:"Le geste, la sensation, le flow quand tout est fluide.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
+    {t:"Progresser et voir que mon travail paie.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+    {t:"Être reconnu et respecté pour mon niveau.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+    {t:"Gagner — le reste ne compte pas vraiment.",s:{stress:2,peur:2,confiance:2,plaisir:1,compet:1}},
+  ]},
+  {cat:"Rapport à la compétition",text:"Face à un moment décisif (tir au but, balle de match, sprint final…), ton corps réagit :",opts:[
+    {t:"En s'activant positivement — je suis fait pour ça.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:4}},
+    {t:"Avec une légère montée d'adrénaline que je canalise.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+    {t:"Avec une tension physique qui gêne mon exécution.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+    {t:"En se bloquant — mes jambes sont lourdes, mes gestes se figent.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
+  ]},
 ];
 
 const AGE_TWEAKS = {
@@ -411,20 +430,7 @@ const AGE_TWEAKS = {
       {t:"Ce que vont penser mes potes, mon coach, mes parents.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
     ]},
   },
-  '25+':{
-    8:{text:"D'où vient principalement ta confiance avant une compétition ?",opts:[
-      {t:"De mon vécu et de mes années de pratique — je me connais.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-      {t:"De mes dernières performances — si ça allait bien, je suis confiant.",s:{stress:3,peur:3,confiance:2,plaisir:3,compet:3}},
-      {t:"Du regard de mon entourage — j'ai besoin d'être validé.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
-      {t:"Elle est fragile — l'expérience ne l'a pas vraiment stabilisée.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
-    ]},
-    13:{text:"Pourquoi je continue le sport en compétition ?",opts:[
-      {t:"Pour le plaisir et le dépassement — c'est viscéral.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-      {t:"Pour progresser encore et atteindre mes objectifs.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"Par habitude et par peur de lâcher quelque chose.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-      {t:"Pour gagner — c'est le seul résultat qui compte encore.",s:{stress:2,peur:2,confiance:2,plaisir:1,compet:1}},
-    ]},
-  }
+  '15-18':{}
 };
 
 const PROFILES = {

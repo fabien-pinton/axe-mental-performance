@@ -199,14 +199,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">15 - 18 ans</div>
 <div style="font-size:10px;color:#5A5040;margin-top:3px;">Sport-etudes</div>
 </div>
-<div id="AX_C" onclick="AX_pick('18-25')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
-<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">18 - 25 ans</div>
-<div style="font-size:10px;color:#5A5040;margin-top:3px;">Performance</div>
-</div>
-<div id="AX_D" onclick="AX_pick('25+')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
-<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">25 ans et plus</div>
-<div style="font-size:10px;color:#5A5040;margin-top:3px;">Experimente</div>
-</div>
+
 </div>
 <div style="font-size:10px;color:#8A7D6A;font-style:italic;margin-bottom:14px;">Tu pourras modifier ton age via le bouton en haut.</div>
 <div id="AX_BTN" onclick="AX_go()" style="background:#A8852A;color:#FDFAF5;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.18em;padding:14px;text-align:center;cursor:pointer;opacity:0.35;transition:opacity .3s;">ACCEDER A MON PROGRAMME</div>
@@ -233,6 +226,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <!-- MOD NAV -->
 <div class="pmod-nav" id="modNav">
   <div class="pmn-item active" onclick="showMod(0)" id="mn0"><div class="pmn-num">01</div><div class="pmn-label">Module 1</div></div>
+  <div class="pmn-item locked" onclick="tryUnlock(1)" id="mn1"><div class="pmn-num">02</div><div class="pmn-label">Mois 2</div><div class="pmn-lock">🔒</div></div>
+  <div class="pmn-item locked" onclick="tryUnlock(2)" id="mn2"><div class="pmn-num">03</div><div class="pmn-label">Mois 3</div><div class="pmn-lock">🔒</div></div>
+  <div class="pmn-item locked" onclick="tryUnlock(3)" id="mn3"><div class="pmn-num">04</div><div class="pmn-label">Mois 4</div><div class="pmn-lock">🔒</div></div>
+  <div class="pmn-item locked" onclick="tryUnlock(4)" id="mn4"><div class="pmn-num">05</div><div class="pmn-label">Mois 5</div><div class="pmn-lock">🔒</div></div>
+  <div class="pmn-item locked" onclick="tryUnlock(5)" id="mn5"><div class="pmn-num">06</div><div class="pmn-label">Mois 6</div><div class="pmn-lock">🔒</div></div>
+</div><div class="pmn-label">Module 1</div></div>
   <div class="pmn-item locked" onclick="tryUnlock(1)" id="mn1"><div class="pmn-num">02</div><div class="pmn-label">Module 2</div><div class="pmn-lock">🔒</div></div>
   <div class="pmn-item locked" onclick="tryUnlock(2)" id="mn2"><div class="pmn-num">03</div><div class="pmn-label">Module 3</div><div class="pmn-lock">🔒</div></div>
   <div class="pmn-item locked" onclick="tryUnlock(3)" id="mn3"><div class="pmn-num">04</div><div class="pmn-label">Pacte</div><div class="pmn-lock">🔒</div></div>
@@ -312,13 +311,13 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <div class="prdv-title">RÉSERVEZ VOTRE RDV<br>AVEC FABIEN</div>
             <div class="prdv-desc">Un échange de 30-45 minutes pour valider votre progression, ajuster le travail et préparer le module suivant.</div>
             <a href="https://tidycal.com/fpinton/rdv-module-1-axe-premium" class="prdv-btn" target="_blank">RÉSERVER MON RDV MODULE 1 →</a>
-            <div class="prdv-note">✦ Le Module 2 se débloque à J+1 après votre RDV</div>
-            <div class="unlock-date-block"><div>📅 <strong>Entrez la date de votre RDV Module 1</strong> pour programmer le déblocage du Module suivant.<div class="unlock-inp"><input type="date" id="rdv1-date"/><button onclick="setUnlock(1)">Enregistrer</button></div></div></div>
+            
+            </div>
           </div>
         </div>
         <div class="pmod locked" id="pm1">
           <div class="pmod-header">
-            <div class="pmod-eyebrow">Module 02 · Débloqué après RDV Module 1</div>
+            <div class="pmod-eyebrow">Module 02 · Débloqué le 1er du Mois 2</div>
             <h2 class="pmod-title">JOUER POUR LE JEU EN COMPÉTITION</h2>
             <div class="pmod-sous">Le focus jeu comme stratégie de performance</div>
             <div class="pmod-objectif">
@@ -366,13 +365,13 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <div class="prdv-title">RÉSERVEZ VOTRE RDV<br>AVEC FABIEN</div>
             <div class="prdv-desc">Un échange de 30-45 minutes pour valider votre progression, ajuster le travail et préparer le module suivant.</div>
             <a href="https://tidycal.com/fpinton/rdv-module-2-axe-premium" class="prdv-btn" target="_blank">RÉSERVER MON RDV MODULE 2 →</a>
-            <div class="prdv-note">✦ Le Module 3 se débloque à J+1 après votre RDV</div>
-            <div class="unlock-date-block"><div>📅 <strong>Entrez la date de votre RDV Module 2</strong> pour programmer le déblocage du Module suivant.<div class="unlock-inp"><input type="date" id="rdv2-date"/><button onclick="setUnlock(2)">Enregistrer</button></div></div></div>
+            
+            </div>
           </div>
         </div>
         <div class="pmod locked" id="pm2">
           <div class="pmod-header">
-            <div class="pmod-eyebrow">Module 03 · Débloqué après RDV Module 2</div>
+            <div class="pmod-eyebrow">Module 03 · Débloqué le 1er du Mois 3</div>
             <h2 class="pmod-title">PROTÉGER LE PLAISIR SOUS PRESSION</h2>
             <div class="pmod-sous">Quand l'enjeu monte — le jeu reste</div>
             <div class="pmod-objectif">
@@ -420,58 +419,214 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <div class="prdv-title">RÉSERVEZ VOTRE RDV<br>AVEC FABIEN</div>
             <div class="prdv-desc">Un échange de 30-45 minutes pour valider votre progression, ajuster le travail et préparer le module suivant.</div>
             <a href="https://tidycal.com/fpinton/rdv-module-3-axe-premium" class="prdv-btn" target="_blank">RÉSERVER MON RDV MODULE 3 →</a>
-            <div class="prdv-note">✦ Le Module 4 se débloque à J+1 après votre RDV</div>
-            <div class="unlock-date-block"><div>📅 <strong>Entrez la date de votre RDV Module 3</strong> pour programmer le déblocage du Module suivant.<div class="unlock-inp"><input type="date" id="rdv3-date"/><button onclick="setUnlock(3)">Enregistrer</button></div></div></div>
+            
+            </div>
           </div>
         </div>
         <div class="pmod locked" id="pm3">
           <div class="pmod-header">
-            <div class="pmod-eyebrow">Module 04 · Débloqué après RDV Module 3</div>
-            <h2 class="pmod-title">LE PACTE DU JEU INÉBRANLABLE</h2>
-            <div class="pmod-sous">Formaliser la maîtrise — pour qu'elle tienne partout</div>
+            <div class="pmod-eyebrow">Module 05 · Débloqué le 1er du Mois 5</div>
+            <h2 class="pmod-title">PROTÉGER LE PLAISIR EN COMPÉTITION DÉCISIVE</h2>
+            <div class="pmod-sous">Le jeu naturel même quand l'enjeu est maximum</div>
             <div class="pmod-objectif">
               <div class="pmod-obj-label">Objectif du module</div>
-              <div class="pmod-obj-text">Formaliser les engagements qui rendent ton jeu naturel accessible en toutes circonstances — pas seulement quand tout va bien. Ce pacte est ta boussole pour les saisons à venir.</div>
+              <div class="pmod-obj-text">Maintenir le plaisir de jeu et la fluidité naturelle dans les compétitions à très forts enjeux.</div>
             </div>
-            <div class="pmod-mantra">"Mon jeu naturel est inébranlable. J'en ai fait un pacte."</div>
+            <div class="pmod-mantra">"Mon jeu naturel est ma vraie arme. Je le protège."</div>
           </div>
           <div class="pexos">
               <div class="pexo">
                 <div class="pexo-num">01</div>
                 <div class="pexo-body">
-                  <div class="pexo-title">Les 5 engagements du jeu naturel</div>
-                  <div class="pexo-desc">Définis 5 engagements envers ton jeu naturel. Ex: "Je définis mes 3 intentions de jeu avant chaque compétition", "Je recharge le plaisir la veille de chaque grande compétition", "Je joue pour le jeu — le résultat est une conséquence". Ces engagements définissent ton rapport au sport.</div>
+                  <div class="pexo-title">L'ancre du plaisir en compétition</div>
+                  <div class="pexo-desc">Identifie un geste ou une sensation qui représente ton meilleur jeu naturel. Avant chaque compétition ce mois : rejoue-la mentalement 3 fois dans les vestiaires. Ton cerveau active les circuits associés.</div>
                   <div class="pexo-focus">
                     <span class="pfocus-label">Focus processus</span>
-                    <span class="pfocus-text">Mes 5 engagements vers mon jeu naturel. Pour toujours.</span>
+                    <span class="pfocus-text">Je commence chaque compétition dans la sensation de bien jouer.</span>
                   </div>
                 </div>
               </div>
               <div class="pexo">
                 <div class="pexo-num">02</div>
                 <div class="pexo-body">
-                  <div class="pexo-title">La lettre à ton futur moi</div>
-                  <div class="pexo-desc">Dans 3 mois — tu joues pour le jeu à chaque compétition. Comment tes résultats ont évolué ? Comment tu vis les compétitions difficiles ? Quel plaisir tu retrouves ? Écris cette lettre. Elle est ton cap.</div>
+                  <div class="pexo-title">Le score plaisir vs résultat</div>
+                  <div class="pexo-desc">Après chaque compétition : note de 1 à 10 ton plaisir de jeu et ton résultat séparément. Sur 6 mois, le lien entre les deux te donnera une information définitive sur ton fonctionnement.</div>
                   <div class="pexo-focus">
                     <span class="pfocus-label">Focus processus</span>
-                    <span class="pfocus-text">Dans 3 mois — je joue pour le jeu. Vraiment.</span>
+                    <span class="pfocus-text">Quand je joue avec plaisir, je performe. Les données le prouvent.</span>
                   </div>
                 </div>
-              </div></div>
-          <div class="prdv-block">
-            <div class="prdv-eyebrow">Fin du Module 04 · Prochaine étape</div>
-            <div class="prdv-title">RÉSERVEZ VOTRE RDV<br>AVEC FABIEN</div>
-            <div class="prdv-desc">Un échange de 30-45 minutes pour valider votre progression, ajuster le travail et préparer le module suivant.</div>
-            <a href="https://tidycal.com/fpinton/seance-finale-axe-premium" class="prdv-btn" target="_blank">RÉSERVER MA SÉANCE FINALE →</a>
-            <div class="prdv-note">✦ Séance de 45 min · Bilan complet · Plan pour la suite</div>
-            
+              </div>
+              <div class="pexo">
+                <div class="pexo-num">03</div>
+                <div class="pexo-body">
+                  <div class="pexo-title">La compétition pour le plaisir</div>
+                  <div class="pexo-desc">Inscris-toi à une compétition sans enjeu ce mois — niveau différent, format ludique. Observer comment tu joues sans pression est une information précieuse sur ton jeu naturel.</div>
+                  <div class="pexo-focus">
+                    <span class="pfocus-label">Focus processus</span>
+                    <span class="pfocus-text">Jouer pour jouer. Ça m'apprend quelque chose sur moi.</span>
+                  </div>
+                </div>
+              </div>
           </div>
+        <div class="mod-note">
+          <div class="mod-note-label">Mes notes sur ce module</div>
+          <textarea class="mod-note-ta" id="modnote-3" placeholder="Note ici tes observations..."></textarea>
+          <button class="mod-note-save" onclick="saveModNote(3)">Enregistrer mes notes</button>
+        </div>
+        <button class="mod-pdf-btn" onclick="downloadModule(3)">Telecharger mon Module 5 en PDF</button>
+        <div class="prdv-block">
+          <div class="prdv-eyebrow">Fin du Mois 3 · Débrief</div>
+          <div class="prdv-title">DÉBRIEF 30 MIN<br>AVEC FABIEN</div>
+          <div class="prdv-desc">Un bilan de 30 min pour valider ta progression sur les 3 premiers mois, ajuster le travail et préparer la suite.</div>
+          <a href="https://tidycal.com/fpinton/seance-debrief" class="prdv-btn" target="_blank">RÉSERVER MON DÉBRIEF MOIS 3 →</a>
+          <div class="prdv-note">✦ 30 minutes · Visioconférence</div>
+        </div>
         </div>
 
-  <!-- MODULE 4 — PACTE -->
-  <div class="pmod" id="pm3">
+        <div class="pmod locked" id="pm4">
+          <div class="pmod-header">
+            <div class="pmod-eyebrow">Module 06 · Débloqué le 1er du Mois 6</div>
+            <h2 class="pmod-title">JOUER LIBÉRÉ — BILAN ET AUTONOMIE</h2>
+            <div class="pmod-sous">Le jeu naturel comme point de départ permanent</div>
+            <div class="pmod-objectif">
+              <div class="pmod-obj-label">Objectif du module</div>
+              <div class="pmod-obj-text">Que le jeu naturel et le plaisir soient devenus ton point de départ par défaut, quelle que soit la compétition.</div>
+            </div>
+            <div class="pmod-mantra">"Je joue pour moi. Toujours."</div>
+          </div>
+          <div class="pexos">
+              <div class="pexo">
+                <div class="pexo-num">01</div>
+                <div class="pexo-body">
+                  <div class="pexo-title">Bilan des 6 mois plaisir et performance</div>
+                  <div class="pexo-desc">Sur 6 mois de scores plaisir vs résultat : le lien est-il visible ? Dans quelles conditions tu as le mieux joué ? Ce bilan te donne une carte de ton fonctionnement que peu de sportifs ont.</div>
+                  <div class="pexo-focus">
+                    <span class="pfocus-label">Focus processus</span>
+                    <span class="pfocus-text">Je connais mes conditions de performance. C'est une arme.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="pexo">
+                <div class="pexo-num">02</div>
+                <div class="pexo-body">
+                  <div class="pexo-title">Mon protocole de reconnexion au jeu</div>
+                  <div class="pexo-desc">Rédige en 1 page ton protocole complet — comment tu te reconnectes à ton jeu naturel avant chaque compétition. Tu n'as plus besoin d'un programme pour accéder à ce niveau.</div>
+                  <div class="pexo-focus">
+                    <span class="pfocus-label">Focus processus</span>
+                    <span class="pfocus-text">Mon jeu. Ma méthode. Mon autonomie.</span>
+                  </div>
+                </div>
+              </div>
+          </div>
+        <div class="mod-note">
+          <div class="mod-note-label">Mes notes sur ce module</div>
+          <textarea class="mod-note-ta" id="modnote-4" placeholder="Note ici tes observations..."></textarea>
+          <button class="mod-note-save" onclick="saveModNote(4)">Enregistrer mes notes</button>
+        </div>
+        <button class="mod-pdf-btn" onclick="downloadModule(4)">Telecharger mon Module 6 en PDF</button>
+        <div class="prdv-block">
+          <div class="prdv-eyebrow">Fin du Mois 6 · Débrief</div>
+          <div class="prdv-title">DÉBRIEF 30 MIN<br>AVEC FABIEN</div>
+          <div class="prdv-desc">Un bilan de 30 min pour valider ta progression sur les 6 premiers mois, ajuster le travail et préparer la suite.</div>
+          <a href="https://tidycal.com/fpinton/seance-finale-axe-premium" class="prdv-btn" target="_blank">RÉSERVER MON DÉBRIEF MOIS 6 →</a>
+          <div class="prdv-note">✦ 30 minutes · Visioconférence</div>
+        </div>
+        <div style="margin:32px 0;padding:28px 32px;background:var(--cream3);border:1px solid var(--bdr);border-left:3px solid var(--gold);">
+          <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Option · Présence en compétition</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.06em;color:var(--ink);margin-bottom:8px;">FABIEN PRÉSENT À TA COMPÉTITION</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--inkd);margin-bottom:20px;line-height:1.65;">Fabien peut être présent physiquement lors d'une compétition de ton choix — observation, coaching bord de terrain, débrief immédiat. Entre la ville de ta compétition pour voir le tarif exact.</div>
+          <div style="margin-bottom:20px;">
+            <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Étape 1 · Calcul du tarif</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;">
+              <input id="comp-city" type="text" placeholder="Ville ou adresse de la compétition" style="flex:1;min-width:200px;border:1px solid var(--bdr2);background:var(--cream2);padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;" />
+              <button onclick="axeCalcDistance()" id="axeCalcBtn" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:12px 22px;cursor:pointer;white-space:nowrap;">CALCULER →</button>
+            </div>
+            <div id="axe-dist-result" style="display:none;margin-top:14px;padding:18px 20px;background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);">
+              <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Récapitulatif</div>
+              <div id="axe-dist-details" style="font-size:14px;color:var(--inkd);line-height:1.9;margin-bottom:14px;"></div>
+              <div id="axe-tarif-display" style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold);letter-spacing:.05em;margin-bottom:4px;"></div>
+              <div style="font-size:10px;color:var(--inkf);margin-bottom:18px;">Tarif de déplacement estimé · 0,55 €/km aller-retour · Confirmé par Fabien après réservation</div>
+              <button onclick="axeGoTidycal()" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:var(--ink);color:#F7F3EC;border:none;padding:15px;width:100%;cursor:pointer;">ÉTAPE 2 · CHOISIR UN CRÉNEAU SUR TIDYCAL →</button>
+            </div>
+            <div id="axe-dist-error" style="display:none;margin-top:10px;font-size:13px;color:#C0392B;padding:10px 14px;background:#fff0ee;border-left:3px solid #C0392B;"></div>
+          </div>
+          <div id="axe-stripe-section" style="display:none;margin-top:16px;padding:18px 20px;background:var(--ink);border-top:2px solid var(--gold);">
+            <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Étape 3 · Paiement du déplacement</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(247,243,236,.75);margin-bottom:16px;line-height:1.6;">Ton créneau est réservé mais <strong style="color:var(--gold-l);font-style:normal;">non confirmé</strong> tant que le déplacement n'est pas réglé.</div>
+            <a id="axe-stripe-btn" href="#" target="_blank" style="display:block;text-align:center;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:15px;">PAYER LE DÉPLACEMENT →</a>
+          </div>
+        </div>
+        <script>
+        var _axeDistKm=0,_axeTarif=0;
+        function axeLoadMapsSDK(){
+          if(window.google&&window.google.maps)return Promise.resolve();
+          return new Promise(function(resolve){
+            window._axeMapsReady=resolve;
+            var s=document.createElement('script');
+            s.src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCmyB9fpUzAJxAsJWmhqlBPNtg6Iwlbv_M&libraries=places&callback=_axeMapsReady';
+            s.async=true;s.defer=true;document.head.appendChild(s);
+          });
+        }
+        async function axeCalcDistance(){
+          var city=document.getElementById('comp-city').value.trim();
+          if(!city)return;
+          var btn=document.getElementById('axeCalcBtn');
+          var resDiv=document.getElementById('axe-dist-result');
+          var errDiv=document.getElementById('axe-dist-error');
+          btn.textContent='...';btn.style.opacity='0.6';btn.disabled=true;
+          resDiv.style.display='none';errDiv.style.display='none';
+          document.getElementById('axe-stripe-section').style.display='none';
+          try{
+            await axeLoadMapsSDK();
+            var svc=new google.maps.DistanceMatrixService();
+            var result=await new Promise(function(resolve,reject){
+              svc.getDistanceMatrix({
+                origins:['Mours-Saint-Eusebe, 26540, France'],
+                destinations:[city],
+                travelMode:google.maps.TravelMode.DRIVING,
+                language:'fr',unitSystem:google.maps.UnitSystem.METRIC
+              },function(resp,status){if(status==='OK')resolve(resp);else reject(new Error(status));});
+            });
+            var el=result.rows[0].elements[0];
+            if(el.status!=='OK')throw new Error('Destination introuvable');
+            var distKm=Math.round(el.distance.value/1000);
+            var ar=distKm*2;var tarif=Math.round(ar*0.55);
+            _axeDistKm=distKm;_axeTarif=tarif;
+            document.getElementById('axe-dist-details').innerHTML=
+              '📍 <strong>'+result.destinationAddresses[0]+'</strong><br>'
+              +'🚗 Aller : <strong>'+distKm+' km</strong> · Aller-retour : <strong>'+ar+' km</strong><br>'
+              +'⏱ Durée : <strong>'+el.duration.text+'</strong>';
+            document.getElementById('axe-tarif-display').textContent=tarif+' €';
+            resDiv.style.display='block';
+          }catch(e){
+            errDiv.textContent="Ville introuvable ou erreur réseau. Verifie l'orthographe ou contacte Fabien.";
+            errDiv.style.display='block';
+          }
+          btn.textContent='CALCULER →';btn.style.opacity='1';btn.disabled=false;
+        }
+        function axeGoTidycal(){
+          if(!_axeTarif)return;
+          var ar=_axeDistKm*2;
+          var stripeUrl='https://buy.stripe.com/28E6oG0Xy2Qu1CR5xs8IU0i?quantity='+ar;
+          document.getElementById('axe-stripe-btn').href=stripeUrl;
+          document.getElementById('axe-stripe-btn').textContent='PAYER LE DEPLACEMENT ('+_axeTarif+' EUR) →';
+          document.getElementById('axe-stripe-section').style.display='block';
+          window.open('https://tidycal.com/fpinton/presence-competition','_blank');
+          document.getElementById('axe-stripe-section').scrollIntoView({behavior:'smooth',block:'nearest'});
+        }
+        document.addEventListener('DOMContentLoaded',function(){
+          var inp=document.getElementById('comp-city');
+          if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')axeCalcDistance();});
+        });
+        </script>
+        </div>
+
+
+  
+  <div class="pmod locked" id="pm5">
     <div class="pmod-header">
-      <div class="pmod-eyebrow">Module 04 · Le Pacte de Processus · Étape finale</div>
+      <div class="pmod-eyebrow">Module 06 · Débloqué le 1er du Mois 6 · Étape finale</div>
       <h2 class="pmod-title">LE<br><em>PACTE</em></h2>
       <div class="pmod-sous">Ton engagement envers le focus processus — pour toujours</div>
       <p style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--inkd);line-height:1.65;margin-top:16px;">Ce qui tue ton plaisir en compétition, c'est le focus sur le résultat. Quand tu penses au score, tu n'es plus dans le jeu — tu es dans l'évaluation. Le focus processus te remet dans le jeu. Et dans le jeu, tu es excellent.<br><br>Ce Pacte scelle cet engagement. Pas envers un résultat. Envers la façon dont tu vas compétir — maintenant et pour toujours.</p>
@@ -480,10 +635,10 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
     
     <div class="mod-note">
       <div class="mod-note-label">📝 Mes notes finales</div>
-      <textarea class="mod-note-ta" id="modnote-3" placeholder="Mes réflexions sur l'ensemble du programme, ce qui a le plus changé..."></textarea>
-      <button class="mod-note-save" onclick="saveModNote(3)">Enregistrer mes notes</button>
+      <textarea class="mod-note-ta" id="modnote-4" placeholder="Mes réflexions sur l'ensemble du programme, ce qui a le plus changé..."></textarea>
+      <button class="mod-note-save" onclick="saveModNote(4)">Enregistrer mes notes</button>
     </div>
-    <button class="mod-pdf-btn" onclick="downloadModule(3)">📄 Télécharger mon Module 4 (Pacte) en PDF</button>
+    <button class="mod-pdf-btn" onclick="downloadModule(4)">📄 Télécharger mon Module 4 (Pacte) en PDF</button>
     <div class="ppacte">
       <div class="ppacte-title">MON <em>PACTE</em><br>DE PROCESSUS</div>
       <p class="ppacte-sub">Je m'engage envers moi-même. Sur ce que je fais — pas sur ce que j'obtiens.</p>
@@ -516,14 +671,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
       <div class="prdv-note">✦ 45 minutes · Bilan complet · Plan pour la suite</div>
     </div>
 
-    <!-- AXE MENSUEL -->
-    <div style="background:var(--cream3);border:1px solid var(--bdr);margin:0 0 48px;overflow:hidden;">
-      <div style="background:var(--ink);padding:28px 36px;position:relative;">
-        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));"></div>
-        <div style="font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Prochaine étape · Réservé aux alumni Premium</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:var(--cream2);margin-bottom:6px;">AXE MENSUEL</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:rgba(247,243,236,.75);line-height:1.6;">Le processus continue. Mois après mois, il devient automatique.</div>
-      </div>
+    
       <div style="padding:24px 36px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
           <div style="background:var(--cream2);border:1px solid var(--bdr);padding:14px 16px;">
@@ -540,7 +688,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);line-height:1;">24€<span style="font-size:14px;letter-spacing:.2em;color:var(--inkf);">/mois</span></div>
             <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkf);margin-top:2px;">Résiliable à tout moment</div>
           </div>
-          <a href="https://buy.stripe.com/aFaaEW7lW9eSa9n8JE8IU0f" style="display:inline-block;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:14px 28px;transition:all .3s;">ACCÉDER À AXE MENSUEL →</a>
+          
         </div>
       </div>
     </div>
@@ -564,7 +712,7 @@ const AT_TABLE = 'tblegbO0k0qHa1Lxh';
 const urlParams = new URLSearchParams(window.location.search);
 const CLIENT_TOKEN = urlParams.get('token') || null;
 let AT_RECORD_ID = null;
-let DATA = {unlocks:{}, pacte:null, lettre:''};
+let DATA = {unlocks:{}, pacte:null, lettre:'', start_date:null};
 let saveTimer = null;
 
 async function atGet() {
@@ -595,15 +743,6 @@ async function atPatch(fields) {
 
 function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(pushToAirtable, 2000); }
 
-async function pushToAirtable() {
-  const fields = { Derniere_activite: new Date().toISOString().split('T')[0] };
-  if (DATA.unlocks && Object.keys(DATA.unlocks).length) fields['Modules_completes'] = JSON.stringify(DATA.unlocks);
-  for (let i = 0; i <= 3; i++) { const v = DATA['note_m'+i]; if (v !== undefined) fields['Notes_M'+(i+1)] = v; }
-  if (DATA.lettre) fields['Notes_M4'] = (fields['Notes_M4']||'') + '\n---LETTRE---\n' + DATA.lettre;
-  await atPatch(fields);
-  showSaveInd();
-}
-
 function showSaveInd() {
   let ind = document.getElementById('axe-save-ind');
   if (!ind) {
@@ -617,19 +756,90 @@ function showSaveInd() {
   setTimeout(() => ind.style.opacity = '0', 2000);
 }
 
+
+function checkUnlocks(){
+  var today = new Date();
+  var startRaw = DATA.start_date;
+  if(!startRaw){ renderNav(); return; }
+  var start = new Date(startRaw);
+  // Module 0: always unlocked
+  // Module i (1-5): unlocked on the 1st of month (i) after start
+  for(var i=1;i<=5;i++){
+    var unlockDate = new Date(start.getFullYear(), start.getMonth()+i, 1);
+    if(today >= unlockDate){
+      DATA.unlocks[i] = unlockDate.toISOString().split('T')[0];
+    }
+  }
+  renderNav();
+}
+
+function renderNav(){
+  var today = new Date().toISOString().split('T')[0];
+  [1,2,3,4,5].forEach(function(i){
+    var mn = document.getElementById('mn'+i);
+    if(!mn) return;
+    if(DATA.unlocks[i] && DATA.unlocks[i] <= today){
+      mn.classList.remove('locked');
+      var lk = mn.querySelector('.pmn-lock');
+      if(lk) lk.remove();
+    }
+  });
+}
+
+function tryUnlock(idx){
+  var today = new Date().toISOString().split('T')[0];
+  if(DATA.unlocks[idx] && DATA.unlocks[idx] <= today){ showMod(idx); }
+  else if(DATA.unlocks[idx]){
+    var d = new Date(DATA.unlocks[idx]);
+    alert('Ce module se débloque le 1er '+d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})+' (un mois après ton démarrage).');
+  } else {
+    alert('Ce module se débloque automatiquement le 1er du mois suivant ton démarrage.');
+  }
+}
+
 async function initAirtable() {
-  if (!CLIENT_TOKEN) { checkUnlocks(); restoreModNotes(); return; }
+  if (!CLIENT_TOKEN) {
+    if(!DATA.start_date) DATA.start_date = new Date().toISOString().split('T')[0];
+    checkUnlocks(); restoreModNotes(); return;
+  }
   const fields = await atGet();
   if (fields) {
     if (fields.Modules_completes) { try { DATA.unlocks = JSON.parse(fields.Modules_completes); } catch(e) {} }
-    for (let i = 0; i <= 3; i++) { const v = fields['Notes_M'+(i+1)]; if (v) DATA['note_m'+i] = v; }
+    if (fields.Start_date) DATA.start_date = fields.Start_date;
+    if (fields.Age) {
+      setTimeout(function(){ try{ AX_pick(fields.Age); AX_age=fields.Age;
+        var ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none';
+        var b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age;
+      }catch(e){} }, 300);
+    }
+    for (let i = 0; i <= 5; i++) { const v = fields['Notes_M'+(i+1)]; if (v) DATA['note_m'+i] = v; }
+  }
+  if(!DATA.start_date){
+    DATA.start_date = new Date().toISOString().split('T')[0];
+    pushStartDate();
   }
   checkUnlocks();
   restoreModNotes();
 }
 
+async function pushStartDate(){
+  const fields = { Start_date: DATA.start_date, Derniere_activite: new Date().toISOString().split('T')[0] };
+  await atPatch(fields);
+}
+
+async function pushToAirtable() {
+  const fields = { Derniere_activite: new Date().toISOString().split('T')[0] };
+  if (DATA.unlocks && Object.keys(DATA.unlocks).length) fields['Modules_completes'] = JSON.stringify(DATA.unlocks);
+  if (DATA.start_date) fields['Start_date'] = DATA.start_date;
+  for (let i = 0; i <= 5; i++) { const v = DATA['note_m'+i]; if (v !== undefined) fields['Notes_M'+(i+1)] = v; }
+  if (DATA.lettre) fields['Notes_M6'] = (fields['Notes_M6']||'') + '\n---LETTRE---\n' + DATA.lettre;
+  if (AX_age) fields['Age'] = AX_age;
+  await atPatch(fields);
+  showSaveInd();
+}
+
 function restoreModNotes() {
-  for (let i = 0; i <= 3; i++) {
+  for (let i = 0; i <= 5; i++) {
     const ta = document.getElementById('modnote-'+i);
     if (ta && DATA['note_m'+i]) ta.value = DATA['note_m'+i];
   }
@@ -639,32 +849,7 @@ function restoreModNotes() {
 
 function save(){ scheduleSave(); }
 
-function setUnlock(idx){
-  const inp=document.getElementById('rdv'+idx+'-date');
-  if(!inp||!inp.value)return;
-  const d=new Date(inp.value);
-  d.setDate(d.getDate()+1);
-  DATA.unlocks[idx]=d.toISOString().split('T')[0];
-  save();checkUnlocks();
-  alert('✅ Module '+(idx+1)+' se débloque le '+d.toLocaleDateString('fr-FR'));
-}
 
-function checkUnlocks(){
-  const today=new Date().toISOString().split('T')[0];
-  [1,2,3].forEach(i=>{
-    if(DATA.unlocks[i]&&DATA.unlocks[i]<=today){
-      const mn=document.getElementById('mn'+i);
-      if(mn){mn.classList.remove('locked');const lk=mn.querySelector('.pmn-lock');if(lk)lk.remove();}
-    }
-  });
-}
-
-function tryUnlock(idx){
-  const today=new Date().toISOString().split('T')[0];
-  if(DATA.unlocks[idx]&&DATA.unlocks[idx]<=today){showMod(idx);}
-  else if(DATA.unlocks[idx]){alert('🔒 Ce module se débloque le '+new Date(DATA.unlocks[idx]).toLocaleDateString('fr-FR'));}
-  else{alert('🔒 Ce module se débloque à J+1 après votre RDV avec Fabien.');}
-}
 
 function showMod(idx){
   document.querySelectorAll('.pmod').forEach((p,i)=>p.classList.toggle('active',i===idx));
@@ -689,7 +874,7 @@ function saveLettre(){
 
 document.addEventListener('DOMContentLoaded',()=>{
   // Autosave on modnote typing
-  for(let i=0;i<=3;i++){
+  for(let i=0;i<=5;i++){
     const ta=document.getElementById('modnote-'+i);
     if(ta) ta.addEventListener('input',()=>{ DATA['note_m'+i]=ta.value; scheduleSave(); });
   }
@@ -737,7 +922,7 @@ function saveModNote(mid){
 }
 
 function restoreModNotes(){
-  [0,1,2,3].forEach(mid=>{
+  [0,1,2,3,4,5].forEach(mid=>{
     const ta=document.getElementById('modnote-'+mid);
     if(ta&&DATA['modnote_'+mid]) ta.value=DATA['modnote_'+mid];
   });
@@ -825,11 +1010,11 @@ checkUnlocks();
 </script>
 <script>
 var AX_age=null;
-var AX_ids={"12-15":"AX_A","15-18":"AX_B","18-25":"AX_C","25+":"AX_D"};
-var AX_m={"12-15":"Joue pour le jeu.","15-18":"Ton jeu naturel est ton argument.","18-25":"Le plaisir de jeu est ta strategie.","25+":"Tu savais jouer."};
+var AX_ids={"12-15":"AX_A","15-18":"AX_B"};
+var AX_m={"12-15":"Joue pour toi. Le plaisir, c'est déjà de la performance.","15-18":"Ton jeu naturel est ta vraie arme. Protège-le."};
 function AX_pick(age){
   AX_age=age;
-  ["AX_A","AX_B","AX_C","AX_D"].forEach(function(id){
+  ["AX_A","AX_B"].forEach(function(id){
     var el=document.getElementById(id);
     if(el)el.style.border="2px solid #E8E1D4";
   });
