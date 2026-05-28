@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMX RACE · Robin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #F7F3EC;
+  --panel:    #F0EBE0;
+  --card:     #FDFAF5;
+  --border:   rgba(168,133,42,0.18);
+  --gold:     #A8852A;
+  --gold2:    #C9A84C;
+  --red:      #C0392B;
+  --green:    #2E7D32;
+  --blue:     #1565C0;
+  --cyan:     #0277BD;
+  --muted:    #8A7D6A;
+  --text:     #1A1612;
+  --text2:    #5A5040;
+  --radius:   2px;
+  --font-hd:  'Bebas Neue', sans-serif;
+  --font-ui:  'DM Sans', sans-serif;
+  --font-mono:'Cormorant Garamond', serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  background: #1A1612;
+  border-bottom: 2px solid var(--gold);
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--gold);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-hd); font-size: 12px; color: #000; flex-shrink: 0;
+}
+.logo-text { font-family: var(--font-hd); font-size: 20px; letter-spacing: 3px; color: #F7F3EC; }
+.logo-sub { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+.hd-days-box { text-align: right; }
+.hd-days-val { font-family: var(--font-hd); font-size: 28px; color: var(--gold); letter-spacing: 1px; line-height: 1; }
+.hd-days-lbl { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+/* NAV */
+nav {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; gap: 0; overflow-x: auto;
+}
+nav::-webkit-scrollbar { height: 0; }
+.nav-btn {
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 12px 18px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.nav-btn:hover { color: var(--text2); }
+.nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* MAIN */
+main { padding: 20px 24px; max-width: 900px; margin: 0 auto; }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* COUNTDOWN */
+.cd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.cd-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cd-card.gold { border-top: 3px solid var(--gold); }
+.cd-card.red  { border-top: 3px solid var(--red); }
+.cd-label { font-family: var(--font-hd); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 3px; }
+.cd-card.gold .cd-label { color: var(--muted); }
+.cd-card.red  .cd-label { color: var(--red); }
+.cd-date { font-family: var(--font-mono); font-size: 11px; color: var(--text2); font-style: italic; }
+.cd-num { font-family: var(--font-hd); font-size: 52px; line-height: 1; }
+.cd-card.gold .cd-num { color: var(--gold); }
+.cd-card.red  .cd-num { color: var(--red); }
+.cd-unit { font-size: 8px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+
+/* OBJECTIF */
+.obj-card {
+  background: #1A1612; border: 1px solid var(--gold);
+  border-radius: var(--radius); padding: 20px 24px;
+  margin-bottom: 0;
+}
+.obj-title { font-family: var(--font-hd); font-size: 13px; letter-spacing: 4px; color: var(--gold); margin-bottom: 10px; }
+.obj-body { font-size: 14px; color: #F0EBE0; line-height: 1.7; }
+.obj-body strong { color: var(--gold2); }
+
+/* PROG BAR */
+.prog-wrap { margin-top: 14px; }
+.prog-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.prog-name { font-size: 12px; color: var(--muted); }
+.prog-val { font-family: var(--font-mono); font-size: 12px; color: var(--gold); }
+.prog-bar { height: 4px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(to right, var(--gold), var(--red)); border-radius: 3px; transition: width 1.2s ease; }
+
+/* SESSIONS */
+.sess-selector {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;
+}
+.sess-tab {
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--muted); font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: all 0.15s;
+}
+.sess-tab:hover { border-color: var(--gold); color: var(--text2); }
+.sess-tab.active { background: var(--gold); border-color: var(--gold); color: #000; font-weight: 700; }
+.sess-tab.done-tab { border-color: var(--green); color: var(--green); }
+.sess-tab.done-tab.active { background: var(--green); color: #000; }
+.sess-tab.future-locked { opacity: 0.28; cursor: not-allowed; pointer-events: none; filter: grayscale(1); }
+.sess-tab.next-available { border-color: var(--gold); color: var(--gold); }
+
+.sess-content { display: none; }
+.sess-content.active { display: block; }
+
+.sess-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.sess-header {
+  background: var(--panel); border-bottom: 1px solid var(--border);
+  padding: 14px 20px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.sess-date { font-family: var(--font-hd); font-size: 22px; letter-spacing: 2px; color: var(--gold); }
+.sess-meta { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-top: 2px; }
+.sess-body { padding: 16px 20px; }
+
+.tl-phase { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; padding: 2px 8px; border-radius: 2px; font-weight: 600; }
+.ph-base  { background: rgba(240,180,41,0.15); color: var(--gold); border: 1px solid rgba(240,180,41,0.3); }
+.ph-build { background: rgba(59,130,246,0.15); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+.ph-recup { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+.ph-peak  { background: rgba(232,52,26,0.15); color: var(--red); border: 1px solid rgba(232,52,26,0.3); }
+.ph-taper { background: rgba(6,182,212,0.15); color: var(--cyan); border: 1px solid rgba(6,182,212,0.3); }
+
+.cat-div {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--muted);
+  margin: 18px 0 10px; display: flex; align-items: center; gap: 10px;
+}
+.cat-div::before { content: '//'; color: var(--gold); margin-right: 4px; }
+.cat-div::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.ex-block { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; transition: border-color 0.2s; }
+.ex-block.done { border-color: var(--green); }
+.ex-head { padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; background: rgba(168,133,42,0.04); user-select: none; }
+.ex-head:hover { background: rgba(168,133,42,0.06); }
+.ex-check { width: 20px; height: 20px; border: 1.5px solid var(--border); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: all 0.15s; cursor: pointer; }
+.ex-block.done .ex-check { background: var(--green); border-color: var(--green); color: #000; }
+.ex-name { font-family: var(--font-ui); font-size: 15px; font-weight: 700; letter-spacing: 0.5px; flex: 1; }
+.ex-badge { font-family: var(--font-mono); font-size: 11px; color: var(--gold); background: rgba(240,180,41,0.1); border: 1px solid rgba(240,180,41,0.25); padding: 3px 10px; border-radius: 2px; white-space: nowrap; }
+.ex-chevron { color: var(--muted); font-size: 12px; transition: transform 0.2s; flex-shrink: 0; }
+.ex-block.open .ex-chevron { transform: rotate(180deg); }
+.ex-body { display: none; padding: 14px 16px 16px 48px; border-top: 1px solid var(--border); }
+.ex-block.open .ex-body { display: block; }
+.ex-desc { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 10px; }
+
+.tip-box { background: rgba(240,180,41,0.05); border-left: 2px solid var(--gold); padding: 8px 12px; font-size: 13px; color: var(--text2); border-radius: 0 2px 2px 0; margin: 10px 0; line-height: 1.6; }
+.tip-box strong { color: var(--gold); }
+.tip-box.bmx { border-left-color: var(--red); background: rgba(232,52,26,0.05); }
+.tip-box.bmx strong { color: var(--red); }
+
+.btn-primary { background: var(--gold); color: #000; border: none; font-family: var(--font-hd); font-size: 14px; letter-spacing: 2px; padding: 9px 22px; border-radius: 2px; cursor: pointer; transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-done { background: var(--green); color: #000; border: none; font-family: var(--font-hd); font-size: 14px; letter-spacing: 2px; padding: 9px 22px; border-radius: 2px; cursor: pointer; }
+
+.bilan { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-top: 20px; }
+.bilan-title { font-family: var(--font-hd); font-size: 16px; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; }
+.bilan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rating-row { margin-bottom: 12px; }
+.rating-lbl { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+.stars { display: flex; gap: 5px; }
+.star { font-size: 22px; cursor: pointer; color: var(--border); transition: color 0.1s; user-select: none; }
+.star.on { color: var(--gold); }
+.star.red.on { color: var(--red); }
+.bilan-ta { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font-ui); font-size: 13px; padding: 10px 12px; resize: vertical; min-height: 80px; outline: none; transition: border-color 0.2s; margin-bottom: 10px; }
+.bilan-ta:focus { border-color: var(--gold); }
+
+.rest-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--border); margin-top: 10px; }
+.rest-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; flex-shrink: 0; }
+.rest-val { font-family: var(--font-hd); font-size: 16px; color: var(--gold); min-width: 48px; }
+.rest-btn { background: rgba(240,180,41,0.12); border: 1px solid rgba(240,180,41,0.3); color: var(--gold); font-family: var(--font-mono); font-size: 10px; padding: 4px 12px; cursor: pointer; border-radius: 2px; }
+.rest-btn.running { color: var(--red); border-color: var(--red); background: rgba(232,52,26,0.12); }
+.rest-countdown { font-family: var(--font-hd); font-size: 22px; color: var(--red); display: none; }
+.rest-countdown.active { display: block; }
+
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #000; font-family: var(--font-hd); font-size: 15px; letter-spacing: 2px; padding: 10px 20px; border-radius: 2px; z-index: 9999; transform: translateY(60px); opacity: 0; transition: all 0.25s; }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+input[type=number] { -moz-appearance: textfield; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">BMX</div>
+    <div>
+      <div class="logo-text">ROBIN</div>
+      <div class="logo-sub">Junior Elite · Programme 2026</div>
+    </div>
+  </div>
+  <div class="hd-days-box">
+    <div class="hd-days-val" id="hd-days">—</div>
+    <div class="hd-days-lbl">Jours → 19 Sep</div>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="showTab('accueil',this)">🏠 Accueil</button>
+  <button class="nav-btn" onclick="showTab('seances',this)">🏋️ Séances</button>
+</nav>
+
+<main>
+
+<!-- ============================================================ -->
+<!-- TAB : ACCUEIL                                                 -->
+<!-- ============================================================ -->
+<div class="tab-content active" id="tab-accueil">
+
+  <!-- Comptes à rebours -->
+  <div class="cd-grid">
+    <div class="cd-card gold">
+      <div>
+        <div class="cd-label">⏱ Compét. test</div>
+        <div class="cd-date">5 Juillet 2026</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="cd-num" id="cd1-d">—</div>
+        <div class="cd-unit">jours</div>
+      </div>
+    </div>
+    <div class="cd-card red">
+      <div>
+        <div class="cd-label">🏆 Objectif principal</div>
+        <div class="cd-date">19 Sept. 2026</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="cd-num" id="cd2-d">—</div>
+        <div class="cd-unit">jours</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Objectif -->
+  <div class="obj-card">
+    <div class="obj-title">🏆 Objectif · 19-20 Septembre 2026</div>
+    <div class="obj-body">
+      Tu arrives à <strong>100%</strong>. Start ultra-explosif. 1ère ligne dominée. Grosses bosses maîtrisées. <strong>17 ans, peak de forme.</strong> Tout le travail paie ici.
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-head">
+        <span class="prog-name">Séances complétées</span>
+        <span class="prog-val" id="pv-sess">0/—</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="pf-sess" style="width:0%"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB : SÉANCES                                                 -->
+<!-- ============================================================ -->
+<div class="tab-content" id="tab-seances">
+  <div class="sess-selector" id="sessTabs"></div>
+  <div id="sessContents"></div>
+</div>
+
+</main>
+
+<div class="toast" id="toast">✓ Enregistré</div>
+
+<script>
+// ====================================================
+// CONSTANTES — premier jour : Jeudi 28 Mai 2026
+// ====================================================
+const SQUAT_MAX = 145;
+const START_DATE = new Date('2026-05-28');
+const RACE1 = new Date('2026-07-05');
+const MAIN  = new Date('2026-09-19');
+const TODAY = new Date();
+
+const DEAD_MAX  = Math.round(SQUAT_MAX * 1.22);
+const BENCH_MAX = Math.round(SQUAT_MAX * 0.65);
+const RDL_MAX   = Math.round(SQUAT_MAX * 0.70);
+const OHPMAX    = Math.round(SQUAT_MAX * 0.40);
+const HT_MAX    = Math.round(SQUAT_MAX * 1.20);
+
+function r(kg)  { return Math.round(kg / 2.5) * 2.5; }
+function pct(max, p) { return r(max * p / 100); }
+
+// ====================================================
+// PROGRAMME DES SÉANCES — Jeudi et Lundi à partir du 28 Mai
+// ====================================================
+function getAllSessions() {
+  const sessions = [];
+  let d = new Date('2026-05-28'); // Jeudi 28 Mai
+  const end = new Date('2026-09-14');
+  while (d <= end) {
+    if (d.getDay() === 4 || d.getDay() === 1) sessions.push(new Date(d));
+    d.setDate(d.getDate() + 1);
+  }
+  return sessions;
+}
+
+function getPhase(date) {
+  const t = date.getTime();
+  if (t < new Date('2026-06-22').getTime()) return 'base';
+  if (t < new Date('2026-07-13').getTime()) return 'build';
+  if (t < new Date('2026-07-20').getTime()) return 'recup';
+  if (t < new Date('2026-09-07').getTime()) return 'peak';
+  return 'taper';
+}
+
+function isAllegedWeek(date) {
+  const t = date.getTime();
+  return t >= new Date('2026-06-29').getTime() && t <= new Date('2026-07-06').getTime();
+}
+
+function isRecovWeek(date) {
+  return date >= new Date('2026-07-13') && date <= new Date('2026-07-20');
+}
+
+function fmtDate(d) {
+  const jours = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  const mois  = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
+  return `${jours[d.getDay()]} ${d.getDate()} ${mois[d.getMonth()]}`;
+}
+function fmtKey(d) { return d.toISOString().split('T')[0]; }
+
+function phaseLabel(p) {
+  const M = {
+    base:  ['BASE','ph-base'],
+    build: ['BUILD','ph-build'],
+    recup: ['RÉCUP','ph-recup'],
+    peak:  ['PEAK','ph-peak'],
+    taper: ['TAPER','ph-taper']
+  };
+  return M[p] || [p,''];
+}
+
+// ====================================================
+// TEMPLATES DES SÉANCES
+// ====================================================
+function sessA(phase, alleg, recov) {
+  const light = alleg || recov;
+  const sets_sq   = recov ? '3×5' : (phase==='base' ? '5×5' : phase==='build' ? '4×4' : phase==='peak' ? '5×3' : '3×5');
+  const sets_pull = recov ? '2×6' : '4×6';
+
+  return [
+    { cat: '// ÉCHAUFFEMENT · 10 min', items: [
+      { id:'ew1', n:'Mobilité hanche + activation fessiers', badge:'10 min',
+        desc:`Hip circle 10 rép/côté → fentes hip flexor 30 sec/côté → pont fessier 2×15 → goblet squat air 2×10 lent. But : préparer les hanches pour le squat et le hip thrust.` },
+    ]},
+    { cat: '// FORCE PRINCIPALE · Postérieure', items: [
+      { id:'sq', n:'Squat barre (cage R7)', badge: light ? `3×5 @55%` : sets_sq,
+        desc:`Barre sur trapèzes (high bar). Descente contrôlée 3 sec, pause 1 sec en bas, montée explosive. Pieds légèrement ouverts (30°), genoux dans l'axe des orteils. RPE cible : ${recov?'5-6':phase==='peak'?'8-9':'7-8'}/10.`,
+        tip:`⚡ BMX : L'extension de jambe explosive au squat = l'extension du 1er coup de pédale depuis le gate.`,
+        weights: [
+          { phase:'base',  label:'Séries', kg:`${pct(SQUAT_MAX,60)} kg`, note:`5×5 · repos 3'` },
+          { phase:'build', label:'Séries', kg:`${pct(SQUAT_MAX,75)} kg`, note:`4×4 · repos 3'30"` },
+          { phase:'recup', label:'Séries', kg:`${pct(SQUAT_MAX,55)} kg`, note:`3×5 · repos 2'` },
+          { phase:'peak',  label:'Séries', kg:`${pct(SQUAT_MAX,82)} kg`, note:`5×3 · repos 4'` },
+          { phase:'taper', label:'Séries', kg:`${pct(SQUAT_MAX,62)} kg`, note:`3×5 · repos 2'` },
+        ],
+      },
+      { id:'ht', n:'Hip Thrust barre (banc)', badge: light ? '3×8 @55%' : '4×8',
+        desc:`Dos sur le banc (omoplates), barre sur les hanches (pad mousse). Descente contrôlée, poussée explosive vers le haut, tenir 1 sec en haut, fessiers contractés. Genoux à 90° en haut.`,
+        tip:`⚡ Le hip thrust = le vecteur de force horizontal de ta sortie de gate. Le muscle le plus important du BMX.`,
+        weights: [
+          { phase:'base',  label:'Séries', kg:`${pct(HT_MAX,60)} kg`, note:`4×10 · repos 90"` },
+          { phase:'build', label:'Séries', kg:`${pct(HT_MAX,72)} kg`, note:`4×8 · repos 2'` },
+          { phase:'recup', label:'Séries', kg:`${pct(HT_MAX,55)} kg`, note:`3×10 · repos 90"` },
+          { phase:'peak',  label:'Séries', kg:`${pct(HT_MAX,80)} kg`, note:`4×6 · repos 2'30"` },
+          { phase:'taper', label:'Séries', kg:`${pct(HT_MAX,60)} kg`, note:`3×8 · repos 90"` },
+        ],
+      },
+    ]},
+    { cat: '// TIRAGE · Dos & bras', items: [
+      { id:'pull', n:'Tractions (barre de cage R7)', badge: light ? '2×max' : sets_pull,
+        desc:`Prise pronation légèrement plus large que les épaules. Tirer les coudes vers les hanches. Poitrine vers la barre. Descente contrôlée 3 sec.`,
+        tip:`⚡ BMX : Le pull des bras au start = exactement ce mouvement.`,
+        weights: [
+          { phase:'base',  label:'Progression', kg:'Poids de corps', note:`4×6 · repos 2' (bande si besoin)` },
+          { phase:'build', label:'Progression', kg:'Poids de corps', note:`4×5 lestées · repos 2'` },
+          { phase:'recup', label:'Progression', kg:'Poids de corps', note:`2×6 · repos 90"` },
+          { phase:'peak',  label:'Progression', kg:`+7,5 kg lest`, note:`4×4 lestées · repos 2'30"` },
+          { phase:'taper', label:'Progression', kg:'Poids de corps', note:`3×5 · repos 2'` },
+        ],
+      },
+      { id:'row', n:'Rowing 1 bras haltère (banc)', badge:'3×10 chaque bras',
+        desc:`Un genou et une main appuyés sur le banc. Tirer vers la hanche. Coude frôle le corps. Dos horizontal et fixe. Contrôlé 2 sec en bas.`,
+        weights: [
+          { phase:'base',  label:'Haltère', kg:'16 kg', note:`3×10 · repos 90"` },
+          { phase:'build', label:'Haltère', kg:'20 kg', note:`3×8 · repos 90"` },
+          { phase:'recup', label:'Haltère', kg:'16 kg', note:`2×10 · repos 60"` },
+          { phase:'peak',  label:'Haltère', kg:'24 kg', note:`4×8 · repos 90"` },
+          { phase:'taper', label:'Haltère', kg:'18 kg', note:`3×8 · repos 90"` },
+        ],
+      },
+    ]},
+    { cat: '// GAINAGE', items: [
+      { id:'plk', n:'Planche frontale', badge:'4×40-60 sec',
+        desc:`Avant-bras au sol, corps parfaitement aligné. Contracter abdos ET fessiers simultanément.`,
+        tip:`⚡ Position de planche = ta position sur le vélo en section pro.`, rest:'60 sec' },
+      { id:'dbug', n:'Dead bug', badge:'3×10 chaque côté',
+        desc:`Allongé sur le dos, bras vers le plafond, genoux à 90°. Abaisser simultanément bras droit + jambe gauche sans coller les lombaires au sol. Revenir. Alterner.`, rest:'45 sec' },
+    ]},
+    { cat: '// NUQUE · 2×/semaine', items: [
+      { id:'neck-a', n:'Isométrie cervicale 4 directions', badge:'4×10→20 sec',
+        desc:`Main sur le front : pousser la tête contre la main (la main résiste). Tenir 10-20 sec. Répéter : main à l'arrière, gauche, droite. 4 directions = 1 série. Intensité 65%.`,
+        tip:`Semaines 1-3 : 10 sec. Semaines 4-8 : 15 sec. Semaines 9+ : bande élastique.`, rest:'30 sec' },
+    ]},
+  ];
+}
+
+function sessB(phase, alleg, recov) {
+  const light = alleg || recov;
+  const sets_bench = recov ? '3×5' : (phase==='base' ? '4×6' : phase==='build' ? '4×4' : phase==='peak' ? '5×3' : '3×5');
+
+  return [
+    { cat: '// ÉCHAUFFEMENT · 10 min', items: [
+      { id:'ew3', n:'Activation explosive', badge:'10 min',
+        desc:`2 min saut corde → 3×10 air squats explosifs → 3×8 pompes → 10 fentes dynamiques.` },
+    ]},
+    { cat: '// FORCE PRINCIPALE · Poussée', items: [
+      { id:'bn', n:'Développé couché barre (banc)', badge: light ? '3×5 @60%' : sets_bench,
+        desc:`Prise légèrement plus large que les épaules. Descente contrôlée 2 sec jusqu'à toucher la poitrine. Pause 1 sec. Poussée EXPLOSIVE. Pieds au sol, omoplates serrées.`,
+        tip:`⚡ BMX : Le bench = le push du guidon au départ. Visualise le guidon en poussant.`,
+        weights: [
+          { phase:'base',  label:'Séries', kg:`${pct(BENCH_MAX,62)} kg`, note:`4×6 · repos 2'` },
+          { phase:'build', label:'Séries', kg:`${pct(BENCH_MAX,75)} kg`, note:`4×4 · repos 2'30"` },
+          { phase:'recup', label:'Séries', kg:`${pct(BENCH_MAX,57)} kg`, note:`3×5 · repos 90"` },
+          { phase:'peak',  label:'Séries', kg:`${pct(BENCH_MAX,82)} kg`, note:`5×3 · repos 3'` },
+          { phase:'taper', label:'Séries', kg:`${pct(BENCH_MAX,62)} kg`, note:`3×5 · repos 2'` },
+        ],
+      },
+      { id:'jsq', n:'Jump squat lesté', badge: light ? '3×5 @25%' : '4×5',
+        desc:`Squat à 30-35% du max → explosion maximale vers le haut → réception souple. Chaque rep est explosive. Repos complet entre les séries.`,
+        tip:`⚡ L'exercice le plus spécifique du programme. Reproduit l'extension explosive du start.`,
+        weights: [
+          { phase:'base',  label:'Charge', kg:`${pct(SQUAT_MAX,30)} kg`, note:`4×5 · repos 2'` },
+          { phase:'build', label:'Charge', kg:`${pct(SQUAT_MAX,33)} kg`, note:`4×5 · repos 2'30"` },
+          { phase:'recup', label:'Charge', kg:`Poids de corps`, note:`3×6 · repos 90"` },
+          { phase:'peak',  label:'Charge', kg:`${pct(SQUAT_MAX,35)} kg`, note:`5×5 · repos 3'` },
+          { phase:'taper', label:'Charge', kg:`${pct(SQUAT_MAX,28)} kg`, note:`3×5 · repos 2'` },
+        ],
+      },
+    ]},
+    { cat: '// PUSH BRAS & ÉPAULES', items: [
+      { id:'ohp', n:'Développé militaire debout', badge:'3×8',
+        desc:`Barre au niveau de la clavicule. Pousser droit au-dessus de la tête. Corps gainé, hanches verrouillées. Descente contrôlée.`,
+        weights: [
+          { phase:'base',  label:'Séries', kg:`${pct(OHPMAX,65)} kg`, note:`3×8 · repos 90"` },
+          { phase:'build', label:'Séries', kg:`${pct(OHPMAX,72)} kg`, note:`3×6 · repos 2'` },
+          { phase:'recup', label:'Séries', kg:`${pct(OHPMAX,55)} kg`, note:`2×8 · repos 60"` },
+          { phase:'peak',  label:'Séries', kg:`${pct(OHPMAX,80)} kg`, note:`4×5 · repos 2'` },
+          { phase:'taper', label:'Séries', kg:`${pct(OHPMAX,65)} kg`, note:`3×6 · repos 90"` },
+        ],
+      },
+    ]},
+    { cat: '// DEADLIFT', items: [
+      { id:'dl', n:'Deadlift conventionnel', badge: light ? '2×5 @60%' : '4×5',
+        desc:`Pieds hip-width. Barre sur le milieu du pied. Hanches en arrière, dos plat. Tirer la barre le long des tibias. Extension hanches + genoux simultanée. Descente contrôlée.`,
+        tip:`⚡ Chaîne postérieure complète. Plus fort au deadlift = plus d'accélération sur toute la 1ère ligne.`,
+        weights: [
+          { phase:'base',  label:'Séries', kg:`${pct(DEAD_MAX,62)} kg`, note:`4×5 · repos 2'30"` },
+          { phase:'build', label:'Séries', kg:`${pct(DEAD_MAX,75)} kg`, note:`4×4 · repos 3'` },
+          { phase:'recup', label:'Séries', kg:`${pct(DEAD_MAX,60)} kg`, note:`2×5 · repos 2'` },
+          { phase:'peak',  label:'Séries', kg:`${pct(DEAD_MAX,82)} kg`, note:`5×3 · repos 3'30"` },
+          { phase:'taper', label:'Séries', kg:`${pct(DEAD_MAX,65)} kg`, note:`3×4 · repos 2'` },
+        ],
+      },
+    ]},
+    { cat: '// GAINAGE EXPLOSIF', items: [
+      { id:'pall', n:'Pallof press ou planche latérale', badge:'3×30-40 sec chaque côté',
+        desc:`Planche latérale : appui sur l'avant-bras, corps aligné pieds → tête. Tenir 30-40 sec.`, rest:'45 sec' },
+      { id:'brd', n:'Broad jump (saut en longueur debout)', badge:'4×5 · mesurer',
+        desc:`Pieds joints. Légère flexion + bras en arrière → sauter le plus loin possible → réception 2 pieds. Mesure la distance en cm.`,
+        tip:`⚡ Mesure obligatoire à chaque séance. C'est ton indicateur de performance direct.`, rest:'2 min' },
+    ]},
+    { cat: '// NUQUE · 2×/semaine', items: [
+      { id:'neck-b', n:'Superman prone + Neck curl bande (S4+)', badge:'3×12 · 2 sec hold',
+        desc:`Superman : allongé face au sol, lever simultanément bras + tête + jambes, tenir 2 sec. S4+ : enchaîner avec neck curl bande légère (4 directions, 12 reps contrôlées).`, rest:'45 sec' },
+    ]},
+    { cat: '// FIN DE SÉANCE · Réaction start', items: [
+      { id:'react', n:'Sprint 5-10m sur signal', badge:'6 sprints',
+        desc:`Position légèrement fléchie. Timer sonore → SPRINT MAXIMAL 5-10m. Focus sur les 2-3 premières foulées. Repos complet entre chaque.`,
+        tip:`⚡ Entraîne le système nerveux à réagir vite. Une amélioration ici = amélioration du gate.`, rest:'90 sec' },
+    ]},
+  ];
+}
+
+// ====================================================
+// RENDU EXERCICE
+// ====================================================
+function renderExercise(ex, phase, sessKey) {
+  const key = `${sessKey}-${ex.id}`;
+  const isDone = ls(`ex-${key}`);
+
+  let prescHtml = '';
+  if (ex.weights && ex.weights.length) {
+    const cw = ex.weights.find(w => w.phase === phase) || ex.weights[0];
+    const noteParts = cw.note.split('·').map(s => s.trim());
+    const series = noteParts[0] || '';
+    const recupNote = noteParts.find(p => p.toLowerCase().includes('repos') || p.toLowerCase().includes('min') || p.toLowerCase().includes('"')) || '';
+    const extra = noteParts.filter(p => p !== series && p !== recupNote).join(' · ');
+
+    prescHtml = `<div style="display:grid;grid-template-columns:1fr 1fr${recupNote?' 1fr':''};gap:8px;margin:12px 0;">
+      <div style="background:rgba(168,133,42,0.10);border:1px solid rgba(168,133,42,0.3);border-radius:2px;padding:10px 14px;text-align:center;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">CHARGE</div>
+        <div style="font-family:var(--font-hd);font-size:22px;color:var(--gold);line-height:1.1;">${cw.kg}</div>
+      </div>
+      <div style="background:rgba(168,133,42,0.06);border:1px solid rgba(168,133,42,0.2);border-radius:2px;padding:10px 14px;text-align:center;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">SÉRIES</div>
+        <div style="font-family:var(--font-hd);font-size:22px;color:var(--text);line-height:1.1;">${series}</div>
+        ${extra ? `<div style="font-size:10px;color:var(--muted);margin-top:2px;">${extra}</div>` : ''}
+      </div>
+      ${recupNote ? `<div style="background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);border-radius:2px;padding:10px 14px;text-align:center;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">⏱ RÉCUP</div>
+        <div style="font-family:var(--font-hd);font-size:18px;color:var(--cyan);line-height:1.2;">${recupNote.replace('repos','').trim()}</div>
+      </div>` : ''}
+    </div>`;
+  }
+
+  const restVal = ex.rest;
+  const restHtml = restVal ? `<div class="rest-row"><span class="rest-label">⏱ RÉCUP</span><span class="rest-val">${restVal}</span><button class="rest-btn" onclick="startRest(this,'${ex.id}',${restVal.includes('min')?parseInt(restVal)*60:parseInt(restVal)})">▶ START</button><span class="rest-countdown" id="rc-${ex.id}"></span></div>` : '';
+
+  return `<div class="ex-block ${isDone?'done':''}" id="ex-${key}">
+    <div class="ex-head" onclick="tog('ex-${key}')">
+      <div class="ex-check" onclick="event.stopPropagation();ck('ex-${key}','${key}')">✓</div>
+      <div class="ex-name">${ex.n}</div>
+      <div class="ex-badge">${ex.badge}</div>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body">
+      <div class="ex-desc">${ex.desc}</div>
+      ${prescHtml}
+      ${ex.tip ? `<div class="tip-box ${ex.tip.includes('⚡')?'bmx':''}"><strong>${ex.tip.slice(0,2)}</strong> ${ex.tip.slice(3)}</div>` : ''}
+      ${restHtml}
+    </div>
+  </div>`;
+}
+
+function renderBilan(key) {
+  const b = lsJ(`bl-${key}`) || { en:0, te:0, do:0, note:'' };
+  return `<div class="bilan">
+    <div class="bilan-title">// BILAN DE SÉANCE</div>
+    <div class="bilan-grid">
+      <div>
+        <div class="rating-row">
+          <div class="rating-lbl">Énergie ressentie</div>
+          <div class="stars" id="st-en-${key}">${[1,2,3,4,5].map(n=>`<span class="star ${b.en>=n?'on':''}" onclick="rate('${key}','en',${n})">★</span>`).join('')}</div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-lbl">Qualité technique</div>
+          <div class="stars" id="st-te-${key}">${[1,2,3,4,5].map(n=>`<span class="star ${b.te>=n?'on':''}" onclick="rate('${key}','te',${n})">★</span>`).join('')}</div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-lbl">Douleurs / gênes</div>
+          <div class="stars" id="st-do-${key}">${[1,2,3,4,5].map(n=>`<span class="star red ${b.do>=n?'on':''}" onclick="rate('${key}','do',${n})">★</span>`).join('')}</div>
+        </div>
+      </div>
+      <div>
+        <div class="rating-lbl" style="margin-bottom:6px;">Notes libres</div>
+        <textarea class="bilan-ta" id="bl-note-${key}" placeholder="Ressenti, réussites, difficultés...">${b.note||''}</textarea>
+        <button class="btn-primary" onclick="saveBilan('${key}')">Enregistrer</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSession(sess, isActive) {
+  const key = fmtKey(sess);
+  const isJeudi = sess.getDay() === 4;
+  const phase = getPhase(sess);
+  const alleg = isAllegedWeek(sess);
+  const recov = isRecovWeek(sess);
+  const [phLbl, phCls] = phaseLabel(phase);
+
+  const categories = isJeudi ? sessB(phase, alleg, recov) : sessA(phase, alleg, recov);
+  const isDoneS = ls(`session-done-${key}`);
+
+  let body = '';
+  categories.forEach(cat => {
+    body += `<div class="cat-div">${cat.cat}</div>`;
+    cat.items.forEach(ex => { body += renderExercise(ex, phase, key); });
+  });
+  body += renderBilan(key);
+
+  const chargeNote = alleg
+    ? `<span style="color:var(--cyan);font-family:var(--font-mono);font-size:10px;">⚠️ SEMAINE ALLÉGÉE · Volume -40%</span>`
+    : recov
+    ? `<span style="color:var(--green);font-family:var(--font-mono);font-size:10px;">♻️ RÉCUPÉRATION · Charges réduites</span>`
+    : '';
+
+  return `<div class="sess-content ${isActive?'active':''}" id="sc-${key}">
+    <div class="sess-card">
+      <div class="sess-header">
+        <div>
+          <div class="sess-date">${fmtDate(sess)} · 18h00</div>
+          <div class="sess-meta">${isJeudi?'SÉANCE B · JEUDI':'SÉANCE A · LUNDI'} &nbsp;|&nbsp; <span class="tl-phase ${phCls}">${phLbl}</span> &nbsp;${chargeNote}</div>
+        </div>
+        <button class="${isDoneS?'btn-done':'btn-primary'}" onclick="markDone('${key}')" id="sd-${key}">
+          ${isDoneS ? '✓ Complétée' : 'Valider'}
+        </button>
+      </div>
+      <div class="sess-body">${body}</div>
+    </div>
+  </div>`;
+}
+
+function buildSeances() {
+  const sessions = getAllSessions();
+  const tabs = document.getElementById('sessTabs');
+  const contents = document.getElementById('sessContents');
+
+  let tabsHtml = '', contHtml = '';
+  const todayKey = fmtKey(TODAY);
+  const nextIdx = sessions.findIndex(s => fmtKey(s) >= todayKey);
+
+  sessions.forEach((s, i) => {
+    const key = fmtKey(s);
+    const isDoneS = ls(`session-done-${key}`);
+    const isNext  = i === nextIdx;
+    const isLocked = i > nextIdx && nextIdx >= 0;
+    const isActive = isNext;
+
+    let cls = '';
+    if (isDoneS)  cls += ' done-tab';
+    if (isActive) cls += ' active';
+    if (isLocked) cls += ' future-locked';
+    if (isNext && !isDoneS) cls += ' next-available';
+
+    const prefix = isDoneS ? '✓ ' : isNext ? '⚡ ' : isLocked ? '🔒 ' : '';
+    const handler = isLocked ? '' : `onclick="selSess('${key}')"`;
+    const title   = isLocked ? `title="Disponible le ${fmtDate(s)}"` : '';
+
+    tabsHtml += `<button class="sess-tab${cls}" id="stb-${key}" ${handler} ${title}>${prefix}${fmtDate(s)}</button>`;
+
+    if (!isLocked) {
+      contHtml += renderSession(s, isActive);
+    } else {
+      contHtml += `<div class="sess-content" id="sc-${key}">
+        <div class="sess-card" style="display:flex;align-items:center;justify-content:center;min-height:200px;">
+          <div style="text-align:center;opacity:0.4;">
+            <div style="font-family:var(--font-hd);font-size:36px;color:var(--gold);margin-bottom:10px;">🔒</div>
+            <div style="font-family:var(--font-hd);font-size:13px;letter-spacing:2px;color:var(--muted);">DISPONIBLE LE ${fmtDate(s)}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+  });
+
+  tabs.innerHTML = tabsHtml;
+  contents.innerHTML = contHtml;
+}
+
+function buildCountdowns() {
+  const now = TODAY;
+  const dR1   = Math.max(0, Math.ceil((RACE1 - now) / 86400000));
+  const dMain = Math.max(0, Math.ceil((MAIN  - now) / 86400000));
+
+  document.getElementById('cd1-d').textContent = dR1;
+  document.getElementById('cd2-d').textContent = dMain;
+  document.getElementById('hd-days').textContent = dMain;
+}
+
+function updateProgress() {
+  const sessions = getAllSessions();
+  const done = sessions.filter(s => ls(`session-done-${fmtKey(s)}`)).length;
+  const pf = document.getElementById('pf-sess');
+  const pv = document.getElementById('pv-sess');
+  if (pf) pf.style.width = Math.round((done/sessions.length)*100) + '%';
+  if (pv) pv.textContent = `${done}/${sessions.length}`;
+}
+
+// ====================================================
+// INTERACTIONS
+// ====================================================
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function selSess(key) {
+  document.querySelectorAll('.sess-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.sess-tab').forEach(t => t.classList.remove('active'));
+  const c = document.getElementById('sc-' + key);
+  const t = document.getElementById('stb-' + key);
+  if (c) c.classList.add('active');
+  if (t) { t.classList.add('active'); t.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); }
+}
+
+function tog(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+function ck(blockId, exKey) {
+  const el = document.getElementById(blockId);
+  if (!el) return;
+  el.classList.toggle('done');
+  const done = el.classList.contains('done');
+  if (exKey) { done ? lsSet(`ex-${exKey}`, '1') : lsDel(`ex-${exKey}`); }
+  toast(done ? '✓ Exercice validé' : 'Décoché');
+}
+
+function markDone(key) {
+  lsSet(`session-done-${key}`, '1');
+  const btn = document.getElementById(`sd-${key}`);
+  if (btn) { btn.textContent = '✓ Complétée'; btn.className = 'btn-done'; }
+  const tab = document.getElementById(`stb-${key}`);
+  if (tab) tab.classList.add('done-tab');
+  toast('🏆 Séance validée !');
+  updateProgress();
+}
+
+function rate(key, field, val) {
+  const b = lsJ(`bl-${key}`) || { en:0, te:0, do:0, note:'' };
+  b[field] = val;
+  lsSetJ(`bl-${key}`, b);
+  const container = document.getElementById(`st-${field}-${key}`);
+  if (!container) return;
+  container.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('on', i < val));
+}
+
+function saveBilan(key) {
+  const b = lsJ(`bl-${key}`) || { en:0, te:0, do:0, note:'' };
+  const ta = document.getElementById(`bl-note-${key}`);
+  if (ta) b.note = ta.value;
+  lsSetJ(`bl-${key}`, b);
+  toast('💾 Bilan enregistré !');
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ====================================================
+// LOCALSTORAGE
+// ====================================================
+function ls(k)    { return localStorage.getItem(k); }
+function lsSet(k, v) { localStorage.setItem(k, v); }
+function lsDel(k) { localStorage.removeItem(k); }
+function lsJ(k)   { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
+function lsSetJ(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+// REST TIMER
+const restTimers = {};
+function startRest(btn, id, seconds) {
+  if (restTimers[id]) { clearInterval(restTimers[id]); delete restTimers[id]; btn.textContent='▶ START'; btn.classList.remove('running'); const cd=document.getElementById('rc-'+id); if(cd){cd.classList.remove('active');cd.textContent='';} return; }
+  let r = seconds; btn.textContent='■ STOP'; btn.classList.add('running');
+  const cd = document.getElementById('rc-'+id); if(cd) cd.classList.add('active');
+  function tick() { if(r<=0){clearInterval(restTimers[id]);delete restTimers[id];btn.textContent='✓ GO';btn.classList.remove('running');if(cd){cd.textContent='';cd.classList.remove('active');}if(navigator.vibrate)navigator.vibrate([200,100,200]);return;} const m=Math.floor(r/60),s=r%60; if(cd) cd.textContent=m>0?m+':'+String(s).padStart(2,'0'):s+'s'; r--; }
+  tick(); restTimers[id] = setInterval(tick, 1000);
+}
+
+// ====================================================
+// INIT
+// ====================================================
+document.addEventListener('DOMContentLoaded', () => {
+  buildCountdowns();
+  buildSeances();
+  updateProgress();
+});
+</script>
+</body>
+</html>
