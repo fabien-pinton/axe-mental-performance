@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic — AXE Mental Performance®</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .qmeta{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .qtext{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,28px);color:var(--ink);line-height:1.35;margin-bottom:24px;}
+  .qnav{display:flex;justify-content:space-between;margin-top:20px;}
+  /* rapport */
+  .rap-axes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0;}
+  .axe-bloc{padding:22px;border:1px solid var(--bdr2);background:var(--cream2);}
+  .axe-bloc.fort{border-left:3px solid var(--green);}
+  .axe-bloc.faible{border-left:3px solid var(--red);}
+  .axe-tag{font-size:8px;letter-spacing:.25em;text-transform:uppercase;font-weight:600;margin-bottom:8px;}
+  .axe-tag.fort{color:var(--green);}.axe-tag.faible{color:var(--red);}
+  .axe-nom{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.04em;color:var(--ink);margin-bottom:8px;line-height:1.1;}
+  .axe-txt{font-size:13px;color:var(--inkd);line-height:1.6;}
+  .bars{margin:14px 0 24px;}
+  .barrow{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .barlab{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--inkd);width:140px;flex-shrink:0;}
+  .bartrack{flex:1;height:8px;background:var(--cream4);overflow:hidden;}
+  .barfill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width 1s;}
+  .barval{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);width:42px;text-align:right;}
+  @media(max-width:640px){.rap-axes{grid-template-columns:1fr;}.barlab{width:96px;font-size:9px;}}
+</style>
+</head>
+<body>
+<nav class="app-nav">
+  <a class="app-logo" href="#">AXE MENTAL PERFORMANCE®<span>Espace athlète</span></a>
+  <div class="app-links"><button class="app-logout" onclick="deco()">Déconnexion</button></div>
+</nav>
+
+<div class="wrap">
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="eyebrow">Étape 2 · Ton diagnostic</div>
+    <h1 class="title">25 questions pour révéler<br><em>ton vrai profil de athlète.</em></h1>
+    <p class="subtitle">Réponds avec honnêteté — il n'y a pas de bonne réponse, seulement la tienne. À la fin, tu obtiens un rapport précis : tes points forts et tes points faibles, mentaux ET physiques. C'est lui qui construit tes 24 semaines.</p>
+    <button class="btn" onclick="demarrer()">Commencer le diagnostic →</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hidden">
+    <div class="pbar"><i id="pfill" style="width:0%"></i></div>
+    <div class="qmeta" id="qmeta"></div>
+    <div class="qtext" id="qtext"></div>
+    <div id="qopts"></div>
+    <div class="qnav">
+      <button class="btn btn-ghost" id="qprev" onclick="prec()">← Précédent</button>
+      <span class="muted" id="qcount"></span>
+    </div>
+  </div>
+
+  <!-- RAPPORT -->
+  <div id="rapport" class="hidden"></div>
+  <div id="msg"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script>
+let PROFIL=null,QS=[],idx=0,REP=[];
+
+(async()=>{
+  const ctx=await chargerProfil();
+  if(!ctx)return;
+  PROFIL=ctx.profil;
+  if(!PROFIL.questionnaire_ok){location.href='questionnaire.html';return;}
+  // construit les questions adaptées à l'âge
+  QS=QUESTIONS.map((q,i)=>{
+    const tw=(AGE_TWEAKS[PROFIL.tranche_age]||{})[i];
+    return tw?{...q,...tw}:q;
+  });
+  REP=new Array(QS.length).fill(null);
+})();
+
+function demarrer(){
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  afficher();
+}
+function afficher(){
+  const q=QS[idx];
+  document.getElementById('qmeta').textContent=q.cat;
+  document.getElementById('qtext').textContent=q.text;
+  document.getElementById('qopts').innerHTML=q.opts.map((o,i)=>
+    '<div class="opt '+(REP[idx]===i?'sel':'')+'" onclick="choisir('+i+')">'+o.t+'</div>').join('');
+  document.getElementById('pfill').style.width=((idx)/QS.length*100)+'%';
+  document.getElementById('qcount').textContent='Question '+(idx+1)+' / '+QS.length;
+  document.getElementById('qprev').style.visibility=idx===0?'hidden':'visible';
+}
+function choisir(i){
+  REP[idx]=i;
+  if(idx<QS.length-1){idx++;setTimeout(afficher,180);}
+  else{terminer();}
+}
+function prec(){if(idx>0){idx--;afficher();}}
+
+function terminer(){
+  // additionne les scores par dimension
+  const dims={stress:0,peur:0,confiance:0,plaisir:0,compet:0};
+  const cnt={stress:0,peur:0,confiance:0,plaisir:0,compet:0};
+  QS.forEach((q,i)=>{
+    const r=REP[i]; if(r===null)return;
+    const s=q.opts[r].s;
+    for(const k in s){dims[k]+=s[k];cnt[k]++;}
+  });
+  // normalise sur 100 (chaque réponse 1..4)
+  const pct={};
+  for(const k in dims){ pct[k]=Math.round((dims[k]/(cnt[k]*4))*100); }
+
+  // profil = dimension la plus faible (le frein principal)
+  const ordreFaible=Object.keys(pct).sort((a,b)=>pct[a]-pct[b]);
+  const profilId=ordreFaible[0];
+  const pointFaibleMental=PROFILES[profilId].faible;
+  // point fort mental = dimension la plus haute
+  const dimFort=ordreFaible[ordreFaible.length-1];
+  const pointFortMental=DIM_LABELS[dimFort];
+
+  // ── DÉRIVATION PHYSIQUE ──
+  // start lié à explosivité/décision → stress+peur ; ligne → compet+confiance ;
+  // gainage → confiance+plaisir ; endurance → stress+compet
+  const phys={
+    start:Math.round((pct.stress+pct.peur)/2),
+    ligne:Math.round((pct.compet+pct.confiance)/2),
+    gainage:Math.round((pct.confiance+pct.plaisir)/2),
+    endurance:Math.round((pct.stress+pct.compet)/2)
+  };
+  // ajustement niveau : plus le niveau est haut, plus la base physique est élevée
+  const bonusNiveau={departemental:0,regional:5,national:10,international:15}[PROFIL.niveau]||0;
+  for(const k in phys){phys[k]=Math.min(100,phys[k]+bonusNiveau);}
+  const ordrePhys=Object.keys(phys).sort((a,b)=>phys[a]-phys[b]);
+  const physFaible=ordrePhys[0], physFort=ordrePhys[ordrePhys.length-1];
+
+  const rapport={pct,phys,profilId,dimFort,physFort,physFaible};
+  afficherRapport(rapport,pointFortMental,pointFaibleMental);
+  sauvegarder(pct,profilId,pointFortMental,pointFaibleMental,physFort,physFaible,rapport);
+}
+
+function afficherRapport(R,pfm,pflm){
+  const P=PROFILES[R.profilId];
+  document.getElementById('quiz').classList.add('hidden');
+  const el=document.getElementById('rapport');
+  el.classList.remove('hidden');
+  const prenom=PROFIL.prenom||'Athlète';
+
+  const bars=Object.keys(DIM_LABELS).map(k=>
+    '<div class="barrow"><div class="barlab">'+DIM_LABELS[k]+'</div>'+
+    '<div class="bartrack"><div class="barfill" style="width:0" data-w="'+R.pct[k]+'%"></div></div>'+
+    '<div class="barval">'+R.pct[k]+'</div></div>').join('');
+
+  const physBars=Object.keys(PHYS_LABELS).map(k=>
+    '<div class="barrow"><div class="barlab">'+PHYS_LABELS[k]+'</div>'+
+    '<div class="bartrack"><div class="barfill" style="width:0" data-w="'+R.phys[k]+'%"></div></div>'+
+    '<div class="barval">'+R.phys[k]+'</div></div>').join('');
+
+  el.innerHTML=
+   '<div class="eyebrow">Ton rapport · '+prenom+'</div>'+
+   '<h1 class="title">Profil : <em>'+P.name+'</em></h1>'+
+   '<p class="subtitle">'+P.fort_si+'</p>'+
+
+   '<div class="card"><h2 class="sec">Tes 5 dimensions mentales</h2>'+
+   '<p class="muted" style="margin-bottom:16px">Chaque score est sur 100. Plus c\'est haut, plus la dimension est solide.</p>'+
+   '<div class="bars">'+bars+'</div></div>'+
+
+   '<div class="rap-axes">'+
+   '<div class="axe-bloc fort"><div class="axe-tag fort">★ Point fort mental</div>'+
+   '<div class="axe-nom">'+pfm+'</div>'+
+   '<div class="axe-txt">C\'est ton socle. On va le rendre encore plus fiable pour qu\'il devienne ta signature en course.</div></div>'+
+   '<div class="axe-bloc faible"><div class="axe-tag faible">▲ Point faible mental</div>'+
+   '<div class="axe-nom">'+pflm+'</div>'+
+   '<div class="axe-txt">'+P.reco+' C\'est ici que se cache le palier que tu cherches.</div></div>'+
+   '</div>'+
+
+   '<div class="card"><h2 class="sec">Tes 4 axes physiques</h2>'+
+   '<p class="muted" style="margin-bottom:16px">Estimés à partir de ton profil et de ton niveau ('+(PROFIL.niveau||'')+'). Affinés au fil des semaines.</p>'+
+   '<div class="bars">'+physBars+'</div></div>'+
+
+   '<div class="rap-axes">'+
+   '<div class="axe-bloc fort"><div class="axe-tag fort">★ Point fort physique</div>'+
+   '<div class="axe-nom">'+PHYS_LABELS[R.physFort]+'</div>'+
+   '<div class="axe-txt">'+PHYS_DESC[R.physFort].fort+'</div></div>'+
+   '<div class="axe-bloc faible"><div class="axe-tag faible">▲ Point faible physique</div>'+
+   '<div class="axe-nom">'+PHYS_LABELS[R.physFaible]+'</div>'+
+   '<div class="axe-txt">'+PHYS_DESC[R.physFaible].faible+'</div></div>'+
+   '</div>'+
+
+   '<div class="card card-gold"><h2 class="sec">La suite : 24 semaines</h2>'+
+   '<p class="muted" style="margin-bottom:8px">Dans la méthode AXE Mental Performance®, ton travail prioritaire est l\'<strong style="color:var(--gold)">'+P.axe+'</strong>.</p>'+
+   '<p class="muted" style="margin-bottom:20px">Ton programme combine : <strong>1 exercice mental</strong> par semaine + <strong>2 séances physiques</strong> (lundi & jeudi), conçus pour consolider tes points forts ET corriger tes points faibles. Une nouvelle semaine se débloque tous les 7 jours.</p>'+
+   '<button class="btn btn-full" onclick="versProgramme()">Accéder à mes 24 semaines →</button></div>';
+
+  setTimeout(()=>{document.querySelectorAll('.barfill').forEach(b=>{b.style.width=b.dataset.w;});},150);
+  window.scrollTo(0,0);
+}
+
+async function sauvegarder(pct,profilId,pfm,pflm,physFort,physFaible,rapport){
+  const {data:u}=await sb.auth.getUser();
+  await sb.from('diagnostics').insert({
+    user_id:u.user.id,
+    score_stress:pct.stress,score_peur:pct.peur,score_confiance:pct.confiance,
+    score_plaisir:pct.plaisir,score_compet:pct.compet,
+    profil_id:profilId,
+    point_fort_mental:pfm,point_faible_mental:pflm,
+    point_fort_physique:PHYS_LABELS[physFort],point_faible_physique:PHYS_LABELS[physFaible],
+    rapport_json:rapport
+  });
+  await sb.from('profils').update({diagnostic_ok:true,date_debut_programme:new Date().toISOString()}).eq('id',u.user.id);
+}
+
+function versProgramme(){location.href='programme.html';}
+async function deco(){await sb.auth.signOut();location.href='index.html';}
+</script>
+</body>
+</html>

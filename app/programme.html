@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon programme — AXE Mental Performance®</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .wk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin:24px 0 40px;}
+  .wk{aspect-ratio:1;border:1px solid var(--bdr2);background:var(--cream2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;text-align:center;padding:8px;}
+  .wk:hover:not(.lock){border-color:var(--gold);background:var(--gold-xl);}
+  .wk.lock{opacity:.4;cursor:not-allowed;background:var(--cream3);}
+  .wk.done{border-left:3px solid var(--green);}
+  .wk.cur{border:2px solid var(--gold);background:var(--gold-xl);}
+  .wk-n{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);line-height:1;}
+  .wk-l{font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--inkf);margin-top:4px;line-height:1.3;}
+  .wk-ph{font-size:6px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:3px;}
+
+  .detail{display:none;}
+  .detail.open{display:block;}
+  .blk{background:var(--cream2);border:1px solid var(--bdr);padding:26px;margin-bottom:18px;}
+  .blk-tag{font-size:8px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+  .blk-tag::before{content:'';width:24px;height:1px;background:var(--gold);}
+  .blk-titre{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.04em;color:var(--ink);margin-bottom:14px;line-height:1.05;}
+  .blk-h{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px;font-weight:600;}
+  .blk-p{font-size:14px;color:var(--inkd);line-height:1.7;margin-bottom:8px;}
+  .exo-list{list-style:none;margin:8px 0;}
+  .exo-list li{padding:10px 14px;border-left:2px solid var(--gold);background:var(--cream3);margin-bottom:7px;font-size:13px;color:var(--ink);line-height:1.5;}
+  .declench{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--gold-d);line-height:1.5;padding:14px 0 4px;border-top:1px solid var(--bdr);margin-top:14px;}
+  .chk{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1px solid var(--bdr2);background:var(--cream);margin-bottom:8px;cursor:pointer;transition:all .2s;}
+  .chk:hover{border-color:var(--gold);}
+  .chk.on{border-color:var(--green);background:rgba(61,122,78,.06);}
+  .chk-box{width:22px;height:22px;border:2px solid var(--bdr2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;}
+  .chk.on .chk-box{background:var(--green);border-color:var(--green);}
+  .chk-lab{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--inkd);font-weight:500;}
+  .back-link{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);cursor:pointer;display:inline-block;margin-bottom:18px;}
+  /* présentiel */
+  .pres{background:var(--ink);color:var(--cream2);padding:30px;margin-top:30px;}
+  .pres h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.04em;color:var(--gold-l);margin-bottom:6px;}
+  .pres p{font-size:13px;color:rgba(247,243,236,.7);line-height:1.6;margin-bottom:16px;}
+  .pres input{width:100%;padding:13px 14px;background:rgba(247,243,236,.08);border:1px solid rgba(168,133,42,.4);color:var(--cream2);margin-bottom:12px;font-family:'DM Sans';font-size:14px;}
+  .pres-res{font-size:13px;line-height:1.8;color:var(--cream2);margin:12px 0;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream2);padding:14px 28px;font-size:12px;letter-spacing:.1em;z-index:200;opacity:0;transition:opacity .3s;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<nav class="app-nav">
+  <a class="app-logo" href="#">AXE MENTAL PERFORMANCE®<span>Espace athlète</span></a>
+  <div class="app-links">
+    <a class="app-link active" href="programme.html">Programme</a>
+    <a class="app-link" href="messages.html" id="lkMsg">Messages</a>
+    <button class="app-logout" onclick="deco()">Déconnexion</button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <!-- VUE LISTE -->
+  <div id="vueListe">
+    <div class="eyebrow">Ton parcours · 24 semaines</div>
+    <h1 class="title" id="hello">Ton programme.</h1>
+    <p class="subtitle" id="introTxt">Une nouvelle semaine se débloque tous les 7 jours. Coche tes exercices, note tes ressentis — tout est sauvegardé et visible par Fabien. Toutes les 8 semaines (S8, S16, S24), tu débloques un <strong>débrief visio</strong> avec lui.</p>
+    <div id="rapidRappel" class="card card-gold" style="display:none"></div>
+    <div class="wk-grid" id="grid"></div>
+
+    <!-- PRÉSENTIEL -->
+    <div class="pres">
+      <h2>Réserver un présentiel en compétition</h2>
+      <p>Fabien se déplace sur l'une de tes compétitions. Indique le lieu : on calcule la distance et le coût du déplacement (0,55 €/km aller-retour), puis tu choisis un créneau.</p>
+      <input id="presComp" placeholder="Nom de la compétition (ex : Championnat régional – Besançon)">
+      <input id="presAdr" placeholder="Adresse ou ville de la compétition">
+      <button class="btn" onclick="calcDist()" id="btnDist">Calculer le déplacement →</button>
+      <div class="pres-res" id="presRes"></div>
+      <div id="presStep2" style="display:none">
+        <button class="btn btn-full" style="background:var(--gold)" onclick="goTidycal()">Choisir un créneau & envoyer ma demande →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VUE DÉTAIL SEMAINE -->
+  <div id="vueDetail" class="detail">
+    <span class="back-link" onclick="retour()">← Toutes les semaines</span>
+    <div class="eyebrow" id="dPhase"></div>
+    <h1 class="title" id="dTitre"></h1>
+
+    <!-- mental -->
+    <div class="blk">
+      <div class="blk-tag">Préparation mentale</div>
+      <div class="blk-titre" id="mTitre"></div>
+      <div class="blk-h">Pourquoi cet exercice</div>
+      <div class="blk-p" id="mPourquoi"></div>
+      <div class="blk-h">Ta consigne</div>
+      <div class="blk-p" id="mConsigne"></div>
+      <div class="declench" id="mDeclench"></div>
+      <div class="chk" id="ckMental" onclick="toggle('mental_fait',this)"><div class="chk-box">✓</div><div class="chk-lab">J'ai fait l'exercice mental cette semaine</div></div>
+      <div class="blk-h" style="margin-top:18px">Mes notes sur cet exercice</div>
+      <textarea class="in" id="noteMental" placeholder="Ce que tu as ressenti, ce qui a marché, tes observations…" onblur="sauverChamp('note_mental',this.value)"></textarea>
+    </div>
+
+    <!-- lundi -->
+    <div class="blk">
+      <div class="blk-tag">Séance physique · Lundi</div>
+      <div class="blk-titre" id="lTitre"></div>
+      <div class="blk-p" id="lFocus" style="font-style:italic;color:var(--gold-d)"></div>
+      <ul class="exo-list" id="lExos"></ul>
+      <div class="blk-h">Le conseil de Fabien</div>
+      <div class="blk-p" id="lConseil"></div>
+      <div class="chk" id="ckLundi" onclick="toggle('seance_lundi_fait',this)"><div class="chk-box">✓</div><div class="chk-lab">Séance du lundi terminée</div></div>
+    </div>
+
+    <!-- jeudi -->
+    <div class="blk">
+      <div class="blk-tag">Séance physique · Jeudi</div>
+      <div class="blk-titre" id="jTitre"></div>
+      <div class="blk-p" id="jFocus" style="font-style:italic;color:var(--gold-d)"></div>
+      <ul class="exo-list" id="jExos"></ul>
+      <div class="blk-h">Le conseil de Fabien</div>
+      <div class="blk-p" id="jConseil"></div>
+      <div class="chk" id="ckJeudi" onclick="toggle('seance_jeudi_fait',this)"><div class="chk-box">✓</div><div class="chk-lab">Séance du jeudi terminée</div></div>
+    </div>
+
+    <!-- DÉBRIEF VISIO (semaines 8, 16, 24) -->
+    <div class="pres" id="blocDebrief" style="display:none;margin-top:0;margin-bottom:18px">
+      <h2 id="debriefTitre">Ton débrief visio</h2>
+      <p id="debriefTxt"></p>
+      <div id="debriefAction"></div>
+    </div>
+
+    <!-- ressenti semaine -->
+    <div class="blk card-gold">
+      <div class="blk-tag">Bilan de ta semaine</div>
+      <div class="blk-h">Ton ressenti global</div>
+      <textarea class="in" id="ressenti" placeholder="Comment t'es-tu senti cette semaine ? Énergie, motivation, progrès ressentis à l'entraînement…" onblur="sauverChamp('ressenti',this.value)"></textarea>
+      <div class="blk-h">Ton intensité ressentie cette semaine (1 = faible · 10 = énorme)</div>
+      <input type="range" min="1" max="10" value="5" id="intensite" oninput="document.getElementById('intVal').textContent=this.value" onchange="sauverChamp('intensite_ressentie',parseInt(this.value))" style="width:100%">
+      <div style="text-align:center;font-family:'Bebas Neue';font-size:30px;color:var(--gold)" id="intVal">5</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="programme-data.js"></script>
+<script>
+let PROFIL=null,USER=null,PROG={},DEBRIEFS={},semaineCourante=1,semaineOuverte=null;
+
+(async()=>{
+  const ctx=await chargerProfil();
+  if(!ctx)return;
+  PROFIL=ctx.profil;USER=ctx.user;
+  if(!PROFIL.questionnaire_ok){location.href='questionnaire.html';return;}
+  if(!PROFIL.diagnostic_ok){location.href='diagnostic.html';return;}
+  document.getElementById('hello').innerHTML='Bienvenue, <em>'+(PROFIL.prenom||'Athlète')+'</em>.';
+  // calcule la semaine débloquée (1 par 7 jours depuis date_debut_programme)
+  if(PROFIL.date_debut_programme){
+    const j=Math.floor((Date.now()-new Date(PROFIL.date_debut_programme))/86400000);
+    semaineCourante=Math.min(24,Math.max(1,Math.floor(j/7)+1));
+  }
+  await chargerProgression();
+  await chargerDebriefs();
+  await badgeMessages();
+  construireGrid();
+})();
+
+async function chargerProgression(){
+  const {data}=await sb.from('progression').select('*').eq('user_id',USER.id);
+  (data||[]).forEach(r=>{PROG[r.semaine]=r;});
+}
+
+async function chargerDebriefs(){
+  const {data}=await sb.from('debriefs').select('*').eq('user_id',USER.id);
+  (data||[]).forEach(r=>{DEBRIEFS[r.jalon]=r;});
+}
+
+function construireGrid(){
+  const g=document.getElementById('grid');g.innerHTML='';
+  for(let i=1;i<=24;i++){
+    const lock=i>semaineCourante;
+    const p=PROG[i]||{};
+    const done=p.mental_fait&&p.seance_lundi_fait&&p.seance_jeudi_fait;
+    const cur=i===semaineCourante;
+    const cls=['wk'];if(lock)cls.push('lock');if(done)cls.push('done');if(cur)cls.push('cur');
+    const ph=SEMAINES[i-1].phase;
+    const estDebrief=(i===8||i===16||i===24);
+    g.innerHTML+='<div class="'+cls.join(' ')+'" onclick="'+(lock?'verrou('+i+')':'ouvrir('+i+')')+'">'+
+      '<div class="wk-n">'+(lock?'🔒':i)+'</div>'+
+      '<div class="wk-l">'+(lock?'Verrouillée':SEMAINES[i-1].titre)+'</div>'+
+      '<div class="wk-ph">'+(estDebrief?'★ Débrief visio':ph)+'</div></div>';
+  }
+}
+
+function verrou(i){
+  const reste=(i-semaineCourante)*7;
+  toast('Semaine '+i+' débloquée dans '+reste+' jour'+(reste>1?'s':'')+'. Une étape à la fois.');
+}
+
+function ouvrir(i){
+  semaineOuverte=i;
+  const w=SEMAINES[i-1];
+  const p=PROG[i]||{};
+  document.getElementById('dPhase').textContent='Semaine '+i+' · '+w.phase;
+  document.getElementById('dTitre').innerHTML=w.titre;
+  // mental
+  document.getElementById('mTitre').textContent=w.mental.titre;
+  document.getElementById('mPourquoi').textContent=w.mental.pourquoi;
+  document.getElementById('mConsigne').textContent=w.mental.consigne;
+  document.getElementById('mDeclench').textContent='« '+w.mental.declencheur+' »';
+  // lundi
+  document.getElementById('lTitre').textContent=w.lundi.titre;
+  document.getElementById('lFocus').textContent=w.lundi.focus;
+  document.getElementById('lExos').innerHTML=w.lundi.exos.map(e=>'<li>'+e+'</li>').join('');
+  document.getElementById('lConseil').textContent=w.lundi.conseil;
+  // jeudi
+  document.getElementById('jTitre').textContent=w.jeudi.titre;
+  document.getElementById('jFocus').textContent=w.jeudi.focus;
+  document.getElementById('jExos').innerHTML=w.jeudi.exos.map(e=>'<li>'+e+'</li>').join('');
+  document.getElementById('jConseil').textContent=w.jeudi.conseil;
+  // états sauvegardés
+  setChk('ckMental',p.mental_fait);
+  setChk('ckLundi',p.seance_lundi_fait);
+  setChk('ckJeudi',p.seance_jeudi_fait);
+  document.getElementById('noteMental').value=p.note_mental||'';
+  document.getElementById('ressenti').value=p.ressenti||'';
+  const intens=p.intensite_ressentie||5;
+  document.getElementById('intensite').value=intens;
+  document.getElementById('intVal').textContent=intens;
+
+  // débrief visio aux jalons 8, 16, 24
+  rendreDebrief(i);
+
+  document.getElementById('vueListe').style.display='none';
+  document.getElementById('vueDetail').classList.add('open');
+  window.scrollTo(0,0);
+}
+
+function rendreDebrief(i){
+  const bloc=document.getElementById('blocDebrief');
+  if(i!==8&&i!==16&&i!==24){bloc.style.display='none';return;}
+  bloc.style.display='block';
+  const num=i===8?'1er':(i===16?'2e':'3e et dernier');
+  const d=DEBRIEFS[i];
+  document.getElementById('debriefTitre').textContent='Ton '+num+' débrief visio · fin du bloc';
+  document.getElementById('debriefTxt').innerHTML=
+    'Tu viens de boucler '+i+' semaines de travail. C\'est le moment de faire le point <strong style="color:var(--gold-l)">en visio avec Fabien</strong> : ce que tu as construit, tes ressentis, et les axes pour la suite. Ce rendez-vous fait partie de ton accompagnement.';
+  const action=document.getElementById('debriefAction');
+  if(d&&(d.statut==='confirme'||d.statut==='fait')){
+    action.innerHTML='<span class="pill pill-on" style="background:rgba(168,133,42,.2);color:var(--gold-l)">Débrief '+(d.statut==='fait'?'effectué ✓':'réservé ✓')+'</span>';
+  } else if(d&&d.statut==='demande'){
+    action.innerHTML='<span class="pill" style="background:rgba(247,243,236,.12);color:var(--cream2)">Demande envoyée — à confirmer</span> '+
+      '<button class="btn" style="background:var(--gold);margin-left:10px" onclick="ouvrirDebrief('+i+')">Rouvrir le calendrier →</button>';
+  } else {
+    action.innerHTML='<button class="btn btn-full" style="background:var(--gold)" onclick="demanderDebrief('+i+')">Réserver mon débrief visio →</button>';
+  }
+}
+
+async function demanderDebrief(jalon){
+  await sb.from('debriefs').upsert({user_id:USER.id,jalon:jalon,statut:'demande'},{onConflict:'user_id,jalon'});
+  DEBRIEFS[jalon]={jalon:jalon,statut:'demande'};
+  window.open(CFG.TIDYCAL_DEBRIEF_VISIO,'_blank');
+  toast('Demande de débrief envoyée ✓');
+  rendreDebrief(jalon);
+}
+function ouvrirDebrief(jalon){
+  window.open(CFG.TIDYCAL_DEBRIEF_VISIO,'_blank');
+}
+function setChk(id,on){document.getElementById(id).classList.toggle('on',!!on);}
+
+function retour(){
+  document.getElementById('vueDetail').classList.remove('open');
+  document.getElementById('vueListe').style.display='block';
+  construireGrid();
+  window.scrollTo(0,0);
+}
+
+async function toggle(champ,node){
+  node.classList.toggle('on');
+  await sauverChamp(champ,node.classList.contains('on'));
+}
+
+async function sauverChamp(champ,valeur){
+  const s=semaineOuverte;if(!s)return;
+  const payload={user_id:USER.id,semaine:s,[champ]:valeur,maj_le:new Date().toISOString()};
+  const {error}=await sb.from('progression').upsert(payload,{onConflict:'user_id,semaine'});
+  if(error){toast('Erreur de sauvegarde');return;}
+  PROG[s]={...(PROG[s]||{}),[champ]:valeur};
+  toast('Sauvegardé ✓');
+}
+
+// ── PRÉSENTIEL (TidyCal + Google Maps Distance Matrix) ──
+let _km=0,_tarif=0;
+function loadMaps(){
+  if(window.google&&window.google.maps)return Promise.resolve();
+  return new Promise((res)=>{
+    window._mapsReady=res;
+    const sc=document.createElement('script');
+    sc.src='https://maps.googleapis.com/maps/api/js?key='+CFG.GOOGLE_MAPS_KEY+'&callback=_mapsReady';
+    document.head.appendChild(sc);
+  });
+}
+async function calcDist(){
+  const comp=document.getElementById('presComp').value.trim();
+  const adr=document.getElementById('presAdr').value.trim();
+  if(!comp||!adr){return toast('Renseigne la compétition et l\'adresse.');}
+  const b=document.getElementById('btnDist');b.disabled=true;b.textContent='Calcul…';
+  try{
+    await loadMaps();
+    const svc=new google.maps.DistanceMatrixService();
+    const r=await new Promise((resolve,reject)=>{
+      svc.getDistanceMatrix({origins:[CFG.ADRESSE_FABIEN],destinations:[adr],
+        travelMode:google.maps.TravelMode.DRIVING,language:'fr',unitSystem:google.maps.UnitSystem.METRIC},
+        (resp,st)=>st==='OK'?resolve(resp):reject(st));
+    });
+    const el=r.rows[0].elements[0];
+    if(el.status!=='OK')throw 'adresse introuvable';
+    _km=Math.round(el.distance.value/1000);
+    const ar=_km*2;_tarif=Math.round(ar*CFG.TARIF_KM);
+    document.getElementById('presRes').innerHTML=
+      '🚗 Aller : <strong>'+_km+' km</strong> · Aller-retour : <strong>'+ar+' km</strong><br>'+
+      '💶 Déplacement estimé : <strong style="color:var(--gold-l)">'+_tarif+' €</strong><br>'+
+      '<span style="font-size:11px;color:rgba(247,243,236,.6)">Tarif confirmé par Fabien après ta demande.</span>';
+    document.getElementById('presStep2').style.display='block';
+  }catch(e){
+    document.getElementById('presRes').innerHTML='<span style="color:#E0A0A0">Adresse non trouvée. Précise la ville et le pays.</span>';
+  }
+  b.disabled=false;b.textContent='Recalculer →';
+}
+async function goTidycal(){
+  const comp=document.getElementById('presComp').value.trim();
+  const adr=document.getElementById('presAdr').value.trim();
+  // enregistre la demande pour que Fabien la voie dans l'admin
+  await sb.from('presentiels').insert({user_id:USER.id,competition:comp,adresse:adr,distance_km:_km,tarif_eur:_tarif,statut:'demande'});
+  toast('Demande envoyée à Fabien ✓');
+  window.open(CFG.TIDYCAL_PRESENTIEL,'_blank');
+}
+
+async function badgeMessages(){
+  const {data}=await sb.from('messages').select('id').eq('user_id',USER.id).eq('auteur','coach').eq('lu',false);
+  if(data&&data.length){document.getElementById('lkMsg').innerHTML='Messages <span class="badge"></span>';}
+}
+
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200);}
+async function deco(){await sb.auth.signOut();location.href='index.html';}
+</script>
+</body>
+</html>
