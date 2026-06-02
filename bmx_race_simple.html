@@ -760,12 +760,27 @@ function rate(key, field, val) {
   container.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('on', i < val));
 }
 
-function saveBilan(key) {
+async function saveBilan(key) {
   const b = lsJ(`bl-${key}`) || { en:0, te:0, do:0, note:'' };
   const ta = document.getElementById(`bl-note-${key}`);
   if (ta) b.note = ta.value;
   lsSetJ(`bl-${key}`, b);
-  toast('💾 Bilan enregistré !');
+
+  try {
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: '5a7d811a-1f7f-4202-9539-e69e7b0f9667',
+        subject: `Bilan séance du ${key}`,
+        from_name: 'BMX Race',
+        message: `Date de séance : ${key}\n\nÉnergie ressentie : ${b.en}/5\nQualité technique : ${b.te}/5\nDouleurs / gênes : ${b.do}/5\n\nNotes libres :\n${b.note || '(aucune)'}`
+      })
+    });
+    toast('💾 Bilan envoyé !');
+  } catch (e) {
+    toast('💾 Bilan enregistré (envoi échoué)');
+  }
 }
 
 function toast(msg) {
