@@ -220,6 +220,124 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   </div>
 </section>
 
+<!-- PRÉSENTIEL (toujours accessible) -->
+<section style="max-width:760px;margin:0 auto;padding:40px 24px;">
+<div style="margin:20px 36px;padding:28px 32px;background:var(--cream3);border:1px solid var(--bdr);border-left:3px solid var(--gold);">
+            <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Option · Présence en compétition</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.06em;color:var(--ink);margin-bottom:8px;">FABIEN PRÉSENT À TA COMPÉTITION</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--inkd);margin-bottom:20px;line-height:1.65;">Fabien peut être présent physiquement lors d'une compétition de ton choix — observation, coaching bord de terrain, débrief immédiat. Entre la ville de ta compétition pour voir le tarif exact.</div>
+
+            <div style="margin-bottom:20px;">
+              <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Étape 1 · Calcul du tarif</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;">
+                <input id="comp-city" type="text" placeholder="Ville ou adresse de la compétition" style="flex:1;min-width:200px;border:1px solid var(--bdr2);background:var(--cream2);padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border .3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--bdr2)'" />
+                <button onclick="axeCalcDistance()" id="axeCalcBtn" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:12px 22px;cursor:pointer;white-space:nowrap;">CALCULER →</button>
+              </div>
+              <div id="axe-dist-result" style="display:none;margin-top:14px;padding:18px 20px;background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);">
+                <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Récapitulatif</div>
+                <div id="axe-dist-details" style="font-size:14px;color:var(--inkd);line-height:1.9;margin-bottom:14px;"></div>
+                <div id="axe-tarif-display" style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold);letter-spacing:.05em;margin-bottom:4px;"></div>
+                <div style="font-size:10px;color:var(--inkf);margin-bottom:18px;">Tarif de déplacement estimé · 0,55 €/km aller-retour · Confirmé par Fabien après réservation</div>
+                <button onclick="axeGoTidycal()" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:var(--ink);color:#F7F3EC;border:none;padding:15px;width:100%;cursor:pointer;">↗ ÉTAPE 2 · CHOISIR UN CRÉNEAU SUR TIDYCAL</button>
+              </div>
+              <div id="axe-dist-error" style="display:none;margin-top:10px;font-size:13px;color:#C0392B;padding:10px 14px;background:#fff0ee;border-left:3px solid #C0392B;"></div>
+            </div>
+
+            <div id="axe-stripe-section" style="display:none;margin-top:16px;padding:18px 20px;background:var(--ink);border-top:2px solid var(--gold);">
+              <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Étape 3 · Paiement du déplacement</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(247,243,236,.75);margin-bottom:16px;line-height:1.6;">Ton créneau est réservé mais <strong style="color:var(--gold-l);font-style:normal;">non confirmé</strong> tant que le déplacement n'est pas réglé. Le montant est pré-rempli automatiquement.</div>
+              <a id="axe-stripe-btn" href="#" target="_blank" style="display:block;text-align:center;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:15px;">PAYER LE DÉPLACEMENT →</a>
+            </div>
+          </div>
+
+          <script>
+          var _axeDistKm = 0;
+          var _axeTarif = 0;
+
+          function axeInitMaps() {
+            // Maps JS SDK loaded, ready
+          }
+
+          function axeLoadMapsSDK() {
+            if(window.google && window.google.maps) { return Promise.resolve(); }
+            return new Promise(function(resolve) {
+              window._axeMapsReady = resolve;
+              var s = document.createElement('script');
+              s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCmyB9fpUzAJxAsJWmhqlBPNtg6Iwlbv_M&libraries=places&callback=_axeMapsReady';
+              s.async = true; s.defer = true;
+              document.head.appendChild(s);
+            });
+          }
+
+          async function axeCalcDistance() {
+            var city = document.getElementById('comp-city').value.trim();
+            if(!city) return;
+            var btn = document.getElementById('axeCalcBtn');
+            var resDiv = document.getElementById('axe-dist-result');
+            var errDiv = document.getElementById('axe-dist-error');
+            btn.textContent = '...'; btn.style.opacity='0.6'; btn.disabled=true;
+            resDiv.style.display='none'; errDiv.style.display='none';
+            document.getElementById('axe-stripe-section').style.display='none';
+
+            try {
+              await axeLoadMapsSDK();
+              var svc = new google.maps.DistanceMatrixService();
+              var result = await new Promise(function(resolve, reject) {
+                svc.getDistanceMatrix({
+                  origins: ['Mours-Saint-Eusèbe, 26540, France'],
+                  destinations: [city],
+                  travelMode: google.maps.TravelMode.DRIVING,
+                  language: 'fr',
+                  unitSystem: google.maps.UnitSystem.METRIC
+                }, function(resp, status) {
+                  if(status === 'OK') resolve(resp); else reject(new Error(status));
+                });
+              });
+
+              var el = result.rows[0].elements[0];
+              if(el.status !== 'OK') throw new Error('Destination introuvable');
+
+              var distKm = Math.round(el.distance.value / 1000);
+              var ar = distKm * 2;
+              var tarif = Math.round(ar * 0.55);
+              _axeDistKm = distKm;
+              _axeTarif = tarif;
+
+              var destName = result.destinationAddresses[0];
+              document.getElementById('axe-dist-details').innerHTML =
+                '📍 <strong>' + destName + '</strong><br>'
+                + '🚗 Aller : <strong>' + distKm + ' km</strong> &nbsp;·&nbsp; Aller-retour : <strong>' + ar + ' km</strong><br>'
+                + '⏱ Durée : <strong>' + el.duration.text + '</strong>';
+              document.getElementById('axe-tarif-display').textContent = tarif + ' €';
+              resDiv.style.display = 'block';
+
+            } catch(e) {
+              errDiv.textContent = 'Ville introuvable ou erreur réseau. Vérifie l\'orthographe ou contacte Fabien.';
+              errDiv.style.display = 'block';
+            }
+            btn.textContent='CALCULER →'; btn.style.opacity='1'; btn.disabled=false;
+          }
+
+          function axeGoTidycal() {
+            if(!_axeTarif) return;
+            var ar = _axeDistKm * 2;
+            var stripeUrl = 'https://buy.stripe.com/28E6oG0Xy2Qu1CR5xs8IU0i?quantity=' + ar;
+            document.getElementById('axe-stripe-btn').href = stripeUrl;
+            document.getElementById('axe-stripe-btn').textContent = 'PAYER LE DÉPLACEMENT (' + _axeTarif + ' €) →';
+            document.getElementById('axe-stripe-section').style.display = 'block';
+            window.open('https://tidycal.com/fpinton/presence-competition', '_blank');
+            document.getElementById('axe-stripe-section').scrollIntoView({behavior:'smooth', block:'nearest'});
+          }
+
+          document.addEventListener('DOMContentLoaded', function() {
+            var inp = document.getElementById('comp-city');
+            if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') axeCalcDistance(); });
+          });
+          </script>
+        </div>
+</section>
+
+
 <!-- MANTRA -->
 <div class="mantra-band">
   <div class="mantra-label">Ton mantra de compétition</div>
@@ -531,121 +649,11 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <button class="note-save" onclick="saveNote(7)">Enregistrer mes notes</button>
           </div>
           <button class="pdf-download-btn" onclick="downloadSemaine(7)">📄 Télécharger ma Semaine 8 — Jouer libéré en toutes circonstances en PDF</button>
-          <div style="margin:20px 36px;padding:28px 32px;background:var(--cream3);border:1px solid var(--bdr);border-left:3px solid var(--gold);">
-            <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Option · Présence en compétition</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.06em;color:var(--ink);margin-bottom:8px;">FABIEN PRÉSENT À TA COMPÉTITION</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--inkd);margin-bottom:20px;line-height:1.65;">Fabien peut être présent physiquement lors d'une compétition de ton choix — observation, coaching bord de terrain, débrief immédiat. Entre la ville de ta compétition pour voir le tarif exact.</div>
-
-            <div style="margin-bottom:20px;">
-              <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Étape 1 · Calcul du tarif</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;">
-                <input id="comp-city" type="text" placeholder="Ville ou adresse de la compétition" style="flex:1;min-width:200px;border:1px solid var(--bdr2);background:var(--cream2);padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border .3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--bdr2)'" />
-                <button onclick="axeCalcDistance()" id="axeCalcBtn" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:12px 22px;cursor:pointer;white-space:nowrap;">CALCULER →</button>
-              </div>
-              <div id="axe-dist-result" style="display:none;margin-top:14px;padding:18px 20px;background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);">
-                <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;">Récapitulatif</div>
-                <div id="axe-dist-details" style="font-size:14px;color:var(--inkd);line-height:1.9;margin-bottom:14px;"></div>
-                <div id="axe-tarif-display" style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold);letter-spacing:.05em;margin-bottom:4px;"></div>
-                <div style="font-size:10px;color:var(--inkf);margin-bottom:18px;">Tarif de déplacement estimé · 0,55 €/km aller-retour · Confirmé par Fabien après réservation</div>
-                <button onclick="axeGoTidycal()" style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:var(--ink);color:#F7F3EC;border:none;padding:15px;width:100%;cursor:pointer;">↗ ÉTAPE 2 · CHOISIR UN CRÉNEAU SUR TIDYCAL</button>
-              </div>
-              <div id="axe-dist-error" style="display:none;margin-top:10px;font-size:13px;color:#C0392B;padding:10px 14px;background:#fff0ee;border-left:3px solid #C0392B;"></div>
-            </div>
-
-            <div id="axe-stripe-section" style="display:none;margin-top:16px;padding:18px 20px;background:var(--ink);border-top:2px solid var(--gold);">
-              <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Étape 3 · Paiement du déplacement</div>
-              <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(247,243,236,.75);margin-bottom:16px;line-height:1.6;">Ton créneau est réservé mais <strong style="color:var(--gold-l);font-style:normal;">non confirmé</strong> tant que le déplacement n'est pas réglé. Le montant est pré-rempli automatiquement.</div>
-              <a id="axe-stripe-btn" href="#" target="_blank" style="display:block;text-align:center;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:15px;">PAYER LE DÉPLACEMENT →</a>
-            </div>
-          </div>
-
-          <script>
-          var _axeDistKm = 0;
-          var _axeTarif = 0;
-
-          function axeInitMaps() {
-            // Maps JS SDK loaded, ready
-          }
-
-          function axeLoadMapsSDK() {
-            if(window.google && window.google.maps) { return Promise.resolve(); }
-            return new Promise(function(resolve) {
-              window._axeMapsReady = resolve;
-              var s = document.createElement('script');
-              s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCmyB9fpUzAJxAsJWmhqlBPNtg6Iwlbv_M&libraries=places&callback=_axeMapsReady';
-              s.async = true; s.defer = true;
-              document.head.appendChild(s);
-            });
-          }
-
-          async function axeCalcDistance() {
-            var city = document.getElementById('comp-city').value.trim();
-            if(!city) return;
-            var btn = document.getElementById('axeCalcBtn');
-            var resDiv = document.getElementById('axe-dist-result');
-            var errDiv = document.getElementById('axe-dist-error');
-            btn.textContent = '...'; btn.style.opacity='0.6'; btn.disabled=true;
-            resDiv.style.display='none'; errDiv.style.display='none';
-            document.getElementById('axe-stripe-section').style.display='none';
-
-            try {
-              await axeLoadMapsSDK();
-              var svc = new google.maps.DistanceMatrixService();
-              var result = await new Promise(function(resolve, reject) {
-                svc.getDistanceMatrix({
-                  origins: ['Mours-Saint-Eusèbe, 26540, France'],
-                  destinations: [city],
-                  travelMode: google.maps.TravelMode.DRIVING,
-                  language: 'fr',
-                  unitSystem: google.maps.UnitSystem.METRIC
-                }, function(resp, status) {
-                  if(status === 'OK') resolve(resp); else reject(new Error(status));
-                });
-              });
-
-              var el = result.rows[0].elements[0];
-              if(el.status !== 'OK') throw new Error('Destination introuvable');
-
-              var distKm = Math.round(el.distance.value / 1000);
-              var ar = distKm * 2;
-              var tarif = Math.round(ar * 0.55);
-              _axeDistKm = distKm;
-              _axeTarif = tarif;
-
-              var destName = result.destinationAddresses[0];
-              document.getElementById('axe-dist-details').innerHTML =
-                '📍 <strong>' + destName + '</strong><br>'
-                + '🚗 Aller : <strong>' + distKm + ' km</strong> &nbsp;·&nbsp; Aller-retour : <strong>' + ar + ' km</strong><br>'
-                + '⏱ Durée : <strong>' + el.duration.text + '</strong>';
-              document.getElementById('axe-tarif-display').textContent = tarif + ' €';
-              resDiv.style.display = 'block';
-
-            } catch(e) {
-              errDiv.textContent = 'Ville introuvable ou erreur réseau. Vérifie l\'orthographe ou contacte Fabien.';
-              errDiv.style.display = 'block';
-            }
-            btn.textContent='CALCULER →'; btn.style.opacity='1'; btn.disabled=false;
-          }
-
-          function axeGoTidycal() {
-            if(!_axeTarif) return;
-            var ar = _axeDistKm * 2;
-            var stripeUrl = 'https://buy.stripe.com/28E6oG0Xy2Qu1CR5xs8IU0i?quantity=' + ar;
-            document.getElementById('axe-stripe-btn').href = stripeUrl;
-            document.getElementById('axe-stripe-btn').textContent = 'PAYER LE DÉPLACEMENT (' + _axeTarif + ' €) →';
-            document.getElementById('axe-stripe-section').style.display = 'block';
-            window.open('https://tidycal.com/fpinton/presence-competition', '_blank');
-            document.getElementById('axe-stripe-section').scrollIntoView({behavior:'smooth', block:'nearest'});
-          }
-
-          document.addEventListener('DOMContentLoaded', function() {
-            var inp = document.getElementById('comp-city');
-            if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') axeCalcDistance(); });
-          });
-          </script>
-        </div>
+          
         </div>
 </div>
+
+
 
 <!-- CTA -->
 <section class="cta-section">
