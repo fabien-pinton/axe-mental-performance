@@ -79,7 +79,12 @@ function msg(txt,type){
 async function inscription(){
   const email=val('sEmail'),pass=val('sPass');
   if(!email||pass.length<8){return msg('Email valide et mot de passe de 8 caractères minimum requis.','err');}
-  const b=document.getElementById('btnSignup');b.disabled=true;b.textContent='Création…';
+  const b=document.getElementById('btnSignup');b.disabled=true;b.textContent='Vérification…';
+  // ── VERROU : seul un email ayant payé (présent dans acces_autorises) peut créer un compte ──
+  const {data:autorise,error:errVerif}=await sb.rpc('email_autorise',{p_email:email});
+  if(errVerif){b.disabled=false;b.textContent='Créer mon accès →';return msg("Impossible de vérifier ton accès pour le moment. Réessaie dans un instant.",'err');}
+  if(!autorise){b.disabled=false;b.textContent='Créer mon accès →';return msg("Cet email n'a pas encore d'accès au programme. Utilise bien l'adresse email saisie lors de ton paiement. En cas de souci, contacte Fabien.",'err');}
+  b.textContent='Création…';
   const {data,error}=await sb.auth.signUp({email,password:pass});
   if(error){b.disabled=false;b.textContent='Créer mon accès →';return msg(traduireErr(error.message),'err');}
   // crée la ligne profil
