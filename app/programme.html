@@ -208,15 +208,17 @@ function ouvrir(i){
   document.getElementById('mPourquoi').textContent=w.mental.pourquoi;
   document.getElementById('mConsigne').textContent=w.mental.consigne;
   document.getElementById('mDeclench').textContent='« '+w.mental.declencheur+' »';
+  // exos adaptés à la tranche d'âge du pilote (choisie au questionnaire)
+  const exosPourAge=s=>(PROFIL.tranche_age==='12-15'?(s.exos12||s.exos):(s.exos18||s.exos))||[];
   // lundi
   document.getElementById('lTitre').textContent=w.lundi.titre;
   document.getElementById('lFocus').textContent=w.lundi.focus;
-  document.getElementById('lExos').innerHTML=w.lundi.exos.map(e=>'<li>'+e+'</li>').join('');
+  document.getElementById('lExos').innerHTML=exosPourAge(w.lundi).map(e=>'<li>'+e+'</li>').join('');
   document.getElementById('lConseil').textContent=w.lundi.conseil;
   // jeudi
   document.getElementById('jTitre').textContent=w.jeudi.titre;
   document.getElementById('jFocus').textContent=w.jeudi.focus;
-  document.getElementById('jExos').innerHTML=w.jeudi.exos.map(e=>'<li>'+e+'</li>').join('');
+  document.getElementById('jExos').innerHTML=exosPourAge(w.jeudi).map(e=>'<li>'+e+'</li>').join('');
   document.getElementById('jConseil').textContent=w.jeudi.conseil;
   // états sauvegardés
   setChk('ckMental',p.mental_fait);
