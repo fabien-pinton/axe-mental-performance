@@ -926,13 +926,32 @@ function buildRapportHTML(name, prof, pct, desc, exos, ageKey){
     <div style="font-size:14px;line-height:1.85;color:#5A5040;">${prof.axeMethod}</div>
   </div>
 
-  <!-- PROCHAINE ÉTAPE -->
+  <!-- PROGRAMME PROFIL · 47€ -->
+  <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;border-bottom:1px solid #E8E1D4;padding-bottom:8px;margin-bottom:24px;">Aller plus loin · Ton profil</div>
+  <div style="border:1px solid #E8E1D4;border-left:3px solid #A8852A;background:#FDFAF5;padding:24px 28px;margin-bottom:20px;">
+    <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#1A1612;margin-bottom:8px;">Programme ${prof.name} — 47€</div>
+    <div style="font-size:14px;color:#5A5040;line-height:1.7;margin-bottom:20px;">8 semaines d'exercices adaptés précisément à ton profil. Plan semaine par semaine. Accès immédiat.</div>
+    <a href="${CFG.DEEP[prof.id] || 'https://fabien-pinton.fr'}" style="display:inline-block;background:#A8852A;color:#FDFAF5;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;">Accéder à mon programme — 47€ →</a>
+  </div>
+
+  <!-- PROGRAMME COMPLET · 997€ -->
+  <div style="border:1px solid #E8E1D4;border-left:3px solid #1A1612;background:#fff;padding:24px 28px;margin-bottom:20px;">
+    <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#1A1612;margin-bottom:8px;">Le programme complet — 997€</div>
+    <div style="font-size:14px;color:#5A5040;line-height:1.7;margin-bottom:18px;">L'accompagnement intégral sur les 5 dimensions mentales. Le travail de fond pour franchir un vrai palier.</div>
+    <div style="background:#FDFAF5;border-left:3px solid #A8852A;padding:16px 20px;margin-bottom:20px;font-size:13px;color:#5A5040;line-height:1.7;">
+      <strong style="color:#1A1612;">Tu deviens partenaire</strong><br>
+      En rejoignant le programme, tu fais partie de l'aventure AXE. Et si tu en parles autour de toi : en faisant la promotion du programme, un dédommagement financier est envisageable. Partage ce qui t'a fait progresser, et sois récompensé pour ça.
+    </div>
+    <a href="https://buy.stripe.com/3cI7sK8q04YC81fcZU8IU0j" style="display:inline-block;background:#1A1612;color:#FDFAF5;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;">Accéder au programme complet — 997€ →</a>
+  </div>
+
+  <!-- APPEL DÉCOUVERTE -->
   <div style="background:#1A1612;padding:40px 44px;text-align:center;position:relative;">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7A6020,#C9A84C,#7A6020);"></div>
-    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:12px;">Prochaine étape</div>
-    <div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#F7F3EC;margin-bottom:10px;">Aller plus loin avec Fabien</div>
-    <div style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:rgba(247,243,236,.75);margin-bottom:24px;line-height:1.7;">Ce rapport est un premier diagnostic. Pour un travail en profondeur sur ton profil ${prof.name}, réserve un appel découverte gratuit.</div>
-    <div style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:#A8852A;color:#FDFAF5;padding:14px 36px;">tidycal.com/fpinton/appel-decouverte</div>
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:12px;">Tu préfères en parler ?</div>
+    <div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#F7F3EC;margin-bottom:10px;">Réserve un appel découverte gratuit</div>
+    <div style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:rgba(247,243,236,.75);margin-bottom:24px;line-height:1.7;">Pour un travail en profondeur sur ton profil ${prof.name}, échangeons de vive voix.</div>
+    <a href="https://tidycal.com/fpinton/appel-decouverte" style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:#A8852A;color:#FDFAF5;text-decoration:none;padding:14px 36px;">Réserver mon appel gratuit →</a>
     <div style="margin-top:16px;font-size:11px;color:rgba(247,243,236,.4);">Ou contacte Fabien directement : contact@fabien-pinton.fr · 07.72.28.94.57</div>
   </div>
 
