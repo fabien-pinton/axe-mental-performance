@@ -847,17 +847,23 @@ function buildRapportHTML(name, prof, pct, desc, exos, ageKey){
   const date = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
   const scoreNames={stress:'Gestion du stress',peur:'Rapport à la peur',confiance:'Confiance en soi',plaisir:'Rapport au plaisir',compet:'Compétitivité'};
   const sorted = Object.entries(pct).sort((a,b)=>b[1]-a[1]);
+  const maxVal = sorted[0][1];
+  const minVal = sorted[sorted.length-1][1];
 
-  const scoresHTML = sorted.map(([k,v])=>`
+  const scoresHTML = sorted.map(([k,v])=>{
+    let color = '#A8852A';
+    if(v===maxVal) color = '#2E7D32';
+    else if(v===minVal) color = '#C0392B';
+    return `
     <tr>
       <td style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#5A5040;padding:10px 0;border-bottom:1px solid #F0EBE0;width:180px;">${scoreNames[k]}</td>
       <td style="padding:10px 16px 10px 0;border-bottom:1px solid #F0EBE0;">
         <div style="height:4px;background:#E8E1D4;border-radius:2px;">
-          <div style="height:100%;width:${v}%;background:#A8852A;border-radius:2px;"></div>
+          <div style="height:100%;width:${v}%;background:${color};border-radius:2px;"></div>
         </div>
       </td>
-      <td style="font-family:'Georgia',serif;font-size:20px;font-weight:700;color:#A8852A;padding:10px 0;border-bottom:1px solid #F0EBE0;white-space:nowrap;width:50px;">${v}%</td>
-    </tr>`).join('');
+      <td style="font-family:'Georgia',serif;font-size:20px;font-weight:700;color:${color};padding:10px 0;border-bottom:1px solid #F0EBE0;white-space:nowrap;width:50px;">${v}%</td>
+    </tr>`;}).join('');
 
   const exosHTML = exos.map((e,i)=>`
     <div style="border-left:3px solid #A8852A;padding:20px 24px;margin-bottom:16px;background:#FDFAF5;">
@@ -884,7 +890,6 @@ function buildRapportHTML(name, prof, pct, desc, exos, ageKey){
     <div>
       <div style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:8px;">Fabien Pinton · Méthode AXE Mental Performance®</div>
       <div style="font-family:Georgia,serif;font-size:36px;font-weight:700;color:#1A1612;letter-spacing:1px;margin-bottom:4px;">${name.charAt(0).toUpperCase()+name.slice(1)}</div>
-      <div style="font-size:12px;color:#8A7D6A;letter-spacing:1px;">${ageLbl}</div>
     </div>
     <div style="text-align:right;">
       <div style="font-size:10px;color:#8A7D6A;margin-bottom:4px;">Rapport personnel</div>
@@ -937,7 +942,7 @@ function buildRapportHTML(name, prof, pct, desc, exos, ageKey){
   <!-- PROGRAMME COMPLET · 997€ -->
   <div style="border:1px solid #E8E1D4;border-left:3px solid #1A1612;background:#fff;padding:24px 28px;margin-bottom:20px;">
     <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#1A1612;margin-bottom:8px;">Le programme complet — 997€</div>
-    <div style="font-size:14px;color:#5A5040;line-height:1.7;margin-bottom:18px;">L'accompagnement intégral sur les 5 dimensions mentales. Le travail de fond pour franchir un vrai palier.</div>
+    <div style="font-size:14px;color:#5A5040;line-height:1.7;margin-bottom:18px;">L'accompagnement intégral qui allie le corps et l'esprit. Le travail de fond physique et mental pour franchir un vrai palier.</div>
     <div style="background:#FDFAF5;border-left:3px solid #A8852A;padding:16px 20px;margin-bottom:20px;font-size:13px;color:#5A5040;line-height:1.7;">
       <strong style="color:#1A1612;">Tu deviens partenaire</strong><br>
       En rejoignant le programme, tu fais partie de l'aventure AXE. Et si tu en parles autour de toi : en faisant la promotion du programme, un dédommagement financier est envisageable. Partage ce qui t'a fait progresser, et sois récompensé pour ça.
