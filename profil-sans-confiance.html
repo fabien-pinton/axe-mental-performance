@@ -99,6 +99,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 .note-save:hover{background:var(--gold-d);}
 .pdf-download-btn{display:flex;align-items:center;gap:10px;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:transparent;border:1px solid var(--bdr2);color:var(--gold-d);padding:10px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;margin:16px 36px 0;width:calc(100% - 72px);justify-content:center;transition:all .3s;}
 .pdf-download-btn:hover{background:var(--gold);color:var(--cream2);border-color:var(--gold);}
+#ax-print-head{display:none;}
 @media print{
   nav,#pbar,.btn-unlock,.pdf-download-btn,.note-save,.cta-section,.avis-section,footer,.semaine.locked{display:none!important;}
   .note-ta{border:none;background:transparent;padding:0;min-height:0;resize:none;font-size:12px;}
@@ -108,6 +109,16 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   .exo{background:#f9f6f1;border-left:3px solid #A8852A;}
   .mantra-band{background:#1A1612;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .hero{background:#FDFAF5;}
+  /* ── Impression d'UNE seule semaine (downloadSemaine) ── */
+  body.ax-print-one .hero,
+  body.ax-print-one .mantra-band,
+  body.ax-print-one .programme-intro,
+  body.ax-print-one section.hero{display:none!important;}
+  body.ax-print-one .semaine{display:none!important;}
+  body.ax-print-one .semaine.ax-print-target{display:block!important;opacity:1!important;pointer-events:auto!important;page-break-inside:avoid;}
+  body.ax-print-one .semaine.ax-print-target .lock-overlay{display:none!important;}
+  body.ax-print-one #ax-print-head{display:block!important;}
+
 }
 
 @media(max-width:640px){
@@ -186,7 +197,8 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <div style="font-size:12px;color:rgba(247,243,236,.65);">Les exercices sont adaptes selon ton age.</div>
 </div>
 <div style="padding:18px 26px;">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+<div id="AX_K" onclick="AX_pick('10-12')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;"><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">10 - 12 ans</div><div style="font-size:10px;color:#5A5040;margin-top:3px;">Le plaisir d'abord</div></div>
 <div id="AX_A" onclick="AX_pick('12-15')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
 <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">12 - 15 ans</div>
 <div style="font-size:10px;color:#5A5040;margin-top:3px;">Jeune competiteur</div>
@@ -356,15 +368,17 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 
 <!-- SEMAINES -->
 <div class="semaines">
+<div id="ax-print-head" style="display:none;"><div style="border-bottom:2px solid #A8852A;padding-bottom:12px;margin-bottom:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.18em;color:#A8852A;">FABIEN PINTON</div><div style="font-size:9px;letter-spacing:.22em;color:#5A5040;font-family:'DM Sans',sans-serif;text-transform:uppercase;margin-top:2px;">Méthode AXE Mental Performance® · Préparation Mentale</div><div id="ax-print-sub" style="font-size:11px;color:#8A7D6A;font-style:italic;margin-top:8px;"></div></div></div>
+
   
         <div class="semaine active" id="s0">
           
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="0">
             <div class="sem-num">Semaine 01</div>
             <div class="sem-titre">Identifier les bases de ta confiance</div>
             <div class="sem-objectif">Comprendre sur quoi ta confiance repose actuellement — et commencer à la déplacer.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="0">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -398,12 +412,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s1">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="1">
             <div class="sem-num">Semaine 02</div>
             <div class="sem-titre">Construire la banque de preuves</div>
             <div class="sem-objectif">Accumuler des preuves de compétence basées sur le processus — pas sur les résultats.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="1">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -438,12 +452,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s2">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="2">
             <div class="sem-num">Semaine 03</div>
             <div class="sem-titre">Se juger sur le processus</div>
             <div class="sem-objectif">Après chaque compétition, s'évaluer sur ce qu'on a fait — pas sur ce qu'on a obtenu.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="2">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -478,12 +492,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s3">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="3">
             <div class="sem-num">Semaine 04</div>
             <div class="sem-titre">Stabiliser la confiance</div>
             <div class="sem-objectif">Rendre la confiance stable — indépendante des résultats et du regard des autres.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="3">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -507,12 +521,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s4">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="4">
             <div class="sem-num">Semaine 05</div>
             <div class="sem-titre">Confiance sous pression</div>
             <div class="sem-objectif">Maintenir la confiance même quand le résultat ne vient pas.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="4">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -536,12 +550,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s5">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="5">
             <div class="sem-num">Semaine 06</div>
             <div class="sem-titre">La confiance fondamentale</div>
             <div class="sem-objectif">Avoir une confiance qui ne depend plus d'aucun facteur externe.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="5">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -573,12 +587,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 
         <div class="semaine locked" id="s6">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="6">
             <div class="sem-num">Semaine 07</div>
             <div class="sem-titre">Confiance en compétition à fort enjeu</div>
             <div class="sem-objectif">Maintenir une confiance stable même dans les compétitions où le résultat compte vraiment.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="6">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -613,12 +627,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s7">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="7">
             <div class="sem-num">Semaine 08</div>
             <div class="sem-titre">La confiance fondamentale — bilan</div>
             <div class="sem-objectif">Confirmer que ta confiance repose désormais sur des bases internes stables.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="7">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -756,7 +770,7 @@ async function initAirtable() {
       if (!DATA.unlocked.includes(0)) DATA.unlocked.unshift(0);
     }
     for (let i = 0; i <= 7; i++) { const v = fields['Notes_S'+(i+1)]; if (v) DATA['note_'+i] = v; }
-    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
+    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; AX_syncContent(fields.Age); const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
   }
   renderLocks();
   restoreNotes();
@@ -831,12 +845,125 @@ restoreNotes();
 
 </script>
 <script>
+
+var AX_KIDS = {"mantra": "Je suis capable. J'ai mes preuves, et personne peut me les enlever.", "weeks": [{"titre": "D'où vient ta confiance ?", "obj": "Comprendre ce qui te rend sûr de toi... ou pas.", "exos": [{"t": "La météo de ma confiance", "d": "Cette semaine, chaque soir, dessine le temps qu'il fait dans ta tête : grand soleil (super confiant), nuages (bof), orage (zéro confiance). Note ce qui a fait changer la météo. Tu vas voir ce qui fait monter et descendre ta confiance.", "fl": "Ma mission", "ft": "Qu'est-ce qui change ma météo intérieure ?"}, {"t": "Qui décide de ma confiance ?", "d": "Quand tu te sens nul, c'est souvent à cause de quoi ? Une remarque ? Une défaite ? Note-le. On va apprendre à ne plus laisser les autres décider si tu es fort ou pas. C'est TOI le chef de ta confiance !", "fl": "Ma mission", "ft": "Je repère qui décide de ma confiance."}]}, {"titre": "Le coffre aux trésors", "obj": "Collectionner les preuves que tu es capable.", "exos": [{"t": "Mon coffre aux trésors", "d": "Trouve une jolie boîte. Chaque soir, écris sur un petit papier UNE chose que t'as bien faite (même petite : un beau virage, t'as aidé un copain, t'as osé un saut) et mets-le dans ta boîte. Quand tu doutes, ouvre ton coffre : ce sont tes preuves que t'es capable !", "fl": "Mon trésor", "ft": "Je collectionne mes preuves de réussite."}, {"t": "Pas besoin de gagner", "d": "Important : tes trésors n'ont pas besoin d'être des victoires ! Un progrès, un effort, un truc bien fait : ça compte autant. Mets-en au moins un chaque jour, même les jours où t'as perdu.", "fl": "Ma règle", "ft": "Un progrès compte autant qu'une victoire."}]}, {"titre": "Le juge, c'est moi", "obj": "Donner ton avis sur toi-même avant celui des autres.", "exos": [{"t": "Le jeu du 'moi d'abord'", "d": "Après chaque course, AVANT de demander à papa, maman ou au coach ce qu'ils pensent — décide TOI : est-ce que t'as bien roulé ? Donne-toi une note sur 10 et dis pourquoi. C'est ton avis qui compte le plus. Tu es le capitaine de ton vélo !", "fl": "Mon pouvoir", "ft": "Je me note moi-même, d'abord."}, {"t": "Mes 3 questions de juge", "d": "Pour te noter, pose-toi 3 questions : Est-ce que je me suis bien battu ? Est-ce que j'ai essayé mes trucs ? Est-ce que je me suis amusé ? Si oui, c'est une bonne course, même si t'as pas gagné !", "fl": "Mes critères", "ft": "Je me juge sur l'effort, pas sur le résultat."}]}, {"titre": "Le bouclier de super-pouvoirs", "obj": "Te rappeler tes forces qui ne changent jamais.", "exos": [{"t": "Mon bouclier de forces", "d": "Dessine un bouclier et écris dedans 3 super-pouvoirs que t'as pour de vrai en vélo (genre 'je suis rapide', 'je suis courageux', 'je ne lâche jamais'). Regarde ton bouclier avant chaque course. Personne ne peut te les enlever, même si tu perds !", "fl": "Mon trésor", "ft": "Mes forces sont à moi, pour toujours."}]}, {"titre": "Garder confiance même quand ça rate", "obj": "Rester sûr de toi même un jour sans victoire.", "exos": [{"t": "Le jour sans, c'est ok", "d": "Cette semaine, si t'as une mauvaise course, sors ton bouclier et ton coffre aux trésors tout de suite après. Relis tes forces et tes réussites. Une mauvaise course ne change pas qui tu es. Les champions ont aussi des jours sans !", "fl": "Mon réflexe", "ft": "Un jour sans n'efface pas mes forces."}]}, {"titre": "La confiance qui vient de moi", "obj": "Avoir une confiance qui ne dépend plus des autres.", "exos": [{"t": "Ma phrase de champion", "d": "Invente une phrase qui te rend fort, à toi (genre 'Je suis capable et je m'améliore chaque jour'). Dis-la à voix haute devant le miroir chaque matin cette semaine. Au début c'est bizarre, mais ton cerveau finit par y croire pour de vrai !", "fl": "Mon ancre", "ft": "Ma phrase de champion me rend fort."}]}, {"titre": "Confiant même dans les grandes courses", "obj": "Garder ta confiance quand la course compte vraiment.", "exos": [{"t": "Le rituel de confiance", "d": "Avant une course importante : relis 3 trésors de ton coffre, regarde ton bouclier, dis ta phrase de champion 3 fois. Ce rituel allume ta confiance exprès, comme on allume une lampe. Tu arrives au départ déjà fort !", "fl": "Mon rituel", "ft": "J'allume ma confiance avant le départ."}, {"t": "Le souvenir de force", "d": "Avant le départ, repense à un moment où t'as été vraiment fort sur le vélo. Revis-le dans ta tête 30 secondes. Ressens cette force. Emmène-la avec toi sur la piste.", "fl": "Mon souvenir", "ft": "Je revis un moment où j'étais fort."}]}, {"titre": "Ma confiance solide comme un roc", "obj": "Voir que ta confiance vient maintenant de l'intérieur.", "exos": [{"t": "Mon livre de confiance", "d": "Regarde tout ce que t'as construit : ton coffre plein de trésors, ton bouclier, ta phrase de champion. Ta confiance ne dépend plus des autres maintenant — elle vient de toi. Dessine-toi en pilote sûr de lui. Garde tout ça précieusement. Bravo !", "fl": "Mon trésor", "ft": "Ma confiance vient de moi, solide comme un roc."}]}]};
+
+var AX_ORIG = null; // stores original innerHTML of weeks to restore
+function AX_capture(){
+  if(AX_ORIG) return;
+  AX_ORIG = {sh:{}, ex:{}};
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    AX_ORIG.sh[el.getAttribute('data-axweek')] = el.innerHTML;
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    AX_ORIG.ex[el.getAttribute('data-axweek')] = el.innerHTML;
+  });
+}
+function AX_buildExo(e, n){
+  var num = ('0'+n).slice(-2);
+  var f = '';
+  if(e.fl || e.ft){
+    f = '<div class="exo-focus"><span class="focus-label">'+(e.fl||'')+'</span>'+
+        '<span class="focus-text">'+(e.ft||'')+'</span></div>';
+  }
+  return '<div class="exo"><div class="exo-num">'+num+'</div>'+
+         '<div class="exo-body"><div class="exo-title">'+e.t+'</div>'+
+         '<div class="exo-desc">'+e.d+'</div>'+f+'</div></div>';
+}
+function AX_applyKids(){
+  AX_capture();
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    var i = parseInt(el.getAttribute('data-axweek'),10);
+    var w = AX_KIDS.weeks[i];
+    if(!w) return;
+    var num = 'Semaine '+('0'+(i+1)).slice(-2);
+    el.innerHTML = '<div class="sem-num">'+num+'</div>'+
+                   '<div class="sem-titre">'+w.titre+'</div>'+
+                   '<div class="sem-objectif">'+w.obj+'</div>';
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    var i = parseInt(el.getAttribute('data-axweek'),10);
+    var w = AX_KIDS.weeks[i];
+    if(!w) return;
+    el.innerHTML = w.exos.map(function(e,idx){return AX_buildExo(e, idx+1);}).join('');
+  });
+}
+function AX_restoreOriginal(){
+  if(!AX_ORIG) return;
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    var k = el.getAttribute('data-axweek');
+    if(AX_ORIG.sh[k]!==undefined) el.innerHTML = AX_ORIG.sh[k];
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    var k = el.getAttribute('data-axweek');
+    if(AX_ORIG.ex[k]!==undefined) el.innerHTML = AX_ORIG.ex[k];
+  });
+}
+function AX_syncContent(age){
+  // called on confirm/load to set week content for the chosen age
+  if(age==='10-12'){ AX_applyKids(); }
+  else { AX_restoreOriginal(); }
+  try{ AX_refreshPdfLabels(); }catch(e){}
+}
+
+
+// ══ TÉLÉCHARGEMENT PDF D'UNE SEMAINE (via impression navigateur) ══
+function AX_weekProfilTag(){
+  var t=document.querySelector('.hero-profil-tag');
+  if(t){ return t.textContent.replace(/\s*·\s*8 semaines.*$/,'').trim(); }
+  return 'Programme AXE';
+}
+function downloadSemaine(n){
+  var sem=document.getElementById('s'+n);
+  if(!sem){return;}
+  // récupère le titre réellement affiché (donc adapté à l'âge)
+  var titreEl=sem.querySelector('.sem-titre');
+  var numEl=sem.querySelector('.sem-num');
+  var titre=titreEl?titreEl.textContent.trim():('Semaine '+(n+1));
+  var num=numEl?numEl.textContent.trim():('Semaine '+('0'+(n+1)).slice(-2));
+  // sous-titre du PDF
+  var sub=document.getElementById('ax-print-sub');
+  if(sub){ sub.textContent=AX_weekProfilTag()+' — '+num+' · '+titre; }
+  // titre du document = nom de fichier proposé par le navigateur
+  var prevTitle=document.title;
+  var safe=(num+' '+titre).replace(/[^\w\u00C0-\u017F \-]/g,'').trim();
+  document.title='AXE '+safe;
+  // cible la semaine et bascule en mode impression
+  document.querySelectorAll('.semaine.ax-print-target').forEach(function(e){e.classList.remove('ax-print-target');});
+  sem.classList.add('ax-print-target');
+  document.body.classList.add('ax-print-one');
+  function cleanup(){
+    document.body.classList.remove('ax-print-one');
+    sem.classList.remove('ax-print-target');
+    document.title=prevTitle;
+    window.removeEventListener('afterprint',cleanup);
+  }
+  window.addEventListener('afterprint',cleanup);
+  setTimeout(function(){ window.print(); }, 60);
+  // filet de sécurité si afterprint ne se déclenche pas
+  setTimeout(cleanup, 4000);
+}
+
+// ══ LIBELLÉS DES BOUTONS PDF (suivent le titre affiché / l'âge) ══
+function AX_refreshPdfLabels(){
+  document.querySelectorAll('.pdf-download-btn').forEach(function(btn){
+    var m=(btn.getAttribute('onclick')||'').match(/downloadSemaine\((\d+)\)/);
+    if(!m)return;
+    var n=parseInt(m[1],10);
+    var sem=document.getElementById('s'+n);
+    if(!sem)return;
+    var titreEl=sem.querySelector('.sem-titre');
+    var titre=titreEl?titreEl.textContent.trim():'';
+    btn.textContent='📄 Télécharger ma Semaine '+(n+1)+(titre?(' — '+titre):'')+' en PDF';
+  });
+}
+
 var AX_age=null;
-var AX_ids={"12-15":"AX_A","15-18":"AX_B"};
-var AX_m={"12-15":"Ta valeur ne change pas selon les résultats. Elle est là, tout le temps.","15-18":"Ta confiance se construit sur des preuves internes — pas sur l'approbation des autres."}; 
+var AX_ids={"10-12":"AX_K","12-15":"AX_A","15-18":"AX_B"};
+var AX_m={"10-12":"Je suis capable. J'ai mes preuves, et personne peut me les enlever.","12-15":"Ta valeur ne change pas selon les résultats. Elle est là, tout le temps.","15-18":"Ta confiance se construit sur des preuves internes — pas sur l'approbation des autres."}; 
 function AX_pick(age){
   AX_age=age;
-  ["AX_A","AX_B"].forEach(function(id){
+  ["AX_K","AX_A","AX_B"].forEach(function(id){
     var el=document.getElementById(id);
     if(el)el.style.border="2px solid #E8E1D4";
   });
@@ -849,6 +976,7 @@ function AX_go(){
   if(!AX_age)return;
   try{DATA.age=AX_age;save();}catch(e){}
   document.getElementById("AX_OV").style.display="none";
+  AX_syncContent(AX_age);
   var b=document.getElementById("AX_BADGE");
   if(b)b.textContent=AX_age;
   var mt=document.getElementById("AX_MANTRA");
@@ -862,6 +990,7 @@ function AX_open(){
   if(AX_age)AX_pick(AX_age);
 }
 window.addEventListener("load",function(){
+  try{ AX_refreshPdfLabels(); }catch(e){}
   var ov=document.getElementById("AX_OV");
   if(!ov)return;
   try{
@@ -869,6 +998,7 @@ window.addEventListener("load",function(){
       ov.style.display="none";
       AX_pick(DATA.age);
       AX_age=DATA.age;
+      AX_syncContent(DATA.age);
       var b=document.getElementById("AX_BADGE");
       if(b)b.textContent=DATA.age;
     }else{ov.style.display="flex";}

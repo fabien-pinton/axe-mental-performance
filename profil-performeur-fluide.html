@@ -99,6 +99,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 .note-save:hover{background:var(--gold-d);}
 .pdf-download-btn{display:flex;align-items:center;gap:10px;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:transparent;border:1px solid var(--bdr2);color:var(--gold-d);padding:10px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;margin:16px 36px 0;width:calc(100% - 72px);justify-content:center;transition:all .3s;}
 .pdf-download-btn:hover{background:var(--gold);color:var(--cream2);border-color:var(--gold);}
+#ax-print-head{display:none;}
 @media print{
   nav,#pbar,.btn-unlock,.pdf-download-btn,.note-save,.cta-section,.avis-section,footer,.semaine.locked{display:none!important;}
   .note-ta{border:none;background:transparent;padding:0;min-height:0;resize:none;font-size:12px;}
@@ -108,6 +109,16 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   .exo{background:#f9f6f1;border-left:3px solid #A8852A;}
   .mantra-band{background:#1A1612;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .hero{background:#FDFAF5;}
+  /* ── Impression d'UNE seule semaine (downloadSemaine) ── */
+  body.ax-print-one .hero,
+  body.ax-print-one .mantra-band,
+  body.ax-print-one .programme-intro,
+  body.ax-print-one section.hero{display:none!important;}
+  body.ax-print-one .semaine{display:none!important;}
+  body.ax-print-one .semaine.ax-print-target{display:block!important;opacity:1!important;pointer-events:auto!important;page-break-inside:avoid;}
+  body.ax-print-one .semaine.ax-print-target .lock-overlay{display:none!important;}
+  body.ax-print-one #ax-print-head{display:block!important;}
+
 }
 
 @media(max-width:640px){
@@ -186,7 +197,8 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <div style="font-size:12px;color:rgba(247,243,236,.65);">Les exercices sont adaptes selon ton age.</div>
 </div>
 <div style="padding:18px 26px;">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+<div id="AX_K" onclick="AX_pick('10-12')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;"><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">10 - 12 ans</div><div style="font-size:10px;color:#5A5040;margin-top:3px;">Le plaisir d'abord</div></div>
 <div id="AX_A" onclick="AX_pick('12-15')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
 <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">12 - 15 ans</div>
 <div style="font-size:10px;color:#5A5040;margin-top:3px;">Jeune competiteur</div>
@@ -216,7 +228,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   <div class="hero-inner">
     <div class="hero-profil-tag">Programme AXE · Le Performeur Fluide · 8 semaines</div>
     <h1 class="hero-title">TU PERFORMES<br>DÉJÀ.<br><em>MAINTIENS-LE.</em></h1>
-    <p class="hero-sub">Le Performeur Fluide est le profil le plus rare — et le plus fragile.<br><br>Tu joues dans ton jeu naturel. Tu performes quand ça compte. Tu n'as pas de blocage évident. Mais ce niveau-là ne se maintient pas seul. Il se travaille — pour qu'il tienne sous pression maximale, saison après saison, pas seulement quand tout va bien.</p>
+    <p class="hero-sub">Le Performeur Fluide est le profil le plus rare — et le plus fragile.<br><br>Tu roules dans ton pilotage naturel. Tu performes quand ça compte. Tu n'as pas de blocage évident. Mais ce niveau-là ne se maintient pas seul. Il se travaille — pour qu'il tienne sous pression maximale, saison après saison, pas seulement quand tout va bien.</p>
     <div style="margin-top:28px;display:inline-block;background:var(--cream3);border:1px solid var(--bdr2);border-left:3px solid var(--gold);padding:16px 24px;">
       <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px;">Ce que ce programme t'apporte</div>
       <div style="font-size:13px;color:var(--inkd);line-height:1.8;">Rendre ton niveau accessible <strong>en toutes circonstances</strong> — pas seulement quand tu es en forme. Sous pression maximale. Après une série de mauvais résultats. En déplacement, blessé, fatigué. <em>C'est ça, la vraie maîtrise.</em></div>
@@ -345,7 +357,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <!-- MANTRA -->
 <div class="mantra-band">
   <div class="mantra-label">Ton mantra de compétition</div>
-  <div class="mantra-text" id="AX_MANTRA">"Mon jeu naturel est disponible. En toutes circonstances."</div>
+  <div class="mantra-text" id="AX_MANTRA">"Mon pilotage naturel est disponible. En toutes circonstances."</div>
 </div>
 
 <!-- PROCESS INTRO -->
@@ -353,17 +365,17 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   <div class="pi-inner">
     <div class="pi-label">Le fil conducteur des 8 semaines</div>
     <h2 class="pi-title">PROTÉGER ET<br><em>ÉLEVER.</em></h2>
-    <p class="pi-desc">Tu n'as pas besoin de te réparer — tu as besoin de te blindar. Ce programme n'est pas conçu pour corriger un défaut. Il est conçu pour rendre ton jeu naturel <em>imperméable</em> : aux grands enjeux, aux séries difficiles, aux conditions extérieures. Ce que tu vis facilement aujourd'hui — le faire tenir quand tout pousse à lâcher.</p>
+    <p class="pi-desc">Tu n'as pas besoin de te réparer — tu as besoin de te blindar. Ce programme n'est pas conçu pour corriger un défaut. Il est conçu pour rendre ton pilotage naturel <em>imperméable</em> : aux grands enjeux, aux séries difficiles, aux conditions extérieures. Ce que tu vis facilement aujourd'hui — le faire tenir quand tout pousse à lâcher.</p>
 
     <!-- Les 3 risques spécifiques au Performeur Fluide -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:32px;">
       <div style="background:var(--cream2);border:1px solid var(--bdr);border-top:2px solid var(--gold);padding:20px 18px;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.08em;color:var(--gold-d);margin-bottom:8px;">LE PIÈGE DE L'ENJEU</div>
-        <div style="font-size:13px;color:var(--inkd);line-height:1.7;">Ton jeu naturel fonctionne quand il n'y a pas de pression. Les grandes compétitions, les sélections, les matchs décisifs — c'est là que ça se complique.</div>
+        <div style="font-size:13px;color:var(--inkd);line-height:1.7;">Ton pilotage naturel fonctionne quand il n'y a pas de pression. Les grandes compétitions, les sélections, les manches décisives — c'est là que ça se complique.</div>
       </div>
       <div style="background:var(--cream2);border:1px solid var(--bdr);border-top:2px solid var(--gold);padding:20px 18px;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.08em;color:var(--gold-d);margin-bottom:8px;">LA FRAGILITÉ DE LA FLUIDITÉ</div>
-        <div style="font-size:13px;color:var(--inkd);line-height:1.7;">Quand tu "es dans ta zone", tout va. Mais un mauvais résultat, une période difficile, et le doute s'installe. Ton jeu naturel devient inaccessible sans que tu saches pourquoi.</div>
+        <div style="font-size:13px;color:var(--inkd);line-height:1.7;">Quand tu "es dans ta zone", tout va. Mais un mauvais résultat, une période difficile, et le doute s'installe. Ton pilotage naturel devient inaccessible sans que tu saches pourquoi.</div>
       </div>
       <div style="background:var(--cream2);border:1px solid var(--bdr);border-top:2px solid var(--gold);padding:20px 18px;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.08em;color:var(--gold-d);margin-bottom:8px;">LE PLAFOND DE VERRE</div>
@@ -377,20 +389,22 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 
 <!-- SEMAINES -->
 <div class="semaines">
+<div id="ax-print-head" style="display:none;"><div style="border-bottom:2px solid #A8852A;padding-bottom:12px;margin-bottom:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.18em;color:#A8852A;">FABIEN PINTON</div><div style="font-size:9px;letter-spacing:.22em;color:#5A5040;font-family:'DM Sans',sans-serif;text-transform:uppercase;margin-top:2px;">Méthode AXE Mental Performance® · Préparation Mentale</div><div id="ax-print-sub" style="font-size:11px;color:#8A7D6A;font-style:italic;margin-top:8px;"></div></div></div>
+
   
         <div class="semaine active" id="s0">
           
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="0">
             <div class="sem-num">Semaine 01</div>
-            <div class="sem-titre">Reconnecter avec ton jeu naturel</div>
-            <div class="sem-objectif">Identifier ce que tu fais quand tu joues 'sans enjeu' — et comprendre comment le reproduire.</div>
+            <div class="sem-titre">Reconnecter avec ton pilotage naturel</div>
+            <div class="sem-objectif">Identifier ce que tu fais quand tu roules 'sans enjeu' — et comprendre comment le reproduire.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="0">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
-                <div class="exo-title">L'inventaire du jeu libre</div>
-                <div class="exo-desc">Pense à tes 3 meilleures performances — pas les meilleures résultats, les meilleures sensations. Qu'est-ce que tu faisais différemment ? Comment tu te sentais ? À quoi tu pensais pendant ces moments ? Note tout. Ce sont les conditions de ton jeu naturel.</div>
+                <div class="exo-title">L'inventaire du pilotage libre</div>
+                <div class="exo-desc">Pense à tes 3 meilleures performances — pas les meilleures résultats, les meilleures sensations. Qu'est-ce que tu faisais différemment ? Comment tu te sentais ? À quoi tu pensais pendant ces moments ? Note tout. Ce sont les conditions de ton pilotage naturel.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
                   <span class="focus-text">Qu'est-ce que je faisais quand je jouais au meilleur de moi-même ?</span>
@@ -400,11 +414,11 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <div class="exo">
               <div class="exo-num">02</div>
               <div class="exo-body">
-                <div class="exo-title">Reproduire les conditions du jeu libre</div>
-                <div class="exo-desc">Parmi les conditions que tu as identifiées, lesquelles dépendent de toi ? La concentration sur les gestes, l'absence de calcul, la prise de risque spontanée ? Construis 3 intentions de jeu basées sur ces conditions. Ce sont elles que tu vas chercher en compétition.</div>
+                <div class="exo-title">Reproduire les conditions du pilotage libre</div>
+                <div class="exo-desc">Parmi les conditions que tu as identifiées, lesquelles dépendent de toi ? La concentration sur les gestes, l'absence de calcul, la prise de risque spontanée ? Construis 3 intentions de pilotage basées sur ces conditions. Ce sont elles que tu vas chercher en compétition.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Les conditions de mon jeu naturel — je les crée moi-même.</span>
+                  <span class="focus-text">Les conditions de mon pilotage naturel — je les crée moi-même.</span>
                 </div>
               </div>
             </div></div>
@@ -414,36 +428,36 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <textarea class="note-ta" id="note-0" placeholder="Note ici tes observations, tes difficultés, ce qui a bien marché..."></textarea>
             <button class="note-save" onclick="saveNote(0)">Enregistrer mes notes</button>
           </div>
-          <button class="pdf-download-btn" onclick="downloadSemaine(0)">📄 Télécharger ma Semaine 1 — Reconnecter avec ton jeu naturel en PDF</button>
+          <button class="pdf-download-btn" onclick="downloadSemaine(0)">📄 Télécharger ma Semaine 1 — Reconnecter avec ton pilotage naturel en PDF</button>
           <button class="btn-unlock" onclick="unlockNext(0)">J'ai complété cette semaine →</button>
         </div>
         <div class="semaine locked" id="s1">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="1">
             <div class="sem-num">Semaine 02</div>
-            <div class="sem-titre">Le focus jeu en compétition</div>
-            <div class="sem-objectif">Remplacer le focus résultat par le focus sur les actions qui te mettent dans ton jeu naturel.</div>
+            <div class="sem-titre">Le focus pilotage en compétition</div>
+            <div class="sem-objectif">Remplacer le focus résultat par le focus sur les actions qui te mettent dans ton pilotage naturel.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="1">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
-                <div class="exo-title">Les 3 intentions de jeu — version plaisir</div>
-                <div class="exo-desc">Tes 3 intentions doivent être des actions qui, quand tu les fais, te mettent dans ton état de jeu naturel. Ex: 'je prends le premier ballon', 'j'attaque sur mes appuis', 'je tente le geste instinctif'. Ces actions-là génèrent le plaisir. Et le plaisir génère la performance.</div>
+                <div class="exo-title">Les 3 intentions de pilotage — version plaisir</div>
+                <div class="exo-desc">Tes 3 intentions doivent être des actions qui, quand tu les fais, te mettent dans ton état de pilotage naturel. Ex: 'je sors le premier du portillon', 'j'attaque la première bosse', 'je tente la trajectoire instinctive'. Ces actions-là génèrent le plaisir. Et le plaisir génère la performance.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Ce que je fais qui me met dans mon jeu naturel.</span>
+                  <span class="focus-text">Ce que je fais qui me met dans mon pilotage naturel.</span>
                 </div>
               </div>
             </div>
             <div class="exo">
               <div class="exo-num">02</div>
               <div class="exo-body">
-                <div class="exo-title">Jouer pour le jeu — pas pour le score</div>
-                <div class="exo-desc">Avant le départ, une phrase à te dire à voix haute ou mentalement : 'je joue pour le jeu'. Pas pour le classement. Pas pour les spectateurs. Pour le jeu lui-même. Cette décision réinitialise ton état mental avant même de commencer.</div>
+                <div class="exo-title">Rouler pour le plaisir — pas pour le score</div>
+                <div class="exo-desc">Avant le départ, une phrase à te dire à voix haute ou mentalement : 'je roule pour le plaisir'. Pas pour le classement. Pas pour les spectateurs. Pour le plaisir de piloter. Cette décision réinitialise ton état mental avant même de commencer.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Je joue pour le jeu. Le score vient après.</span>
+                  <span class="focus-text">Je roule pour le plaisir. Le score vient après.</span>
                 </div>
               </div>
             </div></div>
@@ -454,25 +468,25 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <textarea class="note-ta" id="note-1" placeholder="Note tes observations, tes difficultés, ce qui a bien marché..."></textarea>
             <button class="note-save" onclick="saveNote(1)">Enregistrer mes notes</button>
           </div>
-          <button class="pdf-download-btn" onclick="downloadSemaine(1)">📄 Télécharger ma Semaine 2 — Le focus jeu en compétition en PDF</button>
+          <button class="pdf-download-btn" onclick="downloadSemaine(1)">📄 Télécharger ma Semaine 2 — Le focus pilotage en compétition en PDF</button>
           <button class="btn-unlock" onclick="unlockNext(1)">J'ai complété cette semaine →</button>
         </div>
         <div class="semaine locked" id="s2">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="2">
             <div class="sem-num">Semaine 03</div>
             <div class="sem-titre">Protéger le plaisir sous pression</div>
-            <div class="sem-objectif">Maintenir le plaisir du jeu même quand l'enjeu monte.</div>
+            <div class="sem-objectif">Maintenir le plaisir de rouler même quand l'enjeu monte.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="2">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
                 <div class="exo-title">La reconnexion au plaisir en compétition</div>
-                <div class="exo-desc">Quand tu sens que la pression de résultat monte en compétition : 5 secondes. Rappelle-toi pourquoi tu aimes ce sport — pas aujourd'hui, en général. Une image, une sensation, un moment. Puis reviens à tes 3 intentions. Ce rituel prend 5 secondes et protège ton jeu naturel.</div>
+                <div class="exo-desc">Quand tu sens que la pression de résultat monte en compétition : 5 secondes. Rappelle-toi pourquoi tu aimes ce sport — pas aujourd'hui, en général. Une image, une sensation, un moment. Puis reviens à tes 3 intentions. Ce rituel prend 5 secondes et protège ton pilotage naturel.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Je me rappelle pourquoi j'aime ça. Puis je reviens au jeu.</span>
+                  <span class="focus-text">Je me rappelle pourquoi j'aime ça. Puis je reviens à mon pilotage.</span>
                 </div>
               </div>
             </div></div>
@@ -488,12 +502,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s3">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="3">
             <div class="sem-num">Semaine 04</div>
             <div class="sem-titre">Régularité sans dépendre du plaisir</div>
             <div class="sem-objectif">Être capable de performer même quand le plaisir n'est pas spontanément là.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="3">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -517,20 +531,20 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s4">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="4">
             <div class="sem-num">Semaine 05</div>
-            <div class="sem-titre">Le jeu comme stratégie</div>
-            <div class="sem-objectif">Comprendre que jouer pour le plaisir est ta meilleure stratégie de performance.</div>
+            <div class="sem-titre">Le plaisir comme stratégie</div>
+            <div class="sem-objectif">Comprendre que rouler pour le plaisir est ta meilleure stratégie de performance.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="4">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
                 <div class="exo-title">Analyser tes meilleures performances</div>
-                <div class="exo-desc">Reprends tes 5 meilleures compétitions en termes de résultats. Dans combien d'entre elles tu t'es éclaté ? Dans combien tu as joué pour le jeu plutôt que pour le score ? La corrélation est là. Jouer pour le jeu est ta meilleure stratégie de performance — pas un luxe.</div>
+                <div class="exo-desc">Reprends tes 5 meilleures compétitions en termes de résultats. Dans combien d'entre elles tu t'es éclaté ? Dans combien tu as roulé pour le plaisir plutôt que pour le score ? La corrélation est là. Rouler pour le plaisir est ta meilleure stratégie de performance — pas un luxe.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Jouer pour le jeu = ma meilleure stratégie de performance.</span>
+                  <span class="focus-text">Rouler pour le plaisir = ma meilleure stratégie de performance.</span>
                 </div>
               </div>
             </div></div>
@@ -541,25 +555,25 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <textarea class="note-ta" id="note-4" placeholder="Note tes observations, tes difficultés, ce qui a bien marché..."></textarea>
             <button class="note-save" onclick="saveNote(4)">Enregistrer mes notes</button>
           </div>
-          <button class="pdf-download-btn" onclick="downloadSemaine(4)">📄 Télécharger ma Semaine 5 — Le jeu comme stratégie en PDF</button>
+          <button class="pdf-download-btn" onclick="downloadSemaine(4)">📄 Télécharger ma Semaine 5 — Le plaisir comme stratégie en PDF</button>
           <button class="btn-unlock" onclick="unlockNext(4)">J'ai complété cette semaine →</button>
         </div>
         <div class="semaine locked" id="s5">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="5">
             <div class="sem-num">Semaine 06</div>
-            <div class="sem-titre">Jouer son jeu en toutes circonstances</div>
-            <div class="sem-objectif">Que le jeu naturel devienne accessible même sous pression maximale.</div>
+            <div class="sem-titre">Piloter librement en toutes circonstances</div>
+            <div class="sem-objectif">Que le pilotage naturel devienne accessible même sous pression maximale.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="5">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
                 <div class="exo-title">Bilan : plaisir vs résultat sur 6 semaines</div>
-                <div class="exo-desc">Sur tes 6 semaines de programme : dans quelles compétitions tu t'es le plus éclaté ? Est-ce que le résultat a suivi ? La réponse te donnera une information définitive sur le lien entre ton plaisir de jeu et tes performances. Ce lien est ta boussole.</div>
+                <div class="exo-desc">Sur tes 6 semaines de programme : dans quelles compétitions tu t'es le plus éclaté ? Est-ce que le résultat a suivi ? La réponse te donnera une information définitive sur le lien entre ton plaisir de rouler et tes performances. Ce lien est ta boussole.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Mon plaisir de jeu est mon indicateur de performance.</span>
+                  <span class="focus-text">Mon plaisir de rouler est mon indicateur de performance.</span>
                 </div>
               </div>
             </div></div>
@@ -583,20 +597,20 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 
         <div class="semaine locked" id="s6">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="6">
             <div class="sem-num">Semaine 07</div>
             <div class="sem-titre">Protéger le plaisir en compétition de sélection</div>
-            <div class="sem-objectif">Maintenir le jeu naturel même quand l'enjeu extérieur est maximum.</div>
+            <div class="sem-objectif">Maintenir le pilotage naturel même quand l'enjeu extérieur est maximum.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="6">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
                 <div class="exo-title">L'ancre pré-compétition revisitée</div>
-                <div class="exo-desc">Avant ta prochaine compétition à fort enjeu : 5 minutes de ton échauffement habituel en solo, juste pour retrouver la sensation de jouer. Pas pour te préparer — pour te rappeler comment ça se sent quand tu joues bien. Emmène cette sensation sur le terrain comme point de départ.</div>
+                <div class="exo-desc">Avant ta prochaine compétition à fort enjeu : 5 minutes de ton échauffement habituel en solo, juste pour retrouver la sensation de bien rouler. Pas pour te préparer — pour te rappeler comment ça se sent quand tu pilotes bien. Emmène cette sensation sur la piste comme point de départ.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Je commence chaque compétition dans la sensation de bien jouer.</span>
+                  <span class="focus-text">Je commence chaque compétition dans la sensation de bien rouler.</span>
                 </div>
               </div>
             </div>
@@ -604,10 +618,10 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
               <div class="exo-num">02</div>
               <div class="exo-body">
                 <div class="exo-title">Le débrief plaisir vs résultat</div>
-                <div class="exo-desc">Après chaque compétition cette semaine : note de 1 à 10 ton plaisir de jeu et ton résultat séparément. Observe le lien sur 7 semaines. La plupart du temps tu verras que les meilleures performances arrivent quand le plaisir est élevé. C'est ta boussole.</div>
+                <div class="exo-desc">Après chaque compétition cette semaine : note de 1 à 10 ton plaisir de rouler et ton résultat séparément. Observe le lien sur 7 semaines. La plupart du temps tu verras que les meilleures performances arrivent quand le plaisir est élevé. C'est ta boussole.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Plaisir de jeu élevé = performance élevée. Ce n'est pas un hasard.</span>
+                  <span class="focus-text">Plaisir de rouler élevé = performance élevée. Ce n'est pas un hasard.</span>
                 </div>
               </div>
             </div>
@@ -623,12 +637,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s7">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="7">
             <div class="sem-num">Semaine 08</div>
-            <div class="sem-titre">Jouer libéré — bilan et autonomie</div>
-            <div class="sem-objectif">Que le jeu naturel soit ton point de départ par défaut, quelle que soit la compétition.</div>
+            <div class="sem-titre">Piloter libéré — bilan et autonomie</div>
+            <div class="sem-objectif">Que le pilotage naturel soit ton point de départ par défaut, quelle que soit la compétition.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="7">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -647,7 +661,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
             <textarea class="note-ta" id="note-7" placeholder="Note tes observations, tes difficultés, ce qui a bien marché..."></textarea>
             <button class="note-save" onclick="saveNote(7)">Enregistrer mes notes</button>
           </div>
-          <button class="pdf-download-btn" onclick="downloadSemaine(7)">📄 Télécharger ma Semaine 8 — Jouer libéré — bilan et autonomie en PDF</button>
+          <button class="pdf-download-btn" onclick="downloadSemaine(7)">📄 Télécharger ma Semaine 8 — Piloter libéré — bilan et autonomie en PDF</button>
           
         </div>
 </div>
@@ -659,7 +673,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   <div class="cta-inner">
     <div class="cta-label">Prochaine étape</div>
     <h2 class="cta-title">LE NIVEAU<br><em>SUPÉRIEUR.</em></h2>
-    <p class="cta-sub">Tu as le jeu naturel. L'étape d'après, c'est le rendre <strong>inébranlable</strong> — sous n'importe quelle pression. C'est l'objet du programme complet AXE Mental Performance® : 24 semaines de travail mental ET physique, avec un suivi personnalisé et des débriefs visio directs avec Fabien.</p>
+    <p class="cta-sub">Tu as le pilotage naturel. L'étape d'après, c'est le rendre <strong>inébranlable</strong> — sous n'importe quelle pression. C'est l'objet du programme complet AXE Mental Performance® : 24 semaines de travail mental ET physique, avec un suivi personnalisé et des débriefs visio directs avec Fabien.</p>
 
     <div class="cta-cards">
       <div class="cta-card featured">
@@ -767,7 +781,7 @@ async function initAirtable() {
       if (!DATA.unlocked.includes(0)) DATA.unlocked.unshift(0);
     }
     for (let i = 0; i <= 7; i++) { const v = fields['Notes_S'+(i+1)]; if (v) DATA['note_'+i] = v; }
-    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
+    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; AX_syncContent(fields.Age); const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
   }
   renderLocks();
   restoreNotes();
@@ -842,12 +856,125 @@ restoreNotes();
 
 </script>
 <script>
+
+var AX_KIDS = {"mantra": "Je roule comme un mardi soir au club : libre, et tout s'enchaîne.", "weeks": [{"titre": "Comment tu roules quand tu t'amuses", "obj": "Découvrir ce que tu fais quand tu roules sans pression.", "exos": [{"t": "Le détective du fun", "d": "Cette semaine, quand tu roules juste pour t'amuser (avec des copains, sans course), observe-toi : comment tu roules ? Détendu ? Tu oses plus ? Tu souris ? Note ce qui est différent de quand t'es en compétition. C'est ÇA ton vrai super-pilotage !", "fl": "Ma mission", "ft": "Comment je roule quand je m'éclate ?"}, {"t": "Le film de mon meilleur moment", "d": "Repense au moment où tu t'es le PLUS amusé à vélo. Rejoue ce film dans ta tête : qu'est-ce que tu ressentais ? Garde cette sensation au chaud, on va s'en servir.", "fl": "Ma mission", "ft": "Je me rappelle mon plus beau moment de vélo."}]}, {"titre": "La mission rigolote", "obj": "Choisir un petit défi pour toi à chaque course, au lieu de penser au résultat.", "exos": [{"t": "Ma mission secrète", "d": "Avant chaque course, choisis UNE petite mission rigolote (pas gagner !) : par exemple 'je sors super vite du portillon' ou 'je passe le 1er virage à fond'. Concentre-toi seulement sur ta mission. Quand on se concentre sur une mission, on oublie la pression et on roule mieux !", "fl": "Mon plaisir", "ft": "Ma mission rigolote, pas le classement."}, {"t": "Le smiley après la course", "d": "Après la course, demande-toi : est-ce que j'ai réussi ma mission ? Et est-ce que je me suis amusé ? Dessine un smiley qui correspond. Le but du jeu, c'est le smiley content, pas la place !", "fl": "Ma récompense", "ft": "Je gagne quand mon smiley est content."}]}, {"titre": "Garder le sourire même quand ça compte", "obj": "Ne pas perdre le plaisir quand la course devient importante.", "exos": [{"t": "Le bouton sourire", "d": "Quand une course commence à devenir importante et que tu sens le plaisir partir, appuie sur ton 'bouton sourire' : souris exprès pendant 5 secondes (même si c'est forcé !). C'est magique : le sourire envoie un message à ton cerveau 'tout va bien, on s'amuse'. Et ton plaisir revient.", "fl": "Mon pouvoir", "ft": "Je souris exprès et le plaisir revient."}]}, {"titre": "Rouler bien même sans envie", "obj": "Apprendre à bien rouler même les jours où t'as moins le sourire.", "exos": [{"t": "Le démarrage en douceur", "d": "Les jours où t'as moins envie, ne te force pas à fond tout de suite. Commence ta séance par ton truc préféré (ton saut adoré, un virage que t'aimes). Le plaisir revient souvent en roulant. Comme une voiture qui démarre doucement avant d'accélérer.", "fl": "Mon astuce", "ft": "Je commence par ce que j'aime, le plaisir revient."}]}, {"titre": "S'amuser, c'est ma stratégie", "obj": "Comprendre que rouler pour le plaisir te fait aller plus vite.", "exos": [{"t": "La preuve par le fun", "d": "Cette semaine, compare : tes courses où tu t'es amusé VS celles où t'étais stressé. Dans lesquelles t'as le mieux roulé ? Presque toujours quand tu t'amuses ! C'est prouvé : le plaisir, c'est pas un bonus, c'est ton moteur secret.", "fl": "Ma découverte", "ft": "Je roule mieux quand je m'amuse, c'est prouvé."}]}, {"titre": "Mon pilotage même quand ça chauffe", "obj": "Retrouver ton pilotage naturel même sous grosse pression.", "exos": [{"t": "Le mardi soir au club", "d": "Au début d'une grosse course, imagine que t'es juste à l'entraînement un mardi soir tranquille, à t'amuser comme d'habitude. Les enjeux disparaissent 2 minutes dans ta tête. Puis tu repars de là, détendu. Ton vrai niveau revient tout seul.", "fl": "Mon image", "ft": "Je roule comme un mardi soir tranquille."}]}, {"titre": "Le plaisir dans les grandes courses", "obj": "Garder ton sourire même dans la course la plus importante.", "exos": [{"t": "La recharge de plaisir", "d": "La veille d'une grosse course, passe 10 minutes à faire ton truc préféré à vélo, juste pour le fun, sans enjeu. Ça recharge ta batterie de plaisir pour le lendemain. Tu arrives à la course avec le sourire déjà branché !", "fl": "Mon rituel", "ft": "Je recharge mon plaisir avant la grosse course."}, {"t": "Mes 3 trucs que j'adore", "d": "Avant le départ, dis-toi 3 choses que t'adores dans le vélo. Reconnecte-toi à ça exprès. Le plaisir devient ton point de départ au lieu de la pression.", "fl": "Mon ancre", "ft": "Je me branche sur ce que j'adore."}]}, {"titre": "Le pilote qui s'amuse toujours", "obj": "Faire le bilan : le plaisir est devenu ton point de départ.", "exos": [{"t": "Mon livre du plaisir", "d": "Regarde tout ce que t'as appris : ta mission rigolote, ton bouton sourire, le mardi soir, ta recharge de plaisir. Maintenant, t'es un pilote qui s'amuse même quand ça compte ! Dessine-toi avec un grand sourire sur le vélo. Garde ce livre. Bravo !", "fl": "Mon trésor", "ft": "Le plaisir est devenu mon super-carburant."}]}]};
+
+var AX_ORIG = null; // stores original innerHTML of weeks to restore
+function AX_capture(){
+  if(AX_ORIG) return;
+  AX_ORIG = {sh:{}, ex:{}};
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    AX_ORIG.sh[el.getAttribute('data-axweek')] = el.innerHTML;
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    AX_ORIG.ex[el.getAttribute('data-axweek')] = el.innerHTML;
+  });
+}
+function AX_buildExo(e, n){
+  var num = ('0'+n).slice(-2);
+  var f = '';
+  if(e.fl || e.ft){
+    f = '<div class="exo-focus"><span class="focus-label">'+(e.fl||'')+'</span>'+
+        '<span class="focus-text">'+(e.ft||'')+'</span></div>';
+  }
+  return '<div class="exo"><div class="exo-num">'+num+'</div>'+
+         '<div class="exo-body"><div class="exo-title">'+e.t+'</div>'+
+         '<div class="exo-desc">'+e.d+'</div>'+f+'</div></div>';
+}
+function AX_applyKids(){
+  AX_capture();
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    var i = parseInt(el.getAttribute('data-axweek'),10);
+    var w = AX_KIDS.weeks[i];
+    if(!w) return;
+    var num = 'Semaine '+('0'+(i+1)).slice(-2);
+    el.innerHTML = '<div class="sem-num">'+num+'</div>'+
+                   '<div class="sem-titre">'+w.titre+'</div>'+
+                   '<div class="sem-objectif">'+w.obj+'</div>';
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    var i = parseInt(el.getAttribute('data-axweek'),10);
+    var w = AX_KIDS.weeks[i];
+    if(!w) return;
+    el.innerHTML = w.exos.map(function(e,idx){return AX_buildExo(e, idx+1);}).join('');
+  });
+}
+function AX_restoreOriginal(){
+  if(!AX_ORIG) return;
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    var k = el.getAttribute('data-axweek');
+    if(AX_ORIG.sh[k]!==undefined) el.innerHTML = AX_ORIG.sh[k];
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    var k = el.getAttribute('data-axweek');
+    if(AX_ORIG.ex[k]!==undefined) el.innerHTML = AX_ORIG.ex[k];
+  });
+}
+function AX_syncContent(age){
+  // called on confirm/load to set week content for the chosen age
+  if(age==='10-12'){ AX_applyKids(); }
+  else { AX_restoreOriginal(); }
+  try{ AX_refreshPdfLabels(); }catch(e){}
+}
+
+
+// ══ TÉLÉCHARGEMENT PDF D'UNE SEMAINE (via impression navigateur) ══
+function AX_weekProfilTag(){
+  var t=document.querySelector('.hero-profil-tag');
+  if(t){ return t.textContent.replace(/\s*·\s*8 semaines.*$/,'').trim(); }
+  return 'Programme AXE';
+}
+function downloadSemaine(n){
+  var sem=document.getElementById('s'+n);
+  if(!sem){return;}
+  // récupère le titre réellement affiché (donc adapté à l'âge)
+  var titreEl=sem.querySelector('.sem-titre');
+  var numEl=sem.querySelector('.sem-num');
+  var titre=titreEl?titreEl.textContent.trim():('Semaine '+(n+1));
+  var num=numEl?numEl.textContent.trim():('Semaine '+('0'+(n+1)).slice(-2));
+  // sous-titre du PDF
+  var sub=document.getElementById('ax-print-sub');
+  if(sub){ sub.textContent=AX_weekProfilTag()+' — '+num+' · '+titre; }
+  // titre du document = nom de fichier proposé par le navigateur
+  var prevTitle=document.title;
+  var safe=(num+' '+titre).replace(/[^\w\u00C0-\u017F \-]/g,'').trim();
+  document.title='AXE '+safe;
+  // cible la semaine et bascule en mode impression
+  document.querySelectorAll('.semaine.ax-print-target').forEach(function(e){e.classList.remove('ax-print-target');});
+  sem.classList.add('ax-print-target');
+  document.body.classList.add('ax-print-one');
+  function cleanup(){
+    document.body.classList.remove('ax-print-one');
+    sem.classList.remove('ax-print-target');
+    document.title=prevTitle;
+    window.removeEventListener('afterprint',cleanup);
+  }
+  window.addEventListener('afterprint',cleanup);
+  setTimeout(function(){ window.print(); }, 60);
+  // filet de sécurité si afterprint ne se déclenche pas
+  setTimeout(cleanup, 4000);
+}
+
+// ══ LIBELLÉS DES BOUTONS PDF (suivent le titre affiché / l'âge) ══
+function AX_refreshPdfLabels(){
+  document.querySelectorAll('.pdf-download-btn').forEach(function(btn){
+    var m=(btn.getAttribute('onclick')||'').match(/downloadSemaine\((\d+)\)/);
+    if(!m)return;
+    var n=parseInt(m[1],10);
+    var sem=document.getElementById('s'+n);
+    if(!sem)return;
+    var titreEl=sem.querySelector('.sem-titre');
+    var titre=titreEl?titreEl.textContent.trim():'';
+    btn.textContent='📄 Télécharger ma Semaine '+(n+1)+(titre?(' — '+titre):'')+' en PDF';
+  });
+}
+
 var AX_age=null;
-var AX_ids={"12-15":"AX_A","15-18":"AX_B"};
-var AX_m={"12-15":"Joue pour toi. Le plaisir que tu ressens, c'est déjà de la performance.","15-18":"Ton jeu naturel est ta vraie arme — protège-le même sous pression."}; 
+var AX_ids={"10-12":"AX_K","12-15":"AX_A","15-18":"AX_B"};
+var AX_m={"10-12":"Je roule comme un mardi soir au club : libre, et tout s'enchaîne.","12-15":"Roule pour toi. Le plaisir que tu ressens, c'est déjà de la performance.","15-18":"Ton pilotage naturel est ta vraie arme — protège-le même sous pression."}; 
 function AX_pick(age){
   AX_age=age;
-  ["AX_A","AX_B"].forEach(function(id){
+  ["AX_K","AX_A","AX_B"].forEach(function(id){
     var el=document.getElementById(id);
     if(el)el.style.border="2px solid #E8E1D4";
   });
@@ -860,6 +987,7 @@ function AX_go(){
   if(!AX_age)return;
   try{DATA.age=AX_age;save();}catch(e){}
   document.getElementById("AX_OV").style.display="none";
+  AX_syncContent(AX_age);
   var b=document.getElementById("AX_BADGE");
   if(b)b.textContent=AX_age;
   var mt=document.getElementById("AX_MANTRA");
@@ -873,6 +1001,7 @@ function AX_open(){
   if(AX_age)AX_pick(AX_age);
 }
 window.addEventListener("load",function(){
+  try{ AX_refreshPdfLabels(); }catch(e){}
   var ov=document.getElementById("AX_OV");
   if(!ov)return;
   try{
@@ -880,6 +1009,7 @@ window.addEventListener("load",function(){
       ov.style.display="none";
       AX_pick(DATA.age);
       AX_age=DATA.age;
+      AX_syncContent(DATA.age);
       var b=document.getElementById("AX_BADGE");
       if(b)b.textContent=DATA.age;
     }else{ov.style.display="flex";}

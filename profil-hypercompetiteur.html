@@ -99,6 +99,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 .note-save:hover{background:var(--gold-d);}
 .pdf-download-btn{display:flex;align-items:center;gap:10px;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:transparent;border:1px solid var(--bdr2);color:var(--gold-d);padding:10px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;margin:16px 36px 0;width:calc(100% - 72px);justify-content:center;transition:all .3s;}
 .pdf-download-btn:hover{background:var(--gold);color:var(--cream2);border-color:var(--gold);}
+#ax-print-head{display:none;}
 @media print{
   nav,#pbar,.btn-unlock,.pdf-download-btn,.note-save,.cta-section,.avis-section,footer,.semaine.locked{display:none!important;}
   .note-ta{border:none;background:transparent;padding:0;min-height:0;resize:none;font-size:12px;}
@@ -108,6 +109,16 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   .exo{background:#f9f6f1;border-left:3px solid #A8852A;}
   .mantra-band{background:#1A1612;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .hero{background:#FDFAF5;}
+  /* ── Impression d'UNE seule semaine (downloadSemaine) ── */
+  body.ax-print-one .hero,
+  body.ax-print-one .mantra-band,
+  body.ax-print-one .programme-intro,
+  body.ax-print-one section.hero{display:none!important;}
+  body.ax-print-one .semaine{display:none!important;}
+  body.ax-print-one .semaine.ax-print-target{display:block!important;opacity:1!important;pointer-events:auto!important;page-break-inside:avoid;}
+  body.ax-print-one .semaine.ax-print-target .lock-overlay{display:none!important;}
+  body.ax-print-one #ax-print-head{display:block!important;}
+
 }
 
 @media(max-width:640px){
@@ -186,7 +197,8 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <div style="font-size:12px;color:rgba(247,243,236,.65);">Les exercices sont adaptes selon ton age.</div>
 </div>
 <div style="padding:18px 26px;">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+<div id="AX_K" onclick="AX_pick('10-12')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;"><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">10 - 12 ans</div><div style="font-size:10px;color:#5A5040;margin-top:3px;">Le plaisir d'abord</div></div>
 <div id="AX_A" onclick="AX_pick('12-15')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
 <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">12 - 15 ans</div>
 <div style="font-size:10px;color:#5A5040;margin-top:3px;">Jeune competiteur</div>
@@ -341,7 +353,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <!-- MANTRA -->
 <div class="mantra-band">
   <div class="mantra-label">Ton mantra de compétition</div>
-  <div class="mantra-text" id="AX_MANTRA">"Je fais mon meilleur jeu. Le reste est hors de mon contrôle."</div>
+  <div class="mantra-text" id="AX_MANTRA">"Je fais mon meilleur pilotage. Le reste est hors de mon contrôle."</div>
 </div>
 
 <!-- PROCESS INTRO -->
@@ -349,27 +361,29 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   <div class="pi-inner">
     <div class="pi-label">Le fil conducteur des 8 semaines</div>
     <h2 class="pi-title">FOCUS <em>PROCESSUS.</em><br>PAS RÉSULTAT.</h2>
-    <p class="pi-desc">Le focus processus ne réduit pas ton niveau d'exigence — il le redirige. Au lieu d'exiger un résultat (que tu ne contrôles pas totalement), tu exiges la qualité de ton jeu (que tu contrôles entièrement).</p>
+    <p class="pi-desc">Le focus processus ne réduit pas ton niveau d'exigence — il le redirige. Au lieu d'exiger un résultat (que tu ne contrôles pas totalement), tu exiges la qualité de ton pilotage (que tu contrôles entièrement).</p>
     <div id="AX_AGE_PHRASE" style="margin-top:24px;background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:16px 20px;font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--gold-d);display:none;"></div>
   </div>
 </section>
 
 <!-- SEMAINES -->
 <div class="semaines">
+<div id="ax-print-head" style="display:none;"><div style="border-bottom:2px solid #A8852A;padding-bottom:12px;margin-bottom:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.18em;color:#A8852A;">FABIEN PINTON</div><div style="font-size:9px;letter-spacing:.22em;color:#5A5040;font-family:'DM Sans',sans-serif;text-transform:uppercase;margin-top:2px;">Méthode AXE Mental Performance® · Préparation Mentale</div><div id="ax-print-sub" style="font-size:11px;color:#8A7D6A;font-style:italic;margin-top:8px;"></div></div></div>
+
   
         <div class="semaine active" id="s0">
           
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="0">
             <div class="sem-num">Semaine 01</div>
             <div class="sem-titre">Calculer le coût de l'obsession du résultat</div>
             <div class="sem-objectif">Mesurer objectivement combien l'obsession du résultat te coûte en performance.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="0">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
                 <div class="exo-title">L'audit du coût</div>
-                <div class="exo-desc">Estime honnêtement : quelle part de ton énergie mentale en compétition est consommée par l'obsession du résultat ? 10% ? 30% ? 50% ? Maintenant imagine cette énergie entièrement redirigée vers ton jeu. Quelle différence ça ferait ? Ce calcul est la motivation pour changer.</div>
+                <div class="exo-desc">Estime honnêtement : quelle part de ton énergie mentale en compétition est consommée par l'obsession du résultat ? 10% ? 30% ? 50% ? Maintenant imagine cette énergie entièrement redirigée vers ton pilotage. Quelle différence ça ferait ? Ce calcul est la motivation pour changer.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
                   <span class="focus-text">Combien mon obsession du résultat me coûte en performance ?</span>
@@ -398,20 +412,20 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s1">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="1">
             <div class="sem-num">Semaine 02</div>
             <div class="sem-titre">Rediriger l'exigence vers le processus</div>
-            <div class="sem-objectif">Garder ton niveau d'exigence élevé — mais l'appliquer au jeu, pas au résultat.</div>
+            <div class="sem-objectif">Garder ton niveau d'exigence élevé — mais l'appliquer au pilotage, pas au résultat.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="1">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
-                <div class="exo-title">Les 3 exigences de jeu</div>
-                <div class="exo-desc">Ton exigence est une arme. Elle doit être dirigée vers ce que tu contrôles. Définis 3 exigences de jeu précises pour ta prochaine compétition. Ex: 'j'exige de moi d'être à 100% dans l'engagement', 'j'exige de moi d'appliquer ma technique même sous pression', 'j'exige de moi de revenir au focus en 10 secondes après chaque erreur'. Ce niveau d'exigence est productif.</div>
+                <div class="exo-title">Les 3 exigences de pilotage</div>
+                <div class="exo-desc">Ton exigence est une arme. Elle doit être dirigée vers ce que tu contrôles. Définis 3 exigences de pilotage précises pour ta prochaine compétition. Ex: 'j'exige de moi d'être à 100% dans l'engagement', 'j'exige de moi d'appliquer ma technique même sous pression', 'j'exige de moi de revenir au focus en 10 secondes après chaque erreur'. Ce niveau d'exigence est productif.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">J'exige la qualité de mon JEU. Pas la garantie du RÉSULTAT.</span>
+                  <span class="focus-text">J'exige la qualité de mon PILOTAGE. Pas la garantie du RÉSULTAT.</span>
                 </div>
               </div>
             </div>
@@ -419,7 +433,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
               <div class="exo-num">02</div>
               <div class="exo-body">
                 <div class="exo-title">Évaluer son exigence de processus</div>
-                <div class="exo-desc">Après chaque compétition : note ton score (1-10) sur chacune de tes 3 exigences de jeu. Si tu as un 9/10 sur ton processus — tu as été exigeant avec toi-même de la bonne façon. Même en finissant deuxième.</div>
+                <div class="exo-desc">Après chaque compétition : note ton score (1-10) sur chacune de tes 3 exigences de pilotage. Si tu as un 9/10 sur ton processus — tu as été exigeant avec toi-même de la bonne façon. Même en finissant deuxième.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
                   <span class="focus-text">Mon exigence de processus : c'est ça mon vrai niveau.</span>
@@ -438,12 +452,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s2">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="2">
             <div class="sem-num">Semaine 03</div>
             <div class="sem-titre">Performer dans la fluidité</div>
             <div class="sem-objectif">Apprendre à performer avec intensité mais sans crispation.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="2">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -459,10 +473,10 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
               <div class="exo-num">02</div>
               <div class="exo-body">
                 <div class="exo-title">Le reset immédiat après erreur</div>
-                <div class="exo-desc">Après chaque erreur en compétition, exactement dans cet ordre : 1. Souffle fort. 2. Un mot : 'Suivant'. 3. Reviens à tes 3 exigences de jeu. En 10 secondes. Ton hypercompétitivité veut t'enchaîner à l'erreur. Ce protocole coupe ce circuit immédiatement.</div>
+                <div class="exo-desc">Après chaque erreur en compétition, exactement dans cet ordre : 1. Souffle fort. 2. Un mot : 'Suivant'. 3. Reviens à tes 3 exigences de pilotage. En 10 secondes. Ton hypercompétitivité veut t'enchaîner à l'erreur. Ce protocole coupe ce circuit immédiatement.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
-                  <span class="focus-text">Erreur → Souffle → Suivant → Mes exigences de jeu. 10 secondes.</span>
+                  <span class="focus-text">Erreur → Souffle → Suivant → Mes exigences de pilotage. 10 secondes.</span>
                 </div>
               </div>
             </div></div>
@@ -478,12 +492,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s3">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="3">
             <div class="sem-num">Semaine 04</div>
             <div class="sem-titre">L'analyse calibrée</div>
             <div class="sem-objectif">Faire des bilans de performance exigeants et utiles — sans autocritique destructrice.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="3">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -507,17 +521,17 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s4">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="4">
             <div class="sem-num">Semaine 05</div>
             <div class="sem-titre">Focus processus en compétition décisive</div>
             <div class="sem-objectif">Tenir le focus processus même dans les compétitions à très forts enjeux.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="4">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
                 <div class="exo-title">Le protocole de la grande compétition</div>
-                <div class="exo-desc">Plus l'enjeu est grand, plus le focus processus est critique. Avant une grande compétition : tes 3 exigences de jeu sont plus importantes que jamais. Pas le classement. Pas le titre. Ce que TU fais. Le titre est la conséquence — jamais l'objectif.</div>
+                <div class="exo-desc">Plus l'enjeu est grand, plus le focus processus est critique. Avant une grande compétition : tes 3 exigences de pilotage sont plus importantes que jamais. Pas le classement. Pas le titre. Ce que TU fais. Le titre est la conséquence — jamais l'objectif.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
                   <span class="focus-text">Grand enjeu = encore plus de focus processus. Jamais moins.</span>
@@ -536,12 +550,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s5">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="5">
             <div class="sem-num">Semaine 06</div>
             <div class="sem-titre">L'exigence durable</div>
             <div class="sem-objectif">Être exigeant et fluide en même temps — sur le long terme.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="5">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -573,12 +587,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 
         <div class="semaine locked" id="s6">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="6">
             <div class="sem-num">Semaine 07</div>
             <div class="sem-titre">Exigence de processus en compétition décisive</div>
             <div class="sem-objectif">Tenir le focus processus même quand l'enjeu est maximum et le résultat incertain.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="6">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -613,12 +627,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s7">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="7">
             <div class="sem-num">Semaine 08</div>
             <div class="sem-titre">L'exigence durable — bilan et cap</div>
             <div class="sem-objectif">Consolider une exigence qui tient dans le temps parce qu'elle est tournée vers le processus.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="7">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -756,7 +770,7 @@ async function initAirtable() {
       if (!DATA.unlocked.includes(0)) DATA.unlocked.unshift(0);
     }
     for (let i = 0; i <= 7; i++) { const v = fields['Notes_S'+(i+1)]; if (v) DATA['note_'+i] = v; }
-    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
+    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; AX_syncContent(fields.Age); const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
   }
   renderLocks();
   restoreNotes();
@@ -831,12 +845,125 @@ restoreNotes();
 
 </script>
 <script>
+
+var AX_KIDS = {"mantra": "Je veux gagner ET je reste cool. C'est comme ça qu'on devient le plus fort.", "weeks": [{"titre": "Le détective de la colère", "obj": "Voir ce que ça te coûte quand tu t'énerves après une défaite.", "exos": [{"t": "Le thermomètre de l'énervement", "d": "Cette semaine, après chaque course, dessine ton niveau d'énervement de 1 (cool) à 5 (super fâché). Note combien de temps t'es resté fâché. Tu vas voir : plus tu restes fâché longtemps, moins tu prends de plaisir. On va apprendre à redescendre vite !", "fl": "Ma mission", "ft": "Combien de temps je reste fâché ?"}, {"t": "Vouloir gagner, c'est génial", "d": "D'abord, sache un truc : vouloir gagner très fort, c'est une SUPER qualité ! Les grands champions l'ont tous. On ne va pas l'enlever. On va juste apprendre à rester cool quand ça marche pas, pour que ça t'aide au lieu de t'embêter.", "fl": "Ma découverte", "ft": "Mon envie de gagner est une force."}]}, {"titre": "L'erreur, c'est un indice", "obj": "Transformer tes erreurs en infos utiles au lieu de te fâcher.", "exos": [{"t": "Le détective de l'erreur", "d": "Après chaque erreur, joue au détective : pose-toi UNE question rigolote, 'Qu'est-ce que j'ai appris, moi le super-enquêteur ?'. Pas 'je suis nul', juste un indice pour faire mieux. Les erreurs, c'est des indices pour devenir plus fort, pas des punitions !", "fl": "Mon réflexe", "ft": "Une erreur = un indice, pas une punition."}, {"t": "Mon carnet d'indices", "d": "Note tes indices dans un carnet. À la fin de la semaine, tu auras une collection d'astuces pour t'améliorer. Tu verras : tes erreurs deviennent tes meilleurs profs !", "fl": "Mon outil", "ft": "Je collectionne mes indices d'amélioration."}]}, {"titre": "Rouler cool ET fort", "obj": "Apprendre à être à fond sans être tout crispé.", "exos": [{"t": "Le bouton pause", "d": "Entre deux moments importants, appuie sur ton bouton 'pause' invisible : une grande respiration, tu regardes un point fixe 2 secondes, et tu repars. Ça remet ton cerveau au calme et t'empêche de t'énerver tout au long de la course. Fort, mais cool !", "fl": "Mon réflexe", "ft": "J'appuie sur pause pour rester cool."}, {"t": "Le poing serré, le poing ouvert", "d": "Quand tu sens la crispation monter, serre ton poing très fort 3 secondes... puis ouvre-le grand et imagine que la tension s'en va. Un pilote crispé roule moins bien qu'un pilote détendu. Sois fort comme de l'eau, pas raide comme un bâton !", "fl": "Mon astuce", "ft": "J'ouvre le poing et la tension s'en va."}]}, {"titre": "La chasse aux trucs cool", "obj": "Trouver ce que t'as bien fait, même quand t'as perdu.", "exos": [{"t": "La chasse au trésor d'après-course", "d": "Après chaque course — même perdue — trouve 2 choses que t'as bien faites, comme une chasse au trésor : 'J'ai super bien sauté cette bosse', 'j'ai pas lâché jusqu'au bout'. Ton cerveau a besoin de ces trucs cool pour garder l'envie de continuer longtemps.", "fl": "Ma mission", "ft": "Je trouve 2 trésors même quand je perds."}]}, {"titre": "Rester cool quand ça compte", "obj": "Garder ton calme dans les courses importantes.", "exos": [{"t": "Le champion calme et fort", "d": "Dans une course importante cette semaine, utilise ton bouton pause entre les moments clés. Le secret des champions : ils sont calmes ET intenses en même temps. Pas énervés. Essaie de trouver cet état 'calme-fort' pendant ta course.", "fl": "Mon défi", "ft": "Calme et fort en même temps, comme un champion."}]}, {"titre": "Être fort pour longtemps", "obj": "Garder ton envie de gagner sans te fatiguer la tête.", "exos": [{"t": "La course juste pour le fun", "d": "Cette semaine, fais une session SANS chrono, sans compter, sans te comparer : juste pour le plaisir de rouler et de sentir le vélo. Ça te rend plus fort sur le long terme, pas moins ! Même les plus grands champions adorent rouler juste pour le fun.", "fl": "Mon équilibre", "ft": "Je roule parfois juste pour le plaisir."}]}, {"titre": "Cool même dans la grande course", "obj": "Rester calme et fort même quand l'enjeu est énorme.", "exos": [{"t": "Le reset des 3 secondes", "d": "Dans ta plus grosse course : entre chaque moment important, fais ton reset de 3 secondes (souffle, mot magique, point fixe). Ça t'empêche d'accumuler la tension pendant toute la course. Tu finis aussi cool qu'au début.", "fl": "Mon rituel", "ft": "Je me remets à zéro toutes les quelques minutes."}, {"t": "Une seule chose à améliorer", "d": "Après la grosse course, note 2 trucs cool que t'as faits, et UNE seule chose à améliorer. Une seule ! Pas dix. Trop de critiques, ça décourage. Un truc cool, un truc à bosser, c'est parfait.", "fl": "Mon bilan", "ft": "2 trésors, 1 seule chose à améliorer."}]}, {"titre": "Le champion cool et redoutable", "obj": "Faire le bilan : tu veux gagner, et tu restes cool.", "exos": [{"t": "Mon livre de champion équilibré", "d": "Regarde ce que t'as appris : le détective de l'erreur, le bouton pause, la chasse aux trucs cool, le reset. Maintenant tu veux toujours gagner très fort, MAIS tu restes cool. C'est ça, un futur grand champion ! Dessine-toi : fort et souriant. Garde ton livre. Bravo !", "fl": "Mon trésor", "ft": "Je veux gagner ET je reste cool. Imbattable !"}]}]};
+
+var AX_ORIG = null; // stores original innerHTML of weeks to restore
+function AX_capture(){
+  if(AX_ORIG) return;
+  AX_ORIG = {sh:{}, ex:{}};
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    AX_ORIG.sh[el.getAttribute('data-axweek')] = el.innerHTML;
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    AX_ORIG.ex[el.getAttribute('data-axweek')] = el.innerHTML;
+  });
+}
+function AX_buildExo(e, n){
+  var num = ('0'+n).slice(-2);
+  var f = '';
+  if(e.fl || e.ft){
+    f = '<div class="exo-focus"><span class="focus-label">'+(e.fl||'')+'</span>'+
+        '<span class="focus-text">'+(e.ft||'')+'</span></div>';
+  }
+  return '<div class="exo"><div class="exo-num">'+num+'</div>'+
+         '<div class="exo-body"><div class="exo-title">'+e.t+'</div>'+
+         '<div class="exo-desc">'+e.d+'</div>'+f+'</div></div>';
+}
+function AX_applyKids(){
+  AX_capture();
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    var i = parseInt(el.getAttribute('data-axweek'),10);
+    var w = AX_KIDS.weeks[i];
+    if(!w) return;
+    var num = 'Semaine '+('0'+(i+1)).slice(-2);
+    el.innerHTML = '<div class="sem-num">'+num+'</div>'+
+                   '<div class="sem-titre">'+w.titre+'</div>'+
+                   '<div class="sem-objectif">'+w.obj+'</div>';
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    var i = parseInt(el.getAttribute('data-axweek'),10);
+    var w = AX_KIDS.weeks[i];
+    if(!w) return;
+    el.innerHTML = w.exos.map(function(e,idx){return AX_buildExo(e, idx+1);}).join('');
+  });
+}
+function AX_restoreOriginal(){
+  if(!AX_ORIG) return;
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    var k = el.getAttribute('data-axweek');
+    if(AX_ORIG.sh[k]!==undefined) el.innerHTML = AX_ORIG.sh[k];
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    var k = el.getAttribute('data-axweek');
+    if(AX_ORIG.ex[k]!==undefined) el.innerHTML = AX_ORIG.ex[k];
+  });
+}
+function AX_syncContent(age){
+  // called on confirm/load to set week content for the chosen age
+  if(age==='10-12'){ AX_applyKids(); }
+  else { AX_restoreOriginal(); }
+  try{ AX_refreshPdfLabels(); }catch(e){}
+}
+
+
+// ══ TÉLÉCHARGEMENT PDF D'UNE SEMAINE (via impression navigateur) ══
+function AX_weekProfilTag(){
+  var t=document.querySelector('.hero-profil-tag');
+  if(t){ return t.textContent.replace(/\s*·\s*8 semaines.*$/,'').trim(); }
+  return 'Programme AXE';
+}
+function downloadSemaine(n){
+  var sem=document.getElementById('s'+n);
+  if(!sem){return;}
+  // récupère le titre réellement affiché (donc adapté à l'âge)
+  var titreEl=sem.querySelector('.sem-titre');
+  var numEl=sem.querySelector('.sem-num');
+  var titre=titreEl?titreEl.textContent.trim():('Semaine '+(n+1));
+  var num=numEl?numEl.textContent.trim():('Semaine '+('0'+(n+1)).slice(-2));
+  // sous-titre du PDF
+  var sub=document.getElementById('ax-print-sub');
+  if(sub){ sub.textContent=AX_weekProfilTag()+' — '+num+' · '+titre; }
+  // titre du document = nom de fichier proposé par le navigateur
+  var prevTitle=document.title;
+  var safe=(num+' '+titre).replace(/[^\w\u00C0-\u017F \-]/g,'').trim();
+  document.title='AXE '+safe;
+  // cible la semaine et bascule en mode impression
+  document.querySelectorAll('.semaine.ax-print-target').forEach(function(e){e.classList.remove('ax-print-target');});
+  sem.classList.add('ax-print-target');
+  document.body.classList.add('ax-print-one');
+  function cleanup(){
+    document.body.classList.remove('ax-print-one');
+    sem.classList.remove('ax-print-target');
+    document.title=prevTitle;
+    window.removeEventListener('afterprint',cleanup);
+  }
+  window.addEventListener('afterprint',cleanup);
+  setTimeout(function(){ window.print(); }, 60);
+  // filet de sécurité si afterprint ne se déclenche pas
+  setTimeout(cleanup, 4000);
+}
+
+// ══ LIBELLÉS DES BOUTONS PDF (suivent le titre affiché / l'âge) ══
+function AX_refreshPdfLabels(){
+  document.querySelectorAll('.pdf-download-btn').forEach(function(btn){
+    var m=(btn.getAttribute('onclick')||'').match(/downloadSemaine\((\d+)\)/);
+    if(!m)return;
+    var n=parseInt(m[1],10);
+    var sem=document.getElementById('s'+n);
+    if(!sem)return;
+    var titreEl=sem.querySelector('.sem-titre');
+    var titre=titreEl?titreEl.textContent.trim():'';
+    btn.textContent='📄 Télécharger ma Semaine '+(n+1)+(titre?(' — '+titre):'')+' en PDF';
+  });
+}
+
 var AX_age=null;
-var AX_ids={"12-15":"AX_A","15-18":"AX_B"};
-var AX_m={"12-15":"Donne tout dans le jeu. Le résultat suit si le jeu est là.","15-18":"Ton niveau de jeu est ta vraie arme — pas l'obsession du résultat."}; 
+var AX_ids={"10-12":"AX_K","12-15":"AX_A","15-18":"AX_B"};
+var AX_m={"10-12":"Je veux gagner ET je reste cool. C'est comme ça qu'on devient le plus fort.","12-15":"Donne tout dans ton pilotage. Le résultat suit si le pilotage est là.","15-18":"Ton niveau de pilotage est ta vraie arme — pas l'obsession du résultat."}; 
 function AX_pick(age){
   AX_age=age;
-  ["AX_A","AX_B"].forEach(function(id){
+  ["AX_K","AX_A","AX_B"].forEach(function(id){
     var el=document.getElementById(id);
     if(el)el.style.border="2px solid #E8E1D4";
   });
@@ -849,6 +976,7 @@ function AX_go(){
   if(!AX_age)return;
   try{DATA.age=AX_age;save();}catch(e){}
   document.getElementById("AX_OV").style.display="none";
+  AX_syncContent(AX_age);
   var b=document.getElementById("AX_BADGE");
   if(b)b.textContent=AX_age;
   var mt=document.getElementById("AX_MANTRA");
@@ -862,6 +990,7 @@ function AX_open(){
   if(AX_age)AX_pick(AX_age);
 }
 window.addEventListener("load",function(){
+  try{ AX_refreshPdfLabels(); }catch(e){}
   var ov=document.getElementById("AX_OV");
   if(!ov)return;
   try{
@@ -869,6 +998,7 @@ window.addEventListener("load",function(){
       ov.style.display="none";
       AX_pick(DATA.age);
       AX_age=DATA.age;
+      AX_syncContent(DATA.age);
       var b=document.getElementById("AX_BADGE");
       if(b)b.textContent=DATA.age;
     }else{ov.style.display="flex";}

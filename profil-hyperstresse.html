@@ -99,6 +99,7 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 .note-save:hover{background:var(--gold-d);}
 .pdf-download-btn{display:flex;align-items:center;gap:10px;font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;background:transparent;border:1px solid var(--bdr2);color:var(--gold-d);padding:10px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;margin:16px 36px 0;width:calc(100% - 72px);justify-content:center;transition:all .3s;}
 .pdf-download-btn:hover{background:var(--gold);color:var(--cream2);border-color:var(--gold);}
+#ax-print-head{display:none;}
 @media print{
   nav,#pbar,.btn-unlock,.pdf-download-btn,.note-save,.cta-section,.avis-section,footer,.semaine.locked{display:none!important;}
   .note-ta{border:none;background:transparent;padding:0;min-height:0;resize:none;font-size:12px;}
@@ -108,6 +109,16 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   .exo{background:#f9f6f1;border-left:3px solid #A8852A;}
   .mantra-band{background:#1A1612;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .hero{background:#FDFAF5;}
+  /* ── Impression d'UNE seule semaine (downloadSemaine) ── */
+  body.ax-print-one .hero,
+  body.ax-print-one .mantra-band,
+  body.ax-print-one .programme-intro,
+  body.ax-print-one section.hero{display:none!important;}
+  body.ax-print-one .semaine{display:none!important;}
+  body.ax-print-one .semaine.ax-print-target{display:block!important;opacity:1!important;pointer-events:auto!important;page-break-inside:avoid;}
+  body.ax-print-one .semaine.ax-print-target .lock-overlay{display:none!important;}
+  body.ax-print-one #ax-print-head{display:block!important;}
+
 }
 
 @media(max-width:640px){
@@ -186,7 +197,8 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 <div style="font-size:12px;color:rgba(247,243,236,.65);">Les exercices sont adaptes selon ton age.</div>
 </div>
 <div style="padding:18px 26px;">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+<div id="AX_K" onclick="AX_pick('10-12')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;"><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">10 - 12 ans</div><div style="font-size:10px;color:#5A5040;margin-top:3px;">Le plaisir d'abord</div></div>
 <div id="AX_A" onclick="AX_pick('12-15')" style="border:2px solid #E8E1D4;padding:14px;cursor:pointer;background:#F5F0E8;">
 <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#A8852A;">12 - 15 ans</div>
 <div style="font-size:10px;color:#5A5040;margin-top:3px;">Jeune competiteur</div>
@@ -356,15 +368,17 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 
 <!-- SEMAINES -->
 <div class="semaines">
+<div id="ax-print-head" style="display:none;"><div style="border-bottom:2px solid #A8852A;padding-bottom:12px;margin-bottom:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.18em;color:#A8852A;">FABIEN PINTON</div><div style="font-size:9px;letter-spacing:.22em;color:#5A5040;font-family:'DM Sans',sans-serif;text-transform:uppercase;margin-top:2px;">Méthode AXE Mental Performance® · Préparation Mentale</div><div id="ax-print-sub" style="font-size:11px;color:#8A7D6A;font-style:italic;margin-top:8px;"></div></div></div>
+
   
         <div class="semaine active" id="s0">
           
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="0">
             <div class="sem-num">Semaine 01</div>
             <div class="sem-titre">Identifier le déclencheur</div>
             <div class="sem-objectif">Comprendre exactement à quel moment tu bascules du 'je fais' au 'et si ça tourne mal'.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="0">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -398,16 +412,16 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s1">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="1">
             <div class="sem-num">Semaine 02</div>
             <div class="sem-titre">Installer le focus processus</div>
-            <div class="sem-objectif">Remplacer le focus résultat par 3 intentions de jeu concrètes avant chaque compétition.</div>
+            <div class="sem-objectif">Remplacer le focus résultat par 3 intentions de pilotage concrètes avant chaque compétition.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="1">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
-                <div class="exo-title">Les 3 intentions de jeu</div>
+                <div class="exo-title">Les 3 intentions de pilotage</div>
                 <div class="exo-desc">La veille de chaque compétition, écris 3 choses que tu veux faire — pas obtenir, faire. Ex: 'je maintiens mon rythme en début de course', 'je reste dans ma ligne', 'j'applique ma technique de départ'. Ces 3 intentions remplacent le résultat comme objectif.</div>
                 <div class="exo-focus">
                   <span class="focus-label">Focus processus</span>
@@ -438,12 +452,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s2">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="2">
             <div class="sem-num">Semaine 03</div>
             <div class="sem-titre">Ancrer le processus sous pression</div>
             <div class="sem-objectif">Tenir le focus processus même quand la pression monte au maximum.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="2">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -478,12 +492,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s3">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="3">
             <div class="sem-num">Semaine 04</div>
             <div class="sem-titre">Le rituel de compétition</div>
             <div class="sem-objectif">Créer un rituel pré-compétition qui installe le focus processus avant même le départ.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="3">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -507,12 +521,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s4">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="4">
             <div class="sem-num">Semaine 05</div>
             <div class="sem-titre">La récupération après erreur</div>
             <div class="sem-objectif">Revenir au processus en moins de 10 secondes après une erreur.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="4">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -547,12 +561,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s5">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="5">
             <div class="sem-num">Semaine 06</div>
             <div class="sem-titre">Automatiser le processus</div>
             <div class="sem-objectif">Rendre le focus processus automatique — qu'il se déclenche sans effort sous pression maximale.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="5">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -584,12 +598,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 
         <div class="semaine locked" id="s6">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="6">
             <div class="sem-num">Semaine 07</div>
             <div class="sem-titre">Consolider sous haute pression</div>
             <div class="sem-objectif">Appliquer l'ensemble du protocole lors d'une vraie compétition à enjeu et mesurer les écarts.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="6">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -624,12 +638,12 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
         </div>
         <div class="semaine locked" id="s7">
           <div class="lock-overlay"><div class="lock-icon">🔒</div><p>Débloque cette semaine en complétant la précédente</p></div>
-          <div class="sem-header">
+          <div class="sem-header" data-axweek="7">
             <div class="sem-num">Semaine 08</div>
             <div class="sem-titre">Bilan et autonomie mentale</div>
             <div class="sem-objectif">Faire le bilan des 8 semaines et poser les bases de ton autonomie mentale à long terme.</div>
           </div>
-          <div class="exos">
+          <div class="exos" data-axweek="7">
             <div class="exo">
               <div class="exo-num">01</div>
               <div class="exo-body">
@@ -767,7 +781,7 @@ async function initAirtable() {
       if (!DATA.unlocked.includes(0)) DATA.unlocked.unshift(0);
     }
     for (let i = 0; i <= 7; i++) { const v = fields['Notes_S'+(i+1)]; if (v) DATA['note_'+i] = v; }
-    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
+    if (fields.Age) { setTimeout(() => { try { AX_pick(fields.Age); AX_age=fields.Age; AX_syncContent(fields.Age); const ov=document.getElementById('AX_OV'); if(ov)ov.style.display='none'; const b=document.getElementById('AX_BADGE'); if(b)b.textContent=fields.Age; } catch(e){} }, 300); }
   }
   renderLocks();
   restoreNotes();
@@ -842,12 +856,125 @@ restoreNotes();
 
 </script>
 <script>
+
+var AX_KIDS = {"mantra": "Je respire, je roule, je m'amuse. Le reste, c'est du bonus.", "weeks": [{"titre": "Le détective du stress", "obj": "Trouver le moment rigolo où ton ventre commence à faire des nœuds.", "exos": [{"t": "La chasse au petit nœud", "d": "Après ta prochaine course, joue au détective : à quel moment exactement ton ventre a commencé à se serrer ? Au réveil ? En arrivant au club ? Sur le portillon ? Dessine un petit bonhomme et colorie l'endroit où tu sens le stress. Le connaître, c'est déjà un super-pouvoir pour le calmer.", "fl": "Ma mission", "ft": "Où et quand le petit nœud arrive ?"}, {"t": "Le thermomètre des émotions", "d": "Avant chaque entraînement, dessine un thermomètre et colorie ton niveau de stress de 1 (super zen) à 5 (panique). Fais-le toute la semaine. Tu vas devenir un champion pour repérer ton stress avant qu'il devienne trop grand.", "fl": "Ma mission", "ft": "Je mesure mon stress comme la météo."}]}, {"titre": "Le ballon magique", "obj": "Apprendre le jeu de respiration qui fait partir le stress.", "exos": [{"t": "Le ballon magique dans le ventre", "d": "Imagine un gros ballon coloré dans ton ventre. Tu le gonfles tout doucement en inspirant par le nez (compte jusqu'à 4), puis tu le dégonfles en soufflant par la bouche (compte jusqu'à 4). À chaque fois qu'il se dégonfle, le stress s'envole ! Fais-le 5 fois. Entraîne-toi à la maison comme un super-pouvoir secret.", "fl": "Mon super-pouvoir", "ft": "Je gonfle, je dégonfle, le stress s'envole."}, {"t": "3 ballons avant de rouler", "d": "Juste avant de monter sur le vélo cette semaine, fais 3 ballons magiques. Tu vas sentir ton corps devenir plus calme et plus prêt. Plus tu t'entraînes, plus ça marche vite !", "fl": "Mon rituel", "ft": "3 ballons et je suis prêt à m'amuser."}]}, {"titre": "Le ballon même quand ça chauffe", "obj": "Réussir à faire ton ballon magique même quand t'es tout excité.", "exos": [{"t": "Le ballon en pleine action", "d": "Cette semaine, essaie ton ballon magique dans un moment où t'es déjà un peu stressé : juste avant un départ d'entraînement, par exemple. C'est plus dur, mais c'est là que c'est le plus utile ! Comme un vrai champion qui garde son calme dans la tempête.", "fl": "Mon défi", "ft": "Je garde mon calme même quand ça bouge."}, {"t": "Le mot magique", "d": "Choisis UN mot rigolo qui te calme (genre 'cool', 'tranquille', 'banane'... le tien à toi !). Dis-le dans ta tête en soufflant. Ton cerveau va associer ce mot au calme. Bientôt, il suffira de penser au mot pour te détendre.", "fl": "Mon ancre", "ft": "Mon mot magique = mon bouton calme."}]}, {"titre": "La potion de champion", "obj": "Inventer ta petite routine porte-bonheur avant chaque course.", "exos": [{"t": "Ta potion secrète", "d": "Invente ta routine porte-bonheur, toujours dans le même ordre : par exemple tu tapes 3 fois sur ton casque, tu dis ton mot magique, tu fais un grand sourire, tu fais 3 ballons. Ton cerveau va adorer : il saura que c'est l'heure de s'amuser et d'envoyer du gaz. Écris ta potion sur une feuille et garde-la.", "fl": "Mon rituel", "ft": "Ma potion = mon signal 'prêt à rouler'."}]}, {"titre": "Le bouton 'recommencer'", "obj": "Apprendre à oublier une erreur super vite, comme dans un jeu vidéo.", "exos": [{"t": "Le bouton reset du jeu vidéo", "d": "Quand tu rates quelque chose en course, imagine que t'appuies sur le bouton 'recommencer' d'un jeu vidéo. Tu secoues la main comme pour jeter l'erreur, tu dis 'next !' et tu repars. Dans un jeu, on rate plein de fois et on recommence sans se fâcher — le vélo c'est pareil !", "fl": "Mon réflexe", "ft": "J'appuie sur reset et je repars."}, {"t": "Compter jusqu'au prochain virage", "d": "Après une erreur, donne-toi un délai rigolo : 'j'ai le droit d'être embêté jusqu'au prochain virage, et après j'oublie'. Une fois le virage passé, hop, c'est fini, tu repars frais. Ça t'évite de ruminer toute la course.", "fl": "Mon astuce", "ft": "J'efface au prochain virage et je repars."}]}, {"titre": "Le calme automatique", "obj": "Que ton ballon magique marche tout seul, sans même y penser.", "exos": [{"t": "Le ballon les yeux fermés", "d": "Tu connais bien ton ballon magique maintenant. Cette semaine, fais-le 1 fois par jour les yeux fermés, n'importe quand (devant la télé, dans la voiture...). Plus tu le répètes, plus ton corps sait se calmer tout seul. C'est comme apprendre à faire du vélo : un jour ça vient sans réfléchir !", "fl": "Mon entraînement", "ft": "Mon calme devient automatique."}]}, {"titre": "Le grand test en vraie course", "obj": "Utiliser tous tes super-pouvoirs dans une vraie compétition.", "exos": [{"t": "La mission complète", "d": "Cette semaine, en vraie course : potion de champion avant, ballon magique sur le portillon, bouton reset si tu rates. Utilise tous tes pouvoirs ! Après, raconte (ou dessine) lesquels ont le mieux marché. T'es un vrai apprenti champion mental maintenant.", "fl": "Ma grande mission", "ft": "J'utilise tous mes pouvoirs en vrai."}, {"t": "Le robot mou avant le départ", "d": "Juste avant ta course test, refais le robot mou : tout raide 5 secondes, puis tout mou comme une poupée de chiffon, 3 fois. Ça enlève la tension d'un coup et tu pars détendu. Combine-le avec ta potion de champion !", "fl": "Mon rituel", "ft": "Robot mou + potion = départ tout détendu."}]}, {"titre": "Le carnet de mes pouvoirs", "obj": "Faire le bilan de tout ce que t'as appris et en être fier.", "exos": [{"t": "Mon carnet de super-pouvoirs", "d": "Dessine ou écris tes pouvoirs préférés des 8 semaines : le ballon magique, le mot magique, la potion, le bouton reset, le robot mou. Garde ce carnet. Quand tu stresses avant une course, tu ouvres ton carnet et tu choisis ton pouvoir. Bravo, t'as appris à dompter ton stress !", "fl": "Mon trésor", "ft": "Mes pouvoirs sont à moi pour toujours."}]}]};
+
+var AX_ORIG = null; // stores original innerHTML of weeks to restore
+function AX_capture(){
+  if(AX_ORIG) return;
+  AX_ORIG = {sh:{}, ex:{}};
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    AX_ORIG.sh[el.getAttribute('data-axweek')] = el.innerHTML;
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    AX_ORIG.ex[el.getAttribute('data-axweek')] = el.innerHTML;
+  });
+}
+function AX_buildExo(e, n){
+  var num = ('0'+n).slice(-2);
+  var f = '';
+  if(e.fl || e.ft){
+    f = '<div class="exo-focus"><span class="focus-label">'+(e.fl||'')+'</span>'+
+        '<span class="focus-text">'+(e.ft||'')+'</span></div>';
+  }
+  return '<div class="exo"><div class="exo-num">'+num+'</div>'+
+         '<div class="exo-body"><div class="exo-title">'+e.t+'</div>'+
+         '<div class="exo-desc">'+e.d+'</div>'+f+'</div></div>';
+}
+function AX_applyKids(){
+  AX_capture();
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    var i = parseInt(el.getAttribute('data-axweek'),10);
+    var w = AX_KIDS.weeks[i];
+    if(!w) return;
+    var num = 'Semaine '+('0'+(i+1)).slice(-2);
+    el.innerHTML = '<div class="sem-num">'+num+'</div>'+
+                   '<div class="sem-titre">'+w.titre+'</div>'+
+                   '<div class="sem-objectif">'+w.obj+'</div>';
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    var i = parseInt(el.getAttribute('data-axweek'),10);
+    var w = AX_KIDS.weeks[i];
+    if(!w) return;
+    el.innerHTML = w.exos.map(function(e,idx){return AX_buildExo(e, idx+1);}).join('');
+  });
+}
+function AX_restoreOriginal(){
+  if(!AX_ORIG) return;
+  document.querySelectorAll('.sem-header[data-axweek]').forEach(function(el){
+    var k = el.getAttribute('data-axweek');
+    if(AX_ORIG.sh[k]!==undefined) el.innerHTML = AX_ORIG.sh[k];
+  });
+  document.querySelectorAll('.exos[data-axweek]').forEach(function(el){
+    var k = el.getAttribute('data-axweek');
+    if(AX_ORIG.ex[k]!==undefined) el.innerHTML = AX_ORIG.ex[k];
+  });
+}
+function AX_syncContent(age){
+  // called on confirm/load to set week content for the chosen age
+  if(age==='10-12'){ AX_applyKids(); }
+  else { AX_restoreOriginal(); }
+  try{ AX_refreshPdfLabels(); }catch(e){}
+}
+
+
+// ══ TÉLÉCHARGEMENT PDF D'UNE SEMAINE (via impression navigateur) ══
+function AX_weekProfilTag(){
+  var t=document.querySelector('.hero-profil-tag');
+  if(t){ return t.textContent.replace(/\s*·\s*8 semaines.*$/,'').trim(); }
+  return 'Programme AXE';
+}
+function downloadSemaine(n){
+  var sem=document.getElementById('s'+n);
+  if(!sem){return;}
+  // récupère le titre réellement affiché (donc adapté à l'âge)
+  var titreEl=sem.querySelector('.sem-titre');
+  var numEl=sem.querySelector('.sem-num');
+  var titre=titreEl?titreEl.textContent.trim():('Semaine '+(n+1));
+  var num=numEl?numEl.textContent.trim():('Semaine '+('0'+(n+1)).slice(-2));
+  // sous-titre du PDF
+  var sub=document.getElementById('ax-print-sub');
+  if(sub){ sub.textContent=AX_weekProfilTag()+' — '+num+' · '+titre; }
+  // titre du document = nom de fichier proposé par le navigateur
+  var prevTitle=document.title;
+  var safe=(num+' '+titre).replace(/[^\w\u00C0-\u017F \-]/g,'').trim();
+  document.title='AXE '+safe;
+  // cible la semaine et bascule en mode impression
+  document.querySelectorAll('.semaine.ax-print-target').forEach(function(e){e.classList.remove('ax-print-target');});
+  sem.classList.add('ax-print-target');
+  document.body.classList.add('ax-print-one');
+  function cleanup(){
+    document.body.classList.remove('ax-print-one');
+    sem.classList.remove('ax-print-target');
+    document.title=prevTitle;
+    window.removeEventListener('afterprint',cleanup);
+  }
+  window.addEventListener('afterprint',cleanup);
+  setTimeout(function(){ window.print(); }, 60);
+  // filet de sécurité si afterprint ne se déclenche pas
+  setTimeout(cleanup, 4000);
+}
+
+// ══ LIBELLÉS DES BOUTONS PDF (suivent le titre affiché / l'âge) ══
+function AX_refreshPdfLabels(){
+  document.querySelectorAll('.pdf-download-btn').forEach(function(btn){
+    var m=(btn.getAttribute('onclick')||'').match(/downloadSemaine\((\d+)\)/);
+    if(!m)return;
+    var n=parseInt(m[1],10);
+    var sem=document.getElementById('s'+n);
+    if(!sem)return;
+    var titreEl=sem.querySelector('.sem-titre');
+    var titre=titreEl?titreEl.textContent.trim():'';
+    btn.textContent='📄 Télécharger ma Semaine '+(n+1)+(titre?(' — '+titre):'')+' en PDF';
+  });
+}
+
 var AX_age=null;
-var AX_ids={"12-15":"AX_A","15-18":"AX_B"};
-var AX_m={"12-15":"Fais ce que tu sais faire. Le reste suit tout seul.","15-18":"Ta sélection se joue sur ton jeu — pas sur le classement du moment."}; 
+var AX_ids={"10-12":"AX_K","12-15":"AX_A","15-18":"AX_B"};
+var AX_m={"10-12":"Je respire, je roule, je m'amuse. Le reste, c'est du bonus.","12-15":"Fais ce que tu sais faire. Le reste suit tout seul.","15-18":"Ta sélection se décide sur ton pilotage — pas sur le classement du moment."}; 
 function AX_pick(age){
   AX_age=age;
-  ["AX_A","AX_B"].forEach(function(id){
+  ["AX_K","AX_A","AX_B"].forEach(function(id){
     var el=document.getElementById(id);
     if(el)el.style.border="2px solid #E8E1D4";
   });
@@ -860,6 +987,7 @@ function AX_go(){
   if(!AX_age)return;
   try{DATA.age=AX_age;save();}catch(e){}
   document.getElementById("AX_OV").style.display="none";
+  AX_syncContent(AX_age);
   var b=document.getElementById("AX_BADGE");
   if(b)b.textContent=AX_age;
   var mt=document.getElementById("AX_MANTRA");
@@ -873,6 +1001,7 @@ function AX_open(){
   if(AX_age)AX_pick(AX_age);
 }
 window.addEventListener("load",function(){
+  try{ AX_refreshPdfLabels(); }catch(e){}
   var ov=document.getElementById("AX_OV");
   if(!ov)return;
   try{
@@ -880,6 +1009,7 @@ window.addEventListener("load",function(){
       ov.style.display="none";
       AX_pick(DATA.age);
       AX_age=DATA.age;
+      AX_syncContent(DATA.age);
       var b=document.getElementById("AX_BADGE");
       if(b)b.textContent=DATA.age;
     }else{ov.style.display="flex";}
