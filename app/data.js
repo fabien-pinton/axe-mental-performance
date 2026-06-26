@@ -137,8 +137,60 @@ const QUESTIONS = [
    {t:"« Je ne suis pas au niveau des autres. »",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}}]},
 ];
 
-// Adaptations 12-15 ans (langage simplifié) et 15-18 ans (contexte sélection)
+// Adaptations 10-12 ans (langage très simple, ludique), 12-15 ans (langage simplifié) et 15-18 ans (contexte sélection)
 const AGE_TWEAKS = {
+ '10-12':{
+   0:{text:"La nuit avant une course, tu dors comment ?",opts:[
+     {t:"Super bien, j'ai hâte d'y être.",s:{stress:4,peur:3,confiance:4,plaisir:4,compet:3}},
+     {t:"Bien, comme d'habitude.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+     {t:"Un peu moins bien, je pense à la course.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+     {t:"Pas bien du tout, j'ai le ventre noué.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}}]},
+   1:{text:"Juste avant que la grille tombe, dans ton corps tu sens :",opts:[
+     {t:"Je suis prêt à foncer, tout va bien.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+     {t:"Un peu de stress mais ça va.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+     {t:"Mon cœur bat très fort, je serre le guidon.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+     {t:"J'ai super peur, mes jambes tremblent.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}}]},
+   2:{text:"Quand tu rates ton départ, après tu :",opts:[
+     {t:"J'oublie vite et je me concentre sur la suite.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+     {t:"Je suis embêté mais je continue.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+     {t:"J'y pense pendant toute la manche.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+     {t:"Ça me gâche toute la course.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}}]},
+   4:{text:"Quand un adulte te met la pression avant le départ, tu :",opts:[
+     {t:"Ça ne me dérange pas, je reste concentré.",s:{stress:4,peur:3,confiance:4,plaisir:3,compet:3}},
+     {t:"Ça me stresse un peu mais ça passe.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+     {t:"Ça me stresse beaucoup.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+     {t:"J'ai peur de le décevoir, ça me bloque.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}}]},
+   5:{text:"Juste avant le départ, dans ta tête tu penses surtout à :",opts:[
+     {t:"Ma poussée et mes premiers coups de pédale.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+     {t:"Passer devant les autres tout de suite.",s:{stress:3,peur:4,confiance:3,plaisir:4,compet:4}},
+     {t:"Ce qui peut mal se passer si je rate.",s:{stress:2,peur:1,confiance:2,plaisir:2,compet:2}},
+     {t:"Ce que vont penser mes parents ou mes copains.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}}]},
+   8:{text:"Devant un gros saut ou un virage qui fait peur, tu :",opts:[
+     {t:"Je fonce, j'adore ça.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
+     {t:"J'y vais mais doucement au début.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+     {t:"J'hésite, j'ai un peu peur.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+     {t:"J'évite si je peux.",s:{stress:2,peur:1,confiance:1,plaisir:2,compet:2}}]},
+   13:{text:"Avant une course, tu as une petite routine pour te préparer :",opts:[
+     {t:"Oui, et ça m'aide à être prêt.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+     {t:"Quelques habitudes simples.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+     {t:"Pas vraiment, je fais au feeling.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+     {t:"Non, et des fois je me sens perdu.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}}]},
+   14:{text:"Quand tu rates un truc que tu fais d'habitude, tu te dis :",opts:[
+     {t:"Ça arrive, je réessaie tout de suite.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+     {t:"C'est énervant mais je recommence.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+     {t:"Je doute pour la suite.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
+     {t:"Je me dis que je suis nul.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}}]},
+   16:{text:"Pourquoi tu fais du BMX Race ?",opts:[
+     {t:"Parce que j'adore rouler et m'amuser.",s:{stress:4,peur:3,confiance:3,plaisir:4,compet:3}},
+     {t:"Pour le plaisir et pour gagner des courses.",s:{stress:3,peur:3,confiance:3,plaisir:4,compet:4}},
+     {t:"Surtout pour gagner.",s:{stress:2,peur:3,confiance:2,plaisir:2,compet:4}},
+     {t:"Parce qu'on me demande de le faire.",s:{stress:2,peur:2,confiance:2,plaisir:1,compet:2}}]},
+   24:{text:"Si on t'apprenait des astuces pour mieux partir et oser doubler, tu :",opts:[
+     {t:"Je dis oui tout de suite, ça m'intéresse !",s:{stress:3,peur:3,confiance:3,plaisir:4,compet:4}},
+     {t:"Je veux bien essayer.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+     {t:"Je sais pas trop.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+     {t:"J'en aurais bien besoin, c'est mon point faible.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}}]},
+ },
  '12-15':{
    0:{text:"La veille d'une course, comment tu dors ?",opts:[
      {t:"Bien — j'ai mes habitudes et ça marche.",s:{stress:4,peur:3,confiance:3,plaisir:3,compet:3}},

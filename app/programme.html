@@ -209,7 +209,12 @@ function ouvrir(i){
   document.getElementById('mConsigne').textContent=w.mental.consigne;
   document.getElementById('mDeclench').textContent='« '+w.mental.declencheur+' »';
   // exos adaptés à la tranche d'âge du pilote (choisie au questionnaire)
-  const exosPourAge=s=>(PROFIL.tranche_age==='12-15'?(s.exos12||s.exos):(s.exos18||s.exos))||[];
+  const exosPourAge=s=>{
+    const a=PROFIL.tranche_age;
+    if(a==='10-12') return s.exos10||s.exos12||s.exos18||s.exos||[];
+    if(a==='12-15') return s.exos12||s.exos18||s.exos||[];
+    return s.exos18||s.exos12||s.exos||[];
+  };
   // lundi
   document.getElementById('lTitre').textContent=w.lundi.titre;
   document.getElementById('lFocus').textContent=w.lundi.focus;
