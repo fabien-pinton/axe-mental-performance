@@ -10,7 +10,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9LL33EDPP"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E9LL33EDPP');</script>
 <!-- Meta Pixel -->
-<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','26122160607379448');fbq('track','PageView');</script>
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','26122160607379448');fbq('track','PageView');fbq('track','ViewContent',{content_name:'Diagnostic AXE',value:19,currency:'EUR'});</script>
 
 <style>
 :root{
@@ -733,6 +733,9 @@ function submitGate(){
     prefilled_email: em,
     client_reference_id: 'diag_' + Date.now()
   });
+  // Signal Meta/Google : la personne clique pour payer (utile au retargeting)
+  if(typeof fbq!=='undefined') fbq('track','InitiateCheckout',{value:19,currency:'EUR'});
+  if(typeof gtag!=='undefined') gtag('event','begin_checkout',{value:19,currency:'EUR'});
   window.location.href = CFG.STRIPE + (CFG.STRIPE.includes('?') ? '&' : '?') + params;
 }
 
@@ -747,8 +750,8 @@ function checkReturnFromStripe(){
     document.getElementById('step-landing').style.display='none';
     document.getElementById('step-age').style.display='block';
     window.scrollTo(0,0);
-    if(typeof fbq!=='undefined') fbq('track','Purchase',{value:14,currency:'EUR'});
-    if(typeof gtag!=='undefined') gtag('event','purchase',{value:14,currency:'EUR'});
+    if(typeof fbq!=='undefined') fbq('track','Purchase',{value:19,currency:'EUR'});
+    if(typeof gtag!=='undefined') gtag('event','purchase',{value:19,currency:'EUR'});
   }
 }
 
