@@ -196,6 +196,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
   <h2 class="age-title">TA TRANCHE<br>D'<em>ÂGE</em></h2>
   <p class="age-sub">Le diagnostic et tes exercices sont entièrement adaptés à ta situation selon ton âge.</p>
   <div class="age-cards">
+    <div class="age-card" onclick="selectAge('10-12')" id="ac-10-12">
+      <div class="age-card-range">10 — 12 ANS</div>
+      <div class="age-card-label">Jeune pilote</div>
+      <div class="age-card-desc">Découverte de la compétition, le jeu avant tout, premières émotions au portillon.</div>
+    </div>
     <div class="age-card" onclick="selectAge('12-15')" id="ac-12-15">
       <div class="age-card-range">12 — 15 ANS</div>
       <div class="age-card-label">Jeune compétiteur</div>
@@ -257,6 +262,7 @@ const CFG = {
 };
 
 const AGE_LABELS = {
+  '10-12':'10 — 12 ans · Jeune pilote',
   '12-15':'12 — 15 ans · Jeune compétiteur',
   '15-18':'15 — 18 ans · Sport-études & Sélection',
 };
@@ -426,6 +432,32 @@ const Q_BASE = [
 ];
 
 const AGE_TWEAKS = {
+  '10-12':{
+    0:{cat:"Gestion du stress · Réaction au stress",text:"La nuit avant une course, tu dors comment ?",opts:[
+      {t:"Super bien, j'ai trop hâte d'y être.",s:{stress:4,peur:3,confiance:4,plaisir:4,compet:3}},
+      {t:"Bien, comme les autres nuits.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+      {t:"Un peu moins bien, je pense à la course.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+      {t:"Pas bien, j'ai le ventre tout noué.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
+    ]},
+    1:{cat:"Gestion du stress · Activation",text:"Juste avant que la grille tombe, dans ton corps tu sens :",opts:[
+      {t:"Je suis prêt à foncer, tout va bien.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
+      {t:"Un peu de stress mais ça va.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+      {t:"Mon cœur bat très fort, je serre le guidon.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
+      {t:"J'ai super peur, mes jambes tremblent.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
+    ]},
+    4:{cat:"Rapport à la peur · Contrôle de la peur",text:"Quand tu peux doubler quelqu'un dans un virage, tu penses d'abord à :",opts:[
+      {t:"Comment bien passer, ma trajectoire.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+      {t:"Génial, je vais prendre sa place !",s:{stress:3,peur:4,confiance:3,plaisir:4,compet:4}},
+      {t:"J'ai peur de tomber ou de m'accrocher.",s:{stress:2,peur:1,confiance:2,plaisir:2,compet:2}},
+      {t:"Je préfère rester derrière, c'est plus sûr.",s:{stress:2,peur:1,confiance:1,plaisir:2,compet:1}},
+    ]},
+    13:{cat:"Confiance en soi · Pratique mentale",text:"Quand tu rates un saut que tu fais d'habitude, tu te dis :",opts:[
+      {t:"C'est pas grave, je réessaie tout de suite.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
+      {t:"C'est embêtant mais je continue.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
+      {t:"J'ai peur de le rater encore après.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
+      {t:"Je me dis que je suis nul.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}},
+    ]},
+  },
   '12-15':{
     0:{cat:"Gestion du stress · Réaction au stress",text:"La veille d'une course, comment tu dors ?",opts:[
       {t:"Bien — j'ai mes habitudes et ça marche.",s:{stress:4,peur:3,confiance:3,plaisir:3,compet:3}},
@@ -473,7 +505,8 @@ const PROFILES = {
     id:"stress",name:"L'Hyperstressé",headline:"Le stress te vole ton vrai niveau.",
     desc:{
       default:"Tu as les capacités. Mais avant et pendant la compétition, l'anxiété prend plus de place que ton pilotage. Tu rumines, tu dors mal, et le jour J tu n'es plus tout à fait toi-même.",
-      '12-15':"T'as clairement le niveau. Mais le soir avant la compet, ta tête tourne. Et le matin du départ, ton ventre se serre. C'est normal — et ça se travaille.",
+      '10-12':"T'as le niveau à l'entraînement, mais le jour de la course, quand tu es sur le portillon, ton ventre se serre et tes jambes ne répondent plus pareil. C'est le stress, et c'est super normal. La bonne nouvelle : ça s'apprend à le calmer.",
+'12-15':"T'as clairement le niveau. Mais le soir avant la compet, ta tête tourne. Et le matin du départ, ton ventre se serre. C'est normal — et ça se travaille.",
       '15-18':"Ta préparation physique est là. Mais la pression de la sélection ou du résultat génère un stress qui mange tes ressources mentales exactement quand t'en as le plus besoin.",
       '25+':"Tu as l'expérience. Mais le stress pre-compétition est toujours là — peut-être même plus intense qu'avant parce que les enjeux ont changé. Ce n'est pas une fatalité.",
     },
@@ -483,7 +516,12 @@ const PROFILES = {
         {t:"Le rituel pré-compétition infaillible",d:"Définissez une séquence de 10-15 minutes toujours identique avant l'échauffement : même musique, mêmes gestes, mêmes mots intérieurs. La répétition crée un réflexe de calme ancré dans votre cerveau."},
         {t:"La technique 5-4-3-2-1 contre l'anxiété",d:"Quand l'anxiété monte : nommez mentalement 5 choses que vous voyez, 4 que vous entendez, 3 que vous ressentez physiquement. Cet ancrage sensoriel coupe le circuit de l'anticipation anxieuse en moins de 2 minutes."},
       ],
-      '12-15':[
+      '10-12':[
+        {t:"Souffler comme un ballon",d:"Juste avant que la grille tombe, souffle doucement par la bouche comme si tu gonflais un ballon, 2 fois. Ça envoie un message à ton corps : tout va bien, on peut y aller. C'est ton bouton calme."},
+        {t:"Ton mot rigolo",d:"Choisis un mot marrant qui te fait sourire (par exemple 'pizza' ou 'banane'). Dis-le dans ta tête juste avant le départ. Ça détend, et un pilote détendu pédale mieux qu'un pilote crispé."},
+        {t:"Le plan des 3 images",d:"Avant la course, imagine 3 fois dans ta tête ton départ parfait : la poussée, le premier pédalage, le regard loin devant. Ton cerveau adore les images, il se prépare à réussir."},
+      ],
+'12-15':[
         {t:"La respiration 4-4-4 avant la compet",d:"4 secondes d'inspiration, 4 secondes de pause, 4 secondes d'expiration. Fais ça 5 fois dans les vestiaires avant de sortir. Ton corps va se calmer automatiquement — essaie-le à l'entraînement d'abord."},
         {t:"Ton rituel à toi",d:"Avant chaque compet, fais toujours la même chose dans le même ordre — ta musique, tes gestes, ta phrase. Ton cerveau va associer cette séquence à l'état 'prêt à performer'. En quelques semaines, ça marche tout seul."},
         {t:"Le scan corporel express",d:"Dans les 10 minutes avant le départ, ferme les yeux 30 secondes et sens où est la tension dans ton corps. Contracte cet endroit fort pendant 5 secondes, puis relâche. Fais-le 2-3 fois. Ça libère beaucoup."},
@@ -505,7 +543,8 @@ const PROFILES = {
     id:"peur",name:"Le Bloqué par la Peur",headline:"La peur te retient exactement là où tu veux aller.",
     desc:{
       default:"Ce n'est pas un manque de technique ni de condition physique. C'est un frein invisible et puissant : peur de rater, peur de décevoir, peur du jugement des autres. Tu roules en retrait, tu ne t'engages jamais totalement — et tu le sais.",
-      '12-15':"T'as le niveau. Mais t'as peur de te planter devant tes potes, ton coach, tes parents. Du coup tu te retiens. Tu roules la sécurité, tu freines avant les autres. Et au fond tu sais que c'est pas ton vrai jeu.",
+      '10-12':"T'as le niveau, mais t'as peur : peur de tomber, peur de rater devant les copains ou tes parents. Du coup tu te retiens un peu, tu freines avant les autres. C'est normal d'avoir peur. On va apprendre à oser petit à petit.",
+'12-15':"T'as le niveau. Mais t'as peur de te planter devant tes potes, ton coach, tes parents. Du coup tu te retiens. Tu roules la sécurité, tu freines avant les autres. Et au fond tu sais que c'est pas ton vrai jeu.",
       '15-18':"La peur de décevoir ton entraîneur ou de rater une sélection te fait jouer en dessous de ton niveau. Ce mécanisme est très courant à ton âge — et entièrement travaillable.",
       '25+':"Après des années de compétition, certaines blessures mentales se transforment en peur de s'engager pleinement. Tu te protèges. C'est compréhensible. Mais ça te coûte des performances.",
     },
@@ -515,7 +554,12 @@ const PROFILES = {
         {t:"Distinguer ta valeur de tes résultats",d:"Chaque soir cette semaine, note 3 choses que tu as bien faites dans la journée — indépendamment du résultat final. Reconstruire une identité solide qui ne dépend pas du score est la fondation de tout le reste."},
         {t:"L'exposition progressive à la pression",d:"Crée des situations d'entraînement avec pression artificielle : public de 2-3 personnes, chrono au départ, mini-défi de manche avec un autre pilote. L'exposition progressive et contrôlée est le seul antidote durable à la peur."},
       ],
-      '12-15':[
+      '10-12':[
+        {t:"Le droit de rater",d:"Avant la course, dis-toi dans ta tête : 'Si je rate, c'est pas grave, tout le monde rate.' Même les champions ratent. Ce qui compte, c'est de réessayer. Ça enlève la pression qui te bloque."},
+        {t:"Je roule pour m'amuser",d:"Avant le départ, répète-toi : 'Je roule pour moi, pour le plaisir.' Pas pour faire plaisir aux autres. Quand on s'amuse, on ose plus, et on roule mieux."},
+        {t:"Le petit défi courage",d:"À chaque entraînement, fais UNE chose qui te fait un peu peur : un saut, un virage un peu plus fort. Juste une. Petit à petit, ton cerveau apprend que c'est pas si dangereux, et la peur devient plus petite."},
+      ],
+'12-15':[
         {t:"La permission de rater",d:"Avant la compet, dis-toi dans ta tête : 'Si je rate, c'est ok. Tout le monde rate.' Pas pour baisser tes exigences — pour enlever la pression qui te bloque. Les meilleurs sportifs ratent. La différence c'est qu'ils continuent quand même."},
         {t:"Jouer pour toi, pas pour les autres",d:"Avant le départ, une phrase à te répéter : 'Je roule pour moi aujourd'hui.' Pas pour ton coach, pas pour tes parents, pas pour le classement. Pour toi. Ça change tout à l'intérieur."},
         {t:"Le défi courage",d:"À chaque entraînement cette semaine, fais une chose qui te fait un peu peur sur le vélo. Un saut que tu n'oses pas, un virage attaqué plus fort, un double que tu passes en entier. Petit à petit, ton cerveau apprend que prendre des risques n'est pas dangereux."},
@@ -537,7 +581,8 @@ const PROFILES = {
     id:"confiance",name:"Le Sans Confiance",headline:"Ta confiance est conditionnelle. Elle doit devenir fondamentale.",
     desc:{
       default:"Tu performes correctement quand ça va. Mais dès que les résultats résistent, ta confiance s'effondre. Elle est externe — dépendante du regard des autres, des dernières performances, de l'humeur de ton entourage.",
-      '12-15':"Tu es bon quand ça va bien. Mais dès qu'il y a une difficulté, le doute arrive vite. Et souvent c'est ce que dit ton coach ou tes parents qui fait monter ou descendre ta confiance. C'est très courant à ton âge.",
+      '10-12':"Tu roules bien quand tout va bien. Mais dès que ça se complique, ou dès que quelqu'un te fait une remarque, tu doutes vite de toi. C'est normal à ton âge. On va construire une confiance qui tient, même les jours moins faciles.",
+'12-15':"Tu es bon quand ça va bien. Mais dès qu'il y a une difficulté, le doute arrive vite. Et souvent c'est ce que dit ton coach ou tes parents qui fait monter ou descendre ta confiance. C'est très courant à ton âge.",
       '15-18':"Ta confiance fluctue beaucoup selon les résultats et le regard de ton entourage sportif. En période de sélection, c'est particulièrement fragilisant. Tu as besoin de construire une confiance qui ne dépend pas de ça.",
       '25+':"Tu as eu des hauts et des bas. Et quelque part la confiance n'a jamais vraiment été stable. Elle dépend encore trop de facteurs externes — résultats, regard, validation. À ton stade il est temps de la construire sur autre chose.",
     },
@@ -547,7 +592,12 @@ const PROFILES = {
         {t:"Identifier et neutraliser ton discours saboteur",d:"Note les 3 phrases que tu te dis quand ça va mal. Construis leur exact contraire — réaliste et ancré, pas naïvement positif. Entraîne-toi à les substituer automatiquement dès que les premières apparaissent."},
         {t:"Créer des ancres de confiance inconditionnelle",d:"Définis 2-3 constantes qui ne dépendent jamais du résultat : ton niveau d'application, ton attitude face à l'adversité, ton engagement dans l'effort. Ancre ta confiance à ces constants — pas aux variables que sont les scores."},
       ],
-      '12-15':[
+      '10-12':[
+        {t:"Mon carnet des trucs bien",d:"Chaque soir, note (ou dis à un parent) une chose que t'as bien faite dans la journée sur le vélo. Même toute petite. Ton cerveau a besoin qu'on lui montre que t'es capable."},
+        {t:"Mon avis d'abord",d:"Après une course, avant de demander aux autres ce qu'ils en pensent, décide toi-même : est-ce que t'as bien roulé ? C'est TON avis qui compte le plus."},
+        {t:"Ma super qualité",d:"Trouve une chose que tu fais bien en BMX (ton départ, ton courage, ton sourire). Rappelle-la-toi avant chaque course. C'est ta force, personne peut te l'enlever."},
+      ],
+'12-15':[
         {t:"Le carnet de victoires",d:"Chaque soir, note une chose que t'as bien faite aujourd'hui. Même petite. Même si t'as perdu. Il s'est passé quelque chose de bien. Ton cerveau a besoin qu'on lui montre des preuves que t'es capable."},
         {t:"Ta propre opinion d'abord",d:"Après chaque compet, avant de demander à ton coach ou tes parents ce qu'ils pensent — décide toi-même : est-ce que t'as bien joué ? Sur quoi tu te bases ? C'est ton évaluation qui compte le plus."},
         {t:"Une qualité certaine",d:"Note une qualité que tu as pour sûr en tant que sportif — quelque chose que personne ne peut te retirer même si tu perds. Relis-la avant chaque compétition."},
@@ -569,7 +619,8 @@ const PROFILES = {
     id:"plaisir",name:"Le Performeur Fluide",headline:"L'enjeu tue tes sensations. Il ne devrait pas.",
     desc:{
       default:"Ton moteur est intrinsèque et authentique — tu aimes profondément ton sport. C'est une force rare. Mais quand l'enjeu monte, la pression de résultat écrase ce plaisir naturel, et tes performances chutent avec lui.",
-      '12-15':"T'adores ton sport. À l'entraînement ou en roue libre avec des potes, tu roules vraiment bien. Mais en compétition, quelque chose change. Le plaisir disparaît. Et ton niveau aussi. C'est pas une fatalité.",
+      '10-12':"Tu adores rouler à l'entraînement, tu t'éclates. Mais le jour de la course, dès qu'il y a un enjeu, le plaisir s'en va et tu roules moins bien. On va faire revenir le plaisir dans les courses, parce que c'est là que t'es le plus fort.",
+'12-15':"T'adores ton sport. À l'entraînement ou en roue libre avec des potes, tu roules vraiment bien. Mais en compétition, quelque chose change. Le plaisir disparaît. Et ton niveau aussi. C'est pas une fatalité.",
       '15-18':"Tu performes naturellement quand il n'y a pas trop d'enjeu. Mais dès que c'est une sélection ou un résultat important, la pression écrase ton pilotage naturel. Ton talent est là — c'est le cadre qui te bloque.",
       '25+':"Tu performes mieux quand c'est pour le plaisir. Mais les années d'enjeux ont installé une distance entre toi et ton pilotage naturel. Tu cherches à retrouver cette fluidité que tu avais. Elle est encore là.",
     },
@@ -579,7 +630,12 @@ const PROFILES = {
         {t:"Des objectifs de processus, pas de résultat",d:"Pour ta prochaine compétition, choisis 1 ou 2 objectifs de pilotage uniquement (ex : 'je sors le premier au portillon', 'j'attaque la première bosse'). Ce focus interne te donne un but qui ne dépend pas du score — et libère immédiatement ton naturel."},
         {t:"Apprendre à tolérer l'enjeu",d:"La compétition ne tue pas ton plaisir — c'est ta peur du résultat qui le fait. Avant la compétition, décide consciemment : 'quoi qu'il arrive au score, je m'engage à 100% dans ma course.' Cette décision proactive change tout."},
       ],
-      '12-15':[
+      '10-12':[
+        {t:"La course = un grand terrain de jeu",d:"Avant de partir, rappelle-toi que la course, c'est juste un entraînement en plus grand, avec des copains. On est là pour s'amuser à pédaler vite. Le jeu d'abord."},
+        {t:"Mon sourire de départ",d:"Sur le portillon, souris, même un tout petit peu. Ça paraît bête, mais sourire dit à ton cerveau qu'on est là pour le plaisir, et ça débloque tes sensations."},
+        {t:"Le meilleur moment",d:"Après chaque course, trouve le moment que t'as préféré : un saut, une relance, un dépassement. Garde ça en tête. Tu roules pour ces moments-là."},
+      ],
+'12-15':[
         {t:"Te rappeler pourquoi tu aimes ça",d:"Avant chaque compet, pense à un moment où tu t'es vraiment éclaté dans ton sport — à l'entraînement ou ailleurs. Ressens cette sensation. Emmène-la avec toi dans la compétition."},
         {t:"Un seul objectif de jeu",d:"Choisis une chose que tu veux faire dans cette compet — pas gagner, pas finir premier. Une action précise. Concentre-toi là-dessus. Quand tu t'occupes du jeu au lieu du résultat, ça marche mieux."},
         {t:"Jouer comme si personne ne regardait",d:"Au début de la compet, imagine que t'es seul sur la piste en train de t'entraîner, comme un mardi soir au club. Les enjeux disparaissent 2 minutes dans ta tête. Puis tu repars de là."},
@@ -601,7 +657,8 @@ const PROFILES = {
     id:"compet",name:"L'Hypercompétiteur",headline:"Tu brûles d'une flamme qui risque de te consumer.",
     desc:{
       default:"La victoire est ton oxygène. Tu ne te pardonnes rien. Chaque défaite est une blessure. Cette exigence extrême génère une tension chronique dans ton corps et ton mental qui finit par brider tes performances — trop de crispation, pas assez de fluidité.",
-      '12-15':"Tu veux gagner — vraiment. Et quand tu perds, ça te bouffe. Tu te repasses la manche dans la tête, virage par virage, et tu t'en veux. C'est une qualité rare. Mais si tu apprends pas à gérer ça, ça risque de te peser de plus en plus avec les années.",
+      '10-12':"T'as super envie de gagner, et c'est une belle force ! Mais des fois, tu veux tellement gagner que tu t'énerves ou que tu te crispes, et ça te fait rouler moins bien. On va apprendre à garder cette envie sans qu'elle te gêne.",
+'12-15':"Tu veux gagner — vraiment. Et quand tu perds, ça te bouffe. Tu te repasses la manche dans la tête, virage par virage, et tu t'en veux. C'est une qualité rare. Mais si tu apprends pas à gérer ça, ça risque de te peser de plus en plus avec les années.",
       '15-18':"Ton niveau d'exigence est impressionnant. Mais il génère une tension permanente qui bride ta fluidité au pire moment. La pression de la sélection amplifie encore ça. Apprendre à performer avec fluidité plutôt qu'avec crispation — c'est ton enjeu principal.",
       '25+':"Des années d'exigence ont accumulé une tension mentale chronique. Tu performes encore — mais de moins en moins dans la fluidité. Tes meilleures années ne sont pas derrière toi si tu apprends à réguler cette exigence sans l'éteindre.",
     },
@@ -611,7 +668,12 @@ const PROFILES = {
         {t:"Distinguer exigence juste et auto-maltraitance",d:"Après chaque compétition, crée deux listes séparées : ce que tu as bien fait (liste 1), ce à améliorer avec un plan précis (liste 2). Tu ne lis probablement jamais la liste 1. Ce déséquilibre te coûte très cher."},
         {t:"Réapprendre à rouler pour le plaisir, pas seulement pour gagner",d:"Une fois par semaine, fais une session avec une règle unique : pas de chrono, pas de comparaison. Juste les sensations, le flow des bosses, le plaisir de piloter. Ça te rend plus durable — pas moins compétitif."},
       ],
-      '12-15':[
+      '10-12':[
+        {t:"Gagner mon départ à moi",d:"Au lieu de penser 'je dois finir premier', pense 'je fais le meilleur départ possible'. Ça, tu le contrôles. Et souvent, un super départ, ça donne une super course."},
+        {t:"Le calme après une erreur",d:"Si tu rates quelque chose, souffle un coup et dis 'la prochaine sera meilleure'. S'énerver fait perdre du temps et de l'énergie. Rester calme, c'est être plus fort."},
+        {t:"Content de ma course",d:"Après chaque course, demande-toi : est-ce que j'ai tout donné ? Si oui, sois fier, peu importe la place. Donner le meilleur, c'est ça la vraie victoire à ton âge."},
+      ],
+'12-15':[
         {t:"L'erreur est une information",d:"Après chaque erreur ou défaite, une seule question : 'qu'est-ce que j'apprends ?' Pas 'pourquoi j'ai raté', pas 'je suis nul'. Une information utile. Ça change comment ton cerveau traite la défaite."},
         {t:"Souffler entre les actions",d:"Entre deux actions importantes, fais une grande respiration et regarde un point fixe 2 secondes. Ça peut sembler petit mais ça casse la tension qui monte action après action."},
         {t:"Une chose que t'as bien faite",d:"Après chaque compet — même perdue — trouve une chose que t'as bien faite. Une seule. Prends-en conscience. Ton cerveau a besoin de ça pour maintenir l'énergie sur le long terme."},
@@ -846,128 +908,168 @@ function buildRapportHTML(name, prof, pct, desc, exos, ageKey){
   const ageLbl = AGE_LABELS[ageKey] || '';
   const date = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
   const scoreNames={stress:'Gestion du stress',peur:'Rapport à la peur',confiance:'Confiance en soi',plaisir:'Rapport au plaisir',compet:'Compétitivité'};
+  const prenom = name.charAt(0).toUpperCase()+name.slice(1);
+
+  // ── Détermination point fort / point faible ──
+  // En cas d'égalité, ordre de priorité imposé :
+  //  Point FORT : plaisir > compet > stress > peur > confiance
+  //  Point FAIBLE : confiance > peur > stress > compet > plaisir (miroir)
+  const prioFort   = ['plaisir','compet','stress','peur','confiance'];
+  const prioFaible = ['confiance','peur','stress','compet','plaisir'];
+  // point fort = score le plus haut ; à égalité, celui le plus tôt dans prioFort
+  const cléFort = Object.keys(pct).sort((a,b)=>
+    (pct[b]-pct[a]) || (prioFort.indexOf(a)-prioFort.indexOf(b))
+  )[0];
+  // point faible = score le plus bas ; à égalité, celui le plus tôt dans prioFaible
+  const cléFaible = Object.keys(pct).sort((a,b)=>
+    (pct[a]-pct[b]) || (prioFaible.indexOf(a)-prioFaible.indexOf(b))
+  )[0];
+
+  // tri d'affichage : du plus haut au plus bas
   const sorted = Object.entries(pct).sort((a,b)=>b[1]-a[1]);
-  const maxVal = sorted[0][1];
-  const minVal = sorted[sorted.length-1][1];
+
+  // couleur selon le niveau : solide (vert) ≥65, intéressant (or) 50-65, fragile (rouge) <50
+  function barColor(v){
+    if(v>=65) return '#3D7A4E';      // solide → vert
+    if(v>=50) return '#A8852A';      // intéressant → or
+    return '#A8453A';                // fragile → rouge
+  }
+  function niveauTxt(v){
+    if(v>=65) return 'Solide';
+    if(v>=50) return 'Intéressant';
+    return 'Fragile';
+  }
 
   const scoresHTML = sorted.map(([k,v])=>{
-    let color = '#A8852A';
-    if(v===maxVal) color = '#2E7D32';
-    else if(v===minVal) color = '#C0392B';
+    const c=barColor(v);
+    let tag='';
+    if(k===cléFort)   tag=' <span style="display:inline-block;background:#3D7A4E;color:#fff;font-size:9px;letter-spacing:.5px;text-transform:uppercase;font-weight:bold;padding:2px 7px;border-radius:3px;margin-left:4px;">Point fort</span>';
+    if(k===cléFaible) tag=' <span style="display:inline-block;background:#A8453A;color:#fff;font-size:9px;letter-spacing:.5px;text-transform:uppercase;font-weight:bold;padding:2px 7px;border-radius:3px;margin-left:4px;">Point faible</span>';
     return `
     <tr>
-      <td style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#5A5040;padding:10px 0;border-bottom:1px solid #F0EBE0;width:180px;">${scoreNames[k]}</td>
-      <td style="padding:10px 16px 10px 0;border-bottom:1px solid #F0EBE0;">
-        <div style="height:4px;background:#E8E1D4;border-radius:2px;">
-          <div style="height:100%;width:${v}%;background:${color};border-radius:2px;"></div>
-        </div>
+      <td style="padding:12px 10px 12px 0;border-bottom:1px solid #F0EBE0;vertical-align:middle;width:230px;">
+        <div style="font-size:13px;color:#1A1612;font-weight:bold;">${scoreNames[k]}${tag}</div>
+        <div style="font-size:10px;color:${c};letter-spacing:.5px;text-transform:uppercase;font-weight:bold;margin-top:3px;">${niveauTxt(v)}</div>
       </td>
-      <td style="font-family:'Georgia',serif;font-size:20px;font-weight:700;color:${color};padding:10px 0;border-bottom:1px solid #F0EBE0;white-space:nowrap;width:50px;">${v}%</td>
-    </tr>`;}).join('');
+      <td style="padding:12px 12px 12px 0;border-bottom:1px solid #F0EBE0;vertical-align:middle;">
+        <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#EFE8DC;border-radius:6px;">
+          <tr><td style="background:${c};height:14px;width:${v}%;border-radius:6px;font-size:0;line-height:0;">&nbsp;</td><td style="font-size:0;line-height:0;">&nbsp;</td></tr>
+        </table>
+      </td>
+      <td style="padding:12px 0;border-bottom:1px solid #F0EBE0;vertical-align:middle;white-space:nowrap;width:56px;text-align:right;">
+        <span style="font-family:Georgia,serif;font-size:24px;font-weight:bold;color:${c};">${v}</span><span style="font-size:11px;color:#8A7D6A;">/100</span>
+      </td>
+    </tr>`;
+  }).join('');
 
   const exosHTML = exos.map((e,i)=>`
-    <div style="border-left:3px solid #A8852A;padding:20px 24px;margin-bottom:16px;background:#FDFAF5;">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8852A;font-weight:700;margin-bottom:8px;">Exercice ${i+1} · ${e.t}</div>
-      <div style="font-size:14px;line-height:1.8;color:#5A5040;">${e.d}</div>
-    </div>`).join('');
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:14px;background:#FDFAF5;border-left:4px solid #A8852A;border-radius:0 8px 8px 0;">
+      <tr><td style="padding:18px 22px;">
+        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#A8852A;font-weight:bold;margin-bottom:6px;">✦ Exercice ${i+1} · ${e.t}</div>
+        <div style="font-size:14px;line-height:1.75;color:#5A5040;">${e.d}</div>
+      </td></tr>
+    </table>`).join('');
 
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Rapport Mental AXE — ${name}</title>
-<style>
-  body{font-family:Georgia,serif;background:#F7F3EC;color:#1A1612;margin:0;padding:0;}
-  @media print{body{background:#fff;}}
-</style>
+<title>Rapport Mental AXE — ${prenom}</title>
 </head>
-<body>
+<body style="margin:0;padding:0;background:#F7F3EC;font-family:Georgia,'Times New Roman',serif;color:#1A1612;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#F7F3EC;padding:0;">
+<tr><td align="center" style="padding:0;">
+<table role="presentation" cellpadding="0" cellspacing="0" width="640" style="max-width:640px;width:100%;">
 
-<!-- EN-TÊTE -->
-<div style="background:#fff;border-bottom:3px solid #A8852A;padding:36px 60px 28px;">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
-    <div>
-      <div style="font-family:Georgia,serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:8px;">Fabien Pinton · Méthode AXE Mental Performance®</div>
-      <div style="font-family:Georgia,serif;font-size:36px;font-weight:700;color:#1A1612;letter-spacing:1px;margin-bottom:4px;">${name.charAt(0).toUpperCase()+name.slice(1)}</div>
-    </div>
-    <div style="text-align:right;">
-      <div style="font-size:10px;color:#8A7D6A;margin-bottom:4px;">Rapport personnel</div>
-      <div style="font-size:11px;color:#5A5040;font-weight:700;">${date}</div>
-      <div style="font-size:9px;color:#A8852A;letter-spacing:2px;text-transform:uppercase;margin-top:8px;">Confidentiel</div>
-    </div>
-  </div>
-</div>
+  <!-- EN-TÊTE -->
+  <tr><td style="background:#1A1612;padding:32px 32px 28px;border-radius:0;">
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;">Méthode AXE Mental Performance®</div>
+    <div style="font-size:13px;color:#B8AE9C;letter-spacing:1px;margin-bottom:4px;">Ton rapport mental est prêt</div>
+    <div style="font-family:Georgia,serif;font-size:40px;font-weight:bold;color:#FDFAF5;line-height:1;margin-bottom:8px;">${prenom}</div>
+    <div style="font-size:12px;color:#C9A84C;letter-spacing:1px;">${ageLbl} · ${date}</div>
+  </td></tr>
 
-<!-- CORPS -->
-<div style="max-width:760px;margin:0 auto;padding:48px 60px 80px;">
+  <!-- BANDEAU PROFIL -->
+  <tr><td style="background:#A8852A;padding:26px 32px;">
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5;opacity:.85;margin-bottom:6px;">Ton profil mental dominant</div>
+    <div style="font-family:Georgia,serif;font-size:30px;font-weight:bold;color:#FFFFFF;line-height:1.1;margin-bottom:8px;">${prof.name}</div>
+    <div style="font-family:Georgia,serif;font-size:16px;font-style:italic;color:#FDFAF5;line-height:1.5;">${prof.headline}</div>
+  </td></tr>
 
-  <!-- SECTION PROFIL -->
-  <div style="margin-bottom:40px;">
-    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;border-bottom:1px solid #E8E1D4;padding-bottom:8px;margin-bottom:24px;">Profil détecté</div>
-    <div style="border-left:3px solid #A8852A;padding:24px 28px;background:#fff;">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8852A;margin-bottom:8px;">Ton profil principal</div>
-      <div style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#1A1612;margin-bottom:6px;">${prof.name}</div>
-      <div style="font-family:Georgia,serif;font-size:16px;font-style:italic;color:#A8852A;margin-bottom:16px;">${prof.headline}</div>
-      <div style="font-size:14px;line-height:1.85;color:#5A5040;">${desc}</div>
-    </div>
-  </div>
+  <!-- CORPS -->
+  <tr><td style="background:#FFFFFF;padding:34px 32px;">
 
-  <!-- SECTION SCORES -->
-  <div style="margin-bottom:40px;">
-    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;border-bottom:1px solid #E8E1D4;padding-bottom:8px;margin-bottom:24px;">Tes scores · 5 dimensions</div>
-    <table style="width:100%;border-collapse:collapse;">${scoresHTML}</table>
-  </div>
+    <div style="font-size:14px;line-height:1.8;color:#5A5040;margin-bottom:34px;">${desc}</div>
 
-  <!-- SECTION EXERCICES -->
-  <div style="margin-bottom:40px;">
-    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;border-bottom:1px solid #E8E1D4;padding-bottom:8px;margin-bottom:24px;">3 exercices personnalisés · À faire cette semaine</div>
+    <!-- SCORES -->
+    <div style="background:#1A1612;color:#FDFAF5;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:bold;padding:10px 16px;border-radius:6px;margin-bottom:6px;">Tes 5 dimensions mentales</div>
+    <div style="font-size:12px;color:#8A7D6A;margin:12px 0 8px;">Plus le score est haut, plus la dimension est solide. Ton profil se lit dans tes deux extrêmes.</div>
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:34px;">${scoresHTML}</table>
+
+    <!-- EXERCICES -->
+    <div style="background:#3D7A4E;color:#FFFFFF;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:bold;padding:10px 16px;border-radius:6px;margin-bottom:16px;">3 exercices à faire dès cette semaine</div>
     ${exosHTML}
-  </div>
 
-  <!-- MÉTHODE AXE -->
-  <div style="border:1px solid #E8E1D4;border-left:3px solid #A8852A;padding:24px 28px;margin-bottom:40px;background:#fff;">
-    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:10px;">La méthode AXE Mental Performance® · Alignement · Exigence · Engagement</div>
-    <div style="font-size:14px;line-height:1.85;color:#5A5040;">${prof.axeMethod}</div>
-  </div>
+    <!-- MÉTHODE AXE -->
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:24px 0 8px;background:#F5EDD8;border-radius:8px;">
+      <tr><td style="padding:20px 24px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#7A6020;font-weight:bold;margin-bottom:10px;">La méthode AXE Mental Performance® · Alignement · eXigence · Engagement</div>
+        <div style="font-size:14px;line-height:1.8;color:#5A5040;">${prof.axeMethod}</div>
+      </td></tr>
+    </table>
 
-  <!-- PROGRAMME PROFIL · 47€ -->
-  <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;border-bottom:1px solid #E8E1D4;padding-bottom:8px;margin-bottom:24px;">Aller plus loin · Ton profil</div>
-  <div style="border:1px solid #E8E1D4;border-left:3px solid #A8852A;background:#FDFAF5;padding:24px 28px;margin-bottom:20px;">
-    <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#1A1612;margin-bottom:8px;">Programme ${prof.name} — 47€</div>
-    <div style="font-size:14px;color:#5A5040;line-height:1.7;margin-bottom:20px;">8 semaines d'exercices adaptés précisément à ton profil. Plan semaine par semaine. Accès immédiat.</div>
-    <a href="${CFG.DEEP[prof.id] || 'https://fabien-pinton.fr'}" style="display:inline-block;background:#A8852A;color:#FDFAF5;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;">Accéder à mon programme — 47€ →</a>
-  </div>
+  </td></tr>
 
-  <!-- PROGRAMME COMPLET · 997€ -->
-  <div style="border:1px solid #E8E1D4;border-left:3px solid #1A1612;background:#fff;padding:24px 28px;margin-bottom:20px;">
-    <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#1A1612;margin-bottom:8px;">Le programme complet — 997€</div>
-    <div style="font-size:14px;color:#5A5040;line-height:1.7;margin-bottom:18px;">L'accompagnement intégral qui allie le corps et l'esprit. Le travail de fond physique et mental pour franchir un vrai palier.</div>
-    <div style="background:#FDFAF5;border-left:3px solid #A8852A;padding:16px 20px;margin-bottom:20px;font-size:13px;color:#5A5040;line-height:1.7;">
-      <strong style="color:#1A1612;">Tu deviens partenaire</strong><br>
-      En rejoignant le programme, tu fais partie de l'aventure AXE. Et si tu en parles autour de toi : en faisant la promotion du programme, un dédommagement financier est envisageable. Partage ce qui t'a fait progresser, et sois récompensé pour ça.
-    </div>
-    <a href="https://buy.stripe.com/3cI7sK8q04YC81fcZU8IU0j" style="display:inline-block;background:#1A1612;color:#FDFAF5;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;">Accéder au programme complet — 997€ →</a>
-  </div>
+  <!-- ═══ LA SUITE : APPEL DÉCOUVERTE EN PREMIER ═══ -->
+  <tr><td style="background:#1A1612;padding:38px 32px;text-align:center;">
+    <div style="height:3px;width:60px;background:#C9A84C;margin:0 auto 22px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</div>
+    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-bottom:12px;">Et maintenant, ${prenom} ?</div>
+    <div style="font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#FDFAF5;line-height:1.25;margin-bottom:14px;">On en parle 15 minutes,<br>gratuitement ?</div>
+    <div style="font-size:14px;line-height:1.75;color:#C7BFB2;margin-bottom:26px;">Le rapport te donne une photo. L'appel te donne la direction. Échangeons de vive voix sur ton profil <strong style="color:#FDFAF5;">${prof.name}</strong> et sur ce qui te ferait vraiment progresser, sans aucun engagement.</div>
+    <table role="presentation" cellpadding="0" cellspacing="0" align="center"><tr><td style="border-radius:8px;background:#C9A84C;">
+      <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" style="display:inline-block;padding:17px 40px;font-family:Georgia,serif;font-size:15px;font-weight:bold;color:#1A1612;text-decoration:none;letter-spacing:.5px;">Réserver mon appel gratuit →</a>
+    </td></tr></table>
+    <div style="margin-top:16px;font-size:12px;color:#8A7D6A;">Ou écris directement à Fabien : contact@fabien-pinton.fr</div>
+  </td></tr>
 
-  <!-- APPEL DÉCOUVERTE -->
-  <div style="background:#1A1612;padding:40px 44px;text-align:center;position:relative;">
-    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7A6020,#C9A84C,#7A6020);"></div>
-    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin-bottom:12px;">Tu préfères en parler ?</div>
-    <div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#F7F3EC;margin-bottom:10px;">Réserve un appel découverte gratuit</div>
-    <div style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:rgba(247,243,236,.75);margin-bottom:24px;line-height:1.7;">Pour un travail en profondeur sur ton profil ${prof.name}, échangeons de vive voix.</div>
-    <a href="https://tidycal.com/fpinton/appel-decouverte" style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:#A8852A;color:#FDFAF5;text-decoration:none;padding:14px 36px;">Réserver mon appel gratuit →</a>
-    <div style="margin-top:16px;font-size:11px;color:rgba(247,243,236,.4);">Ou contacte Fabien directement : contact@fabien-pinton.fr · 07.72.28.94.57</div>
-  </div>
+  <!-- OFFRES -->
+  <tr><td style="background:#FFFFFF;padding:34px 32px 20px;">
+    <div style="text-align:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A7D6A;margin-bottom:24px;">Tu préfères avancer par toi-même ? Voici tes options</div>
 
-</div>
+    <!-- 47€ -->
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:16px;border:2px solid #EFE8DC;border-radius:10px;">
+      <tr><td style="padding:24px 26px;">
+        <div style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#1A1612;margin-bottom:4px;">Le programme ${prof.name} <span style="color:#A8852A;">— 47€</span></div>
+        <div style="font-size:13px;line-height:1.7;color:#5A5040;margin-bottom:18px;">8 semaines d'exercices mentaux conçus précisément pour ton profil. Un plan clair, semaine après semaine. Accès immédiat.</div>
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:7px;background:#A8852A;">
+          <a href="${CFG.DEEP[prof.id] || 'https://fabien-pinton.fr'}" target="_blank" style="display:inline-block;padding:13px 28px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#FDFAF5;text-decoration:none;letter-spacing:.5px;">Débloquer mon programme profil →</a>
+        </td></tr></table>
+      </td></tr>
+    </table>
 
-<!-- PIED DE PAGE -->
-<div style="background:#fff;border-top:1px solid #E8E1D4;padding:16px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-  <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8852A;">Méthode AXE Mental Performance® · Fabien Pinton · 2026</div>
-  <div style="font-size:11px;color:#8A7D6A;">contact@fabien-pinton.fr · 07.72.28.94.57 · fabien-pinton.fr</div>
-</div>
+    <!-- 997€ -->
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:8px;border:2px solid #1A1612;border-radius:10px;">
+      <tr><td style="padding:24px 26px;">
+        <div style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#1A1612;margin-bottom:4px;">Le programme complet <span style="color:#A8852A;">— 24 semaines</span></div>
+        <div style="font-size:13px;line-height:1.7;color:#5A5040;margin-bottom:14px;">L'accompagnement mental ET physique, calé sur ta grande compétition, pour franchir un vrai palier. Le programme se construit autour de tes dates de course.</div>
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:7px;background:#1A1612;">
+          <a href="https://fabien-pinton.fr/demarrer.html" target="_blank" style="display:inline-block;padding:13px 28px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#FDFAF5;text-decoration:none;letter-spacing:.5px;">Construire mon programme →</a>
+        </td></tr></table>
+      </td></tr>
+    </table>
 
+  </td></tr>
+
+  <!-- PIED -->
+  <tr><td style="background:#F7F3EC;padding:22px 32px;text-align:center;border-top:1px solid #E8E1D4;">
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8852A;margin-bottom:6px;">Méthode AXE Mental Performance® · Fabien Pinton · 2026</div>
+    <div style="font-size:11px;color:#8A7D6A;">contact@fabien-pinton.fr · 07.72.28.94.57 · fabien-pinton.fr</div>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
 </body>
 </html>`;
 }
