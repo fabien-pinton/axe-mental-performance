@@ -10,7 +10,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9LL33EDPP"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E9LL33EDPP');</script>
 <!-- Meta Pixel -->
-<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','26122160607379448');fbq('track','PageView');fbq('track','ViewContent',{content_name:'Diagnostic AXE',value:19,currency:'EUR'});</script>
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','26122160607379448');fbq('track','PageView');</script>
 
 <style>
 :root{
@@ -733,9 +733,6 @@ function submitGate(){
     prefilled_email: em,
     client_reference_id: 'diag_' + Date.now()
   });
-  // Signal Meta/Google : la personne clique pour payer (utile au retargeting)
-  if(typeof fbq!=='undefined') fbq('track','InitiateCheckout',{value:19,currency:'EUR'});
-  if(typeof gtag!=='undefined') gtag('event','begin_checkout',{value:19,currency:'EUR'});
   window.location.href = CFG.STRIPE + (CFG.STRIPE.includes('?') ? '&' : '?') + params;
 }
 
@@ -750,8 +747,8 @@ function checkReturnFromStripe(){
     document.getElementById('step-landing').style.display='none';
     document.getElementById('step-age').style.display='block';
     window.scrollTo(0,0);
-    if(typeof fbq!=='undefined') fbq('track','Purchase',{value:19,currency:'EUR'});
-    if(typeof gtag!=='undefined') gtag('event','purchase',{value:19,currency:'EUR'});
+    if(typeof fbq!=='undefined') fbq('track','Purchase',{value:14,currency:'EUR'});
+    if(typeof gtag!=='undefined') gtag('event','purchase',{value:14,currency:'EUR'});
   }
 }
 
@@ -1028,7 +1025,7 @@ function buildRapportHTML(name, prof, pct, desc, exos, ageKey){
   <tr><td style="background:#1A1612;padding:38px 32px;text-align:center;">
     <div style="height:3px;width:60px;background:#C9A84C;margin:0 auto 22px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</div>
     <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-bottom:12px;">Et maintenant, ${prenom} ?</div>
-    <div style="font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#FDFAF5;line-height:1.25;margin-bottom:14px;">On en parle 15 minutes,<br>gratuitement ?</div>
+    <div style="font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#FDFAF5;line-height:1.25;margin-bottom:14px;">On en parle 30 minutes,<br>gratuitement ?</div>
     <div style="font-size:14px;line-height:1.75;color:#C7BFB2;margin-bottom:26px;">Le rapport te donne une photo. L'appel te donne la direction. Échangeons de vive voix sur ton profil <strong style="color:#FDFAF5;">${prof.name}</strong> et sur ce qui te ferait vraiment progresser, sans aucun engagement.</div>
     <table role="presentation" cellpadding="0" cellspacing="0" align="center"><tr><td style="border-radius:8px;background:#C9A84C;">
       <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" style="display:inline-block;padding:17px 40px;font-family:Georgia,serif;font-size:15px;font-weight:bold;color:#1A1612;text-decoration:none;letter-spacing:.5px;">Réserver mon appel gratuit →</a>
