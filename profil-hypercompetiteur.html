@@ -664,22 +664,14 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
     <div class="cta-label">Prochaine étape</div>
     <h2 class="cta-title">TU VEUX ALLER<br><em>PLUS LOIN ?</em></h2>
     <p class="cta-sub">Le Programme AXE Mental Performance® va beaucoup plus loin — 24 semaines de travail mental ET physique, un espace de suivi personnel, une messagerie directe avec Fabien, 3 débriefs visio et le présentiel en compétition.</p>
-    <div class="cta-cards">
+    <div class="cta-cards" style="grid-template-columns:1fr;max-width:520px;margin:0 auto;">
       <div class="cta-card featured">
         <div class="cc-tag">⭐ L'accompagnement complet — 6 mois</div>
         <div class="cc-name">AXE MENTAL<br>PERFORMANCE®</div>
         <div class="cc-desc">24 semaines · 1 exercice mental + 2 séances physiques/semaine · Diagnostic complet · 3 débriefs visio · Messagerie directe · Présentiel en compétition · Suivi sauvegardé.</div>
         <div class="cc-price">997€</div>
-        <div class="cc-sub">Paiement unique ou en plusieurs fois · Accès complet</div>
-        <a href="https://buy.stripe.com/3cI7sK8q04YC81fcZU8IU0j" class="cc-btn">ACCÉDER AU PROGRAMME COMPLET →</a>
-      </div>
-      <div class="cta-card">
-        <div class="cc-tag">Appel découverte</div>
-        <div class="cc-name">PARLER AVEC<br>FABIEN</div>
-        <div class="cc-desc">30 minutes pour faire le point sur ton profil, tes blocages, et la meilleure voie pour avancer.</div>
-        <div class="cc-price">Gratuit</div>
-        <div class="cc-sub">30 min · Visioconférence</div>
-        <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" class="cc-btn outline">RÉSERVER MON APPEL →</a>
+        <div class="cc-sub">Paiement unique ou en plusieurs fois · Tout commence par un échange avec Fabien</div>
+        <a href="https://fabien-pinton.fr/demarrer.html" class="cc-btn">DÉCOUVRIR LE PROGRAMME →</a>
       </div>
     </div>
   </div>
@@ -1008,11 +1000,12 @@ window.addEventListener("load",function(){
 
 
 <script>
+// Suivi correct : le clic vers le programme complet 997€ signale une INTENTION (InitiateCheckout),
+// pas un achat. Le Purchase réel du 997€ est envoyé par Make via l'API Conversions après l'appel.
 document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(function(btn) {
+  document.querySelectorAll('a[href*="demarrer.html"]').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      if(typeof fbq !== 'undefined') fbq('track', 'Purchase', {value: 37.00, currency: 'EUR'});
-      if(typeof gtag !== 'undefined') gtag('event', 'conversion', {'send_to': 'AW-17960470630/8Hd6CPWIw_obEOaQnPRC', 'value': 37, 'currency': 'EUR'});
+      if(typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', {content_name: 'Programme complet 997', currency: 'EUR', value: 997.00});
     });
   });
 });

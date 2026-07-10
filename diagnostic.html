@@ -135,6 +135,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .confirm-next-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.05em;color:var(--cream2);margin-bottom:8px;}
 .confirm-next-sub{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:rgba(247,243,236,.7);margin-bottom:20px;line-height:1.6;}
 .confirm-next-btn{display:inline-block;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--ink);text-decoration:none;padding:14px 32px;}
+@media(max-width:640px){.avis-diag-grid{grid-template-columns:1fr !important;}}
 </style>
 </head>
 <body>
@@ -161,6 +162,25 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
       <div class="landing-item">Tes scores sur 5 dimensions : gestion du stress, rapport à la peur, confiance en soi, rapport au plaisir, compétitivité</div>
       <div class="landing-item">3 exercices concrets personnalisés adaptés à ton profil ET à ta tranche d'âge — à faire cette semaine</div>
       <div class="landing-item">Un rapport PDF complet dans ta boîte mail dans les minutes qui suivent</div>
+    </div>
+  </div>
+
+  <!-- ══ PREUVE SOCIALE (avis Google vérifiables) ══ -->
+  <div style="margin:32px 0 8px;padding:0 4px;">
+    <div style="text-align:center;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;">★★★★★ · Avis Google vérifiables de parents</div>
+    <div class="avis-diag-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div style="background:var(--cream2);border:1px solid var(--bdr);padding:16px 16px;border-radius:6px;">
+        <p style="font-size:12.5px;line-height:1.55;color:var(--inkd);margin:0 0 10px;font-style:italic;">"Questionnaire clair et pertinent, il permet déjà de mieux comprendre certains blocages."</p>
+        <div style="font-size:11px;font-weight:600;color:var(--ink);">Enzo ROQUE</div>
+      </div>
+      <div style="background:var(--cream2);border:1px solid var(--bdr);padding:16px 16px;border-radius:6px;">
+        <p style="font-size:12.5px;line-height:1.55;color:var(--inkd);margin:0 0 10px;font-style:italic;">"Mon fils arrive mieux à gérer son stress et travaille sa confiance en lui. Ses conseils sont pertinents et toujours adaptés à sa situation."</p>
+        <div style="font-size:11px;font-weight:600;color:var(--ink);">Valérie VILLARD</div>
+      </div>
+      <div style="background:var(--cream2);border:1px solid var(--bdr);padding:16px 16px;border-radius:6px;">
+        <p style="font-size:12.5px;line-height:1.55;color:var(--inkd);margin:0 0 10px;font-style:italic;">"La prestation est top, très professionnel et ses analyses sont bonnes. Je recommande à 100%."</p>
+        <div style="font-size:11px;font-weight:600;color:var(--ink);">Elliott Busca</div>
+      </div>
     </div>
   </div>
 
@@ -251,6 +271,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 const CFG = {
   STRIPE: "https://buy.stripe.com/3cI6oG9u4dv895j4to8IU03",
   WEBHOOK: "https://hook.eu1.make.com/96f7c0lxqk82tnxjt9gsqvs460q58ow8",
+  WEBHOOK_GATE: "https://hook.eu1.make.com/REMPLACE_PAR_TON_WEBHOOK_ABANDON",  // <-- webhook Make abandon panier
   CALL: "https://tidycal.com/fpinton/appel-decouverte",
   DEEP: {
     stress:"https://buy.stripe.com/6oUdR8gWw0Im3KZf828IU09",
@@ -703,6 +724,7 @@ let ans = [];
 
 // ══ ÉCRAN LANDING ══
 function goToGate(){
+  if(typeof fbq!=='undefined') fbq('track','ViewContent',{content_name:'Diagnostic Mental',value:19,currency:'EUR'});
   document.getElementById('step-landing').style.display='none';
   document.getElementById('step-gate').style.display='block';
   window.scrollTo(0,0);
@@ -729,9 +751,48 @@ function submitGate(){
   sessionStorage.setItem('axe_ln', ln);
   sessionStorage.setItem('axe_em', em);
   sessionStorage.setItem('axe_sport', sport);
+
+  const refId = 'diag_' + Date.now();
+  sessionStorage.setItem('axe_ref', refId);
+
+  /* ══════════════════════════════════════════════════════════════════════
+     CRITIQUE 2 — CAPTURE ABANDON PANIER · DÉSACTIVÉE POUR L'INSTANT
+     ----------------------------------------------------------------------
+     Ce bloc envoie le contact à Make AVANT la redirection Stripe, pour
+     déclencher une séquence de relance si la personne ne paie pas.
+     Il est COMMENTÉ tant que le webhook Make n'existe pas.
+
+     >>> POUR RÉACTIVER (quand le scénario Make est prêt) :
+         1. Ligne ~274 : remplacer l'URL WEBHOOK_GATE (REMPLACE_PAR_TON_WEBHOOK_ABANDON)
+            par la vraie URL du webhook Make.
+         2. Retirer les marqueurs de commentaire autour du bloc ci-dessous
+            (la ligne d'ouverture et la ligne de fermeture de ce commentaire).
+         3. Rien d'autre à toucher : le reste du tunnel est déjà en place.
+     ══════════════════════════════════════════════════════════════════════
+  try {
+    fetch(CFG.WEBHOOK_GATE, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      keepalive: true, // garantit l'envoi même pendant la redirection
+      body: JSON.stringify({
+        type: 'gate_non_paye',
+        ref: refId,
+        prenom: fn,
+        nom: ln,
+        email: em,
+        sport: sport,
+        date: new Date().toISOString()
+      })
+    }).catch(function(e){ console.error('Webhook gate error:', e); });
+  } catch(e){ console.error('Webhook gate error:', e); }
+  ═══════════════════════════════════════════════════════════════════════ */
+
+  // InitiateCheckout : audience "a voulu payer" pour le retargeting Meta
+  if(typeof fbq!=='undefined') fbq('track','InitiateCheckout',{value:19,currency:'EUR',content_name:'Diagnostic Mental'});
+
   const params = new URLSearchParams({
     prefilled_email: em,
-    client_reference_id: 'diag_' + Date.now()
+    client_reference_id: refId
   });
   window.location.href = CFG.STRIPE + (CFG.STRIPE.includes('?') ? '&' : '?') + params;
 }
@@ -747,8 +808,8 @@ function checkReturnFromStripe(){
     document.getElementById('step-landing').style.display='none';
     document.getElementById('step-age').style.display='block';
     window.scrollTo(0,0);
-    if(typeof fbq!=='undefined') fbq('track','Purchase',{value:14,currency:'EUR'});
-    if(typeof gtag!=='undefined') gtag('event','purchase',{value:14,currency:'EUR'});
+    if(typeof fbq!=='undefined') fbq('track','Purchase',{value:19,currency:'EUR',content_name:'Diagnostic Mental'});
+    if(typeof gtag!=='undefined') gtag('event','purchase',{value:19,currency:'EUR'});
   }
 }
 

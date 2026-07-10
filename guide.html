@@ -579,5 +579,32 @@
   </script>
   <script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
 
+
+  <!-- ══ Redirection tripwire : quand Brevo confirme l'inscription, envoyer vers merci-guide ══ -->
+  <script>
+  (function(){
+    var success = document.getElementById('success-message');
+    if(!success) return;
+    var done = false;
+    function goMerci(){
+      if(done) return;
+      done = true;
+      // laisser une fraction de seconde pour que Brevo enregistre bien le contact
+      setTimeout(function(){
+        window.location.href = 'https://fabien-pinton.fr/merci-guide.html';
+      }, 800);
+    }
+    // Le script Brevo rend #success-message visible (display) en cas de succès
+    var obs = new MutationObserver(function(){
+      var vis = window.getComputedStyle(success).display !== 'none'
+                && success.offsetParent !== null;
+      if(vis) goMerci();
+    });
+    obs.observe(success, {attributes:true, attributeFilter:['style','class']});
+    // Filet de sécurité : si le style est déjà visible au chargement
+    if(window.getComputedStyle(success).display !== 'none') goMerci();
+  })();
+  </script>
+
 </body>
 </html>
