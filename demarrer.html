@@ -91,6 +91,21 @@ h2.sec em{color:var(--gold);font-style:normal;}
 .calleg span{display:flex;align-items:center;gap:7px;}
 .calleg i{width:13px;height:13px;border-radius:4px;display:inline-block;}
 
+.impt{display:flex;align-items:center;gap:5px;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:#8A8172;cursor:pointer;white-space:nowrap;}
+.impt input{accent-color:var(--gold);cursor:pointer;}
+.impt-off{opacity:.25;cursor:not-allowed;}
+.impt-off input{cursor:not-allowed;}
+.fldhint{font-weight:400;color:#8A8172;font-size:13px;}
+.jours{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:6px;}
+.jour{position:relative;}
+.jour input{position:absolute;opacity:0;width:0;height:0;}
+.jour span{display:block;text-align:center;padding:12px 4px;border:1px solid #DED7CA;border-radius:10px;background:#fff;font-size:14px;font-weight:500;color:#6B6355;cursor:pointer;transition:all .15s;}
+.jour input:checked + span{background:var(--gold);border-color:var(--gold);color:#fff;}
+.muscu{display:flex;gap:10px;margin-bottom:6px;}
+.mchoice{flex:1;position:relative;}
+.mchoice input{position:absolute;opacity:0;width:0;height:0;}
+.mchoice span{display:block;text-align:center;padding:13px;border:1px solid #DED7CA;border-radius:10px;background:#fff;font-size:14px;font-weight:500;color:#6B6355;cursor:pointer;transition:all .15s;}
+.mchoice input:checked + span{background:var(--gold);border-color:var(--gold);color:#fff;}
 .idgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
 .idfield{width:100%;padding:13px 14px;border:1px solid #DED7CA;border-radius:10px;font-family:'DM Sans';font-size:14px;background:#fff;color:#2A241C;}
 .idfield:focus{outline:none;border-color:var(--gold);}
@@ -164,6 +179,15 @@ footer .fb{font-family:'Bebas Neue';font-size:14px;letter-spacing:.2em;color:var
 
       <label class="fld">L'âge du rider</label>
       <div class="ages" id="ages"></div>
+
+      <label class="fld">Jours disponibles pour s'entraîner <span class="fldhint">(hors entraînement club)</span></label>
+      <div class="jours" id="jours"></div>
+
+      <label class="fld">Accès à une salle de musculation</label>
+      <div class="muscu">
+        <label class="mchoice"><input type="radio" name="muscu" value="oui"> <span>Oui</span></label>
+        <label class="mchoice"><input type="radio" name="muscu" value="non" checked> <span>Non</span></label>
+      </div>
 
       <label class="fld">Tes compétitions de la saison</label>
       <div id="comps"></div>
@@ -354,7 +378,7 @@ const AXE = (function () {
 
 const AGES=[['10-12','10 — 12 ans'],['12-15','12 — 15 ans'],['15-18','15 — 18 ans']];
 let ageSel=null;
-let COMPS=[{date:'',nom:'',major:true},{date:'',nom:'',major:false},{date:'',nom:'',major:false},{date:'',nom:'',major:false},{date:'',nom:'',major:false}];
+let COMPS=[{date:'',nom:'',major:true,importante:false},{date:'',nom:'',major:false,importante:false},{date:'',nom:'',major:false,importante:false},{date:'',nom:'',major:false,importante:false},{date:'',nom:'',major:false,importante:false}];
 
 const LABELS={base:'Base',developpement:'Dévelop.',intensite:'Intensité',affutage:'Affûtage',recup:'Récup'};
 const CLS={base:'cl-base',developpement:'cl-dev',intensite:'cl-inten',affutage:'cl-aff',recup:'cl-recup'};
@@ -372,6 +396,7 @@ function renderComps(){
       '<input type="date" value="'+(c.date||'')+'" onchange="majComp('+i+',\'date\',this.value)">'+
       '<input class="nom" placeholder="Nom / lieu (optionnel)" value="'+(c.nom||'').replace(/"/g,'&quot;')+'" onchange="majComp('+i+',\'nom\',this.value)">'+
       '<label class="star"><input type="radio" name="major" '+(c.major?'checked':'')+' onchange="setMajor('+i+')"> Principale</label>'+
+      '<label class="impt'+(c.major?' impt-off':'')+'"><input type="checkbox" '+(c.importante&&!c.major?'checked':'')+' '+(c.major?'disabled':'')+' onchange="setImportante('+i+',this.checked)"> Importante</label>'+
       (COMPS.length>5?'<button class="comp-del" onclick="delComp('+i+')">✕</button>':'')+
     '</div>'
   ).join('');
@@ -379,8 +404,9 @@ function renderComps(){
   ab.style.display=COMPS.length>=10?'none':'inline-block';
 }
 function majComp(i,k,v){ COMPS[i][k]=v; recalc(); }
-function setMajor(i){ COMPS.forEach((c,j)=>c.major=(j===i)); renderComps(); recalc(); }
-function addComp(){ if(COMPS.length<10){ COMPS.push({date:'',nom:'',major:false}); renderComps(); } }
+function setMajor(i){ COMPS.forEach((c,j)=>{ c.major=(j===i); if(c.major) c.importante=false; }); renderComps(); recalc(); }
+function setImportante(i,v){ COMPS[i].importante=v; renderComps(); }
+function addComp(){ if(COMPS.length<10){ COMPS.push({date:'',nom:'',major:false,importante:false}); renderComps(); } }
 function delComp(i){ const wasMajor=COMPS[i].major; COMPS.splice(i,1); if(wasMajor&&COMPS.length)COMPS[0].major=true; renderComps(); recalc(); }
 
 let dernierPlan=null;
@@ -417,6 +443,16 @@ function recalc(){
 
 const TIDYCAL_URL = 'https://tidycal.com/fpinton/preparation-programme';
 
+const JOURS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
+function renderJours(){
+  document.getElementById('jours').innerHTML = JOURS.map((j,i) =>
+    '<label class="jour"><input type="checkbox" id="jour'+i+'"><span>'+j.slice(0,3)+'</span></label>'
+  ).join('');
+}
+function joursChoisis(){
+  return JOURS.filter((j,i) => document.getElementById('jour'+i).checked);
+}
+
 function reserver(){
   if(!dernierPlan)return;
 
@@ -441,8 +477,16 @@ function reserver(){
   // Récapitulatif des compétitions saisies (lecture directe de COMPS)
   const listeComps = COMPS
     .filter(x => x && x.date)
-    .map(x => (x.major ? '★ ' : '• ') + x.date + (x.nom ? ' — ' + x.nom : ''))
+    .map(x => {
+      const tag = x.major ? '★ PRINCIPALE (pic de forme) — ' : (x.importante ? '! Importante — ' : '• ');
+      return tag + x.date + (x.nom ? ' — ' + x.nom : '');
+    })
     .join('\n');
+
+  // Nouvelles infos : jours dispo + salle de muscu
+  const jours = joursChoisis();
+  const muscuEl = document.querySelector('input[name="muscu"]:checked');
+  const muscu = muscuEl ? muscuEl.value : 'non';
 
   // Notes pré-remplies pour TidyCal : Fabien reçoit tout dans la notification de RDV
   const notes =
@@ -452,6 +496,9 @@ function reserver(){
     'Âge : ' + dernierPlan.age + '\n' +
     'Parent : ' + pPrenom + ' ' + pNom + '\n' +
     'Email : ' + pEmail + '\n' +
+    '─────────────────────────\n' +
+    'Jours dispo (hors club) : ' + (jours.length ? jours.join(', ') : 'aucun renseigné') + '\n' +
+    'Salle de musculation : ' + (muscu === 'oui' ? 'OUI' : 'NON') + '\n' +
     '─────────────────────────\n' +
     'PRIX CALCULÉ : ' + p.prix.toFixed(2) + ' €\n' +
     'Durée : ' + p.nbSemaines + ' semaines\n' +
@@ -470,6 +517,7 @@ function reserver(){
 }
 
 renderAges();
+renderJours();
 renderComps();
 </script>
 </body>
