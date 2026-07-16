@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBJECTIF TROYES · 19 septembre · Robin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F3EC; --panel:#F0EBE0; --card:#FDFAF5; --border:rgba(168,133,42,.18);
+  --gold:#A8852A; --gold2:#C9A84C; --gold-d:#7A6020;
+  --red:#C0392B; --green:#2E7D32; --blue:#1565C0; --orange:#E67E22;
+  --muted:#8A7D6A; --text:#1A1612; --text2:#5A5040;
+  --font-hd:'Bebas Neue',sans-serif; --font-ui:'DM Sans',sans-serif; --font-s:'Cormorant Garamond',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-weight:300;font-size:15px;line-height:1.5;padding-bottom:60px;}
+
+header{background:#1A1612;border-bottom:2px solid var(--gold);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.logo{display:flex;align-items:center;gap:11px;}
+.logo-mark{width:34px;height:34px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-family:var(--font-hd);font-size:12px;color:#000;flex-shrink:0;}
+.logo-txt{font-family:var(--font-hd);font-size:19px;color:var(--card);letter-spacing:.12em;line-height:1;}
+.logo-sub{font-size:9px;color:var(--gold2);letter-spacing:.22em;text-transform:uppercase;margin-top:2px;}
+.countdown{text-align:right;}
+.cd-num{font-family:var(--font-hd);font-size:26px;color:var(--gold2);line-height:1;}
+.cd-lbl{font-size:8px;color:rgba(247,243,236,.5);letter-spacing:.18em;text-transform:uppercase;}
+
+.wrap{max-width:840px;margin:0 auto;padding:22px 16px;}
+
+.intro{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);padding:18px 20px;margin-bottom:20px;}
+.intro h1{font-family:var(--font-hd);font-size:27px;letter-spacing:.04em;margin-bottom:9px;line-height:1.1;}
+.intro p{font-size:14px;color:var(--text2);line-height:1.65;}
+.intro strong{color:var(--text);font-weight:600;}
+
+.obj{background:#1A1612;color:var(--card);padding:16px 20px;margin-bottom:20px;border-left:3px solid var(--red);}
+.obj-t{font-family:var(--font-hd);font-size:15px;color:var(--red);letter-spacing:.14em;margin-bottom:7px;}
+.obj p{font-size:13.5px;color:rgba(247,243,236,.85);line-height:1.65;}
+.obj b{color:var(--gold2);}
+
+.rythme{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
+.ry{background:var(--card);border:1px solid var(--border);padding:12px 14px;border-top:3px solid;}
+.ry.r1{border-top-color:var(--blue);} .ry.r2{border-top-color:var(--orange);} .ry.r3{border-top-color:var(--gold);}
+.ry-d{font-family:var(--font-hd);font-size:16px;letter-spacing:.08em;margin-bottom:3px;}
+.ry-n{font-size:11px;color:var(--muted);line-height:1.45;}
+@media(max-width:600px){.rythme{grid-template-columns:1fr;}}
+
+.prog-bar{background:var(--panel);height:6px;margin-bottom:6px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold2));transition:width .5s;}
+.prog-txt{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px;}
+
+.phase{margin-bottom:14px;}
+.ph-head{display:flex;align-items:center;gap:12px;margin-bottom:13px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.ph-tag{font-family:var(--font-hd);font-size:13px;letter-spacing:.13em;padding:4px 10px;color:#fff;white-space:nowrap;}
+.ph-1{background:var(--blue);} .ph-2{background:var(--red);} .ph-3{background:var(--gold-d);} .ph-4{background:var(--green);}
+.ph-name{font-family:var(--font-hd);font-size:20px;letter-spacing:.05em;line-height:1.1;}
+.ph-goal{font-size:12px;color:var(--muted);font-style:italic;font-family:var(--font-s);}
+
+.week{background:var(--card);border:1px solid var(--border);margin-bottom:9px;}
+.week.race{border:2px solid var(--red);}
+.week.deload{border-left:3px solid var(--green);}
+.wk-head{padding:13px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.wk-head:hover{background:var(--panel);}
+.wk-l{display:flex;align-items:center;gap:12px;}
+.wk-num{font-family:var(--font-hd);font-size:22px;color:var(--gold);line-height:1;min-width:26px;}
+.week.race .wk-num{color:var(--red);}
+.week.deload .wk-num{color:var(--green);}
+.wk-dates{font-size:13px;font-weight:500;}
+.wk-focus{font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;}
+.wk-chevron{color:var(--gold);font-size:13px;transition:transform .25s;}
+.week.open .wk-chevron{transform:rotate(90deg);}
+.wk-body{display:none;padding:0 18px 16px;border-top:1px solid var(--border);}
+.week.open .wk-body{display:block;}
+
+.sess{border-left:2px solid var(--border);padding:12px 0 12px 14px;margin-top:14px;}
+.sess.s-sam{border-left-color:var(--gold);}
+.sess-head{display:flex;align-items:center;gap:9px;margin-bottom:9px;flex-wrap:wrap;}
+.sess-day{font-family:var(--font-hd);font-size:16px;letter-spacing:.07em;color:var(--gold-d);}
+.sess-type{font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:2px 7px;color:#fff;}
+.t-force{background:var(--blue);} .t-sprint{background:var(--orange);} .t-spe{background:var(--gold);} .t-start{background:var(--red);} .t-recup{background:var(--muted);}
+.sess-dur{font-size:11px;color:var(--muted);margin-left:auto;}
+
+.blk{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d);font-weight:600;margin:12px 0 4px;padding-top:8px;border-top:1px dotted var(--border);}
+.blk:first-of-type{border-top:none;padding-top:0;margin-top:8px;}
+
+table{width:100%;border-collapse:collapse;margin-top:4px;}
+th{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);text-align:left;padding:5px 8px 5px 0;font-weight:500;border-bottom:1px solid var(--border);}
+td{padding:8px 8px 8px 0;font-size:13.5px;border-bottom:1px solid rgba(168,133,42,.07);vertical-align:top;}
+td:first-child{font-weight:500;width:46%;}
+td.num{font-family:var(--font-s);font-size:15px;color:var(--gold-d);font-weight:600;white-space:nowrap;}
+.ex-note{display:block;font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px;line-height:1.45;}
+
+.alt{background:var(--panel);border-left:2px solid var(--gold);padding:10px 14px;margin-top:10px;font-size:12.5px;color:var(--text2);line-height:1.6;}
+.alt b{color:var(--gold-d);}
+.tip{background:var(--panel);border-left:2px solid var(--gold2);padding:10px 14px;margin-top:12px;font-size:12.5px;color:var(--text2);line-height:1.6;}
+.tip b{color:var(--text);}
+.tip.warn{border-left-color:var(--red);}
+.tip.ok{border-left-color:var(--green);}
+
+.done-btn{margin-top:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--font-ui);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;transition:all .2s;}
+.done-btn:hover{border-color:var(--gold);color:var(--gold);}
+.done-btn.done{background:var(--green);border-color:var(--green);color:#fff;}
+
+.mental{background:#1A1612;color:var(--card);padding:20px;margin:24px 0;border-left:3px solid var(--gold);}
+.mental h3{font-family:var(--font-hd);font-size:19px;color:var(--gold2);letter-spacing:.06em;margin-bottom:9px;}
+.mental p{font-size:13.5px;color:rgba(247,243,236,.82);line-height:1.7;}
+.mental p+p{margin-top:9px;}
+.mental b{color:var(--gold2);}
+
+footer{text-align:center;padding:26px 16px;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+
+@media(max-width:600px){
+  .wrap{padding:16px 12px;}
+  td:first-child{width:54%;}
+  .wk-focus{display:none;}
+  .sess-dur{margin-left:0;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <div>
+      <div class="logo-txt">OBJECTIF TROYES</div>
+      <div class="logo-sub">Robin · Première ligne</div>
+    </div>
+  </div>
+  <div class="countdown">
+    <div class="cd-num" id="cdNum">—</div>
+    <div class="cd-lbl">jours avant Troyes</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="intro">
+    <h1>10 SEMAINES POUR ÊTRE LE PLUS RAPIDE AU PORTILLON</h1>
+    <p><strong>Jeudi 16 juillet → samedi 19 septembre.</strong> Trois séances par semaine, 60 à 80 minutes. Aucune salle, aucune charge, aucun club.</p>
+  </div>
+
+  <div class="obj">
+    <div class="obj-t">L'OBJECTIF COMMANDE TOUT</div>
+    <p>Être le meilleur au start, c'est trois qualités et rien d'autre : la <b>poussée explosive</b> des jambes, la <b>traction du haut du corps</b> sur le guidon, et le <b>gainage</b> qui transmet cette force au vélo au lieu de la perdre. Chaque exercice de ce programme sert l'une de ces trois qualités. Tout le reste a été supprimé.</p>
+  </div>
+
+  <div class="rythme">
+    <div class="ry r1"><div class="ry-d">LUNDI</div><div class="ry-n">Force &amp; pliométrie<br>La poussée</div></div>
+    <div class="ry r2"><div class="ry-d">JEUDI</div><div class="ry-n">Sprint &amp; réaction<br>L'explosion</div></div>
+    <div class="ry r3"><div class="ry-d">SAMEDI</div><div class="ry-n">Puissance spécifique<br>Le transfert</div></div>
+  </div>
+
+  <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  <div class="prog-txt" id="progTxt">Séances validées : 0 / 30</div>
+
+  <!-- ════ PHASE 1 : FONDATIONS ════ -->
+  <div class="phase">
+    <div class="ph-head">
+      <span class="ph-tag ph-1">PHASE 1</span>
+      <div>
+        <div class="ph-name">FONDATIONS</div>
+        <div class="ph-goal">Semaines 1-3 · Réhabituer le corps, construire la base</div>
+      </div>
+    </div>
+
+    <!-- S1 -->
+    <div class="week" data-wk="1">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">01</span>
+          <div><div class="wk-dates">16 → 20 juillet</div><div class="wk-focus">Reprise · 2 séances seulement</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 16</span><span class="sess-type t-force">FORCE · REPRISE</span><span class="sess-dur">65 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table>
+            <tr><td>Footing léger + mobilisation articulaire<span class="ex-note">Chevilles, genoux, hanches, épaules. Puis montées de genoux, talons-fesses.</span></td><td class="num">12 min</td></tr>
+          </table>
+          <div class="blk">Poussée jambes · 25 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Squat poids du corps<span class="ex-note">Descente 3 sec, remontée normale. Cuisses parallèles au sol.</span></td><td class="num">4 × 15</td><td class="num">90 s</td></tr>
+            <tr><td>Fentes marchées<span class="ex-note">Genou arrière frôle le sol. Buste droit.</span></td><td class="num">3 × 12/jambe</td><td class="num">90 s</td></tr>
+            <tr><td>Montées sur marche</td><td class="num">3 × 12/jambe</td><td class="num">60 s</td></tr>
+          </table>
+          <div class="blk">Haut du corps · 18 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Pompes<span class="ex-note">Amplitude complète, poitrine près du sol. Pieds surélevés sur une chaise si c'est trop facile.</span></td><td class="num">4 × max</td><td class="num">90 s</td></tr>
+            <tr><td>Dips entre deux chaises<span class="ex-note">Mains sur deux chaises stables, jambes tendues devant. Descends jusqu'à 90° aux coudes.</span></td><td class="num">3 × 10</td><td class="num">90 s</td></tr>
+            <tr><td>Pompes diamant<span class="ex-note">Mains jointes en triangle sous la poitrine. Triceps et épaules.</span></td><td class="num">3 × max</td><td class="num">90 s</td></tr>
+          </table>
+          <div class="blk">Gainage · 12 min</div>
+          <table>
+            <tr><td>Planche<span class="ex-note">Corps aligné, fesses ni hautes ni basses.</span></td><td class="num">3 × 45 s</td><td class="num">45 s</td></tr>
+            <tr><td>Gainage latéral<span class="ex-note">Ce qui te tient dans les virages et au sprint.</span></td><td class="num">3 × 30 s/côté</td><td class="num">45 s</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 18</span><span class="sess-type t-spe">DÉCOUVERTE SPRINT</span><span class="sess-dur">55 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table>
+            <tr><td>Footing 10 min + gammes athlétiques<span class="ex-note">Montées de genoux, talons-fesses, pas chassés, foulées bondissantes. 2 × 20 m chacun. L'échauffement avant sprint n'est PAS négociable.</span></td><td class="num">20 min</td></tr>
+          </table>
+          <div class="blk">Premiers sprints · 25 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints départ arrêté 20 m<span class="ex-note">Volume volontairement bas cette semaine. On réhabitue les tendons avant de charger.</span></td><td class="num">5 × 20 m</td><td class="num">2 min</td></tr>
+            <tr><td>Sprints 30 m</td><td class="num">3 × 30 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Hollow hold<span class="ex-note">Allongé sur le dos, épaules et jambes décollées, lombaires plaquées au sol.</span></td><td class="num">3 × 30 s</td><td class="num">60 s</td></tr></table>
+          <div class="alt"><b>Si la piste est dispo :</b> remplace les sprints à pied par 8 départs au portillon, récup 3 min entre chaque. C'est toujours mieux.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="tip"><b>Semaine 1 volontairement allégée</b> (2 séances). Le corps se réhabitue. Des courbatures modérées sont normales, une douleur articulaire ne l'est pas.</div>
+        <div class="alt"><b>Barre de traction : elle arrive le 24 juillet.</b> Jusqu'au jeudi 23, le haut du corps se travaille en poussée (pompes, dips, pompes diamant). À partir du <b>lundi 27 juillet</b>, les tractions entrent dans le programme, et c'est là que le vrai travail commence : au portillon, on tire sur le guidon autant qu'on pousse sur les pédales. Perdre dix jours de tirage sur dix semaines, ça ne coûte rien.</div>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="week" data-wk="2">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">02</span>
+          <div><div class="wk-dates">20 → 25 juillet</div><div class="wk-focus">Rythme complet · 3 séances</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 20</span><span class="sess-type t-force">FORCE</span><span class="sess-dur">70 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Footing + mobilisation + gammes</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Poussée jambes · 28 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Squat bulgare (pied arrière sur chaise)<span class="ex-note">Le meilleur exercice de force unilatérale sans matériel. Dur, très efficace.</span></td><td class="num">4 × 10/jambe</td><td class="num">90 s</td></tr>
+            <tr><td>Squat tempo lent<span class="ex-note">4 sec de descente, 1 sec de pause en bas, remontée normale.</span></td><td class="num">4 × 12</td><td class="num">90 s</td></tr>
+            <tr><td>Mollets sur une marche<span class="ex-note">Amplitude complète, talon bien sous le niveau de la marche.</span></td><td class="num">4 × 20</td><td class="num">60 s</td></tr>
+          </table>
+          <div class="blk">Tirage · 18 min</div>
+          <table>
+            <tr><td>Pompes explosives<span class="ex-note">Pousse assez fort pour décoller les mains du sol, même d'un centimètre.</span></td><td class="num">4 × 8</td><td class="num">2 min</td></tr>
+            <tr><td>Pompes pieds surélevés</td><td class="num">4 × 10</td><td class="num">90 s</td></tr>
+          </table>
+          <div class="blk">Gainage · 12 min</div>
+          <table>
+            <tr><td>Planche dynamique<span class="ex-note">Alterne coudes / bras tendus sans casser l'alignement.</span></td><td class="num">3 × 40 s</td><td class="num">60 s</td></tr>
+            <tr><td>Gainage latéral</td><td class="num">3 × 35 s/côté</td><td class="num">45 s</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 23</span><span class="sess-type t-sprint">SPRINT</span><span class="sess-dur">70 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table><tr><td>Footing + gammes complètes</td><td class="num">20 min</td></tr></table>
+          <div class="blk">Sprints · 38 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints 10 m départ arrêté<span class="ex-note">Court et brutal. Toute l'énergie dans les 3 premiers appuis. C'est ta première ligne.</span></td><td class="num">6 × 10 m</td><td class="num">90 s</td></tr>
+            <tr><td>Sprints 20 m</td><td class="num">6 × 20 m</td><td class="num">2 min</td></tr>
+            <tr><td>Sprints 30 m</td><td class="num">4 × 30 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="blk">Gainage · 10 min</div>
+          <table>
+            <tr><td>Hollow hold</td><td class="num">3 × 35 s</td><td class="num">60 s</td></tr>
+            <tr><td>Superman<span class="ex-note">Bas du dos. Essentiel pour tenir la position de départ.</span></td><td class="num">3 × 15</td><td class="num">45 s</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 25</span><span class="sess-type t-spe">PUISSANCE SPÉCIFIQUE</span><span class="sess-dur">60 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes + 3 sauts progressifs</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Premiers sauts · 30 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Squat sauté<span class="ex-note">Première séance explosive. Remontée avec décollage, réception souple genoux fléchis.</span></td><td class="num">4 × 8</td><td class="num">2 min</td></tr>
+            <tr><td>Saut en longueur départ arrêté<span class="ex-note">LE geste le plus proche du portillon hors du vélo. Poussée horizontale maximale.</span></td><td class="num">4 × 5</td><td class="num">2 min</td></tr>
+            <tr><td>Fentes sautées alternées<span class="ex-note">Change de jambe en l'air. Contrôle de la réception.</span></td><td class="num">3 × 8/jambe</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 10 min</div>
+          <table><tr><td>Circuit : planche, latéral, hollow<span class="ex-note">30 sec chaque, enchaînés. 2 tours.</span></td><td class="num">2 tours</td><td class="num">60 s</td></tr></table>
+          <div class="alt"><b>Si la piste est dispo :</b> remplace tout le bloc sauts par du portillon. 10 départs, récup complète. Le vélo bat toujours le sol.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="week" data-wk="3">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">03</span>
+          <div><div class="wk-dates">27 juillet → 1er août</div><div class="wk-focus">Fin des fondations</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 27</span><span class="sess-type t-force">FORCE</span><span class="sess-dur">75 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Footing + mobilisation + gammes</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Poussée jambes · 30 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Squat bulgare</td><td class="num">4 × 12/jambe</td><td class="num">90 s</td></tr>
+            <tr><td>Squat tempo lent</td><td class="num">4 × 12</td><td class="num">90 s</td></tr>
+            <tr><td>Mollets sur une marche</td><td class="num">4 × 25</td><td class="num">60 s</td></tr>
+          </table>
+          <div class="blk">Tirage · 20 min</div>
+          <table>
+            <tr><td>Tractions pronation<span class="ex-note">Si 0 traction : négatives, descente 5 sec.</span></td><td class="num">4 × max</td><td class="num">2 min</td></tr>
+            <tr><td>Pompes explosives<span class="ex-note">Pousse assez fort pour décoller les mains, même d'un centimètre.</span></td><td class="num">4 × 8</td><td class="num">2 min</td></tr>
+            <tr><td>Dips entre deux chaises</td><td class="num">3 × 10</td><td class="num">90 s</td></tr>
+          </table>
+          <div class="blk">Gainage · 13 min</div>
+          <table>
+            <tr><td>Hollow hold</td><td class="num">3 × 40 s</td><td class="num">60 s</td></tr>
+            <tr><td>Gainage latéral avec levée de hanche</td><td class="num">3 × 12/côté</td><td class="num">60 s</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 30</span><span class="sess-type t-sprint">SPRINT</span><span class="sess-dur">72 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table><tr><td>Footing + gammes</td><td class="num">20 min</td></tr></table>
+          <div class="blk">Sprints · 40 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints 10 m<span class="ex-note">Varie les positions de départ : debout, accroupi, une main au sol.</span></td><td class="num">8 × 10 m</td><td class="num">90 s</td></tr>
+            <tr><td>Sprints 20 m</td><td class="num">6 × 20 m</td><td class="num">2 min</td></tr>
+            <tr><td>Sprint en côte 20 m<span class="ex-note">Une pente. Développement pur de la puissance de poussée.</span></td><td class="num">4 × 20 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="blk">Gainage · 10 min</div>
+          <table><tr><td>Circuit complet</td><td class="num">3 tours</td><td class="num">60 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 1er</span><span class="sess-type t-spe">PUISSANCE SPÉCIFIQUE</span><span class="sess-dur">65 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet + sauts progressifs</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Pliométrie · 35 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut sur banc / muret (box jump)<span class="ex-note">Monte en sautant, redescends en marchant. Hauteur raisonnable.</span></td><td class="num">4 × 5</td><td class="num">2 min</td></tr>
+            <tr><td>Saut en longueur départ arrêté</td><td class="num">5 × 5</td><td class="num">2 min</td></tr>
+            <tr><td>Squat sauté maximal</td><td class="num">4 × 6</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 10 min</div>
+          <table><tr><td>Circuit</td><td class="num">3 tours</td><td class="num">60 s</td></tr></table>
+          <div class="alt"><b>Si la piste est dispo :</b> portillon prioritaire. 10 à 12 départs.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 : DÉCHARGE -->
+    <div class="week deload" data-wk="4">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">04</span>
+          <div><div class="wk-dates">3 → 8 août</div><div class="wk-focus">DÉCHARGE · Volume divisé par 2</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="tip ok"><b>Semaine de décharge.</b> Ce n'est pas du repos, c'est de la construction. Le corps ne progresse pas pendant l'effort, il progresse pendant la récupération. Trois semaines de charge, une semaine allégée : c'est ce qui empêche l'accumulation de fatigue et les blessures. Ne rajoute rien.</div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 3</span><span class="sess-type t-force">FORCE LÉGÈRE</span><span class="sess-dur">45 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Footing + mobilisation</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Force · 25 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Squat bulgare<span class="ex-note">Moitié moins de séries. Même qualité d'exécution.</span></td><td class="num">2 × 10/jambe</td><td class="num">90 s</td></tr>
+            <tr><td>Tractions<span class="ex-note">Volume réduit. Qualité conservée.</span></td><td class="num">2 × max</td><td class="num">2 min</td></tr>
+            <tr><td>Pompes</td><td class="num">2 × 10</td><td class="num">90 s</td></tr>
+          </table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Planche + latéral</td><td class="num">2 × 30 s</td><td class="num">60 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 6</span><span class="sess-type t-sprint">SPRINT LÉGER</span><span class="sess-dur">45 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table><tr><td>Footing + gammes</td><td class="num">20 min</td></tr></table>
+          <div class="blk">Sprints · 20 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints 20 m<span class="ex-note">Vitesse conservée, volume réduit. On entretient le système nerveux sans le fatiguer.</span></td><td class="num">4 × 20 m</td><td class="num">3 min</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 8</span><span class="sess-type t-recup">MOBILITÉ</span><span class="sess-dur">30 min</span></div>
+          <table>
+            <tr><th>Contenu</th><th>Durée</th><th>Note</th></tr>
+            <tr><td>Étirements complets + marche ou nage<span class="ex-note">Ischios, quadriceps, fessiers, dos, épaules. 30 sec par position.</span></td><td class="num">30 min</td><td class="num">Doux</td></tr>
+          </table>
+          <div class="alt"><b>Si la piste est dispo :</b> roule pour le plaisir. Pas de chrono, pas d'objectif. Sensations.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mental">
+    <h3>POURQUOI TROIS SÉANCES, ET PAS CINQ</h3>
+    <p>Le geste explosif ne se construit pas par le volume, mais par la <b>fréquence de stimulation du système nerveux</b>. Trois expositions courtes et fraîches valent mieux que cinq séances traînées dans la fatigue.</p>
+    <p>Et il y a une règle que peu de gens respectent : <b>une séance faite fatigué ne construit rien, elle abîme.</b> Les semaines de décharge (4 et 7) ne sont pas des semaines perdues. C'est là que le travail des trois semaines précédentes s'installe dans le corps.</p>
+  </div>
+
+  <!-- ════ PHASE 2 : PUISSANCE ════ -->
+  <div class="phase">
+    <div class="ph-head">
+      <span class="ph-tag ph-2">PHASE 2</span>
+      <div>
+        <div class="ph-name">PUISSANCE EXPLOSIVE</div>
+        <div class="ph-goal">Semaines 5-6 · Le cœur du programme. C'est ici que le start se construit.</div>
+      </div>
+    </div>
+
+    <!-- S5 -->
+    <div class="week" data-wk="5">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">05</span>
+          <div><div class="wk-dates">10 → 15 août</div><div class="wk-focus">Pliométrie · Réaction</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 10</span><span class="sess-type t-start">PLIOMÉTRIE</span><span class="sess-dur">75 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes + 3 sauts progressifs<span class="ex-note">La pliométrie sur un corps froid, c'est la blessure assurée.</span></td><td class="num">15 min</td></tr></table>
+          <div class="blk">Pliométrie · 38 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Box jump<span class="ex-note">Hauteur raisonnable, réception parfaite. Dès qu'elle se dégrade, tu redescends.</span></td><td class="num">5 × 5</td><td class="num">2 min 30</td></tr>
+            <tr><td>Saut en longueur départ arrêté<span class="ex-note">Poussée horizontale maximale. C'est ton portillon.</span></td><td class="num">5 × 5</td><td class="num">2 min 30</td></tr>
+            <tr><td>Squat sauté maximal</td><td class="num">4 × 6</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Tirage explosif · 12 min</div>
+          <table>
+            <tr><td>Tractions explosives<span class="ex-note">Monte le plus vite possible, descends lentement (3 sec). C'est la vitesse de tirage qu'on cherche, celle du portillon.</span></td><td class="num">5 × 5</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="blk">Gainage · 10 min</div>
+          <table><tr><td>Hollow rock<span class="ex-note">Le hollow hold en se balançant. Brutal.</span></td><td class="num">4 × 20</td><td class="num">60 s</td></tr></table>
+          <div class="tip warn"><b>Règle d'or de la pliométrie :</b> repos long entre les séries. Le but n'est pas de te fatiguer, c'est de produire de la puissance maximale à chaque répétition. Si tu es essoufflé, tu fais du cardio, pas de l'explosivité.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 13</span><span class="sess-type t-sprint">SPRINT + RÉACTION</span><span class="sess-dur">75 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table><tr><td>Footing + gammes + accélérations progressives</td><td class="num">20 min</td></tr></table>
+          <div class="blk">Départs à signal · 25 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints 10 m sur signal sonore<span class="ex-note">Quelqu'un tape dans les mains à un moment imprévisible. C'est le TEMPS DE RÉACTION au portillon que tu travailles. Fondamental pour la première ligne. Appli de bip aléatoire s'il est seul.</span></td><td class="num">8 × 10 m</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Sprints · 20 min</div>
+          <table>
+            <tr><td>Sprints 20 m</td><td class="num">6 × 20 m</td><td class="num">2 min 30</td></tr>
+            <tr><td>Sprints en côte</td><td class="num">4 × 15 m</td><td class="num">3 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 10 min</div>
+          <table><tr><td>Circuit complet</td><td class="num">3 tours</td><td class="num">60 s</td></tr></table>
+          <div class="tip"><b>Au portillon, la force ne suffit pas.</b> Il faut réagir avant les sept autres. C'est ce qui sépare celui qui est fort de celui qui est devant.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 15</span><span class="sess-type t-spe">TRANSFERT</span><span class="sess-dur">65 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Explosivité + tirage · 40 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur enchaîné<span class="ex-note">3 sauts d'affilée sans temps d'arrêt. Rebondis.</span></td><td class="num">5 × 3</td><td class="num">2 min 30</td></tr>
+            <tr><td>Squat bulgare sauté<span class="ex-note">Très dur. Réduis si la technique se casse.</span></td><td class="num">4 × 6/jambe</td><td class="num">2 min</td></tr>
+            <tr><td>Tractions lestées<span class="ex-note">Sac à dos avec des bouteilles d'eau. Si les tractions strictes sont encore dures, reste au poids du corps.</span></td><td class="num">4 × 6</td><td class="num">2 min 30</td></tr>
+            <tr><td>Pompes claquées ou explosives</td><td class="num">4 × 6</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Circuit</td><td class="num">2 tours</td><td class="num">60 s</td></tr></table>
+          <div class="alt"><b>Si la piste est dispo :</b> priorité absolue au portillon. 12 départs, récup complète 3 min.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6 : PIC -->
+    <div class="week" data-wk="6">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">06</span>
+          <div><div class="wk-dates">17 → 22 août</div><div class="wk-focus">PIC DE CHARGE · La semaine la plus dure</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 17</span><span class="sess-type t-start">PUISSANCE MAX</span><span class="sess-dur">80 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet, progressif, sans économie</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Pliométrie · 45 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Box jump hauteur maximale</td><td class="num">6 × 4</td><td class="num">3 min</td></tr>
+            <tr><td>Saut en longueur — MESURE LA DISTANCE<span class="ex-note">Note sa meilleure distance. C'est l'indicateur de progression le plus fiable du programme. Tu la compareras en semaine 9.</span></td><td class="num">6 × 3</td><td class="num">2 min 30</td></tr>
+            <tr><td>Sauts groupés genoux-poitrine</td><td class="num">4 × 8</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Tirage · 12 min</div>
+          <table><tr><td>Tractions lestées<span class="ex-note">Poids du corps si le lest est trop dur.</span></td><td class="num">5 × 5</td><td class="num">2 min 30</td></tr></table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Circuit renforcé</td><td class="num">4 tours</td><td class="num">60 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 20</span><span class="sess-type t-sprint">SPRINT MAXIMAL</span><span class="sess-dur">80 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table><tr><td>Footing + gammes + accélérations</td><td class="num">20 min</td></tr></table>
+          <div class="blk">Sprints · 48 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Départs sur signal 10 m<span class="ex-note">Chronomètre si tu peux. La progression se voit là.</span></td><td class="num">10 × 10 m</td><td class="num">2 min</td></tr>
+            <tr><td>Sprints 20 m</td><td class="num">6 × 20 m</td><td class="num">2 min 30</td></tr>
+            <tr><td>Sprints en côte 20 m</td><td class="num">5 × 20 m</td><td class="num">3 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 10 min</div>
+          <table><tr><td>Circuit complet</td><td class="num">3 tours</td><td class="num">60 s</td></tr></table>
+          <div class="tip warn"><b>Semaine la plus dure du programme.</b> Après celle-ci, la charge redescend définitivement. Si la fatigue est trop forte, enlève une série plutôt que de sauter la séance.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 22</span><span class="sess-type t-spe">TRANSFERT</span><span class="sess-dur">70 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Explosivité · 45 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur enchaîné</td><td class="num">5 × 3</td><td class="num">2 min 30</td></tr>
+            <tr><td>Box jump</td><td class="num">5 × 4</td><td class="num">3 min</td></tr>
+            <tr><td>Sprint sur 20 m (course)</td><td class="num">5 × 20 m</td><td class="num">2 min 30</td></tr>
+            <tr><td>Tractions lestées</td><td class="num">4 × 6</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Circuit</td><td class="num">2 tours</td><td class="num">60 s</td></tr></table>
+          <div class="alt"><b>Si la piste est dispo :</b> portillon. C'est le meilleur moment de tout le programme pour rouler.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S7 : DÉCHARGE -->
+    <div class="week deload" data-wk="7">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">07</span>
+          <div><div class="wk-dates">24 → 29 août</div><div class="wk-focus">DÉCHARGE · Assimilation</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="tip ok"><b>Deuxième décharge.</b> Après le pic de la semaine 6, le corps a besoin d'assimiler. C'est cette semaine qui transforme la fatigue accumulée en progression réelle. Résiste à l'envie d'en faire plus.</div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 24</span><span class="sess-type t-force">FORCE LÉGÈRE</span><span class="sess-dur">45 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Footing + mobilisation</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Explosivité légère · 25 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Box jump<span class="ex-note">Volume réduit de moitié. On entretient, on ne charge pas.</span></td><td class="num">3 × 4</td><td class="num">3 min</td></tr>
+            <tr><td>Squat sauté</td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+            <tr><td>Tractions</td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Léger</td><td class="num">2 × 30 s</td><td class="num">60 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 27</span><span class="sess-type t-sprint">VITESSE LÉGÈRE</span><span class="sess-dur">45 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table><tr><td>Footing + gammes</td><td class="num">20 min</td></tr></table>
+          <div class="blk">Sprints · 20 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Départs sur signal 10 m<span class="ex-note">Peu de répétitions, fraîcheur totale à chaque départ.</span></td><td class="num">5 × 10 m</td><td class="num">3 min</td></tr>
+            <tr><td>Sprints 20 m</td><td class="num">3 × 20 m</td><td class="num">3 min</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 29</span><span class="sess-type t-recup">MOBILITÉ</span><span class="sess-dur">30 min</span></div>
+          <table>
+            <tr><th>Contenu</th><th>Durée</th><th>Note</th></tr>
+            <tr><td>Étirements + repos actif</td><td class="num">30 min</td><td class="num">Doux</td></tr>
+          </table>
+          <div class="alt"><b>Si la piste est dispo :</b> roule pour le plaisir et les sensations. Pas de départs à fond.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PHASE 3 : SPÉCIFICITÉ ════ -->
+  <div class="phase">
+    <div class="ph-head">
+      <span class="ph-tag ph-3">PHASE 3</span>
+      <div>
+        <div class="ph-name">SPÉCIFICITÉ COURSE</div>
+        <div class="ph-goal">Semaine 8 · Intensité maximale, volume contenu. On affine.</div>
+      </div>
+    </div>
+
+    <!-- S8 -->
+    <div class="week" data-wk="8">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">08</span>
+          <div><div class="wk-dates">31 août → 5 septembre</div><div class="wk-focus">Vitesse pure · Réaction</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 31 AOÛT</span><span class="sess-type t-start">EXPLOSIVITÉ</span><span class="sess-dur">65 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Pliométrie · 35 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Box jump<span class="ex-note">Volume réduit, qualité maximale. Chaque saut compte.</span></td><td class="num">4 × 4</td><td class="num">3 min</td></tr>
+            <tr><td>Saut en longueur enchaîné</td><td class="num">4 × 3</td><td class="num">2 min 30</td></tr>
+            <tr><td>Squat sauté</td><td class="num">3 × 6</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Tirage · 10 min</div>
+          <table><tr><td>Tractions</td><td class="num">3 × max</td><td class="num">2 min</td></tr></table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Circuit court</td><td class="num">2 tours</td><td class="num">60 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 3 SEPT</span><span class="sess-type t-sprint">RÉACTION PURE</span><span class="sess-dur">65 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table><tr><td>Footing + gammes</td><td class="num">20 min</td></tr></table>
+          <div class="blk">Départs à signal · 35 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Départs sur signal 10 m<span class="ex-note">Toute la séance est là. Réaction + explosion. Rien d'autre. C'est ta course.</span></td><td class="num">10 × 10 m</td><td class="num">2 min 30</td></tr>
+            <tr><td>Sprints 15 m</td><td class="num">4 × 15 m</td><td class="num">3 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Circuit court</td><td class="num">2 tours</td><td class="num">60 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 5</span><span class="sess-type t-spe">TRANSFERT FINAL</span><span class="sess-dur">60 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Explosivité · 35 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur</td><td class="num">4 × 3</td><td class="num">3 min</td></tr>
+            <tr><td>Sprint 20 m départ arrêté</td><td class="num">5 × 20 m</td><td class="num">3 min</td></tr>
+            <tr><td>Tractions</td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 8 min</div>
+          <table><tr><td>Circuit court</td><td class="num">2 tours</td><td class="num">60 s</td></tr></table>
+          <div class="alt"><b>Si la piste est dispo :</b> priorité maximale. Simulation de manches complètes, départs, premiers virages. À deux semaines de Troyes, chaque tour de piste vaut de l'or.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PHASE 4 : AFFÛTAGE ════ -->
+  <div class="phase">
+    <div class="ph-head">
+      <span class="ph-tag ph-4">PHASE 4</span>
+      <div>
+        <div class="ph-name">AFFÛTAGE</div>
+        <div class="ph-goal">Semaines 9-10 · On enlève la fatigue, on garde la vitesse. Arriver frais.</div>
+      </div>
+    </div>
+
+    <!-- S9 -->
+    <div class="week deload" data-wk="9">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">09</span>
+          <div><div class="wk-dates">7 → 12 septembre</div><div class="wk-focus">Volume divisé par 2 · Vitesse intacte</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 7</span><span class="sess-type t-start">ENTRETIEN EXPLOSIF</span><span class="sess-dur">50 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet, sans économie</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Explosivité · 25 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur — MESURE ET COMPARE<span class="ex-note">Le moment de vérité. Compare à la distance notée en semaine 6. Elle doit avoir progressé. C'est la preuve chiffrée que le travail a payé.</span></td><td class="num">4 × 3</td><td class="num">3 min</td></tr>
+            <tr><td>Box jump</td><td class="num">3 × 4</td><td class="num">3 min</td></tr>
+            <tr><td>Squat sauté</td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Tirage · 8 min</div>
+          <table><tr><td>Tractions</td><td class="num">3 × 5</td><td class="num">2 min</td></tr></table>
+          <div class="tip"><b>Volume divisé par deux.</b> C'est volontaire, et c'est là que le corps assimile huit semaines de travail. Ne rajoute rien.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 10</span><span class="sess-type t-sprint">VITESSE COURTE</span><span class="sess-dur">50 min</span></div>
+          <div class="blk">Échauffement · 20 min</div>
+          <table><tr><td>Footing + gammes + accélérations</td><td class="num">20 min</td></tr></table>
+          <div class="blk">Sprints · 22 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Départs sur signal 10 m<span class="ex-note">Peu de répétitions, qualité maximale. On réveille le système nerveux, on ne le fatigue pas.</span></td><td class="num">6 × 10 m</td><td class="num">3 min</td></tr>
+            <tr><td>Sprints 20 m</td><td class="num">3 × 20 m</td><td class="num">3 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 6 min</div>
+          <table><tr><td>Léger</td><td class="num">2 × 30 s</td><td class="num">60 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 12</span><span class="sess-type t-spe">DERNIÈRE SPÉCIFIQUE</span><span class="sess-dur">45 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Activation · 25 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur<span class="ex-note">Volume minimal. On reste vif sans créer de fatigue.</span></td><td class="num">3 × 3</td><td class="num">3 min</td></tr>
+            <tr><td>Sprints 15 m</td><td class="num">4 × 15 m</td><td class="num">3 min</td></tr>
+          </table>
+          <div class="alt"><b>Si la piste est dispo :</b> dernière grosse session vélo. Départs, trajectoires. Après ça, on économise tout jusqu'à Troyes.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S10 : COURSE -->
+    <div class="week race" data-wk="10">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">10</span>
+          <div><div class="wk-dates">14 → 19 septembre · TROYES</div><div class="wk-focus">Semaine de course</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 14</span><span class="sess-type t-start">ACTIVATION</span><span class="sess-dur">40 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing léger + gammes</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Activation · 22 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur<span class="ex-note">Juste pour réveiller. Aucune recherche de performance.</span></td><td class="num">3 × 2</td><td class="num">3 min</td></tr>
+            <tr><td>Départs sur signal 10 m</td><td class="num">4 × 10 m</td><td class="num">3 min</td></tr>
+          </table>
+          <div class="tip warn"><b>Aucune fatigue à partir d'ici.</b> Le travail est fait depuis longtemps. La seule chose que tu peux encore faire, c'est te gâcher la course en en rajoutant.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 17</span><span class="sess-type t-recup">DÉROUILLAGE</span><span class="sess-dur">25 min</span></div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Note</th></tr>
+            <tr><td>Footing léger<span class="ex-note">Juste pour ne pas être raide.</span></td><td class="num">12 min</td><td class="num">Facile</td></tr>
+            <tr><td>3 accélérations progressives<span class="ex-note">Sur 15 m, sans forcer. Le système nerveux reste éveillé.</span></td><td class="num">3 × 15 m</td><td class="num">Vif</td></tr>
+            <tr><td>Étirements légers</td><td class="num">8 min</td><td class="num">Doux</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">VENDREDI 18</span><span class="sess-type t-recup">REPOS</span><span class="sess-dur">—</span></div>
+          <table>
+            <tr><th>Contenu</th><th></th></tr>
+            <tr><td>Repos complet<span class="ex-note">Rien. Prépare le matériel, dors tôt, mange normalement. Le corps est prêt.</span></td><td class="num">Repos</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 19</span><span class="sess-type t-start">TROYES · JOUR J</span><span class="sess-dur">COURSE</span></div>
+          <table>
+            <tr><th>Protocole d'avant-course</th><th></th></tr>
+            <tr><td>Échauffement long et progressif<span class="ex-note">Ne JAMAIS aborder un portillon à froid. 20 à 25 min minimum : footing, gammes, mobilisation.</span></td><td class="num">20-25 min</td></tr>
+            <tr><td>Départs d'activation sur le vélo<span class="ex-note">3 à 4 départs progressifs, le dernier à 90 %, environ 20 min avant sa manche. Puis il reste chaud (veste, mouvement).</span></td><td class="num">3-4 départs</td></tr>
+            <tr><td>Entre les manches<span class="ex-note">Ne jamais se refroidir complètement. Bouger, se couvrir, boire.</span></td><td class="num">—</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mental">
+    <h3>CE QUI SE JOUE AU PORTILLON</h3>
+    <p>Dix semaines de travail se jouent en <b>trois secondes</b>. C'est peu, et c'est pour ça que tout le programme converge vers ce moment.</p>
+    <p>La force, il l'aura construite. La réaction, il l'aura travaillée sur signal, semaine après semaine. Le reste, ce jour-là, c'est la tête. <b>Celui qui gagne le portillon n'est pas celui qui veut le plus fort : c'est celui qui est le plus calme au moment où le portillon tombe.</b></p>
+    <p>Le corps saura déjà quoi faire. Son seul travail, à cet instant, c'est de le laisser faire.</p>
+  </div>
+
+  <div class="mental">
+    <h3>S'IL N'A RIEN SOUS LA MAIN</h3>
+    <p><b>Zéro traction possible au début ?</b> Normal. Fais des négatives : monte sur une chaise, saute en position haute, et descends le plus lentement possible (5 sec). En trois semaines, la première traction arrive.</p>
+    <p><b>Avant le 24 juillet (barre pas encore là) ?</b> Pompes, dips entre deux chaises, pompes diamant. Le tirage démarre en semaine 3 (lundi 27), avec la barre.</p>
+    <p><b>Pas de banc pour les box jumps ?</b> Un muret, un escalier, un banc public, une caisse stable.</p>
+    <p><b>Pas de terrain pour sprinter ?</b> Un parking vide, une allée, un chemin. Il faut 30 mètres, pas un stade.</p>
+    <p><b>Personne pour donner le signal ?</b> Une appli de bip aléatoire sur son téléphone.</p>
+    <p><b>Une séance sautée ?</b> On ne rattrape pas, on reprend au suivant. Deux séances tenues valent mieux que trois séances entassées.</p>
+  </div>
+
+  <footer>AXE MENTAL PERFORMANCE® · OBJECTIF TROYES · 19 SEPTEMBRE</footer>
+</div>
+
+<script>
+(function(){
+  var course = new Date(new Date().getFullYear(), 8, 19);
+  var now = new Date();
+  if (course < now) course.setFullYear(course.getFullYear() + 1);
+  var jours = Math.ceil((course - now) / 86400000);
+  document.getElementById('cdNum').textContent = jours > 0 ? jours : 0;
+})();
+
+document.querySelectorAll('.wk-head').forEach(function(h){
+  h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
+});
+var w1 = document.querySelector('.week[data-wk="1"]');
+if (w1) w1.classList.add('open');
+
+var total = document.querySelectorAll('.done-btn').length;
+function maj(){
+  var f = document.querySelectorAll('.done-btn.done').length;
+  var p = Math.round(f/total*100);
+  document.getElementById('progFill').style.width = p + '%';
+  document.getElementById('progTxt').textContent = 'Séances validées : ' + f + ' / ' + total + '  ·  ' + p + '%';
+}
+document.querySelectorAll('.done-btn').forEach(function(b){
+  b.addEventListener('click', function(){
+    b.classList.toggle('done');
+    b.textContent = b.classList.contains('done') ? '✓ Validée' : 'Séance validée';
+    maj();
+  });
+});
+maj();
+</script>
+</body>
+</html>
