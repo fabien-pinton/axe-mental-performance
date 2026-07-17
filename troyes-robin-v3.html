@@ -99,6 +99,14 @@ td.num{font-family:var(--font-s);font-size:15px;color:var(--gold-d);font-weight:
 .done-btn{margin-top:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--font-ui);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;transition:all .2s;}
 .done-btn:hover{border-color:var(--gold);color:var(--gold);}
 .done-btn.done{background:var(--green);border-color:var(--green);color:#fff;}
+.fb{display:none;margin-top:10px;background:var(--panel);border-left:2px solid var(--gold);padding:12px 14px;}
+.fb.show{display:block;}
+.fb label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d);font-weight:600;display:block;margin-bottom:6px;}
+.fb textarea{width:100%;min-height:70px;border:1px solid var(--border);background:var(--card);font-family:var(--font-ui);font-size:13px;padding:8px 10px;resize:vertical;color:var(--text);}
+.fb textarea:focus{outline:none;border-color:var(--gold);}
+.fb-send{margin-top:8px;background:var(--gold);border:none;color:#fff;font-family:var(--font-ui);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;cursor:pointer;}
+.fb-send:hover{background:var(--gold-d);}
+.fb-ok{font-size:11px;color:var(--green);margin-top:6px;display:none;}
 
 .mental{background:#1A1612;color:var(--card);padding:20px;margin:24px 0;border-left:3px solid var(--gold);}
 .mental h3{font-family:var(--font-hd);font-size:19px;color:var(--gold2);letter-spacing:.06em;margin-bottom:9px;}
@@ -219,7 +227,7 @@ footer{text-align:center;padding:26px 16px;font-size:10px;letter-spacing:.15em;t
         </div>
 
         <div class="tip"><b>Semaine 1 volontairement allégée</b> (2 séances). Le corps se réhabitue. Des courbatures modérées sont normales, une douleur articulaire ne l'est pas.</div>
-        <div class="alt"><b>Barre de traction : elle arrive le 24 juillet.</b> Jusqu'au jeudi 23, le haut du corps se travaille en poussée (pompes, dips, pompes diamant). À partir du <b>lundi 27 juillet</b>, les tractions entrent dans le programme, et c'est là que le vrai travail commence : au portillon, on tire sur le guidon autant qu'on pousse sur les pédales. Perdre dix jours de tirage sur dix semaines, ça ne coûte rien.</div>
+        <div class="alt"><b>Barre de traction : disponible dès le jeudi 23 juillet.</b> Avant ça, le haut du corps se travaille en poussée (pompes, dips, pompes diamant). Dès le 23, il peut se familiariser avec la barre (suspensions, négatives), et à partir du <b>lundi 27 juillet</b> les tractions entrent officiellement dans le programme : au portillon, on tire sur le guidon autant qu'on pousse sur les pédales.</div>
       </div>
     </div>
 
@@ -824,7 +832,7 @@ footer{text-align:center;padding:26px 16px;font-size:10px;letter-spacing:.15em;t
   <div class="mental">
     <h3>S'IL N'A RIEN SOUS LA MAIN</h3>
     <p><b>Zéro traction possible au début ?</b> Normal. Fais des négatives : monte sur une chaise, saute en position haute, et descends le plus lentement possible (5 sec). En trois semaines, la première traction arrive.</p>
-    <p><b>Avant le 24 juillet (barre pas encore là) ?</b> Pompes, dips entre deux chaises, pompes diamant. Le tirage démarre en semaine 3 (lundi 27), avec la barre.</p>
+    <p><b>Avant le jeudi 23 juillet (barre pas encore là) ?</b> Pompes, dips entre deux chaises, pompes diamant. Dès le 23 : suspensions et négatives. Le tirage complet démarre en semaine 3 (lundi 27).</p>
     <p><b>Pas de banc pour les box jumps ?</b> Un muret, un escalier, un banc public, une caisse stable.</p>
     <p><b>Pas de terrain pour sprinter ?</b> Un parking vide, une allée, un chemin. Il faut 30 mètres, pas un stade.</p>
     <p><b>Personne pour donner le signal ?</b> Une appli de bip aléatoire sur son téléphone.</p>
@@ -857,9 +865,32 @@ function maj(){
   document.getElementById('progTxt').textContent = 'Séances validées : ' + f + ' / ' + total + '  ·  ' + p + '%';
 }
 document.querySelectorAll('.done-btn').forEach(function(b){
+  var sess = b.closest('.sess');
+  var head = sess ? sess.querySelector('.sess-head') : null;
+  var wkDates = b.closest('.week') ? b.closest('.week').querySelector('.wk-dates') : null;
+  var titre = (head ? head.textContent.replace(/\s+/g,' ').trim() : 'Séance') + (wkDates ? ' (' + wkDates.textContent.trim() + ')' : '');
+
+  var fb = document.createElement('div');
+  fb.className = 'fb';
+  fb.innerHTML = '<label>Ton ressenti de séance</label>' +
+    '<textarea placeholder="Comment tu t\'es senti ? Facile, dur, douleurs, sensations au sprint..."></textarea>' +
+    '<button class="fb-send" type="button">Envoyer mon ressenti à Fabien</button>' +
+    '<div class="fb-ok">✓ Ta messagerie va s\'ouvrir. Vérifie et envoie.</div>';
+  b.parentNode.insertBefore(fb, b.nextSibling);
+
+  fb.querySelector('.fb-send').addEventListener('click', function(){
+    var txt = fb.querySelector('textarea').value.trim();
+    var sujet = encodeURIComponent('Ressenti séance · ' + titre);
+    var corps = encodeURIComponent('Séance : ' + titre + '\n\nRessenti :\n' + (txt || '(non renseigné)'));
+    window.location.href = 'mailto:f.pinton@outlook.fr?subject=' + sujet + '&body=' + corps;
+    fb.querySelector('.fb-ok').style.display = 'block';
+  });
+
   b.addEventListener('click', function(){
     b.classList.toggle('done');
-    b.textContent = b.classList.contains('done') ? '✓ Validée' : 'Séance validée';
+    var ok = b.classList.contains('done');
+    b.textContent = ok ? '✓ Validée' : 'Séance validée';
+    fb.classList.toggle('show', ok);
     maj();
   });
 });

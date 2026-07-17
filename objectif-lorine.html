@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBJECTIF 29 AOÛT · Pilote 12 ans</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F3EC; --panel:#F0EBE0; --card:#FDFAF5; --border:rgba(168,133,42,.18);
+  --gold:#A8852A; --gold2:#C9A84C; --gold-d:#7A6020;
+  --red:#C0392B; --green:#2E7D32; --blue:#1565C0; --orange:#E67E22;
+  --muted:#8A7D6A; --text:#1A1612; --text2:#5A5040;
+  --font-hd:'Bebas Neue',sans-serif; --font-ui:'DM Sans',sans-serif; --font-s:'Cormorant Garamond',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-weight:300;font-size:15px;line-height:1.5;padding-bottom:60px;}
+header{background:#1A1612;border-bottom:2px solid var(--gold);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.logo{display:flex;align-items:center;gap:11px;}
+.logo-mark{width:34px;height:34px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-family:var(--font-hd);font-size:12px;color:#000;flex-shrink:0;}
+.logo-txt{font-family:var(--font-hd);font-size:19px;color:var(--card);letter-spacing:.12em;line-height:1;}
+.logo-sub{font-size:9px;color:var(--gold2);letter-spacing:.22em;text-transform:uppercase;margin-top:2px;}
+.countdown{text-align:right;}
+.cd-num{font-family:var(--font-hd);font-size:26px;color:var(--gold2);line-height:1;}
+.cd-lbl{font-size:8px;color:rgba(247,243,236,.5);letter-spacing:.18em;text-transform:uppercase;}
+.wrap{max-width:840px;margin:0 auto;padding:22px 16px;}
+.intro{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);padding:18px 20px;margin-bottom:20px;}
+.intro h1{font-family:var(--font-hd);font-size:27px;letter-spacing:.04em;margin-bottom:9px;line-height:1.1;}
+.intro p{font-size:14px;color:var(--text2);line-height:1.65;}
+.intro strong{color:var(--text);font-weight:600;}
+.obj{background:#1A1612;color:var(--card);padding:16px 20px;margin-bottom:20px;border-left:3px solid var(--red);}
+.obj-t{font-family:var(--font-hd);font-size:15px;color:var(--red);letter-spacing:.14em;margin-bottom:7px;}
+.obj p{font-size:13.5px;color:rgba(247,243,236,.85);line-height:1.65;}
+.obj b{color:var(--gold2);}
+.rythme{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:22px;}
+.ry{background:var(--card);border:1px solid var(--border);padding:12px 14px;border-top:3px solid;}
+.ry.r1{border-top-color:var(--blue);} .ry.r2{border-top-color:var(--orange);} .ry.r3{border-top-color:var(--gold);}
+.ry-d{font-family:var(--font-hd);font-size:16px;letter-spacing:.08em;margin-bottom:3px;}
+.ry-n{font-size:11px;color:var(--muted);line-height:1.45;}
+@media(max-width:600px){.rythme{grid-template-columns:1fr;}}
+.prog-bar{background:var(--panel);height:6px;margin-bottom:6px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold2));transition:width .5s;}
+.prog-txt{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px;}
+.phase{margin-bottom:14px;}
+.ph-head{display:flex;align-items:center;gap:12px;margin-bottom:13px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.ph-tag{font-family:var(--font-hd);font-size:13px;letter-spacing:.13em;padding:4px 10px;color:#fff;white-space:nowrap;}
+.ph-1{background:var(--blue);} .ph-2{background:var(--red);} .ph-3{background:var(--gold-d);} .ph-4{background:var(--green);}
+.ph-name{font-family:var(--font-hd);font-size:20px;letter-spacing:.05em;line-height:1.1;}
+.ph-goal{font-size:12px;color:var(--muted);font-style:italic;font-family:var(--font-s);}
+.week{background:var(--card);border:1px solid var(--border);margin-bottom:9px;}
+.week.race{border:2px solid var(--red);}
+.week.deload{border-left:3px solid var(--green);}
+.wk-head{padding:13px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.wk-head:hover{background:var(--panel);}
+.wk-l{display:flex;align-items:center;gap:12px;}
+.wk-num{font-family:var(--font-hd);font-size:22px;color:var(--gold);line-height:1;min-width:26px;}
+.week.race .wk-num{color:var(--red);}
+.week.deload .wk-num{color:var(--green);}
+.wk-dates{font-size:13px;font-weight:500;}
+.wk-focus{font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;}
+.wk-chevron{color:var(--gold);font-size:13px;transition:transform .25s;}
+.week.open .wk-chevron{transform:rotate(90deg);}
+.wk-body{display:none;padding:0 18px 16px;border-top:1px solid var(--border);}
+.week.open .wk-body{display:block;}
+.sess{border-left:2px solid var(--border);padding:12px 0 12px 14px;margin-top:14px;}
+.sess.s-sam{border-left-color:var(--gold);}
+.sess-head{display:flex;align-items:center;gap:9px;margin-bottom:9px;flex-wrap:wrap;}
+.sess-day{font-family:var(--font-hd);font-size:16px;letter-spacing:.07em;color:var(--gold-d);}
+.sess-type{font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:2px 7px;color:#fff;}
+.t-force{background:var(--blue);} .t-sprint{background:var(--orange);} .t-spe{background:var(--gold);} .t-start{background:var(--red);} .t-recup{background:var(--muted);}
+.sess-dur{font-size:11px;color:var(--muted);margin-left:auto;}
+.blk{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d);font-weight:600;margin:12px 0 4px;padding-top:8px;border-top:1px dotted var(--border);}
+.blk:first-of-type{border-top:none;padding-top:0;margin-top:8px;}
+table{width:100%;border-collapse:collapse;margin-top:4px;}
+th{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);text-align:left;padding:5px 8px 5px 0;font-weight:500;border-bottom:1px solid var(--border);}
+td{padding:8px 8px 8px 0;font-size:13.5px;border-bottom:1px solid rgba(168,133,42,.07);vertical-align:top;}
+td:first-child{font-weight:500;width:46%;}
+td.num{font-family:var(--font-s);font-size:15px;color:var(--gold-d);font-weight:600;white-space:nowrap;}
+.ex-note{display:block;font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px;line-height:1.45;}
+.alt{background:var(--panel);border-left:2px solid var(--gold);padding:10px 14px;margin-top:10px;font-size:12.5px;color:var(--text2);line-height:1.6;}
+.alt b{color:var(--gold-d);}
+.tip{background:var(--panel);border-left:2px solid var(--gold2);padding:10px 14px;margin-top:12px;font-size:12.5px;color:var(--text2);line-height:1.6;}
+.tip b{color:var(--text);}
+.tip.warn{border-left-color:var(--red);}
+.tip.ok{border-left-color:var(--green);}
+.done-btn{margin-top:12px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--font-ui);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;transition:all .2s;}
+.done-btn:hover{border-color:var(--gold);color:var(--gold);}
+.done-btn.done{background:var(--green);border-color:var(--green);color:#fff;}
+.fb{display:none;margin-top:10px;background:var(--panel);border-left:2px solid var(--gold);padding:12px 14px;}
+.fb.show{display:block;}
+.fb label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d);font-weight:600;display:block;margin-bottom:6px;}
+.fb textarea{width:100%;min-height:70px;border:1px solid var(--border);background:var(--card);font-family:var(--font-ui);font-size:13px;padding:8px 10px;resize:vertical;color:var(--text);}
+.fb textarea:focus{outline:none;border-color:var(--gold);}
+.fb-send{margin-top:8px;background:var(--gold);border:none;color:#fff;font-family:var(--font-ui);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;cursor:pointer;}
+.fb-send:hover{background:var(--gold-d);}
+.fb-ok{font-size:11px;color:var(--green);margin-top:6px;display:none;}
+.mental{background:#1A1612;color:var(--card);padding:20px;margin:24px 0;border-left:3px solid var(--gold);}
+.mental h3{font-family:var(--font-hd);font-size:19px;color:var(--gold2);letter-spacing:.06em;margin-bottom:9px;}
+.mental p{font-size:13.5px;color:rgba(247,243,236,.82);line-height:1.7;}
+.mental p+p{margin-top:9px;}
+.mental b{color:var(--gold2);}
+footer{text-align:center;padding:26px 16px;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+@media(max-width:600px){
+  .wrap{padding:16px 12px;}
+  td:first-child{width:54%;}
+  .wk-focus{display:none;}
+  .sess-dur{margin-left:0;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <div>
+      <div class="logo-txt">OBJECTIF 29 AOÛT</div>
+      <div class="logo-sub">Pilote 12 ans · Première ligne</div>
+    </div>
+  </div>
+  <div class="countdown">
+    <div class="cd-num" id="cdNum">—</div>
+    <div class="cd-lbl">jours avant la course</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="intro">
+    <h1>6 SEMAINES POUR ARRIVER PRÊTE AU PORTILLON</h1>
+    <p><strong>Lundi 20 juillet → samedi 29 août.</strong> Trois séances par semaine, 40 à 55 minutes. Aucune salle, aucune charge lourde, tout au poids du corps. À 12 ans, on construit la vitesse et la coordination, pas la masse. Chaque séance doit rester un jeu qui va vite.</p>
+  </div>
+
+  <div class="obj">
+    <div class="obj-t">L'OBJECTIF COMMANDE TOUT</div>
+    <p>Être devant au start, c'est trois qualités : la <b>poussée explosive</b> des jambes, le <b>tirage</b> sur le guidon, et le <b>gainage</b> qui transmet la force au vélo. À 12 ans, on y ajoute une quatrième arme qui compte plus que tout : le <b>temps de réaction</b>. Chaque exercice de ce programme sert l'une de ces quatre qualités.</p>
+  </div>
+
+  <div class="rythme">
+    <div class="ry r1"><div class="ry-d">LUNDI</div><div class="ry-n">Force ludique &amp; sauts<br>La poussée</div></div>
+    <div class="ry r2"><div class="ry-d">JEUDI</div><div class="ry-n">Sprint &amp; réaction<br>L'explosion</div></div>
+    <div class="ry r3"><div class="ry-d">SAMEDI</div><div class="ry-n">Transfert &amp; piste<br>Le pilotage</div></div>
+  </div>
+
+  <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  <div class="prog-txt" id="progTxt">Séances validées : 0 / 18</div>
+
+  <!-- ════ PHASE 1 : FONDATIONS ════ -->
+  <div class="phase">
+    <div class="ph-head">
+      <span class="ph-tag ph-1">PHASE 1</span>
+      <div>
+        <div class="ph-name">FONDATIONS</div>
+        <div class="ph-goal">Semaines 1-2 · Réveiller le corps, apprendre les bons gestes</div>
+      </div>
+    </div>
+
+    <!-- S1 -->
+    <div class="week" data-wk="1">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">01</span>
+          <div><div class="wk-dates">20 → 25 juillet</div><div class="wk-focus">Reprise en douceur</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 20</span><span class="sess-type t-force">FORCE · REPRISE</span><span class="sess-dur">45 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Footing léger + mobilisation<span class="ex-note">Chevilles, genoux, hanches, épaules. Puis montées de genoux, talons-fesses.</span></td><td class="num">12 min</td></tr></table>
+          <div class="blk">Poussée jambes · 18 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Squat poids du corps<span class="ex-note">Descente contrôlée, cuisses parallèles au sol. La technique avant tout.</span></td><td class="num">3 × 12</td><td class="num">90 s</td></tr>
+            <tr><td>Fentes marchées<span class="ex-note">Buste droit, genou arrière frôle le sol.</span></td><td class="num">3 × 8/jambe</td><td class="num">90 s</td></tr>
+            <tr><td>Montées sur marche</td><td class="num">2 × 10/jambe</td><td class="num">60 s</td></tr>
+          </table>
+          <div class="blk">Haut du corps · 8 min</div>
+          <table>
+            <tr><td>Pompes sur les genoux ou complètes<span class="ex-note">Complètes seulement si le dos reste droit.</span></td><td class="num">3 × 8</td><td class="num">60 s</td></tr>
+            <tr><td>Dips entre deux chaises<span class="ex-note">Mains sur deux chaises stables. La barre de traction arrive jeudi 23, en attendant on travaille en poussée.</span></td><td class="num">3 × 8</td><td class="num">90 s</td></tr>
+          </table>
+          <div class="blk">Gainage · 6 min</div>
+          <table><tr><td>Planche</td><td class="num">3 × 30 s</td><td class="num">45 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 23</span><span class="sess-type t-sprint">DÉCOUVERTE SPRINT</span><span class="sess-dur">45 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes athlétiques<span class="ex-note">Montées de genoux, talons-fesses, pas chassés, foulées bondissantes. L'échauffement avant sprint n'est PAS négociable.</span></td><td class="num">15 min</td></tr></table>
+          <div class="blk">Premiers sprints · 20 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints départ arrêté 15 m<span class="ex-note">Volume bas cette semaine, on réhabitue les tendons.</span></td><td class="num">5 × 15 m</td><td class="num">2 min</td></tr>
+            <tr><td>Jeu de réaction<span class="ex-note">Un parent tape dans les mains à un moment imprévisible, elle part en sprint sur 10 m. On travaille déjà le portillon.</span></td><td class="num">4 × 10 m</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 5 min</div>
+          <table><tr><td>Planche + latéral</td><td class="num">2 × 30 s</td><td class="num">45 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 25</span><span class="sess-type t-spe">TRANSFERT</span><span class="sess-dur">45 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Complet</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Sauts &amp; coordination · 25 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Corde à sauter<span class="ex-note">Pieds joints, rythme régulier. Coordination et tonicité des chevilles.</span></td><td class="num">4 × 45 s</td><td class="num">60 s</td></tr>
+            <tr><td>Saut en longueur départ arrêté<span class="ex-note">Poussée horizontale, comme au portillon. Réception fléchie et stable.</span></td><td class="num">4 × 3</td><td class="num">2 min</td></tr>
+            <tr><td>Sprints 20 m</td><td class="num">3 × 20 m</td><td class="num">2 min</td></tr>
+            <tr><td>Premières tractions<span class="ex-note">La barre est là depuis jeudi. Négatives si la traction complète ne passe pas : monter avec une chaise, descendre en 5 sec.</span></td><td class="num">3 × 3</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="alt"><b>Si la piste est dispo :</b> remplace les sprints par 6 départs au portillon, récup 3 min. C'est toujours mieux.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="tip"><b>Règle absolue à 12 ans :</b> aucune charge, aucun lest, jamais. Le poids du corps suffit largement pour progresser au start. Des courbatures légères sont normales, une douleur articulaire ne l'est pas : on arrête et on en parle.</div>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="week" data-wk="2">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">02</span>
+          <div><div class="wk-dates">27 juillet → 1 août</div><div class="wk-focus">Rythme complet</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 27</span><span class="sess-type t-force">FORCE</span><span class="sess-dur">50 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Footing + mobilisation + gammes</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Poussée jambes · 20 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Squat bulgare (pied arrière sur chaise)<span class="ex-note">Le meilleur exercice de force sans matériel. Amplitude réduite si c'est trop dur.</span></td><td class="num">3 × 8/jambe</td><td class="num">90 s</td></tr>
+            <tr><td>Squat tempo lent<span class="ex-note">3 sec de descente, remontée dynamique.</span></td><td class="num">3 × 10</td><td class="num">90 s</td></tr>
+            <tr><td>Montées sur marche dynamiques</td><td class="num">3 × 10/jambe</td><td class="num">60 s</td></tr>
+          </table>
+          <div class="blk">Haut du corps · 10 min</div>
+          <table>
+            <tr><td>Tractions<span class="ex-note">Négatives si la traction complète ne passe pas encore : monte avec une chaise, descends en 5 sec.</span></td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+            <tr><td>Pompes</td><td class="num">3 × 8</td><td class="num">60 s</td></tr>
+          </table>
+          <div class="blk">Gainage · 6 min</div>
+          <table><tr><td>Planche + latéral</td><td class="num">3 × 30 s</td><td class="num">45 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 30</span><span class="sess-type t-sprint">SPRINT + RÉACTION</span><span class="sess-dur">50 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes + accélérations progressives</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Départs sur signal · 18 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints 10 m sur signal sonore<span class="ex-note">Signal imprévisible : clap, sifflet ou appli de bip aléatoire. C'est le temps de réaction du portillon.</span></td><td class="num">6 × 10 m</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Sprints · 12 min</div>
+          <table>
+            <tr><td>Sprints 20 m</td><td class="num">4 × 20 m</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Gainage · 5 min</div>
+          <table><tr><td>Hollow hold<span class="ex-note">Allongée sur le dos, épaules et jambes décollées, lombaires plaquées au sol.</span></td><td class="num">3 × 20 s</td><td class="num">45 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 1</span><span class="sess-type t-spe">TRANSFERT</span><span class="sess-dur">50 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Complet</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Explosivité · 25 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Corde à sauter, pieds alternés</td><td class="num">4 × 45 s</td><td class="num">60 s</td></tr>
+            <tr><td>Saut en longueur départ arrêté</td><td class="num">4 × 3</td><td class="num">2 min</td></tr>
+            <tr><td>Squat sauté<span class="ex-note">Saute le plus haut possible, réception souple.</span></td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="alt"><b>Si la piste est dispo :</b> 8 départs au portillon, récup 3 min. Priorité à la qualité, pas au nombre.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mental">
+    <h3>POURQUOI TROIS SÉANCES, ET PAS CINQ</h3>
+    <p>L'explosivité ne se construit pas par le volume, mais par la <b>fréquence de stimulation du système nerveux</b>. Trois séances courtes et fraîches valent mieux que cinq séances traînées dans la fatigue. Et à 12 ans, le corps grandit : le repos fait partie du programme, exactement au même titre que les sprints.</p>
+  </div>
+
+  <!-- ════ PHASE 2 : PUISSANCE ════ -->
+  <div class="phase">
+    <div class="ph-head">
+      <span class="ph-tag ph-2">PHASE 2</span>
+      <div>
+        <div class="ph-name">PUISSANCE EXPLOSIVE</div>
+        <div class="ph-goal">Semaines 3-4 · Le cœur du programme. C'est ici que le start se construit.</div>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="week" data-wk="3">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">03</span>
+          <div><div class="wk-dates">3 → 8 août</div><div class="wk-focus">Pliométrie légère · Réaction</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 3</span><span class="sess-type t-start">PLIOMÉTRIE</span><span class="sess-dur">55 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes + 3 sauts progressifs<span class="ex-note">La pliométrie sur un corps froid, c'est la blessure assurée.</span></td><td class="num">15 min</td></tr></table>
+          <div class="blk">Pliométrie · 25 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Box jump sur support bas<span class="ex-note">Banc, marche ou muret de 30 à 40 cm maximum. Réception parfaite ou on arrête.</span></td><td class="num">4 × 4</td><td class="num">2 min</td></tr>
+            <tr><td>Saut en longueur départ arrêté</td><td class="num">4 × 4</td><td class="num">2 min</td></tr>
+            <tr><td>Squat sauté</td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Tirage · 8 min</div>
+          <table><tr><td>Tractions dynamiques<span class="ex-note">Monte le plus vite possible, descends lentement. C'est la vitesse de tirage du portillon. Négatives si besoin.</span></td><td class="num">3 × 5</td><td class="num">2 min</td></tr></table>
+          <div class="blk">Gainage · 5 min</div>
+          <table><tr><td>Hollow hold</td><td class="num">3 × 20 s</td><td class="num">45 s</td></tr></table>
+          <div class="tip warn"><b>Règle d'or de la pliométrie :</b> repos long entre les séries. Le but n'est pas de se fatiguer, c'est de produire une puissance maximale à chaque répétition. Essoufflée = on récupère plus longtemps.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 6</span><span class="sess-type t-sprint">SPRINT + RÉACTION</span><span class="sess-dur">55 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes + accélérations</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Départs sur signal · 20 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints 10 m sur signal sonore<span class="ex-note">C'est le temps de réaction qui met en première ligne. On répète, on répète, on répète.</span></td><td class="num">7 × 10 m</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Sprints · 15 min</div>
+          <table>
+            <tr><td>Sprints 20 m</td><td class="num">4 × 20 m</td><td class="num">2 min 30</td></tr>
+            <tr><td>Sprints en légère côte<span class="ex-note">Pente douce, 10 à 15 m. Force la poussée sans traumatisme.</span></td><td class="num">3 × 12 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 8</span><span class="sess-type t-spe">TRANSFERT</span><span class="sess-dur">50 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Complet</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Explosivité + tirage · 28 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur enchaîné<span class="ex-note">2 sauts d'affilée sans temps d'arrêt. Rebondis.</span></td><td class="num">4 × 2</td><td class="num">2 min</td></tr>
+            <tr><td>Corde à sauter, sprint de pieds<span class="ex-note">Le plus de tours possible en 20 secondes.</span></td><td class="num">4 × 20 s</td><td class="num">90 s</td></tr>
+            <tr><td>Tractions<span class="ex-note">Complètes ou négatives selon le niveau du jour.</span></td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+            <tr><td>Pompes dynamiques<span class="ex-note">Poussée rapide en montant, sans claquer si c'est trop dur.</span></td><td class="num">3 × 6</td><td class="num">90 s</td></tr>
+          </table>
+          <div class="alt"><b>Si la piste est dispo :</b> priorité absolue au portillon. 10 départs, récup complète 3 min.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 -->
+    <div class="week" data-wk="4">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">04</span>
+          <div><div class="wk-dates">10 → 15 août</div><div class="wk-focus">Pic de travail</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 10</span><span class="sess-type t-start">PLIOMÉTRIE</span><span class="sess-dur">55 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes + sauts progressifs</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Pliométrie · 26 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Box jump support bas</td><td class="num">5 × 4</td><td class="num">2 min</td></tr>
+            <tr><td>Saut en longueur départ arrêté<span class="ex-note">Marque la distance au sol. Le jeu : améliorer sa propre marque, pas battre quelqu'un.</span></td><td class="num">5 × 3</td><td class="num">2 min</td></tr>
+            <tr><td>Squat bulgare dynamique<span class="ex-note">Remontée la plus rapide possible, sans saut.</span></td><td class="num">3 × 6/jambe</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Tirage · 8 min</div>
+          <table><tr><td>Tractions dynamiques</td><td class="num">3 × 5</td><td class="num">2 min</td></tr></table>
+          <div class="blk">Gainage · 5 min</div>
+          <table><tr><td>Planche + hollow hold</td><td class="num">2 × 30 s + 2 × 20 s</td><td class="num">45 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 13</span><span class="sess-type t-sprint">SPRINT + RÉACTION</span><span class="sess-dur">55 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes + accélérations</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Départs sur signal · 20 min</div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Récup</th></tr>
+            <tr><td>Sprints 10 m sur signal, positions variées<span class="ex-note">Départ debout, accroupie, de dos. Le corps apprend à exploser depuis n'importe quelle position.</span></td><td class="num">8 × 10 m</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="blk">Sprints · 15 min</div>
+          <table>
+            <tr><td>Sprints 25 m</td><td class="num">4 × 25 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="tip"><b>Au portillon, la force ne suffit pas.</b> Il faut réagir avant les sept autres. C'est ce qui sépare celle qui est forte de celle qui est devant.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 15</span><span class="sess-type t-spe">TRANSFERT</span><span class="sess-dur">50 min</span></div>
+          <div class="blk">Échauffement · 12 min</div>
+          <table><tr><td>Complet</td><td class="num">12 min</td></tr></table>
+          <div class="blk">Explosivité · 26 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur enchaîné</td><td class="num">4 × 3</td><td class="num">2 min</td></tr>
+            <tr><td>Squat sauté</td><td class="num">4 × 5</td><td class="num">2 min</td></tr>
+            <tr><td>Tractions</td><td class="num">3 × 5</td><td class="num">2 min</td></tr>
+          </table>
+          <div class="alt"><b>Si la piste est dispo :</b> 10 à 12 départs au portillon + travail des premières bosses. C'est la meilleure séance possible cette semaine.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PHASE 3 : AFFÛTAGE ════ -->
+  <div class="phase">
+    <div class="ph-head">
+      <span class="ph-tag ph-3">PHASE 3</span>
+      <div>
+        <div class="ph-name">AFFÛTAGE</div>
+        <div class="ph-goal">Semaine 5 · On garde la vitesse, on enlève la fatigue</div>
+      </div>
+    </div>
+
+    <!-- S5 -->
+    <div class="week deload" data-wk="5">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">05</span>
+          <div><div class="wk-dates">17 → 22 août</div><div class="wk-focus">Allègement · Fraîcheur</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 17</span><span class="sess-type t-start">EXPLOSIVITÉ LÉGÈRE</span><span class="sess-dur">40 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Activation · 18 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur<span class="ex-note">Volume réduit, intensité maximale. On reste vive sans créer de fatigue.</span></td><td class="num">3 × 3</td><td class="num">2 min 30</td></tr>
+            <tr><td>Sprints 15 m</td><td class="num">4 × 15 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="blk">Gainage · 5 min</div>
+          <table><tr><td>Léger</td><td class="num">2 × 30 s</td><td class="num">60 s</td></tr></table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 20</span><span class="sess-type t-sprint">RÉACTION LÉGÈRE</span><span class="sess-dur">35 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing + gammes</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Départs · 15 min</div>
+          <table>
+            <tr><td>Sprints 10 m sur signal<span class="ex-note">Vitesse conservée, volume réduit. On entretient le système nerveux sans le fatiguer.</span></td><td class="num">5 × 10 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 22</span><span class="sess-type t-spe">DERNIÈRE SPÉCIFIQUE</span><span class="sess-dur">40 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Complet</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Activation · 20 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur</td><td class="num">3 × 3</td><td class="num">2 min 30</td></tr>
+            <tr><td>Sprints 15 m</td><td class="num">3 × 15 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="alt"><b>Si la piste est dispo :</b> dernière vraie session vélo. Départs, trajectoires, premières bosses. Après ça, on économise tout jusqu'au 29.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PHASE 4 : COURSE ════ -->
+  <div class="phase">
+    <div class="ph-head">
+      <span class="ph-tag ph-4">PHASE 4</span>
+      <div>
+        <div class="ph-name">SEMAINE DE COURSE</div>
+        <div class="ph-goal">Semaine 6 · Arriver fraîche, vive et calme au portillon</div>
+      </div>
+    </div>
+
+    <!-- S6 : COURSE -->
+    <div class="week race" data-wk="6">
+      <div class="wk-head">
+        <div class="wk-l"><span class="wk-num">06</span>
+          <div><div class="wk-dates">24 → 29 août · COURSE</div><div class="wk-focus">Semaine de course</div></div></div>
+        <span class="wk-chevron">›</span>
+      </div>
+      <div class="wk-body">
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">LUNDI 24</span><span class="sess-type t-start">ACTIVATION</span><span class="sess-dur">35 min</span></div>
+          <div class="blk">Échauffement · 15 min</div>
+          <table><tr><td>Footing léger + gammes</td><td class="num">15 min</td></tr></table>
+          <div class="blk">Activation · 16 min</div>
+          <table>
+            <tr><th>Exercice</th><th>Séries</th><th>Repos</th></tr>
+            <tr><td>Saut en longueur<span class="ex-note">Juste pour réveiller. Aucune recherche de performance.</span></td><td class="num">3 × 2</td><td class="num">2 min 30</td></tr>
+            <tr><td>Départs sur signal 10 m</td><td class="num">4 × 10 m</td><td class="num">2 min 30</td></tr>
+          </table>
+          <div class="tip warn"><b>Aucune fatigue à partir d'ici.</b> Le travail est fait. La seule chose qu'on peut encore faire cette semaine, c'est se gâcher la course en en rajoutant.</div>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">JEUDI 27</span><span class="sess-type t-recup">DÉROUILLAGE</span><span class="sess-dur">25 min</span></div>
+          <table>
+            <tr><th>Contenu</th><th>Volume</th><th>Note</th></tr>
+            <tr><td>Footing léger<span class="ex-note">Juste pour ne pas être raide.</span></td><td class="num">10 min</td><td class="num">Facile</td></tr>
+            <tr><td>3 accélérations progressives<span class="ex-note">Sur 15 m, sans forcer. Le système nerveux reste éveillé.</span></td><td class="num">3 × 15 m</td><td class="num">Vif</td></tr>
+            <tr><td>Étirements légers</td><td class="num">8 min</td><td class="num">Doux</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess">
+          <div class="sess-head"><span class="sess-day">VENDREDI 28</span><span class="sess-type t-recup">REPOS</span><span class="sess-dur">—</span></div>
+          <table>
+            <tr><th>Contenu</th><th></th></tr>
+            <tr><td>Repos complet<span class="ex-note">Rien. Préparer le matériel, dormir tôt, manger normalement. Le corps est prêt.</span></td><td class="num">Repos</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+
+        <div class="sess s-sam">
+          <div class="sess-head"><span class="sess-day">SAMEDI 29</span><span class="sess-type t-start">JOUR J · COURSE</span><span class="sess-dur">COURSE</span></div>
+          <table>
+            <tr><th>Protocole d'avant-course</th><th></th></tr>
+            <tr><td>Échauffement long et progressif<span class="ex-note">Ne JAMAIS aborder un portillon à froid. 20 min minimum : footing, gammes, mobilisation.</span></td><td class="num">20 min</td></tr>
+            <tr><td>Départs d'activation sur le vélo<span class="ex-note">3 départs progressifs, le dernier à 90 %, environ 20 min avant sa manche. Puis elle reste chaude (veste, mouvement).</span></td><td class="num">3 départs</td></tr>
+            <tr><td>Entre les manches<span class="ex-note">Ne jamais se refroidir complètement. Bouger, se couvrir, boire.</span></td><td class="num">—</td></tr>
+          </table>
+          <button class="done-btn">Séance validée</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mental">
+    <h3>CE QUI SE JOUE AU PORTILLON</h3>
+    <p>Six semaines de travail se jouent en <b>trois secondes</b>. C'est peu, et c'est pour ça que tout le programme converge vers ce moment.</p>
+    <p>La force, elle l'aura construite. La réaction, elle l'aura travaillée sur signal, semaine après semaine. Le reste, ce jour-là, c'est la tête. <b>Celle qui gagne le portillon n'est pas celle qui veut le plus fort : c'est celle qui est la plus calme au moment où le portillon tombe.</b></p>
+    <p>Le corps saura déjà quoi faire. Son seul travail, à cet instant, c'est de le laisser faire.</p>
+  </div>
+
+  <div class="mental">
+    <h3>SI ELLE N'A RIEN SOUS LA MAIN</h3>
+    <p><b>Zéro traction possible au début ?</b> Normal à 12 ans. Fais des négatives : monte en position haute avec une chaise, et descends le plus lentement possible (5 sec). En quelques semaines, la première traction arrive.</p>
+    <p><b>Pas de support pour les box jumps ?</b> Un muret, une marche, un banc public. 30 à 40 cm maximum, pas plus.</p>
+    <p><b>Pas de terrain pour sprinter ?</b> Un parking vide, une allée, un chemin. Il faut 25 mètres, pas un stade.</p>
+    <p><b>Personne pour donner le signal ?</b> Une appli de bip aléatoire sur un téléphone.</p>
+    <p><b>Une séance sautée ?</b> On ne rattrape pas, on reprend au suivant. Deux séances tenues valent mieux que trois séances entassées.</p>
+    <p><b>Une douleur qui dure ?</b> On arrête, on prévient un parent, et on m'écrit. À 12 ans, aucune séance ne vaut une blessure.</p>
+  </div>
+
+  <footer>AXE MENTAL PERFORMANCE® · OBJECTIF 29 AOÛT</footer>
+</div>
+
+<script>
+(function(){
+  var course = new Date(new Date().getFullYear(), 7, 29);
+  var now = new Date();
+  if (course < now) course.setFullYear(course.getFullYear() + 1);
+  var jours = Math.ceil((course - now) / 86400000);
+  document.getElementById('cdNum').textContent = jours > 0 ? jours : 0;
+})();
+
+document.querySelectorAll('.wk-head').forEach(function(h){
+  h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
+});
+var w1 = document.querySelector('.week[data-wk="1"]');
+if (w1) w1.classList.add('open');
+
+var total = document.querySelectorAll('.done-btn').length;
+function maj(){
+  var f = document.querySelectorAll('.done-btn.done').length;
+  var p = Math.round(f/total*100);
+  document.getElementById('progFill').style.width = p + '%';
+  document.getElementById('progTxt').textContent = 'Séances validées : ' + f + ' / ' + total + '  ·  ' + p + '%';
+}
+document.querySelectorAll('.done-btn').forEach(function(b){
+  var sess = b.closest('.sess');
+  var head = sess ? sess.querySelector('.sess-head') : null;
+  var wkDates = b.closest('.week') ? b.closest('.week').querySelector('.wk-dates') : null;
+  var titre = (head ? head.textContent.replace(/\s+/g,' ').trim() : 'Séance') + (wkDates ? ' (' + wkDates.textContent.trim() + ')' : '');
+
+  var fb = document.createElement('div');
+  fb.className = 'fb';
+  fb.innerHTML = '<label>Ton ressenti de séance</label>' +
+    '<textarea placeholder="Comment tu t\'es sentie ? Facile, dur, douleurs, sensations au sprint..."></textarea>' +
+    '<button class="fb-send" type="button">Envoyer mon ressenti à Fabien</button>' +
+    '<div class="fb-ok">✓ Ta messagerie va s\'ouvrir. Vérifie et envoie.</div>';
+  b.parentNode.insertBefore(fb, b.nextSibling);
+
+  fb.querySelector('.fb-send').addEventListener('click', function(){
+    var txt = fb.querySelector('textarea').value.trim();
+    var sujet = encodeURIComponent('Ressenti séance · ' + titre);
+    var corps = encodeURIComponent('Séance : ' + titre + '\n\nRessenti :\n' + (txt || '(non renseigné)'));
+    window.location.href = 'mailto:f.pinton@outlook.fr?subject=' + sujet + '&body=' + corps;
+    fb.querySelector('.fb-ok').style.display = 'block';
+  });
+
+  b.addEventListener('click', function(){
+    b.classList.toggle('done');
+    var ok = b.classList.contains('done');
+    b.textContent = ok ? '✓ Validée' : 'Séance validée';
+    fb.classList.toggle('show', ok);
+    maj();
+  });
+});
+maj();
+</script>
+</body>
+</html>
