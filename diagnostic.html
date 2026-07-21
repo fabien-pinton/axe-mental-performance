@@ -271,7 +271,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 const CFG = {
   STRIPE: "https://buy.stripe.com/3cI6oG9u4dv895j4to8IU03",
   WEBHOOK: "https://hook.eu1.make.com/96f7c0lxqk82tnxjt9gsqvs460q58ow8",
-  WEBHOOK_GATE: "https://hook.eu1.make.com/96f7c0lxqk82tnxjt9gsqvs460q58ow8",  // même webhook que le rapport, routé par le champ "type" dans Make
+  WEBHOOK_GATE: "https://hook.eu1.make.com/REMPLACE_PAR_TON_WEBHOOK_ABANDON",  // <-- webhook Make abandon panier
   CALL: "https://tidycal.com/fpinton/appel-decouverte",
   DEEP: {
     stress:"https://buy.stripe.com/6oUdR8gWw0Im3KZf828IU09",
@@ -756,16 +756,19 @@ function submitGate(){
   sessionStorage.setItem('axe_ref', refId);
 
   /* ══════════════════════════════════════════════════════════════════════
-     CAPTURE ABANDON PANIER · ACTIVE
+     CRITIQUE 2 — CAPTURE ABANDON PANIER · DÉSACTIVÉE POUR L'INSTANT
      ----------------------------------------------------------------------
      Ce bloc envoie le contact à Make AVANT la redirection Stripe, pour
      déclencher une séquence de relance si la personne ne paie pas.
+     Il est COMMENTÉ tant que le webhook Make n'existe pas.
 
-     ACTIVÉ le 17/07/2026 : envoie le contact au webhook Make (le même que le
-     rapport) avec type="gate_non_paye". Le Router Make aiguille vers la
-     liste Brevo "Abandon diagnostic". La relance est gérée par une
-     automation Brevo (attente 2h + vérification paiement).
-     ══════════════════════════════════════════════════════════════════════ */
+     >>> POUR RÉACTIVER (quand le scénario Make est prêt) :
+         1. Ligne ~274 : remplacer l'URL WEBHOOK_GATE (REMPLACE_PAR_TON_WEBHOOK_ABANDON)
+            par la vraie URL du webhook Make.
+         2. Retirer les marqueurs de commentaire autour du bloc ci-dessous
+            (la ligne d'ouverture et la ligne de fermeture de ce commentaire).
+         3. Rien d'autre à toucher : le reste du tunnel est déjà en place.
+     ══════════════════════════════════════════════════════════════════════
   try {
     fetch(CFG.WEBHOOK_GATE, {
       method: 'POST',
@@ -782,6 +785,7 @@ function submitGate(){
       })
     }).catch(function(e){ console.error('Webhook gate error:', e); });
   } catch(e){ console.error('Webhook gate error:', e); }
+  ═══════════════════════════════════════════════════════════════════════ */
 
   // InitiateCheckout : audience "a voulu payer" pour le retargeting Meta
   if(typeof fbq!=='undefined') fbq('track','InitiateCheckout',{value:19,currency:'EUR',content_name:'Diagnostic Mental'});
