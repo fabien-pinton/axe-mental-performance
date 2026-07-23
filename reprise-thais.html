@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMX RACE · Thaïs</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #F7F3EC;
+  --panel:    #F0EBE0;
+  --card:     #FDFAF5;
+  --border:   rgba(168,133,42,0.18);
+  --gold:     #A8852A;
+  --gold2:    #C9A84C;
+  --red:      #C0392B;
+  --green:    #2E7D32;
+  --blue:     #1565C0;
+  --cyan:     #0277BD;
+  --muted:    #8A7D6A;
+  --text:     #1A1612;
+  --text2:    #5A5040;
+  --radius:   2px;
+  --font-hd:  'Bebas Neue', sans-serif;
+  --font-ui:  'DM Sans', sans-serif;
+  --font-mono:'Cormorant Garamond', serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  background: #1A1612;
+  border-bottom: 2px solid var(--gold);
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--gold);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-hd); font-size: 12px; color: #000; flex-shrink: 0;
+}
+.logo-text { font-family: var(--font-hd); font-size: 20px; letter-spacing: 3px; color: #F7F3EC; }
+.logo-sub { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+.hd-days-box { text-align: right; }
+.hd-days-val { font-family: var(--font-hd); font-size: 28px; color: var(--gold); letter-spacing: 1px; line-height: 1; }
+.hd-days-lbl { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+/* NAV */
+nav {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; gap: 0; overflow-x: auto;
+}
+nav::-webkit-scrollbar { height: 0; }
+.nav-btn {
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 12px 18px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.nav-btn:hover { color: var(--text2); }
+.nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* MAIN */
+main { padding: 20px 24px; max-width: 900px; margin: 0 auto; }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* COUNTDOWN */
+.cd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.cd-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cd-card.gold { border-top: 3px solid var(--gold); }
+.cd-card.red  { border-top: 3px solid var(--red); }
+.cd-label { font-family: var(--font-hd); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 3px; }
+.cd-card.gold .cd-label { color: var(--muted); }
+.cd-card.red  .cd-label { color: var(--red); }
+.cd-date { font-family: var(--font-mono); font-size: 11px; color: var(--text2); font-style: italic; }
+.cd-num { font-family: var(--font-hd); font-size: 52px; line-height: 1; }
+.cd-card.gold .cd-num { color: var(--gold); }
+.cd-card.red  .cd-num { color: var(--red); }
+.cd-unit { font-size: 8px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+
+/* OBJECTIF */
+.obj-card {
+  background: #1A1612; border: 1px solid var(--gold);
+  border-radius: var(--radius); padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.obj-title { font-family: var(--font-hd); font-size: 13px; letter-spacing: 4px; color: var(--gold); margin-bottom: 10px; }
+.obj-body { font-size: 14px; color: #F0EBE0; line-height: 1.7; }
+.obj-body strong { color: var(--gold2); }
+
+/* PROG BAR */
+.prog-wrap { margin-top: 14px; }
+.prog-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.prog-name { font-size: 12px; color: var(--muted); }
+.prog-val { font-family: var(--font-mono); font-size: 12px; color: var(--gold); }
+.prog-bar { height: 4px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(to right, var(--gold), var(--red)); border-radius: 3px; transition: width 1.2s ease; }
+
+/* CONSIGNES / SECURITE */
+.warn-card {
+  background: rgba(192,57,43,0.06); border: 1px solid rgba(192,57,43,0.35);
+  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px;
+}
+.warn-title { font-family: var(--font-hd); font-size: 15px; letter-spacing: 2px; color: var(--red); margin-bottom: 10px; display:flex; align-items:center; gap:8px; }
+.warn-body { font-size: 13.5px; color: var(--text2); line-height: 1.75; }
+.warn-body p { margin-bottom: 8px; }
+.warn-body strong { color: var(--text); }
+.warn-body ul { margin: 6px 0 6px 18px; }
+.warn-body li { margin-bottom: 4px; }
+
+.ankle-card {
+  background: rgba(2,119,189,0.06); border: 1px solid rgba(2,119,189,0.3);
+  border-radius: var(--radius); padding: 16px 20px; margin-bottom: 20px;
+}
+.ankle-title { font-family: var(--font-hd); font-size: 14px; letter-spacing: 2px; color: var(--cyan); margin-bottom: 8px; }
+.ankle-body { font-size: 13.5px; color: var(--text2); line-height: 1.7; }
+
+/* SESSIONS */
+.sess-selector {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;
+}
+.sess-tab {
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--muted); font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: all 0.15s;
+}
+.sess-tab:hover { border-color: var(--gold); color: var(--text2); }
+.sess-tab.active { background: var(--gold); border-color: var(--gold); color: #000; font-weight: 700; }
+.sess-tab.done-tab { border-color: var(--green); color: var(--green); }
+.sess-tab.done-tab.active { background: var(--green); color: #000; }
+.sess-tab.future-locked { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.sess-tab.next-available { border-color: var(--gold); color: var(--gold); }
+
+.sess-content { display: none; }
+.sess-content.active { display: block; }
+
+.sess-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.sess-header {
+  background: var(--panel); border-bottom: 1px solid var(--border);
+  padding: 14px 20px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.sess-date { font-family: var(--font-hd); font-size: 22px; letter-spacing: 2px; color: var(--gold); }
+.sess-meta { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-top: 2px; }
+.sess-body { padding: 16px 20px; }
+
+.tl-phase { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; padding: 2px 8px; border-radius: 2px; font-weight: 600; }
+.ph-reprise      { background: rgba(2,119,189,0.15); color: var(--cyan); border: 1px solid rgba(2,119,189,0.3); }
+.ph-construction { background: rgba(240,180,41,0.15); color: var(--gold); border: 1px solid rgba(240,180,41,0.3); }
+.ph-intensite    { background: rgba(59,130,246,0.15); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+.ph-pic          { background: rgba(232,52,26,0.15); color: var(--red); border: 1px solid rgba(232,52,26,0.3); }
+
+.cat-div {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--muted);
+  margin: 18px 0 10px; display: flex; align-items: center; gap: 10px;
+}
+.cat-div::before { content: '//'; color: var(--gold); margin-right: 4px; }
+.cat-div::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.ex-block { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; transition: border-color 0.2s; }
+.ex-block.done { border-color: var(--green); }
+.ex-head { padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; background: rgba(168,133,42,0.04); user-select: none; }
+.ex-head:hover { background: rgba(168,133,42,0.06); }
+.ex-check { width: 20px; height: 20px; border: 1.5px solid var(--border); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: all 0.15s; cursor: pointer; }
+.ex-block.done .ex-check { background: var(--green); border-color: var(--green); color: #000; }
+.ex-name { font-family: var(--font-ui); font-size: 15px; font-weight: 700; letter-spacing: 0.5px; flex: 1; }
+.ex-badge { font-family: var(--font-mono); font-size: 11px; color: var(--gold); background: rgba(240,180,41,0.1); border: 1px solid rgba(240,180,41,0.25); padding: 3px 10px; border-radius: 2px; white-space: nowrap; }
+.ex-chevron { color: var(--muted); font-size: 12px; transition: transform 0.2s; flex-shrink: 0; }
+.ex-block.open .ex-chevron { transform: rotate(180deg); }
+.ex-body { display: none; padding: 14px 16px 16px 48px; border-top: 1px solid var(--border); }
+.ex-block.open .ex-body { display: block; }
+.ex-desc { font-size: 13px; color: var(--text2); line-height: 1.75; margin-bottom: 10px; }
+
+.tip-box { background: rgba(240,180,41,0.05); border-left: 2px solid var(--gold); padding: 8px 12px; font-size: 13px; color: var(--text2); border-radius: 0 2px 2px 0; margin: 10px 0; line-height: 1.6; }
+.tip-box strong { color: var(--gold); }
+.tip-box.bmx { border-left-color: var(--red); background: rgba(232,52,26,0.05); }
+.tip-box.bmx strong { color: var(--red); }
+.tip-box.ankle { border-left-color: var(--cyan); background: rgba(2,119,189,0.05); }
+.tip-box.ankle strong { color: var(--cyan); }
+
+.btn-primary { background: var(--gold); color: #000; border: none; font-family: var(--font-hd); font-size: 14px; letter-spacing: 2px; padding: 9px 22px; border-radius: 2px; cursor: pointer; transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-done { background: var(--green); color: #000; border: none; font-family: var(--font-hd); font-size: 14px; letter-spacing: 2px; padding: 9px 22px; border-radius: 2px; cursor: pointer; }
+
+.bilan { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-top: 20px; }
+.bilan-title { font-family: var(--font-hd); font-size: 16px; letter-spacing: 2px; color: var(--gold); margin-bottom: 4px; }
+.bilan-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+.bilan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rating-row { margin-bottom: 12px; }
+.rating-lbl { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+.stars { display: flex; gap: 5px; }
+.star { font-size: 22px; cursor: pointer; color: var(--border); transition: color 0.1s; user-select: none; }
+.star.on { color: var(--gold); }
+.star.red.on { color: var(--red); }
+.bilan-ta { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font-ui); font-size: 13px; padding: 10px 12px; resize: vertical; min-height: 80px; outline: none; transition: border-color 0.2s; margin-bottom: 10px; }
+.bilan-ta:focus { border-color: var(--gold); }
+.bilan-note { font-size: 11.5px; color: var(--muted); line-height: 1.6; margin-top: 10px; }
+
+.rest-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--border); margin-top: 10px; }
+.rest-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; flex-shrink: 0; }
+.rest-val { font-family: var(--font-hd); font-size: 16px; color: var(--gold); min-width: 48px; }
+.rest-btn { background: rgba(240,180,41,0.12); border: 1px solid rgba(240,180,41,0.3); color: var(--gold); font-family: var(--font-mono); font-size: 10px; padding: 4px 12px; cursor: pointer; border-radius: 2px; }
+.rest-btn.running { color: var(--red); border-color: var(--red); background: rgba(232,52,26,0.12); }
+.rest-countdown { font-family: var(--font-hd); font-size: 22px; color: var(--red); display: none; }
+.rest-countdown.active { display: block; }
+
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #000; font-family: var(--font-hd); font-size: 15px; letter-spacing: 2px; padding: 10px 20px; border-radius: 2px; z-index: 9999; transform: translateY(60px); opacity: 0; transition: all 0.25s; max-width: 80vw; }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+input[type=number] { -moz-appearance: textfield; }
+
+@media (max-width: 560px) {
+  .cd-grid { grid-template-columns: 1fr; }
+  .bilan-grid { grid-template-columns: 1fr; }
+  .cd-num { font-size: 40px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">BMX</div>
+    <div>
+      <div class="logo-text">THAÏS</div>
+      <div class="logo-sub">Reprise post-blessure · Programme 2026</div>
+    </div>
+  </div>
+  <div class="hd-days-box">
+    <div class="hd-days-val" id="hd-days">—</div>
+    <div class="hd-days-lbl">Jours → 17 Sep</div>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="showTab('accueil',this)">🏠 Accueil</button>
+  <button class="nav-btn" onclick="showTab('seances',this)">🏋️ Séances</button>
+</nav>
+
+<main>
+
+<!-- ============================================================ -->
+<!-- TAB : ACCUEIL                                                 -->
+<!-- ============================================================ -->
+<div class="tab-content active" id="tab-accueil">
+
+  <!-- Consignes de sécurité -->
+  <div class="warn-card">
+    <div class="warn-title">⚠️ À lire avant de commencer</div>
+    <div class="warn-body">
+      <p>Ce programme est un outil d'entraînement. <strong>Il ne remplace pas l'avis de ton kiné ou de ton médecin.</strong> Tu es en soin pour ta cheville jusqu'au vendredi 28 août : si un exercice te fait mal ou te semble bizarre pour ta cheville, tu ne le fais pas, et tu en parles à ton kiné ou à Fabien avant la séance suivante.</p>
+      <p><strong>Sur la posture et l'exécution :</strong></p>
+      <ul>
+        <li>Toujours s'échauffer avant de charger un exercice.</li>
+        <li>Dos plat sur les mouvements de tirage et de squat, jamais de dos rond sous charge.</li>
+        <li>Genoux dans l'axe des pieds, jamais vers l'intérieur.</li>
+        <li>Une charge trop lourde ou une douleur, ce n'est jamais "il faut serrer les dents" : on arrête l'exercice et on ajuste.</li>
+      </ul>
+      <p>C'est à toi de vérifier que tu exécutes correctement chaque mouvement, si besoin en demandant à quelqu'un présent en salle de te regarder. <strong>Fabien n'est pas présent physiquement pendant tes séances et ne peut pas être tenu responsable d'une blessure liée à une mauvaise exécution ou à un capteur de douleur ignoré.</strong> En cas de doute sur un exercice, tu ne le fais pas et tu poses la question avant.</p>
+    </div>
+  </div>
+
+  <!-- Comptes à rebours -->
+  <div class="cd-grid">
+    <div class="cd-card gold">
+      <div>
+        <div class="cd-label">🦶 Fin restriction cheville</div>
+        <div class="cd-date">28 Août 2026</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="cd-num" id="cd1-d">—</div>
+        <div class="cd-unit">jours</div>
+      </div>
+    </div>
+    <div class="cd-card red">
+      <div>
+        <div class="cd-label">🏆 Pic de forme</div>
+        <div class="cd-date">17 Sept. 2026</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="cd-num" id="cd2-d">—</div>
+        <div class="cd-unit">jours</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Note cheville -->
+  <div class="ankle-card">
+    <div class="ankle-title">🦶 Ta cheville, la règle du jeu</div>
+    <div class="ankle-body">
+      Jusqu'au <strong>vendredi 28 août</strong>, aucun exercice ne fait travailler la cheville de façon instable ou avec impact (pas de saut, pas de sprint, pas de squat libre). On travaille sur machines guidées et sur le haut du corps pour que tu retrouves de la forme sans risque. À partir du <strong>31 août</strong>, le bas du corps revient progressivement, puis les sauts et les départs reviennent en dernier, quand tu es prête.
+    </div>
+  </div>
+
+  <!-- Objectif -->
+  <div class="obj-card">
+    <div class="obj-title">🏆 Objectif · 17 Septembre 2026</div>
+    <div class="obj-body">
+      Le programme suit toujours le même fil : préparer <strong>l'explosivité de la 1ère ligne</strong>, du start jusqu'à la première bosse. On commence doucement pour reconstruire, on monte progressivement, et on termine avec un <strong>pic de forme</strong> le 17 septembre.
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-head">
+        <span class="prog-name">Séances complétées</span>
+        <span class="prog-val" id="pv-sess">0/—</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="pf-sess" style="width:0%"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB : SÉANCES                                                 -->
+<!-- ============================================================ -->
+<div class="tab-content" id="tab-seances">
+  <div class="sess-selector" id="sessTabs"></div>
+  <div id="sessContents"></div>
+</div>
+
+</main>
+
+<div class="toast" id="toast">✓ Enregistré</div>
+
+<script>
+// ====================================================
+// CONSTANTES
+// ====================================================
+const START_DATE   = new Date('2026-08-03'); // Lundi
+const ANKLE_LIMIT   = new Date('2026-08-28'); // fin restriction cheville (inclus)
+const MAIN          = new Date('2026-09-17'); // pic de forme
+const TODAY = new Date();
+
+function fmtDate(d) {
+  const jours = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  const mois  = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
+  return `${jours[d.getDay()]} ${d.getDate()} ${mois[d.getMonth()]}`;
+}
+function fmtKey(d) { return d.toISOString().split('T')[0]; }
+
+// ====================================================
+// CALENDRIER DES SÉANCES
+// Lundi / Mercredi / Vendredi, 3 séances / semaine
+// Dernière semaine : Lundi 14 / Mercredi 16 / Jeudi 17 (fin imposée au 17/09)
+// ====================================================
+function getAllSessions() {
+  const sessions = [];
+  let d = new Date('2026-08-03');
+  const regularEnd = new Date('2026-09-11'); // dernière semaine "normale" avant l'ajustement final
+  while (d <= regularEnd) {
+    if (d.getDay() === 1 || d.getDay() === 3 || d.getDay() === 5) sessions.push(new Date(d));
+    d.setDate(d.getDate() + 1);
+  }
+  // Semaine finale, ajustée pour se terminer pile le jeudi 17 septembre
+  sessions.push(new Date('2026-09-14')); // Lundi
+  sessions.push(new Date('2026-09-16')); // Mercredi
+  sessions.push(new Date('2026-09-17')); // Jeudi — séance finale, pic de forme
+  return sessions;
+}
+
+// ====================================================
+// PHASES
+// reprise      : 03/08 → 28/08 (restriction cheville, aucun impact)
+// construction : 31/08 → 04/09 (retour progressif du bas du corps)
+// intensite    : 07/09 → 11/09 (charge et explosivité en hausse)
+// pic          : 14/09 → 17/09 (volume réduit, vitesse maximale)
+// ====================================================
+function getPhase(date) {
+  const t = date.getTime();
+  if (t <= new Date('2026-08-28').getTime()) return 'reprise';
+  if (t <= new Date('2026-09-04').getTime()) return 'construction';
+  if (t <= new Date('2026-09-11').getTime()) return 'intensite';
+  return 'pic';
+}
+function isAnkleRestricted(date) { return date.getTime() <= ANKLE_LIMIT.getTime(); }
+
+function phaseLabel(p) {
+  const M = {
+    reprise:      ['REPRISE','ph-reprise'],
+    construction: ['CONSTRUCTION','ph-construction'],
+    intensite:    ['INTENSITÉ','ph-intensite'],
+    pic:          ['PIC DE FORME','ph-pic'],
+  };
+  return M[p] || [p,''];
+}
+
+// ====================================================
+// SÉANCE A (Lundi) — Bas du corps / postérieur
+// ====================================================
+function sessA(phase) {
+  if (phase === 'reprise') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 10 min', items: [
+        { id:'ew-a1', n:'Mobilité hanche (pas la cheville)', badge:'10 min',
+          desc:`Cercles de hanche debout, 10 par côté. Fentes avant sans descendre trop bas, 30 secondes par côté. Pont fessier allongé, 2 séries de 15. Le but : réveiller les hanches et les fessiers sans solliciter la cheville.` },
+      ]},
+      { cat: '// RENFORCEMENT GUIDÉ · Sans impact', items: [
+        { id:'legpress', n:'Presse à cuisses (machine)', badge:'4×10',
+          desc:`Assise sur la machine, pieds à plat sur le plateau, largeur des hanches. Tu descends doucement jusqu'à ce que les genoux fassent un angle de 90°, puis tu pousses sans bloquer les genoux en haut. La machine guide le mouvement, donc pas de risque pour la cheville.`,
+          tip:`On utilise la presse plutôt que le squat libre tant que la cheville est fragile : même travail musculaire, zéro instabilité.`,
+          weights: [ { phase:'reprise', label:'Charge', kg:'40 kg (sem. 1-2) → 55 kg (sem. 3-4)', note:`4×10 · repos 90"` } ] },
+        { id:'ht-a', n:'Hip thrust barre (banc)', badge:'4×10',
+          desc:`Dos appuyé contre un banc, barre posée sur les hanches (avec un tapis de protection). Tu pousses les hanches vers le haut jusqu'à ce que le corps forme une ligne droite des épaules aux genoux, tu serres les fessiers 1 seconde en haut, puis tu redescends doucement.`,
+          tip:`Le hip thrust muscle exactement ce qui pousse fort à la sortie du gate, sans faire porter de charge sur la cheville.`,
+          weights: [ { phase:'reprise', label:'Charge', kg:'20 kg (sem. 1-2) → 30 kg (sem. 3-4)', note:`4×10 · repos 90"` } ] },
+        { id:'curl-a', n:'Leg curl (machine, ischios)', badge:'3×12',
+          desc:`Allongée ou assise sur la machine, tu plies les genoux pour ramener le rouleau vers l'arrière, puis tu reviens lentement. Mouvement guidé, aucun appui au sol nécessaire.`,
+          weights: [ { phase:'reprise', label:'Charge', kg:'15 kg (sem. 1-2) → 20 kg (sem. 3-4)', note:`3×12 · repos 60"` } ] },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'plk-a', n:'Planche frontale', badge:'3×30-40 sec',
+          desc:`Appui sur les avant-bras et les pointes de pieds, corps aligné de la tête aux talons, ventre et fessiers gainés. Si la position debout sur les pointes de pieds gêne la cheville, tu peux poser les genoux au sol.`, rest:'45 sec' },
+        { id:'dbug-a', n:'Dead bug', badge:'3×10 chaque côté',
+          desc:`Allongée sur le dos, bras tendus vers le plafond, genoux pliés à 90°. Tu abaisses lentement un bras et la jambe opposée vers le sol sans creuser le bas du dos, puis tu reviens. Tu alternes.` , rest:'45 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'construction') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 10 min', items: [
+        { id:'ew-a2', n:'Réactivation hanche + cheville', badge:'10 min',
+          desc:`Cercles de cheville lents, 10 par côté. Montée sur pointes de pieds contrôlée, 2 séries de 10. Fentes avant, 30 secondes par côté. On réintroduit la cheville en douceur, sans à-coups.` },
+      ]},
+      { cat: '// RETOUR DU SQUAT LIBRE', items: [
+        { id:'sq-c', n:'Squat barre (cage)', badge:'4×8',
+          desc:`Barre posée sur le haut du dos, pieds largeur des épaules. Tu descends lentement, genoux dans l'axe des pieds, jusqu'à ce que les cuisses soient parallèles au sol, puis tu remontes de façon contrôlée. Pas d'explosivité pour l'instant, on remet la cheville en confiance.`,
+          tip:`Premier retour au squat libre : charge légère, on privilégie une exécution parfaite avant d'augmenter le poids.`,
+          weights: [ { phase:'construction', label:'Charge', kg:'30 kg', note:`4×8 · repos 2'` } ] },
+        { id:'ht-c', n:'Hip thrust barre', badge:'4×8',
+          desc:`Même mouvement que les semaines précédentes, charge légèrement plus lourde.`,
+          weights: [ { phase:'construction', label:'Charge', kg:'40 kg', note:`4×8 · repos 90"` } ] },
+        { id:'rdl-c', n:'Soulevé de terre roumain (haltères)', badge:'3×10',
+          desc:`Un haltère dans chaque main, jambes légèrement fléchies. Tu descends les haltères le long des jambes en poussant les fesses vers l'arrière, dos plat, puis tu reviens en poussant sur les talons.`,
+          weights: [ { phase:'construction', label:'Haltères', kg:'12 kg chacun', note:`3×10 · repos 90"` } ] },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'pallof-c', n:'Pallof press (élastique)', badge:'3×10 chaque côté',
+          desc:`Élastique attaché sur le côté à hauteur de poitrine. Tu pousses tes mains droit devant toi sans que le buste ne tourne, puis tu reviens lentement. Ça muscle le gainage anti-rotation.`, rest:'45 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'intensite') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 10 min', items: [
+        { id:'ew-a3', n:'Activation dynamique', badge:'10 min',
+          desc:`10 squats sans charge, talons-fesses sur 20m, montées de genoux sur 20m, puis 3 accélérations progressives sur 15m à allure modérée.` },
+      ]},
+      { cat: '// FORCE PRINCIPALE', items: [
+        { id:'sq-i', n:'Squat barre (cage)', badge:'4×6',
+          desc:`Même mouvement que la semaine précédente. La charge augmente, la descente reste contrôlée et la remontée devient plus rapide, sans perdre la technique.`,
+          weights: [ { phase:'intensite', label:'Charge', kg:'40 kg', note:`4×6 · repos 2'30"` } ] },
+        { id:'ht-i', n:'Hip thrust barre', badge:'4×6',
+          desc:`Même mouvement, poussée plus explosive vers le haut en gardant le contrôle.`,
+          weights: [ { phase:'intensite', label:'Charge', kg:'45 kg', note:`4×6 · repos 2'` } ] },
+        { id:'dl-i', n:'Soulevé de terre (barre)', badge:'3×6',
+          desc:`Barre au sol, pieds largeur des hanches. Dos plat, hanches en arrière, tu tires la barre le long des tibias en te redressant, puis tu redescends de façon contrôlée.`,
+          weights: [ { phase:'intensite', label:'Charge', kg:'35 kg', note:`3×6 · repos 2'30"` } ] },
+      ]},
+      { cat: '// EXPLOSIVITÉ · Introduite ici', items: [
+        { id:'broad-i', n:'Saut en longueur debout (mesuré)', badge:'4×3 · mesurer',
+          desc:`Pieds joints, tu balances les bras en arrière puis tu sautes le plus loin possible vers l'avant, réception souple sur les deux pieds. Tu mesures la distance à chaque fois pour suivre ta progression.`,
+          tip:`Premier exercice avec impact au sol depuis la blessure : reste concentrée sur une réception souple et contrôlée.`, rest:'2 min' },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'plk-i', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne que les semaines précédentes.`, rest:'45 sec' },
+      ]},
+    ];
+  }
+  // pic
+  return [
+    { cat: '// ÉCHAUFFEMENT · 10 min', items: [
+      { id:'ew-a4', n:'Activation courte', badge:'8 min',
+        desc:`10 squats sans charge, montées de genoux sur 15m, 2 accélérations progressives sur 15m.` },
+    ]},
+    { cat: '// FORCE · Volume réduit, vitesse d\'exécution', items: [
+      { id:'sq-p', n:'Squat barre (cage)', badge:'3×5',
+        desc:`Même mouvement, charge plus légère que la semaine précédente. L'objectif ici n'est plus d'ajouter du poids, c'est d'être rapide et précise à la remontée.`,
+        weights: [ { phase:'pic', label:'Charge', kg:'35 kg', note:`3×5 · repos 2'` } ] },
+      { id:'ht-p', n:'Hip thrust barre', badge:'3×5 explosif',
+        desc:`Même mouvement, poussée la plus rapide possible en haut tout en gardant le contrôle en descente.`,
+        weights: [ { phase:'pic', label:'Charge', kg:'35 kg', note:`3×5 · repos 90"` } ] },
+    ]},
+    { cat: '// GAINAGE COURT', items: [
+      { id:'plk-p', n:'Planche frontale', badge:'2×30 sec', desc:`Version courte pour garder de la fraîcheur.`, rest:'30 sec' },
+    ]},
+  ];
+}
+
+// ====================================================
+// SÉANCE B (Mercredi) — Haut du corps
+// ====================================================
+function sessB(phase) {
+  if (phase === 'reprise') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 8 min', items: [
+        { id:'ew-b1', n:'Mobilité épaules', badge:'8 min',
+          desc:`Rotations d'épaules, 10 vers l'avant puis 10 vers l'arrière. Pompes sur les genoux, 2 séries de 8, pour réveiller le haut du corps.` },
+      ]},
+      { cat: '// POUSSÉE', items: [
+        { id:'bn-b1', n:'Développé couché (barre, banc)', badge:'4×8',
+          desc:`Allongée sur le banc, prise un peu plus large que les épaules. Tu descends la barre doucement jusqu'à toucher la poitrine, tu marques un temps d'arrêt, puis tu pousses vers le haut.`,
+          weights: [ { phase:'reprise', label:'Charge', kg:'15 kg (sem. 1-2) → 20 kg (sem. 3-4)', note:`4×8 · repos 2'` } ] },
+      ]},
+      { cat: '// TIRAGE · Dos', items: [
+        { id:'pull-b1', n:'Tirage horizontal (machine) ou tractions assistées', badge:'4×8',
+          desc:`Assise à la machine, tu tires la poignée vers ton ventre en rapprochant les omoplates, puis tu reviens lentement en gardant le dos droit.` },
+        { id:'row-b1', n:'Rowing 1 bras (haltère, banc)', badge:'3×10 chaque bras',
+          desc:`Un genou et une main posés sur le banc, l'autre main tient l'haltère bras tendu. Tu tires l'haltère vers la hanche en gardant le dos plat, puis tu redescends lentement.`,
+          weights: [ { phase:'reprise', label:'Haltère', kg:'8 kg (sem. 1-2) → 10 kg (sem. 3-4)', note:`3×10 · repos 90"` } ] },
+      ]},
+      { cat: '// GAINAGE & NUQUE', items: [
+        { id:'side-b1', n:'Planche latérale', badge:'3×20-30 sec chaque côté',
+          desc:`Appui sur un avant-bras, corps aligné sur le côté. Si l'appui sur les pieds gêne la cheville, tu peux poser le genou du bas au sol pour soulager.`, rest:'45 sec' },
+        { id:'neck-b1', n:'Isométrie cervicale', badge:'3×10 sec, 4 directions',
+          desc:`Main sur le front, tu pousses la tête contre la main sans qu'elle ne bouge, 10 secondes. Puis même chose à l'arrière, à gauche et à droite de la tête. C'est un travail statique, sans mouvement.`, rest:'30 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'construction') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 8 min', items: [
+        { id:'ew-b2', n:'Mobilité épaules', badge:'8 min', desc:`Même échauffement que les semaines précédentes.` },
+      ]},
+      { cat: '// POUSSÉE', items: [
+        { id:'bn-b2', n:'Développé couché (barre, banc)', badge:'4×6',
+          desc:`Même mouvement, charge en légère hausse.`,
+          weights: [ { phase:'construction', label:'Charge', kg:'25 kg', note:`4×6 · repos 2'` } ] },
+        { id:'ohp-b2', n:'Développé militaire (debout)', badge:'3×8',
+          desc:`Barre au niveau des clavicules, tu pousses droit au-dessus de la tête sans creuser le dos, puis tu redescends de façon contrôlée.`,
+          weights: [ { phase:'construction', label:'Charge', kg:'15 kg', note:`3×8 · repos 90"` } ] },
+      ]},
+      { cat: '// TIRAGE · Dos', items: [
+        { id:'pull-b2', n:'Tractions (assistées si besoin)', badge:'4×6',
+          desc:`Prise un peu plus large que les épaules, tu tires les coudes vers les hanches jusqu'à ce que le menton passe la barre, puis tu redescends lentement. Utilise une bande d'assistance si tu ne peux pas encore en faire seule.` },
+        { id:'row-b2', n:'Rowing 1 bras (haltère)', badge:'3×10 chaque bras',
+          desc:`Même mouvement, charge en légère hausse.`,
+          weights: [ { phase:'construction', label:'Haltère', kg:'12 kg', note:`3×10 · repos 90"` } ] },
+      ]},
+      { cat: '// GAINAGE & NUQUE', items: [
+        { id:'side-b2', n:'Planche latérale', badge:'3×30 sec chaque côté', desc:`Même consigne que les semaines précédentes.`, rest:'45 sec' },
+        { id:'neck-b2', n:'Isométrie cervicale', badge:'3×15 sec, 4 directions', desc:`Même exercice, durée augmentée.`, rest:'30 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'intensite') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 8 min', items: [
+        { id:'ew-b3', n:'Activation haut du corps', badge:'8 min', desc:`Rotations d'épaules, pompes classiques 2 séries de 8, élastique en tirage léger 2 séries de 12.` },
+      ]},
+      { cat: '// POUSSÉE', items: [
+        { id:'bn-b3', n:'Développé couché (barre, banc)', badge:'4×5',
+          desc:`Même mouvement, charge en hausse, poussée plus rapide en haut.`,
+          weights: [ { phase:'intensite', label:'Charge', kg:'30 kg', note:`4×5 · repos 2'30"` } ] },
+        { id:'ohp-b3', n:'Développé militaire (debout)', badge:'3×6',
+          desc:`Même mouvement, charge en légère hausse.`,
+          weights: [ { phase:'intensite', label:'Charge', kg:'18 kg', note:`3×6 · repos 2'` } ] },
+      ]},
+      { cat: '// TIRAGE · Dos', items: [
+        { id:'pull-b3', n:'Tractions', badge:'4×6', desc:`Même mouvement que la semaine précédente.` },
+        { id:'row-b3', n:'Rowing 1 bras (haltère)', badge:'3×8 chaque bras',
+          desc:`Même mouvement, charge en légère hausse.`,
+          weights: [ { phase:'intensite', label:'Haltère', kg:'14 kg', note:`3×8 · repos 90"` } ] },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'side-b3', n:'Planche latérale', badge:'3×35 sec chaque côté', desc:`Même exercice, durée en hausse.`, rest:'45 sec' },
+      ]},
+    ];
+  }
+  // pic
+  return [
+    { cat: '// ÉCHAUFFEMENT · 6 min', items: [
+      { id:'ew-b4', n:'Activation courte', badge:'6 min', desc:`Rotations d'épaules, pompes classiques 1 série de 8.` },
+    ]},
+    { cat: '// POUSSÉE · Volume réduit', items: [
+      { id:'bn-b4', n:'Développé couché (barre, banc)', badge:'3×5',
+        desc:`Même mouvement, charge légèrement réduite. On garde de la fraîcheur pour le pic de forme.`,
+        weights: [ { phase:'pic', label:'Charge', kg:'25 kg', note:`3×5 · repos 2'` } ] },
+    ]},
+    { cat: '// TIRAGE', items: [
+      { id:'pull-b4', n:'Tractions', badge:'3×5', desc:`Même mouvement, volume réduit.` },
+    ]},
+    { cat: '// GAINAGE COURT', items: [
+      { id:'side-b4', n:'Planche latérale', badge:'2×25 sec chaque côté', desc:`Version courte.`, rest:'30 sec' },
+    ]},
+  ];
+}
+
+// ====================================================
+// SÉANCE C (Vendredi / Jeudi final) — Cardio, gainage, spécifique start
+// ====================================================
+function sessC(phase) {
+  if (phase === 'reprise') {
+    return [
+      { cat: '// CARDIO DOUX · Sans impact', items: [
+        { id:'row-cardio', n:'Rameur', badge:'15-20 min, allure facile',
+          desc:`Assise sur le rameur, tu pousses avec les jambes puis tu tires avec les bras, dans cet ordre, puis tu reviens dans l'ordre inverse. Allure où tu peux encore parler facilement. Le rameur n'a aucun impact au sol, donc il ne stresse pas la cheville.`,
+          tip:`On garde la caisse (le cœur, les poumons) en forme pendant que la cheville se répare, sans aucun impact au sol.` },
+      ]},
+      { cat: '// GAINAGE COMPLET', items: [
+        { id:'plk-c1', n:'Planche frontale', badge:'3×30-40 sec', desc:`Même consigne que la séance A.`, rest:'45 sec' },
+        { id:'dbug-c1', n:'Dead bug', badge:'3×10 chaque côté', desc:`Même mouvement que la séance A.`, rest:'45 sec' },
+        { id:'pallof-c1', n:'Pallof press (élastique)', badge:'3×10 chaque côté', desc:`Même mouvement que décrit en séance B construction.`, rest:'45 sec' },
+      ]},
+      { cat: '// HAUT DU CORPS LÉGER', items: [
+        { id:'pushup-c1', n:'Pompes inclinées (mains sur banc)', badge:'3×10',
+          desc:`Mains posées sur un banc, corps incliné, tu descends la poitrine vers le banc puis tu remontes. Plus facile que la pompe classique, ça permet de travailler sans forcer.`, rest:'60 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'construction') {
+    return [
+      { cat: '// ÉCHAUFFEMENT DYNAMIQUE · 8 min', items: [
+        { id:'ew-c2', n:'Activation légère', badge:'8 min', desc:`Talons-fesses sur 15m, montées de genoux sur 15m, 2 accélérations très progressives sur 15m.` },
+      ]},
+      { cat: '// PREMIER RETOUR DE L\'EXPLOSIVITÉ', items: [
+        { id:'jsq-c2', n:'Squat sauté (poids du corps)', badge:'3×6',
+          desc:`Position de squat, tu sautes verticalement le plus haut possible, réception souple en pliant les genoux à l'atterrissage. Sans charge, juste ton poids de corps : on réintroduit le saut en douceur.`,
+          tip:`C'est le premier exercice avec un vrai saut depuis la blessure. Reste concentrée sur une réception souple et silencieuse.`, rest:'2 min' },
+      ]},
+      { cat: '// CARDIO', items: [
+        { id:'row-c2', n:'Rameur par intervalles', badge:'5×2 min (allure modérée / facile)',
+          desc:`2 minutes à allure modérée, puis 1 minute à allure facile, à répéter 5 fois.` },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'plk-c2', n:'Planche frontale', badge:'3×40 sec', desc:`Même consigne.`, rest:'45 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'intensite') {
+    return [
+      { cat: '// ÉCHAUFFEMENT DYNAMIQUE · 10 min', items: [
+        { id:'ew-c3', n:'Activation complète', badge:'10 min', desc:`Talons-fesses, montées de genoux, pas chassés, puis 3 accélérations progressives sur 20m.` },
+      ]},
+      { cat: '// EXPLOSIVITÉ', items: [
+        { id:'jsq-c3', n:'Squat sauté lesté (haltères légers)', badge:'4×5',
+          desc:`Même mouvement que la semaine précédente, avec un haltère léger dans chaque main pour ajouter un peu de charge.`,
+          weights: [ { phase:'intensite', label:'Charge', kg:'5 kg chacun', note:`4×5 · repos 2'` } ] },
+        { id:'broad-c3', n:'Saut en longueur debout (mesuré)', badge:'4×3 · mesurer',
+          desc:`Même mouvement que décrit en séance A. On compare la distance à chaque séance.`, rest:'2 min' },
+      ]},
+      { cat: '// SPÉCIFIQUE START · Introduit ici', items: [
+        { id:'react-c3', n:'Sprint 5m sur signal', badge:'4 sprints',
+          desc:`Position légèrement fléchie, comme au portillon. Sur un signal (voix, tape dans les mains), tu pars en sprint maximal sur 5m. Récupération complète entre chaque sprint.`,
+          tip:`Premier vrai travail de départ depuis la blessure. Sur herbe ou piste plane, jamais sur sol glissant.`, rest:'2 min' },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'plk-c3', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne.`, rest:'45 sec' },
+      ]},
+    ];
+  }
+  // pic — séance finale du 17 septembre
+  return [
+    { cat: '// ÉCHAUFFEMENT COMPLET · 12 min', items: [
+      { id:'ew-c4', n:'Activation complète', badge:'12 min',
+        desc:`Talons-fesses, montées de genoux, pas chassés, puis 3 accélérations progressives sur 20m jusqu'à une allure proche du maximum.` },
+    ]},
+    { cat: '// SIMULATION DE START · Séance clé', items: [
+      { id:'react-c4', n:'Sprint 5-10m sur signal', badge:'6 sprints',
+        desc:`Position légèrement fléchie, comme au portillon. Sur un signal, tu pars en sprint maximal sur 5 à 10m. Récupération complète entre chaque sprint, pour que chaque départ soit fait à pleine vitesse.`,
+        tip:`C'est la séance qui résume tout le programme : un start rapide et propre, la cheville solide dessous.`, rest:'2 min 30' },
+      { id:'broad-c4', n:'Saut en longueur debout (mesure finale)', badge:'3×3 · mesurer',
+        desc:`Même mouvement que les semaines précédentes. Compare ta distance à celle du début du programme.`, rest:'2 min' },
+    ]},
+    { cat: '// GAINAGE COURT', items: [
+      { id:'plk-c4', n:'Planche frontale', badge:'2×30 sec', desc:`Version courte pour terminer.`, rest:'30 sec' },
+    ]},
+  ];
+}
+
+// ====================================================
+// RENDU EXERCICE
+// ====================================================
+function renderExercise(ex, phase, sessKey) {
+  const key = `${sessKey}-${ex.id}`;
+  const isDone = ls(`ex-${key}`);
+
+  let prescHtml = '';
+  if (ex.weights && ex.weights.length) {
+    const cw = ex.weights.find(w => w.phase === phase) || ex.weights[0];
+    const noteParts = cw.note.split('·').map(s => s.trim());
+    const series = noteParts[0] || '';
+    const recupNote = noteParts.find(p => p.toLowerCase().includes('repos')) || '';
+
+    prescHtml = `<div style="display:grid;grid-template-columns:1fr 1fr${recupNote?' 1fr':''};gap:8px;margin:12px 0;">
+      <div style="background:rgba(168,133,42,0.10);border:1px solid rgba(168,133,42,0.3);border-radius:2px;padding:10px 14px;text-align:center;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">${cw.label.toUpperCase()}</div>
+        <div style="font-family:var(--font-hd);font-size:20px;color:var(--gold);line-height:1.1;">${cw.kg}</div>
+      </div>
+      <div style="background:rgba(168,133,42,0.06);border:1px solid rgba(168,133,42,0.2);border-radius:2px;padding:10px 14px;text-align:center;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">SÉRIES</div>
+        <div style="font-family:var(--font-hd);font-size:22px;color:var(--text);line-height:1.1;">${series}</div>
+      </div>
+      ${recupNote ? `<div style="background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);border-radius:2px;padding:10px 14px;text-align:center;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">⏱ RÉCUP</div>
+        <div style="font-family:var(--font-hd);font-size:16px;color:var(--cyan);line-height:1.2;">${recupNote.replace('repos','').trim()}</div>
+      </div>` : ''}
+    </div>`;
+  }
+
+  const restVal = ex.rest;
+  const restSeconds = restVal ? (restVal.includes('min') ? Math.round(parseFloat(restVal)*60) : parseInt(restVal)) : 0;
+  const restHtml = restVal ? `<div class="rest-row"><span class="rest-label">⏱ RÉCUP</span><span class="rest-val">${restVal}</span><button class="rest-btn" onclick="startRest(this,'${key}',${restSeconds})">▶ START</button><span class="rest-countdown" id="rc-${key}"></span></div>` : '';
+
+  return `<div class="ex-block ${isDone?'done':''}" id="ex-${key}">
+    <div class="ex-head" onclick="tog('ex-${key}')">
+      <div class="ex-check" onclick="event.stopPropagation();ck('ex-${key}','${key}')">✓</div>
+      <div class="ex-name">${ex.n}</div>
+      <div class="ex-badge">${ex.badge}</div>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body">
+      <div class="ex-desc">${ex.desc}</div>
+      ${prescHtml}
+      ${ex.tip ? `<div class="tip-box ${ex.tip.includes('⚡')?'bmx':'ankle'}"><strong>${ex.tip.includes('⚡')?'⚡ BMX':'💡 Conseil'}</strong> ${ex.tip.replace('⚡','').trim()}</div>` : ''}
+      ${restHtml}
+    </div>
+  </div>`;
+}
+
+function renderBilan(key) {
+  const b = lsJ(`bl-${key}`) || { en:0, te:0, do:0, note:'' };
+  return `<div class="bilan">
+    <div class="bilan-title">// BILAN DE SÉANCE</div>
+    <div class="bilan-sub">Ce bilan part directement par mail à Fabien quand tu cliques sur "Envoyer le bilan". Sois honnête, surtout sur la cheville : c'est ce qui permet d'ajuster la suite en toute sécurité.</div>
+    <div class="bilan-grid">
+      <div>
+        <div class="rating-row">
+          <div class="rating-lbl">Fatigue physique ressentie</div>
+          <div class="stars" id="st-en-${key}">${[1,2,3,4,5].map(n=>`<span class="star ${b.en>=n?'on':''}" onclick="rate('${key}','en',${n})">★</span>`).join('')}</div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-lbl">Difficulté de la séance</div>
+          <div class="stars" id="st-te-${key}">${[1,2,3,4,5].map(n=>`<span class="star ${b.te>=n?'on':''}" onclick="rate('${key}','te',${n})">★</span>`).join('')}</div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-lbl">Sensations cheville (gêne)</div>
+          <div class="stars" id="st-do-${key}">${[1,2,3,4,5].map(n=>`<span class="star red ${b.do>=n?'on':''}" onclick="rate('${key}','do',${n})">★</span>`).join('')}</div>
+        </div>
+      </div>
+      <div>
+        <div class="rating-lbl" style="margin-bottom:6px;">Notes libres (cheville, sensations, questions...)</div>
+        <textarea class="bilan-ta" id="bl-note-${key}" placeholder="Comment s'est passée la séance ? Comment va la cheville ?">${b.note||''}</textarea>
+        <button class="btn-primary" onclick="saveBilan('${key}')">Envoyer le bilan</button>
+        <div class="bilan-note">1 étoile = aucune fatigue / aucune gêne · 5 étoiles = fatigue ou gêne très forte.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSession(sess, isActive) {
+  const key = fmtKey(sess);
+  const day = sess.getDay(); // 1=Lundi, 3=Mercredi, 5/4=Vendredi ou Jeudi final
+  const phase = getPhase(sess);
+  const ankle = isAnkleRestricted(sess);
+  const [phLbl, phCls] = phaseLabel(phase);
+
+  let categories, typeLbl;
+  if (day === 1) { categories = sessA(phase); typeLbl = 'SÉANCE A · BAS DU CORPS'; }
+  else if (day === 3) { categories = sessB(phase); typeLbl = 'SÉANCE B · HAUT DU CORPS'; }
+  else { categories = sessC(phase); typeLbl = (fmtKey(sess) === '2026-09-17') ? 'SÉANCE FINALE · PIC DE FORME' : 'SÉANCE C · CARDIO & GAINAGE'; }
+
+  const isDoneS = ls(`session-done-${key}`);
+
+  let body = '';
+  categories.forEach(cat => {
+    body += `<div class="cat-div">${cat.cat}</div>`;
+    cat.items.forEach(ex => { body += renderExercise(ex, phase, key); });
+  });
+  body += renderBilan(key);
+
+  const ankleNote = ankle
+    ? `<span style="color:var(--cyan);font-family:var(--font-mono);font-size:10px;">🦶 CHEVILLE PROTÉGÉE · Aucun impact</span>`
+    : '';
+
+  return `<div class="sess-content ${isActive?'active':''}" id="sc-${key}">
+    <div class="sess-card">
+      <div class="sess-header">
+        <div>
+          <div class="sess-date">${fmtDate(sess)}</div>
+          <div class="sess-meta">${typeLbl} &nbsp;|&nbsp; <span class="tl-phase ${phCls}">${phLbl}</span> &nbsp;${ankleNote}</div>
+        </div>
+        <button class="${isDoneS?'btn-done':'btn-primary'}" onclick="markDone('${key}')" id="sd-${key}">
+          ${isDoneS ? '✓ Complétée' : 'Valider la séance'}
+        </button>
+      </div>
+      <div class="sess-body">${body}</div>
+    </div>
+  </div>`;
+}
+
+const PREVIEW_MODE = new URLSearchParams(window.location.search).get('preview') === '1';
+
+function buildSeances() {
+  const sessions = getAllSessions();
+  const tabs = document.getElementById('sessTabs');
+  const contents = document.getElementById('sessContents');
+
+  if (PREVIEW_MODE) {
+    const bar = document.createElement('div');
+    bar.style.cssText = 'background:#C0392B;color:#fff;font-family:var(--font-hd);font-size:12px;letter-spacing:2px;text-align:center;padding:6px;position:sticky;top:60px;z-index:150;';
+    bar.textContent = '👁 MODE APERÇU · TOUTES LES SÉANCES SONT DÉVERROUILLÉES · CE MODE N\'EST PAS POUR THAÏS';
+    document.body.insertBefore(bar, document.querySelector('nav').nextSibling);
+  }
+
+  let tabsHtml = '', contHtml = '';
+  const todayKey = fmtKey(TODAY);
+  const nextIdx = sessions.findIndex(s => fmtKey(s) >= todayKey);
+
+  sessions.forEach((s, i) => {
+    const key = fmtKey(s);
+    const isDoneS = ls(`session-done-${key}`);
+    const isToday = fmtKey(s) === todayKey;
+    const isLocked = PREVIEW_MODE ? false : (!isToday && !isDoneS); // débloqué uniquement le jour même (ou déjà validé), sauf en mode aperçu
+    const isActive = i === nextIdx;
+
+    let cls = '';
+    if (isDoneS)  cls += ' done-tab';
+    if (isActive) cls += ' active';
+    if (isLocked) cls += ' future-locked';
+    if (isToday && !isDoneS) cls += ' next-available';
+
+    const prefix = isDoneS ? '✓ ' : isToday ? '⚡ ' : '🔒 ';
+    const handler = isLocked ? '' : `onclick="selSess('${key}')"`;
+    const title   = isLocked ? `title="Disponible le ${fmtDate(s)}"` : '';
+
+    tabsHtml += `<button class="sess-tab${cls}" id="stb-${key}" ${handler} ${title}>${prefix}${fmtDate(s)}</button>`;
+
+    if (!isLocked) {
+      contHtml += renderSession(s, isActive);
+    } else {
+      contHtml += `<div class="sess-content" id="sc-${key}">
+        <div class="sess-card" style="display:flex;align-items:center;justify-content:center;min-height:200px;">
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-family:var(--font-hd);font-size:36px;color:var(--gold);margin-bottom:10px;">🔒</div>
+            <div style="font-family:var(--font-hd);font-size:13px;letter-spacing:2px;color:var(--muted);">DISPONIBLE LE ${fmtDate(s)}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+  });
+
+  tabs.innerHTML = tabsHtml;
+  contents.innerHTML = contHtml;
+
+  // Si aucune séance n'est "active" aujourd'hui (ex: on est un jour sans séance), on sélectionne la prochaine visible
+  if (nextIdx === -1 && sessions.length) {
+    const lastKey = fmtKey(sessions[sessions.length-1]);
+    selSess(lastKey);
+  }
+}
+
+function buildCountdowns() {
+  const now = TODAY;
+  const dAnkle = Math.max(0, Math.ceil((ANKLE_LIMIT - now) / 86400000));
+  const dMain  = Math.max(0, Math.ceil((MAIN - now) / 86400000));
+
+  document.getElementById('cd1-d').textContent = dAnkle;
+  document.getElementById('cd2-d').textContent = dMain;
+  document.getElementById('hd-days').textContent = dMain;
+}
+
+function updateProgress() {
+  const sessions = getAllSessions();
+  const done = sessions.filter(s => ls(`session-done-${fmtKey(s)}`)).length;
+  const pf = document.getElementById('pf-sess');
+  const pv = document.getElementById('pv-sess');
+  if (pf) pf.style.width = Math.round((done/sessions.length)*100) + '%';
+  if (pv) pv.textContent = `${done}/${sessions.length}`;
+}
+
+// ====================================================
+// INTERACTIONS
+// ====================================================
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function selSess(key) {
+  document.querySelectorAll('.sess-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.sess-tab').forEach(t => t.classList.remove('active'));
+  const c = document.getElementById('sc-' + key);
+  const t = document.getElementById('stb-' + key);
+  if (c) c.classList.add('active');
+  if (t) { t.classList.add('active'); t.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); }
+}
+
+function tog(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+function ck(blockId, exKey) {
+  const el = document.getElementById(blockId);
+  if (!el) return;
+  el.classList.toggle('done');
+  const done = el.classList.contains('done');
+  if (exKey) { done ? lsSet(`ex-${exKey}`, '1') : lsDel(`ex-${exKey}`); }
+  toast(done ? '✓ Exercice validé' : 'Décoché');
+}
+
+function markDone(key) {
+  lsSet(`session-done-${key}`, '1');
+  const btn = document.getElementById(`sd-${key}`);
+  if (btn) { btn.textContent = '✓ Complétée'; btn.className = 'btn-done'; }
+  const tab = document.getElementById(`stb-${key}`);
+  if (tab) tab.classList.add('done-tab');
+  toast('🏆 Séance validée ! Pense à envoyer ton bilan.');
+  updateProgress();
+}
+
+function rate(key, field, val) {
+  const b = lsJ(`bl-${key}`) || { en:0, te:0, do:0, note:'' };
+  b[field] = val;
+  lsSetJ(`bl-${key}`, b);
+  const container = document.getElementById(`st-${field}-${key}`);
+  if (!container) return;
+  container.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('on', i < val));
+}
+
+async function saveBilan(key) {
+  const b = lsJ(`bl-${key}`) || { en:0, te:0, do:0, note:'' };
+  const ta = document.getElementById(`bl-note-${key}`);
+  if (ta) b.note = ta.value;
+  lsSetJ(`bl-${key}`, b);
+
+  try {
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: '5a7d811a-1f7f-4202-9539-e69e7b0f9667',
+        subject: `Bilan séance Thaïs · ${key}`,
+        from_name: 'BMX Race · Thaïs',
+        message: `Date de séance : ${key}\n\nFatigue physique ressentie : ${b.en}/5\nDifficulté de la séance : ${b.te}/5\nSensations cheville (gêne) : ${b.do}/5\n\nNotes libres :\n${b.note || '(aucune)'}`
+      })
+    });
+    toast('💌 Bilan envoyé à Fabien !');
+  } catch (e) {
+    toast('💾 Bilan enregistré (envoi échoué, réessaie plus tard)');
+  }
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ====================================================
+// LOCALSTORAGE
+// ====================================================
+function ls(k)    { return localStorage.getItem(k); }
+function lsSet(k, v) { localStorage.setItem(k, v); }
+function lsDel(k) { localStorage.removeItem(k); }
+function lsJ(k)   { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
+function lsSetJ(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+// REST TIMER
+const restTimers = {};
+function startRest(btn, id, seconds) {
+  if (restTimers[id]) { clearInterval(restTimers[id]); delete restTimers[id]; btn.textContent='▶ START'; btn.classList.remove('running'); const cd=document.getElementById('rc-'+id); if(cd){cd.classList.remove('active');cd.textContent='';} return; }
+  let r = seconds; btn.textContent='■ STOP'; btn.classList.add('running');
+  const cd = document.getElementById('rc-'+id); if(cd) cd.classList.add('active');
+  function tick() { if(r<=0){clearInterval(restTimers[id]);delete restTimers[id];btn.textContent='✓ GO';btn.classList.remove('running');if(cd){cd.textContent='';cd.classList.remove('active');}if(navigator.vibrate)navigator.vibrate([200,100,200]);return;} const m=Math.floor(r/60),s=r%60; if(cd) cd.textContent=m>0?m+':'+String(s).padStart(2,'0'):s+'s'; r--; }
+  tick(); restTimers[id] = setInterval(tick, 1000);
+}
+
+// ====================================================
+// INIT
+// ====================================================
+document.addEventListener('DOMContentLoaded', () => {
+  buildCountdowns();
+  buildSeances();
+  updateProgress();
+});
+</script>
+</body>
+</html>
