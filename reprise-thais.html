@@ -330,7 +330,7 @@ input[type=number] { -moz-appearance: textfield; }
   <div class="obj-card">
     <div class="obj-title">🏆 Objectif · 17 Septembre 2026</div>
     <div class="obj-body">
-      Le programme suit toujours le même fil : préparer <strong>l'explosivité de la 1ère ligne</strong>, du start jusqu'à la première bosse. On commence doucement pour reconstruire, on monte progressivement, et on termine avec un <strong>pic de forme</strong> le 17 septembre.
+      Le programme suit toujours le même fil : préparer <strong>l'explosivité du start et de la 1ère ligne</strong>, jusqu'à la sortie du premier virage. On commence doucement pour reconstruire, on monte progressivement, et on termine avec un <strong>pic de forme</strong> le 17 septembre.
     </div>
     <div class="prog-wrap">
       <div class="prog-head">
@@ -850,7 +850,8 @@ function buildSeances() {
     const key = fmtKey(s);
     const isDoneS = ls(`session-done-${key}`);
     const isToday = fmtKey(s) === todayKey;
-    const isLocked = PREVIEW_MODE ? false : (!isToday && !isDoneS); // débloqué uniquement le jour même (ou déjà validé), sauf en mode aperçu
+    const isPastOrToday = key <= todayKey;
+    const isLocked = PREVIEW_MODE ? false : !isPastOrToday; // débloqué à partir de sa date, et reste débloqué ensuite (sauf en mode aperçu, tout est ouvert)
     const isActive = i === nextIdx;
 
     let cls = '';
