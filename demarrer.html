@@ -75,6 +75,9 @@ h2.sec em{color:var(--gold);font-style:normal;}
 .price{font-family:'Bebas Neue';font-size:62px;color:var(--gold-l);line-height:.9;}
 .price-meta{font-size:13px;color:#C7BFB2;}
 .price-meta b{color:var(--cream);}
+.price-disclaimer{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.5;color:#C7BFB2;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:12px 14px;margin:14px 0 4px;}
+.price-disclaimer b{color:var(--gold-l);}
+.price-disclaimer svg{flex:none;margin-top:2px;}
 .refus-msg{color:#E8A99F;font-size:15px;background:rgba(168,69,58,.15);border-left:3px solid var(--red);padding:14px 18px;border-radius:6px;margin-bottom:10px;}
 
 /* CALENDRIER */
@@ -162,7 +165,7 @@ footer .fb{font-family:'Bebas Neue';font-size:14px;letter-spacing:.2em;color:var
     <div class="config">
       <div class="eyebrow">Construis ton programme</div>
       <h2>Tes compétitions, ton calendrier.</h2>
-      <p class="sub">Indique l'âge du rider et tes compétitions de la saison (entre 5 et 10). Désigne ta compétition la plus importante : tout le programme se cale pour t'y amener au sommet, sur 24 semaines maximum. Le tarif s'ajuste à la durée réelle de préparation.</p>
+      <p class="sub">Indique l'âge du rider et désigne ta compétition la plus importante (obligatoire) : tout le programme se cale pour t'y amener au sommet, sur 24 semaines maximum. Tu peux ajouter d'autres compétitions de la saison si tu veux (jusqu'à 10), mais ce n'est pas obligatoire. Le tarif s'ajuste à la durée réelle de préparation.</p>
 
       <label class="fld">Le rider</label>
       <div class="idgrid">
@@ -200,6 +203,10 @@ footer .fb{font-family:'Bebas Neue';font-size:14px;letter-spacing:.2em;color:var
           <div class="price" id="price">—</div>
           <div class="price-meta">pour <b id="nbsem">—</b> semaines de préparation<br>soit le tarif complet ajusté à ton calendrier</div>
         </div>
+        <div class="price-disclaimer">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span><b>Montant indicatif.</b> Ce prix est calculé à titre indicatif sur ta situation actuelle — <b>tu ne paieras jamais plus que ce montant affiché.</b> Le tarif définitif sera ajusté avec toi pendant l'appel de préparation.</span>
+        </div>
         <div class="calleg">
           <span><i style="background:#DCEBF7"></i>Base</span>
           <span><i style="background:#DBEBC4"></i>Développement</span>
@@ -210,7 +217,7 @@ footer .fb{font-family:'Bebas Neue';font-size:14px;letter-spacing:.2em;color:var
         <div class="cal" id="cal"></div>
         <p class="idwarn" id="idwarn">Complète le prénom, le nom et l'email pour réserver ton appel.</p>
         <button class="payer" id="payer" onclick="reserver()">Réserver mon appel de préparation →</button>
-        <p class="paynote">Appel gratuit et sans engagement · le prix affiché est ton tarif · le programme sera construit sur mesure après l'appel</p>
+        <p class="paynote">Appel gratuit et sans engagement · le prix affiché est un plafond, jamais un plancher · le programme sera construit et ajusté sur mesure après l'appel</p>
       </div>
     </div>
   </div>
@@ -413,9 +420,8 @@ let dernierPlan=null;
 function recalc(){
   const res=document.getElementById('result');
   const major=COMPS.find(c=>c.major);
-  // il faut un âge, une date principale, et au moins 5 dates remplies
-  const datesRemplies=COMPS.filter(c=>c.date).length;
-  if(!ageSel || !major || !major.date || datesRemplies<5){ res.classList.remove('show'); dernierPlan=null; return; }
+  // il faut un âge et une date principale ; les autres compétitions sont facultatives
+  if(!ageSel || !major || !major.date){ res.classList.remove('show'); dernierPlan=null; return; }
 
   const comps=COMPS.filter(c=>c.date).map(c=>({date:c.date,rang:c.major?1:2}));
   const plan=AXE.genererPlan(new Date(), comps);
