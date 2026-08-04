@@ -179,6 +179,20 @@ main { padding: 20px 24px; max-width: 900px; margin: 0 auto; }
 .ph-construction { background: rgba(240,180,41,0.15); color: var(--gold); border: 1px solid rgba(240,180,41,0.3); }
 .ph-intensite    { background: rgba(59,130,246,0.15); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
 .ph-pic          { background: rgba(232,52,26,0.15); color: var(--red); border: 1px solid rgba(232,52,26,0.3); }
+.ph-maison       { background: rgba(46,125,50,0.13); color: var(--green); border: 1px solid rgba(46,125,50,0.35); }
+
+/* STRAP */
+.strap-box { border-radius: var(--radius); padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: flex-start; gap: 12px; font-size: 13.5px; line-height: 1.65; color: var(--text2); }
+.strap-box.yes { background: rgba(192,57,43,0.07); border: 1px solid rgba(192,57,43,0.35); }
+.strap-box.no  { background: rgba(46,125,50,0.07); border: 1px solid rgba(46,125,50,0.32); }
+.strap-box strong { color: var(--text); }
+.strap-ico { font-size: 22px; line-height: 1.1; flex-shrink: 0; }
+.strap-t { font-family: var(--font-hd); font-size: 15px; letter-spacing: 2px; display: block; margin-bottom: 4px; }
+.strap-box.yes .strap-t { color: var(--red); }
+.strap-box.no  .strap-t { color: var(--green); }
+.strap-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; padding: 2px 8px; border-radius: 2px; }
+.strap-chip.yes { background: rgba(192,57,43,0.14); color: var(--red); border: 1px solid rgba(192,57,43,0.35); }
+.strap-chip.no  { background: rgba(46,125,50,0.12); color: var(--green); border: 1px solid rgba(46,125,50,0.32); }
 
 .cat-div {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 3px;
@@ -282,12 +296,14 @@ input[type=number] { -moz-appearance: textfield; }
   <div class="warn-card">
     <div class="warn-title">⚠️ À lire avant de commencer</div>
     <div class="warn-body">
-      <p>Ce programme est un outil d'entraînement. <strong>Il ne remplace pas l'avis de ton kiné ou de ton médecin.</strong> Tu es en soin pour ta cheville jusqu'au vendredi 28 août : si un exercice te fait mal ou te semble bizarre pour ta cheville, tu ne le fais pas, et tu en parles à ton kiné ou à Fabien avant la séance suivante.</p>
+      <p>Ce programme est un outil d'entraînement. <strong>Il ne remplace pas l'avis de ton kiné ou de ton médecin.</strong> Ta cheville est encore en soin : si un exercice te fait mal ou te semble bizarre, tu ne le fais pas, et tu en parles à ton kiné ou à Fabien avant la séance suivante.</p>
+      <p><strong>Le strap :</strong> chaque séance t'indique en haut si tu dois le poser ou non. Quand c'est marqué strap obligatoire, tu le poses <strong>avant l'échauffement</strong>, avec le montage que ton kiné t'a montré. Quand c'est marqué sans strap, tu fais la séance libre : c'est aussi comme ça que la cheville se renforce.</p>
       <p><strong>Sur la posture et l'exécution :</strong></p>
       <ul>
         <li>Toujours s'échauffer avant de charger un exercice.</li>
         <li>Dos plat sur les mouvements de tirage et de squat, jamais de dos rond sous charge.</li>
         <li>Genoux dans l'axe des pieds, jamais vers l'intérieur.</li>
+        <li>Aucun mouvement de rotation ou de pivot sur la cheville tant que ce n'est pas explicitement demandé.</li>
         <li>Une charge trop lourde ou une douleur, ce n'est jamais "il faut serrer les dents" : on arrête l'exercice et on ajuste.</li>
       </ul>
       <p>C'est à toi de vérifier que tu exécutes correctement chaque mouvement, si besoin en demandant à quelqu'un présent en salle de te regarder. <strong>Fabien n'est pas présent physiquement pendant tes séances et ne peut pas être tenu responsable d'une blessure liée à une mauvaise exécution ou à un capteur de douleur ignoré.</strong> En cas de doute sur un exercice, tu ne le fais pas et tu poses la question avant.</p>
@@ -298,8 +314,8 @@ input[type=number] { -moz-appearance: textfield; }
   <div class="cd-grid">
     <div class="cd-card gold">
       <div>
-        <div class="cd-label">🦶 Fin restriction cheville</div>
-        <div class="cd-date">28 Août 2026</div>
+        <div class="cd-label">🏋️ Retour en salle</div>
+        <div class="cd-date">Vendredi 21 Août 2026</div>
       </div>
       <div style="text-align:right;">
         <div class="cd-num" id="cd1-d">—</div>
@@ -322,7 +338,10 @@ input[type=number] { -moz-appearance: textfield; }
   <div class="ankle-card">
     <div class="ankle-title">🦶 Ta cheville, la règle du jeu</div>
     <div class="ankle-body">
-      Jusqu'au <strong>vendredi 28 août</strong>, aucun exercice ne fait travailler la cheville de façon instable ou avec impact (pas de saut, pas de sprint, pas de squat libre). On travaille sur machines guidées et sur le haut du corps pour que tu retrouves de la forme sans risque. À partir du <strong>31 août</strong>, le bas du corps revient progressivement, puis les sauts et les départs reviennent en dernier, quand tu es prête.
+      <p style="margin-bottom:10px;">Ton kiné a autorisé le vélo : on peut donc <strong>charger un peu plus la cheville</strong>, mais toujours en ligne droite. Aucune torsion, aucun pivot, aucun changement de direction jusqu'au <strong>vendredi 28 août</strong>.</p>
+      <p style="margin-bottom:10px;"><strong>Salle fermée jusqu'au 20 août :</strong> jusque-là, tout se fait au poids du corps et sur le vélo. La salle rouvre le <strong>vendredi 21 août</strong>, on remet alors les machines et la barre.</p>
+      <p style="margin-bottom:10px;"><strong>Les sauts et les sprints</strong> ne reviennent qu'à partir du <strong>31 août</strong>, une fois que la cheville aura encaissé trois semaines de charge progressive.</p>
+      <p><strong>🩹 Le strap :</strong> chaque séance te dit en haut si tu en as besoin. En gros : séances bas du corps (lundi) = strap, séances haut du corps (mercredi) = pas de strap, séances vélo et gainage (vendredi) = pas de strap jusqu'au retour des sauts.</p>
     </div>
   </div>
 
@@ -330,7 +349,7 @@ input[type=number] { -moz-appearance: textfield; }
   <div class="obj-card">
     <div class="obj-title">🏆 Objectif · 17 Septembre 2026</div>
     <div class="obj-body">
-      Le programme suit toujours le même fil : préparer <strong>l'explosivité du start et de la 1ère ligne</strong>, jusqu'à la sortie du premier virage. On commence doucement pour reconstruire, on monte progressivement, et on termine avec un <strong>pic de forme</strong> le 17 septembre.
+      Le programme suit toujours le même fil : préparer <strong>l'explosivité du start et de la 1ère ligne</strong>, jusqu'à la sortie du premier virage. Deux semaines au poids du corps et sur le vélo pour reconstruire la base, une semaine de retour en salle, puis la montée en charge et l'explosivité, jusqu'au <strong>pic de forme</strong> le 17 septembre.
     </div>
     <div class="prog-wrap">
       <div class="prog-head">
@@ -366,9 +385,10 @@ input[type=number] { -moz-appearance: textfield; }
 // ====================================================
 // CONSTANTES
 // ====================================================
-const START_DATE   = new Date('2026-08-03'); // Lundi
-const ANKLE_LIMIT   = new Date('2026-08-28'); // fin restriction cheville (inclus)
-const MAIN          = new Date('2026-09-17'); // pic de forme
+const START_DATE   = new Date('2026-08-05'); // Mercredi - reprise du programme
+const GYM_REOPEN   = new Date('2026-08-21'); // reouverture de la salle
+const ANKLE_LIMIT  = new Date('2026-08-28'); // fin de la restriction torsion / impact
+const MAIN         = new Date('2026-09-17'); // pic de forme
 const TODAY = new Date();
 
 function fmtDate(d) {
@@ -381,11 +401,12 @@ function fmtKey(d) { return d.toISOString().split('T')[0]; }
 // ====================================================
 // CALENDRIER DES SÉANCES
 // Lundi / Mercredi / Vendredi, 3 séances / semaine
+// Départ : mercredi 5 août
 // Dernière semaine : Lundi 14 / Mercredi 16 / Jeudi 17 (fin imposée au 17/09)
 // ====================================================
 function getAllSessions() {
   const sessions = [];
-  let d = new Date('2026-08-03');
+  let d = new Date('2026-08-05');
   const regularEnd = new Date('2026-09-11'); // dernière semaine "normale" avant l'ajustement final
   while (d <= regularEnd) {
     if (d.getDay() === 1 || d.getDay() === 3 || d.getDay() === 5) sessions.push(new Date(d));
@@ -400,13 +421,17 @@ function getAllSessions() {
 
 // ====================================================
 // PHASES
-// reprise      : 03/08 → 28/08 (restriction cheville, aucun impact)
-// construction : 31/08 → 04/09 (retour progressif du bas du corps)
+// maison1      : 05/08 → 12/08 (salle fermée, poids du corps + vélo)
+// maison2      : 14/08 → 20/08 (salle fermée, poids du corps intensifié)
+// reprise      : 21/08 → 28/08 (retour en salle, charges guidées, zéro impact)
+// construction : 31/08 → 04/09 (retour du squat libre et des premiers sauts)
 // intensite    : 07/09 → 11/09 (charge et explosivité en hausse)
 // pic          : 14/09 → 17/09 (volume réduit, vitesse maximale)
 // ====================================================
 function getPhase(date) {
   const t = date.getTime();
+  if (t <= new Date('2026-08-12').getTime()) return 'maison1';
+  if (t <= new Date('2026-08-20').getTime()) return 'maison2';
   if (t <= new Date('2026-08-28').getTime()) return 'reprise';
   if (t <= new Date('2026-09-04').getTime()) return 'construction';
   if (t <= new Date('2026-09-11').getTime()) return 'intensite';
@@ -416,7 +441,9 @@ function isAnkleRestricted(date) { return date.getTime() <= ANKLE_LIMIT.getTime(
 
 function phaseLabel(p) {
   const M = {
-    reprise:      ['REPRISE','ph-reprise'],
+    maison1:      ['MAISON · S1','ph-maison'],
+    maison2:      ['MAISON · S2','ph-maison'],
+    reprise:      ['RETOUR SALLE','ph-reprise'],
     construction: ['CONSTRUCTION','ph-construction'],
     intensite:    ['INTENSITÉ','ph-intensite'],
     pic:          ['PIC DE FORME','ph-pic'],
@@ -425,64 +452,168 @@ function phaseLabel(p) {
 }
 
 // ====================================================
+// STRAP — la séance sollicite-t-elle beaucoup la cheville ?
+// Séance A (bas du corps) : toujours strap
+// Séance B (haut du corps) : jamais de strap
+// Séance C : strap seulement quand les sauts et les départs reviennent
+// ====================================================
+function strapNeeded(day, phase) {
+  if (day === 3) return false;                     // Séance B — haut du corps
+  if (day === 1) return true;                      // Séance A — bas du corps
+  return ['construction','intensite','pic'].includes(phase); // Séance C
+}
+
+function strapBox(needed) {
+  if (needed) {
+    return `<div class="strap-box yes">
+      <div class="strap-ico">🩹</div>
+      <div>
+        <span class="strap-t">STRAP OBLIGATOIRE AUJOURD'HUI</span>
+        Cette séance sollicite beaucoup ta cheville. Tu poses ton strap <strong>avant l'échauffement</strong>, avec le montage que ton kiné t'a montré. Si le strap te serre au point de t'engourdir le pied, tu le refais moins serré. Pas de strap sous la main ou montage impossible : tu remplaces cette séance par la séance vélo + gainage.
+      </div>
+    </div>`;
+  }
+  return `<div class="strap-box no">
+    <div class="strap-ico">✅</div>
+    <div>
+      <span class="strap-t">PAS DE STRAP NÉCESSAIRE</span>
+      Cette séance ne charge pas ta cheville. Tu la fais libre, c'est aussi comme ça que l'articulation se renforce toute seule. Si tu ressens une gêne malgré tout, tu mets le strap et tu le signales dans le bilan.
+    </div>
+  </div>`;
+}
+
+// ====================================================
 // SÉANCE A (Lundi) — Bas du corps / postérieur
 // ====================================================
 function sessA(phase) {
+  if (phase === 'maison1') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 10 min', items: [
+        { id:'ew-a1', n:'Réveil cheville + hanches', badge:'10 min',
+          desc:`Assise, cercles de cheville lents : 10 dans un sens, 10 dans l'autre, sur chaque pied. Puis flexion-extension de cheville, 15 par pied (tu ramènes la pointe vers toi, puis tu la pousses loin de toi). Debout : cercles de hanche, 10 par côté, et pont fessier au sol, 2 séries de 12.`,
+          tip:`On réveille la cheville en ligne droite, jamais en rotation. Les cercles se font lentement et sans forcer sur les fins d'amplitude.` },
+      ]},
+      { cat: '// FORCE · Poids du corps', items: [
+        { id:'sq-m1', n:'Squat au poids du corps (tempo lent)', badge:'4×15',
+          desc:`Pieds largeur des épaules, pointes légèrement ouvertes. Tu descends en 3 secondes jusqu'à ce que les cuisses soient parallèles au sol, tu marques 1 seconde en bas, puis tu remontes en 1 seconde. Talons collés au sol, genoux dans l'axe des pieds.`,
+          tip:`Sans charge, c'est la lenteur qui fait tout le travail. Compte vraiment les 3 secondes de descente, sinon l'exercice devient trop facile et ne sert plus à rien.`,
+          weights: [ { phase:'maison1', label:'Charge', kg:'Poids du corps', note:`4×15 · repos 60"` } ] },
+        { id:'lunge-m1', n:'Fente arrière', badge:'3×10 par jambe',
+          desc:`Debout, tu recules un pied loin derrière toi et tu descends le genou arrière vers le sol, buste droit. Puis tu reviens en poussant sur le pied avant. On recule au lieu d'avancer : le pied avant reste posé, il n'a rien à freiner.`,
+          tip:`La fente arrière charge la cuisse et le fessier sans demander à ta cheville d'absorber un choc vers l'avant.`,
+          weights: [ { phase:'maison1', label:'Charge', kg:'Poids du corps', note:`3×10 · repos 60"` } ] },
+        { id:'ht-m1', n:'Pont fessier une jambe', badge:'3×12 par jambe',
+          desc:`Allongée sur le dos, un pied au sol genou plié, l'autre jambe tendue vers le plafond. Tu pousses les hanches vers le haut, tu serres le fessier 1 seconde en haut, puis tu redescends doucement sans reposer complètement les fesses.`,
+          tip:`C'est le mouvement le plus proche de ta poussée de sortie de portillon, et il ne demande rien à la cheville.`,
+          weights: [ { phase:'maison1', label:'Charge', kg:'Poids du corps', note:`3×12 · repos 60"` } ] },
+        { id:'calf-m1', n:'Montées sur pointes (2 pieds)', badge:'4×20',
+          desc:`Debout, mains posées légèrement sur un mur pour l'équilibre. Tu montes lentement sur la pointe des pieds le plus haut possible, tu tiens 1 seconde en haut, puis tu redescends en 3 secondes. Le poids reste réparti sur tout l'avant du pied, sans partir vers l'intérieur ni vers l'extérieur.`,
+          tip:`Le mollet est le muscle qui tient ta cheville. Plus il est fort, moins l'articulation travaille toute seule. C'est l'exercice le plus utile de ta reprise.`,
+          weights: [ { phase:'maison1', label:'Charge', kg:'Poids du corps', note:`4×20 · repos 45"` } ] },
+        { id:'wall-m1', n:'Chaise contre le mur', badge:'3×30 sec',
+          desc:`Dos plaqué contre un mur, cuisses parallèles au sol, genoux à 90°, pieds à plat écartés de la largeur des hanches. Tu tiens la position sans t'aider des mains sur les cuisses.`, rest:'60 sec' },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'plk-a1', n:'Planche frontale', badge:'3×30-40 sec',
+          desc:`Appui sur les avant-bras et les pointes de pieds, corps aligné de la tête aux talons, ventre et fessiers serrés. Si l'appui sur les pointes gêne la cheville, tu poses les genoux au sol.`, rest:'45 sec' },
+        { id:'dbug-a1', n:'Dead bug', badge:'3×10 chaque côté',
+          desc:`Allongée sur le dos, bras tendus vers le plafond, genoux pliés à 90°. Tu abaisses lentement un bras et la jambe opposée vers le sol sans creuser le bas du dos, puis tu reviens. Tu alternes.`, rest:'45 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'maison2') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 10 min', items: [
+        { id:'ew-a2', n:'Réveil cheville + équilibre', badge:'10 min',
+          desc:`Cercles de cheville, 10 par sens et par pied. Montées sur pointes lentes, 2 séries de 12. Puis équilibre sur un pied, 30 secondes par côté, pied nu, regard fixé devant toi. Si c'est facile, tu fermes les yeux 10 secondes.`,
+          tip:`L'équilibre sur un pied réapprend à ta cheville à se rattraper toute seule. C'est ce qui te protégera le jour où tu poses le pied de travers sur la piste.` },
+      ]},
+      { cat: '// FORCE · Poids du corps, version unilatérale', items: [
+        { id:'bulg-m2', n:'Fente bulgare (pied arrière sur une chaise)', badge:'3×10 par jambe',
+          desc:`Debout devant une chaise, tu poses le dessus du pied arrière dessus. Tu descends droit vers le bas, genou avant dans l'axe du pied, buste droit, puis tu remontes en poussant dans le talon avant. Le mouvement va vers le bas, jamais vers l'avant.`,
+          tip:`Beaucoup plus dur qu'une fente classique. Commence par une série d'essai pour trouver la bonne distance entre la chaise et ton pied avant.`,
+          weights: [ { phase:'maison2', label:'Charge', kg:'Poids du corps', note:`3×10 · repos 90"` } ] },
+        { id:'sq-m2', n:'Squat au poids du corps (pause 2 sec en bas)', badge:'4×20',
+          desc:`Même squat que la semaine dernière, mais tu marques une pause de 2 secondes complètes en position basse, sans relâcher les cuisses, avant de remonter vite.`,
+          weights: [ { phase:'maison2', label:'Charge', kg:'Poids du corps', note:`4×20 · repos 60"` } ] },
+        { id:'ht-m2', n:'Pont fessier une jambe, pied surélevé', badge:'3×12 par jambe',
+          desc:`Même mouvement que la semaine dernière, mais le pied d'appui est posé sur une marche ou un canapé. L'amplitude est plus grande, donc le fessier travaille plus.`,
+          weights: [ { phase:'maison2', label:'Charge', kg:'Poids du corps', note:`3×12 · repos 60"` } ] },
+        { id:'calf-m2', n:'Montées sur pointes sur un pied', badge:'3×12 par pied',
+          desc:`Sur une jambe, mains en appui léger sur un mur. Tu montes sur la pointe, 1 seconde en haut, descente en 3 secondes. Commence par le pied valide pour te caler, puis fais le côté blessé au même rythme.`,
+          tip:`Compare les deux côtés : si le côté blessé fait nettement moins de répétitions propres, note-le dans le bilan, c'est une info importante pour la suite.`,
+          weights: [ { phase:'maison2', label:'Charge', kg:'Poids du corps', note:`3×12 · repos 60"` } ] },
+        { id:'wall-m2', n:'Chaise contre le mur', badge:'3×45 sec',
+          desc:`Même position que la semaine dernière, tenue plus longue.`, rest:'60 sec' },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'plk-a2', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne que la semaine dernière, durée en hausse.`, rest:'45 sec' },
+        { id:'holl-a2', n:'Hollow hold', badge:'3×20 sec',
+          desc:`Allongée sur le dos, bas du dos bien plaqué au sol, tu décolles les épaules et les jambes tendues de quelques centimètres, bras allongés au-dessus de la tête. Si c'est trop dur, tu plies les genoux.`, rest:'45 sec' },
+      ]},
+    ];
+  }
   if (phase === 'reprise') {
     return [
       { cat: '// ÉCHAUFFEMENT · 10 min', items: [
-        { id:'ew-a1', n:'Mobilité hanche (pas la cheville)', badge:'10 min',
-          desc:`Cercles de hanche debout, 10 par côté. Fentes avant sans descendre trop bas, 30 secondes par côté. Pont fessier allongé, 2 séries de 15. Le but : réveiller les hanches et les fessiers sans solliciter la cheville.` },
+        { id:'ew-a3', n:'Mobilité + activation', badge:'10 min',
+          desc:`Cercles de cheville, 10 par sens. Montées sur pointes, 2 séries de 12. Cercles de hanche, 10 par côté. Puis 15 squats à vide avant de charger.` },
       ]},
-      { cat: '// RENFORCEMENT GUIDÉ · Sans impact', items: [
+      { cat: '// RENFORCEMENT GUIDÉ · Retour en salle', items: [
         { id:'legpress', n:'Presse à cuisses (machine)', badge:'4×10',
-          desc:`Assise sur la machine, pieds à plat sur le plateau, largeur des hanches. Tu descends doucement jusqu'à ce que les genoux fassent un angle de 90°, puis tu pousses sans bloquer les genoux en haut. La machine guide le mouvement, donc pas de risque pour la cheville.`,
-          tip:`On utilise la presse plutôt que le squat libre tant que la cheville est fragile : même travail musculaire, zéro instabilité.`,
-          weights: [ { phase:'reprise', label:'Charge', kg:'40 kg (sem. 1-2) → 55 kg (sem. 3-4)', note:`4×10 · repos 90"` } ] },
+          desc:`Assise sur la machine, pieds à plat sur le plateau, largeur des hanches. Tu descends doucement jusqu'à ce que les genoux fassent un angle de 90°, puis tu pousses sans bloquer les genoux en haut.`,
+          tip:`On repasse par la presse plutôt que par le squat libre pour la première semaine de retour en salle : même travail musculaire, aucune instabilité pour la cheville.`,
+          weights: [ { phase:'reprise', label:'Charge', kg:'40 kg → 55 kg', note:`4×10 · repos 90"` } ] },
         { id:'ht-a', n:'Hip thrust barre (banc)', badge:'4×10',
-          desc:`Dos appuyé contre un banc, barre posée sur les hanches (avec un tapis de protection). Tu pousses les hanches vers le haut jusqu'à ce que le corps forme une ligne droite des épaules aux genoux, tu serres les fessiers 1 seconde en haut, puis tu redescends doucement.`,
+          desc:`Dos appuyé contre un banc, barre posée sur les hanches avec un tapis de protection. Tu pousses les hanches vers le haut jusqu'à former une ligne droite des épaules aux genoux, tu serres les fessiers 1 seconde, puis tu redescends doucement.`,
           tip:`Le hip thrust muscle exactement ce qui pousse fort à la sortie du gate, sans faire porter de charge sur la cheville.`,
-          weights: [ { phase:'reprise', label:'Charge', kg:'20 kg (sem. 1-2) → 30 kg (sem. 3-4)', note:`4×10 · repos 90"` } ] },
+          weights: [ { phase:'reprise', label:'Charge', kg:'25 kg → 35 kg', note:`4×10 · repos 90"` } ] },
         { id:'curl-a', n:'Leg curl (machine, ischios)', badge:'3×12',
-          desc:`Allongée ou assise sur la machine, tu plies les genoux pour ramener le rouleau vers l'arrière, puis tu reviens lentement. Mouvement guidé, aucun appui au sol nécessaire.`,
-          weights: [ { phase:'reprise', label:'Charge', kg:'15 kg (sem. 1-2) → 20 kg (sem. 3-4)', note:`3×12 · repos 60"` } ] },
+          desc:`Allongée ou assise sur la machine, tu plies les genoux pour ramener le rouleau vers l'arrière, puis tu reviens lentement. Mouvement guidé, aucun appui au sol.`,
+          weights: [ { phase:'reprise', label:'Charge', kg:'15 kg → 20 kg', note:`3×12 · repos 60"` } ] },
+        { id:'calf-a3', n:'Mollets debout chargés (haltères ou machine)', badge:'4×15',
+          desc:`Un haltère dans chaque main ou à la machine à mollets. Tu montes sur la pointe des pieds, 1 seconde en haut, descente lente en 3 secondes. En ligne droite, sans laisser le pied rouler sur le côté.`,
+          tip:`Tu as travaillé les mollets au poids du corps pendant deux semaines. Maintenant on ajoute de la charge : c'est la meilleure protection possible pour ta cheville.`,
+          weights: [ { phase:'reprise', label:'Charge', kg:'2×8 kg', note:`4×15 · repos 60"` } ] },
       ]},
       { cat: '// GAINAGE', items: [
-        { id:'plk-a', n:'Planche frontale', badge:'3×30-40 sec',
-          desc:`Appui sur les avant-bras et les pointes de pieds, corps aligné de la tête aux talons, ventre et fessiers gainés. Si la position debout sur les pointes de pieds gêne la cheville, tu peux poser les genoux au sol.`, rest:'45 sec' },
-        { id:'dbug-a', n:'Dead bug', badge:'3×10 chaque côté',
-          desc:`Allongée sur le dos, bras tendus vers le plafond, genoux pliés à 90°. Tu abaisses lentement un bras et la jambe opposée vers le sol sans creuser le bas du dos, puis tu reviens. Tu alternes.` , rest:'45 sec' },
+        { id:'plk-a3', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne que les semaines précédentes.`, rest:'45 sec' },
+        { id:'pallof-a3', n:'Pallof press (poulie ou élastique)', badge:'3×10 chaque côté',
+          desc:`Élastique ou poulie attaché sur le côté à hauteur de poitrine. Tu pousses tes mains droit devant toi sans que le buste ne tourne, puis tu reviens lentement.`, rest:'45 sec' },
       ]},
     ];
   }
   if (phase === 'construction') {
     return [
       { cat: '// ÉCHAUFFEMENT · 10 min', items: [
-        { id:'ew-a2', n:'Réactivation hanche + cheville', badge:'10 min',
-          desc:`Cercles de cheville lents, 10 par côté. Montée sur pointes de pieds contrôlée, 2 séries de 10. Fentes avant, 30 secondes par côté. On réintroduit la cheville en douceur, sans à-coups.` },
+        { id:'ew-a4', n:'Réactivation hanche + cheville', badge:'10 min',
+          desc:`Cercles de cheville lents, 10 par côté. Montées sur pointes contrôlées, 2 séries de 10. Fentes arrière, 30 secondes par côté. Puis 15 squats à vide.` },
       ]},
       { cat: '// RETOUR DU SQUAT LIBRE', items: [
         { id:'sq-c', n:'Squat barre (cage)', badge:'4×8',
-          desc:`Barre posée sur le haut du dos, pieds largeur des épaules. Tu descends lentement, genoux dans l'axe des pieds, jusqu'à ce que les cuisses soient parallèles au sol, puis tu remontes de façon contrôlée. Pas d'explosivité pour l'instant, on remet la cheville en confiance.`,
-          tip:`Premier retour au squat libre : charge légère, on privilégie une exécution parfaite avant d'augmenter le poids.`,
+          desc:`Barre posée sur le haut du dos, pieds largeur des épaules. Tu descends lentement, genoux dans l'axe des pieds, jusqu'à ce que les cuisses soient parallèles au sol, puis tu remontes de façon contrôlée. Pas d'explosivité pour l'instant.`,
+          tip:`Premier retour au squat libre : charge légère, exécution parfaite avant d'augmenter le poids. Si la cheville tire dans la descente, tu réduis l'amplitude et tu le notes dans le bilan.`,
           weights: [ { phase:'construction', label:'Charge', kg:'30 kg', note:`4×8 · repos 2'` } ] },
         { id:'ht-c', n:'Hip thrust barre', badge:'4×8',
-          desc:`Même mouvement que les semaines précédentes, charge légèrement plus lourde.`,
+          desc:`Même mouvement que les semaines précédentes, charge plus lourde.`,
           weights: [ { phase:'construction', label:'Charge', kg:'40 kg', note:`4×8 · repos 90"` } ] },
         { id:'rdl-c', n:'Soulevé de terre roumain (haltères)', badge:'3×10',
-          desc:`Un haltère dans chaque main, jambes légèrement fléchies. Tu descends les haltères le long des jambes en poussant les fesses vers l'arrière, dos plat, puis tu reviens en poussant sur les talons.`,
+          desc:`Un haltère dans chaque main, jambes légèrement fléchies. Tu descends les haltères le long des jambes en poussant les fesses vers l'arrière, dos plat, puis tu reviens en poussant dans les talons.`,
           weights: [ { phase:'construction', label:'Haltères', kg:'12 kg chacun', note:`3×10 · repos 90"` } ] },
+        { id:'calf-c', n:'Mollets debout chargés', badge:'3×15',
+          desc:`Même mouvement que la phase précédente, charge en légère hausse.`,
+          weights: [ { phase:'construction', label:'Charge', kg:'2×10 kg', note:`3×15 · repos 60"` } ] },
       ]},
       { cat: '// GAINAGE', items: [
         { id:'pallof-c', n:'Pallof press (élastique)', badge:'3×10 chaque côté',
-          desc:`Élastique attaché sur le côté à hauteur de poitrine. Tu pousses tes mains droit devant toi sans que le buste ne tourne, puis tu reviens lentement. Ça muscle le gainage anti-rotation.`, rest:'45 sec' },
+          desc:`Élastique attaché sur le côté à hauteur de poitrine. Tu pousses tes mains droit devant toi sans que le buste ne tourne, puis tu reviens lentement.`, rest:'45 sec' },
       ]},
     ];
   }
   if (phase === 'intensite') {
     return [
       { cat: '// ÉCHAUFFEMENT · 10 min', items: [
-        { id:'ew-a3', n:'Activation dynamique', badge:'10 min',
+        { id:'ew-a5', n:'Activation dynamique', badge:'10 min',
           desc:`10 squats sans charge, talons-fesses sur 20m, montées de genoux sur 20m, puis 3 accélérations progressives sur 15m à allure modérée.` },
       ]},
       { cat: '// FORCE PRINCIPALE', items: [
@@ -496,10 +627,10 @@ function sessA(phase) {
           desc:`Barre au sol, pieds largeur des hanches. Dos plat, hanches en arrière, tu tires la barre le long des tibias en te redressant, puis tu redescends de façon contrôlée.`,
           weights: [ { phase:'intensite', label:'Charge', kg:'35 kg', note:`3×6 · repos 2'30"` } ] },
       ]},
-      { cat: '// EXPLOSIVITÉ · Introduite ici', items: [
+      { cat: '// EXPLOSIVITÉ', items: [
         { id:'broad-i', n:'Saut en longueur debout (mesuré)', badge:'4×3 · mesurer',
-          desc:`Pieds joints, tu balances les bras en arrière puis tu sautes le plus loin possible vers l'avant, réception souple sur les deux pieds. Tu mesures la distance à chaque fois pour suivre ta progression.`,
-          tip:`Premier exercice avec impact au sol depuis la blessure : reste concentrée sur une réception souple et contrôlée.`, rest:'2 min' },
+          desc:`Pieds joints, tu balances les bras en arrière puis tu sautes le plus loin possible vers l'avant, réception souple sur les deux pieds. Tu mesures la distance à chaque fois.`,
+          tip:`Réception souple et symétrique, sur les deux pieds en même temps. Si tu sens que tu te réceptionnes de travers, tu arrêtes la série.`, rest:'2 min' },
       ]},
       { cat: '// GAINAGE', items: [
         { id:'plk-i', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne que les semaines précédentes.`, rest:'45 sec' },
@@ -508,16 +639,16 @@ function sessA(phase) {
   }
   // pic
   return [
-    { cat: '// ÉCHAUFFEMENT · 10 min', items: [
-      { id:'ew-a4', n:'Activation courte', badge:'8 min',
+    { cat: '// ÉCHAUFFEMENT · 8 min', items: [
+      { id:'ew-a6', n:'Activation courte', badge:'8 min',
         desc:`10 squats sans charge, montées de genoux sur 15m, 2 accélérations progressives sur 15m.` },
     ]},
     { cat: '// FORCE · Volume réduit, vitesse d\'exécution', items: [
       { id:'sq-p', n:'Squat barre (cage)', badge:'3×5',
-        desc:`Même mouvement, charge plus légère que la semaine précédente. L'objectif ici n'est plus d'ajouter du poids, c'est d'être rapide et précise à la remontée.`,
+        desc:`Même mouvement, charge plus légère que la semaine précédente. L'objectif n'est plus d'ajouter du poids, c'est d'être rapide et précise à la remontée.`,
         weights: [ { phase:'pic', label:'Charge', kg:'35 kg', note:`3×5 · repos 2'` } ] },
       { id:'ht-p', n:'Hip thrust barre', badge:'3×5 explosif',
-        desc:`Même mouvement, poussée la plus rapide possible en haut tout en gardant le contrôle en descente.`,
+        desc:`Même mouvement, poussée la plus rapide possible en haut, contrôle en descente.`,
         weights: [ { phase:'pic', label:'Charge', kg:'35 kg', note:`3×5 · repos 90"` } ] },
     ]},
     { cat: '// GAINAGE COURT', items: [
@@ -530,179 +661,270 @@ function sessA(phase) {
 // SÉANCE B (Mercredi) — Haut du corps
 // ====================================================
 function sessB(phase) {
-  if (phase === 'reprise') {
+  if (phase === 'maison1') {
     return [
       { cat: '// ÉCHAUFFEMENT · 8 min', items: [
         { id:'ew-b1', n:'Mobilité épaules', badge:'8 min',
-          desc:`Rotations d'épaules, 10 vers l'avant puis 10 vers l'arrière. Pompes sur les genoux, 2 séries de 8, pour réveiller le haut du corps.` },
+          desc:`Rotations d'épaules, 10 vers l'avant puis 10 vers l'arrière. Bras tendus en cercles, 10 par sens. Pompes sur les genoux, 2 séries de 8 pour réveiller le haut du corps.` },
       ]},
       { cat: '// POUSSÉE', items: [
-        { id:'bn-b1', n:'Développé couché (barre, banc)', badge:'4×8',
-          desc:`Allongée sur le banc, prise un peu plus large que les épaules. Tu descends la barre doucement jusqu'à toucher la poitrine, tu marques un temps d'arrêt, puis tu pousses vers le haut.`,
-          weights: [ { phase:'reprise', label:'Charge', kg:'15 kg (sem. 1-2) → 20 kg (sem. 3-4)', note:`4×8 · repos 2'` } ] },
+        { id:'pu-b1', n:'Pompes', badge:'4×8-12',
+          desc:`Mains un peu plus larges que les épaules, corps aligné de la tête aux talons. Tu descends la poitrine jusqu'à quelques centimètres du sol, puis tu remontes. Si tu n'arrives pas à faire 8 répétitions propres, pose les mains sur une chaise pour incliner le corps.`,
+          tip:`Mieux vaut 8 pompes parfaites sur une chaise que 12 pompes au sol avec les fesses qui montent.`,
+          weights: [ { phase:'maison1', label:'Charge', kg:'Poids du corps', note:`4×10 · repos 90"` } ] },
+        { id:'dip-b1', n:'Dips sur chaise', badge:'3×10',
+          desc:`Assise au bord d'une chaise stable, mains posées de chaque côté des hanches, tu avances les fesses dans le vide et tu descends les coudes à 90°, puis tu pousses pour remonter. Jambes tendues devant toi, talons au sol.`, rest:'60 sec' },
       ]},
       { cat: '// TIRAGE · Dos', items: [
-        { id:'pull-b1', n:'Tirage horizontal (machine) ou tractions assistées', badge:'4×8',
-          desc:`Assise à la machine, tu tires la poignée vers ton ventre en rapprochant les omoplates, puis tu reviens lentement en gardant le dos droit.` },
-        { id:'row-b1', n:'Rowing 1 bras (haltère, banc)', badge:'3×10 chaque bras',
-          desc:`Un genou et une main posés sur le banc, l'autre main tient l'haltère bras tendu. Tu tires l'haltère vers la hanche en gardant le dos plat, puis tu redescends lentement.`,
-          weights: [ { phase:'reprise', label:'Haltère', kg:'8 kg (sem. 1-2) → 10 kg (sem. 3-4)', note:`3×10 · repos 90"` } ] },
+        { id:'row-b1', n:'Rowing inversé (sous une table solide)', badge:'4×8',
+          desc:`Allongée sous une table solide, tu attrapes le bord et tu tires ta poitrine vers la table en gardant le corps aligné, talons au sol. Puis tu redescends lentement. Si tu as une barre de traction, tu peux faire des tractions assistées à la place.`,
+          tip:`Le dos et les bras, c'est ce qui tient ton guidon quand ça tape. C'est le vrai travail à faire pendant que la salle est fermée.`,
+          weights: [ { phase:'maison1', label:'Charge', kg:'Poids du corps', note:`4×8 · repos 90"` } ] },
+        { id:'sup-b1', n:'Superman', badge:'3×12',
+          desc:`Allongée sur le ventre, bras tendus devant toi. Tu décolles les bras, la poitrine et les jambes du sol en même temps, tu tiens 2 secondes, puis tu redescends doucement.`, rest:'45 sec' },
       ]},
       { cat: '// GAINAGE & NUQUE', items: [
         { id:'side-b1', n:'Planche latérale', badge:'3×20-30 sec chaque côté',
-          desc:`Appui sur un avant-bras, corps aligné sur le côté. Si l'appui sur les pieds gêne la cheville, tu peux poser le genou du bas au sol pour soulager.`, rest:'45 sec' },
+          desc:`Appui sur un avant-bras, corps aligné sur le côté, hanches hautes. Si l'appui sur les pieds gêne la cheville, tu poses le genou du bas au sol.`, rest:'45 sec' },
         { id:'neck-b1', n:'Isométrie cervicale', badge:'3×10 sec, 4 directions',
-          desc:`Main sur le front, tu pousses la tête contre la main sans qu'elle ne bouge, 10 secondes. Puis même chose à l'arrière, à gauche et à droite de la tête. C'est un travail statique, sans mouvement.`, rest:'30 sec' },
+          desc:`Main sur le front, tu pousses la tête contre ta main sans qu'elle ne bouge, 10 secondes. Puis même chose à l'arrière, à gauche et à droite de la tête. Travail statique, aucun mouvement.`,
+          tip:`Une nuque solide, c'est moins de fatigue en fin de manche et une meilleure tenue de tête sur les bosses.`, rest:'30 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'maison2') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 8 min', items: [
+        { id:'ew-b2', n:'Mobilité épaules', badge:'8 min', desc:`Même échauffement que la semaine dernière.` },
+      ]},
+      { cat: '// POUSSÉE', items: [
+        { id:'pu-b2', n:'Pompes pieds surélevés', badge:'4×8',
+          desc:`Pieds posés sur une chaise ou une marche, mains au sol un peu plus larges que les épaules. Le corps reste parfaitement aligné, les fesses ne montent pas. Si c'est trop dur, tu reviens aux pompes au sol.`,
+          weights: [ { phase:'maison2', label:'Charge', kg:'Poids du corps', note:`4×8 · repos 90"` } ] },
+        { id:'pud-b2', n:'Pompes diamant', badge:'3×8',
+          desc:`Mains rapprochées sous la poitrine, index et pouces qui se touchent. Tu descends coudes le long du corps puis tu remontes. Version genoux au sol autorisée si besoin.`, rest:'90 sec' },
+      ]},
+      { cat: '// TIRAGE · Dos', items: [
+        { id:'row-b2', n:'Rowing inversé (ou tractions assistées)', badge:'4×10',
+          desc:`Même mouvement que la semaine dernière, deux répétitions de plus par série. Pour durcir, tu avances les pieds pour être plus à l'horizontale.`,
+          weights: [ { phase:'maison2', label:'Charge', kg:'Poids du corps', note:`4×10 · repos 90"` } ] },
+        { id:'bird-b2', n:'Bird dog', badge:'3×10 chaque côté',
+          desc:`À quatre pattes, tu tends un bras devant et la jambe opposée derrière, en gardant le dos parfaitement immobile. Tu tiens 2 secondes, puis tu changes de côté.`, rest:'45 sec' },
+      ]},
+      { cat: '// GAINAGE & NUQUE', items: [
+        { id:'side-b2', n:'Planche latérale', badge:'3×35 sec chaque côté', desc:`Même consigne, durée en hausse.`, rest:'45 sec' },
+        { id:'neck-b2', n:'Isométrie cervicale', badge:'3×15 sec, 4 directions', desc:`Même exercice, durée augmentée.`, rest:'30 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'reprise') {
+    return [
+      { cat: '// ÉCHAUFFEMENT · 8 min', items: [
+        { id:'ew-b3', n:'Mobilité épaules', badge:'8 min', desc:`Rotations d'épaules, pompes sur les genoux 2 séries de 8, élastique en tirage léger 2 séries de 12.` },
+      ]},
+      { cat: '// POUSSÉE', items: [
+        { id:'bn-b3', n:'Développé couché (barre, banc)', badge:'4×8',
+          desc:`Allongée sur le banc, prise un peu plus large que les épaules. Tu descends la barre doucement jusqu'à toucher la poitrine, temps d'arrêt, puis tu pousses vers le haut.`,
+          tip:`Premier retour à la barre après deux semaines à la maison : reprends plus léger que ce que tu penses pouvoir faire, la technique d'abord.`,
+          weights: [ { phase:'reprise', label:'Charge', kg:'15 kg → 20 kg', note:`4×8 · repos 2'` } ] },
+      ]},
+      { cat: '// TIRAGE · Dos', items: [
+        { id:'pull-b3', n:'Tirage horizontal (machine) ou tractions assistées', badge:'4×8',
+          desc:`Assise à la machine, tu tires la poignée vers ton ventre en rapprochant les omoplates, puis tu reviens lentement en gardant le dos droit.` },
+        { id:'row-b3', n:'Rowing 1 bras (haltère, banc)', badge:'3×10 chaque bras',
+          desc:`Un genou et une main posés sur le banc, l'autre main tient l'haltère bras tendu. Tu tires l'haltère vers la hanche en gardant le dos plat, puis tu redescends lentement.`,
+          weights: [ { phase:'reprise', label:'Haltère', kg:'8 kg → 10 kg', note:`3×10 · repos 90"` } ] },
+      ]},
+      { cat: '// GAINAGE & NUQUE', items: [
+        { id:'side-b3', n:'Planche latérale', badge:'3×35 sec chaque côté', desc:`Même consigne que les semaines précédentes.`, rest:'45 sec' },
+        { id:'neck-b3', n:'Isométrie cervicale', badge:'3×15 sec, 4 directions', desc:`Même exercice que les semaines précédentes.`, rest:'30 sec' },
       ]},
     ];
   }
   if (phase === 'construction') {
     return [
       { cat: '// ÉCHAUFFEMENT · 8 min', items: [
-        { id:'ew-b2', n:'Mobilité épaules', badge:'8 min', desc:`Même échauffement que les semaines précédentes.` },
+        { id:'ew-b4', n:'Mobilité épaules', badge:'8 min', desc:`Même échauffement que les semaines précédentes.` },
       ]},
       { cat: '// POUSSÉE', items: [
-        { id:'bn-b2', n:'Développé couché (barre, banc)', badge:'4×6',
+        { id:'bn-b4', n:'Développé couché (barre, banc)', badge:'4×6',
           desc:`Même mouvement, charge en légère hausse.`,
           weights: [ { phase:'construction', label:'Charge', kg:'25 kg', note:`4×6 · repos 2'` } ] },
-        { id:'ohp-b2', n:'Développé militaire (debout)', badge:'3×8',
+        { id:'ohp-b4', n:'Développé militaire (debout)', badge:'3×8',
           desc:`Barre au niveau des clavicules, tu pousses droit au-dessus de la tête sans creuser le dos, puis tu redescends de façon contrôlée.`,
           weights: [ { phase:'construction', label:'Charge', kg:'15 kg', note:`3×8 · repos 90"` } ] },
       ]},
       { cat: '// TIRAGE · Dos', items: [
-        { id:'pull-b2', n:'Tractions (assistées si besoin)', badge:'4×6',
+        { id:'pull-b4', n:'Tractions (assistées si besoin)', badge:'4×6',
           desc:`Prise un peu plus large que les épaules, tu tires les coudes vers les hanches jusqu'à ce que le menton passe la barre, puis tu redescends lentement. Utilise une bande d'assistance si tu ne peux pas encore en faire seule.` },
-        { id:'row-b2', n:'Rowing 1 bras (haltère)', badge:'3×10 chaque bras',
+        { id:'row-b4', n:'Rowing 1 bras (haltère)', badge:'3×10 chaque bras',
           desc:`Même mouvement, charge en légère hausse.`,
           weights: [ { phase:'construction', label:'Haltère', kg:'12 kg', note:`3×10 · repos 90"` } ] },
       ]},
       { cat: '// GAINAGE & NUQUE', items: [
-        { id:'side-b2', n:'Planche latérale', badge:'3×30 sec chaque côté', desc:`Même consigne que les semaines précédentes.`, rest:'45 sec' },
-        { id:'neck-b2', n:'Isométrie cervicale', badge:'3×15 sec, 4 directions', desc:`Même exercice, durée augmentée.`, rest:'30 sec' },
+        { id:'side-b4', n:'Planche latérale', badge:'3×30 sec chaque côté', desc:`Même consigne que les semaines précédentes.`, rest:'45 sec' },
+        { id:'neck-b4', n:'Isométrie cervicale', badge:'3×15 sec, 4 directions', desc:`Même exercice.`, rest:'30 sec' },
       ]},
     ];
   }
   if (phase === 'intensite') {
     return [
       { cat: '// ÉCHAUFFEMENT · 8 min', items: [
-        { id:'ew-b3', n:'Activation haut du corps', badge:'8 min', desc:`Rotations d'épaules, pompes classiques 2 séries de 8, élastique en tirage léger 2 séries de 12.` },
+        { id:'ew-b5', n:'Activation haut du corps', badge:'8 min', desc:`Rotations d'épaules, pompes classiques 2 séries de 8, élastique en tirage léger 2 séries de 12.` },
       ]},
       { cat: '// POUSSÉE', items: [
-        { id:'bn-b3', n:'Développé couché (barre, banc)', badge:'4×5',
+        { id:'bn-b5', n:'Développé couché (barre, banc)', badge:'4×5',
           desc:`Même mouvement, charge en hausse, poussée plus rapide en haut.`,
           weights: [ { phase:'intensite', label:'Charge', kg:'30 kg', note:`4×5 · repos 2'30"` } ] },
-        { id:'ohp-b3', n:'Développé militaire (debout)', badge:'3×6',
+        { id:'ohp-b5', n:'Développé militaire (debout)', badge:'3×6',
           desc:`Même mouvement, charge en légère hausse.`,
           weights: [ { phase:'intensite', label:'Charge', kg:'18 kg', note:`3×6 · repos 2'` } ] },
       ]},
       { cat: '// TIRAGE · Dos', items: [
-        { id:'pull-b3', n:'Tractions', badge:'4×6', desc:`Même mouvement que la semaine précédente.` },
-        { id:'row-b3', n:'Rowing 1 bras (haltère)', badge:'3×8 chaque bras',
+        { id:'pull-b5', n:'Tractions', badge:'4×6', desc:`Même mouvement que la semaine précédente.` },
+        { id:'row-b5', n:'Rowing 1 bras (haltère)', badge:'3×8 chaque bras',
           desc:`Même mouvement, charge en légère hausse.`,
           weights: [ { phase:'intensite', label:'Haltère', kg:'14 kg', note:`3×8 · repos 90"` } ] },
       ]},
       { cat: '// GAINAGE', items: [
-        { id:'side-b3', n:'Planche latérale', badge:'3×35 sec chaque côté', desc:`Même exercice, durée en hausse.`, rest:'45 sec' },
+        { id:'side-b5', n:'Planche latérale', badge:'3×35 sec chaque côté', desc:`Même exercice, durée en hausse.`, rest:'45 sec' },
       ]},
     ];
   }
   // pic
   return [
     { cat: '// ÉCHAUFFEMENT · 6 min', items: [
-      { id:'ew-b4', n:'Activation courte', badge:'6 min', desc:`Rotations d'épaules, pompes classiques 1 série de 8.` },
+      { id:'ew-b6', n:'Activation courte', badge:'6 min', desc:`Rotations d'épaules, pompes classiques 1 série de 8.` },
     ]},
     { cat: '// POUSSÉE · Volume réduit', items: [
-      { id:'bn-b4', n:'Développé couché (barre, banc)', badge:'3×5',
+      { id:'bn-b6', n:'Développé couché (barre, banc)', badge:'3×5',
         desc:`Même mouvement, charge légèrement réduite. On garde de la fraîcheur pour le pic de forme.`,
         weights: [ { phase:'pic', label:'Charge', kg:'25 kg', note:`3×5 · repos 2'` } ] },
     ]},
     { cat: '// TIRAGE', items: [
-      { id:'pull-b4', n:'Tractions', badge:'3×5', desc:`Même mouvement, volume réduit.` },
+      { id:'pull-b6', n:'Tractions', badge:'3×5', desc:`Même mouvement, volume réduit.` },
     ]},
     { cat: '// GAINAGE COURT', items: [
-      { id:'side-b4', n:'Planche latérale', badge:'2×25 sec chaque côté', desc:`Version courte.`, rest:'30 sec' },
+      { id:'side-b6', n:'Planche latérale', badge:'2×25 sec chaque côté', desc:`Version courte.`, rest:'30 sec' },
     ]},
   ];
 }
 
 // ====================================================
-// SÉANCE C (Vendredi / Jeudi final) — Cardio, gainage, spécifique start
+// SÉANCE C (Vendredi / Jeudi final) — Vélo, cardio, gainage, spécifique start
 // ====================================================
 function sessC(phase) {
-  if (phase === 'reprise') {
+  if (phase === 'maison1') {
     return [
-      { cat: '// CARDIO DOUX · Sans impact', items: [
-        { id:'row-cardio', n:'Rameur', badge:'15-20 min, allure facile',
-          desc:`Assise sur le rameur, tu pousses avec les jambes puis tu tires avec les bras, dans cet ordre, puis tu reviens dans l'ordre inverse. Allure où tu peux encore parler facilement. Le rameur n'a aucun impact au sol, donc il ne stresse pas la cheville.`,
-          tip:`On garde la caisse (le cœur, les poumons) en forme pendant que la cheville se répare, sans aucun impact au sol.` },
+      { cat: '// VÉLO · Autorisé par le kiné', items: [
+        { id:'velo-c1', n:'Vélo endurance (assise)', badge:'35 min · allure facile',
+          desc:`Home-trainer, vélo de route ou vélo d'appartement. 35 minutes à une allure où tu peux encore parler en faisant des phrases complètes. Braquet souple, cadence élevée (autour de 90 tours de pédale par minute). Tu restes assise tout du long, pas de danseuse.`,
+          tip:`Le pédalage est le seul mouvement qui fait travailler ta cheville en ligne droite, sans choc et sans torsion. C'est pour ça que ton kiné l'a autorisé en premier.` },
+        { id:'cad-c1', n:'Blocs de cadence', badge:'5×1 min',
+          desc:`À la fin des 35 minutes ou intégré dedans : 1 minute à cadence rapide (autour de 100-110 tours par minute) sur braquet léger, sans sauter sur la selle, puis 2 minutes de récupération à cadence normale. Tu répètes 5 fois.`,
+          tip:`Cadence rapide = travail de vélocité pure. Ça réveille la coordination du pédalage sans jamais charger l'articulation.`, rest:'2 min' },
       ]},
       { cat: '// GAINAGE COMPLET', items: [
-        { id:'plk-c1', n:'Planche frontale', badge:'3×30-40 sec', desc:`Même consigne que la séance A.`, rest:'45 sec' },
+        { id:'plk-c1', n:'Planche frontale', badge:'3×40 sec', desc:`Même consigne que la séance A.`, rest:'45 sec' },
+        { id:'side-c1', n:'Planche latérale', badge:'3×25 sec chaque côté', desc:`Même consigne que la séance B.`, rest:'45 sec' },
         { id:'dbug-c1', n:'Dead bug', badge:'3×10 chaque côté', desc:`Même mouvement que la séance A.`, rest:'45 sec' },
-        { id:'pallof-c1', n:'Pallof press (élastique)', badge:'3×10 chaque côté', desc:`Même mouvement que décrit en séance B construction.`, rest:'45 sec' },
       ]},
-      { cat: '// HAUT DU CORPS LÉGER', items: [
-        { id:'pushup-c1', n:'Pompes inclinées (mains sur banc)', badge:'3×10',
-          desc:`Mains posées sur un banc, corps incliné, tu descends la poitrine vers le banc puis tu remontes. Plus facile que la pompe classique, ça permet de travailler sans forcer.`, rest:'60 sec' },
+    ];
+  }
+  if (phase === 'maison2') {
+    return [
+      { cat: '// VÉLO · Intervalles', items: [
+        { id:'velo-c2', n:'Échauffement vélo', badge:'12 min',
+          desc:`12 minutes de pédalage facile, cadence libre, pour monter la température doucement.` },
+        { id:'int-c2', n:'Intervalles assis', badge:'6×2 min',
+          desc:`2 minutes à allure soutenue (tu peux encore parler, mais par petites phrases), puis 2 minutes de récupération très facile. Tu répètes 6 fois. Tu restes assise, braquet modéré, cadence autour de 90.`,
+          tip:`On construit la caisse pour tenir la manche entière. Ne pars pas trop fort sur les deux premiers blocs, l'objectif est que le sixième soit aussi bon que le premier.`, rest:'2 min' },
+        { id:'cool-c2', n:'Retour au calme', badge:'8 min',
+          desc:`8 minutes de pédalage très facile pour redescendre.` },
+      ]},
+      { cat: '// GAINAGE COMPLET', items: [
+        { id:'plk-c2', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne.`, rest:'45 sec' },
+        { id:'holl-c2', n:'Hollow hold', badge:'3×25 sec', desc:`Même mouvement que la séance A de cette semaine.`, rest:'45 sec' },
+        { id:'sup-c2', n:'Superman', badge:'3×12', desc:`Même mouvement que la séance B.`, rest:'45 sec' },
+      ]},
+    ];
+  }
+  if (phase === 'reprise') {
+    return [
+      { cat: '// CARDIO · Sans impact', items: [
+        { id:'row-c3', n:'Rameur ou vélo par intervalles', badge:'6×2 min',
+          desc:`Au choix : rameur ou vélo. 2 minutes à allure soutenue, 1 minute 30 de récupération facile, à répéter 6 fois. Sur rameur : tu pousses avec les jambes, puis tu tires avec les bras, et tu reviens dans l'ordre inverse.`,
+          tip:`Aucun impact au sol sur ces deux machines : on continue de construire la caisse pendant que la cheville finit de se solidifier.`, rest:'90 sec' },
+      ]},
+      { cat: '// PROPRIOCEPTION · Préparation du retour des sauts', items: [
+        { id:'prop-c3', n:'Équilibre unipodal + coussin', badge:'4×45 sec par pied',
+          desc:`Debout sur un pied sur un tapis souple ou un coussin d'équilibre. Tu tiens 45 secondes en gardant le regard devant toi. Si c'est facile, tu fais des petits lancers de balle contre un mur pendant que tu tiens la position.`,
+          tip:`C'est l'exercice qui prépare le retour des sauts la semaine prochaine : ta cheville réapprend à corriger toute seule avant qu'on lui demande d'absorber un atterrissage.`, rest:'30 sec' },
+        { id:'calf-c3', n:'Montées sur pointes sur un pied', badge:'3×15 par pied',
+          desc:`Sur une marche si possible, pour descendre le talon plus bas que la pointe. Montée contrôlée, 1 seconde en haut, descente en 3 secondes.`, rest:'60 sec' },
+      ]},
+      { cat: '// GAINAGE', items: [
+        { id:'plk-c3', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne.`, rest:'45 sec' },
+        { id:'pallof-c3', n:'Pallof press (élastique)', badge:'3×10 chaque côté', desc:`Même mouvement que décrit en séance A.`, rest:'45 sec' },
       ]},
     ];
   }
   if (phase === 'construction') {
     return [
       { cat: '// ÉCHAUFFEMENT DYNAMIQUE · 8 min', items: [
-        { id:'ew-c2', n:'Activation légère', badge:'8 min', desc:`Talons-fesses sur 15m, montées de genoux sur 15m, 2 accélérations très progressives sur 15m.` },
+        { id:'ew-c4', n:'Activation légère', badge:'8 min', desc:`Talons-fesses sur 15m, montées de genoux sur 15m, 2 accélérations très progressives sur 15m.` },
       ]},
       { cat: '// PREMIER RETOUR DE L\'EXPLOSIVITÉ', items: [
-        { id:'jsq-c2', n:'Squat sauté (poids du corps)', badge:'3×6',
-          desc:`Position de squat, tu sautes verticalement le plus haut possible, réception souple en pliant les genoux à l'atterrissage. Sans charge, juste ton poids de corps : on réintroduit le saut en douceur.`,
-          tip:`C'est le premier exercice avec un vrai saut depuis la blessure. Reste concentrée sur une réception souple et silencieuse.`, rest:'2 min' },
+        { id:'jsq-c4', n:'Squat sauté (poids du corps)', badge:'3×6',
+          desc:`Position de squat, tu sautes verticalement le plus haut possible, réception souple en pliant les genoux à l'atterrissage. Sans charge, juste ton poids de corps.`,
+          tip:`Premier vrai saut depuis la blessure, et première séance C avec strap. Réception souple et silencieuse : si tu t'entends atterrir, tu amortis mal.`, rest:'2 min' },
       ]},
       { cat: '// CARDIO', items: [
-        { id:'row-c2', n:'Rameur par intervalles', badge:'5×2 min (allure modérée / facile)',
+        { id:'row-c4', n:'Rameur ou vélo par intervalles', badge:'5×2 min',
           desc:`2 minutes à allure modérée, puis 1 minute à allure facile, à répéter 5 fois.` },
       ]},
       { cat: '// GAINAGE', items: [
-        { id:'plk-c2', n:'Planche frontale', badge:'3×40 sec', desc:`Même consigne.`, rest:'45 sec' },
+        { id:'plk-c4', n:'Planche frontale', badge:'3×40 sec', desc:`Même consigne.`, rest:'45 sec' },
       ]},
     ];
   }
   if (phase === 'intensite') {
     return [
       { cat: '// ÉCHAUFFEMENT DYNAMIQUE · 10 min', items: [
-        { id:'ew-c3', n:'Activation complète', badge:'10 min', desc:`Talons-fesses, montées de genoux, pas chassés, puis 3 accélérations progressives sur 20m.` },
+        { id:'ew-c5', n:'Activation complète', badge:'10 min', desc:`Talons-fesses, montées de genoux, pas chassés, puis 3 accélérations progressives sur 20m.` },
       ]},
       { cat: '// EXPLOSIVITÉ', items: [
-        { id:'jsq-c3', n:'Squat sauté lesté (haltères légers)', badge:'4×5',
-          desc:`Même mouvement que la semaine précédente, avec un haltère léger dans chaque main pour ajouter un peu de charge.`,
+        { id:'jsq-c5', n:'Squat sauté lesté (haltères légers)', badge:'4×5',
+          desc:`Même mouvement que la semaine précédente, avec un haltère léger dans chaque main.`,
           weights: [ { phase:'intensite', label:'Charge', kg:'5 kg chacun', note:`4×5 · repos 2'` } ] },
-        { id:'broad-c3', n:'Saut en longueur debout (mesuré)', badge:'4×3 · mesurer',
+        { id:'broad-c5', n:'Saut en longueur debout (mesuré)', badge:'4×3 · mesurer',
           desc:`Même mouvement que décrit en séance A. On compare la distance à chaque séance.`, rest:'2 min' },
       ]},
-      { cat: '// SPÉCIFIQUE START · Introduit ici', items: [
-        { id:'react-c3', n:'Sprint 5m sur signal', badge:'4 sprints',
+      { cat: '// SPÉCIFIQUE START', items: [
+        { id:'react-c5', n:'Sprint 5m sur signal', badge:'4 sprints',
           desc:`Position légèrement fléchie, comme au portillon. Sur un signal (voix, tape dans les mains), tu pars en sprint maximal sur 5m. Récupération complète entre chaque sprint.`,
-          tip:`Premier vrai travail de départ depuis la blessure. Sur herbe ou piste plane, jamais sur sol glissant.`, rest:'2 min' },
+          tip:`Premier vrai travail de départ depuis la blessure. Sur herbe ou piste plane, jamais sur sol glissant, et en ligne droite.`, rest:'2 min' },
       ]},
       { cat: '// GAINAGE', items: [
-        { id:'plk-c3', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne.`, rest:'45 sec' },
+        { id:'plk-c5', n:'Planche frontale', badge:'3×45 sec', desc:`Même consigne.`, rest:'45 sec' },
       ]},
     ];
   }
   // pic — séance finale du 17 septembre
   return [
     { cat: '// ÉCHAUFFEMENT COMPLET · 12 min', items: [
-      { id:'ew-c4', n:'Activation complète', badge:'12 min',
+      { id:'ew-c6', n:'Activation complète', badge:'12 min',
         desc:`Talons-fesses, montées de genoux, pas chassés, puis 3 accélérations progressives sur 20m jusqu'à une allure proche du maximum.` },
     ]},
     { cat: '// SIMULATION DE START · Séance clé', items: [
-      { id:'react-c4', n:'Sprint 5-10m sur signal', badge:'6 sprints',
+      { id:'react-c6', n:'Sprint 5-10m sur signal', badge:'6 sprints',
         desc:`Position légèrement fléchie, comme au portillon. Sur un signal, tu pars en sprint maximal sur 5 à 10m. Récupération complète entre chaque sprint, pour que chaque départ soit fait à pleine vitesse.`,
         tip:`C'est la séance qui résume tout le programme : un start rapide et propre, la cheville solide dessous.`, rest:'2 min 30' },
-      { id:'broad-c4', n:'Saut en longueur debout (mesure finale)', badge:'3×3 · mesurer',
+      { id:'broad-c6', n:'Saut en longueur debout (mesure finale)', badge:'3×3 · mesurer',
         desc:`Même mouvement que les semaines précédentes. Compare ta distance à celle du début du programme.`, rest:'2 min' },
     ]},
     { cat: '// GAINAGE COURT', items: [
-      { id:'plk-c4', n:'Planche frontale', badge:'2×30 sec', desc:`Version courte pour terminer.`, rest:'30 sec' },
+      { id:'plk-c6', n:'Planche frontale', badge:'2×30 sec', desc:`Version courte pour terminer.`, rest:'30 sec' },
     ]},
   ];
 }
@@ -801,15 +1023,21 @@ function renderSession(sess, isActive) {
 
   const isDoneS = ls(`session-done-${key}`);
 
-  let body = '';
+  const strap = strapNeeded(day, phase);
+
+  let body = strapBox(strap);
   categories.forEach(cat => {
     body += `<div class="cat-div">${cat.cat}</div>`;
     cat.items.forEach(ex => { body += renderExercise(ex, phase, key); });
   });
   body += renderBilan(key);
 
+  const strapChip = strap
+    ? `<span class="strap-chip yes">🩹 STRAP</span>`
+    : `<span class="strap-chip no">SANS STRAP</span>`;
+
   const ankleNote = ankle
-    ? `<span style="color:var(--cyan);font-family:var(--font-mono);font-size:10px;">🦶 CHEVILLE PROTÉGÉE · Aucun impact</span>`
+    ? `<span style="color:var(--cyan);font-family:var(--font-mono);font-size:10px;">🦶 ZÉRO TORSION</span>`
     : '';
 
   return `<div class="sess-content ${isActive?'active':''}" id="sc-${key}">
@@ -817,7 +1045,7 @@ function renderSession(sess, isActive) {
       <div class="sess-header">
         <div>
           <div class="sess-date">${fmtDate(sess)}</div>
-          <div class="sess-meta">${typeLbl} &nbsp;|&nbsp; <span class="tl-phase ${phCls}">${phLbl}</span> &nbsp;${ankleNote}</div>
+          <div class="sess-meta">${typeLbl} &nbsp;|&nbsp; <span class="tl-phase ${phCls}">${phLbl}</span> &nbsp;${strapChip} &nbsp;${ankleNote}</div>
         </div>
         <button class="${isDoneS?'btn-done':'btn-primary'}" onclick="markDone('${key}')" id="sd-${key}">
           ${isDoneS ? '✓ Complétée' : 'Valider la séance'}
@@ -892,7 +1120,7 @@ function buildSeances() {
 
 function buildCountdowns() {
   const now = TODAY;
-  const dAnkle = Math.max(0, Math.ceil((ANKLE_LIMIT - now) / 86400000));
+  const dAnkle = Math.max(0, Math.ceil((GYM_REOPEN - now) / 86400000));
   const dMain  = Math.max(0, Math.ceil((MAIN - now) / 86400000));
 
   document.getElementById('cd1-d').textContent = dAnkle;
