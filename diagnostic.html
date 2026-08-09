@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnostic Mental AXE — Méthode Fabien Pinton</title>
-<meta name="description" content="25 questions pour identifier votre profil mental exact. Rapport personnalisé adapté à votre âge. Méthode AXE Mental Performance®. 19€.">
+<title>Diagnostic BMX offert — mental & physique · AXE Mental Performance®</title>
+<meta name="description" content="35 questions pour identifier le point fort et le point faible de ton pilote, au mental comme au physique. Gratuit, adapté à sa tranche d'âge. Méthode AXE Mental Performance®.">
+<meta property="og:title" content="Le diagnostic offert du rider BMX — mental & physique">
+<meta property="og:description" content="En 8 minutes, sais exactement sur quoi travailler. Gratuit.">
+<meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9LL33EDPP"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E9LL33EDPP');</script>
@@ -18,10 +22,13 @@
   --cream:#F7F3EC;--cream2:#FDFAF5;--cream3:#F0EBE0;--cream4:#E8E1D4;
   --ink:#1A1612;--inkd:#5A5040;--inkf:#8A7D6A;
   --bdr:rgba(168,133,42,0.18);--bdr2:rgba(168,133,42,0.32);
+  --alert:#8C3B2A;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;font-weight:300;background:var(--cream);color:var(--ink);overflow-x:hidden;min-height:100vh;}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}html{scroll-behavior:auto;}}
 
 #prog-bar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--cream4);z-index:200;}
 #prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));width:0%;transition:width .4s ease;}
@@ -33,1112 +40,644 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 @media(max-width:640px){nav{padding:12px 18px;}}
 
 .wrap{max-width:640px;margin:0 auto;padding:100px 24px 80px;}
+.step{display:none;}
+.step.on{display:block;}
 
-/* ── LANDING (écran de vente) ── */
-.landing-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;}
-.landing-eyebrow::before,.landing-eyebrow::after{content:'';width:32px;height:1px;background:var(--gold);}
-.landing-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,8vw,76px);letter-spacing:.04em;color:var(--ink);line-height:.92;margin-bottom:20px;}
-.landing-title em{color:var(--gold);font-style:normal;}
-.landing-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.2vw,21px);font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:40px;}
-.landing-promise{background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:32px;}
-.landing-promise-title{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
-.landing-items{display:flex;flex-direction:column;gap:10px;}
-.landing-item{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--inkd);line-height:1.6;}
-.landing-item::before{content:'✦';color:var(--gold);font-size:10px;margin-top:3px;flex-shrink:0;}
-.landing-cta-block{background:var(--ink);padding:36px 40px;text-align:center;position:relative;overflow:hidden;}
-.landing-cta-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
-.landing-price{font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--gold);letter-spacing:.05em;line-height:1;}
-.landing-price-label{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,243,236,.4);margin-bottom:20px;}
-.landing-btn{display:inline-block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;padding:18px 48px;cursor:pointer;border:none;transition:background .3s;width:100%;text-align:center;}
-.landing-btn:hover{background:var(--gold-d);}
-.landing-secure{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.3);margin-top:14px;}
+.eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.eyebrow::before,.eyebrow::after{content:'';width:32px;height:1px;background:var(--gold);}
+.big-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,8vw,72px);letter-spacing:.04em;line-height:.92;margin-bottom:20px;}
+.big-title em{color:var(--gold);font-style:normal;}
+.sub{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.2vw,21px);font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:36px;}
 
-/* ── GATE (email avant diagnostic) ── */
-#step-gate{display:none;}
-.gate-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:14px;}
-.gate-eyebrow::before,.gate-eyebrow::after{content:'';width:24px;height:1px;background:var(--gold);}
-.gate-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,56px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;}
-.gate-title em{color:var(--gold);font-style:normal;}
-.gate-sub{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:32px;}
-.gate-confirm{background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:18px 22px;margin-bottom:28px;font-size:13px;color:var(--inkd);line-height:1.6;}
-.gate-confirm strong{color:var(--gold);font-weight:500;}
-.gate-fields{display:flex;flex-direction:column;gap:14px;margin-bottom:20px;}
-.gate-field{display:flex;flex-direction:column;gap:6px;}
-.gate-field label{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--inkd);}
-.gate-field input{border:1px solid var(--bdr2);background:var(--cream2);padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border .3s;}
-.gate-field input:focus{border-color:var(--gold);}
-.gate-btn{display:block;width:100%;text-align:center;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;background:var(--gold);color:var(--cream2);padding:17px;border:none;cursor:pointer;transition:background .3s;}
-.gate-btn:hover{background:var(--gold-d);}
-.gate-note{font-size:10px;letter-spacing:.15em;color:var(--inkf);text-align:center;margin-top:12px;}
+.panel{background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:32px;}
+.panel-title{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.panel-items{display:flex;flex-direction:column;gap:10px;}
+.panel-item{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--inkd);line-height:1.6;}
+.panel-item::before{content:'✦';color:var(--gold);font-size:10px;margin-top:3px;flex-shrink:0;}
 
-/* ── AGE ── */
-#step-age{display:none;}
-.age-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:14px;}
-.age-eyebrow::before,.age-eyebrow::after{content:'';width:32px;height:1px;background:var(--gold);}
-.age-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,72px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;text-align:center;}
-.age-title em{color:var(--gold);font-style:normal;}
-.age-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2vw,19px);font-style:italic;color:var(--inkd);line-height:1.65;max-width:480px;margin:0 auto 40px;text-align:center;}
-.age-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:560px;margin:0 auto;}
-.age-card{background:var(--cream2);border:2px solid var(--bdr);padding:24px 20px;cursor:pointer;transition:all .3s;text-align:left;}
-.age-card:hover{border-color:var(--gold);transform:translateY(-2px);}
-.age-card.sel{border-color:var(--gold);background:rgba(168,133,42,.06);}
-.age-card-range{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.06em;color:var(--gold);margin-bottom:6px;}
-.age-card-label{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--inkf);margin-bottom:10px;}
-.age-card-desc{font-size:12px;color:var(--inkd);line-height:1.6;}
-.age-note{margin-top:28px;font-size:11px;letter-spacing:.15em;color:var(--inkf);font-style:italic;text-align:center;}
-.btn-start{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:16px 40px;cursor:pointer;transition:all .3s;margin-top:28px;display:block;width:100%;max-width:560px;margin-left:auto;margin-right:auto;opacity:.4;pointer-events:none;}
-.btn-start.active{opacity:1;pointer-events:auto;}
-.btn-start.active:hover{background:var(--gold-d);}
-@media(max-width:480px){.age-cards{grid-template-columns:1fr;}}
+.btn{display:block;width:100%;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.35em;text-transform:uppercase;background:var(--gold);color:var(--cream2);text-decoration:none;text-align:center;padding:18px 24px;cursor:pointer;border:none;transition:background .3s;}
+.btn:hover{background:var(--gold-d);}
+.btn:disabled{background:var(--cream4);color:var(--inkf);cursor:not-allowed;}
+.btn-ghost{background:none;border:1px solid var(--bdr2);color:var(--inkd);}
+.btn-ghost:hover{background:var(--cream3);}
+.note{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--inkf);text-align:center;margin-top:14px;}
+
+/* ── ÂGE ── */
+.age-card{background:var(--cream2);border:1px solid var(--bdr);padding:22px 26px;margin-bottom:12px;cursor:pointer;transition:border-color .3s,background .3s;display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;text-align:left;font-family:inherit;}
+.age-card:hover{border-color:var(--bdr2);}
+.age-card.sel{border-color:var(--gold);background:var(--cream3);}
+.age-num{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.04em;color:var(--ink);line-height:1;}
+.age-lbl{font-size:12px;color:var(--inkd);margin-top:4px;}
+.age-mark{width:18px;height:18px;border:1px solid var(--bdr2);border-radius:50%;flex-shrink:0;}
+.age-card.sel .age-mark{background:var(--gold);border-color:var(--gold);}
 
 /* ── QUIZ ── */
-#step-quiz{display:none;}
-.q-card{background:var(--cream2);border:1px solid var(--bdr);padding:40px 44px;}
-.q-num{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.4em;color:var(--gold);margin-bottom:8px;}
-.q-cat{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--inkf);margin-bottom:20px;border-left:2px solid var(--gold);padding-left:10px;}
-.q-text{font-family:'Cormorant Garamond',serif;font-size:clamp(19px,2.8vw,25px);font-weight:600;line-height:1.35;color:var(--ink);margin-bottom:32px;}
+.q-card{background:var(--cream2);border:1px solid var(--bdr);padding:32px 30px;margin-bottom:24px;}
+.q-num{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--inkf);margin-bottom:10px;}
+.q-cat{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:23px;line-height:1.4;color:var(--ink);margin-bottom:26px;}
 .opts{display:flex;flex-direction:column;gap:10px;}
-.opt{background:transparent;border:1px solid var(--bdr);padding:14px 18px;cursor:pointer;text-align:left;display:flex;gap:14px;align-items:flex-start;transition:all .25s;font-family:'DM Sans',sans-serif;width:100%;}
-.opt:hover{border-color:var(--bdr2);background:rgba(168,133,42,.03);}
-.opt.sel{border-color:var(--gold);background:rgba(168,133,42,.06);}
-.opt-l{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;color:var(--gold);min-width:20px;margin-top:1px;}
-.opt.sel .opt-l{color:var(--gold-d);}
+.opt{display:flex;gap:14px;align-items:flex-start;background:var(--cream);border:1px solid var(--bdr);padding:16px 18px;cursor:pointer;text-align:left;font-family:inherit;transition:border-color .25s,background .25s;width:100%;}
+.opt:hover{border-color:var(--bdr2);}
+.opt.sel{border-color:var(--gold);background:var(--cream3);}
+.opt-l{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:.1em;line-height:1.4;flex-shrink:0;}
 .opt-t{font-size:14px;color:var(--inkd);line-height:1.55;}
-.nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:24px;}
-.btn-back{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;background:transparent;border:none;color:var(--inkf);cursor:pointer;padding:10px 0;transition:color .3s;}
-.btn-back:hover{color:var(--gold);}
-.btn-next{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;background:var(--gold);color:var(--cream2);border:none;padding:15px 32px;cursor:pointer;transition:all .3s;}
-.btn-next:hover{background:var(--gold-d);}
-.btn-next:disabled{opacity:.35;cursor:not-allowed;}
-@media(max-width:640px){.q-card{padding:28px 20px;}}
+.opt.sel .opt-t{color:var(--ink);}
+.qnav{display:flex;gap:12px;}
+.qnav .btn{flex:1;}
+.qnav .btn-ghost{flex:0 0 110px;}
 
-/* ── CONFIRMATION ── */
-#step-confirm{display:none;text-align:center;}
-.confirm-icon{font-size:48px;margin-bottom:20px;}
-.confirm-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,64px);letter-spacing:.04em;color:var(--ink);line-height:.9;margin-bottom:16px;}
-.confirm-title em{color:var(--gold);font-style:normal;}
-.confirm-sub{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--inkd);line-height:1.65;margin-bottom:32px;}
-.confirm-box{background:var(--cream2);border:1px solid var(--bdr);border-left:3px solid var(--gold);padding:28px 32px;text-align:left;margin-bottom:24px;}
-.confirm-box-label{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
-.confirm-box-profil{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:var(--ink);}
-.confirm-box-age{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkf);margin-top:4px;margin-bottom:16px;}
-.confirm-scores{display:flex;flex-direction:column;gap:10px;}
-.cs-row{display:grid;grid-template-columns:140px 1fr 44px;gap:12px;align-items:center;}
-.cs-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkd);}
-.cs-track{height:2px;background:var(--cream4);}
-.cs-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width 1s ease;width:0%;}
-.cs-pct{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);text-align:right;}
-.confirm-email-msg{background:rgba(168,133,42,.06);border:1px solid var(--bdr);padding:20px 24px;font-size:13px;color:var(--inkd);line-height:1.7;text-align:center;}
-.confirm-email-msg strong{color:var(--gold);font-weight:500;}
-.confirm-next{background:var(--ink);padding:32px 36px;text-align:center;position:relative;overflow:hidden;margin-top:24px;}
-.confirm-next::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
-.confirm-next-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.05em;color:var(--cream2);margin-bottom:8px;}
-.confirm-next-sub{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:rgba(247,243,236,.7);margin-bottom:20px;line-height:1.6;}
-.confirm-next-btn{display:inline-block;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;background:var(--gold);color:var(--ink);text-decoration:none;padding:14px 32px;}
-@media(max-width:640px){.avis-diag-grid{grid-template-columns:1fr !important;}}
+/* ── INTERLUDE ── */
+.interlude{background:var(--ink);color:var(--cream2);padding:40px 34px;text-align:center;}
+.interlude-eyebrow{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.interlude-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,6vw,44px);letter-spacing:.04em;line-height:1;margin-bottom:16px;}
+.interlude-txt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;line-height:1.6;color:rgba(253,250,245,.78);margin-bottom:28px;}
+
+/* ── GATE ── */
+.fields{display:flex;flex-direction:column;gap:14px;margin-bottom:20px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--inkd);}
+.field input{border:1px solid var(--bdr2);background:var(--cream2);padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--ink);outline:none;transition:border-color .3s;}
+.field input:focus{border-color:var(--gold);}
+.field .hint{font-size:11px;color:var(--inkf);}
+.err{color:var(--alert);font-size:12px;margin-bottom:12px;display:none;}
+.err.on{display:block;}
+
+/* ── RAPPORT ── */
+.rep-head{background:var(--ink);color:var(--cream2);padding:38px 34px;margin-bottom:28px;position:relative;overflow:hidden;}
+.rep-head::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--gold-d));}
+.rep-eyebrow{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.rep-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,6vw,48px);letter-spacing:.04em;line-height:1;margin-bottom:10px;}
+.rep-age{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(253,250,245,.5);}
+
+.sect-label{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin:36px 0 16px;display:flex;align-items:center;gap:12px;}
+.sect-label::after{content:'';flex:1;height:1px;background:var(--bdr);}
+
+.pcard{border:1px solid var(--bdr);padding:24px 26px;margin-bottom:14px;background:var(--cream2);}
+.pcard.weak{border-left:3px solid var(--alert);}
+.pcard.strong{border-left:3px solid var(--gold);}
+.pcard-tag{font-size:9px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;}
+.pcard.weak .pcard-tag{color:var(--alert);}
+.pcard.strong .pcard-tag{color:var(--gold);}
+.pcard-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.04em;line-height:1;margin-bottom:12px;}
+.pcard-txt{font-size:14px;line-height:1.7;color:var(--inkd);}
+
+.bars{margin-top:18px;}
+.bar-row{display:grid;grid-template-columns:1fr 90px 40px;gap:12px;align-items:center;margin-bottom:9px;}
+.bar-lbl{font-size:12px;color:var(--inkd);}
+.bar-track{height:5px;background:var(--cream4);}
+.bar-fill{height:100%;background:var(--gold);width:0;transition:width .8s ease;}
+.bar-pct{font-size:11px;color:var(--inkf);text-align:right;}
+
+.callout{background:var(--cream3);border:1px solid var(--bdr2);padding:24px 26px;margin:28px 0;}
+.callout-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.03em;margin-bottom:10px;}
+.callout p{font-size:14px;line-height:1.7;color:var(--inkd);margin-bottom:18px;}
+
+/* ── PAYWALL ── */
+.offers{display:flex;flex-direction:column;gap:14px;margin-top:18px;}
+.offer{border:1px solid var(--bdr);background:var(--cream2);padding:26px 28px;}
+.offer.feature{border:1px solid var(--gold);background:var(--cream2);position:relative;}
+.offer.feature::before{content:'Le plus choisi';position:absolute;top:-9px;left:26px;background:var(--gold);color:var(--cream2);font-size:8px;letter-spacing:.28em;text-transform:uppercase;padding:4px 12px;}
+.offer.dark{background:var(--ink);border-color:var(--ink);}
+.offer-top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:14px;}
+.offer-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.04em;line-height:1.1;}
+.offer-price{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--gold);line-height:1;white-space:nowrap;}
+.offer-desc{font-size:14px;line-height:1.65;color:var(--inkd);margin-bottom:16px;}
+.offer ul{list-style:none;margin-bottom:20px;}
+.offer li{font-size:13px;color:var(--inkd);line-height:1.6;padding:5px 0 5px 20px;position:relative;}
+.offer li::before{content:'→';position:absolute;left:0;color:var(--gold);}
+.offer.dark .offer-name,.offer.dark .offer-desc,.offer.dark li{color:var(--cream2);}
+.offer.dark .offer-desc,.offer.dark li{color:rgba(253,250,245,.8);}
+
+.foot{text-align:center;margin-top:56px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--inkf);line-height:2;}
+.foot a{color:var(--inkf);}
 </style>
 </head>
 <body>
 
 <div id="prog-bar"><div id="prog-fill"></div></div>
-
 <nav>
-  <a href="https://fabien-pinton.fr" class="nlogo">FABIEN PINTON<span>Méthode AXE Mental Performance® · Préparation Mentale</span></a>
-  <div id="prog-counter">Diagnostic</div>
+  <a href="/index.html" class="nlogo">FABIEN PINTON<span>Méthode AXE Mental Performance®</span></a>
+  <div id="prog-counter">Diagnostic offert</div>
 </nav>
 
 <div class="wrap">
 
-<!-- ══ ÉCRAN 0 — LANDING / VENTE ══ -->
-<div id="step-landing">
-  <div class="landing-eyebrow">Diagnostic Mental · Méthode AXE Mental Performance®</div>
-  <h1 class="landing-title">QUEL EST<br>TON <em>PROFIL</em><br>MENTAL ?</h1>
-  <p class="landing-sub">25 questions pour identifier exactement ce qui te bloque en compétition. Rapport personnalisé adapté à ton âge. Reçu directement dans ta boîte mail.</p>
+<!-- ════════ 1 · ACCUEIL ════════ -->
+<section class="step on" id="step-landing">
+  <div class="eyebrow">Diagnostic offert</div>
+  <h1 class="big-title">CE QUI FREINE<br>VRAIMENT <em>TON RIDER</em>.</h1>
+  <p class="sub">Dans la tête, ou dans le corps. En 8 minutes, tu sauras lequel des deux — et sur quel point précis travailler en premier.</p>
 
-  <div class="landing-promise">
-    <div class="landing-promise-title">Ce que tu reçois</div>
-    <div class="landing-items">
-      <div class="landing-item">Ton profil mental exact parmi 5 profils identifiés (L'Hyperstressé, Le Bloqué par la Peur, Le Sans Confiance, Le Performeur Fluide, L'Hypercompétiteur)</div>
-      <div class="landing-item">Tes scores sur 5 dimensions : gestion du stress, rapport à la peur, confiance en soi, rapport au plaisir, compétitivité</div>
-      <div class="landing-item">3 exercices concrets personnalisés adaptés à ton profil ET à ta tranche d'âge — à faire cette semaine</div>
-      <div class="landing-item">Un rapport PDF complet dans ta boîte mail dans les minutes qui suivent</div>
+  <div class="panel">
+    <div class="panel-title">Ce que tu reçois, gratuitement</div>
+    <div class="panel-items">
+      <div class="panel-item">35 questions adaptées à sa tranche d'âge : 25 sur le mental, 10 sur le physique</div>
+      <div class="panel-item">Son point fort et son point faible au mental, parmi 5 profils</div>
+      <div class="panel-item">Son point fort et son point faible au physique, parmi 5 qualités de pilote</div>
+      <div class="panel-item">Le rapport complet à l'écran, immédiatement, et par mail</div>
     </div>
   </div>
 
-  <!-- ══ PREUVE SOCIALE (avis Google vérifiables) ══ -->
-  <div style="margin:32px 0 8px;padding:0 4px;">
-    <div style="text-align:center;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;">★★★★★ · Avis Google vérifiables de parents</div>
-    <div class="avis-diag-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-      <div style="background:var(--cream2);border:1px solid var(--bdr);padding:16px 16px;border-radius:6px;">
-        <p style="font-size:12.5px;line-height:1.55;color:var(--inkd);margin:0 0 10px;font-style:italic;">"Questionnaire clair et pertinent, il permet déjà de mieux comprendre certains blocages."</p>
-        <div style="font-size:11px;font-weight:600;color:var(--ink);">Enzo ROQUE</div>
-      </div>
-      <div style="background:var(--cream2);border:1px solid var(--bdr);padding:16px 16px;border-radius:6px;">
-        <p style="font-size:12.5px;line-height:1.55;color:var(--inkd);margin:0 0 10px;font-style:italic;">"Mon fils arrive mieux à gérer son stress et travaille sa confiance en lui. Ses conseils sont pertinents et toujours adaptés à sa situation."</p>
-        <div style="font-size:11px;font-weight:600;color:var(--ink);">Valérie VILLARD</div>
-      </div>
-      <div style="background:var(--cream2);border:1px solid var(--bdr);padding:16px 16px;border-radius:6px;">
-        <p style="font-size:12.5px;line-height:1.55;color:var(--inkd);margin:0 0 10px;font-style:italic;">"La prestation est top, très professionnel et ses analyses sont bonnes. Je recommande à 100%."</p>
-        <div style="font-size:11px;font-weight:600;color:var(--ink);">Elliott Busca</div>
-      </div>
-    </div>
-  </div>
+  <button class="btn" onclick="goAge()">Commencer le diagnostic</button>
+  <p class="note">Gratuit · Aucune carte bancaire · 8 minutes</p>
+</section>
 
-  <div class="landing-cta-block">
-    <div class="landing-price">19€</div>
-    <div class="landing-price-label">Paiement unique · Accès immédiat</div>
-    <button class="landing-btn" onclick="goToGate()">COMMENCER MON DIAGNOSTIC →</button>
-    <div class="landing-secure">✦ Paiement sécurisé · Rapport en quelques minutes</div>
-  </div>
-</div>
+<!-- ════════ 2 · ÂGE ════════ -->
+<section class="step" id="step-age">
+  <div class="eyebrow">Étape 1 sur 3</div>
+  <h2 class="big-title">QUEL ÂGE A<br><em>TON PILOTE ?</em></h2>
+  <p class="sub">Les questions et les exercices changent selon l'âge. Un pilote de 11 ans et un pilote de 17 ans ne travaillent pas les mêmes choses.</p>
 
-<!-- ══ ÉCRAN 1 — GATE (infos avant le quiz) ══ -->
-<div id="step-gate">
-  <div class="gate-eyebrow">Étape 1 sur 3 · Tes informations</div>
-  <h2 class="gate-title">OÙ ENVOYER<br>TON <em>RAPPORT</em> ?</h2>
-  <p class="gate-sub">Entre tes informations. Ton rapport PDF personnalisé t'y sera envoyé dès que tu auras terminé le diagnostic.</p>
-  <div class="gate-confirm">
-    Après avoir rempli ce formulaire, tu seras redirigé vers le <strong>paiement sécurisé (19€)</strong> puis tu accèderas directement au diagnostic.
-  </div>
-  <div class="gate-fields">
-    <div class="gate-field"><label>Prénom</label><input type="text" id="gfn" placeholder="Ton prénom" autocomplete="given-name"></div>
-    <div class="gate-field"><label>Nom</label><input type="text" id="gln" placeholder="Ton nom" autocomplete="family-name"></div>
-    <div class="gate-field"><label>Email</label><input type="email" id="gem" placeholder="ton@email.fr" autocomplete="email"></div>
-    <div class="gate-field"><label>Ton sport</label><input type="text" id="gsport" placeholder="Ex : Football, Tennis, Natation..." autocomplete="off"></div>
-  </div>
-  <button class="gate-btn" onclick="submitGate()">ACCÉDER AU PAIEMENT — 19€ →</button>
-  <p class="gate-note">✦ Paiement sécurisé Stripe · Tu reviens ensuite faire le diagnostic</p>
-</div>
+  <button class="age-card" id="ac-10-12" onclick="pickAge('10-12')" type="button">
+    <div><div class="age-num">10 — 12 ANS</div><div class="age-lbl">Jeune pilote</div></div>
+    <div class="age-mark"></div>
+  </button>
+  <button class="age-card" id="ac-12-15" onclick="pickAge('12-15')" type="button">
+    <div><div class="age-num">12 — 15 ANS</div><div class="age-lbl">Jeune compétiteur</div></div>
+    <div class="age-mark"></div>
+  </button>
+  <button class="age-card" id="ac-15-18" onclick="pickAge('15-18')" type="button">
+    <div><div class="age-num">15 — 18 ANS</div><div class="age-lbl">Sport-études & sélection</div></div>
+    <div class="age-mark"></div>
+  </button>
 
-<!-- ══ ÉCRAN 2 — SÉLECTION ÂGE ══ -->
-<div id="step-age">
-  <div class="age-eyebrow">Étape 2 sur 3 · Ton profil</div>
-  <h2 class="age-title">TA TRANCHE<br>D'<em>ÂGE</em></h2>
-  <p class="age-sub">Le diagnostic et tes exercices sont entièrement adaptés à ta situation selon ton âge.</p>
-  <div class="age-cards">
-    <div class="age-card" onclick="selectAge('10-12')" id="ac-10-12">
-      <div class="age-card-range">10 — 12 ANS</div>
-      <div class="age-card-label">Jeune pilote</div>
-      <div class="age-card-desc">Découverte de la compétition, le jeu avant tout, premières émotions au portillon.</div>
-    </div>
-    <div class="age-card" onclick="selectAge('12-15')" id="ac-12-15">
-      <div class="age-card-range">12 — 15 ANS</div>
-      <div class="age-card-label">Jeune compétiteur</div>
-      <div class="age-card-desc">Premiers enjeux de compétition, pression du regard des pairs, plaisir avant résultat.</div>
-    </div>
-    <div class="age-card" onclick="selectAge('15-18')" id="ac-15-18">
-      <div class="age-card-range">15 — 18 ANS</div>
-      <div class="age-card-label">Sport-études · Sélection</div>
-      <div class="age-card-desc">Pression des résultats pour intégrer une structure, regard de l'entraîneur, identité sportive forte.</div>
-    </div>
+  <button class="btn" id="btn-start" onclick="startQuiz()" disabled style="margin-top:24px;">Commencer</button>
+</section>
 
-  </div>
-  <div class="age-note">Cette information adapte tes questions, ton rapport et tes exercices.</div>
-  <button class="btn-start" id="btn-start" onclick="startQuiz()">COMMENCER LE DIAGNOSTIC →</button>
-</div>
-
-<!-- ══ ÉCRAN 3 — QUIZ ══ -->
-<div id="step-quiz">
+<!-- ════════ 3 · QUIZ ════════ -->
+<section class="step" id="step-quiz">
   <div id="qzone"></div>
-  <div class="nav-btns">
-    <button class="btn-back" id="btnBack" onclick="prev()">← Précédent</button>
-    <button class="btn-next" id="btnNext" onclick="next()" disabled><span id="btnLbl">Question suivante →</span></button>
+  <div class="qnav">
+    <button class="btn btn-ghost" id="btnBack" onclick="prev()">Retour</button>
+    <button class="btn" id="btnNext" onclick="next()"><span id="btnLbl">Question suivante</span></button>
   </div>
-</div>
+</section>
 
-<!-- ══ ÉCRAN 4 — CONFIRMATION ══ -->
-<div id="step-confirm">
-  <div class="confirm-icon">✦</div>
-  <h2 class="confirm-title">TON RAPPORT<br>EST EN <em>ROUTE</em></h2>
-  <p class="confirm-sub">Ton rapport PDF personnalisé est en cours d'envoi. Vérifie ta boîte mail dans les prochaines minutes.</p>
-  <div class="confirm-box">
-    <div class="confirm-box-label">Profil détecté</div>
-    <div class="confirm-box-profil" id="cfProfileName">—</div>
-    <div class="confirm-box-age" id="cfAgeBadge">—</div>
-    <div class="confirm-scores" id="cfScores"></div>
+<!-- ════════ 3bis · INTERLUDE MENTAL → PHYSIQUE ════════ -->
+<section class="step" id="step-interlude">
+  <div class="interlude">
+    <div class="interlude-eyebrow">Partie mentale terminée</div>
+    <div class="interlude-title">MAINTENANT,<br>LE CORPS.</div>
+    <p class="interlude-txt">Un frein mental et un frein physique ne se corrigent pas de la même façon. Dix dernières questions sur ce que fait son corps entre le portillon et la ligne.</p>
+    <button class="btn" onclick="startPhys()">Continuer · 10 questions</button>
   </div>
-  <div class="confirm-email-msg">Rapport envoyé à <strong id="cfEmail">—</strong><br>Vérifie aussi tes spams si tu ne le vois pas dans 5 minutes.</div>
-  <div class="confirm-next">
-    <div class="confirm-next-title">ALLER PLUS LOIN</div>
-    <div class="confirm-next-sub">Ton rapport PDF est un premier diagnostic. Pour aller vraiment plus loin, réserve un appel gratuit avec Fabien.</div>
-    <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" class="confirm-next-btn">APPEL DÉCOUVERTE GRATUIT →</a>
+</section>
+
+<!-- ════════ 4 · COORDONNÉES ════════ -->
+<section class="step" id="step-gate">
+  <div class="eyebrow">Étape 3 sur 3 · Dernière étape</div>
+  <h2 class="big-title">SON RAPPORT<br><em>EST PRÊT.</em></h2>
+  <p class="sub">Dis-moi juste où te l'envoyer. Il s'affiche à l'écran juste après, et arrive aussi dans ta boîte mail pour que tu puisses le relire au bord de la piste.</p>
+
+  <div class="fields">
+    <div class="field"><label for="gfn">Prénom du pilote</label><input type="text" id="gfn" placeholder="Son prénom" autocomplete="given-name"></div>
+    <div class="field"><label for="gln">Nom</label><input type="text" id="gln" placeholder="Son nom" autocomplete="family-name"></div>
+    <div class="field"><label for="gem">Email</label><input type="email" id="gem" placeholder="ton@email.fr" autocomplete="email" inputmode="email"></div>
+    <div class="field"><label for="gpn">Téléphone</label><input type="tel" id="gpn" placeholder="06 12 34 56 78" autocomplete="tel" inputmode="tel"><span class="hint">Facultatif — uniquement si tu veux qu'on en parle de vive voix.</span></div>
+    <div class="field"><label for="gclub">Club</label><input type="text" id="gclub" placeholder="Nom du club" autocomplete="off"><span class="hint">Facultatif.</span></div>
   </div>
-</div>
+  <div class="err" id="gate-err"></div>
+  <button class="btn" onclick="submitGate()">Voir le rapport</button>
+  <p class="note">Gratuit · Pas de carte bancaire · Désinscription en un clic</p>
+</section>
+
+<!-- ════════ 5 · RAPPORT ════════ -->
+<section class="step" id="step-rapport">
+  <div class="rep-head">
+    <div class="rep-eyebrow">Rapport AXE · Diagnostic complet</div>
+    <div class="rep-name" id="repName"></div>
+    <div class="rep-age" id="repAge"></div>
+  </div>
+
+  <div class="sect-label">Le mental</div>
+  <div id="repMental"></div>
+  <div class="bars" id="barsMental"></div>
+
+  <div class="sect-label">Le physique</div>
+  <div id="repPhys"></div>
+  <div class="bars" id="barsPhys"></div>
+
+  <div class="sect-label">Passer à l'action</div>
+  <p style="font-size:14px;line-height:1.75;color:var(--inkd);margin-bottom:6px;">Tu sais maintenant ce qui bloque. Ce rapport s'arrête là où le travail commence : savoir <em>quoi faire</em>, précisément, pour son profil et pour son âge.</p>
+
+  <div class="offers" id="offers"></div>
+
+  <div class="foot">
+    Fabien Pinton · Méthode AXE Mental Performance®<br>
+    <a href="mailto:contact@fabien-pinton.fr">contact@fabien-pinton.fr</a> · 07.72.28.94.57
+  </div>
+</section>
 
 </div><!-- /wrap -->
 
+<script src="axe-mental.js"></script>
+<script src="axe-physique.js"></script>
 <script>
+/* ══════════════════════════════════════════════════════════════
+   AXE · MOTEUR DU DIAGNOSTIC GRATUIT
+   Parcours : accueil → âge → 25 questions mentales → interlude
+              → 10 questions physiques → coordonnées → rapport + offres
+   ══════════════════════════════════════════════════════════════ */
+
 const CFG = {
-  STRIPE: "https://buy.stripe.com/3cI6oG9u4dv895j4to8IU03",
-  WEBHOOK: "https://hook.eu1.make.com/96f7c0lxqk82tnxjt9gsqvs460q58ow8",
-  WEBHOOK_GATE: "https://hook.eu1.make.com/REMPLACE_PAR_TON_WEBHOOK_ABANDON",  // <-- webhook Make abandon panier
-  CALL: "https://tidycal.com/fpinton/appel-decouverte",
-  DEEP: {
-    stress:"https://buy.stripe.com/6oUdR8gWw0Im3KZf828IU09",
-    peur:"https://buy.stripe.com/28EfZg5dO1Mqdlz8JE8IU08",
+  WEBHOOK:      "https://hook.eu1.make.com/hrqnt4vykelbctc6jfk6hgfwun1gw8uq",
+  WEBHOOK_INTENT:"https://hook.eu1.make.com/REMPLACE_PAR_TON_WEBHOOK_INTENTION",
+  PACK19:       "https://buy.stripe.com/3cI4gycGgfDgdlz2lg8IU0k",
+  DEMARRER:     "/demarrer.html",
+  CALL:         "https://tidycal.com/fpinton/appel-decouverte",
+  SEUIL_APPEL: 45,      // repère interne : sous ce score mental, le contact est marqué à rappeler (invisible du client)
+  DEEP: {               // programmes 8 semaines à 47€, par profil mental faible
+    stress:   "https://buy.stripe.com/6oUdR8gWw0Im3KZf828IU09",
+    peur:     "https://buy.stripe.com/28EfZg5dO1Mqdlz8JE8IU08",
     confiance:"https://buy.stripe.com/00wcN4dKk4YC2GVbVQ8IU07",
-    plaisir:"https://buy.stripe.com/7sY8wO21C62G4P35xs8IU06",
-    compet:"https://buy.stripe.com/dRmcN4ay8bn0bdr8JE8IU05",
+    plaisir:  "https://buy.stripe.com/7sY8wO21C62G4P35xs8IU06",
+    compet:   "https://buy.stripe.com/dRmcN4ay8bn0bdr8JE8IU05",
   }
 };
 
 const AGE_LABELS = {
   '10-12':'10 — 12 ans · Jeune pilote',
   '12-15':'12 — 15 ans · Jeune compétiteur',
-  '15-18':'15 — 18 ans · Sport-études & Sélection',
+  '15-18':'15 — 18 ans · Sport-études & sélection',
+};
+const NOMS_MENTAL = {stress:'Gestion du stress',peur:'Rapport à la peur',confiance:'Confiance en soi',plaisir:'Plaisir de rouler',compet:'Compétitivité'};
+const NOMS_PHYS   = {explo:'Explosivité',moteur:'Résistance',charpente:'Gainage',appuis:'Coordination',poigne:'Force haut du corps'};
+
+/* Les 5 profils mentaux décrivent des freins. Quand une dimension ressort comme
+   point fort, c'est la qualité qu'il faut nommer, pas le profil-problème. */
+const FORTS_MENTAL = {
+  stress:"Tu encaisses la pression sans que ton pilotage se dégrade. Ce qui fait paniquer les autres au portillon ne t'atteint pas au même degré — c'est un socle rare, et c'est sur lui qu'on s'appuie pour travailler le reste.",
+  peur:"Tu oses. Tu t'engages dans les sections et dans les dépassements là où beaucoup lèvent le pied. Cette capacité à aller au contact est ce qui transforme un bon pilote en compétiteur.",
+  confiance:"Tu crois en ce que tu vaux, y compris après une mauvaise manche. Cette confiance-là ne dépend pas de ton dernier résultat, et c'est exactement ce qui permet de rebondir vite dans une journée de course.",
+  plaisir:"Tu aimes rouler, et ça se voit. Le plaisir est le carburant le plus durable de ce sport : c'est ce qui te fera continuer à 15 ans, quand beaucoup arrêtent.",
+  compet:"Tu as la niaque. Tu veux gagner, tu te bats, tu ne lâches rien avant la ligne. Cette flamme est un moteur puissant — le travail consistera à la diriger, jamais à l'éteindre.",
 };
 
-// ══ QUESTIONS ══
-const Q_BASE = [
-  // ── GESTION DU STRESS (réaction au stress · relaxation · activation) ──
-  {cat:"Gestion du stress · Réaction au stress",text:"La nuit avant une grosse manche, comment dors-tu ?",opts:[
-    {t:"Comme d'habitude — ma routine d'avant-course est rodée.",s:{stress:4,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Un peu moins bien, mais ça ne m'affecte pas le lendemain au portillon.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Difficilement — je repasse les départs et les lignes dans ma tête.",s:{stress:1,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Très peu — l'anxiété de la course prend toute la place.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
-  ]},
-  {cat:"Gestion du stress · Activation",text:"Sur le portillon, dans les secondes avant que la grille tombe, ton état mental est :",opts:[
-    {t:"Focalisé et calme — je suis dans ma bulle, prêt à pédaler.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-    {t:"Une excitation maîtrisée qui me met en alerte positive.",s:{stress:3,peur:3,confiance:3,plaisir:4,compet:3}},
-    {t:"Une anxiété nette que je gère tant bien que mal.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Un stress intense — le cœur s'emballe, mes appuis se figent.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
-  ]},
-  {cat:"Gestion du stress · Récupération",text:"Après un mauvais départ ou une faute sur la première ligne droite, ta récupération mentale prend :",opts:[
-    {t:"Quelques mètres — j'efface et je joue la relance dans la bosse suivante.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"Un virage ou deux — je reviens vite dans ma course.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Le reste de la manche — je rumine la faute en pédalant.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Toute la journée — le mauvais départ me hante manche après manche.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Gestion du stress · Relaxation",text:"Ton niveau en course par rapport à l'entraînement sur la piste est :",opts:[
-    {t:"Supérieur — le jour de la course me révèle et m'élève.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:4}},
-    {t:"Similaire — je reproduis fidèlement mes départs et mes trajectoires.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Légèrement inférieur — la pression grignote mon explosivité.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Nettement inférieur — je ne retrouve jamais mes sensations d'entraînement en manche.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
-  ]},
+/* ── État ── */
+let age=null, phase='mental', cur=0;
+let QM=[], QP=[], aM=[], aP=[];
+let user={prenom:'',nom:'',email:'',tel:'',club:''};
+let ref='', resultat=null;
 
-  // ── RAPPORT À LA PEUR (contrôle de la peur · activation) ──
-  {cat:"Rapport à la peur · Contrôle de la peur",text:"Quand tu as l'occasion de doubler dans un virage relevé serré, tu penses d'abord à :",opts:[
-    {t:"Ce que je dois faire — la trajectoire, le point de corde, le timing.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-    {t:"L'opportunité de prendre la place et de me distinguer.",s:{stress:3,peur:4,confiance:3,plaisir:4,compet:3}},
-    {t:"Ce qui pourrait mal tourner — la chute, l'accrochage.",s:{stress:2,peur:1,confiance:2,plaisir:2,compet:2}},
-    {t:"Le risque de tomber devant tout le monde — je laisse passer.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Rapport à la peur · Contrôle de la peur",text:"Face à un pilote clairement plus fort sur la grille, tu ressens :",opts:[
-    {t:"De l'envie — une chance de me mesurer et de me dépasser.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-    {t:"Du respect, mais je roule ma course sans me comparer.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Une pression en plus qui me crispe sur le portillon.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Un sentiment de course perdue avant même que la grille tombe.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Rapport à la peur · Engagement",text:"En manche, je me surprends parfois à rouler pour ne pas chuter plutôt que pour gagner :",opts:[
-    {t:"Jamais — je suis toujours dans une dynamique offensive, à l'attaque.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:4}},
-    {t:"Rarement — seulement sur des sections vraiment piégeuses.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Souvent — surtout quand l'enjeu de la course monte.",s:{stress:2,peur:1,confiance:2,plaisir:2,compet:2}},
-    {t:"Presque toujours — la prudence est mon mode par défaut en course.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Rapport à la peur · Contrôle de la peur",text:"Après une grosse chute douloureuse, je reviens sur la piste :",opts:[
-    {t:"Motivé — la chute m'a donné une info utile sur ma trajectoire.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"Neutre — je tourne la page assez vite et je repédale.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Un peu marqué — j'appréhende la section où je suis tombé.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Avec une vraie appréhension qui dure longtemps.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-
-  // ── CONFIANCE EN SOI (confiance · préparation · imagerie · pratique mentale) ──
-  {cat:"Confiance en soi · Confiance",text:"D'où vient principalement ta confiance avant une course ?",opts:[
-    {t:"De mon travail et de mes départs répétés — je me connais.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"De mes bons résultats récents en manche.",s:{stress:3,peur:3,confiance:2,plaisir:3,compet:3}},
-    {t:"Du regard positif de mon coach ou de mes parents au bord de piste.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
-    {t:"Je ne sais pas vraiment — elle est souvent absente sur la grille.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
-  ]},
-  {cat:"Confiance en soi · Confiance",text:"Après 3 mauvaises manches d'affilée, ma confiance :",opts:[
-    {t:"Reste stable — je sais que c'est une phase et je continue le travail.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"Baisse un peu mais je garde le cap jusqu'à la prochaine course.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"S'effondre — je commence à douter de mon départ et de mon niveau.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
-    {t:"Disparaît complètement — je remets tout en question.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Confiance en soi · Confiance",text:"Le regard et l'approbation de mon coach influencent mes courses :",opts:[
-    {t:"Peu — je suis autonome dans l'évaluation de ma course.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"Modérément — c'est une donnée parmi d'autres.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Beaucoup — sa validation conditionne fortement mes manches.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
-    {t:"Énormément — une remarque négative peut gâcher toute ma journée de course.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Confiance en soi · Préparation à la compétition",text:"Avant une course, j'ai un rituel de préparation mentale :",opts:[
-    {t:"Oui, complet et rodé — il fait partie de ma performance au portillon.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"Quelques habitudes simples mais efficaces avant de m'élancer.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Non vraiment — j'improvise selon comment je me sens ce jour-là.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Non — et ça me manque clairement sur la grille.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
-  ]},
-  {cat:"Confiance en soi · Confiance",text:"Je me compare aux autres pilotes de ma série :",opts:[
-    {t:"Rarement — je me mesure surtout à mes propres chronos et sensations.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"Parfois, pour situer mon niveau objectivement.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Souvent — les comparaisons m'obsèdent au portillon.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
-    {t:"En permanence — c'est mon référentiel principal avant de partir.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Confiance en soi · Pratique mentale",text:"Quand je rate un geste technique que je réussis d'habitude (un saut, un manual), je me dis :",opts:[
-    {t:"Ça arrive — je reste concentré sur la suite de la manche.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"C'est agaçant mais je gère et je relance.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Je commence à douter de moi pour le reste de la course.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
-    {t:"Tout s'effondre — je n'arrive plus à enchaîner quoi que ce soit.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}},
-  ]},
-
-  {cat:"Confiance en soi · Imagerie",text:"La veille d'une course, je me visualise en train de rouler la piste (départ, bosses, virages) :",opts:[
-    {t:"Oui, en détail et en sensations — je \"roule\" la piste dans ma tête avant d'y être.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-    {t:"Un peu — je repasse les sections clés mentalement.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Rarement — je n'y pense pas vraiment ou je n'y arrive pas.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Jamais — et quand j'essaie, je ne vois que ce qui peut mal tourner.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
-  ]},
-
-  // ── RAPPORT AU PLAISIR (engagement · concentration) ──
-  {cat:"Rapport au plaisir · Engagement",text:"Pourquoi je fais du BMX Race en compétition ?",opts:[
-    {t:"Pour le plaisir et les sensations — le résultat vient après.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-    {t:"Pour progresser et atteindre mes objectifs de saison.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Pour prouver ma valeur à moi-même et aux autres.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Pour gagner — la victoire est la seule chose qui compte.",s:{stress:2,peur:2,confiance:2,plaisir:1,compet:1}},
-  ]},
-  {cat:"Rapport au plaisir · Engagement",text:"Au fond, ce que tu préfères dans le BMX c'est :",opts:[
-    {t:"La sensation de vitesse, le flow quand l'enchaînement de bosses est parfait.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-    {t:"Progresser et voir que mon travail au portillon paie.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Être reconnu et respecté pour mon niveau dans le club.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Gagner la manche — le reste ne compte pas vraiment.",s:{stress:2,peur:2,confiance:2,plaisir:1,compet:1}},
-  ]},
-  {cat:"Rapport au plaisir · Concentration",text:"À l'entraînement sur la piste, sans enjeu de course, mon engagement est :",opts:[
-    {t:"Identique — je m'engage toujours à fond, même sur un tour d'entraînement.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:4}},
-    {t:"Légèrement inférieur — c'est normal sans la course.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Nettement supérieur — je roule libéré quand il n'y a pas d'enjeu.",s:{stress:2,peur:2,confiance:2,plaisir:1,compet:2}},
-    {t:"La différence est énorme — la course me bloque vraiment.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
-  ]},
-  {cat:"Rapport au plaisir · Concentration",text:"Quand la course devient très intense (départ groupé, bagarre dans le premier virage), je :",opts:[
-    {t:"M'élève — l'intensité libère mon meilleur niveau.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-    {t:"Reste stable — je gère la pression et je tiens ma ligne.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Me crispe — l'intensité ajoute une charge mentale.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Perds mes moyens — je ne suis plus moi-même sur le vélo.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
-  ]},
-
-  // ── RAPPORT À LA COMPÉTITION (établissement de buts · engagement · préparation) ──
-  {cat:"Rapport à la compétition · Établissement de buts",text:"Comment je vis une élimination en série ou une défaite ?",opts:[
-    {t:"Comme une information — qu'est-ce que j'améliore pour la prochaine ?",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"C'est difficile mais je relativise assez vite.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Très mal — ça me ronge pendant des jours.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:1}},
-    {t:"Comme un échec personnel qui remet tout en cause.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Rapport à la compétition · Exigence",text:"Mes exigences envers moi-même en course sont :",opts:[
-    {t:"Élevées mais justes — je suis ambitieux sans me maltraiter.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"Normales — j'ai des objectifs de course réalistes.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Très élevées — je me pardonne difficilement la moindre faute de pilotage.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:1}},
-    {t:"Impossibles — rien n'est jamais assez bien, même une victoire.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Rapport à la compétition · Engagement",text:"Ma relation avec la victoire est :",opts:[
-    {t:"Saine — la victoire est un bonus, pas une obsession.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-    {t:"Positive — je veux gagner mais je gère la défaite.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Tendue — l'absence de podium me pèse beaucoup.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:1}},
-    {t:"Obsessionnelle — ne pas gagner la manche est inacceptable.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-  ]},
-  {cat:"Rapport à la compétition · Activation",text:"Au moment décisif (le pédalage de départ, le sprint vers la ligne), ton corps réagit :",opts:[
-    {t:"En s'activant positivement — je suis fait pour ces moments-là.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:4}},
-    {t:"Avec une montée d'adrénaline que je canalise.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Avec une tension physique qui gêne mon explosivité.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"En se bloquant — jambes lourdes, gestes figés au portillon.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
-  ]},
-  {cat:"Rapport à la compétition · Réaction au stress",text:"Quand un coach ou un parent te met de la pression juste avant de t'élancer, tu :",opts:[
-    {t:"Restes centré — leur pression ne change pas mon état au portillon.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"L'entends mais tu arrives à te recentrer sur ta course.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Ressens un surcroît de tension qui perturbe ta concentration.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"Te déstabilises complètement — leur pression te bloque.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
-  ]},
-  {cat:"Rapport à la compétition · Préparation à la compétition",text:"Si un travail mental pouvait te faire franchir un palier décisif (mieux partir, oser doubler), tu :",opts:[
-    {t:"L'as déjà intégré dans ta préparation de pilote.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-    {t:"Serais partant — je comprends l'importance du mental en BMX.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-    {t:"Hésiterais — je ne sais pas par où commencer.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-    {t:"En aurais vraiment besoin — c'est clairement mon frein principal en course.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}},
-  ]},
-];
-
-const AGE_TWEAKS = {
-  '10-12':{
-    0:{cat:"Gestion du stress · Réaction au stress",text:"La nuit avant une course, tu dors comment ?",opts:[
-      {t:"Super bien, j'ai trop hâte d'y être.",s:{stress:4,peur:3,confiance:4,plaisir:4,compet:3}},
-      {t:"Bien, comme les autres nuits.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"Un peu moins bien, je pense à la course.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-      {t:"Pas bien, j'ai le ventre tout noué.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
-    ]},
-    1:{cat:"Gestion du stress · Activation",text:"Juste avant que la grille tombe, dans ton corps tu sens :",opts:[
-      {t:"Je suis prêt à foncer, tout va bien.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-      {t:"Un peu de stress mais ça va.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"Mon cœur bat très fort, je serre le guidon.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-      {t:"J'ai super peur, mes jambes tremblent.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
-    ]},
-    4:{cat:"Rapport à la peur · Contrôle de la peur",text:"Quand tu peux doubler quelqu'un dans un virage, tu penses d'abord à :",opts:[
-      {t:"Comment bien passer, ma trajectoire.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-      {t:"Génial, je vais prendre sa place !",s:{stress:3,peur:4,confiance:3,plaisir:4,compet:4}},
-      {t:"J'ai peur de tomber ou de m'accrocher.",s:{stress:2,peur:1,confiance:2,plaisir:2,compet:2}},
-      {t:"Je préfère rester derrière, c'est plus sûr.",s:{stress:2,peur:1,confiance:1,plaisir:2,compet:1}},
-    ]},
-    13:{cat:"Confiance en soi · Pratique mentale",text:"Quand tu rates un saut que tu fais d'habitude, tu te dis :",opts:[
-      {t:"C'est pas grave, je réessaie tout de suite.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-      {t:"C'est embêtant mais je continue.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"J'ai peur de le rater encore après.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
-      {t:"Je me dis que je suis nul.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}},
-    ]},
-  },
-  '12-15':{
-    0:{cat:"Gestion du stress · Réaction au stress",text:"La veille d'une course, comment tu dors ?",opts:[
-      {t:"Bien — j'ai mes habitudes et ça marche.",s:{stress:4,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"Un peu moins mais ça change pas grand-chose au portillon.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"Mal — j'arrête pas de penser au départ.",s:{stress:1,peur:2,confiance:2,plaisir:2,compet:2}},
-      {t:"Je dors presque pas — le stress de la course est trop fort.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
-    ]},
-    1:{cat:"Gestion du stress · Activation",text:"Sur le portillon, juste avant que la grille tombe, dans ta tête c'est :",opts:[
-      {t:"Calme et concentré — je suis dans ma bulle, prêt à pédaler.",s:{stress:4,peur:4,confiance:4,plaisir:4,compet:3}},
-      {t:"Excité mais de la bonne façon, ça me réveille.",s:{stress:3,peur:3,confiance:3,plaisir:4,compet:3}},
-      {t:"Stressé — j'essaie de me calmer comme je peux.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-      {t:"La panique — mon cœur bat trop fort, je bloque.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:2}},
-    ]},
-    4:{cat:"Rapport à la peur · Contrôle de la peur",text:"Quand t'as l'occasion de doubler quelqu'un dans un virage, tu penses d'abord à :",opts:[
-      {t:"Ce que je dois faire — ma trajectoire, mon timing.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-      {t:"L'occasion de prendre la place et de montrer ce que je sais faire.",s:{stress:3,peur:4,confiance:3,plaisir:4,compet:3}},
-      {t:"Ce qui pourrait mal se passer — tomber, m'accrocher.",s:{stress:2,peur:1,confiance:2,plaisir:2,compet:2}},
-      {t:"Ce que vont penser mes potes, mon coach, mes parents si je chute.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:1}},
-    ]},
-    13:{cat:"Confiance en soi · Pratique mentale",text:"Quand tu rates un saut ou un truc que tu fais d'habitude, tu te dis :",opts:[
-      {t:"Ça arrive — je me concentre sur la suite de la manche.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-      {t:"C'est énervant mais je relance direct.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"Je commence à douter pour le reste de la course.",s:{stress:2,peur:2,confiance:1,plaisir:2,compet:2}},
-      {t:"Je suis nul — j'arrive plus à rien enchaîner.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}},
-    ]},
-  },
-  '15-18':{
-    11:{cat:"Confiance en soi · Préparation à la compétition",text:"Avant une course de sélection (championnat, qualif), j'ai un rituel de préparation mentale :",opts:[
-      {t:"Oui, complet et rodé — il fait partie de ma performance, surtout en sélection.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-      {t:"Quelques habitudes simples mais efficaces avant de m'élancer.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"Non vraiment — j'improvise, et ça se ressent quand l'enjeu monte.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-      {t:"Non — et en course de sélection ça me manque clairement.",s:{stress:1,peur:1,confiance:1,plaisir:2,compet:2}},
-    ]},
-    24:{cat:"Rapport à la compétition · Préparation à la compétition",text:"Si un travail mental pouvait te faire passer un cap pour intégrer une structure ou un pôle, tu :",opts:[
-      {t:"L'as déjà intégré dans ta préparation de pilote.",s:{stress:4,peur:4,confiance:4,plaisir:3,compet:3}},
-      {t:"Serais partant — le mental fait souvent la différence à la sélection.",s:{stress:3,peur:3,confiance:3,plaisir:3,compet:3}},
-      {t:"Hésiterais — je ne sais pas par où commencer.",s:{stress:2,peur:2,confiance:2,plaisir:2,compet:2}},
-      {t:"En aurais vraiment besoin — c'est ce qui me sépare du niveau visé.",s:{stress:1,peur:1,confiance:1,plaisir:1,compet:1}},
-    ]},
-  }
-};
-
-const PROFILES = {
-  stress:{
-    id:"stress",name:"L'Hyperstressé",headline:"Le stress te vole ton vrai niveau.",
-    desc:{
-      default:"Tu as les capacités. Mais avant et pendant la compétition, l'anxiété prend plus de place que ton pilotage. Tu rumines, tu dors mal, et le jour J tu n'es plus tout à fait toi-même.",
-      '10-12':"T'as le niveau à l'entraînement, mais le jour de la course, quand tu es sur le portillon, ton ventre se serre et tes jambes ne répondent plus pareil. C'est le stress, et c'est super normal. La bonne nouvelle : ça s'apprend à le calmer.",
-'12-15':"T'as clairement le niveau. Mais le soir avant la compet, ta tête tourne. Et le matin du départ, ton ventre se serre. C'est normal — et ça se travaille.",
-      '15-18':"Ta préparation physique est là. Mais la pression de la sélection ou du résultat génère un stress qui mange tes ressources mentales exactement quand t'en as le plus besoin.",
-      '25+':"Tu as l'expérience. Mais le stress pre-compétition est toujours là — peut-être même plus intense qu'avant parce que les enjeux ont changé. Ce n'est pas une fatalité.",
-    },
-    exos:{
-      default:[
-        {t:"La cohérence cardiaque quotidienne",d:"Inspirez 5s par le nez, retenez 5s, expirez 5s par la bouche. 3 fois par jour pendant 21 jours. Cette technique recalibre physiologiquement votre réponse au stress. Le résultat est mesurable en 3 semaines."},
-        {t:"Le rituel pré-compétition infaillible",d:"Définissez une séquence de 10-15 minutes toujours identique avant l'échauffement : même musique, mêmes gestes, mêmes mots intérieurs. La répétition crée un réflexe de calme ancré dans votre cerveau."},
-        {t:"La technique 5-4-3-2-1 contre l'anxiété",d:"Quand l'anxiété monte : nommez mentalement 5 choses que vous voyez, 4 que vous entendez, 3 que vous ressentez physiquement. Cet ancrage sensoriel coupe le circuit de l'anticipation anxieuse en moins de 2 minutes."},
-      ],
-      '10-12':[
-        {t:"Souffler comme un ballon",d:"Juste avant que la grille tombe, souffle doucement par la bouche comme si tu gonflais un ballon, 2 fois. Ça envoie un message à ton corps : tout va bien, on peut y aller. C'est ton bouton calme."},
-        {t:"Ton mot rigolo",d:"Choisis un mot marrant qui te fait sourire (par exemple 'pizza' ou 'banane'). Dis-le dans ta tête juste avant le départ. Ça détend, et un pilote détendu pédale mieux qu'un pilote crispé."},
-        {t:"Le plan des 3 images",d:"Avant la course, imagine 3 fois dans ta tête ton départ parfait : la poussée, le premier pédalage, le regard loin devant. Ton cerveau adore les images, il se prépare à réussir."},
-      ],
-'12-15':[
-        {t:"La respiration 4-4-4 avant la compet",d:"4 secondes d'inspiration, 4 secondes de pause, 4 secondes d'expiration. Fais ça 5 fois dans les vestiaires avant de sortir. Ton corps va se calmer automatiquement — essaie-le à l'entraînement d'abord."},
-        {t:"Ton rituel à toi",d:"Avant chaque compet, fais toujours la même chose dans le même ordre — ta musique, tes gestes, ta phrase. Ton cerveau va associer cette séquence à l'état 'prêt à performer'. En quelques semaines, ça marche tout seul."},
-        {t:"Le scan corporel express",d:"Dans les 10 minutes avant le départ, ferme les yeux 30 secondes et sens où est la tension dans ton corps. Contracte cet endroit fort pendant 5 secondes, puis relâche. Fais-le 2-3 fois. Ça libère beaucoup."},
-      ],
-      '15-18':[
-        {t:"La cohérence cardiaque pré-sélection",d:"5s inspiration, 5s expiration — 5 minutes par jour. En 3 semaines de pratique régulière, ton système nerveux apprend à rester calme sous pression de sélection. Ce n'est pas une technique — c'est un entraînement physiologique."},
-        {t:"Décorréler résultat et valeur personnelle",d:"Après chaque compétition, note 3 choses que tu as bien faites — indépendamment du résultat. Ton cerveau a besoin de preuves que tu as de la valeur même sans victoire. Construis ce dossier de preuves."},
-        {t:"Le rituel de recentrage entre les efforts",d:"Entre deux efforts ou deux phases, même exercice : 3 respirations lentes, un mot-ancre ('focus', 'moi', 'calme'), regard fixé sur un point précis. 20 secondes. Ça remet le cerveau en mode 'présent'."},
-      ],
-      '25+':[
-        {t:"La cohérence cardiaque — vraiment cette fois",d:"Tu en as peut-être entendu parler. La différence à 25+ ans : pratique-la 3 fois par jour pendant 30 jours consécutifs. Pas 5. Pas 10. 30. C'est là que les changements neurologiques deviennent durables."},
-        {t:"Identifier tes déclencheurs précis",d:"Note les 3 situations qui font systématiquement monter ton stress. Ce ne sont pas des situations générales — ce sont des déclencheurs très précis. Les connaître donne un pouvoir immédiat dessus."},
-        {t:"Le protocole post-compétition",d:"Dans les 2h après une compétition stressante : 15 min de marche lente, note 3 choses que tu as bien gérées mentalement, 1 chose à améliorer. Ce décompression active évite que le stress s'accumule sur le long terme."},
-      ],
-    },
-    axeMethod:"Dans la méthode AXE Mental Performance®, ton profil travaille d'abord l'Alignement (A) — réconcilier ce que tu ressens avec ce que tu es réellement capable de faire. Ton potentiel réel est nettement supérieur à ce que tu montres sous pression.",
-  },
-  peur:{
-    id:"peur",name:"Le Bloqué par la Peur",headline:"La peur te retient exactement là où tu veux aller.",
-    desc:{
-      default:"Ce n'est pas un manque de technique ni de condition physique. C'est un frein invisible et puissant : peur de rater, peur de décevoir, peur du jugement des autres. Tu roules en retrait, tu ne t'engages jamais totalement — et tu le sais.",
-      '10-12':"T'as le niveau, mais t'as peur : peur de tomber, peur de rater devant les copains ou tes parents. Du coup tu te retiens un peu, tu freines avant les autres. C'est normal d'avoir peur. On va apprendre à oser petit à petit.",
-'12-15':"T'as le niveau. Mais t'as peur de te planter devant tes potes, ton coach, tes parents. Du coup tu te retiens. Tu roules la sécurité, tu freines avant les autres. Et au fond tu sais que c'est pas ton vrai jeu.",
-      '15-18':"La peur de décevoir ton entraîneur ou de rater une sélection te fait jouer en dessous de ton niveau. Ce mécanisme est très courant à ton âge — et entièrement travaillable.",
-      '25+':"Après des années de compétition, certaines blessures mentales se transforment en peur de s'engager pleinement. Tu te protèges. C'est compréhensible. Mais ça te coûte des performances.",
-    },
-    exos:{
-      default:[
-        {t:"T'autoriser l'erreur — explicitement",d:"Avant chaque compétition, dis-toi à voix haute ou par écrit : 'Je m'autorise à faire 3 erreurs aujourd'hui.' Non pas en les souhaitant, mais en retirant l'interdit inconscient. Cette phrase simple change ton rapport à la prise de risque."},
-        {t:"Distinguer ta valeur de tes résultats",d:"Chaque soir cette semaine, note 3 choses que tu as bien faites dans la journée — indépendamment du résultat final. Reconstruire une identité solide qui ne dépend pas du score est la fondation de tout le reste."},
-        {t:"L'exposition progressive à la pression",d:"Crée des situations d'entraînement avec pression artificielle : public de 2-3 personnes, chrono au départ, mini-défi de manche avec un autre pilote. L'exposition progressive et contrôlée est le seul antidote durable à la peur."},
-      ],
-      '10-12':[
-        {t:"Le droit de rater",d:"Avant la course, dis-toi dans ta tête : 'Si je rate, c'est pas grave, tout le monde rate.' Même les champions ratent. Ce qui compte, c'est de réessayer. Ça enlève la pression qui te bloque."},
-        {t:"Je roule pour m'amuser",d:"Avant le départ, répète-toi : 'Je roule pour moi, pour le plaisir.' Pas pour faire plaisir aux autres. Quand on s'amuse, on ose plus, et on roule mieux."},
-        {t:"Le petit défi courage",d:"À chaque entraînement, fais UNE chose qui te fait un peu peur : un saut, un virage un peu plus fort. Juste une. Petit à petit, ton cerveau apprend que c'est pas si dangereux, et la peur devient plus petite."},
-      ],
-'12-15':[
-        {t:"La permission de rater",d:"Avant la compet, dis-toi dans ta tête : 'Si je rate, c'est ok. Tout le monde rate.' Pas pour baisser tes exigences — pour enlever la pression qui te bloque. Les meilleurs sportifs ratent. La différence c'est qu'ils continuent quand même."},
-        {t:"Jouer pour toi, pas pour les autres",d:"Avant le départ, une phrase à te répéter : 'Je roule pour moi aujourd'hui.' Pas pour ton coach, pas pour tes parents, pas pour le classement. Pour toi. Ça change tout à l'intérieur."},
-        {t:"Le défi courage",d:"À chaque entraînement cette semaine, fais une chose qui te fait un peu peur sur le vélo. Un saut que tu n'oses pas, un virage attaqué plus fort, un double que tu passes en entier. Petit à petit, ton cerveau apprend que prendre des risques n'est pas dangereux."},
-      ],
-      '15-18':[
-        {t:"Séparer performance et sélection",d:"Note par écrit : qu'est-ce que tu contrôles dans ta performance ? (ton engagement, ta technique, ton attitude) vs qu'est-ce que tu ne contrôles pas ? (la décision du sélectionneur, le niveau des autres). Concentre toute ton énergie sur ce que tu contrôles."},
-        {t:"Le journal du courage",d:"Chaque soir, note une chose que t'as faite aujourd'hui malgré une peur ou une hésitation. Même petite. Ton identité de sportif courageux se construit par accumulation de petits actes."},
-        {t:"L'engagement total sur une seule action",d:"Choisis une action précise dans ta prochaine compétition où tu vas t'engager à 100% — peu importe le résultat. Une seule. Fais-la vraiment. Observe comment tu te sens après."},
-      ],
-      '25+':[
-        {t:"Identifier les blessures qui bloquent l'engagement",d:"Note les 2-3 situations précises où tu te retiens. Souviens-toi de quand ça a commencé. Les blocages adultes ont une histoire — les identifier est la première étape pour les déconstruire."},
-        {t:"La visualisation d'engagement total",d:"10 minutes avant de dormir, 3 fois par semaine : visualise-toi en compétition, t'engageant totalement sur une action qui te fait peur habituellement. Ressens la sensation de liberté après. Ton cerveau apprend même en visualisation."},
-        {t:"L'analyse post-retenue",d:"Après chaque compétition où tu t'es retenu : note exactement à quel moment et pourquoi. Ce n'est pas de l'auto-critique — c'est de la data. La conscience précise du blocage est le début de sa dissolution."},
-      ],
-    },
-    axeMethod:"La méthode AXE Mental Performance® travaille ici l'Engagement (E) — s'engager pleinement malgré le risque perçu. Ton blocage est un mécanisme de protection que ton cerveau a construit. Il était utile. Il ne l'est plus.",
-  },
-  confiance:{
-    id:"confiance",name:"Le Sans Confiance",headline:"Ta confiance est conditionnelle. Elle doit devenir fondamentale.",
-    desc:{
-      default:"Tu performes correctement quand ça va. Mais dès que les résultats résistent, ta confiance s'effondre. Elle est externe — dépendante du regard des autres, des dernières performances, de l'humeur de ton entourage.",
-      '10-12':"Tu roules bien quand tout va bien. Mais dès que ça se complique, ou dès que quelqu'un te fait une remarque, tu doutes vite de toi. C'est normal à ton âge. On va construire une confiance qui tient, même les jours moins faciles.",
-'12-15':"Tu es bon quand ça va bien. Mais dès qu'il y a une difficulté, le doute arrive vite. Et souvent c'est ce que dit ton coach ou tes parents qui fait monter ou descendre ta confiance. C'est très courant à ton âge.",
-      '15-18':"Ta confiance fluctue beaucoup selon les résultats et le regard de ton entourage sportif. En période de sélection, c'est particulièrement fragilisant. Tu as besoin de construire une confiance qui ne dépend pas de ça.",
-      '25+':"Tu as eu des hauts et des bas. Et quelque part la confiance n'a jamais vraiment été stable. Elle dépend encore trop de facteurs externes — résultats, regard, validation. À ton stade il est temps de la construire sur autre chose.",
-    },
-    exos:{
-      default:[
-        {t:"Construire une confiance sur des preuves internes",d:"Chaque vendredi soir, liste 3 progrès mesurables de la semaine — pas de résultats, de progrès. Un geste mieux exécuté, une réaction plus rapide, une récupération plus courte. Bâtis un dossier de preuves de ton évolution."},
-        {t:"Identifier et neutraliser ton discours saboteur",d:"Note les 3 phrases que tu te dis quand ça va mal. Construis leur exact contraire — réaliste et ancré, pas naïvement positif. Entraîne-toi à les substituer automatiquement dès que les premières apparaissent."},
-        {t:"Créer des ancres de confiance inconditionnelle",d:"Définis 2-3 constantes qui ne dépendent jamais du résultat : ton niveau d'application, ton attitude face à l'adversité, ton engagement dans l'effort. Ancre ta confiance à ces constants — pas aux variables que sont les scores."},
-      ],
-      '10-12':[
-        {t:"Mon carnet des trucs bien",d:"Chaque soir, note (ou dis à un parent) une chose que t'as bien faite dans la journée sur le vélo. Même toute petite. Ton cerveau a besoin qu'on lui montre que t'es capable."},
-        {t:"Mon avis d'abord",d:"Après une course, avant de demander aux autres ce qu'ils en pensent, décide toi-même : est-ce que t'as bien roulé ? C'est TON avis qui compte le plus."},
-        {t:"Ma super qualité",d:"Trouve une chose que tu fais bien en BMX (ton départ, ton courage, ton sourire). Rappelle-la-toi avant chaque course. C'est ta force, personne peut te l'enlever."},
-      ],
-'12-15':[
-        {t:"Le carnet de victoires",d:"Chaque soir, note une chose que t'as bien faite aujourd'hui. Même petite. Même si t'as perdu. Il s'est passé quelque chose de bien. Ton cerveau a besoin qu'on lui montre des preuves que t'es capable."},
-        {t:"Ta propre opinion d'abord",d:"Après chaque compet, avant de demander à ton coach ou tes parents ce qu'ils pensent — décide toi-même : est-ce que t'as bien joué ? Sur quoi tu te bases ? C'est ton évaluation qui compte le plus."},
-        {t:"Une qualité certaine",d:"Note une qualité que tu as pour sûr en tant que sportif — quelque chose que personne ne peut te retirer même si tu perds. Relis-la avant chaque compétition."},
-      ],
-      '15-18':[
-        {t:"La banque de preuves hebdomadaire",d:"Chaque dimanche soir, note 3 preuves concrètes que tu es compétent — des faits, pas des impressions. Cette banque devient ton ancre mentale quand le doute arrive en compétition."},
-        {t:"Découpler résultat de sélection et valeur personnelle",d:"Exercice écrit : si tu n'es pas sélectionné, est-ce que tu vaux moins comme sportif ? Non. Rédige la liste de ce qui ne change pas si tu n'es pas pris. C'est ta valeur réelle."},
-        {t:"Le protocole pré-compétition de confiance",d:"La veille : relis tes 5 meilleures performances. Le matin : répète ta phrase de confiance à voix haute 3 fois. Avant le départ : rappelle-toi une situation où tu as été vraiment fort. Ce protocole active ta confiance délibérément."},
-      ],
-      '25+':[
-        {t:"L'inventaire de compétence réelle",d:"Assieds-toi et liste tout ce que tu as accompli sportivement — pas les titres, les actes. Les moments où tu as tenu un guidon, gagné un coude-à-coude dans un virage, sorti un départ parfait. C'est ta vraie valeur. Elle est là."},
-        {t:"Séparer la confiance des résultats pour de bon",d:"Définis 3 critères de 'bonne performance' qui ne dépendent PAS du score. Engagement, technique, mental. Évalue-toi sur ces critères après chaque compétition — pendant 1 mois."},
-        {t:"Le dialogue intérieur de soutien",d:"Note ce que tu te dis quand ça va mal. Maintenant écris ce qu'un entraîneur bienveillant mais honnête te dirait à la place. C'est lui qui doit parler dans ta tête — pas le critique."},
-      ],
-    },
-    axeMethod:"Dans la méthode AXE Mental Performance®, l'Alignement (A) est ton travail prioritaire — mettre en cohérence ce que tu vaux réellement et ce que tu crois valoir. L'écart entre les deux est ton plafond de verre.",
-  },
-  plaisir:{
-    id:"plaisir",name:"Le Performeur Fluide",headline:"L'enjeu tue tes sensations. Il ne devrait pas.",
-    desc:{
-      default:"Ton moteur est intrinsèque et authentique — tu aimes profondément ton sport. C'est une force rare. Mais quand l'enjeu monte, la pression de résultat écrase ce plaisir naturel, et tes performances chutent avec lui.",
-      '10-12':"Tu adores rouler à l'entraînement, tu t'éclates. Mais le jour de la course, dès qu'il y a un enjeu, le plaisir s'en va et tu roules moins bien. On va faire revenir le plaisir dans les courses, parce que c'est là que t'es le plus fort.",
-'12-15':"T'adores ton sport. À l'entraînement ou en roue libre avec des potes, tu roules vraiment bien. Mais en compétition, quelque chose change. Le plaisir disparaît. Et ton niveau aussi. C'est pas une fatalité.",
-      '15-18':"Tu performes naturellement quand il n'y a pas trop d'enjeu. Mais dès que c'est une sélection ou un résultat important, la pression écrase ton pilotage naturel. Ton talent est là — c'est le cadre qui te bloque.",
-      '25+':"Tu performes mieux quand c'est pour le plaisir. Mais les années d'enjeux ont installé une distance entre toi et ton pilotage naturel. Tu cherches à retrouver cette fluidité que tu avais. Elle est encore là.",
-    },
-    exos:{
-      default:[
-        {t:"Réintroduire le plaisir comme stratégie",d:"Avant chaque compétition, écris 3 choses que tu aimes dans ton sport. Relis-les juste avant le début. Reconnecte-toi à ça de manière délibérée. Le plaisir n'est pas un luxe — c'est ce qui te permet de performer."},
-        {t:"Des objectifs de processus, pas de résultat",d:"Pour ta prochaine compétition, choisis 1 ou 2 objectifs de pilotage uniquement (ex : 'je sors le premier au portillon', 'j'attaque la première bosse'). Ce focus interne te donne un but qui ne dépend pas du score — et libère immédiatement ton naturel."},
-        {t:"Apprendre à tolérer l'enjeu",d:"La compétition ne tue pas ton plaisir — c'est ta peur du résultat qui le fait. Avant la compétition, décide consciemment : 'quoi qu'il arrive au score, je m'engage à 100% dans ma course.' Cette décision proactive change tout."},
-      ],
-      '10-12':[
-        {t:"La course = un grand terrain de jeu",d:"Avant de partir, rappelle-toi que la course, c'est juste un entraînement en plus grand, avec des copains. On est là pour s'amuser à pédaler vite. Le jeu d'abord."},
-        {t:"Mon sourire de départ",d:"Sur le portillon, souris, même un tout petit peu. Ça paraît bête, mais sourire dit à ton cerveau qu'on est là pour le plaisir, et ça débloque tes sensations."},
-        {t:"Le meilleur moment",d:"Après chaque course, trouve le moment que t'as préféré : un saut, une relance, un dépassement. Garde ça en tête. Tu roules pour ces moments-là."},
-      ],
-'12-15':[
-        {t:"Te rappeler pourquoi tu aimes ça",d:"Avant chaque compet, pense à un moment où tu t'es vraiment éclaté dans ton sport — à l'entraînement ou ailleurs. Ressens cette sensation. Emmène-la avec toi dans la compétition."},
-        {t:"Un seul objectif de jeu",d:"Choisis une chose que tu veux faire dans cette compet — pas gagner, pas finir premier. Une action précise. Concentre-toi là-dessus. Quand tu t'occupes du jeu au lieu du résultat, ça marche mieux."},
-        {t:"Jouer comme si personne ne regardait",d:"Au début de la compet, imagine que t'es seul sur la piste en train de t'entraîner, comme un mardi soir au club. Les enjeux disparaissent 2 minutes dans ta tête. Puis tu repars de là."},
-      ],
-      '15-18':[
-        {t:"La reconnexion au plaisir avant la pression",d:"La veille de chaque compétition importante : 10 minutes à faire quelque chose que tu aimes dans ton sport sans enjeu. Recharger cette ressource modifie ton état mental le lendemain."},
-        {t:"Le focus processus en compétition de sélection",d:"Définis 3 intentions de jeu avant la compétition. Pas de résultat, pas de sélection — 3 actions concrètes qui dépendent de toi. En te concentrant là-dessus, tu performes mieux et tu penses moins à la sélection."},
-        {t:"L'ancre du plaisir",d:"Identifie un geste ou une sensation qui représente ton meilleur pilotage. Rejoue-la mentalement 3 fois avant la compétition. Ton cerveau active les circuits associés — et tu repartes de là plutôt que de la pression."},
-      ],
-      '25+':[
-        {t:"Retrouver le jeu originel",d:"Souviens-toi pourquoi tu as commencé ce sport. Pas pour les résultats — pour quoi exactement. Écris-le. Relis-le avant chaque compétition pendant 1 mois. Ça réengage un moteur qui s'est peut-être éteint progressivement."},
-        {t:"Une compétition pour le plaisir par mois",d:"Inscris-toi à une compétition sans enjeu — niveau inférieur, format différent, juste pour jouer. Observer comment tu performes sans pression est une information précieuse et régénérante."},
-        {t:"Séparer performance et résultat une fois pour toutes",d:"Définis par écrit ce qu'est une 'bonne performance' pour toi — indépendamment du résultat. Évalue-toi sur ces critères. C'est ton vrai standard. Pas le classement."},
-      ],
-    },
-    axeMethod:"La méthode AXE Mental Performance® travaille ici l'Exigence (X) — une exigence tournée vers le jeu et le processus, pas vers le résultat. Tu dois apprendre à performer sans éteindre ce qui te fait aimer ton sport.",
-  },
-  compet:{
-    id:"compet",name:"L'Hypercompétiteur",headline:"Tu brûles d'une flamme qui risque de te consumer.",
-    desc:{
-      default:"La victoire est ton oxygène. Tu ne te pardonnes rien. Chaque défaite est une blessure. Cette exigence extrême génère une tension chronique dans ton corps et ton mental qui finit par brider tes performances — trop de crispation, pas assez de fluidité.",
-      '10-12':"T'as super envie de gagner, et c'est une belle force ! Mais des fois, tu veux tellement gagner que tu t'énerves ou que tu te crispes, et ça te fait rouler moins bien. On va apprendre à garder cette envie sans qu'elle te gêne.",
-'12-15':"Tu veux gagner — vraiment. Et quand tu perds, ça te bouffe. Tu te repasses la manche dans la tête, virage par virage, et tu t'en veux. C'est une qualité rare. Mais si tu apprends pas à gérer ça, ça risque de te peser de plus en plus avec les années.",
-      '15-18':"Ton niveau d'exigence est impressionnant. Mais il génère une tension permanente qui bride ta fluidité au pire moment. La pression de la sélection amplifie encore ça. Apprendre à performer avec fluidité plutôt qu'avec crispation — c'est ton enjeu principal.",
-      '25+':"Des années d'exigence ont accumulé une tension mentale chronique. Tu performes encore — mais de moins en moins dans la fluidité. Tes meilleures années ne sont pas derrière toi si tu apprends à réguler cette exigence sans l'éteindre.",
-    },
-    exos:{
-      default:[
-        {t:"Performer dans la fluidité, pas dans la crispation",d:"Entre chaque action importante, accorde-toi 3 secondes : une respiration, un repère visuel fixe, puis repars. Ce geste simple casse le cycle de tension qui s'accumule et libère 15 à 20% d'efficacité immédiate."},
-        {t:"Distinguer exigence juste et auto-maltraitance",d:"Après chaque compétition, crée deux listes séparées : ce que tu as bien fait (liste 1), ce à améliorer avec un plan précis (liste 2). Tu ne lis probablement jamais la liste 1. Ce déséquilibre te coûte très cher."},
-        {t:"Réapprendre à rouler pour le plaisir, pas seulement pour gagner",d:"Une fois par semaine, fais une session avec une règle unique : pas de chrono, pas de comparaison. Juste les sensations, le flow des bosses, le plaisir de piloter. Ça te rend plus durable — pas moins compétitif."},
-      ],
-      '10-12':[
-        {t:"Gagner mon départ à moi",d:"Au lieu de penser 'je dois finir premier', pense 'je fais le meilleur départ possible'. Ça, tu le contrôles. Et souvent, un super départ, ça donne une super course."},
-        {t:"Le calme après une erreur",d:"Si tu rates quelque chose, souffle un coup et dis 'la prochaine sera meilleure'. S'énerver fait perdre du temps et de l'énergie. Rester calme, c'est être plus fort."},
-        {t:"Content de ma course",d:"Après chaque course, demande-toi : est-ce que j'ai tout donné ? Si oui, sois fier, peu importe la place. Donner le meilleur, c'est ça la vraie victoire à ton âge."},
-      ],
-'12-15':[
-        {t:"L'erreur est une information",d:"Après chaque erreur ou défaite, une seule question : 'qu'est-ce que j'apprends ?' Pas 'pourquoi j'ai raté', pas 'je suis nul'. Une information utile. Ça change comment ton cerveau traite la défaite."},
-        {t:"Souffler entre les actions",d:"Entre deux actions importantes, fais une grande respiration et regarde un point fixe 2 secondes. Ça peut sembler petit mais ça casse la tension qui monte action après action."},
-        {t:"Une chose que t'as bien faite",d:"Après chaque compet — même perdue — trouve une chose que t'as bien faite. Une seule. Prends-en conscience. Ton cerveau a besoin de ça pour maintenir l'énergie sur le long terme."},
-      ],
-      '15-18':[
-        {t:"Le reset entre les efforts",d:"Entre deux parties ou deux efforts : 3 secondes, souffle fort, un mot-ancre, regard fixe. Ce protocole de 3 secondes t'empêche d'accumuler la tension tout au long de la compétition."},
-        {t:"L'analyse post-comp calibrée",d:"Dans les 48h après : note 3 choses bien faites et 1 seule chose à améliorer. Une. Pas cinq. La surcharge de points d'amélioration génère une pression toxique. Un point, un plan, c'est suffisant."},
-        {t:"Visualiser la fluidité",d:"3 fois par semaine avant de dormir : visualise-toi en compétition, performant avec légèreté et fluidité — intense mais pas crispé. Ton cerveau mémorise cet état et le rend plus accessible en situation réelle."},
-      ],
-      '25+':[
-        {t:"L'inventaire du coût réel",d:"Estime honnêtement : combien de ton énergie mentale est consommée par l'autocritique et la pression que tu te mets ? 20% ? 40% ? Cette énergie redirigée vers la performance ferait quelle différence ?"},
-        {t:"Le protocole de décompression post-défaite",d:"Dans les 2h après une défaite difficile : 20 min de marche, note 3 choses que tu as bien gérées, une chose à améliorer, puis ferme le dossier mentalement. Cette séquence évite que la tension s'accumule sur les semaines."},
-        {t:"Performer avec intensité calme",d:"Les meilleurs compétiteurs expérimentés décrivent tous le même état : 'j'étais calme et intense à la fois.' Entraîne-toi à trouver cet état à l'entraînement d'abord — puis tu le transportes en compétition."},
-      ],
-    },
-    axeMethod:"Dans la méthode AXE Mental Performance®, ton travail principal est l'Exigence (X) juste — pas l'exigence toxique. Ta compétitivité est une arme exceptionnelle. Mais une arme mal maniée blesse son porteur.",
-  },
-};
-
-// ══ ÉTAT ══
-let userFirstName = '';
-let userEmail = '';
-let selectedAge = null;
-let Q = [];
-let cur = 0;
-let ans = [];
-
-// ══ ÉCRAN LANDING ══
-function goToGate(){
-  if(typeof fbq!=='undefined') fbq('track','ViewContent',{content_name:'Diagnostic Mental',value:19,currency:'EUR'});
-  document.getElementById('step-landing').style.display='none';
-  document.getElementById('step-gate').style.display='block';
+/* ── Navigation entre étapes ── */
+function show(id){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
   window.scrollTo(0,0);
 }
+function setProgress(done,total,label){
+  document.getElementById('prog-fill').style.width=(total?(done/total*100):0)+'%';
+  document.getElementById('prog-counter').textContent=label;
+}
 
-// ══ GATE ══
-let userLastName = '';
-let userSport = '';
+function goAge(){
+  if(typeof fbq!=='undefined') fbq('track','ViewContent',{content_name:'Diagnostic gratuit'});
+  show('step-age');
+  setProgress(0,35,'Étape 1 sur 3');
+}
 
+function pickAge(a){
+  age=a;
+  document.querySelectorAll('.age-card').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('ac-'+a).classList.add('sel');
+  document.getElementById('btn-start').disabled=false;
+  QM=Q_BASE.map((q,i)=>{const t=(AGE_TWEAKS[a]||{})[i]; return t?{...q,...t}:q;});
+  QP=QP_BASE.map((q,i)=>{const t=(AGE_TWEAKS_PHYS[a]||{})[i]; return t?{...q,...t}:q;});
+  aM=new Array(QM.length).fill(null);
+  aP=new Array(QP.length).fill(null);
+}
+
+function startQuiz(){ if(!age)return; phase='mental'; cur=0; show('step-quiz'); render(); }
+function startPhys(){ phase='phys'; cur=0; show('step-quiz'); render(); }
+
+/* ── Rendu d'une question ── */
+function currentSet(){ return phase==='mental'?{q:QM,a:aM,offset:0}:{q:QP,a:aP,offset:QM.length}; }
+
+function render(){
+  const {q,a,offset}=currentSet();
+  const item=q[cur];
+  const done=offset+cur+1, total=QM.length+QP.length;
+  setProgress(done,total,(phase==='mental'?'Mental':'Physique')+' · '+done+' / '+total);
+  const last=cur===q.length-1;
+  document.getElementById('btnBack').style.visibility=(cur===0&&phase==='mental')?'hidden':'visible';
+  document.getElementById('btnLbl').textContent=last?(phase==='mental'?'Partie physique →':'Voir le rapport →'):'Question suivante';
+  document.getElementById('btnNext').disabled=a[cur]===null;
+  document.getElementById('qzone').innerHTML=
+    '<div class="q-card">'+
+      '<div class="q-num">Question '+String(done).padStart(2,'0')+' / '+total+'</div>'+
+      '<div class="q-cat">'+item.cat+'</div>'+
+      '<div class="q-text">'+item.text+'</div>'+
+      '<div class="opts">'+item.opts.map((o,i)=>
+        '<button class="opt'+(a[cur]===i?' sel':'')+'" type="button" onclick="pick('+i+')">'+
+          '<div class="opt-l">'+'ABCD'[i]+'</div><div class="opt-t">'+o.t+'</div></button>').join('')+
+      '</div>'+
+    '</div>';
+}
+
+function pick(i){ const {a}=currentSet(); a[cur]=i; render(); }
+
+function next(){
+  const {q,a}=currentSet();
+  if(a[cur]===null) return;
+  if(cur<q.length-1){ cur++; window.scrollTo(0,0); render(); return; }
+  if(phase==='mental'){ show('step-interlude'); return; }
+  show('step-gate');
+  setProgress(35,35,'Étape 3 sur 3');
+}
+
+function prev(){
+  if(cur>0){ cur--; window.scrollTo(0,0); render(); return; }
+  if(phase==='phys'){ show('step-interlude'); }
+}
+
+/* ── Calcul des scores ── */
+function scores(questions,answers,dims){
+  const somme={},max={};
+  dims.forEach(d=>{somme[d]=0;max[d]=0;});
+  questions.forEach((q,i)=>{
+    dims.forEach(d=>{ max[d]+=Math.max(...q.opts.map(o=>o.s[d])); });
+    if(answers[i]!==null) dims.forEach(d=>{ somme[d]+=q.opts[answers[i]].s[d]; });
+  });
+  const pct={};
+  dims.forEach(d=>{ pct[d]=max[d]?Math.round(somme[d]/max[d]*100):0; });
+  return pct;
+}
+function extremes(pct){
+  const tri=Object.entries(pct).sort((a,b)=>a[1]-b[1]);
+  return {faible:tri[0][0], fort:tri[tri.length-1][0], pctFaible:tri[0][1], pctFort:tri[tri.length-1][1]};
+}
+
+/* ── Coordonnées → rapport ── */
 function submitGate(){
-  const fn = document.getElementById('gfn').value.trim();
-  const ln = document.getElementById('gln').value.trim();
-  const em = document.getElementById('gem').value.trim();
-  const sport = document.getElementById('gsport').value.trim();
-  if(!fn || !ln || !em || !em.includes('@') || !sport){
-    alert('Merci de remplir tous les champs.');
+  const err=document.getElementById('gate-err');
+  const fn=document.getElementById('gfn').value.trim();
+  const ln=document.getElementById('gln').value.trim();
+  const em=document.getElementById('gem').value.trim();
+  if(!fn||!ln||!em||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){
+    err.textContent='Il me faut le prénom, le nom et une adresse email valide pour envoyer le rapport.';
+    err.classList.add('on');
     return;
   }
-  userFirstName = fn;
-  userLastName = ln;
-  userEmail = em;
-  userSport = sport;
-  sessionStorage.setItem('axe_fn', fn);
-  sessionStorage.setItem('axe_ln', ln);
-  sessionStorage.setItem('axe_em', em);
-  sessionStorage.setItem('axe_sport', sport);
-
-  const refId = 'diag_' + Date.now();
-  sessionStorage.setItem('axe_ref', refId);
-
-  /* ══════════════════════════════════════════════════════════════════════
-     CRITIQUE 2 — CAPTURE ABANDON PANIER · DÉSACTIVÉE POUR L'INSTANT
-     ----------------------------------------------------------------------
-     Ce bloc envoie le contact à Make AVANT la redirection Stripe, pour
-     déclencher une séquence de relance si la personne ne paie pas.
-     Il est COMMENTÉ tant que le webhook Make n'existe pas.
-
-     >>> POUR RÉACTIVER (quand le scénario Make est prêt) :
-         1. Ligne ~274 : remplacer l'URL WEBHOOK_GATE (REMPLACE_PAR_TON_WEBHOOK_ABANDON)
-            par la vraie URL du webhook Make.
-         2. Retirer les marqueurs de commentaire autour du bloc ci-dessous
-            (la ligne d'ouverture et la ligne de fermeture de ce commentaire).
-         3. Rien d'autre à toucher : le reste du tunnel est déjà en place.
-     ══════════════════════════════════════════════════════════════════════
-  try {
-    fetch(CFG.WEBHOOK_GATE, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      keepalive: true, // garantit l'envoi même pendant la redirection
-      body: JSON.stringify({
-        type: 'gate_non_paye',
-        ref: refId,
-        prenom: fn,
-        nom: ln,
-        email: em,
-        sport: sport,
-        date: new Date().toISOString()
-      })
-    }).catch(function(e){ console.error('Webhook gate error:', e); });
-  } catch(e){ console.error('Webhook gate error:', e); }
-  ═══════════════════════════════════════════════════════════════════════ */
-
-  // InitiateCheckout : audience "a voulu payer" pour le retargeting Meta
-  if(typeof fbq!=='undefined') fbq('track','InitiateCheckout',{value:19,currency:'EUR',content_name:'Diagnostic Mental'});
-
-  const params = new URLSearchParams({
-    prefilled_email: em,
-    client_reference_id: refId
-  });
-  window.location.href = CFG.STRIPE + (CFG.STRIPE.includes('?') ? '&' : '?') + params;
+  err.classList.remove('on');
+  user={prenom:fn,nom:ln,email:em,
+        tel:document.getElementById('gpn').value.trim(),
+        club:document.getElementById('gclub').value.trim()};
+  ref='diag_'+Date.now();
+  if(typeof fbq!=='undefined') fbq('track','Lead',{content_name:'Diagnostic gratuit complété'});
+  if(typeof gtag!=='undefined') gtag('event','generate_lead',{method:'diagnostic'});
+  buildRapport();
 }
 
-// ══ RETOUR DE STRIPE ══
-function checkReturnFromStripe(){
-  const p = new URLSearchParams(window.location.search);
-  if(p.get('paid') === '1'){
-    userFirstName = sessionStorage.getItem('axe_fn') || '';
-    userLastName  = sessionStorage.getItem('axe_ln') || '';
-    userEmail     = sessionStorage.getItem('axe_em') || '';
-    userSport     = sessionStorage.getItem('axe_sport') || '';
-    document.getElementById('step-landing').style.display='none';
-    document.getElementById('step-age').style.display='block';
-    window.scrollTo(0,0);
-    if(typeof fbq!=='undefined') fbq('track','Purchase',{value:19,currency:'EUR',content_name:'Diagnostic Mental'});
-    if(typeof gtag!=='undefined') gtag('event','purchase',{value:19,currency:'EUR'});
-  }
+function buildRapport(){
+  const dimsM=['stress','peur','confiance','plaisir','compet'];
+  const dimsP=['explo','moteur','charpente','appuis','poigne'];
+  const pctM=scores(QM,aM,dimsM), pctP=scores(QP,aP,dimsP);
+  const exM=extremes(pctM), exP=extremes(pctP);
+  const profFaibleM=PROFILES[exM.faible], profFortM=PROFILES[exM.fort];
+  const profFaibleP=PROFILS_PHYS[exP.faible], profFortP=PROFILS_PHYS[exP.fort];
+
+  resultat={pctM,pctP,exM,exP,profFaibleM,profFortM,profFaibleP,profFortP};
+
+  document.getElementById('repName').textContent=user.prenom.toUpperCase();
+  document.getElementById('repAge').textContent=AGE_LABELS[age]||'';
+
+  const descM=k=>PROFILES[k].desc[age]||PROFILES[k].desc.default;
+  const tagFaible=exM.pctFaible>=80?'Son point le plus perfectible':'Point faible · à travailler en premier';
+  const tagFaibleP=exP.pctFaible>=80?'Son point le plus perfectible':'Point faible · à travailler en premier';
+
+  document.getElementById('repMental').innerHTML=
+    card('weak',tagFaible,profFaibleM.name,descM(exM.faible))+
+    card('strong','Point fort · son appui',NOMS_MENTAL[exM.fort],FORTS_MENTAL[exM.fort]);
+
+  document.getElementById('repPhys').innerHTML=
+    card('weak',tagFaibleP,profFaibleP.name,profFaibleP.faible[age]||profFaibleP.faible.default)+
+    card('strong','Point fort · son appui',profFortP.name,profFortP.fort[age]||profFortP.fort.default);
+
+  document.getElementById('barsMental').innerHTML=bars(pctM,NOMS_MENTAL);
+  document.getElementById('barsPhys').innerHTML=bars(pctP,NOMS_PHYS);
+  setTimeout(()=>document.querySelectorAll('.bar-fill').forEach(el=>{el.style.width=el.dataset.w+'%';}),250);
+
+
+  document.getElementById('offers').innerHTML=offers(profFaibleM,profFaibleP,exM.faible);
+
+  setProgress(35,35,'Rapport');
+  show('step-rapport');
+  envoyer();
 }
 
-// ══ ÂGE ══
-function selectAge(age){
-  selectedAge = age;
-  document.querySelectorAll('.age-card').forEach(c=>c.classList.remove('sel'));
-  const card = document.getElementById('ac-'+age);
-  if(card) card.classList.add('sel');
-  document.getElementById('btn-start').classList.add('active');
-  Q = Q_BASE.map((q,i)=>{
-    const tw = AGE_TWEAKS[age]?.[i];
-    return tw ? {...q,...tw} : q;
-  });
-  ans = new Array(Q.length).fill(null);
+function card(kind,tag,nom,txt){
+  return '<div class="pcard '+kind+'"><div class="pcard-tag">'+tag+'</div>'+
+         '<div class="pcard-name">'+nom+'</div><div class="pcard-txt">'+txt+'</div></div>';
+}
+function bars(pct,noms){
+  return Object.entries(pct).sort((a,b)=>a[1]-b[1]).map(([k,v])=>
+    '<div class="bar-row"><div class="bar-lbl">'+noms[k]+'</div>'+
+    '<div class="bar-track"><div class="bar-fill" data-w="'+v+'"></div></div>'+
+    '<div class="bar-pct">'+v+'%</div></div>').join('');
 }
 
-function startQuiz(){
-  if(!selectedAge) return;
-  document.getElementById('step-age').style.display='none';
-  document.getElementById('step-quiz').style.display='block';
-  cur=0; render();
+function offers(pfM,pfP,idM){
+  return ''+
+  '<div class="offer">'+
+    '<div class="offer-top"><div class="offer-name">SES 2 EXERCICES<br>CIBLÉS</div><div class="offer-price">19€</div></div>'+
+    '<div class="offer-desc">Un exercice pour la tête, un pour le corps. Précisément ceux qui correspondent à ses deux points faibles, à commencer dès cette semaine.</div>'+
+    '<ul>'+
+      '<li>1 exercice mental pour « '+pfM.name+' », écrit pour sa tranche d\'âge</li>'+
+      '<li>1 exercice physique pour « '+pfP.name+' » : au poids du corps, sans matériel, à faire tous les jours</li>'+
+      '<li>Reçus par mail immédiatement, en PDF</li>'+
+    '</ul>'+
+    '<a class="btn" href="'+lienPack()+'" onclick="trackIntent(\'pack_19\',19)">Recevoir ses 2 exercices</a>'+
+  '</div>'+
+
+  '<div class="offer feature">'+
+    '<div class="offer-top"><div class="offer-name">SON PROGRAMME MENTAL<br>8 SEMAINES</div><div class="offer-price">47€</div></div>'+
+    '<div class="offer-desc">Un plan mental semaine par semaine, construit sur son profil « '+pfM.name+' » et sur son âge. Uniquement le mental : le physique n\'est pas inclus.</div>'+
+    '<ul>'+
+      '<li>8 semaines de travail mental progressif, séance par séance</li>'+
+      '<li>Le volet mental seul — la préparation physique n\'est pas comprise</li>'+
+      '<li>Adapté à sa tranche d\'âge et à son profil exact</li>'+
+      '<li>Les repères pour mesurer ce qui bouge, course après course</li>'+
+    '</ul>'+
+    '<a class="btn" href="'+(CFG.DEEP[idM]||CFG.DEMARRER)+'" onclick="trackIntent(\'programme_47\',47)">Prendre le programme mental</a>'+
+  '</div>'+
+
+  '<div class="offer dark">'+
+    '<div class="offer-top"><div class="offer-name">LE PROGRAMME COMPLET<br>MENTAL & PHYSIQUE</div></div>'+
+    '<div class="offer-desc">Le suivi sur mesure : mental et physique construits ensemble, avec moi, sur toute la saison, et ajustés course après course.</div>'+
+    '<ul>'+
+      '<li>Programme mental et physique bâti sur ses 4 profils, pas sur un modèle</li>'+
+      '<li>Ajusté en continu selon ses courses et sa progression</li>'+
+      '<li>On en parle d\'abord : le tarif se décide selon ce dont il a réellement besoin</li>'+
+    '</ul>'+
+    '<a class="btn" href="'+CFG.DEMARRER+'" onclick="trackIntent(\'programme_complet\',0)">En parler avec Fabien</a>'+
+  '</div>';
 }
 
-// ══ QUIZ ══
-function render(){
-  const q=Q[cur];
-  document.getElementById('prog-fill').style.width=((cur+1)/Q.length*100)+'%';
-  document.getElementById('prog-counter').textContent=String(cur+1).padStart(2,'0')+' / '+String(Q.length).padStart(2,'0');
-  document.getElementById('btnBack').style.visibility=cur===0?'hidden':'visible';
-  document.getElementById('btnLbl').textContent=cur===Q.length-1?'Voir mon profil →':'Question suivante →';
-  document.getElementById('btnNext').disabled=ans[cur]===null;
-  document.getElementById('qzone').innerHTML=`
-    <div class="q-card">
-      <div class="q-num">Question ${String(cur+1).padStart(2,'0')} / ${String(Q.length).padStart(2,'0')}</div>
-      <div class="q-cat">${q.cat}</div>
-      <div class="q-text">${q.text}</div>
-      <div class="opts">${q.opts.map((o,i)=>`
-        <button class="opt ${ans[cur]===i?'sel':''}" onclick="pick(${i})" type="button">
-          <div class="opt-l">${'ABCD'[i]}</div>
-          <div class="opt-t">${o.t}</div>
-        </button>`).join('')}</div>
-    </div>`;
+/* ── Lien du pack 19€ : on y accroche la référence du diagnostic et l'email.
+   Stripe les renvoie dans checkout.session.completed, ce qui permet à Make
+   de retrouver la bonne ligne Airtable et d'envoyer les exercices tout seul.
+   Les liens des programmes 47€ ne sont pas modifiés. */
+function lienPack(){
+  const sep = CFG.PACK19.indexOf('?') > -1 ? '&' : '?';
+  return CFG.PACK19 + sep
+       + 'client_reference_id=' + encodeURIComponent(ref || '')
+       + '&prefilled_email='    + encodeURIComponent(user.email || '');
 }
 
-function pick(i){ ans[cur]=i; render(); }
-function next(){ if(ans[cur]===null)return; if(cur<Q.length-1){cur++;window.scrollTo(0,0);render();}else finishQuiz(); }
-function prev(){ if(cur>0){cur--;window.scrollTo(0,0);render();} }
-
-// ══ SCORES & PROFIL ══
-function calcScores(){
-  const d={stress:0,peur:0,confiance:0,plaisir:0,compet:0};
-  const mx={stress:0,peur:0,confiance:0,plaisir:0,compet:0};
-  Q.forEach((q,i)=>{
-    Object.keys(mx).forEach(k=>mx[k]+=q.opts[0].s[k]);
-    if(ans[i]!==null) Object.keys(d).forEach(k=>d[k]+=q.opts[ans[i]].s[k]);
-  });
-  const p={};
-  Object.keys(d).forEach(k=>p[k]=Math.round((d[k]/mx[k])*100));
-  return p;
+/* ── Signal d'intention : envoyé quand quelqu'un clique une offre ── */
+function trackIntent(offre,valeur){
+  if(typeof fbq!=='undefined') fbq('track','InitiateCheckout',{content_name:offre,value:valeur,currency:'EUR'});
+  if(!CFG.WEBHOOK_INTENT||CFG.WEBHOOK_INTENT.indexOf('REMPLACE')>-1) return;
+  try{
+    fetch(CFG.WEBHOOK_INTENT,{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
+      body:JSON.stringify({type:'intention_achat',offre:offre,ref:ref,prenom:user.prenom,nom:user.nom,
+        email:user.email,telephone:user.tel,date:new Date().toISOString()})}).catch(()=>{});
+  }catch(e){}
 }
 
-function getProfile(pct){
-  const sorted=Object.entries(pct).sort((a,b)=>a[1]-b[1]);
-  return PROFILES[sorted[0][0]];
-}
+/* ── Envoi à Make ── */
+function envoyer(){
+  const r=resultat;
+  const reponses={};
+  QM.forEach((q,i)=>{reponses['mental_'+String(i+1).padStart(2,'0')]=aM[i]!==null?q.opts[aM[i]].t:'';});
+  QP.forEach((q,i)=>{reponses['physique_'+String(i+1).padStart(2,'0')]=aP[i]!==null?q.opts[aP[i]].t:'';});
 
-// ══ FIN DU QUIZ ══
-async function finishQuiz(){
-  document.getElementById('step-quiz').style.display='none';
-  document.getElementById('step-confirm').style.display='block';
-  window.scrollTo(0,0);
+  const exoM=(r.profFaibleM.exos[age]||r.profFaibleM.exos.default).slice(0,1);
+  const exoP=(r.profFaibleP.exos[age]||r.profFaibleP.exos.default).slice(0,1);
 
-  const pct = calcScores();
-  const prof = getProfile(pct);
-  const ageKey = selectedAge;
-  const desc = prof.desc[ageKey] || prof.desc.default;
-  const exos = prof.exos[ageKey] || prof.exos.default;
-
-  // Affiche l'écran de confirmation
-  document.getElementById('cfProfileName').textContent = prof.name;
-  document.getElementById('cfAgeBadge').textContent = AGE_LABELS[selectedAge] || '';
-  document.getElementById('cfEmail').textContent = userEmail;
-  document.getElementById('prog-counter').textContent = 'Rapport envoyé';
-  document.getElementById('prog-fill').style.width = '100%';
-
-  const scoreNames={stress:'Gestion du stress',peur:'Blocage par la peur',confiance:'Confiance en soi',plaisir:'Rapport au plaisir',compet:'Compétitivité'};
-  document.getElementById('cfScores').innerHTML=Object.entries(pct).map(([k,v])=>`
-    <div class="cs-row">
-      <div class="cs-label">${scoreNames[k]}</div>
-      <div class="cs-track"><div class="cs-fill" id="csf-${k}"></div></div>
-      <div class="cs-pct">${v}%</div>
-    </div>`).join('');
-  setTimeout(()=>Object.entries(pct).forEach(([k,v])=>{
-    const el=document.getElementById('csf-'+k);
-    if(el) el.style.width=v+'%';
-  }),300);
-
-  // Construit le rapport HTML (pour Make → PDF)
-  const rapportHTML = buildRapportHTML(userFirstName, prof, pct, desc, exos, ageKey);
-
-  // Envoie au webhook Make
-  const reponses = {};
-  Q.forEach((q,i)=>{ reponses['question_'+String(i+1).padStart(2,'0')] = ans[i]!==null ? q.opts[ans[i]].t : ''; });
-
-  const payload = {
-    prenom: userFirstName,
-    nom: userLastName,
-    nom_complet: userFirstName + ' ' + userLastName,
-    email: userEmail,
-    sport: userSport,
-    profil: prof.name,
-    profil_id: prof.id,
-    age_tranche: selectedAge,
-    age_label: AGE_LABELS[selectedAge] || '',
-    scores: pct,
-    reponses: reponses,
-    rapport_html: rapportHTML,
-    timestamp: new Date().toISOString(),
-    // Champs pour le template email Brevo (params)
-    params: {
-      firstName: userFirstName,
-      lastName: userLastName,
-      sport: userSport,
-      profilName: prof.name,
-      headline: prof.headline,
-      description: desc,
-      scoreStress: pct.stress,
-      scorePeur: pct.peur,
-      scoreConfiance: pct.confiance,
-      scorePlaisir: pct.plaisir,
-      scoreCompet: pct.compet,
-      exo1Titre: exos[0].t,
-      exo1Desc: exos[0].d,
-      exo2Titre: exos[1].t,
-      exo2Desc: exos[1].d,
-      exo3Titre: exos[2].t,
-      exo3Desc: exos[2].d,
-      axeMethod: prof.axeMethod,
-      lienProgramme: CFG.DEEP[prof.id] || 'https://fabien-pinton.fr',
+  const payload={
+    type:'diagnostic_gratuit',
+    ref:ref,
+    prenom:user.prenom, nom:user.nom, nom_complet:user.prenom+' '+user.nom,
+    email:user.email, telephone:user.tel, club:user.club,
+    sport:'BMX Race',
+    age_tranche:age, age_label:AGE_LABELS[age]||'',
+    profil_mental_faible:r.profFaibleM.name, profil_mental_faible_id:r.exM.faible,
+    profil_mental_fort:NOMS_MENTAL[r.exM.fort], profil_mental_fort_id:r.exM.fort,
+    profil_physique_faible:r.profFaibleP.name, profil_physique_faible_id:r.exP.faible,
+    profil_physique_fort:r.profFortP.name,     profil_physique_fort_id:r.exP.fort,
+    scores_mental:r.pctM, scores_physique:r.pctP,
+    score_mental_faible:r.exM.pctFaible,
+    a_rappeler:r.exM.pctFaible<CFG.SEUIL_APPEL,
+    reponses:reponses,
+    rapport_html:rapportHTML(),
+    pack19_html:packHTML(exoM,exoP),
+    lien_programme_47:CFG.DEEP[r.exM.faible]||'',
+    timestamp:new Date().toISOString(),
+    params:{
+      firstName:user.prenom, lastName:user.nom, ageLabel:AGE_LABELS[age]||'',
+      mentalFaible:r.profFaibleM.name, mentalFort:NOMS_MENTAL[r.exM.fort],
+      physiqueFaible:r.profFaibleP.name, physiqueFort:r.profFortP.name,
+      descMentalFaible:(r.profFaibleM.desc[age]||r.profFaibleM.desc.default),
+      descPhysiqueFaible:(r.profFaibleP.faible[age]||r.profFaibleP.faible.default),
+      axeMethod:r.profFaibleM.axeMethod,
+      lienProgramme:CFG.DEEP[r.exM.faible]||'',
+      lienPack19:lienPack(), lienAppel:CFG.CALL
     }
   };
 
-  try {
-    await fetch(CFG.WEBHOOK, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-  } catch(e) {
-    console.error('Webhook error:', e);
-  }
+  try{
+    fetch(CFG.WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
+      body:JSON.stringify(payload)}).catch(e=>console.error('Webhook:',e));
+  }catch(e){console.error('Webhook:',e);}
 }
 
-// ══ RAPPORT HTML (envoyé à Make pour conversion PDF) ══
-function buildRapportHTML(name, prof, pct, desc, exos, ageKey){
-  const ageLbl = AGE_LABELS[ageKey] || '';
-  const date = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
-  const scoreNames={stress:'Gestion du stress',peur:'Rapport à la peur',confiance:'Confiance en soi',plaisir:'Rapport au plaisir',compet:'Compétitivité'};
-  const prenom = name.charAt(0).toUpperCase()+name.slice(1);
+/* ── Rapport HTML compatible email (tableaux + styles en ligne) ── */
+function rapportHTML(){
+  const r=resultat;
+  const date=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  const ligne=(nom,v)=>'<tr><td style="padding:6px 0;font-size:13px;color:#5A5040;width:45%;">'+nom+'</td>'+
+    '<td style="padding:6px 0;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%"><tr>'+
+    '<td style="background:#A8852A;height:6px;width:'+v+'%;"></td><td style="background:#E8E1D4;height:6px;"></td>'+
+    '</tr></table></td><td style="padding:6px 0 6px 10px;font-size:12px;color:#8A7D6A;width:36px;">'+v+'%</td></tr>';
+  const bloc=(tag,couleur,nom,txt)=>
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E8E1D4;border-left:3px solid '+couleur+';margin-bottom:12px;"><tr><td style="padding:20px 22px;">'+
+    '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:'+couleur+';margin-bottom:8px;">'+tag+'</div>'+
+    '<div style="font-family:Georgia,serif;font-size:21px;color:#1A1612;margin-bottom:10px;">'+nom+'</div>'+
+    '<div style="font-size:14px;line-height:1.7;color:#5A5040;">'+txt+'</div></td></tr></table>';
 
-  // ── Détermination point fort / point faible ──
-  // En cas d'égalité, ordre de priorité imposé :
-  //  Point FORT : plaisir > compet > stress > peur > confiance
-  //  Point FAIBLE : confiance > peur > stress > compet > plaisir (miroir)
-  const prioFort   = ['plaisir','compet','stress','peur','confiance'];
-  const prioFaible = ['confiance','peur','stress','compet','plaisir'];
-  // point fort = score le plus haut ; à égalité, celui le plus tôt dans prioFort
-  const cléFort = Object.keys(pct).sort((a,b)=>
-    (pct[b]-pct[a]) || (prioFort.indexOf(a)-prioFort.indexOf(b))
-  )[0];
-  // point faible = score le plus bas ; à égalité, celui le plus tôt dans prioFaible
-  const cléFaible = Object.keys(pct).sort((a,b)=>
-    (pct[a]-pct[b]) || (prioFaible.indexOf(a)-prioFaible.indexOf(b))
-  )[0];
+  return '<div style="font-family:Helvetica,Arial,sans-serif;max-width:640px;margin:0 auto;background:#F7F3EC;padding:28px;">'+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#1A1612;margin-bottom:24px;"><tr><td style="padding:30px 26px;">'+
+      '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:10px;">Rapport AXE · Diagnostic complet</div>'+
+      '<div style="font-family:Georgia,serif;font-size:30px;color:#FDFAF5;">'+user.prenom.toUpperCase()+'</div>'+
+      '<div style="font-size:11px;letter-spacing:2px;color:rgba(253,250,245,.55);margin-top:6px;">'+(AGE_LABELS[age]||'')+' · '+date+'</div>'+
+    '</td></tr></table>'+
 
-  // tri d'affichage : du plus haut au plus bas
-  const sorted = Object.entries(pct).sort((a,b)=>b[1]-a[1]);
+    '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin:0 0 12px;">Le mental</div>'+
+    bloc(r.exM.pctFaible>=80?'Son point le plus perfectible':'Point faible · à travailler en premier','#8C3B2A',r.profFaibleM.name,(r.profFaibleM.desc[age]||r.profFaibleM.desc.default))+
+    bloc('Point fort · son appui','#A8852A',NOMS_MENTAL[r.exM.fort],FORTS_MENTAL[r.exM.fort])+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:26px;">'+
+      Object.entries(r.pctM).sort((a,b)=>a[1]-b[1]).map(([k,v])=>ligne(NOMS_MENTAL[k],v)).join('')+'</table>'+
 
-  // couleur selon le niveau : solide (vert) ≥65, intéressant (or) 50-65, fragile (rouge) <50
-  function barColor(v){
-    if(v>=65) return '#3D7A4E';      // solide → vert
-    if(v>=50) return '#A8852A';      // intéressant → or
-    return '#A8453A';                // fragile → rouge
-  }
-  function niveauTxt(v){
-    if(v>=65) return 'Solide';
-    if(v>=50) return 'Intéressant';
-    return 'Fragile';
-  }
+    '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin:0 0 12px;">Le physique</div>'+
+    bloc('Point faible · à travailler en premier','#8C3B2A',r.profFaibleP.name,(r.profFaibleP.faible[age]||r.profFaibleP.faible.default))+
+    bloc('Point fort · son appui','#A8852A',r.profFortP.name,(r.profFortP.fort[age]||r.profFortP.fort.default))+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:26px;">'+
+      Object.entries(r.pctP).sort((a,b)=>a[1]-b[1]).map(([k,v])=>ligne(NOMS_PHYS[k],v)).join('')+'</table>'+
 
-  const scoresHTML = sorted.map(([k,v])=>{
-    const c=barColor(v);
-    let tag='';
-    if(k===cléFort)   tag=' <span style="display:inline-block;background:#3D7A4E;color:#fff;font-size:9px;letter-spacing:.5px;text-transform:uppercase;font-weight:bold;padding:2px 7px;border-radius:3px;margin-left:4px;">Point fort</span>';
-    if(k===cléFaible) tag=' <span style="display:inline-block;background:#A8453A;color:#fff;font-size:9px;letter-spacing:.5px;text-transform:uppercase;font-weight:bold;padding:2px 7px;border-radius:3px;margin-left:4px;">Point faible</span>';
-    return `
-    <tr>
-      <td style="padding:12px 10px 12px 0;border-bottom:1px solid #F0EBE0;vertical-align:middle;width:230px;">
-        <div style="font-size:13px;color:#1A1612;font-weight:bold;">${scoreNames[k]}${tag}</div>
-        <div style="font-size:10px;color:${c};letter-spacing:.5px;text-transform:uppercase;font-weight:bold;margin-top:3px;">${niveauTxt(v)}</div>
-      </td>
-      <td style="padding:12px 12px 12px 0;border-bottom:1px solid #F0EBE0;vertical-align:middle;">
-        <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#EFE8DC;border-radius:6px;">
-          <tr><td style="background:${c};height:14px;width:${v}%;border-radius:6px;font-size:0;line-height:0;">&nbsp;</td><td style="font-size:0;line-height:0;">&nbsp;</td></tr>
-        </table>
-      </td>
-      <td style="padding:12px 0;border-bottom:1px solid #F0EBE0;vertical-align:middle;white-space:nowrap;width:56px;text-align:right;">
-        <span style="font-family:Georgia,serif;font-size:24px;font-weight:bold;color:${c};">${v}</span><span style="font-size:11px;color:#8A7D6A;">/100</span>
-      </td>
-    </tr>`;
-  }).join('');
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F0EBE0;border:1px solid #E8E1D4;"><tr><td style="padding:22px 24px;">'+
+      '<div style="font-size:14px;line-height:1.75;color:#5A5040;">'+r.profFaibleM.axeMethod+'</div></td></tr></table>'+
 
-  const exosHTML = exos.map((e,i)=>`
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:14px;background:#FDFAF5;border-left:4px solid #A8852A;border-radius:0 8px 8px 0;">
-      <tr><td style="padding:18px 22px;">
-        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#A8852A;font-weight:bold;margin-bottom:6px;">✦ Exercice ${i+1} · ${e.t}</div>
-        <div style="font-size:14px;line-height:1.75;color:#5A5040;">${e.d}</div>
-      </td></tr>
-    </table>`).join('');
+    // ── La suite : le rapport ne se termine jamais sans une porte ouverte ──
+    '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin:30px 0 12px;">Et maintenant</div>'+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E8E1D4;margin-bottom:12px;"><tr><td style="padding:22px 24px;">'+
+      '<div style="font-family:Georgia,serif;font-size:20px;color:#1A1612;margin-bottom:8px;">Ses 2 exercices ciblés — 19 €</div>'+
+      '<div style="font-size:14px;line-height:1.75;color:#5A5040;margin-bottom:16px;">Un exercice mental pour « '+r.profFaibleM.name+' », un exercice physique pour « '+r.profFaibleP.name+' ». Écrits pour sa tranche d\'âge, à commencer dès cette semaine.</div>'+
+      '<a href="'+lienPack()+'" style="display:inline-block;background:#A8852A;color:#FDFAF5;text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:14px 26px;">Recevoir ses 2 exercices</a>'+
+    '</td></tr></table>'+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E8E1D4;margin-bottom:12px;"><tr><td style="padding:22px 24px;">'+
+      '<div style="font-family:Georgia,serif;font-size:20px;color:#1A1612;margin-bottom:8px;">Son programme mental 8 semaines — 47 €</div>'+
+      '<div style="font-size:14px;line-height:1.75;color:#5A5040;margin-bottom:16px;">Un plan mental semaine par semaine, construit sur son profil « '+r.profFaibleM.name+' » et sur son âge. Il porte uniquement sur le mental : la préparation physique n\'est pas comprise.</div>'+
+      '<a href="'+(CFG.DEEP[r.exM.faible]||'https://fabien-pinton.fr/demarrer.html')+'" style="display:inline-block;border:1px solid #A8852A;color:#7A6020;text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:14px 26px;">Voir le programme mental</a>'+
+    '</td></tr></table>'+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#1A1612;"><tr><td style="padding:22px 24px;">'+
+      '<div style="font-family:Georgia,serif;font-size:20px;color:#FDFAF5;margin-bottom:8px;">Le programme complet, mental <em>et</em> physique</div>'+
+      '<div style="font-size:14px;line-height:1.75;color:rgba(253,250,245,.8);margin-bottom:16px;">Le suivi sur mesure sur toute la saison, ajusté course après course. On en parle d\'abord, le tarif se décide selon ce dont il a réellement besoin.</div>'+
+      '<a href="https://fabien-pinton.fr/demarrer.html" style="display:inline-block;background:#A8852A;color:#FDFAF5;text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:14px 26px;">En parler avec Fabien</a>'+
+    '</td></tr></table>'+
 
-  return `<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Rapport Mental AXE — ${prenom}</title>
-</head>
-<body style="margin:0;padding:0;background:#F7F3EC;font-family:Georgia,'Times New Roman',serif;color:#1A1612;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#F7F3EC;padding:0;">
-<tr><td align="center" style="padding:0;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="640" style="max-width:640px;width:100%;">
-
-  <!-- EN-TÊTE -->
-  <tr><td style="background:#1A1612;padding:32px 32px 28px;border-radius:0;">
-    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:14px;">Méthode AXE Mental Performance®</div>
-    <div style="font-size:13px;color:#B8AE9C;letter-spacing:1px;margin-bottom:4px;">Ton rapport mental est prêt</div>
-    <div style="font-family:Georgia,serif;font-size:40px;font-weight:bold;color:#FDFAF5;line-height:1;margin-bottom:8px;">${prenom}</div>
-    <div style="font-size:12px;color:#C9A84C;letter-spacing:1px;">${ageLbl} · ${date}</div>
-  </td></tr>
-
-  <!-- BANDEAU PROFIL -->
-  <tr><td style="background:#A8852A;padding:26px 32px;">
-    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#FDFAF5;opacity:.85;margin-bottom:6px;">Ton profil mental dominant</div>
-    <div style="font-family:Georgia,serif;font-size:30px;font-weight:bold;color:#FFFFFF;line-height:1.1;margin-bottom:8px;">${prof.name}</div>
-    <div style="font-family:Georgia,serif;font-size:16px;font-style:italic;color:#FDFAF5;line-height:1.5;">${prof.headline}</div>
-  </td></tr>
-
-  <!-- CORPS -->
-  <tr><td style="background:#FFFFFF;padding:34px 32px;">
-
-    <div style="font-size:14px;line-height:1.8;color:#5A5040;margin-bottom:34px;">${desc}</div>
-
-    <!-- SCORES -->
-    <div style="background:#1A1612;color:#FDFAF5;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:bold;padding:10px 16px;border-radius:6px;margin-bottom:6px;">Tes 5 dimensions mentales</div>
-    <div style="font-size:12px;color:#8A7D6A;margin:12px 0 8px;">Plus le score est haut, plus la dimension est solide. Ton profil se lit dans tes deux extrêmes.</div>
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:34px;">${scoresHTML}</table>
-
-    <!-- EXERCICES -->
-    <div style="background:#3D7A4E;color:#FFFFFF;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:bold;padding:10px 16px;border-radius:6px;margin-bottom:16px;">3 exercices à faire dès cette semaine</div>
-    ${exosHTML}
-
-    <!-- MÉTHODE AXE -->
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:24px 0 8px;background:#F5EDD8;border-radius:8px;">
-      <tr><td style="padding:20px 24px;">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#7A6020;font-weight:bold;margin-bottom:10px;">La méthode AXE Mental Performance® · Alignement · eXigence · Engagement</div>
-        <div style="font-size:14px;line-height:1.8;color:#5A5040;">${prof.axeMethod}</div>
-      </td></tr>
-    </table>
-
-  </td></tr>
-
-  <!-- ═══ LA SUITE : APPEL DÉCOUVERTE EN PREMIER ═══ -->
-  <tr><td style="background:#1A1612;padding:38px 32px;text-align:center;">
-    <div style="height:3px;width:60px;background:#C9A84C;margin:0 auto 22px;border-radius:2px;font-size:0;line-height:0;">&nbsp;</div>
-    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-bottom:12px;">Et maintenant, ${prenom} ?</div>
-    <div style="font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#FDFAF5;line-height:1.25;margin-bottom:14px;">On en parle 30 minutes,<br>gratuitement ?</div>
-    <div style="font-size:14px;line-height:1.75;color:#C7BFB2;margin-bottom:26px;">Le rapport te donne une photo. L'appel te donne la direction. Échangeons de vive voix sur ton profil <strong style="color:#FDFAF5;">${prof.name}</strong> et sur ce qui te ferait vraiment progresser, sans aucun engagement.</div>
-    <table role="presentation" cellpadding="0" cellspacing="0" align="center"><tr><td style="border-radius:8px;background:#C9A84C;">
-      <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" style="display:inline-block;padding:17px 40px;font-family:Georgia,serif;font-size:15px;font-weight:bold;color:#1A1612;text-decoration:none;letter-spacing:.5px;">Réserver mon appel gratuit →</a>
-    </td></tr></table>
-    <div style="margin-top:16px;font-size:12px;color:#8A7D6A;">Ou écris directement à Fabien : contact@fabien-pinton.fr</div>
-  </td></tr>
-
-  <!-- OFFRES -->
-  <tr><td style="background:#FFFFFF;padding:34px 32px 20px;">
-    <div style="text-align:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A7D6A;margin-bottom:24px;">Tu préfères avancer par toi-même ? Voici tes options</div>
-
-    <!-- 47€ -->
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:16px;border:2px solid #EFE8DC;border-radius:10px;">
-      <tr><td style="padding:24px 26px;">
-        <div style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#1A1612;margin-bottom:4px;">Le programme ${prof.name} <span style="color:#A8852A;">— 47€</span></div>
-        <div style="font-size:13px;line-height:1.7;color:#5A5040;margin-bottom:18px;">8 semaines d'exercices mentaux conçus précisément pour ton profil. Un plan clair, semaine après semaine. Accès immédiat.</div>
-        <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:7px;background:#A8852A;">
-          <a href="${CFG.DEEP[prof.id] || 'https://fabien-pinton.fr'}" target="_blank" style="display:inline-block;padding:13px 28px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#FDFAF5;text-decoration:none;letter-spacing:.5px;">Débloquer mon programme profil →</a>
-        </td></tr></table>
-      </td></tr>
-    </table>
-
-    <!-- 997€ -->
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:8px;border:2px solid #1A1612;border-radius:10px;">
-      <tr><td style="padding:24px 26px;">
-        <div style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#1A1612;margin-bottom:4px;">Le programme complet <span style="color:#A8852A;">— 24 semaines</span></div>
-        <div style="font-size:13px;line-height:1.7;color:#5A5040;margin-bottom:14px;">L'accompagnement mental ET physique, calé sur ta grande compétition, pour franchir un vrai palier. Le programme se construit autour de tes dates de course.</div>
-        <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:7px;background:#1A1612;">
-          <a href="https://fabien-pinton.fr/demarrer.html" target="_blank" style="display:inline-block;padding:13px 28px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#FDFAF5;text-decoration:none;letter-spacing:.5px;">Construire mon programme →</a>
-        </td></tr></table>
-      </td></tr>
-    </table>
-
-  </td></tr>
-
-  <!-- PIED -->
-  <tr><td style="background:#F7F3EC;padding:22px 32px;text-align:center;border-top:1px solid #E8E1D4;">
-    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8852A;margin-bottom:6px;">Méthode AXE Mental Performance® · Fabien Pinton · 2026</div>
-    <div style="font-size:11px;color:#8A7D6A;">contact@fabien-pinton.fr · 07.72.28.94.57 · fabien-pinton.fr</div>
-  </td></tr>
-
-</table>
-</td></tr>
-</table>
-</body>
-</html>`;
+    '<div style="text-align:center;font-size:11px;letter-spacing:2px;color:#8A7D6A;margin-top:26px;line-height:2;">'+
+      'FABIEN PINTON · MÉTHODE AXE MENTAL PERFORMANCE®<br>contact@fabien-pinton.fr · 07.72.28.94.57</div>'+
+  '</div>';
 }
 
-// ══ INIT ══
-document.addEventListener('DOMContentLoaded', function(){
-  checkReturnFromStripe();
-});
+/* ── Pack 19 € : construit ici, envoyé à Make, à ne délivrer qu'après paiement ── */
+function packHTML(exoM,exoP){
+  const r=resultat;
+  const item=(e)=>'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E8E1D4;border-left:3px solid #A8852A;margin-bottom:12px;"><tr><td style="padding:20px 22px;">'+
+    '<div style="font-family:Georgia,serif;font-size:19px;color:#1A1612;margin-bottom:8px;">'+e.t+'</div>'+
+    '<div style="font-size:14px;line-height:1.75;color:#5A5040;">'+e.d+'</div></td></tr></table>';
+  return '<div style="font-family:Helvetica,Arial,sans-serif;max-width:640px;margin:0 auto;background:#F7F3EC;padding:28px;">'+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#1A1612;margin-bottom:24px;"><tr><td style="padding:30px 26px;">'+
+      '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:10px;">Les 2 exercices de '+user.prenom+'</div>'+
+      '<div style="font-family:Georgia,serif;font-size:26px;color:#FDFAF5;">À FAIRE DÈS CETTE SEMAINE</div>'+
+      '<div style="font-size:11px;letter-spacing:2px;color:rgba(253,250,245,.55);margin-top:6px;">'+(AGE_LABELS[age]||'')+'</div>'+
+    '</td></tr></table>'+
+    '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin:0 0 12px;">Mental · '+r.profFaibleM.name+'</div>'+
+    exoM.map(item).join('')+
+    '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin:26px 0 12px;">Physique · '+r.profFaibleP.name+'</div>'+
+    exoP.map(item).join('')+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F0EBE0;border:1px solid #E8E1D4;margin-top:20px;"><tr><td style="padding:20px 22px;font-size:13px;line-height:1.7;color:#5A5040;">'+
+      'L\'exercice physique se fait tous les jours, sans matériel. L\'exercice mental se pratique d\'abord à l\'entraînement, jamais en découverte le jour d\'une course. Une question ? Réponds simplement à ce mail.</td></tr></table>'+
+
+    // ── Les deux portes suivantes, dans le mail du pack ──
+    '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A8852A;margin:32px 0 12px;">Quand ces deux exercices seront installés</div>'+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E8E1D4;margin-bottom:12px;"><tr><td style="padding:22px 24px;">'+
+      '<div style="font-family:Georgia,serif;font-size:20px;color:#1A1612;margin-bottom:8px;">Son programme mental 8 semaines &mdash; 47 &euro;</div>'+
+      '<div style="font-size:14px;line-height:1.75;color:#5A5040;margin-bottom:16px;">Le plan complet pour &laquo; '+r.profFaibleM.name+' &raquo;, semaine par semaine, adapt&eacute; &agrave; son &acirc;ge. Il porte uniquement sur le mental : la pr&eacute;paration physique n\'est pas comprise.</div>'+
+      '<a href="'+(CFG.DEEP[r.exM.faible]||'https://fabien-pinton.fr/demarrer.html')+'" style="display:inline-block;background:#A8852A;color:#FDFAF5;text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:14px 26px;">Voir son programme mental</a>'+
+    '</td></tr></table>'+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#1A1612;"><tr><td style="padding:22px 24px;">'+
+      '<div style="font-family:Georgia,serif;font-size:20px;color:#FDFAF5;margin-bottom:8px;">Le programme complet, mental <em>et</em> physique</div>'+
+      '<div style="font-size:14px;line-height:1.75;color:rgba(253,250,245,.8);margin-bottom:16px;">Mental et physique construits ensemble sur toute la saison, ajust&eacute;s course apr&egrave;s course. On en parle d\'abord, le tarif se d&eacute;cide selon ce dont il a r&eacute;ellement besoin.</div>'+
+      '<a href="https://fabien-pinton.fr/demarrer.html" style="display:inline-block;background:#A8852A;color:#FDFAF5;text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:14px 26px;">En parler avec Fabien</a>'+
+    '</td></tr></table>'+
+
+    '<div style="text-align:center;font-size:11px;letter-spacing:2px;color:#8A7D6A;margin-top:26px;line-height:2;">'+
+      'FABIEN PINTON &middot; M&Eacute;THODE AXE MENTAL PERFORMANCE&reg;<br>contact@fabien-pinton.fr &middot; 07.72.28.94.57</div>'+
+  '</div>';
+}
 </script>
 </body>
 </html>
