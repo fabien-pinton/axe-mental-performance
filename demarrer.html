@@ -448,9 +448,6 @@ function recalc(){
 }
 
 const TIDYCAL_URL = 'https://tidycal.com/fpinton/preparation-programme';
-/* Le lead part vers Make AVANT la redirection : si le parent n'aboutit pas
-   sur TidyCal, la demande existe quand même dans Airtable. */
-const WEBHOOK_DEMARRER = 'https://hook.eu1.make.com/REMPLACE_PAR_TON_WEBHOOK_DEMARRER';
 
 const JOURS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
 function renderJours(){
@@ -522,26 +519,6 @@ function reserver(){
     email: pEmail,
     notes: notes
   });
-  // Envoi à Make avant de quitter la page
-  if (WEBHOOK_DEMARRER.indexOf('REMPLACE') === -1) {
-    try {
-      fetch(WEBHOOK_DEMARRER, {
-        method: 'POST', headers: {'Content-Type':'application/json'}, keepalive: true,
-        body: JSON.stringify({
-          type: 'programme_complet',
-          rider_prenom: rPrenom, rider_nom: rNom, age: dernierPlan.age,
-          parent_prenom: pPrenom, parent_nom: pNom, email: pEmail,
-          jours_dispo: jours, salle_muscu: muscu,
-          prix_calcule: p.prix, nb_semaines: p.nbSemaines,
-          date_debut: p.date_debut_programme,
-          date_grande_competition: p.date_grande_competition,
-          competitions: COMPS.filter(x => x && x.date),
-          notes: notes,
-          date: new Date().toISOString()
-        })
-      }).catch(function(){});
-    } catch(e) {}
-  }
   window.location.href = TIDYCAL_URL + '?' + params.toString();
 }
 

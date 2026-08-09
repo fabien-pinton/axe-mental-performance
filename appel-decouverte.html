@@ -5,17 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Appel Découverte — Fabien Pinton · Préparateur Mental</title>
   <meta name="description" content="Votre enfant performe à l'entraînement mais pas en compétition ? 30 minutes pour comprendre ce qui bloque — appel gratuit avec Fabien Pinton.">
-
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-E9LL33EDPP"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E9LL33EDPP');</script>
-
-<!-- Meta Pixel -->
-<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','26122160607379448');
-fbq('track','PageView');
-fbq('track','ViewContent',{content_name:'Appel découverte'});</script>
-
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -240,7 +229,7 @@ fbq('track','ViewContent',{content_name:'Appel découverte'});</script>
 <!-- STICKY CTA -->
 <div class="sticky-cta" id="stickyCta">
   <span class="sticky-cta-text">Appel gratuit · 30 min · Sans engagement</span>
-  <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" rel="noopener" onclick="axeRdv()" class="sticky-cta-btn">RÉSERVER →</a>
+  <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" rel="noopener" class="sticky-cta-btn">RÉSERVER →</a>
 </div>
 
 <!-- NAV -->
@@ -264,7 +253,7 @@ fbq('track','ViewContent',{content_name:'Appel découverte'});</script>
     </p>
 
     <div class="hero-cta">
-      <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" rel="noopener" onclick="axeRdv()" class="btn-main">
+      <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" rel="noopener" class="btn-main">
         RÉSERVER L'APPEL GRATUIT →
       </a>
       <span class="btn-sub">Gratuit · Visio · Sans engagement · Je choisis mon créneau</span>
@@ -351,7 +340,7 @@ fbq('track','ViewContent',{content_name:'Appel découverte'});</script>
         <li>Votre enfant repart avec 2-3 pistes concrètes applicables dès cette semaine</li>
         <li>Aucun engagement, aucune suite obligatoire — juste 30 minutes qui changent la perspective</li>
       </ul>
-      <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" rel="noopener" onclick="axeRdv()" class="btn-center">
+      <a href="https://tidycal.com/fpinton/appel-decouverte" target="_blank" rel="noopener" class="btn-center">
         RÉSERVER L'APPEL GRATUIT →
       </a>
       <p class="btn-clarif">Vous choisissez le créneau · Visioconférence · Gratuit · Sans engagement</p>
@@ -408,12 +397,6 @@ fbq('track','ViewContent',{content_name:'Appel découverte'});</script>
   new IntersectionObserver(entries => {
     bar.classList.toggle('visible', !entries[0].isIntersecting);
   }, { threshold: 0.2 }).observe(hero);
-</script>
-<script>
-function axeRdv(){
-  if(typeof fbq!=='undefined') fbq('track','InitiateCheckout',{content_name:'Appel découverte',value:0,currency:'EUR'});
-  if(typeof gtag!=='undefined') gtag('event','generate_lead',{method:'appel_decouverte'});
-}
 </script>
 </body>
 </html>
