@@ -448,9 +448,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
     </div>
     <div class="cta-row">
       <button class="btn gold" onclick="go('profil')">Commencer mon inscription</button>
-      <button class="btn ghost" onclick="go('obs')">Entrer en observateur</button>
     </div>
-    <p class="mini-note" style="text-align:left;margin-top:34px">Démo interactive. Clique et navigue, tout réagit. <b>Aucune donnée n'est enregistrée.</b></p>
   </div>
 </section>
 
@@ -695,19 +693,6 @@ textarea:focus{outline:none;border-color:var(--gold)}
 
     <button class="btn gold" onclick="submitReport()">Envoyer mon rapport</button>
     <p class="mini-note" style="margin-top:20px">Ton coach reçoit ce rapport en lecture. Il te recontacte seulement si besoin.</p>
-  </div>
-</section>
-
-<!-- ============ OBSERVER ============ -->
-<section class="screen" id="obs">
-  <div class="obs">
-    <div class="sec-head">
-      <div class="step-tag">CÔTÉ COACH · LECTURE SEULE</div>
-      <h1>ESPACE OBSERVATEUR</h1>
-      <div class="serif">Tu vois tout, tu n'interviens que si tu le décides. Le suivi avance sans te solliciter au quotidien.</div>
-    </div>
-    <div class="obs-grid" id="obsGrid"></div>
-    <p class="mini-note" style="margin-top:36px">Le voyant <b>Vigilance</b> s'allume seul quand un rapport contient des mots qui sortent du cadre sportif. C'est ton seul filet à surveiller.</p>
   </div>
 </section>
 
@@ -965,7 +950,7 @@ function nextMonthStatus(){
 }
 
 /* ============ NAV ============ */
-const screens=['hero','profil','diag','dash','report','obs'];
+const screens=['hero','profil','diag','dash','report'];
 function go(id){
   // en quittant la fiche profil vers le diagnostic, on mémorise les contacts
   if(id==='diag'){
@@ -980,11 +965,10 @@ function go(id){
   document.getElementById('roleTag').textContent = id==='obs'?'Espace coach':'Espace pilote';
   buildStepper(id);
   if(id==='diag'){state.qi=0;renderQ();}
-  if(id==='obs')renderObs();
+  if(id==='start')renderStart();
   if(id==='notes')renderNotesRecap();
   if(id==='trimestre')renderTrimestre();
   if(id==='competition')renderCompetition();
-  if(id==='start')renderStart();
 }
 function buildStepper(active){
   const wrap=document.getElementById('stepper');
@@ -1672,59 +1656,6 @@ function submitReport(){
   }
 }
 
-/* ============ OBSERVER ============ */
-// joursRetard : nb de jours de validation en retard (0 = à jour ; "attente" = validation attendue aujourd'hui, journée en cours)
-const riders=[
-  {name:'Thaïs',lvl:'Régional',age:14,valid:'ok',streak:'3 mois',note:"Le portillon me stresse moins depuis la routine.",noteP:"Je la sens plus détendue avant les manches, je reste en retrait comme conseillé.",bloc:'Les virages',phoneR:'06 12 34 56 78',phoneP:'06 98 76 54 32',oeil:'droit',canal:'auditif',depart:'son',achat:'900€ en 3 fois',parrainCode:'AXE-THAIS-4417',parrainePar:'',aParraine:['Ethan'],reverseADu:150},
-  {name:'Noah',lvl:'National',age:16,valid:'attente',streak:'5 mois',note:"Grosse relance en sortie de virage ce mois.",noteP:"Il travaille dur, j'essaie de valoriser l'effort plutôt que le résultat.",bloc:'Les bosses',phoneR:'07 22 33 44 55',phoneP:'06 11 22 33 44',oeil:'gauche',canal:'visuel',depart:'lumière',achat:'900€ en 1 fois',parrainCode:'AXE-NOAH-2290',parrainePar:'',aParraine:[],reverseADu:0},
-  {name:'Léa',lvl:'Départemental',age:11,valid:'attente',streak:'1 mois',note:"J'ai un peu de mal à tout suivre.",noteP:"Elle est parfois débordée, on avance doucement à la maison.",bloc:'1re ligne droite',phoneR:'',phoneP:'06 55 44 33 22',oeil:'droit',canal:'équilibré',depart:'son',achat:'Abonnement mensuel',parrainCode:'',parrainePar:'',aParraine:[],reverseADu:0},
-  {name:'Ethan',lvl:'Régional',age:15,valid:'retard',joursRetard:3,streak:'2 mois',note:"En ce moment j'ai plus trop envie, même en dehors du vélo.",noteP:"Il est renfermé ces temps-ci, ça déborde du vélo, je ne sais pas trop quoi faire.",bloc:'Au portillon',phoneR:'07 66 77 88 99',phoneP:'06 00 11 22 33',oeil:'gauche',canal:'auditif',depart:'son',achat:'900€ en 3 fois',parrainCode:'AXE-ETHAN-7731',parrainePar:'Thaïs',aParraine:[],reverseADu:0},
-];
-function departLabel(d){return d==='son'?'au son':d==='lumière'?'à la lumière':'à déterminer';}
-function validBadge(r){
-  if(r.valid==='ok')return '<span class="badge ok">Sur les rails</span>';
-  if(r.valid==='attente')return '<span class="badge watch">À suivre</span>';
-  const j=r.joursRetard||1;
-  return '<span class="badge alert">Vigilance · '+j+(j>1?' jours':' jour')+' de retard</span>';
-}
-function renderObs(){
-  const g=document.getElementById('obsGrid');
-  g.innerHTML='';
-  riders.forEach(r=>{
-    const badge=validBadge(r);
-    const validLine = r.valid==='ok'?'À jour'
-      : r.valid==='attente'?'Validation attendue aujourd\'hui'
-      : (r.joursRetard||1)+((r.joursRetard||1)>1?' jours':' jour')+' sans validation';
-    // ligne partenaire / parrainage
-    const estPartenaire = r.achat.includes('900');
-    let parrainBlock='';
-    if(estPartenaire){
-      const amenes = r.aParraine.length?r.aParraine.join(', '):'personne pour l\'instant';
-      parrainBlock+=`<div class="rc-line"><span>Statut partenaire</span><span class="tag-part">Éligible</span></div>`;
-      parrainBlock+=`<div class="rc-line"><span>Son lien parrain</span><span class="mono">${r.parrainCode}</span></div>`;
-      parrainBlock+=`<div class="rc-line"><span>A parrainé</span><span>${amenes}</span></div>`;
-    }
-    if(r.parrainePar){
-      parrainBlock+=`<div class="rc-line"><span>Venu grâce à</span><span><b>${r.parrainePar}</b></span></div>`;
-    }
-    // alerte reversement gérée hors fiche (email / Make), pas affichée ici
-    g.innerHTML+=`<div class="rider-card">
-      <div class="rc-top"><h3>${r.name}</h3>${badge}</div>
-      <div class="rc-line"><span>Âge · niveau</span><span>${r.age} ans · ${r.lvl}</span></div>
-      <div class="rc-line"><span>Abonné depuis</span><span>${r.streak}</span></div>
-      <div class="rc-line"><span>Méthode d'achat</span><span>${r.achat}</span></div>
-      ${parrainBlock}
-      <div class="rc-line"><span>Validations</span><span>${validLine}</span></div>
-      <div class="rc-line"><span>Blocage du mois</span><span>${r.bloc}</span></div>
-      <div class="rc-line"><span>Œil · canal</span><span>${r.oeil} · ${r.canal}</span></div>
-      <div class="rc-line"><span>Départ conseillé</span><span>${departLabel(r.depart)}</span></div>
-      <div class="rc-line"><span>Tél. rider</span><span>${r.phoneR||'non renseigné'}</span></div>
-      <div class="rc-line"><span>Tél. parents</span><span>${r.phoneP||'non renseigné'}</span></div>
-      <div class="rc-note"><span class="rc-who">Rider</span>"${r.note}"</div>
-      <div class="rc-note pa"><span class="rc-who">Parent</span>"${r.noteP}"</div>
-    </div>`;
-  });
-}
 </script>
 </body>
 </html>
