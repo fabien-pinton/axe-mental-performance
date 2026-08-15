@@ -403,6 +403,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .mini-note{font-size:12px;color:var(--dim);text-align:center;padding:30px 0 10px;letter-spacing:.02em}
 .mini-note b{color:var(--gold)}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -713,6 +714,32 @@ textarea:focus{outline:none;border-color:var(--gold)}
 </div>
 
 <script>
+/* ============ CONNEXION SUPABASE ============ */
+const SUPABASE_URL = 'https://ilsxrdvxvnvlznjuevba.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
+const axeDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// Lecture de la session : code du rider + étape demandée, passés dans l'adresse
+const axeParams = new URLSearchParams(window.location.search);
+const axeCode = axeParams.get('code') || sessionStorage.getItem('axe_code') || '';
+const axeEtape = axeParams.get('etape') || '';
+
+// Au chargement : on vérifie la connexion en lisant le rider (test prudent, n'affiche rien de bloquant)
+async function axeInit(){
+  if(!axeCode){ console.log('[AXE] Pas de code : mode démo local.'); return; }
+  try{
+    const { data, error } = await axeDB.rpc('verifier_acces', { code: axeCode });
+    if(error){ console.log('[AXE] Erreur lecture :', error.message); return; }
+    if(data && data.length){
+      console.log('[AXE] Rider connecté. Accès actif :', data[0].actif, '| étape :', axeEtape, '| mois :', data[0].mois);
+      window.axeRider = data[0]; // on garde les infos du rider pour la suite
+    } else {
+      console.log('[AXE] Code inconnu.');
+    }
+  }catch(e){ console.log('[AXE] Souci connexion :', e.message); }
+}
+axeInit();
+
 /* ============ DATA ============ */
 const diagQuestions=[
   {axis:'mental',q:"Au moment de te présenter au portillon, qu'est-ce qui se passe dans ta tête ?",opts:["Je repense à mes erreurs passées","Mon cœur s'emballe, je perds mes moyens","Je pense à trop de choses à la fois","Je suis concentré mais tendu"]},
