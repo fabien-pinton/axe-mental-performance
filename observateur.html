@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace coach · AXE Mental Performance®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1A1612;--cream:#FDFAF5;--gold:#A8852A;--parent:#5D6F4A;--physique:#7A3B2E;--line:rgba(26,22,18,.14);--dim:rgba(26,22,18,.6);--ease:cubic-bezier(.4,0,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;padding:0}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:16px 30px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(253,250,245,.94);backdrop-filter:blur(8px);z-index:10}
+.axe-letters{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28px;letter-spacing:.18em;color:var(--gold);line-height:.9;padding-right:.18em}
+.axe-sub{font-family:'DM Sans';font-weight:600;font-size:7px;letter-spacing:.34em;color:var(--gold);border-top:1px solid rgba(168,133,42,.4);padding-top:3px;margin-top:3px;text-align:center}
+.role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.wrap{max-width:1100px;margin:0 auto;padding:34px 24px 80px}
+/* Login */
+.login{max-width:400px;margin:80px auto;text-align:center}
+.login h1{font-family:'Bebas Neue';font-weight:400;font-size:34px;letter-spacing:.04em;margin-bottom:8px}
+.login .serif{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--dim);margin-bottom:28px}
+.login input{width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:5px;font-size:16px;text-align:center;background:#fff;color:var(--ink)}
+.login input:focus{outline:none;border-color:var(--gold)}
+.login button{width:100%;margin-top:14px;padding:14px;border:none;border-radius:5px;background:var(--ink);color:var(--cream);font-family:'DM Sans';font-weight:600;font-size:15px;cursor:pointer}
+.login .msg{margin-top:16px;font-size:14px;min-height:20px;color:#9B2C2C}
+/* Grid */
+.sec-head{margin-bottom:24px}
+.sec-head h1{font-family:'Bebas Neue';font-weight:400;font-size:38px;letter-spacing:.03em}
+.sec-head .serif{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:var(--dim)}
+.count{font-size:13px;color:var(--dim);margin-top:6px}
+.obs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px;margin-top:24px}
+.rider-card{border:1.5px solid var(--line);border-radius:4px;padding:20px;background:rgba(255,255,255,.5)}
+.rc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:12px}
+.rider-card h3{font-family:'Bebas Neue';font-size:24px;letter-spacing:.04em;font-weight:400}
+.badge{font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:2px;text-align:right;flex-shrink:0;line-height:1.3}
+.badge.ok{background:rgba(93,135,74,.14);color:#5D874A}
+.badge.watch{background:rgba(168,133,42,.16);color:var(--gold)}
+.badge.alert{background:rgba(168,60,42,.14);color:#A83C2A}
+.rc-line{font-size:13px;color:var(--dim);display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px dashed var(--line)}
+.rc-line span:last-child{color:var(--ink);text-align:right}
+.mono{font-family:ui-monospace,monospace;font-size:12px;background:rgba(26,22,18,.05);padding:2px 6px;border-radius:3px}
+.tag-part{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--parent);background:rgba(93,111,74,.14);padding:2px 8px;border-radius:2px}
+.rc-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--ink);margin-top:12px;padding-left:12px;border-left:2px solid var(--gold)}
+.rc-note.pa{border-left-color:var(--parent);margin-top:9px}
+.rc-who{display:block;font-family:'DM Sans';font-style:normal;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
+.rc-sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:16px 0 4px}
+.empty{color:var(--dim);font-style:italic;font-size:13px;margin-top:20px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="bar">
+  <div style="display:flex;flex-direction:column;align-items:center">
+    <div class="axe-letters">AXE</div>
+    <div class="axe-sub">MENTAL PERFORMANCE®</div>
+  </div>
+  <div class="role">Espace coach</div>
+</div>
+
+<!-- Écran de connexion -->
+<div class="wrap" id="loginScreen">
+  <div class="login">
+    <h1>ESPACE COACH</h1>
+    <div class="serif">Entre ta clé pour voir tes riders.</div>
+    <input type="password" id="cle" placeholder="Ta clé coach" autocomplete="off">
+    <button onclick="entrer()">Ouvrir mon tableau de bord</button>
+    <div class="msg" id="msg"></div>
+  </div>
+</div>
+
+<!-- Tableau de bord -->
+<div class="wrap" id="board" style="display:none">
+  <div class="sec-head">
+    <h1>MES RIDERS</h1>
+    <div class="serif">Chaque fiche, en direct de ta base.</div>
+    <div class="count" id="count"></div>
+  </div>
+  <div class="obs-grid" id="grid"></div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ilsxrdvxvnvlznjuevba.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const msg = document.getElementById('msg');
+
+document.getElementById('cle').addEventListener('keydown', e=>{ if(e.key==='Enter') entrer(); });
+
+async function entrer(){
+  const cle = document.getElementById('cle').value;
+  msg.textContent = '';
+  if(!cle){ msg.textContent = 'Entre ta clé.'; return; }
+  msg.textContent = 'Chargement...';
+  try{
+    const { data, error } = await db.rpc('liste_riders', { cle: cle });
+    if(error){ msg.textContent = 'Erreur : ' + error.message; return; }
+    if(!data || data.length === 0){
+      // soit clé fausse (renvoie vide), soit aucun rider
+      msg.textContent = 'Clé incorrecte, ou aucun rider pour le moment.';
+      return;
+    }
+    // succès : on affiche le board
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('board').style.display = 'block';
+    afficherRiders(data);
+    // on charge aussi les notes et rapports
+    chargerNotesRapports(cle);
+  }catch(e){ msg.textContent = 'Souci : ' + e.message; }
+}
+
+let notesParCode = {};
+let rapportsParCode = {};
+
+async function chargerNotesRapports(cle){
+  // on lit toutes les notes et rapports via des fonctions coach dédiées (à créer si besoin)
+  // pour l'instant on tente une lecture directe protégée
+  try{
+    const n = await db.rpc('liste_notes', { cle: cle });
+    if(!n.error && n.data){ n.data.forEach(x=>{ (notesParCode[x.code_acces]=notesParCode[x.code_acces]||[]).push(x); }); }
+    const r = await db.rpc('liste_rapports', { cle: cle });
+    if(!r.error && r.data){ r.data.forEach(x=>{ (rapportsParCode[x.code_acces]=rapportsParCode[x.code_acces]||[]).push(x); }); }
+    // re-render si on a du contenu
+    if((!n.error && n.data && n.data.length) || (!r.error && r.data && r.data.length)){
+      // relance l'affichage avec notes/rapports
+      const cle2 = document.getElementById('cle').value;
+      const { data } = await db.rpc('liste_riders', { cle: cle2 });
+      if(data) afficherRiders(data);
+    }
+  }catch(e){ /* silencieux : notes/rapports optionnels */ }
+}
+
+function badgeAcces(r){
+  const actif = (r.statut === 'actif') && r.date_fin_acces && (new Date(r.date_fin_acces) >= new Date());
+  if(actif) return '<span class="badge ok">Actif</span>';
+  return '<span class="badge alert">Expiré</span>';
+}
+function departLabel(d){return d==='son'?'au son':d==='lumière'?'à la vue':'à déterminer';}
+
+function afficherRiders(riders){
+  const grid = document.getElementById('grid');
+  document.getElementById('count').textContent = riders.length + (riders.length>1?' riders':' rider');
+  grid.innerHTML = '';
+  riders.forEach(r=>{
+    // profil décodé
+    let p = {};
+    try{ if(r.profil_diagnostic) p = JSON.parse(r.profil_diagnostic); }catch(e){}
+    const estPartenaire = r.formule && (r.formule.includes('900') || r.formule.includes('fois') || r.formule.includes('an'));
+
+    let profilBlock = '';
+    if(p.age || p.niveau){
+      profilBlock += `<div class="rc-line"><span>Âge · niveau</span><span>${p.age||'?'} ans · ${p.niveau||'?'}</span></div>`;
+    }
+    if(p.canal){
+      profilBlock += `<div class="rc-line"><span>Œil · canal</span><span>${p.oeil||'?'} · ${p.canal}</span></div>`;
+      profilBlock += `<div class="rc-line"><span>Départ conseillé</span><span>${departLabel(p.depart)}</span></div>`;
+    }
+
+    // notes de ce rider
+    const notes = notesParCode[r.code_acces] || [];
+    let notesBlock = '';
+    notes.slice(-4).forEach(n=>{
+      const cls = (n.auteur === 'parent') ? 'rc-note pa' : 'rc-note';
+      const who = (n.auteur === 'parent') ? 'Parent' : 'Rider';
+      notesBlock += `<div class="${cls}"><span class="rc-who">${who} · mois ${n.mois||'?'}</span>${n.texte}</div>`;
+    });
+
+    // rapports de ce rider
+    const rapports = rapportsParCode[r.code_acces] || [];
+    let rapBlock = '';
+    if(rapports.length){
+      rapBlock += `<div class="rc-sub">Rapports de fin de mois</div>`;
+      rapports.slice(-3).forEach(rp=>{
+        rapBlock += `<div class="rc-line"><span>Mois ${rp.mois||'?'}</span><span>${rp.bloc||'-'}${rp.jours_dispo?(' · '+rp.jours_dispo+'j'):''}</span></div>`;
+        if(rp.texte){ rapBlock += `<div class="rc-note"><span class="rc-who">Ressenti</span>${rp.texte}</div>`; }
+      });
+    }
+
+    grid.innerHTML += `<div class="rider-card">
+      <div class="rc-top"><h3>${p.profilMental || 'Rider'}</h3>${badgeAcces(r)}</div>
+      <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
+      <div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>
+      <div class="rc-line"><span>Formule</span><span>${r.formule||'?'}</span></div>
+      ${estPartenaire?`<div class="rc-line"><span>Statut</span><span class="tag-part">Partenaire éligible</span></div>`:''}
+      ${r.parraine_par?`<div class="rc-line"><span>Venu grâce à</span><span>${r.parraine_par}</span></div>`:''}
+      <div class="rc-line"><span>Fin d'accès</span><span>${r.date_fin_acces||'?'}</span></div>
+      <div class="rc-line"><span>Contact parent</span><span>${r.email_parent||r.tel_parent||'non renseigné'}</span></div>
+      ${profilBlock}
+      ${notesBlock}
+      ${rapBlock}
+    </div>`;
+  });
+}
+</script>
+</body>
+</html>
