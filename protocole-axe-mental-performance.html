@@ -1586,10 +1586,41 @@ function saveNote(id){
   s.textContent='Enregistré ✓ visible côté coach';
   clearTimeout(window['t'+id]);
   window['t'+id]=setTimeout(()=>s.textContent='',1800);
+  // enregistrement Supabase après une courte pause de frappe (anti-rebond)
+  clearTimeout(window['db'+id]);
+  window['db'+id]=setTimeout(()=>axeEnregistrerNote(id),1200);
+}
+async function axeEnregistrerNote(id){
+  if(!axeCode) return; // mode démo
+  const champ=document.getElementById('note-'+id);
+  if(!champ) return;
+  const texte=champ.value.trim();
+  if(!texte) return;
+  const auteur = (id==='pa0') ? 'parent' : 'rider';
+  try{
+    const { error } = await axeDB.rpc('enregistrer_note', {
+      code: axeCode, auteur_note: auteur, texte_note: texte, mois_note: state.month
+    });
+    if(error){ console.log('[AXE] Erreur note :', error.message); }
+    else{ console.log('[AXE] Note ('+auteur+') enregistrée.'); }
+  }catch(e){ console.log('[AXE] Souci note :', e.message); }
 }
 function bindNotes(){}
 
 /* ============ REPORT ============ */
+async function axeEnregistrerRapport(){
+  if(!axeCode) return; // mode démo
+  const bloc = state.report.bloc || '';
+  const texte = state.report.text || '';
+  const jours = state.report.jours || state.days || null;
+  try{
+    const { error } = await axeDB.rpc('enregistrer_rapport', {
+      code: axeCode, mois_r: state.month, bloc_r: bloc, texte_r: texte, jours_r: jours
+    });
+    if(error){ console.log('[AXE] Erreur rapport :', error.message); }
+    else{ console.log('[AXE] Rapport du mois '+state.month+' enregistré.'); }
+  }catch(e){ console.log('[AXE] Souci rapport :', e.message); }
+}
 function rScale(btn,q,val){
   btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
@@ -1599,6 +1630,7 @@ function submitReport(){
   state.report.text=document.getElementById('reportText').value;
   state.report.goal=document.getElementById('reportGoal').value;
   state.reportDone=true;
+  axeEnregistrerRapport();
   const cond=nextMonthStatus();
 
   // regen animation
