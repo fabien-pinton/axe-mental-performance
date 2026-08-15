@@ -92,10 +92,32 @@ async function verifier(){
     const ligne = data[0];
     if(ligne.actif === true){
       msg.className='msg ok';
-      msg.textContent = 'Accès validé. Ouverture de ton protocole...';
-      // on mémorise le code pour la session et on ouvre le protocole
+      // on mémorise le code pour la session
       sessionStorage.setItem('axe_code', code);
-      setTimeout(()=>{ window.location.href = FICHIER_PROTOCOLE + '?code=' + encodeURIComponent(code); }, 800);
+
+      // ===== AIGUILLAGE : diagnostic ou programme ? =====
+      // date_diag vide => jamais fait => diagnostic (1re connexion)
+      // date_diag > 3 mois => diagnostic obligatoire (rendez-vous trimestriel)
+      // sinon => accès direct au programme
+      let etape = 'programme';
+      if(!ligne.date_diag){
+        etape = 'diagnostic';
+      } else {
+        const dernier = new Date(ligne.date_diag);
+        const troisMois = new Date();
+        troisMois.setMonth(troisMois.getMonth() - 3);
+        if(dernier < troisMois){ etape = 'diagnostic'; }
+      }
+
+      if(etape === 'diagnostic'){
+        msg.textContent = 'Accès validé. Direction ton diagnostic...';
+      } else {
+        msg.textContent = 'Accès validé. Ouverture de ton programme...';
+      }
+      // on passe le code ET l'étape au protocole via l'adresse
+      setTimeout(()=>{
+        window.location.href = FICHIER_PROTOCOLE + '?code=' + encodeURIComponent(code) + '&etape=' + etape;
+      }, 800);
     } else {
       msg.className='msg err';
       msg.textContent = "Ton accès a expiré ou n'est plus actif. Contacte ton préparateur pour le renouveler.";
