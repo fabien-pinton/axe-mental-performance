@@ -740,6 +740,34 @@ async function axeInit(){
 }
 axeInit();
 
+// Enregistre le profil du diagnostic dans Supabase (appelé à la fin du diagnostic)
+async function axeEnregistrerDiagnostic(){
+  if(!axeCode){ console.log('[AXE] Pas de code, diagnostic non enregistré (mode démo).'); return; }
+  // on rassemble le profil complet sous forme compacte
+  const mental = pickMental();
+  const sensoriel = analyseSensoriel();
+  const forces = analyse();
+  const profil = JSON.stringify({
+    mental: state.mental,
+    physique: state.physique,
+    sensoriel: state.sensoriel,
+    age: state.age,
+    niveau: state.level,
+    jours: state.days,
+    salle: state.gym,
+    profilMental: mental.title || '',
+    canal: sensoriel.canal,
+    depart: sensoriel.depart,
+    oeil: sensoriel.oeil,
+    forces: forces
+  });
+  try{
+    const { error } = await axeDB.rpc('enregistrer_diagnostic', { code: axeCode, profil: profil });
+    if(error){ console.log('[AXE] Erreur enregistrement diagnostic :', error.message); }
+    else{ console.log('[AXE] Diagnostic enregistré dans la base.'); }
+  }catch(e){ console.log('[AXE] Souci enregistrement :', e.message); }
+}
+
 /* ============ DATA ============ */
 const diagQuestions=[
   {axis:'mental',q:"Au moment de te présenter au portillon, qu'est-ce qui se passe dans ta tête ?",opts:["Je repense à mes erreurs passées","Mon cœur s'emballe, je perds mes moyens","Je pense à trop de choses à la fois","Je suis concentré mais tendu"]},
@@ -981,7 +1009,7 @@ function renderQ(){
 function nextQ(){
   state.qi++;
   document.getElementById('qbar').style.width=((state.qi)/diagQuestions.length*100)+'%';
-  if(state.qi>=diagQuestions.length){buildProgram();}
+  if(state.qi>=diagQuestions.length){ axeEnregistrerDiagnostic(); buildProgram(); }
   else renderQ();
 }
 function prevQ(){
