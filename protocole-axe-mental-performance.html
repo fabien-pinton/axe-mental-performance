@@ -731,12 +731,36 @@ async function axeInit(){
     const { data, error } = await axeDB.rpc('verifier_acces', { code: axeCode });
     if(error){ console.log('[AXE] Erreur lecture :', error.message); return; }
     if(data && data.length){
-      console.log('[AXE] Rider connecté. Accès actif :', data[0].actif, '| étape :', axeEtape, '| mois :', data[0].mois);
-      window.axeRider = data[0]; // on garde les infos du rider pour la suite
+      const r = data[0];
+      console.log('[AXE] Rider connecté. Accès actif :', r.actif, '| étape :', axeEtape, '| mois :', r.mois);
+      window.axeRider = r;
+      // Si le rider revient à son programme ET qu'un profil est enregistré : on le recharge
+      if(axeEtape === 'programme' && r.profil){
+        axeChargerProfil(r);
+      }
     } else {
       console.log('[AXE] Code inconnu.');
     }
   }catch(e){ console.log('[AXE] Souci connexion :', e.message); }
+}
+
+// Recharge le profil sauvegardé dans le state, puis ouvre directement le programme
+function axeChargerProfil(r){
+  try{
+    const p = JSON.parse(r.profil);
+    if(p.mental) state.mental = p.mental;
+    if(p.physique) state.physique = p.physique;
+    if(p.sensoriel) state.sensoriel = p.sensoriel;
+    if(typeof p.age !== 'undefined') state.age = p.age;
+    if(p.niveau) state.level = p.niveau;
+    if(typeof p.jours !== 'undefined') state.days = p.jours;
+    if(typeof p.salle !== 'undefined') state.gym = p.salle;
+    if(r.mois) state.month = r.mois;
+    console.log('[AXE] Profil rechargé depuis la base. Ouverture du programme.');
+    // on construit le programme et on va au tableau de bord
+    buildProgram();
+    go('dash');
+  }catch(e){ console.log('[AXE] Profil illisible, diagnostic à refaire :', e.message); }
 }
 axeInit();
 
