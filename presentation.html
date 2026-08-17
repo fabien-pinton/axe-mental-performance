@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'offre PILOTE · Le protocole AXE Mental Performance®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1A1612;--cream:#FDFAF5;--gold:#A8852A;--gold-soft:#C9A94E;--line:rgba(26,22,18,.14);--dim:rgba(26,22,18,.6);--mental:#3B4A6B;--physique:#7A3B2E;--parent:#5D6F4A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--gold);color:var(--cream)}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:700}
+h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
+.serif{font-family:'Cormorant Garamond',serif}
+
+/* track bg */
+.track{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45}
+.track svg{width:100%;height:100%}
+.wrap{position:relative;z-index:1}
+
+/* hero */
+.hero{padding:80px 0 50px;text-align:center}
+.hero .eyebrow{margin-bottom:16px}
+.hero h1{font-size:clamp(52px,10vw,104px);margin-bottom:14px}
+.hero h1 .g{color:var(--gold)}
+.hero .lead{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,3vw,27px);color:var(--ink);max-width:24ch;margin:0 auto 10px}
+.hero .sub{color:var(--dim);max-width:52ch;margin:0 auto;font-size:16px}
+
+/* price band */
+.price-band{background:var(--ink);color:var(--cream);border-radius:6px;padding:34px 30px;margin:40px 0;text-align:center;position:relative;overflow:hidden}
+.price-band::before{content:"";position:absolute;top:-40%;right:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,169,78,.18),transparent 70%)}
+.price-band .amt{font-family:'Bebas Neue';font-size:78px;line-height:.9;letter-spacing:1px}
+.price-band .amt small{font-size:24px;color:var(--gold-soft)}
+.price-band .alt{color:var(--gold-soft);font-size:15px;margin-top:8px}
+.price-band .promise{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;margin-top:16px;opacity:.9}
+
+/* section */
+.sec{padding:36px 0}
+.sec-tag{font-family:'Bebas Neue';font-size:15px;letter-spacing:.2em;color:var(--gold)}
+.sec h2{font-family:'Bebas Neue';font-weight:400;font-size:clamp(32px,5vw,50px);letter-spacing:.04em;line-height:1;margin:4px 0 8px}
+.sec .intro{color:var(--dim);max-width:60ch;margin-bottom:26px;font-size:16px}
+
+/* value bricks */
+.brick{display:flex;gap:22px;padding:26px 0;border-top:1px solid var(--line);align-items:flex-start}
+.brick .num{font-family:'Bebas Neue';font-size:44px;line-height:1;color:var(--gold);flex-shrink:0;width:56px}
+.brick .body{flex:1}
+.brick h3{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;margin-bottom:6px}
+.brick p{color:var(--dim);font-size:15px;max-width:64ch}
+.brick .accent{display:inline-block;margin-top:10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:4px 12px;border-radius:2px}
+.a-mental{background:rgba(59,74,107,.12);color:var(--mental)}
+.a-phys{background:rgba(122,59,46,.12);color:var(--physique)}
+.a-parent{background:rgba(93,111,74,.14);color:var(--parent)}
+.a-gold{background:rgba(168,133,42,.14);color:var(--gold)}
+
+/* what's included grid */
+.incl{background:rgba(255,255,255,.55);border:1.5px solid var(--line);border-radius:6px;padding:30px;margin:20px 0}
+.incl h2{margin-bottom:18px}
+.incl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 26px}
+@media(max-width:680px){.incl-grid{grid-template-columns:1fr}.brick{gap:14px}.brick .num{width:38px;font-size:32px}}
+.incl-item{display:flex;gap:11px;align-items:flex-start;font-size:15px}
+.incl-item .ck{color:var(--gold);flex-shrink:0;margin-top:3px}
+.incl-item b{font-weight:600}
+.incl-item span{color:var(--dim)}
+
+/* why worth it */
+.worth{background:var(--ink);color:var(--cream);border-radius:6px;padding:34px;margin:34px 0}
+.worth h2{color:var(--cream);margin-bottom:8px}
+.worth .g{color:var(--gold-soft)}
+.worth p{opacity:.9;margin:10px 0;font-size:15px;max-width:64ch}
+.worth .compare{display:flex;gap:16px;margin-top:22px;flex-wrap:wrap}
+.worth .cc{flex:1;min-width:200px;border:1px solid rgba(253,250,245,.2);border-radius:4px;padding:16px}
+.worth .cc .lbl{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:6px}
+.worth .cc .v{font-family:'Bebas Neue';font-size:26px}
+.worth .cc small{opacity:.7;font-size:13px}
+
+/* guarantee */
+.guar{border:2px solid var(--gold);border-radius:6px;padding:26px 30px;margin:30px 0;display:flex;gap:20px;align-items:center}
+.guar .ico{flex-shrink:0}
+.guar h3{font-family:'Bebas Neue';font-size:26px;letter-spacing:.04em;font-weight:400;margin-bottom:4px}
+.guar p{color:var(--dim);font-size:15px}
+
+/* two offers */
+.offers{display:flex;gap:18px;margin:24px 0;flex-wrap:wrap}
+.offer{flex:1;min-width:240px;border:1.5px solid var(--line);border-radius:6px;padding:26px;background:rgba(255,255,255,.5)}
+.offer.feat{border:2px solid var(--gold);position:relative}
+.offer.feat .ribbon{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--cream);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:4px 14px;border-radius:2px;white-space:nowrap}
+.offer .oname{font-family:'Bebas Neue';font-size:22px;letter-spacing:.06em}
+.offer .op{font-family:'Bebas Neue';font-size:52px;line-height:1;margin:8px 0}
+.offer .op small{font-size:18px;color:var(--dim)}
+.offer .odesc{color:var(--dim);font-size:14px;margin-bottom:14px}
+.offer .obtn{display:block;text-align:center;padding:13px;border-radius:3px;font-weight:600;font-size:14px;text-decoration:none;transition:.2s}
+.offer .obtn.g{background:var(--gold);color:var(--cream)}
+.offer .obtn.o{border:1.5px solid var(--ink);color:var(--ink)}
+
+/* cta final */
+.final{text-align:center;padding:56px 0 40px}
+.final h2{font-family:'Bebas Neue';font-weight:400;font-size:clamp(34px,6vw,60px);letter-spacing:.04em;margin-bottom:10px}
+.final p{color:var(--dim);max-width:48ch;margin:0 auto 24px;font-size:16px}
+.btn{display:inline-block;background:var(--gold);color:var(--cream);font-weight:600;font-size:15px;letter-spacing:.03em;padding:16px 40px;border-radius:3px;text-decoration:none;border:1.5px solid var(--gold);transition:.2s}
+.btn:hover{background:transparent;color:var(--ink);border-color:var(--ink)}
+/* video */
+.video-zone{margin:10px 0 40px;text-align:center}
+.video-frame{max-width:720px;margin:0 auto;aspect-ratio:16/9;border-radius:6px;overflow:hidden;border:1.5px solid var(--line);background:#F1ECE3}
+.video-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--dim)}
+.vp-play{width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--cream);display:grid;place-items:center;font-size:22px;padding-left:4px}
+.vp-txt{font-family:'Bebas Neue';font-size:22px;letter-spacing:.04em;color:var(--ink)}
+.vp-hint{font-size:12px;max-width:34ch}
+.video-cap{font-style:italic;font-size:18px;color:var(--dim);margin-top:16px;max-width:40ch;margin-left:auto;margin-right:auto}
+/* offers 3 col */
+.offers-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+@media(max-width:760px){.offers-3{grid-template-columns:1fr}}
+.partenaire-note{text-align:center;font-style:italic;font-size:18px;color:var(--ink);max-width:52ch;margin:30px auto 0;padding-top:24px;border-top:1px solid var(--line)}
+.foot{text-align:center;padding:30px 0 50px;font-size:12px;color:var(--dim)}
+.disc{font-size:11px;color:var(--dim);max-width:60ch;margin:10px auto 0;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="track">
+<svg viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" fill="none">
+<path d="M-50 700 C 220 700 260 460 460 460 C 660 460 690 260 900 260 C 1080 260 1140 140 1260 140" stroke="#1A1612" stroke-width="1" opacity="0.08"/>
+<path d="M-50 760 C 240 760 300 540 520 540 C 740 540 780 340 980 340 C 1140 340 1200 220 1260 220" stroke="#A8852A" stroke-width="1.2" opacity="0.14" stroke-dasharray="2 11" stroke-linecap="round"/>
+</svg>
+</div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">L'offre PILOTE · préparation mentale &amp; physique BMX Race</div>
+  <h1>TON ENFANT<br><span class="g">MÉRITE UN VRAI</span><br>ENCADREMENT</h1>
+  <p class="lead">Pas une application de plus. Un protocole complet, pensé comme un club, vécu à la maison.</p>
+  <p class="sub">Le mental, le physique, et le soutien parental réunis dans un seul suivi qui se remoule chaque mois sur ton pilote. Je le conçois et je le pilote moi-même, disponible partout, tout le temps.</p>
+</div>
+
+<!-- VIDEO -->
+<div class="video-zone">
+  <div class="video-frame">
+    <div class="video-placeholder">
+      <div class="vp-play">▶</div>
+      <div class="vp-txt">Ta vidéo arrive ici</div>
+      <div class="vp-hint">Colle ton lien de vidéo (YouTube, Vimeo...) à la place de cette zone</div>
+    </div>
+  </div>
+  <p class="video-cap serif">Prends deux minutes : je me présente, et je t'explique pourquoi le mental et le corps ne font qu'un.</p>
+</div>
+
+<!-- PRICE -->
+<div class="price-band">
+  <div class="amt">89<small> € / mois</small></div>
+  <div class="alt">ou 900 € pour l'année, payable en 3 fois</div>
+  <div class="promise">Le mensuel est sans engagement. Tu arrêtes quand tu veux, l'accès s'arrête avec.</div>
+</div>
+
+<!-- VALUE BRICKS -->
+<div class="sec">
+  <div class="sec-tag">CE QUI JUSTIFIE CE PRIX</div>
+  <h2>QUATRE PILIERS DE VALEUR</h2>
+  <p class="intro">À ce niveau de prix, tu ne paies pas des exercices. Tu paies un accompagnement mental dense et vivant, et un filet de sécurité humain autour de ton enfant.</p>
+
+  <div class="brick">
+    <div class="num">01</div>
+    <div class="body">
+      <h3>Un double suivi, mental et physique</h3>
+      <p>Chaque semaine, un exercice mental calé sur le profil de ton pilote, et deux à trois séances physiques adaptées à son âge, son niveau et ses disponibilités. Le tout construit sur une logique de progression en spirale : rien ne se répète, tout s'approfondit.</p>
+      <span class="accent a-mental">Mental</span> <span class="accent a-phys">Physique</span>
+    </div>
+  </div>
+
+  <div class="brick">
+    <div class="num">02</div>
+    <div class="body">
+      <h3>Une méthode mentale qui évolue avec lui</h3>
+      <p>Le cœur du protocole, c'est le mental. Chaque mois, le ressenti que ton pilote écrit dans son rapport oriente le travail du mois suivant. Le même blocage se retravaille plus en profondeur à chaque cycle, comme une spirale : on ne tourne jamais en rond, on monte. C'est ce suivi vivant qui fait toute la différence sur la durée.</p>
+      <span class="accent a-mental">Méthode AXE</span>
+    </div>
+  </div>
+
+  <div class="brick">
+    <div class="num">03</div>
+    <div class="body">
+      <h3>Les parents accompagnés, pas spectateurs</h3>
+      <p>Chaque mois, une clé concrète pour épauler ton enfant sans mettre de pression : le trajet du retour de course, la gestion du portillon, l'entretien de la motivation. Un carnet de notes te permet d'écrire ce que tu observes, et de rester pleinement acteur du parcours.</p>
+      <span class="accent a-parent">Côté parent</span>
+    </div>
+  </div>
+
+  <div class="brick">
+    <div class="num">04</div>
+    <div class="body">
+      <h3>Moi derrière, jamais un robot</h3>
+      <p>Le protocole tourne en autonomie, mais je veille. Tes notes et celles de ton pilote me remontent en lecture, et un système de vigilance repère les signaux qui sortent du cadre sportif. Le jour où ça compte vraiment, je suis là.</p>
+      <span class="accent a-gold">Suivi humain</span>
+    </div>
+  </div>
+</div>
+
+<!-- INCLUDED -->
+<div class="incl">
+  <div class="sec-tag">TOUT CE QUI EST INCLUS</div>
+  <h2>DANS L'ABONNEMENT</h2>
+  <div class="incl-grid">
+    <div class="incl-item"><span class="ck">✓</span><div><b>Diagnostic complet</b> <span>mental et physique à l'entrée</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>1 exercice mental par semaine</b> <span>calé sur le profil</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>2 à 3 séances physiques par semaine</b> <span>selon âge et dispos</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>Séances en salle ou au poids du corps</b> <span>selon l'accès</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>Carnet de notes du pilote</b> <span>sur ses exercices mentaux</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>Programme réadapté chaque mois</b> <span>selon le rapport</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>Espace parent</b> <span>avec clé d'accompagnement mensuelle</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>Carnets de notes</b> <span>rider et parent</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>Accès multi-support</b> <span>téléphone, tablette, ordinateur</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>Filet de vigilance</b> <span>avec droit de m'alerter directement</span></div></div>
+  </div>
+</div>
+
+<!-- WHY WORTH -->
+<div class="worth">
+  <div class="sec-tag" style="color:var(--gold-soft)">METTONS LES CHOSES EN PERSPECTIVE</div>
+  <h2>POURQUOI <span class="g">CE PRIX</span> SE DÉFEND</h2>
+  <p>Une séance de préparation mentale en cabinet, c'est 60 à 90 euros, une seule fois, sans suivi entre deux rendez-vous. Le protocole te donne un accompagnement mental continu, semaine après semaine, plus un cadre physique et l'implication des parents, pour le prix d'une seule séance par mois.</p>
+  <div class="compare">
+    <div class="cc"><div class="lbl">Une séance de prépa mentale</div><div class="v">60 à 90 €</div><small>une fois, sans suivi</small></div>
+    <div class="cc"><div class="lbl">Le protocole complet</div><div class="v">89 € / mois</div><small>suivi mental continu, chaque semaine</small></div>
+  </div>
+</div>
+
+<!-- GUARANTEE -->
+<div class="guar">
+  <div class="ico"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#A8852A" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+  <div>
+    <h3>Ton droit d'alerte, toujours ouvert</h3>
+    <p>Une inquiétude sur ton enfant, un doute, une question qui sort du cadre ? Tu peux me solliciter, et je te réponds. Ce filet existe en permanence, même si tu n'en as jamais besoin. C'est la différence entre une application et un vrai encadrement.</p>
+  </div>
+</div>
+
+<!-- OFFERS -->
+<div class="sec">
+  <div class="sec-tag">TROIS FAÇONS DE DÉMARRER</div>
+  <h2>CHOISIS TA FORMULE</h2>
+  <div class="offers offers-3">
+    <div class="offer">
+      <div class="oname">MENSUEL</div>
+      <div class="op">89<small> €/mois</small></div>
+      <div class="odesc">Toute la liberté. Sans engagement, tu arrêtes quand tu veux, l'accès s'arrête avec, sans justification.</div>
+      <a class="obtn o" href="#" id="btn-mensuel">Choisir le mensuel</a>
+    </div>
+    <div class="offer feat">
+      <div class="ribbon">Le plus choisi</div>
+      <div class="oname">ANNUEL · EN 1 FOIS</div>
+      <div class="op">900<small> €/an</small></div>
+      <div class="odesc">12 mois d'accès d'un coup. L'équivalent de dix mois payés pour douze. Tu deviens <b>partenaire</b> : chaque famille que tu amènes te rapporte 150 euros.</div>
+      <a class="obtn g" href="#" id="btn-900">Payer en une fois</a>
+    </div>
+    <div class="offer">
+      <div class="oname">ANNUEL · EN 3 FOIS</div>
+      <div class="op">3 × 300<small> €</small></div>
+      <div class="odesc">Le même accès de 12 mois, réglé en trois fois pour étaler. Toi aussi tu deviens <b>partenaire</b>, avec 150 euros par famille parrainée.</div>
+      <a class="obtn o" href="#" id="btn-3fois">Payer en trois fois</a>
+    </div>
+  </div>
+  <p class="partenaire-note serif">Devenir partenaire, c'est simple : après ton inscription annuelle, tu reçois un lien personnel. Chaque famille qui s'inscrit grâce à lui te fait gagner 150 euros. Ta confiance récompensée.</p>
+</div>
+
+<!-- FINAL CTA -->
+<div class="final">
+  <h2>PRÊT À LUI DONNER<br>UNE LONGUEUR D'AVANCE ?</h2>
+  <p>Choisis ta formule ci-dessus. Dès ton inscription, ton enfant reçoit son accès et démarre par son diagnostic.</p>
+  <p class="disc">J'accompagne la préparation mentale et physique du pilote et de sa famille. Mon accompagnement ne se substitue pas à une prise en charge médicale ou thérapeutique en cas de trouble de santé. Aucune promesse de résultat sportif n'est faite. Public conseillé de 10 à 18 ans.</p>
+</div>
+
+<div class="foot">Le protocole AXE Mental Performance® · Page de vente · Version de travail</div>
+
+</div>
+
+<script>
+/* ============================================================
+   LES 3 LIENS DE PAIEMENT STRIPE
+   Colle ici tes liens du mode REEL (ils commencent par
+   https://buy.stripe.com/ et ne contiennent PAS le mot test).
+   C'est le seul endroit de la page a modifier.
+   ============================================================ */
+var LIENS = {
+  mensuel : 'COLLE_ICI_LE_LIEN_MENSUEL_89',
+  annuel  : 'COLLE_ICI_LE_LIEN_900_UNE_FOIS',
+  trois   : 'COLLE_ICI_LE_LIEN_3_FOIS_300'
+};
+
+(function(){
+  var map = { 'btn-mensuel':LIENS.mensuel, 'btn-900':LIENS.annuel, 'btn-3fois':LIENS.trois };
+  Object.keys(map).forEach(function(id){
+    var b = document.getElementById(id);
+    if(b && map[id] && map[id].indexOf('http') === 0){ b.setAttribute('href', map[id]); }
+  });
+})();
+</script>
+</body>
+</html>

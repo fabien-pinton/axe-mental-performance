@@ -46,6 +46,17 @@ body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .rc-who{display:block;font-family:'DM Sans';font-style:normal;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
 .rc-sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:16px 0 4px}
 .empty{color:var(--dim);font-style:italic;font-size:13px;margin-top:20px}
+/* Prospects */
+.sec-block{margin-top:56px;padding-top:30px;border-top:1px solid var(--line)}
+.tbl-wrap{overflow-x:auto;margin-top:20px;border:1.5px solid var(--line);border-radius:4px;background:rgba(255,255,255,.5)}
+table.pros{width:100%;border-collapse:collapse;font-size:13.5px;min-width:620px}
+table.pros th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700;padding:12px 14px;border-bottom:1.5px solid var(--line);white-space:nowrap}
+table.pros td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+table.pros tr:last-child td{border-bottom:none}
+table.pros td.date{color:var(--dim);white-space:nowrap;font-size:12.5px}
+table.pros td.mail{font-family:ui-monospace,monospace;font-size:12px}
+table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(93,135,74,.14);color:#5D874A;font-weight:700}
+.exp{margin-top:14px;font-size:12px;color:var(--dim);background:none;border:1px solid var(--line);border-radius:3px;padding:8px 14px;cursor:pointer;font-family:'DM Sans',sans-serif}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -78,6 +89,24 @@ body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;m
     <div class="count" id="count"></div>
   </div>
   <div class="obs-grid" id="grid"></div>
+
+  <!-- Demandes reçues via le lien d'autorisation -->
+  <div class="sec-block">
+    <div class="sec-head">
+      <h1>DEMANDES REÇUES</h1>
+      <div class="serif">Chaque famille qui a ouvert ton lien et validé l'accord parental.</div>
+      <div class="count" id="countPros"></div>
+    </div>
+    <div class="tbl-wrap" id="prosWrap">
+      <table class="pros">
+        <thead>
+          <tr><th>Parent</th><th>Pilote</th><th>Email parent</th><th>Date du clic</th><th>Suite</th></tr>
+        </thead>
+        <tbody id="prosBody"></tbody>
+      </table>
+    </div>
+    <button class="exp" onclick="exporterProspects()">Exporter en tableur (CSV)</button>
+  </div>
 </div>
 
 <script>
@@ -88,26 +117,73 @@ const msg = document.getElementById('msg');
 
 document.getElementById('cle').addEventListener('keydown', e=>{ if(e.key==='Enter') entrer(); });
 
+let prospects = [];
+let emailsClients = new Set();
+
 async function entrer(){
   const cle = document.getElementById('cle').value;
   msg.textContent = '';
   if(!cle){ msg.textContent = 'Entre ta clé.'; return; }
   msg.textContent = 'Chargement...';
   try{
-    const { data, error } = await db.rpc('liste_riders', { cle: cle });
-    if(error){ msg.textContent = 'Erreur : ' + error.message; return; }
-    if(!data || data.length === 0){
-      // soit clé fausse (renvoie vide), soit aucun rider
-      msg.textContent = 'Clé incorrecte, ou aucun rider pour le moment.';
-      return;
-    }
-    // succès : on affiche le board
+    // 1. on valide la clé sur les prospects : cette fonction refuse une clé fausse
+    const p = await db.rpc('liste_prospects', { cle: cle });
+    if(p.error){ msg.textContent = 'Clé incorrecte.'; return; }
+    prospects = p.data || [];
+
+    // 2. clé valide : on ouvre le tableau de bord, même si aucun rider encore
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('board').style.display = 'block';
-    afficherRiders(data);
-    // on charge aussi les notes et rapports
+
+    const r = await db.rpc('liste_riders', { cle: cle });
+    const riders = (r.error || !r.data) ? [] : r.data;
+    riders.forEach(x=>{ if(x.email_parent){ emailsClients.add(String(x.email_parent).toLowerCase().trim()); } });
+
+    afficherRiders(riders);
+    afficherProspects();
     chargerNotesRapports(cle);
   }catch(e){ msg.textContent = 'Souci : ' + e.message; }
+}
+
+function dateFr(d){
+  if(!d) return '';
+  const x = new Date(d);
+  if(isNaN(x)) return d;
+  return x.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}) + ' à ' + x.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function afficherProspects(){
+  const body = document.getElementById('prosBody');
+  document.getElementById('countPros').textContent = prospects.length + (prospects.length>1?' demandes':' demande');
+  if(!prospects.length){
+    body.innerHTML = '<tr><td colspan="5" class="empty" style="padding:22px 14px">Aucune demande pour le moment. Envoie ton lien d\'autorisation et les familles apparaîtront ici.</td></tr>';
+    return;
+  }
+  body.innerHTML = '';
+  prospects.forEach(p=>{
+    const mail = (p.email_parent||'').toLowerCase().trim();
+    const devenuClient = mail && emailsClients.has(mail);
+    body.innerHTML += `<tr>
+      <td>${p.nom_parent||''}</td>
+      <td>${p.nom_rider||''}</td>
+      <td class="mail">${p.email_parent||''}</td>
+      <td class="date">${dateFr(p.clique_le)}</td>
+      <td>${devenuClient ? '<span class="conv">Client</span>' : (p.parraine_par ? 'Parrainé' : '')}</td>
+    </tr>`;
+  });
+}
+
+function exporterProspects(){
+  if(!prospects.length) return;
+  const lignes = [['Nom parent','Nom pilote','Email parent','Date du clic','Parrain']];
+  prospects.forEach(p=>{
+    lignes.push([p.nom_parent||'', p.nom_rider||'', p.email_parent||'', dateFr(p.clique_le), p.parraine_par||'']);
+  });
+  const csv = '﻿' + lignes.map(l=>l.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8;'}));
+  a.download = 'demandes-axe.csv';
+  a.click();
 }
 
 let notesParCode = {};
@@ -142,6 +218,10 @@ function afficherRiders(riders){
   const grid = document.getElementById('grid');
   document.getElementById('count').textContent = riders.length + (riders.length>1?' riders':' rider');
   grid.innerHTML = '';
+  if(!riders.length){
+    grid.innerHTML = '<div class="empty">Aucun rider inscrit pour le moment.</div>';
+    return;
+  }
   riders.forEach(r=>{
     // profil décodé
     let p = {};
