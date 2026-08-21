@@ -399,6 +399,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
 @media(max-width:760px){.stepper{display:none}}
 .stepper button{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--line-strong);background:transparent;cursor:pointer;padding:0;transition:.2s}
 .stepper button.on{background:var(--gold);border-color:var(--gold);transform:scale(1.3)}
+.stepper button.locked{opacity:.3;cursor:default}
 
 .mini-note{font-size:12px;color:var(--dim);text-align:center;padding:30px 0 10px;letter-spacing:.02em}
 .mini-note b{color:var(--gold)}
@@ -767,22 +768,46 @@ async function axeInit(){
   }catch(e){ console.log('[AXE] Souci connexion :', e.message); }
 }
 
-// Recharge le profil sauvegardé dans le state, puis ouvre directement le programme
+// Un profil enregistré avant le passage au diagnostic à 24 questions garde ses réponses sous
+// d'anciennes clés numériques (0,1,2...) au lieu des identifiants stables actuels (mental_1,
+// physique_1, sens_oeil...). On le détecte pour ne jamais charger des réponses devenues
+// incompatibles : mieux vaut renvoyer le pilote refaire (vite) le nouveau diagnostic que
+// d'afficher silencieusement un profil faussé ou neutre.
+function axeReponsesCompatibles(obj, axis){
+  if(!obj || !Object.keys(obj).length) return true; // rien d'enregistré : rien d'incompatible
+  const ids = diagQuestions.filter(function(q){return q.axis===axis;}).map(function(q){return q.id;});
+  return Object.keys(obj).some(function(k){ return ids.includes(k); });
+}
+
+// Recharge le profil sauvegardé dans le state, puis ouvre directement le programme.
+// Si les réponses mental/physique/sensoriel sont dans l'ancien format (incompatible avec
+// le diagnostic actuel), on garde uniquement les infos encore valables (âge, niveau, jours,
+// salle, mois) et on renvoie le pilote refaire le diagnostic au lieu d'ouvrir le tableau de bord.
 function axeChargerProfil(r){
   try{
     const p = JSON.parse(r.profil);
-    if(p.mental) state.mental = p.mental;
-    if(p.physique) state.physique = p.physique;
-    if(p.sensoriel) state.sensoriel = p.sensoriel;
+    const compatible = axeReponsesCompatibles(p.mental,'mental')
+      && axeReponsesCompatibles(p.physique,'physique')
+      && axeReponsesCompatibles(p.sensoriel,'sensoriel');
+    if(compatible){
+      if(p.mental) state.mental = p.mental;
+      if(p.physique) state.physique = p.physique;
+      if(p.sensoriel) state.sensoriel = p.sensoriel;
+    } else {
+      console.log('[AXE] Ancien format de diagnostic détecté : réponses ignorées, diagnostic à refaire.');
+    }
     if(typeof p.age !== 'undefined') state.age = p.age;
     if(p.niveau) state.level = p.niveau;
     if(typeof p.jours !== 'undefined') state.days = p.jours;
     if(typeof p.salle !== 'undefined') state.gym = p.salle;
     if(r.mois) state.month = r.mois;
-    console.log('[AXE] Profil rechargé depuis la base. Ouverture du programme.');
-    // on construit le programme et on va au tableau de bord
-    buildProgram();
-    go('dash');
+    if(compatible){
+      console.log('[AXE] Profil rechargé depuis la base. Ouverture du programme.');
+      buildProgram();
+      go('dash');
+    } else {
+      go('diag');
+    }
   }catch(e){ console.log('[AXE] Profil illisible, diagnostic à refaire :', e.message); }
 }
 axeInit();
@@ -1264,6 +1289,12 @@ function isWeekUnlocked(w){
   if(!state.simDate||!state.startDate)return false;
   return state.simDate>=weekOpenDate(w);
 }
+// le programme a-t-il réellement démarré ? (même règle que dans buildProgram, mais réutilisable
+// ailleurs, notamment pour verrouiller l'accès au rapport mensuel tant qu'on n'y est pas)
+function estDemarre(){
+  const maintenant=new Date();
+  return modeDemo ? (state.simDate>=state.startDate) : (!state.startDate || maintenant>=state.startDate);
+}
 // le mois suivant s'ouvre si : rapport fait ET on est au 1er du mois (ou après) ET paiement reçu
 function nextMonthStatus(){
   const conditions={
@@ -1278,6 +1309,10 @@ function nextMonthStatus(){
 /* ============ NAV ============ */
 const screens=['hero','profil','diag','dash','report'];
 function go(id){
+  // verrou : pour un vrai pilote, le rapport mensuel n'est jamais accessible tant que le
+  // programme n'a pas réellement démarré (1er du mois), même via un accès direct (ex : le
+  // petit menu à points sur le côté). En mode démo, on laisse passer pour pouvoir tester.
+  if(id==='report' && !modeDemo && !estDemarre()){ id='dash'; }
   // en quittant la fiche profil vers le diagnostic, on mémorise les contacts
   if(id==='diag'){
     const pr=document.getElementById('phoneRider');
@@ -1304,6 +1339,9 @@ function buildStepper(active){
   screens.forEach(s=>{
     const b=document.createElement('button');
     if(s===active)b.classList.add('on');
+    // le point "report" reste visuellement verrouillé tant que le programme n'a pas démarré
+    // (le clic reste inoffensif dans tous les cas : go() applique le même verrou)
+    if(s==='report' && !modeDemo && !estDemarre()) b.classList.add('locked');
     b.title=s;
     b.onclick=()=>go(s);
     wrap.appendChild(b);
@@ -1837,8 +1875,7 @@ function buildProgram(){
   // simulée ; pour un vrai pilote, on compare à la vraie date du jour, contre la
   // date de démarrage renvoyée par Supabase (state.startDate).
   const lock=document.getElementById('lockBanner');
-  const maintenant=new Date();
-  const started = modeDemo ? (state.simDate>=state.startDate) : (!state.startDate || maintenant>=state.startDate);
+  const started = estDemarre();
   if(!started){
     lock.style.display='flex';
     lock.innerHTML='<span class="lk-ico"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>'
