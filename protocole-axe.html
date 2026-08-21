@@ -909,70 +909,155 @@ async function axeEnregistrerDiagnostic(){
 }
 
 /* ============ DATA ============ */
+// Diagnostic à 24 questions (9 mental, 9 physique, 6 sensoriel). Chaque question a un id stable
+// (les réponses sont enregistrées par id, plus par position, pour rester fiables même si l'ordre change).
+// Mental et physique : chaque question porte un "tags" = une catégorie par option. Le profil final
+// se construit en cumulant les réponses sur les 9 questions de l'axe, pas sur une seule question.
 const diagQuestions=[
-  {axis:'mental',q:"Au moment de te présenter sur la gate, qu'est-ce qui se passe dans ta tête ?",opts:["Je repense à mes erreurs passées","Mon cœur s'emballe, je perds mes moyens","Je pense à trop de choses à la fois","Je suis concentré mais tendu"]},
-  {axis:'mental',q:"Quand une manche se passe mal, ta réaction la plus fréquente ?",opts:["Je m'en veux longtemps","J'ai envie de tout arrêter sur le moment","Je rejoue la scène en boucle","Je passe vite à la suivante"]},
-  {axis:'mental',q:"Avant une grosse course, la nuit d'avant :",opts:["Je dors mal, je rumine","Je suis surexcité","J'ai des doutes sur mon niveau","Je suis plutôt serein"]},
-  {axis:'physique',q:"Sur un tour complet, où tu perds le plus d'énergie ?",opts:["Le sprint de départ","Le pumping sur les bosses","La relance en sortie de virage","La fin de course, je coince"]},
-  {axis:'physique',q:"Ton point faible physique ressenti :",opts:["Explosivité au départ","Force dans les jambes","Gainage et stabilité","Endurance sur la durée"]},
-  {axis:'physique',q:"Après un entraînement intense, ton corps :",opts:["Récupère lentement","Manque de force le lendemain","Tient bien mais manque de vitesse","Récupère bien"]},
-  {axis:'sensoriel',q:"Fais le test : tends les bras, forme un petit triangle avec tes mains, et vise un objet lointain au centre. Ferme l'œil gauche. L'objet reste dans le triangle ?",opts:["Oui, il reste bien au centre","Non, il saute sur le côté"],help:"Ce test révèle ton œil directeur. S'il reste quand tu fermes l'œil gauche, c'est le droit. S'il saute, c'est le gauche."},
-  {axis:'sensoriel',q:"Quelqu'un t'appelle de loin sans que tu le voies. Tu retrouves d'où vient la voix :",opts:["Tout de suite, l'oreille repère vite","Plutôt en cherchant des yeux"],help:"Ce test observe si ton oreille capte et situe l'info rapidement."},
-  {axis:'sensoriel',q:"Pour retenir une consigne d'entraînement, ce qui marche le mieux pour toi :",opts:["Qu'on me l'explique à voix haute","Qu'on me la montre ou me la dessine"],help:"Comment tu enregistres le mieux une information : par l'oreille ou par l'œil."},
-  {axis:'sensoriel',q:"Dans le bruit et l'agitation d'une compétition, ce qui te déconcentre le plus :",opts:["Les bruits, les cris, les annonces","Les mouvements, l'agitation visuelle autour"],help:"Ton canal le plus sensible est souvent aussi ton canal dominant."},
+  // ---- MENTAL (9 questions, 3 catégories : portillon / rumination / confiance, + une option neutre) ----
+  {id:'mental_1',axis:'mental',q:"Au moment de te présenter sur la gate, qu'est-ce qui se passe dans ta tête ?",
+    opts:["Je repense à mes erreurs passées","Mon cœur s'emballe, je perds mes moyens","Je doute de mon niveau par rapport aux autres","Je suis concentré, plutôt calme"],
+    tags:['rumination','portillon','confiance','neutre']},
+  {id:'mental_2',axis:'mental',q:"Quand une manche se passe mal, ta réaction la plus fréquente ?",
+    opts:["Je rejoue la scène en boucle dans ma tête","J'ai peur de refaire la même erreur à la manche suivante","Je me dis que je ne suis pas assez bon","Je passe vite à la suivante, sans y repenser"],
+    tags:['rumination','portillon','confiance','neutre']},
+  {id:'mental_3',axis:'mental',q:"La nuit avant une grosse course :",
+    opts:["Je dors mal, des images de la course tournent en boucle","J'ai du mal à m'endormir, le cœur qui bat déjà","J'ai des doutes sur mon niveau","Je dors plutôt bien, serein"],
+    tags:['rumination','portillon','confiance','neutre']},
+  {id:'mental_4',axis:'mental',q:"Juste avant que la gate ne tombe :",
+    opts:["Mes jambes tremblent, j'ai du mal à respirer","Je repense à ma dernière chute ou ma dernière erreur","Je me demande si les autres sont meilleurs que moi","Je suis concentré sur ma routine, sans stress"],
+    tags:['portillon','rumination','confiance','neutre']},
+  {id:'mental_5',axis:'mental',q:"Après une chute à l'entraînement :",
+    opts:["J'y repense pendant plusieurs jours","J'appréhende de reprendre la même figure ou le même virage","Je me sens moins légitime que les autres pilotes","Je remonte et je passe à autre chose rapidement"],
+    tags:['rumination','portillon','confiance','neutre']},
+  {id:'mental_6',axis:'mental',q:"Quand tu regardes le plateau de départ d'une course importante :",
+    opts:["Je me sens tendu, j'ai peur de mal démarrer","Je pense déjà à l'erreur que je pourrais refaire","Je me compare aux autres pilotes et je doute","Je me sens à ma place, prêt à courir"],
+    tags:['portillon','rumination','confiance','neutre']},
+  {id:'mental_7',axis:'mental',q:"Pendant l'échauffement avant une manche décisive :",
+    opts:["Je n'arrive pas à me concentrer, trop de pression","Je pense à mes erreurs des courses précédentes","Je me sens moins prêt que je ne le voudrais","Je me sens bien, concentré sur mes appuis"],
+    tags:['portillon','rumination','confiance','neutre']},
+  {id:'mental_8',axis:'mental',q:"Quand un adulte (coach, parent) te parle juste avant ton départ :",
+    opts:["Ça ajoute du stress, j'ai déjà du mal à me concentrer","Ça me ramène à une erreur qu'on m'a déjà reprochée","Je me demande si je suis à la hauteur de ce qu'on attend","Ça ne me perturbe pas, je reste concentré sur moi"],
+    tags:['portillon','rumination','confiance','neutre']},
+  {id:'mental_9',axis:'mental',q:"En arrivant sur une piste que tu ne connais pas :",
+    opts:["Je me demande si je vais réussir à bien démarrer","Je pense déjà à ce qui pourrait mal tourner","Je me sens moins à l'aise que les pilotes qui la connaissent","Je prends le temps de la découvrir, sans stress"],
+    tags:['portillon','rumination','confiance','neutre']},
+  // ---- PHYSIQUE (9 questions, 4 catégories : explosivité / force / stabilité / vitesse) ----
+  {id:'physique_1',axis:'physique',q:"Sur un tour complet, où tu perds le plus d'énergie ?",
+    opts:["Le sprint de départ","Le pumping sur les bosses","La relance en sortie de virage","La fin de course, je coince"],
+    tags:['explosivite','stabilite','force','vitesse']},
+  {id:'physique_2',axis:'physique',q:"Ton point faible physique ressenti :",
+    opts:["Explosivité au départ","Force dans les jambes","Gainage et stabilité","Vitesse et endurance sur la durée"],
+    tags:['explosivite','force','stabilite','vitesse']},
+  {id:'physique_3',axis:'physique',q:"Après un entraînement intense, ton corps :",
+    opts:["Manque de peps au prochain départ","Manque de force le lendemain","Est moins stable, moins gainé","Récupère lentement en endurance"],
+    tags:['explosivite','force','stabilite','vitesse']},
+  {id:'physique_4',axis:'physique',q:"Sur la gate, au moment où elle tombe :",
+    opts:["Je démarre plutôt lentement, je manque de peps","Je manque de puissance dans la poussée","Je perds un peu l'équilibre au premier appui","Je pars bien, mais je perds en vitesse pure ensuite"],
+    tags:['explosivite','force','stabilite','vitesse']},
+  {id:'physique_5',axis:'physique',q:"Dans les bosses (rythm section) :",
+    opts:["Je manque de jus pour sauter fort","Mes jambes fatiguent vite sur les relances","J'ai du mal à rester stable, équilibré","Je perds en vitesse à chaque bosse"],
+    tags:['explosivite','force','stabilite','vitesse']},
+  {id:'physique_6',axis:'physique',q:"En sortie de virage :",
+    opts:["Je manque d'explosivité pour relancer fort","Je manque de force pour pousser sur le pédalier","Je perds en stabilité, l'appui qui part de travers","Je perds de la vitesse par rapport aux autres"],
+    tags:['explosivite','force','stabilite','vitesse']},
+  {id:'physique_7',axis:'physique',q:"Sur la fin d'une manche :",
+    opts:["Je n'ai plus l'explosivité du début","Mes jambes n'ont plus de force","Je suis moins stable, plus imprécis","Je ralentis nettement, je manque d'endurance"],
+    tags:['explosivite','force','stabilite','vitesse']},
+  {id:'physique_8',axis:'physique',q:"Après plusieurs manches dans la même journée :",
+    opts:["Mes départs deviennent moins explosifs","Mes jambes n'ont plus de force","Mon gainage lâche, je suis moins stable","Je perds en vitesse au fil des manches"],
+    tags:['explosivite','force','stabilite','vitesse']},
+  {id:'physique_9',axis:'physique',q:"S'il fallait choisir une seule chose à muscler en priorité :",
+    opts:["L'explosivité au départ","La force dans les jambes","Le gainage et la stabilité","La vitesse et l'endurance de fin de course"],
+    tags:['explosivite','force','stabilite','vitesse']},
+  // ---- SENSORIEL (1 test comportemental + 5 questions de canal dominant, majorité sur 5) ----
+  {id:'sens_oeil',axis:'sensoriel',q:"Fais le test : tends les bras, forme un petit triangle avec tes mains, et vise un objet lointain au centre. Ferme l'œil gauche. L'objet reste dans le triangle ?",opts:["Oui, il reste bien au centre","Non, il saute sur le côté"],help:"Ce test révèle ton œil directeur. S'il reste quand tu fermes l'œil gauche, c'est le droit. S'il saute, c'est le gauche."},
+  {id:'sens_canal_1',axis:'sensoriel',q:"Quelqu'un t'appelle de loin sans que tu le voies. Tu retrouves d'où vient la voix :",opts:["Tout de suite, l'oreille repère vite","Plutôt en cherchant des yeux"],help:"Ce test observe si ton oreille capte et situe l'info rapidement."},
+  {id:'sens_canal_2',axis:'sensoriel',q:"Pour retenir une consigne d'entraînement, ce qui marche le mieux pour toi :",opts:["Qu'on me l'explique à voix haute","Qu'on me la montre ou me la dessine"],help:"Comment tu enregistres le mieux une information : par l'oreille ou par l'œil."},
+  {id:'sens_canal_3',axis:'sensoriel',q:"Dans le bruit et l'agitation d'une compétition, ce qui te déconcentre le plus :",opts:["Les bruits, les cris, les annonces","Les mouvements, l'agitation visuelle autour"],help:"Ton canal le plus sensible est souvent aussi ton canal dominant."},
+  {id:'sens_canal_4',axis:'sensoriel',q:"Quand tu apprends une nouvelle trajectoire ou une nouvelle figure, ce qui t'aide le plus :",opts:["Qu'on me l'explique avec des mots","Qu'on me la montre en vidéo ou en démonstration"],help:"Comment tu apprends le mieux un nouveau geste : par l'explication ou par l'image."},
+  {id:'sens_canal_5',axis:'sensoriel',q:"Sur la piste, en pleine course, ce qui te donne le plus d'informations sur ce qui se passe autour de toi :",opts:["Les sons : bruits de vélo, cris, annonces","Ce que je vois : mouvements, positions des autres"],help:"Ton canal le plus utilisé en course, dans le feu de l'action."},
 ];
 
-// analyse des points forts et faibles à partir du diagnostic
-const axisLabels={
-  mental:{
-    faible:["la gestion des erreurs passées","le contrôle de la pression","la concentration, trop dispersée","la tension avant course"],
-    q1:["mental d'après-course","stabilité émotionnelle","confiance en soi","sérénité avant course"],
-  },
-  physique:{
-    faible:["l'explosivité au départ","le pumping sur les bosses","la relance en sortie de virage","l'endurance de fin de course"],
-    faible2:["l'explosivité","la force des jambes","le gainage et la stabilité","l'endurance"],
-  }
-};
+/* Cumule les réponses d'un axe en score par catégorie (id -> catégorie via "tags"), en ignorant
+   les questions non répondues et l'option neutre. Un score par question au lieu d'une seule
+   question qui décidait de tout : plus une catégorie revient, plus elle pèse dans le profil. */
+function scoreAxis(axisState, axis){
+  const scores={};
+  diagQuestions.filter(function(q){return q.axis===axis;}).forEach(function(q){
+    const ans = axisState ? axisState[q.id] : undefined;
+    if(ans===undefined || !q.tags) return;
+    const tag = q.tags[ans];
+    if(!tag || tag==='neutre') return;
+    scores[tag]=(scores[tag]||0)+1;
+  });
+  return scores;
+}
+// catégorie la plus présente, priorité à l'ordre donné en cas d'égalité ; null si rien de marquant
+function topTag(scores, order, fallback){
+  let best=null, bestN=0;
+  order.forEach(function(k){ const n=scores[k]||0; if(n>bestN){bestN=n;best=k;} });
+  return best!==null ? best : fallback;
+}
+// catégorie la moins présente (pour le point fort), en évitant si possible la catégorie du point faible
+function lowTag(scores, order, excludeKey){
+  const candidates = order.filter(function(k){return k!==excludeKey;});
+  const pool = candidates.length ? candidates : order;
+  let best=pool[0], bestN=Infinity;
+  pool.forEach(function(k){ const n=scores[k]||0; if(n<bestN){bestN=n;best=k;} });
+  return best;
+}
+const MENTAL_ORDER=['rumination','confiance','portillon'];
+const PHYS_ORDER=['explosivite','force','stabilite','vitesse'];
+
+// libellés affichés pour le point faible / le point fort de chaque catégorie
+const mentalFaibleLabels={portillon:"la gestion de la pression sur la gate",rumination:"la gestion des erreurs passées",confiance:"la confiance en soi face aux autres pilotes"};
+const mentalFortLabels={portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en course"};
+const physFaibleLabels={explosivite:"l'explosivité au départ",force:"la force dans les jambes",stabilite:"le gainage et la stabilité",vitesse:"la vitesse et l'endurance de fin de course"};
+const physFortLabels={explosivite:"la percussion au démarrage",force:"la puissance dans les jambes",stabilite:"la stabilité sur les bosses",vitesse:"la vivacité en fin de course"};
+
+// analyse des points forts et faibles à partir des 9 questions mentales + 9 questions physiques du diagnostic
 function analyse(){
-  const m=state.mental, p=state.physique;
-  // point faible mental : première question du diag
-  const mFaible = (m[0]!==undefined)?axisLabels.mental.faible[m[0]]:'non évalué';
-  // point fort mental : dernière question mentale, la sérénité s'il l'a choisie
-  const mFort = (m[2]===3)?'la sérénité avant course':(m[1]===3)?'le passage à autre chose':'la lucidité';
-  // point faible physique : question 5 (index 4) ressenti direct
-  const pFaible = (p[4]!==undefined)?axisLabels.physique.faible2[p[4]]:'non évalué';
-  // point fort physique : la récupération s'il récupère bien
-  const pFort = (p[5]===3)?'la récupération':(p[5]===2)?'la vitesse':'la combativité';
+  const mScores=scoreAxis(state.mental,'mental');
+  const mTop=topTag(mScores, MENTAL_ORDER, null);
+  const mLow=mTop ? lowTag(mScores, ['portillon','rumination','confiance'], mTop) : null;
+  const mFaible = mTop ? mentalFaibleLabels[mTop] : 'non évalué';
+  const mFort = mLow ? mentalFortLabels[mLow] : 'non évalué';
+
+  const pScores=scoreAxis(state.physique,'physique');
+  const pTop=topTag(pScores, PHYS_ORDER, null);
+  const pLow=pTop ? lowTag(pScores, PHYS_ORDER, pTop) : null;
+  const pFaible = pTop ? physFaibleLabels[pTop] : 'non évalué';
+  const pFort = pLow ? physFortLabels[pLow] : 'non évalué';
+
   return {mFaible,mFort,pFaible,pFort};
 }
-// profil sensoriel : œil directeur + canal dominant (auditif/visuel) déduit par croisement
-// Hypothèse de travail (latéralité + réactivité), présentée comme un conseil, pas une vérité
+// profil sensoriel : œil directeur (test comportemental) + canal dominant (auditif/visuel),
+// déduit d'un vote à majorité sur 5 questions (3 sur 5 minimum, au lieu de 2 sur 3 auparavant).
+// Hypothèse de travail (latéralité + réactivité), présentée comme un conseil, pas une vérité.
 function analyseSensoriel(){
   const s=state.sensoriel;
-  // Q6 (index 6) : œil directeur (test du triangle)
-  const oeil = (s[6]===0)?'droit':(s[6]===1)?'gauche':'à déterminer';
-  // Trois indices de dominance : réponse 0 = auditif, réponse 1 = visuel
-  //  Q7 : repérage d'une voix (oreille)
-  //  Q8 : mémorisation d'une consigne (canal d'apprentissage)
-  //  Q9 : source de déconcentration (canal le plus sensible)
+  // œil directeur (test du triangle)
+  const oeil = (s['sens_oeil']===0)?'droit':(s['sens_oeil']===1)?'gauche':'à déterminer';
+  // 5 indices de dominance : réponse 0 = auditif, réponse 1 = visuel
   let auditif=0, visuel=0, repondu=0;
-  [7,8,9].forEach(q=>{
-    if(s[q]===0){auditif++;repondu++;}
-    else if(s[q]===1){visuel++;repondu++;}
+  ['sens_canal_1','sens_canal_2','sens_canal_3','sens_canal_4','sens_canal_5'].forEach(function(id){
+    if(s[id]===0){auditif++;repondu++;}
+    else if(s[id]===1){visuel++;repondu++;}
   });
   let canal, depart, confiance;
-  if(repondu<3){
+  if(repondu<5){
     canal='à déterminer'; depart='à déterminer'; confiance='incomplet';
-  } else if(auditif>=2){
+  } else if(auditif>=3){
     canal='auditif';
     depart='son';
-    confiance = (auditif===3)?'marquée':'légère';
-  } else if(visuel>=2){
+    confiance = (auditif>=4)?'marquée':'légère';
+  } else if(visuel>=3){
     canal='visuel';
     depart='lumière';
-    confiance = (visuel===3)?'marquée':'légère';
+    confiance = (visuel>=4)?'marquée':'légère';
   } else {
-    // équilibré : on recommande le son par défaut (réaction au son plus rapide, fait établi)
+    // équilibré (cas rare avec un nombre impair de questions) : on recommande le son par défaut
     canal='équilibré';
     depart='son';
     confiance='équilibré';
@@ -1242,13 +1327,13 @@ function renderQ(){
   else{helpEl.style.display='none';}
   const opts=document.getElementById('opts');
   opts.innerHTML='';
-  const already=state[item.axis][state.qi];
+  const already=state[item.axis][item.id];
   item.opts.forEach((o,i)=>{
     const b=document.createElement('button');
     b.className='opt'+(already===i?' sel':'');
     b.innerHTML='<span class="k">'+String.fromCharCode(65+i)+'</span>'+o;
     b.onclick=()=>{
-      state[item.axis][state.qi]=i;
+      state[item.axis][item.id]=i;
       opts.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
       b.classList.add('sel');
       setTimeout(nextQ,240);
@@ -1353,15 +1438,16 @@ function adjustWeight(poidsStr){
   });
 }
 
-// catégories physiques à renforcer selon le point faible ressenti au diagnostic
-// (question 5 de l'axe physique : explosivité / force / gainage-stabilité / endurance)
+// catégorie physique la plus citée sur les 9 questions physiques du diagnostic (explosivité / force / stabilité / vitesse)
+function poidsFaiblesseKey(){
+  const scores = scoreAxis(state.physique,'physique');
+  return topTag(scores, PHYS_ORDER, null);
+}
+// catégories physiques à renforcer, dérivées de la catégorie dominante du diagnostic
+const PHYS_LVL_MAP={explosivite:['Explosivité'],force:['Force'],stabilite:['Stabilité','Rotation'],vitesse:['Vitesse','Puissance']};
 function poidsFaiblesse(){
-  const idx = state.physique ? state.physique[4] : undefined;
-  if(idx===0) return ['Explosivité'];
-  if(idx===1) return ['Force'];
-  if(idx===2) return ['Stabilité','Rotation'];
-  if(idx===3) return ['Vitesse','Puissance'];
-  return []; // diagnostic physique pas encore répondu : rotation neutre, sans priorité
+  const key = poidsFaiblesseKey();
+  return key ? (PHYS_LVL_MAP[key]||[]) : []; // diagnostic physique pas encore répondu : rotation neutre, sans priorité
 }
 // construit l'ordre de passage des séances : les catégories du point faible reviennent
 // environ deux fois plus souvent dans le cycle, sans jamais faire disparaître les autres
@@ -1378,11 +1464,9 @@ function ordreSeances(poolBase){
 
 /* ============ BUILD PROGRAM ============ */
 function blocageKey(){
-  // choisit le blocage mental selon les réponses du diagnostic
-  const a=state.mental;
-  if(a[1]===2||a[0]===0) return 'rumination';
-  if(a[2]===2||a[2]===0) return 'confiance';
-  return 'portillon';
+  // choisit le blocage mental dominant sur les 9 questions mentales du diagnostic
+  const scores = scoreAxis(state.mental,'mental');
+  return topTag(scores, MENTAL_ORDER, null) || 'portillon';
 }
 function pickMental(){
   // le niveau (1 à 3) est calé sur le mois en cours, pas sur un compteur en mémoire :
@@ -1532,11 +1616,11 @@ function texteBlocageMentalSemaine(){
 // astuce physique de semaine de course, selon le point faible identifié au diagnostic
 // (même mapping que poidsFaiblesse, adapté à la logique d'affûtage avant course plutôt qu'à la charge d'entraînement)
 function texteFaiblessePhysiqueSemaine(){
-  const idx = state.physique ? state.physique[4] : undefined;
-  if(idx===0) return "Garde tes jambes fraîches pour l'explosivité : pas de grosse séance jambes dans les 48 h avant la course, tu gardes le peps pour la gate.";
-  if(idx===1) return "Garde de la force en réserve cette semaine : entraînements plus légers, aucune charge lourde à moins de 3 jours de la course.";
-  if(idx===2) return "Quelques minutes de gainage léger chaque jour suffisent à garder ton tronc réactif, sans te fatiguer avant la course.";
-  if(idx===3) return "Attention à ne pas arriver cramé : réduis le volume cette semaine, garde juste un peu de vitesse courte pour rester vif sans épuiser tes réserves.";
+  const key = poidsFaiblesseKey();
+  if(key==='explosivite') return "Garde tes jambes fraîches pour l'explosivité : pas de grosse séance jambes dans les 48 h avant la course, tu gardes le peps pour la gate.";
+  if(key==='force') return "Garde de la force en réserve cette semaine : entraînements plus légers, aucune charge lourde à moins de 3 jours de la course.";
+  if(key==='stabilite') return "Quelques minutes de gainage léger chaque jour suffisent à garder ton tronc réactif, sans te fatiguer avant la course.";
+  if(key==='vitesse') return "Attention à ne pas arriver cramé : réduis le volume cette semaine, garde juste un peu de vitesse courte pour rester vif sans épuiser tes réserves.";
   return "Ton diagnostic physique n'est pas encore complet : cette astuce se précisera une fois qu'il sera fait.";
 }
 function renderCompetition(){
