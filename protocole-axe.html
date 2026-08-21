@@ -402,6 +402,13 @@ textarea:focus{outline:none;border-color:var(--gold)}
 
 .mini-note{font-size:12px;color:var(--dim);text-align:center;padding:30px 0 10px;letter-spacing:.02em}
 .mini-note b{color:var(--gold)}
+
+/* ===== VIDEO DE BIENVENUE ===== */
+.axe-video{max-width:720px;margin:0 auto;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#1A1612;border:1.5px solid rgba(26,22,18,.14)}
+.axe-video iframe,.axe-video video{width:100%;height:100%;display:block;border:0}
+.axe-video .vph{width:100%;height:100%;display:grid;place-items:center;text-align:center;padding:24px;color:#FDFAF5;font-family:'Bebas Neue';font-size:20px;letter-spacing:.04em;line-height:1.4}
+.video-secours{text-align:center;margin-top:16px;font-size:12.5px;color:rgba(26,22,18,.6)}
+.video-secours a{color:#A8852A}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -518,6 +525,24 @@ textarea:focus{outline:none;border-color:var(--gold)}
   </div>
 </section>
 
+<!-- ============ VIDEO DE BIENVENUE ============ -->
+<section class="screen" id="bienvenue">
+  <div class="diag">
+    <div class="sec-head">
+      <div class="step-tag">TON ACCUEIL</div>
+      <h1>BIENVENUE DANS LE PROTOCOLE</h1>
+      <div class="serif">Ton diagnostic est fait. Avant d'ouvrir ton programme, prends deux minutes avec moi.</div>
+    </div>
+    <div class="axe-video" id="videoZone"></div>
+    <div id="videoBtnWrap" style="text-align:center;margin-top:24px;display:none">
+      <button class="btn gold" onclick="finirBienvenue()">Ouvrir mon programme</button>
+    </div>
+    <p class="video-secours" id="videoSecours" style="display:none">
+      La video ne se lance pas ? <a href="#" onclick="finirBienvenue();return false;">Continuer vers mon programme</a>
+    </p>
+  </div>
+</section>
+
 <!-- ============ REGEN ANIM ============ -->
 <div class="regen" id="regen">
   <div class="spiral">
@@ -581,6 +606,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <button class="act-btn" onclick="go('notes')"><span class="ab-ico">📓</span><span><b>Mon carnet</b><small>Revoir toutes mes notes</small></span></button>
       <button class="act-btn" id="trimBtn" onclick="go('trimestre')"><span class="ab-ico">📈</span><span><b>Mon bilan des 3 mois</b><small id="trimSub">Disponible tous les 3 mois</small></span></button>
       <a class="act-btn wa" id="waRider" target="_blank"><span class="ab-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 00-8.5 15.3L2 22l4.8-1.5A10 10 0 1012 2z"/></svg></span><span><b>Écrire à mon préparateur</b><small>Une question ? Contacte-le sur WhatsApp</small></span></a>
+      <a class="act-btn abo" id="btnAbonnement" target="_blank"><span class="ab-ico">⚙️</span><span><b>Gérer mon abonnement</b><small>Modifier ou résilier mon paiement</small></span></a>
     </div>
   </div>
 </section>
@@ -591,7 +617,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="sec-head">
       <div class="step-tag">PROTOCOLE SPÉCIAL</div>
       <h1>SEMAINE DE COMPÉTITION</h1>
-      <div class="serif">La routine qui te met en condition, du lundi jusqu'au portillon.</div>
+      <div class="serif">La routine qui te met en condition, du lundi jusqu'à la gate.</div>
     </div>
     <div id="compContent"></div>
     <div style="text-align:center;margin-top:34px"><button class="btn ghost" onclick="go('dash')">← Retour au programme</button></div>
@@ -662,7 +688,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="rq">
       <p>Sur quel moment tu as senti le plus de blocage ?</p>
       <div class="scale" data-q="bloc" style="flex-wrap:wrap">
-        <button onclick="rScale(this,'bloc','Au portillon')">Au portillon</button>
+        <button onclick="rScale(this,'bloc','Sur la gate')">Sur la gate</button>
         <button onclick="rScale(this,'bloc','Dans la première ligne droite')">1re ligne droite</button>
         <button onclick="rScale(this,'bloc','Dans les virages')">Les virages</button>
         <button onclick="rScale(this,'bloc','Sur les bosses')">Les bosses</button>
@@ -708,8 +734,12 @@ const axeDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 const axeParams = new URLSearchParams(window.location.search);
 const axeCode = axeParams.get('code') || sessionStorage.getItem('axe_code') || '';
 const axeEtape = axeParams.get('etape') || '';
+// true seulement en démo locale (sans code réel). Un vrai pilote ne doit jamais voir
+// le panneau de simulation, ni dépendre d'une date simulée : son mois vient de Supabase.
+const modeDemo = !axeCode;
 
 // Au chargement : on vérifie la connexion en lisant le rider (test prudent, n'affiche rien de bloquant)
+let axePremiereFois = false;   // vrai si le rider n'a jamais fait de diagnostic
 async function axeInit(){
   if(!axeCode){ console.log('[AXE] Pas de code : mode démo local.'); return; }
   try{
@@ -717,8 +747,16 @@ async function axeInit(){
     if(error){ console.log('[AXE] Erreur lecture :', error.message); return; }
     if(data && data.length){
       const r = data[0];
-      console.log('[AXE] Rider connecté. Accès actif :', r.actif, '| étape :', axeEtape, '| mois :', r.mois);
+      console.log('[AXE] Rider connecté. Accès actif :', r.actif, '| étape :', axeEtape, '| mois :', r.mois, '| début du mois :', r.date_debut_mois);
       window.axeRider = r;
+      // date reelle de demarrage du programme (1er du mois suivant le paiement), renvoyee
+      // par Supabase. Tant qu'on n'est pas arrive a cette date, le programme reste verrouille,
+      // meme si le paiement et le diagnostic sont deja faits.
+      if(r.date_debut_mois){
+        const parts = String(r.date_debut_mois).split('-');
+        state.startDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      }
+      axePremiereFois = !r.date_diag;   // premier diagnostic de sa vie : il verra la video d'accueil
       // Si le rider revient à son programme ET qu'un profil est enregistré : on le recharge
       if(axeEtape === 'programme' && r.profil){
         axeChargerProfil(r);
@@ -748,6 +786,99 @@ function axeChargerProfil(r){
   }catch(e){ console.log('[AXE] Profil illisible, diagnostic à refaire :', e.message); }
 }
 axeInit();
+
+/* ============ VIDEO DE BIENVENUE ============
+   Colle ci-dessous le lien de ta video d'accueil (YouTube, Vimeo ou fichier .mp4).
+   Elle ne s'affiche qu'une seule fois, apres le tout premier diagnostic.
+   Au diagnostic trimestriel, elle ne revient pas.
+   ============================================ */
+const VIDEO_BIENVENUE = 'https://youtube.com/shorts/lTinYeuSNxE';
+const VIDEO_SECOURS_SECONDES = 120;   // au bout de ce delai, une sortie de secours discrete apparait
+
+let axeVideoFinie = false;
+
+function videoPrete(){ return typeof VIDEO_BIENVENUE === 'string' && VIDEO_BIENVENUE.indexOf('http') === 0; }
+function cleVideoVue(){ return 'axe_video_bienvenue_' + (axeCode || 'demo'); }
+function axeDoitVoirVideo(){
+  if(!videoPrete()) return false;
+  if(!axePremiereFois) return false;
+  try{ if(localStorage.getItem(cleVideoVue())) return false; }catch(e){}
+  return true;
+}
+
+// appele a la fin du diagnostic
+function ouvrirApresDiagnostic(){
+  if(axeDoitVoirVideo()){ montrerBienvenue(); }
+  else { buildProgram(); }
+}
+
+function montrerBienvenue(){
+  go('bienvenue');
+  jouerVideoBienvenue();
+}
+
+function finirBienvenue(){
+  try{ localStorage.setItem(cleVideoVue(), '1'); }catch(e){}
+  buildProgram();
+}
+
+function videoTerminee(){
+  if(axeVideoFinie) return;
+  axeVideoFinie = true;
+  const w = document.getElementById('videoBtnWrap');
+  if(w) w.style.display = 'block';
+  const s = document.getElementById('videoSecours');
+  if(s) s.style.display = 'none';
+}
+
+function chargerScript(src, apres){
+  const dejaLa = document.querySelector('script[src="' + src + '"]');
+  if(dejaLa){ apres(); return; }
+  const sc = document.createElement('script');
+  sc.src = src; sc.onload = apres; sc.onerror = apres;
+  document.head.appendChild(sc);
+}
+
+function jouerVideoBienvenue(){
+  const zone = document.getElementById('videoZone');
+  const url = VIDEO_BIENVENUE;
+  const yt = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/);
+  const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+
+  if(yt){
+    zone.innerHTML = '<div id="ytPlayer"></div>';
+    chargerScript('https://www.youtube.com/iframe_api', function(){
+      function creer(){
+        try{
+          new YT.Player('ytPlayer', {
+            height:'100%', width:'100%', videoId: yt[1],
+            playerVars:{rel:0, modestbranding:1, playsinline:1},
+            events:{ onStateChange:function(e){ if(e.data === 0) videoTerminee(); } }
+          });
+        }catch(e){ videoTerminee(); }
+      }
+      if(window.YT && window.YT.Player) creer();
+      else window.onYouTubeIframeAPIReady = creer;
+    });
+  } else if(vm){
+    zone.innerHTML = '<iframe id="vmPlayer" src="https://player.vimeo.com/video/' + vm[1] + '" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+    chargerScript('https://player.vimeo.com/api/player.js', function(){
+      try{
+        const pv = new Vimeo.Player(document.getElementById('vmPlayer'));
+        pv.on('ended', videoTerminee);
+      }catch(e){ videoTerminee(); }
+    });
+  } else {
+    zone.innerHTML = '<video id="mp4Player" src="' + url + '" controls playsinline></video>';
+    const v = document.getElementById('mp4Player');
+    if(v) v.addEventListener('ended', videoTerminee);
+  }
+
+  setTimeout(function(){
+    const s = document.getElementById('videoSecours');
+    if(s && !axeVideoFinie) s.style.display = 'block';
+  }, VIDEO_SECOURS_SECONDES * 1000);
+}
 
 // Enregistre le profil du diagnostic dans Supabase (appelé à la fin du diagnostic)
 async function axeEnregistrerDiagnostic(){
@@ -779,7 +910,7 @@ async function axeEnregistrerDiagnostic(){
 
 /* ============ DATA ============ */
 const diagQuestions=[
-  {axis:'mental',q:"Au moment de te présenter au portillon, qu'est-ce qui se passe dans ta tête ?",opts:["Je repense à mes erreurs passées","Mon cœur s'emballe, je perds mes moyens","Je pense à trop de choses à la fois","Je suis concentré mais tendu"]},
+  {axis:'mental',q:"Au moment de te présenter sur la gate, qu'est-ce qui se passe dans ta tête ?",opts:["Je repense à mes erreurs passées","Mon cœur s'emballe, je perds mes moyens","Je pense à trop de choses à la fois","Je suis concentré mais tendu"]},
   {axis:'mental',q:"Quand une manche se passe mal, ta réaction la plus fréquente ?",opts:["Je m'en veux longtemps","J'ai envie de tout arrêter sur le moment","Je rejoue la scène en boucle","Je passe vite à la suivante"]},
   {axis:'mental',q:"Avant une grosse course, la nuit d'avant :",opts:["Je dors mal, je rumine","Je suis surexcité","J'ai des doutes sur mon niveau","Je suis plutôt serein"]},
   {axis:'physique',q:"Sur un tour complet, où tu perds le plus d'énergie ?",opts:["Le sprint de départ","Le pumping sur les bosses","La relance en sortie de virage","La fin de course, je coince"]},
@@ -850,28 +981,68 @@ function analyseSensoriel(){
 }
 
 const mentalPools={
-  'portillon':{title:"Ancrage au portillon",lvl:"Niveau 1 · Repérer",desc:"3 minutes avant chaque manche, tu poses une routine en 4 temps : regard, respiration, mot-clé, poussée. Tu notes ce que tu ressens juste après."},
-  'rumination':{title:"Vider le sac après la manche",lvl:"Niveau 1 · Repérer",desc:"Après chaque course, 90 secondes pour écrire une chose ratée et une chose réussie. On coupe la boucle avant qu'elle tourne."},
-  'confiance':{title:"Le carnet des preuves",lvl:"Niveau 1 · Repérer",desc:"Chaque semaine, tu notes 3 moments où ton pilotage a bien répondu. On construit la confiance sur du concret, pas sur des mots."},
+  'portillon':{title:"Ancrage sur la gate",niveaux:[
+    {lvl:"Niveau 1 · Repérer",desc:"3 minutes avant chaque manche, tu poses une routine en 4 temps : regard, respiration, mot-clé, poussée. Tu notes ce que tu ressens juste après."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 4 temps, tu les muscles. À l'entraînement, tu les répètes 3 fois d'affilée en imaginant le bruit du portique et les autres pilotes à côté de toi. Tu notes, pour chacune, ce qui a tenu et ce qui a lâché."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Ta routine doit maintenant tenir en 10 secondes, pas en 3 minutes. Un seul regard, une seule respiration, ton mot-clé, la poussée. Le jour de course, tu ne la penses plus, elle se déclenche toute seule."},
+  ]},
+  'rumination':{title:"Vider le sac après la manche",niveaux:[
+    {lvl:"Niveau 1 · Repérer",desc:"Après chaque course, 90 secondes pour écrire une chose ratée et une chose réussie. On coupe la boucle avant qu'elle tourne."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque course, et tu ajoutes une question : qu'est-ce que je ferais différemment la prochaine fois, en une phrase courte. Le but n'est plus seulement de vider, c'est de transformer ce qui reste en une consigne simple pour la manche suivante."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Ta consigne du niveau 2 doit maintenant apparaître toute seule, dans les 10 secondes qui suivent une manche ratée, avant même que tu aies eu le temps de ruminer. Continue d'écrire une fois par semaine, pour vérifier qu'elle est toujours là."},
+  ]},
+  'confiance':{title:"Le carnet des preuves",niveaux:[
+    {lvl:"Niveau 1 · Repérer",desc:"Chaque semaine, tu notes 3 moments où ton pilotage a bien répondu. On construit la confiance sur du concret, pas sur des mots."},
+    {lvl:"Niveau 2 · Exposer",desc:"Ton carnet des preuves continue, et tu ajoutes une relecture. Une fois par semaine, avant l'entraînement, tu relis tes 3 dernières notes à voix basse. Le but : que ta tête associe la confiance à un vrai souvenir, pas à une pensée en l'air."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Le carnet devient un réflexe silencieux. Avant chaque manche, tu convoques en 5 secondes ta meilleure image des dernières semaines, sans l'écrire. C'est cette image, et pas le stress du moment, qui doit être la dernière chose dans ta tête avant la poussée."},
+  ]},
 };
 const physPool={
+  // SALLE : équipement de gym normal, mais uniquement des poids fixes, toujours en nombre pair de kilos.
   gym:[
-    {title:"Départs explosifs",lvl:"Explosivité",desc:"La puissance qui te sort du portillon.",series:"4 séries",dur:"20 min",moves:[
+    {title:"Départs explosifs",lvl:"Explosivité",desc:"La puissance qui te sort de la gate.",series:"4 séries",dur:"20 min",moves:[
       {n:"Presse à cuisses explosive",d:"4 × 5 reps · poussée la plus rapide possible · repos 2 min",poids:"40 kg"},
       {n:"Fentes sautées (haltères)",d:"4 × 6 par jambe · réception souple · repos 90 s",poids:"2 × 4 kg"},
       {n:"Sauts sur box",d:"4 × 4 · monter haut, redescendre contrôlé · repos 2 min",poids:"poids du corps"},
     ]},
     {title:"Chaîne postérieure",lvl:"Force",desc:"Le moteur de ta relance en sortie de virage.",series:"3 séries",dur:"18 min",moves:[
       {n:"Soulevé de terre léger",d:"3 × 8 · dos gainé, mouvement lent · repos 2 min",poids:"30 kg"},
-      {n:"Hip thrust",d:"3 × 10 · pause 1 s en haut · repos 90 s",poids:"25 kg"},
-      {n:"Leg curl",d:"3 × 12 · descente contrôlée · repos 75 s",poids:"15 kg"},
+      {n:"Hip thrust",d:"3 × 10 · pause 1 s en haut · repos 90 s",poids:"24 kg"},
+      {n:"Leg curl",d:"3 × 12 · descente contrôlée · repos 75 s",poids:"16 kg"},
     ]},
     {title:"Gainage dynamique",lvl:"Stabilité",desc:"Le corps solide qui tient sur les bosses.",series:"3 séries",dur:"12 min",moves:[
       {n:"Planche sur ballon",d:"3 × 40 s · bassin verrouillé · repos 45 s",poids:"poids du corps"},
-      {n:"Rotations avec disque",d:"3 × 10 par côté · lent · repos 45 s",poids:"5 kg"},
+      {n:"Rotations avec disque",d:"3 × 10 par côté · lent · repos 45 s",poids:"4 kg"},
       {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s",poids:"poids du corps"},
     ]},
+    {title:"Puissance de relance",lvl:"Puissance",desc:"La force qui te fait regagner les watts perdus en sortie de virage.",series:"3 séries",dur:"20 min",moves:[
+      {n:"Presse à cuisses lourde",d:"3 × 6 · charge plus lourde, contrôle à la descente · repos 2 min 30",poids:"50 kg"},
+      {n:"Rowing buste penché",d:"3 × 8 · dos plat, tirage vers le nombril · repos 90 s",poids:"20 kg"},
+      {n:"Squat gobelet",d:"3 × 10 · descente lente, remontée puissante · repos 90 s",poids:"16 kg"},
+    ]},
+    {title:"Vitesse de jambes",lvl:"Vitesse",desc:"La fréquence de jambes qui fait la différence sur les portions de pumping.",series:"4 séries",dur:"18 min",moves:[
+      {n:"Montées de genoux lestées",d:"4 × 20 s · rythme maximal · repos 60 s",poids:"2 × 2 kg"},
+      {n:"Sauts latéraux",d:"4 × 8 par côté · réactif, temps de contact court au sol · repos 75 s",poids:"poids du corps"},
+      {n:"Fentes bulgares",d:"3 × 8 par jambe · pied arrière surélevé · repos 90 s",poids:"2 × 6 kg"},
+    ]},
+    {title:"Haut du corps, tenue du guidon",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent le guidon dans les bosses, sans se fatiguer avant la fin de la manche.",series:"3 séries",dur:"16 min",moves:[
+      {n:"Tirage poulie haute",d:"3 × 10 · omoplates serrées, contrôle du retour · repos 75 s",poids:"20 kg"},
+      {n:"Développé épaules assis",d:"3 × 8 · mouvement contrôlé, pas de à-coup · repos 90 s",poids:"2 × 6 kg"},
+      {n:"Curl biceps",d:"3 × 10 · lent à la descente · repos 60 s",poids:"2 × 4 kg"},
+    ]},
+    {title:"Gainage rotationnel",lvl:"Rotation",desc:"La rotation du buste qui te fait passer les virages sans perdre d'appui.",series:"3 séries",dur:"16 min",moves:[
+      {n:"Rotations à la poulie",d:"3 × 10 par côté · lent, contrôlé · repos 60 s",poids:"6 kg"},
+      {n:"Woodchop avec disque",d:"3 × 8 par côté · geste diagonal, dynamique · repos 60 s",poids:"8 kg"},
+      {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s",poids:"poids du corps"},
+    ]},
+    {title:"Bas du corps unilatéral",lvl:"Équilibre",desc:"L'équilibre jambe par jambe qui te sauve la mise quand un appui part de travers.",series:"3 séries",dur:"18 min",moves:[
+      {n:"Squat bulgare",d:"3 × 8 par jambe · buste droit, genou aligné · repos 90 s",poids:"2 × 8 kg"},
+      {n:"Fente latérale",d:"3 × 8 par jambe · hanche mobile · repos 75 s",poids:"2 × 4 kg"},
+      {n:"Équilibre sur un pied lesté",d:"3 × 30 s par jambe · gainage actif · repos 45 s",poids:"2 × 2 kg"},
+    ]},
   ],
+  // MAISON : uniquement le poids du corps. Une chaise ou une table stable peuvent servir d'appui,
+  // jamais de barre, d'élastique ou de matériel à acheter.
   home:[
     {title:"Sprints de poussée",lvl:"Explosivité",desc:"Pur poids du corps pour le départ, sans aucun matériel.",series:"4 séries",dur:"18 min",moves:[
       {n:"Squats sautés",d:"4 × 8 · réception souple, remonter vite · repos 90 s"},
@@ -888,6 +1059,31 @@ const physPool={
       {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s"},
       {n:"Superman",d:"3 × 12 · pause 1 s en haut · repos 45 s"},
     ]},
+    {title:"Appuis sur chaise",lvl:"Puissance",desc:"La poussée des bras et des jambes, avec juste une chaise stable pour t'aider.",series:"3 séries",dur:"16 min",moves:[
+      {n:"Dips sur chaise",d:"3 × 10 · mains sur le bord d'une chaise stable, descente contrôlée · repos 75 s"},
+      {n:"Pompes surélevées",d:"3 × 10 · mains sur une chaise ou une table basse, corps aligné · repos 75 s"},
+      {n:"Squats sautés",d:"3 × 8 · réception souple · repos 90 s"},
+    ]},
+    {title:"Équilibre sur une jambe",lvl:"Équilibre",desc:"L'équilibre sur une jambe, la base de ta stabilité dans les virages.",series:"3 séries",dur:"16 min",moves:[
+      {n:"Fente arrière surélevée",d:"3 × 8 par jambe · pied arrière posé sur une chaise · repos 90 s"},
+      {n:"Squat une jambe assisté",d:"3 × 6 par jambe · une main posée sur une table ou un mur pour l'équilibre · repos 90 s"},
+      {n:"Chaise au mur",d:"3 × 40 s · cuisses parallèles au sol · repos 60 s"},
+    ]},
+    {title:"Vitesse au sol",lvl:"Vitesse",desc:"La fréquence de jambes, sans un gramme de matériel.",series:"4 séries",dur:"16 min",moves:[
+      {n:"Montées de genoux",d:"4 × 20 s · rythme maximal, sur place · repos 60 s"},
+      {n:"Ciseaux au sol",d:"3 × 10 par jambe · rythme rapide, gainage actif · repos 60 s"},
+      {n:"Sauts latéraux",d:"4 × 8 par côté · réactif · repos 75 s"},
+    ]},
+    {title:"Haut du corps sans matériel",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent le guidon, travaillés à la maison.",series:"3 séries",dur:"16 min",moves:[
+      {n:"Pompes classiques",d:"3 × 8 · corps aligné, descente contrôlée · repos 75 s"},
+      {n:"Pompes déclinées",d:"3 × 6 · pieds posés sur une chaise, mains au sol · repos 90 s"},
+      {n:"Gainage bras tendus",d:"3 × 30 s · position de planche haute · repos 45 s"},
+    ]},
+    {title:"Gainage rotationnel au sol",lvl:"Rotation",desc:"La rotation du buste qui te fait passer les virages, sans matériel.",series:"3 séries",dur:"14 min",moves:[
+      {n:"Rotations du buste assis",d:"3 × 10 par côté · pieds surélevés sur une chaise, mains jointes · repos 60 s"},
+      {n:"Superman croisé",d:"3 × 10 par côté · bras et jambe opposés · repos 60 s"},
+      {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s"},
+    ]},
   ],
 };
 
@@ -897,7 +1093,7 @@ const parentPool=[
     {n:"Une seule question ouverte",d:"Demande simplement : \"tu as ressenti quoi ?\" plutôt que \"pourquoi tu as raté ?\". On ouvre, on ne referme pas."},
     {n:"Finir sur du positif",d:"Repère un vrai point réussi dans sa course et cite-le, même si le résultat n'y est pas."},
   ]},
-  {title:"Gérer la pression du portillon",lvl:"Présence",desc:"Ta propre tension se transmet à ton enfant sans un mot. Ce mois-ci, on travaille ta posture à toi.",moves:[
+  {title:"Gérer la pression de la gate",lvl:"Présence",desc:"Ta propre tension se transmet à ton enfant sans un mot. Ce mois-ci, on travaille ta posture à toi.",moves:[
     {n:"Le calme avant la manche",d:"Dans les minutes avant le départ, reste en retrait et souriant. Évite les derniers conseils, ils ajoutent de la charge."},
     {n:"Le geste neutre",d:"Un pouce levé ou un signe simple, sans mot. Il sait que tu es là sans sentir d'attente."},
     {n:"Observer sans commenter",d:"Note pour toi ce que tu vois, tu en parleras plus tard, à froid, s'il le demande."},
@@ -906,6 +1102,51 @@ const parentPool=[
     {n:"Valoriser l'effort, pas le résultat",d:"\"J'ai vu que tu as travaillé tes départs\" vaut mieux que \"tu as gagné\". On ancre l'effort."},
     {n:"Laisser de la place au plaisir",d:"Demande ce qui l'a fait rire ou kiffer sur la piste. Le plaisir est le meilleur carburant longue durée."},
     {n:"Respecter les jours sans",d:"S'il n'a pas envie un jour, accepte-le sans culpabiliser. La régularité se joue sur des mois, pas sur un jour."},
+  ]},
+  {title:"La peur de la chute",lvl:"Sécurité",desc:"Ta propre peur, même silencieuse, se voit. Ce mois-ci, on travaille comment la garder pour toi sans qu'elle devienne la sienne.",moves:[
+    {n:"Ne pas nommer le pire",d:"Évite les \"fais attention à...\" juste avant le départ. Ça met une image dans sa tête qui n'y était pas."},
+    {n:"Séparer ta peur de sa réalité",d:"Ta peur de parent est normale. Elle ne veut pas dire qu'il prend un vrai risque déraisonnable, elle veut dire que tu l'aimes."},
+    {n:"Après une chute, le corps d'abord",d:"Vérifie qu'il va bien, calmement, avant tout commentaire sur la course. Le reste attend."},
+  ]},
+  {title:"Les jours de doute",lvl:"Patience",desc:"Il y aura des semaines où il aura envie de tout arrêter. C'est un passage, pas un signal d'alarme.",moves:[
+    {n:"Ne pas trancher à chaud",d:"Un \"j'arrête le BMX\" dit un soir de défaite se prend au sérieux, mais ne se décide jamais le soir même."},
+    {n:"Reposer la question à froid",d:"Quelques jours plus tard, redemande calmement ce qu'il en pense, loin de l'émotion de la course."},
+    {n:"Rappeler le pourquoi, pas le comment",d:"Reviens sur ce qui lui plaît dans ce sport, pas sur ses résultats. Le comment peut attendre."},
+  ]},
+  {title:"La comparaison aux autres pilotes",lvl:"Recul",desc:"Sur une piste, la comparaison est partout. Ton rôle est de ramener le regard sur son propre chemin.",moves:[
+    {n:"Comparer à lui-même",d:"\"Par rapport à ta dernière course\" vaut toujours mieux que \"par rapport à untel\". Le seul adversaire qui compte, c'est son mois dernier."},
+    {n:"Nommer ce qui ne se voit pas sur un chrono",d:"La régularité, le sang-froid, la progression technique. Ce que le classement ne raconte pas."},
+    {n:"Filtrer ce qui vient de l'extérieur",d:"Les commentaires d'autres parents ou pilotes n'ont pas à devenir les tiens. Protège son espace."},
+  ]},
+  {title:"Le sommeil et la récupération",lvl:"Hygiène de vie",desc:"Le corps progresse pendant qu'il se repose, pas seulement pendant qu'il roule. Ce mois-ci, on regarde ce point simple et souvent oublié.",moves:[
+    {n:"Une heure de coucher stable",d:"Même approximative, une régularité vaut mieux qu'un horaire parfait mais qui change tous les jours."},
+    {n:"Les écrans avant de dormir",d:"Une coupure 30 minutes avant le coucher, simplement pour que la tête retombe avant le corps."},
+    {n:"Une vraie question médicale, un vrai médecin",d:"Fatigue inhabituelle, douleur qui persiste : ce carnet ne remplace jamais un avis médical. Ce mois-ci, c'est juste un rappel de bon sens."},
+  ]},
+  {title:"Fêter les progrès invisibles",lvl:"Reconnaissance",desc:"Les plus beaux progrès ne se voient pas sur un classement. Ce mois-ci, on apprend à les repérer ensemble.",moves:[
+    {n:"Un carnet à deux mains",d:"Demande-lui ce dont il est fier ce mois-ci. Sa réponse t'en apprendra plus que n'importe quel résultat."},
+    {n:"Nommer la régularité",d:"Avoir tenu son programme un mois entier est déjà une vraie réussite, dis-le lui clairement."},
+    {n:"Un petit rituel de fin de mois",d:"Rien de grand, juste un moment à vous pour marquer le coup. Ça ancre l'idée que l'effort compte, pas que le résultat."},
+  ]},
+  {title:"Gérer un coup dur",lvl:"Soutien",desc:"Une blessure, une mauvaise série, une déception. Ce mois-ci, on parle de ta posture face aux moments difficiles.",moves:[
+    {n:"Le médical d'abord, toujours",d:"En cas de douleur ou de blessure, un avis médical reste la priorité absolue. Ce protocole accompagne, il ne soigne pas."},
+    {n:"Autoriser la pause",d:"S'arrêter n'est pas reculer. Un corps ou une tête qui a besoin de souffler a le droit de le faire, sans culpabilité."},
+    {n:"Rester présent sans forcer",d:"Tu n'as pas besoin de réparer la situation. Être là, simplement, suffit souvent."},
+  ]},
+  {title:"Préparer une compétition importante",lvl:"Anticipation",desc:"Une grande course approche. Ton calme dans les jours qui précèdent compte autant que sa préparation à lui.",moves:[
+    {n:"Alléger les derniers jours",d:"Évite d'ajouter des conseils ou des attentes dans la semaine qui précède. Le travail est fait, il reste à le laisser sortir."},
+    {n:"Préparer la logistique, pas la performance",d:"Occupe-toi du matériel, des horaires, du trajet. Laisse-le se concentrer sur lui, pas sur l'organisation."},
+    {n:"Une phrase simple avant le départ",d:"Quelque chose de court et de chaleureux, jamais un dernier conseil technique. Le moment n'est plus à ça."},
+  ]},
+  {title:"Le rôle du groupe",lvl:"Appartenance",desc:"Les copains de piste comptent souvent plus que n'importe quel discours. Ce mois-ci, on regarde ce que ce groupe lui apporte.",moves:[
+    {n:"S'intéresser à ses coéquipiers",d:"Demande qui il apprécie sur la piste, et pourquoi. Le lien social est un moteur puissant à cet âge."},
+    {n:"Favoriser les moments entre pilotes",d:"Un trajet partagé, un temps libre après l'entraînement. Ce n'est pas du temps perdu pour la performance."},
+    {n:"Rester à ta place",d:"Le groupe est à lui. Ton rôle est de le faciliter, pas de t'y intégrer ou de le commenter."},
+  ]},
+  {title:"Faire le bilan de l'année ensemble",lvl:"Projection",desc:"Un an de protocole, c'est un vrai chemin parcouru. Ce mois-ci, on prend le temps de le regarder ensemble avant de reconduire ou d'ajuster.",moves:[
+    {n:"Relire le chemin, pas seulement les courses",d:"Reprenez ensemble ce qui a changé dans sa manière de gérer la pression, pas seulement ses résultats."},
+    {n:"Lui demander ce qu'il veut pour l'an prochain",d:"Son avis sur la suite compte autant que le tien. C'est son protocole, avant d'être le tien."},
+    {n:"Marquer le cap franchi",d:"Un an de régularité mérite d'être reconnu comme tel, indépendamment des résultats sportifs de la saison."},
   ]},
 ];
 const state={mental:{},physique:{},sensoriel:{},age:13,days:3,level:'Régional',gym:true,qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
@@ -964,6 +1205,8 @@ function go(id){
   window.scrollTo({top:0,behavior:'instant'});
   document.getElementById('roleTag').textContent = id==='obs'?'Espace coach':'Espace pilote';
   buildStepper(id);
+  const stepEl=document.getElementById('stepper');
+  if(stepEl) stepEl.style.display = (id==='bienvenue') ? 'none' : '';
   if(id==='diag'){state.qi=0;renderQ();}
   if(id==='start')renderStart();
   if(id==='notes')renderNotesRecap();
@@ -1017,7 +1260,7 @@ function renderQ(){
 function nextQ(){
   state.qi++;
   document.getElementById('qbar').style.width=((state.qi)/diagQuestions.length*100)+'%';
-  if(state.qi>=diagQuestions.length){ axeEnregistrerDiagnostic(); buildProgram(); }
+  if(state.qi>=diagQuestions.length){ axeEnregistrerDiagnostic(); ouvrirApresDiagnostic(); }
   else renderQ();
 }
 function prevQ(){
@@ -1085,6 +1328,17 @@ function intensityLabel(){
 }
 // calcul du poids selon âge et niveau (base = 15 ans, niveau régional)
 // les 10-14 ans n'ont pas accès à la salle, donc jamais concernés
+// arrondit à l'entier pair le plus proche, jamais de kg impair ni de virgule : ce sont toujours des poids fixes de salle
+function roundEven(x){
+  let v = 2*Math.round(x/2);
+  return v<2 ? 2 : v;
+}
+// la charge progresse doucement sur les 6 premiers mois, puis se stabilise : un abonnement de 12, 16 ou 24 mois
+// ne fait jamais grimper les poids indéfiniment, il maintient un palier sûr une fois la progression atteinte
+function coefProgressionMensuelle(){
+  const m = Math.min(state.month, 6);
+  return 1 + (m-1)*0.03; // +3 % par mois jusqu'au mois 6 (+15 %), palier stable ensuite
+}
 function adjustWeight(poidsStr){
   // on ne touche qu'aux poids chiffrés en kg
   if(!poidsStr || !/\d/.test(poidsStr) || poidsStr.includes('poids du corps')) return poidsStr;
@@ -1092,26 +1346,58 @@ function adjustWeight(poidsStr){
   let ageCoef = state.age>=17 ? 1.2 : 1.0;
   // coefficient de niveau : départemental 0.9, régional 1.0, national 1.1
   let lvlCoef = state.level==='National' ? 1.1 : state.level==='Départemental' ? 0.9 : 1.0;
-  const coef = ageCoef*lvlCoef;
-  // gérer les formats "40 kg" et "2 × 4 kg"
+  const coef = ageCoef*lvlCoef*coefProgressionMensuelle();
+  // gérer les formats "40 kg" et "2 × 4 kg" : toujours un poids fixe, pair, jamais de virgule
   return poidsStr.replace(/(\d+(?:\.\d+)?)\s*kg/g,(m,n)=>{
-    let val = Math.round(+n*coef);
-    // arrondir au plus proche multiple de 2,5 kg pour du concret en salle
-    val = Math.round(val/2.5)*2.5;
-    return (Number.isInteger(val)?val:val.toFixed(1))+' kg';
+    return roundEven(+n*coef)+' kg';
   });
 }
 
+// catégories physiques à renforcer selon le point faible ressenti au diagnostic
+// (question 5 de l'axe physique : explosivité / force / gainage-stabilité / endurance)
+function poidsFaiblesse(){
+  const idx = state.physique ? state.physique[4] : undefined;
+  if(idx===0) return ['Explosivité'];
+  if(idx===1) return ['Force'];
+  if(idx===2) return ['Stabilité','Rotation'];
+  if(idx===3) return ['Vitesse','Puissance'];
+  return []; // diagnostic physique pas encore répondu : rotation neutre, sans priorité
+}
+// construit l'ordre de passage des séances : les catégories du point faible reviennent
+// environ deux fois plus souvent dans le cycle, sans jamais faire disparaître les autres
+function ordreSeances(poolBase){
+  const prio = poidsFaiblesse();
+  let cycle = poolBase.map((_,i)=>i);
+  if(prio.length){
+    const boostIdx = poolBase.reduce((a,x,i)=>{ if(prio.includes(x.lvl)) a.push(i); return a; },[]);
+    const milieu = Math.floor(cycle.length/2);
+    boostIdx.forEach((i,k)=> cycle.splice(milieu+k, 0, i));
+  }
+  return cycle;
+}
+
 /* ============ BUILD PROGRAM ============ */
-function pickMental(){
-  // choisit le pool mental selon les réponses du diag (démo simplifiée)
+function blocageKey(){
+  // choisit le blocage mental selon les réponses du diagnostic
   const a=state.mental;
-  if(a[1]===2||a[0]===0) return mentalPools.rumination;
-  if(a[2]===2||a[2]===0) return mentalPools.confiance;
-  return mentalPools.portillon;
+  if(a[1]===2||a[0]===0) return 'rumination';
+  if(a[2]===2||a[2]===0) return 'confiance';
+  return 'portillon';
+}
+function pickMental(){
+  // le niveau (1 à 3) est calé sur le mois en cours, pas sur un compteur en mémoire :
+  // un rider qui se reconnecte retrouve toujours le bon niveau, même sur un autre appareil
+  const pool=mentalPools[blocageKey()];
+  const niv=Math.min(state.month-1, pool.niveaux.length-1);
+  const n=pool.niveaux[niv];
+  return {title:pool.title, lvl:n.lvl, desc:n.desc};
 }
 // numéro du préparateur pour le contact WhatsApp (format international, sans + ni espaces)
-const WA_NUMBER='33600000000';
+const WA_NUMBER='33772289457';
+// lien du portail Stripe (Paramètres > Facturation > Portail client) qui permet à
+// chaque pilote/parent de gérer ou résilier son abonnement lui-même. Colle-le ici
+// une fois activé côté Stripe. Tant qu'il n'est pas rempli, le bouton reste masqué.
+const LIEN_PORTAIL_ABONNEMENT='https://billing.stripe.com/p/login/fZudR85dO76KftHcZU8IU00';
 function renderStrengths(){
   const a=analyse();
   const s=analyseSensoriel();
@@ -1122,7 +1408,7 @@ function renderStrengths(){
   let departPourquoi='';
   if(s.confiance==='marquée') departPourquoi = s.canal==='auditif'
       ? 'Ton canal auditif ressort nettement : le signal sonore devrait être ton meilleur déclencheur. À confirmer à l\'entraînement.'
-      : 'Ton canal visuel ressort nettement : le mouvement de la grille devrait être ton meilleur repère. À confirmer à l\'entraînement.';
+      : 'Ton canal visuel ressort nettement : les feux devraient être ton meilleur repère. À confirmer à l\'entraînement.';
   else if(s.confiance==='légère') departPourquoi = 'Ta dominance penche vers le '+s.canal+', mais légèrement. Teste les deux départs et garde celui où tu te sens le plus vif.';
   else if(s.confiance==='équilibré') departPourquoi = 'Tes canaux sont équilibrés. On suggère le son par défaut, car on réagit en général plus vite à un son qu\'à une image. À toi de vérifier ce qui te réussit le mieux.';
   el.innerHTML=`
@@ -1177,6 +1463,17 @@ function setupWhatsApp(){
   const wr=document.getElementById('waRider');
   if(wr)wr.href=link;
 }
+function setupAbonnement(){
+  const btn=document.getElementById('btnAbonnement');
+  if(!btn) return;
+  // le bouton ne concerne que la formule mensuelle : les formules annuelles
+  // (1 fois ou 3 fois) ne sont pas vendues "sans engagement", pas de résiliation
+  const formule = (window.axeRider && window.axeRider.formule) ? String(window.axeRider.formule).toLowerCase() : '';
+  const estMensuel = formule.indexOf('mensuel') !== -1;
+  const pret = typeof LIEN_PORTAIL_ABONNEMENT === 'string' && LIEN_PORTAIL_ABONNEMENT.indexOf('http') === 0;
+  if(pret && estMensuel){ btn.href = LIEN_PORTAIL_ABONNEMENT; btn.style.display = ''; }
+  else { btn.style.display = 'none'; } // portail pas configuré, ou formule non-mensuelle : on cache plutôt qu'un lien mort ou hors-sujet
+}
 function updateTrimBtn(){
   // le bilan trimestriel s'ouvre tous les 3 mois (mois 3, 6, 9...)
   const dispo = state.month>=3;
@@ -1225,12 +1522,35 @@ function renderTrimestre(){
       <div class="trim-evo" style="border:none"><div>Un bilan de trois mois, c'est un bon moment pour échanger. Tu peux écrire à ton préparateur quand tu veux, il est là.</div></div>
     </div>`;
 }
+// astuce mentale de semaine de course, selon le blocage identifié au diagnostic
+function texteBlocageMentalSemaine(){
+  const key = blocageKey();
+  if(key==='portillon') return "Ressors ton rituel des 20 secondes construit dans \"Boss du start\", et utilise-le à chaque manche de la semaine, même à l'entraînement. Ne l'improvise jamais le jour J, il doit déjà être automatique.";
+  if(key==='rumination') return "Prépare ta consigne de retour au calme avant la course, pas après une mauvaise manche. Relis-la la veille : elle doit être prête à l'avance, pas inventée à chaud.";
+  return "Relis ton carnet des preuves avant chaque journée de course. Le but : que ta dernière pensée avant de rouler soit un souvenir solide, pas un doute.";
+}
+// astuce physique de semaine de course, selon le point faible identifié au diagnostic
+// (même mapping que poidsFaiblesse, adapté à la logique d'affûtage avant course plutôt qu'à la charge d'entraînement)
+function texteFaiblessePhysiqueSemaine(){
+  const idx = state.physique ? state.physique[4] : undefined;
+  if(idx===0) return "Garde tes jambes fraîches pour l'explosivité : pas de grosse séance jambes dans les 48 h avant la course, tu gardes le peps pour la gate.";
+  if(idx===1) return "Garde de la force en réserve cette semaine : entraînements plus légers, aucune charge lourde à moins de 3 jours de la course.";
+  if(idx===2) return "Quelques minutes de gainage léger chaque jour suffisent à garder ton tronc réactif, sans te fatiguer avant la course.";
+  if(idx===3) return "Attention à ne pas arriver cramé : réduis le volume cette semaine, garde juste un peu de vitesse courte pour rester vif sans épuiser tes réserves.";
+  return "Ton diagnostic physique n'est pas encore complet : cette astuce se précisera une fois qu'il sera fait.";
+}
 function renderCompetition(){
   const el=document.getElementById('compContent');
   const s=analyseSensoriel();
   // bandeau profil sensoriel
-  const departTxt = s.depart==='son'?'un départ au SON du signal':s.depart==='lumière'?'un départ à la VUE, sur le mouvement de la grille':'à déterminer avec ton diagnostic';
+  const departTxt = s.depart==='son'?'un départ au SON du signal':s.depart==='lumière'?'un départ à la VUE, sur les feux':'à déterminer avec ton diagnostic';
   let banner=`<div class="comp-sens-banner">D'après ton diagnostic, ton œil directeur est le <b>${s.oeil}</b> et ton canal dominant est <b>${s.canal}</b>. On te conseille de tester <b>${departTxt}</b>. Ce n'est pas une règle absolue : essaie à l'entraînement et garde ce qui te rend le plus vif. Les astuces ci-dessous t'aident à activer ce canal le jour J.</div>`;
+  // sur mesure : le blocage mental et le point faible physique du diagnostic, appliqués à la semaine de course
+  let perso=`<div class="comp-jour-j" style="margin-bottom:20px">
+    <h3>Ta préparation, sur mesure</h3>
+    <div class="comp-tip"><span class="ct-num">🧠</span><div><b>Côté mental.</b> ${texteBlocageMentalSemaine()}</div></div>
+    <div class="comp-tip"><span class="ct-num">💪</span><div><b>Côté physique.</b> ${texteFaiblessePhysiqueSemaine()}</div></div>
+  </div>`;
 
   // planning cross crawl de la semaine (tous les jours)
   const jours=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
@@ -1245,12 +1565,12 @@ function renderCompetition(){
   if(s.depart==='son'){
     tips=`
       <div class="comp-tip"><span class="ct-num">1</span><div><b>Réveille tes oreilles.</b> Frotte doucement le pavillon de tes deux oreilles entre le pouce et l'index, de haut en bas, une dizaine de fois. Tu les rends plus vives au signal.</div></div>
-      <div class="comp-tip"><span class="ct-num">2</span><div><b>Cale-toi sur le son.</b> Sur la grille, ferme les yeux une seconde et concentre-toi uniquement sur le bruit du départ. C'est lui ton déclencheur, pas la lumière.</div></div>
+      <div class="comp-tip"><span class="ct-num">2</span><div><b>Cale-toi sur le son.</b> Sur la gate, ferme les yeux une seconde et concentre-toi uniquement sur le bruit du départ. C'est lui ton déclencheur, pas la lumière.</div></div>
       <div class="comp-tip"><span class="ct-num">3</span><div><b>Respiration d'ancrage.</b> Trois respirations lentes, en écoutant les sons autour de toi. Tu ancres ton attention sur ton canal fort, l'ouïe.</div></div>`;
   } else if(s.depart==='lumière'){
     tips=`
       <div class="comp-tip"><span class="ct-num">1</span><div><b>Réveille tes yeux.</b> Sans bouger la tête, balaie du regard de gauche à droite puis de haut en bas, une dizaine d'allers-retours. Tu actives ta vision périphérique.</div></div>
-      <div class="comp-tip"><span class="ct-num">2</span><div><b>Fixe le bon repère.</b> Sur la grille, repère le point précis où la barrière va bouger, et garde-le dans ton champ de vision. C'est ton déclencheur, le mouvement, pas le son.</div></div>
+      <div class="comp-tip"><span class="ct-num">2</span><div><b>Fixe les feux.</b> Sur la gate, garde les feux dans ton champ de vision, jamais la grille. C'est le changement des feux qui te déclenche, pas le mouvement de la grille, ni le son.</div></div>
       <div class="comp-tip"><span class="ct-num">3</span><div><b>Clignements nets.</b> Quelques clignements francs juste avant, pour une vision claire et réactive au top départ.</div></div>`;
   } else {
     tips=`<div class="comp-tip"><span class="ct-num">!</span><div>Ton profil de départ n'est pas encore déterminé. Refais la partie sensorielle de ton diagnostic pour débloquer tes astuces personnalisées du jour J.</div></div>`;
@@ -1258,6 +1578,7 @@ function renderCompetition(){
 
   el.innerHTML=`
     ${banner}
+    ${perso}
     <h2 style="font-family:'Bebas Neue';font-size:22px;letter-spacing:.04em;font-weight:400;margin-bottom:14px">Ta semaine, jour par jour</h2>
     ${planning}
     <div class="comp-jour-j">
@@ -1313,14 +1634,14 @@ function renderStart(){
     <!-- 2. Routine de pré-départ -->
     <div class="start-card">
       <div class="sc-head"><span class="sc-emoji">🎯</span><h3>Mon rituel d'avant-départ</h3><span class="sc-when">À construire une fois</span></div>
-      <div class="sc-body">Tu crées ta petite séquence à toi, toujours la même, à faire dans les dernières secondes avant le portillon. Tu la construis maintenant, et ensuite elle est à toi pour toujours. <b>Rien à refaire en semaine.</b></div>
+      <div class="sc-body">Tu crées ta petite séquence à toi, toujours la même, à faire dans les dernières secondes avant la gate. Tu la construis maintenant, et ensuite elle est à toi pour toujours. <b>Rien à refaire en semaine.</b></div>
       <div class="sc-body"><b>Ton ancrage sensoriel :</b> comme ton canal fort est ${s.canal}, accroche-toi à ${ancrage}.</div>
       <div class="routine-build">
         <input type="text" id="rMot" placeholder="Ton mot déclencheur (ex : GO, feu, chasse...)" value="${state.startRoutine.mot||''}" oninput="saveRoutine()">
         <input type="text" id="rGeste" placeholder="Ton petit geste (ex : serrer le guidon 2 fois, souffler fort...)" value="${state.startRoutine.geste||''}" oninput="saveRoutine()">
       </div>
       <div class="routine-preview${bRoutine?' on':''}" id="routinePreview">
-        <b>Ton rituel est prêt.</b> Le jour de course, dans les 20 secondes avant le portillon :
+        <b>Ton rituel est prêt.</b> Le jour de course, dans les 20 secondes avant la gate :
         <ol>
           <li>3 respirations lentes.</li>
           <li>Tu ancres <b>${ancrage}</b>.</li>
@@ -1334,7 +1655,7 @@ function renderStart(){
     <!-- 3. Cross crawl (déjà fait le matin) -->
     <div class="start-card">
       <div class="sc-head"><span class="sc-emoji">🔄</span><h3>Ton cross crawl, secret du start</h3><span class="sc-when">Déjà dans ta matinée</span></div>
-      <div class="sc-body">Tu le fais déjà chaque matin, on ne rajoute rien. On te dit juste pourquoi il compte pour ton start : le cross crawl met ton corps et ta tête en cohérence, gauche-droite, avant l'effort. C'est ta mise en route corps-esprit, exactement ce qui te sert au portillon.</div>
+      <div class="sc-body">Tu le fais déjà chaque matin, on ne rajoute rien. On te dit juste pourquoi il compte pour ton start : le cross crawl met ton corps et ta tête en cohérence, gauche-droite, avant l'effort. C'est ta mise en route corps-esprit, exactement ce qui te sert sur la gate.</div>
       <div class="sc-body dim">Le jour de course, ton cross crawl du matin fait partie de ta préparation du start. Tu es déjà en train de bosser sans le savoir.</div>
     </div>
 
@@ -1368,7 +1689,12 @@ function addJournal(){
   state.startJournal.push(v);
   renderStart();
 }
-function renderSimPanel(){  const p=document.getElementById('simPanel');
+function renderSimPanel(){
+  const p=document.getElementById('simPanel');
+  // ce panneau ne sert qu'à prévisualiser la spirale en démo locale : jamais visible
+  // par un vrai pilote connecté avec son code
+  if(!modeDemo){ p.innerHTML=''; p.style.display='none'; return; }
+  p.style.display='';
   const pay=state.paymentOk;
   p.innerHTML=`
     <span class="sim-lbl">Simulation démo · date du jour</span>
@@ -1388,8 +1714,13 @@ function togglePay(){
   buildProgram();
 }
 function buildProgram(){
-  // initialisation des dates la première fois
-  if(!state.startDate){
+  // le panneau "simulation démo" (avance du temps, bascule de paiement) ne sert qu'à
+  // prévisualiser la spirale sur plusieurs mois en démo locale. Un vrai pilote (axeCode
+  // renseigné) ne doit jamais le voir, ni dépendre d'une date simulée : son mois et sa
+  // date de démarrage réelle (state.startDate) viennent directement de Supabase
+  // (r.mois, r.date_debut_mois), déjà chargés dans axeInit()/axeChargerProfil().
+  // initialisation des dates la première fois (uniquement en démo locale)
+  if(modeDemo && !state.startDate){
     // inscription simulée le "signupDay" du mois courant réel
     const now=new Date();
     const signup=new Date(now.getFullYear(),now.getMonth(),state.signupDay);
@@ -1413,25 +1744,32 @@ function buildProgram(){
   renderStrengths();
   renderCrossCrawl();
   setupWhatsApp();
+  setupAbonnement();
   updateTrimBtn();
   renderSimPanel();
 
-  // bandeau : programme pas encore démarré (inscription en cours de mois)
+  // bandeau : programme pas encore démarré (paiement/diagnostic faits en cours de
+  // mois, mais on n'est pas encore au 1er du mois). En démo, on compare à la date
+  // simulée ; pour un vrai pilote, on compare à la vraie date du jour, contre la
+  // date de démarrage renvoyée par Supabase (state.startDate).
   const lock=document.getElementById('lockBanner');
-  const started = state.simDate>=state.startDate;
+  const maintenant=new Date();
+  const started = modeDemo ? (state.simDate>=state.startDate) : (!state.startDate || maintenant>=state.startDate);
   if(!started){
     lock.style.display='flex';
     lock.innerHTML='<span class="lk-ico"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>'
-      +'<div>Ton abonnement est actif, bravo. Ton planning démarre le <b>'+fmtDate(state.startDate)+'</b>. On commence toujours un 1er de mois, pour un cycle complet et propre. En attendant, tout est en place.</div>';
+      +'<div>Ton abonnement est actif, bravo. Ton diagnostic est fait. Ton programme démarre le <b>'+fmtDate(state.startDate)+'</b>. On commence toujours un 1er de mois, pour un cycle complet et propre. En attendant, tout est en place.</div>';
   }else{
     lock.style.display='none';
   }
 
-  // onglets de semaine (verrouillés tant que leur date n'est pas atteinte)
+  // onglets de semaine : verrouillés selon la date simulée en démo. Pour un vrai
+  // pilote, toutes les semaines du mois s'ouvrent d'un coup dès que le mois a
+  // réellement démarré (started) : pas de verrou semaine par semaine côté réel.
   const tabs=document.getElementById('weekTabs');
   tabs.innerHTML='';
   for(let w=1;w<=4;w++){
-    const unlocked=isWeekUnlocked(w);
+    const unlocked = modeDemo ? isWeekUnlocked(w) : started;
     const b=document.createElement('button');
     b.className='week-tab'+(w===state.week?' on':'')+(unlocked?'':' locked');
     b.innerHTML='SEM '+w;
@@ -1439,8 +1777,8 @@ function buildProgram(){
     else{b.title='Ouvre le '+fmtDate(weekOpenDate(w));}
     tabs.appendChild(b);
   }
-  // si la semaine courante n'est pas déverrouillée, on se cale sur la dernière ouverte
-  if(!isWeekUnlocked(state.week)){
+  // si la semaine courante n'est pas déverrouillée, on se cale sur la dernière ouverte (démo uniquement)
+  if(modeDemo && !isWeekUnlocked(state.week)){
     let last=1;
     for(let w=1;w<=4;w++){if(isWeekUnlocked(w))last=w;}
     state.week=last;
@@ -1457,9 +1795,18 @@ function buildProgram(){
   }else{
     ob.style.display='none';
   }
-  // le rapport n'est accessible qu'en fin de mois (semaine 4 atteinte)
+  // le rapport n'est accessible qu'une fois le mois réellement démarré. En démo,
+  // on affine encore avec la semaine 4 atteinte. Pour un vrai pilote, il est
+  // accessible dès que "started" est vrai (mois démarré), sans distinction de
+  // semaine côté front : le mois suivant s'ouvre de toute façon automatiquement
+  // au prochain prélèvement, indépendamment du moment où le rapport est envoyé.
   const cta=document.getElementById('reportCta');
-  if(started && isWeekUnlocked(4)){
+  if(!modeDemo && started){
+    cta.style.display='block';
+    cta.innerHTML='<p class="serif" style="font-size:20px;font-style:italic;color:var(--dim);margin-bottom:18px">Fin du mois ? C\'est l\'heure du bilan.</p><button class="btn gold" onclick="go(\'report\')">Faire mon rapport mensuel</button>';
+  }else if(!modeDemo && !started){
+    cta.style.display='none';
+  }else if(started && isWeekUnlocked(4)){
     cta.style.display='block';
     cta.innerHTML='<p class="serif" style="font-size:20px;font-style:italic;color:var(--dim);margin-bottom:18px">Fin du mois ? C\'est l\'heure du bilan.</p><button class="btn gold" onclick="go(\'report\')">Faire mon rapport mensuel</button>';
   }else if(started){
@@ -1490,9 +1837,20 @@ function renderWeek(started){
   if(state.week===4)n=Math.max(1,n-1); // semaine de relâchement : une séance en moins
   document.getElementById('physCount').textContent=n+' exercices · '+wp.tag.toLowerCase();
   const pool=state.gym?physPool.gym:physPool.home;
+  // le cycle de séances avance chaque mois (aucune répétition figée sur un abonnement long),
+  // et priorise le point faible physique du diagnostic sans jamais exclure les autres catégories
+  const cycle=ordreSeances(pool);
+  const offset=((state.month-1)*n)%cycle.length;
   let html='';
+  const semaineVue=new Set();
   for(let i=0;i<n;i++){
-    const p=JSON.parse(JSON.stringify(pool[i%pool.length]));
+    let idx=cycle[(offset+i)%cycle.length];
+    let base=pool[idx];
+    // filet de sécurité : jamais deux fois la même séance dans la même semaine
+    let essais=0;
+    while(semaineVue.has(base.title) && essais<pool.length){ idx=(idx+1)%pool.length; base=pool[idx]; essais++; }
+    semaineVue.add(base.title);
+    const p=JSON.parse(JSON.stringify(base));
     // poids ajusté selon âge et niveau (salle uniquement)
     if(p.moves)p.moves.forEach(mv=>{if(mv.poids)mv.poids=adjustWeight(mv.poids);});
     // progression d'intensité sur le mois
@@ -1615,13 +1973,29 @@ function submitReport(){
   state.report.goal=document.getElementById('reportGoal').value;
   state.reportDone=true;
   axeEnregistrerRapport();
-  const cond=nextMonthStatus();
 
   // regen animation
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   const r=document.getElementById('regen');r.classList.add('on');
   window.scrollTo({top:0});
 
+  if(!modeDemo){
+    // vrai pilote : le rapport est enregistré dans Supabase (axeEnregistrerRapport),
+    // qui décide côté serveur si le mois avance (paiement + rapport réunis, voir
+    // enregistrer_rapport en base). Le mois affiché (state.month) vient de r.mois et
+    // ne doit PAS être incrémenté ici côté client : on ne fait donc aucune promesse
+    // de date, le message reste volontairement neutre.
+    document.getElementById('regenTitle').textContent='RAPPORT ENREGISTRÉ';
+    document.getElementById('regenSub').textContent='Merci, ton bilan est bien pris en compte et lu par ton préparateur. Il sert de base à la construction de ton mois prochain.';
+    setTimeout(()=>{
+      r.classList.remove('on');
+      buildProgram();
+    },2600);
+    return;
+  }
+
+  // à partir d'ici : démo locale uniquement (prévisualisation de la spirale)
+  const cond=nextMonthStatus();
   if(cond.ok){
     document.getElementById('regenTitle').textContent='TON COACH RÉADAPTE';
     document.getElementById('regenSub').textContent='Ton rapport est lu et sert à construire ton mois prochain. On monte d\'un cran dans la spirale...';
@@ -1634,12 +2008,7 @@ function submitReport(){
       if(state.report.jours){state.days=state.report.jours;}
       // le mois suivant démarre au 1er du mois suivant
       state.startDate=firstOfNextMonth(state.startDate);
-      // spiral : le mental monte de niveau
-      Object.keys(mentalPools).forEach(k=>{
-        const lv=mentalPools[k].lvl;
-        if(lv.includes('1'))mentalPools[k].lvl=lv.replace('Niveau 1 · Repérer','Niveau 2 · Exposer');
-        else if(lv.includes('2'))mentalPools[k].lvl=lv.replace('Niveau 2 · Exposer','Niveau 3 · Ancrer');
-      });
+      // le niveau mental se déduit automatiquement de state.month (voir pickMental)
       buildProgram();
     },2600);
   }else{

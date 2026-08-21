@@ -109,11 +109,14 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 .vp-play{width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--cream);display:grid;place-items:center;font-size:22px;padding-left:4px}
 .vp-txt{font-family:'Bebas Neue';font-size:22px;letter-spacing:.04em;color:var(--ink)}
 .vp-hint{font-size:12px;max-width:34ch}
+.video-frame iframe,.video-frame video{width:100%;height:100%;display:block;border:0}
 .video-cap{font-style:italic;font-size:18px;color:var(--dim);margin-top:16px;max-width:40ch;margin-left:auto;margin-right:auto}
 /* offers 3 col */
 .offers-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
 @media(max-width:760px){.offers-3{grid-template-columns:1fr}}
 .partenaire-note{text-align:center;font-style:italic;font-size:18px;color:var(--ink);max-width:52ch;margin:30px auto 0;padding-top:24px;border-top:1px solid var(--line)}
+.parrain-banner{display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(168,133,42,.1);border:1px solid rgba(168,133,42,.35);border-radius:6px;padding:13px 20px;margin-bottom:24px;font-size:14.5px;color:var(--ink)}
+.parrain-banner .pb-ico{color:var(--gold);font-size:17px}
 .foot{text-align:center;padding:30px 0 50px;font-size:12px;color:var(--dim)}
 .disc{font-size:11px;color:var(--dim);max-width:60ch;margin:10px auto 0;font-style:italic}
 </style>
@@ -128,6 +131,12 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 </div>
 
 <div class="wrap">
+
+<!-- BANDEAU PARRAINAGE -->
+<div class="parrain-banner" id="parrainBanner" style="display:none">
+  <span class="pb-ico">★</span>
+  <span>Tu arrives grâce à un membre du protocole. Bienvenue, tu es au bon endroit.</span>
+</div>
 
 <!-- HERO -->
 <div class="hero">
@@ -184,7 +193,7 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
     <div class="num">03</div>
     <div class="body">
       <h3>Les parents accompagnés, pas spectateurs</h3>
-      <p>Chaque mois, une clé concrète pour épauler ton enfant sans mettre de pression : le trajet du retour de course, la gestion du portillon, l'entretien de la motivation. Un carnet de notes te permet d'écrire ce que tu observes, et de rester pleinement acteur du parcours.</p>
+      <p>Chaque mois, une clé concrète pour épauler ton enfant sans mettre de pression : le trajet du retour de course, la gestion de la gate, l'entretien de la motivation. Un carnet de notes te permet d'écrire ce que tu observes, et de rester pleinement acteur du parcours.</p>
       <span class="accent a-parent">Côté parent</span>
     </div>
   </div>
@@ -283,17 +292,56 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
    https://buy.stripe.com/ et ne contiennent PAS le mot test).
    C'est le seul endroit de la page a modifier.
    ============================================================ */
+/* Le lien de ta video de presentation, la meme sur les deux pages.
+   YouTube, Vimeo ou fichier .mp4, colle simplement l'adresse. */
+var VIDEO_VENTE = 'https://youtube.com/shorts/KAlhJaJ27-4';
+
 var LIENS = {
   mensuel : 'https://buy.stripe.com/00wdR86hScr4dlz2lg8IU0n',
   annuel  : 'https://buy.stripe.com/4gM3cucGgfDgftHe3Y8IU0l',
   trois   : 'https://buy.stripe.com/28E28q9u4fDg0yNf828IU0m'
 };
 
+function poserVideo(){
+  if(typeof VIDEO_VENTE !== 'string' || VIDEO_VENTE.indexOf('http') !== 0) return;
+  var el = document.querySelector('.video-frame');
+  if(!el) return;
+  var yt = VIDEO_VENTE.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/);
+  var vm = VIDEO_VENTE.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if(yt){
+    el.innerHTML = '<iframe src="https://www.youtube.com/embed/' + yt[1] + '?rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+  } else if(vm){
+    el.innerHTML = '<iframe src="https://player.vimeo.com/video/' + vm[1] + '" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+  } else {
+    el.innerHTML = '<video src="' + VIDEO_VENTE + '" controls playsinline></video>';
+  }
+}
+poserVideo();
+
 (function(){
+  // 1. on pose les liens de paiement
   var map = { 'btn-mensuel':LIENS.mensuel, 'btn-900':LIENS.annuel, 'btn-3fois':LIENS.trois };
   Object.keys(map).forEach(function(id){
     var b = document.getElementById(id);
     if(b && map[id] && map[id].indexOf('http') === 0){ b.setAttribute('href', map[id]); }
+  });
+
+  // 2. on recupere le code du parrain dans l'adresse (?parrain=AXE-xxxxx)
+  var params = new URLSearchParams(window.location.search);
+  var codeParrain = params.get('parrain');
+  if(!codeParrain) return; // pas de parrain : page normale
+
+  var banner = document.getElementById('parrainBanner');
+  if(banner) banner.style.display = 'flex';
+
+  // 3. on attache le code parrain sur chaque bouton, via client_reference_id
+  ['btn-mensuel','btn-900','btn-3fois'].forEach(function(id){
+    var b = document.getElementById(id);
+    if(!b) return;
+    var url = b.getAttribute('href');
+    if(url.indexOf('http') !== 0) return;
+    var sep = url.indexOf('?') === -1 ? '?' : '&';
+    b.setAttribute('href', url + sep + 'client_reference_id=' + encodeURIComponent(codeParrain));
   });
 })();
 </script>

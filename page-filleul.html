@@ -109,10 +109,12 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 .vp-play{width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--cream);display:grid;place-items:center;font-size:22px;padding-left:4px}
 .vp-txt{font-family:'Bebas Neue';font-size:22px;letter-spacing:.04em;color:var(--ink)}
 .vp-hint{font-size:12px;max-width:34ch}
+.video-frame iframe,.video-frame video{width:100%;height:100%;display:block;border:0}
 .video-cap{font-style:italic;font-size:18px;color:var(--dim);margin-top:16px;max-width:40ch;margin-left:auto;margin-right:auto}
 /* offers 3 col */
 .offers-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
-@media(max-width:760px){.offers-3{grid-template-columns:1fr}}
+.offers-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;align-items:stretch}
+@media(max-width:760px){.offers-3{grid-template-columns:1fr}.offers-2{grid-template-columns:1fr}}
 .partenaire-note{text-align:center;font-style:italic;font-size:18px;color:var(--ink);max-width:52ch;margin:30px auto 0;padding-top:24px;border-top:1px solid var(--line)}
 .parrain-banner{display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(168,133,42,.1);border:1px solid rgba(168,133,42,.35);border-radius:6px;padding:13px 20px;margin-bottom:24px;font-size:14.5px;color:var(--ink)}
 .parrain-banner .pb-ico{color:var(--gold);font-size:17px}
@@ -159,9 +161,9 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 
 <!-- PRICE -->
 <div class="price-band">
-  <div class="amt">89<small> € / mois</small></div>
-  <div class="alt">ou 900 € pour l'année, payable en 3 fois</div>
-  <div class="promise">Le mensuel est sans engagement. Tu arrêtes quand tu veux, l'accès s'arrête avec.</div>
+  <div class="amt">900<small> € / an</small></div>
+  <div class="alt">ou 3 × 300 €, payable en trois fois</div>
+  <div class="promise">Le protocole complet, pour toute la saison.</div>
 </div>
 
 <!-- VALUE BRICKS -->
@@ -192,7 +194,7 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
     <div class="num">03</div>
     <div class="body">
       <h3>Les parents accompagnés, pas spectateurs</h3>
-      <p>Chaque mois, une clé concrète pour épauler ton enfant sans mettre de pression : le trajet du retour de course, la gestion du portillon, l'entretien de la motivation. Un carnet de notes te permet d'écrire ce que tu observes, et de rester pleinement acteur du parcours.</p>
+      <p>Chaque mois, une clé concrète pour épauler ton enfant sans mettre de pression : le trajet du retour de course, la gestion de la gate, l'entretien de la motivation. Un carnet de notes te permet d'écrire ce que tu observes, et de rester pleinement acteur du parcours.</p>
       <span class="accent a-parent">Côté parent</span>
     </div>
   </div>
@@ -229,10 +231,10 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 <div class="worth">
   <div class="sec-tag" style="color:var(--gold-soft)">METTONS LES CHOSES EN PERSPECTIVE</div>
   <h2>POURQUOI <span class="g">CE PRIX</span> SE DÉFEND</h2>
-  <p>Une séance de préparation mentale en cabinet, c'est 60 à 90 euros, une seule fois, sans suivi entre deux rendez-vous. Le protocole te donne un accompagnement mental continu, semaine après semaine, plus un cadre physique et l'implication des parents, pour le prix d'une seule séance par mois.</p>
+  <p>Une séance de préparation mentale en cabinet, c'est 60 à 90 euros, une seule fois, sans suivi entre deux rendez-vous. Le protocole te donne un accompagnement mental continu, toute la saison, semaine après semaine, plus un cadre physique et l'implication des parents.</p>
   <div class="compare">
     <div class="cc"><div class="lbl">Une séance de prépa mentale</div><div class="v">60 à 90 €</div><small>une fois, sans suivi</small></div>
-    <div class="cc"><div class="lbl">Le protocole complet</div><div class="v">89 € / mois</div><small>suivi mental continu, chaque semaine</small></div>
+    <div class="cc"><div class="lbl">Le protocole complet</div><div class="v">900 € / an</div><small>suivi mental continu, toute la saison</small></div>
   </div>
 </div>
 
@@ -247,27 +249,21 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 
 <!-- OFFERS -->
 <div class="sec">
-  <div class="sec-tag">TROIS FAÇONS DE DÉMARRER</div>
+  <div class="sec-tag">DEUX FAÇONS DE DÉMARRER</div>
   <h2>CHOISIS TA FORMULE</h2>
-  <div class="offers offers-3">
-    <div class="offer">
-      <div class="oname">MENSUEL</div>
-      <div class="op">89<small> €/mois</small></div>
-      <div class="odesc">Toute la liberté. Sans engagement, tu arrêtes quand tu veux, l'accès s'arrête avec, sans justification.</div>
-      <a class="obtn o" href="https://buy.stripe.com/test_bJe8wO21C4YCa9n0d88IU01" id="btn-mensuel">Choisir le mensuel</a>
-    </div>
+  <div class="offers offers-2" id="offersGrid">
     <div class="offer feat">
       <div class="ribbon">Le plus choisi</div>
       <div class="oname">ANNUEL · EN 1 FOIS</div>
       <div class="op">900<small> €/an</small></div>
       <div class="odesc">12 mois d'accès d'un coup. L'équivalent de dix mois payés pour douze. Tu deviens <b>partenaire</b> : chaque famille que tu amènes te rapporte 150 euros.</div>
-      <a class="obtn g" href="https://buy.stripe.com/test_fZudR85dO76KftHcZU8IU00" id="btn-900">Payer en une fois</a>
+      <a class="obtn g" href="#" id="btn-900">Payer en une fois</a>
     </div>
     <div class="offer">
       <div class="oname">ANNUEL · EN 3 FOIS</div>
       <div class="op">3 × 300<small> €</small></div>
       <div class="odesc">Le même accès de 12 mois, réglé en trois fois pour étaler. Toi aussi tu deviens <b>partenaire</b>, avec 150 euros par famille parrainée.</div>
-      <a class="obtn o" href="https://buy.stripe.com/test_dRmcN48q062G0yN9NI8IU02" id="btn-3fois">Payer en trois fois</a>
+      <a class="obtn o" href="#" id="btn-3fois">Payer en trois fois</a>
     </div>
   </div>
   <p class="partenaire-note serif">Devenir partenaire, c'est simple : après ton inscription annuelle, tu reçois un lien personnel. Chaque famille qui s'inscrit grâce à lui te fait gagner 150 euros. Ta confiance récompensée.</p>
@@ -284,19 +280,59 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 
 </div>
 <script>
-// Récupère le code du parrain dans l'adresse (?parrain=AXE-xxxxx) et l'attache aux 3 boutons de paiement
+/* ============================================================
+   LES 2 LIENS DE PAIEMENT STRIPE
+   Uniquement les formules annuelles : le filleul n'a pas acces
+   au mensuel, le parrainage est reserve a l'annuel.
+   Colle ici tes liens du mode REEL.
+   ============================================================ */
+/* Le lien de ta video de presentation, la meme sur les deux pages.
+   YouTube, Vimeo ou fichier .mp4, colle simplement l'adresse. */
+var VIDEO_VENTE = 'https://youtube.com/shorts/KAlhJaJ27-4';
+
+var LIENS = {
+  annuel  : 'https://buy.stripe.com/4gM3cucGgfDgftHe3Y8IU0l',
+  trois   : 'https://buy.stripe.com/28E28q9u4fDg0yNf828IU0m'
+};
+
+function poserVideo(){
+  if(typeof VIDEO_VENTE !== 'string' || VIDEO_VENTE.indexOf('http') !== 0) return;
+  var el = document.querySelector('.video-frame');
+  if(!el) return;
+  var yt = VIDEO_VENTE.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/);
+  var vm = VIDEO_VENTE.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if(yt){
+    el.innerHTML = '<iframe src="https://www.youtube.com/embed/' + yt[1] + '?rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+  } else if(vm){
+    el.innerHTML = '<iframe src="https://player.vimeo.com/video/' + vm[1] + '" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+  } else {
+    el.innerHTML = '<video src="' + VIDEO_VENTE + '" controls playsinline></video>';
+  }
+}
+poserVideo();
+
 (function(){
+  // 1. on pose les liens de paiement (uniquement les 2 formules annuelles)
+  var map = { 'btn-900':LIENS.annuel, 'btn-3fois':LIENS.trois };
+  Object.keys(map).forEach(function(id){
+    var b = document.getElementById(id);
+    if(b && map[id] && map[id].indexOf('http') === 0){ b.setAttribute('href', map[id]); }
+  });
+
+  // 2. on recupere le code du parrain dans l'adresse (?parrain=AXE-xxxxx)
   var params = new URLSearchParams(window.location.search);
   var codeParrain = params.get('parrain');
   if(!codeParrain) return; // pas de parrain : page normale
-  // on affiche le bandeau de bienvenue
+
   var banner = document.getElementById('parrainBanner');
   if(banner) banner.style.display = 'flex';
-  // on colle le code sur chaque bouton, via client_reference_id
-  ['btn-mensuel','btn-900','btn-3fois'].forEach(function(id){
+
+  // 3. on attache le code parrain sur chaque bouton, via client_reference_id
+  ['btn-900','btn-3fois'].forEach(function(id){
     var b = document.getElementById(id);
     if(!b) return;
     var url = b.getAttribute('href');
+    if(url.indexOf('http') !== 0) return;
     var sep = url.indexOf('?') === -1 ? '?' : '&';
     b.setAttribute('href', url + sep + 'client_reference_id=' + encodeURIComponent(codeParrain));
   });
