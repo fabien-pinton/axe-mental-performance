@@ -322,6 +322,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .card{border:1.5px solid var(--line);border-radius:3px;padding:22px;margin-bottom:16px;background:rgba(255,255,255,.4);transition:.2s var(--ease)}
 .card:hover{border-color:var(--line-strong)}
 .card .ex-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:9px}
+.day-tag{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--physique);font-family:'DM Sans';font-weight:700;margin-bottom:8px}
 .card h3{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;line-height:1.15}
 .card .lvl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:3px 9px;border-radius:2px;white-space:nowrap}
 .card p.desc{font-size:14px;color:var(--dim);margin-bottom:14px}
@@ -503,6 +504,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <div class="field">
         <label>Jours dispos pour le physique</label>
         <div class="chips" id="daysChips"></div>
+        <p class="gym-note">Choisis les jours où tu peux t'entraîner. On laisse au moins 48h entre deux jours pour la récupération — les jours trop proches se grisent automatiquement.</p>
       </div>
       <div class="field">
         <label>Niveau de compétition</label>
@@ -702,15 +704,9 @@ textarea:focus{outline:none;border-color:var(--gold)}
     </div>
 
     <div class="rq">
-      <p>Combien de jours par semaine seras-tu dispo pour le physique le mois prochain ?</p>
-      <div class="scale" data-q="jours">
-        <button onclick="rScale(this,'jours',1)">1 jour</button>
-        <button onclick="rScale(this,'jours',2)">2 jours</button>
-        <button onclick="rScale(this,'jours',3)">3 jours</button>
-        <button onclick="rScale(this,'jours',4)">4 jours</button>
-        <button onclick="rScale(this,'jours',5)">5 jours</button>
-      </div>
-      <p class="mini-note" style="text-align:left;margin-top:10px">Tes dispos changent d'un mois à l'autre ? Normal. Ton planning se recale dessus.</p>
+      <p>Quels jours seras-tu dispo pour le physique le mois prochain ?</p>
+      <div class="chips" id="reportDaysChips"></div>
+      <p class="mini-note" style="text-align:left;margin-top:10px">Tes dispos changent d'un mois à l'autre ? Normal. Ton planning se recale dessus. On laisse au moins 48h entre deux jours choisis.</p>
     </div>
 
     <div class="rq">
@@ -798,7 +794,10 @@ function axeChargerProfil(r){
     }
     if(typeof p.age !== 'undefined') state.age = p.age;
     if(p.niveau) state.level = p.niveau;
-    if(typeof p.jours !== 'undefined') state.days = p.jours;
+    // rétrocompatibilité : les anciens profils stockaient un simple nombre de jours (1-5),
+    // les nouveaux stockent directement la liste des jours de la semaine choisis
+    if(Array.isArray(p.jours)) state.trainingDays = p.jours;
+    else if(typeof p.jours === 'number') state.trainingDays = joursParDefaut(p.jours);
     if(typeof p.salle !== 'undefined') state.gym = p.salle;
     if(r.mois) state.month = r.mois;
     if(compatible){
@@ -918,7 +917,7 @@ async function axeEnregistrerDiagnostic(){
     sensoriel: state.sensoriel,
     age: state.age,
     niveau: state.level,
-    jours: state.days,
+    jours: state.trainingDays,
     salle: state.gym,
     profilMental: mental.title || '',
     canal: sensoriel.canal,
@@ -1259,7 +1258,7 @@ const parentPool=[
     {n:"Marquer le cap franchi",d:"Un an de régularité mérite d'être reconnu comme tel, indépendamment des résultats sportifs de la saison."},
   ]},
 ];
-const state={mental:{},physique:{},sensoriel:{},age:13,days:3,level:'Régional',gym:true,qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
+const state={mental:{},physique:{},sensoriel:{},age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
   simDate:null,         // date "courante" simulée dans la démo
   startDate:null,       // 1er du mois suivant l'inscription
@@ -1328,6 +1327,10 @@ function go(id){
   const stepEl=document.getElementById('stepper');
   if(stepEl) stepEl.style.display = (id==='bienvenue') ? 'none' : '';
   if(id==='diag'){state.qi=0;renderQ();}
+  if(id==='report'){
+    if(!state.report.trainingDays)state.report.trainingDays=[...state.trainingDays];
+    if(typeof refreshReportDaysChips==='function')refreshReportDaysChips();
+  }
   if(id==='start')renderStart();
   if(id==='notes')renderNotesRecap();
   if(id==='trimestre')renderTrimestre();
@@ -1435,14 +1438,68 @@ function chipGroup(containerId,values,key,fmt){
     c.appendChild(b);
   });
 }
-chipGroup('daysChips',[1,2,3,4,5],'days',v=>v+(v>1?' jours':' jour'));
+/* ============ JOURS DE LA SEMAINE (48h entre deux séances) ============ */
+const JOURS_SEMAINE=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+const JOURS_LABEL={lundi:'Lundi',mardi:'Mardi',mercredi:'Mercredi',jeudi:'Jeudi',vendredi:'Vendredi',samedi:'Samedi',dimanche:'Dimanche'};
+// distance circulaire entre deux jours de la semaine (le dimanche touche le lundi)
+function distanceJours(a,b){
+  const ia=JOURS_SEMAINE.indexOf(a), ib=JOURS_SEMAINE.indexOf(b);
+  const d=Math.abs(ia-ib);
+  return Math.min(d,7-d);
+}
+// un jour est bloqué (grisé) s'il est à moins de 48h (soit adjacent) d'un jour déjà choisi,
+// sauf s'il est lui-même déjà choisi (auquel cas cliquer dessus le déselectionne)
+function jourBloque(list,j){
+  if(list.includes(j))return false;
+  return list.some(sel=>distanceJours(sel,j)===1);
+}
+function joursTries(list){
+  return [...list].sort((a,b)=>JOURS_SEMAINE.indexOf(a)-JOURS_SEMAINE.indexOf(b));
+}
+// rétrocompatibilité : convertit un ancien nombre de jours (1-5) en une liste de jours
+// de la semaine plausible, en respectant toujours les 48h entre deux jours
+function joursParDefaut(n){
+  if(n<=1)return['lundi'];
+  if(n===2)return['lundi','jeudi'];
+  return['lundi','mercredi','vendredi'];
+}
+function renderDaysChips(containerId,list,onChange){
+  const c=document.getElementById(containerId);
+  c.innerHTML='';
+  JOURS_SEMAINE.forEach(j=>{
+    const b=document.createElement('button');
+    const sel=list.includes(j);
+    const bloque=jourBloque(list,j);
+    b.className='chip'+(sel?' sel':'')+(bloque?' disabled':'');
+    b.textContent=JOURS_LABEL[j];
+    if(!bloque){
+      b.onclick=()=>{
+        const idx=list.indexOf(j);
+        if(idx>=0)list.splice(idx,1); else list.push(j);
+        onChange();
+      };
+    }
+    c.appendChild(b);
+  });
+}
 chipGroup('lvlChips',['Départemental','Régional','National'],'level');
 updateGymAccess();
+function refreshDaysChips(){ renderDaysChips('daysChips',state.trainingDays,refreshDaysChips); }
+refreshDaysChips();
+function refreshReportDaysChips(){ renderDaysChips('reportDaysChips',state.report.trainingDays,refreshReportDaysChips); }
 
 /* ============ VOLUME RULE ============ */
+// le nombre de séances réelles dépend de l'âge/niveau/salle, jamais uniquement du nombre
+// de jours cochés : cocher 3 jours ne veut pas forcément dire 3 séances (ex: un pilote de
+// 12 ans ou moins est plafonné à 2 séances même s'il a coché 3 jours dispos)
 function physSessions(){
   let cap = state.age<=12?2 : state.age<=15?3 : 3;
-  return Math.min(cap, state.days); // dispos écrasent toujours le plafond d'âge
+  return Math.min(cap, state.trainingDays.length);
+}
+// les jours qui reçoivent réellement une séance cette semaine (les premiers de la semaine
+// en priorité si le nombre de jours cochés dépasse le plafond d'âge)
+function joursSeance(){
+  return joursTries(state.trainingDays).slice(0,physSessions());
 }
 function intensityLabel(){
   return state.level==='National'?'+ séries, + complexité'
@@ -1856,7 +1913,7 @@ function buildProgram(){
   const stats=[
     ['Âge',state.age+' ans'],
     ['Niveau',state.level],
-    ['Physique',physSessions()+' séances/sem'],
+    ['Physique',physSessions()+' séances/sem · '+joursTries(state.trainingDays).map(j=>JOURS_LABEL[j]).join(', ')],
     ['Format',state.gym?'Salle':'Poids du corps'],
     ['Intensité',intensityLabel()],
   ];
@@ -1911,7 +1968,7 @@ function buildProgram(){
   if(state.month>1 && state.report.bloc){
     ob.style.display='flex';
     let txt='Ce mois découle de ton dernier bilan. Tu avais signalé un blocage <b>'+state.report.bloc.toLowerCase()+'</b>, ton programme a été recentré dessus.';
-    if(state.report.jours){txt+=' Tu avais annoncé <b>'+state.report.jours+(state.report.jours>1?' jours':' jour')+'</b> dispo, ton volume a été calé sur ça.';}
+    if(state.report.trainingDays && state.report.trainingDays.length){txt+=' Tu avais annoncé être dispo le <b>'+joursTries(state.report.trainingDays).map(j=>JOURS_LABEL[j]).join(', ')+'</b>, ton volume a été calé sur ça.';}
     ob.innerHTML='<span class="ob-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></span><div>'+txt+'</div>';
   }else{
     ob.style.display='none';
@@ -1956,6 +2013,7 @@ function renderWeek(started){
   // physique
   let n=physSessions();
   if(state.week===4)n=Math.max(1,n-1); // semaine de relâchement : une séance en moins
+  const joursSem=joursSeance().slice(0,n);
   document.getElementById('physCount').textContent=n+' exercices · '+wp.tag.toLowerCase();
   const pool=state.gym?physPool.gym:physPool.home;
   // le cycle de séances avance chaque mois (aucune répétition figée sur un abonnement long),
@@ -1979,7 +2037,8 @@ function renderWeek(started){
     if(state.level==='National')bump+=1;
     if(bump>0)p.series=p.series.replace(/\d+/,x=>+x+bump);
     if(state.week===4)p.series=p.series.replace(/\d+/,x=>Math.max(2,+x-1));
-    html+=exCard(p,false,'p'+i);
+    const jourLabel=joursSem[i]?JOURS_LABEL[joursSem[i]]:'';
+    html+=exCard(p,false,'p'+i,jourLabel);
   }
   if(state.gym){
     html+='<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
@@ -2001,7 +2060,7 @@ function renderWeek(started){
     </div>
   </div>`;
 }
-function exCard(ex,isMental,id){
+function exCard(ex,isMental,id,jourLabel){
   let note = isMental ? `
     <button class="note-toggle" onclick="toggleNote('${id}')">＋ Mes notes sur cet exercice</button>
     <div class="note-box" id="box-${id}">
@@ -2025,6 +2084,7 @@ function exCard(ex,isMental,id){
       <div class="move-d">${m.d}</div>
     </div>`).join('');
   return `<div class="card" id="card-${id}">
+    ${jourLabel?`<span class="day-tag">Séance du ${jourLabel.toLowerCase()}</span>`:''}
     <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
     <p class="desc">${ex.desc}</p>
     <div class="meta"><span><b>${ex.series}</b></span><span><b>${ex.dur}</b></span></div>
@@ -2075,7 +2135,9 @@ async function axeEnregistrerRapport(){
   if(!axeCode) return; // mode démo
   const bloc = state.report.bloc || '';
   const texte = state.report.text || '';
-  const jours = state.report.jours || state.days || null;
+  // jours_r reste un entier côté base (pas de migration de schéma) : on envoie le nombre
+  // de jours choisis, le détail des jours de la semaine vit uniquement côté client/JSON diagnostic
+  const jours = (state.report.trainingDays && state.report.trainingDays.length) || state.trainingDays.length || null;
   try{
     const { error } = await axeDB.rpc('enregistrer_rapport', {
       code: axeCode, mois_r: state.month, bloc_r: bloc, texte_r: texte, jours_r: jours
@@ -2126,7 +2188,7 @@ function submitReport(){
       state.week=1;
       state.reportDone=false;
       // recale les jours dispos selon ce que le pilote a indiqué pour le mois prochain
-      if(state.report.jours){state.days=state.report.jours;}
+      if(state.report.trainingDays && state.report.trainingDays.length){state.trainingDays=[...state.report.trainingDays];}
       // le mois suivant démarre au 1er du mois suivant
       state.startDate=firstOfNextMonth(state.startDate);
       // le niveau mental se déduit automatiquement de state.month (voir pickMental)
