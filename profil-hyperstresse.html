@@ -583,39 +583,73 @@ nav.sc{padding:10px 48px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
 </footer>
 
 <script>
-// ── PROGRESSION · via webhook Make (aucune clé d'API dans la page) ──
-const WEBHOOK_PROGRESSION = 'https://hook.eu1.make.com/REMPLACE_PAR_TON_WEBHOOK_PROGRESSION';
+// ── PROGRESSION · appel DIRECT à l'API Airtable (page unique, usage ponctuel) ──
+// IMPORTANT : ce jeton est visible par quiconque regarde le code source de la page.
+// Il DOIT donc être un Personal Access Token Airtable limité à CETTE SEULE base,
+// avec uniquement les droits data.records:read et data.records:write. Ne jamais
+// réutiliser ce jeton ailleurs, et le révoquer une fois ce protocole terminé.
+const AIRTABLE_TOKEN = 'patvCy2C9IfRsGYeQ.fdf9ed369c6926bbef13251ad3a9706475b02d1f5791269a424fe8b71ceeb9fa';
+const AIRTABLE_BASE_ID = 'appLQTD1lgEmXjSDB';                   // base "Programme AXE — Clients"
+const AIRTABLE_TABLE = 'Clients';                               // table existante, celle utilisée pour Louison/Enzo/Victor
+const AIRTABLE_API = 'https://api.airtable.com/v0/' + AIRTABLE_BASE_ID + '/' + encodeURIComponent(AIRTABLE_TABLE);
+
 const urlParams = new URLSearchParams(window.location.search);
 const CLIENT_TOKEN = urlParams.get('token') || null;
 const LS_KEY = 'axe_progression_' + (CLIENT_TOKEN || 'local');
 let DATA = {unlocked:[0]};
 let saveTimer = null;
-function webhookPret(){ return WEBHOOK_PROGRESSION.indexOf('REMPLACE') === -1; }
+function webhookPret(){ return AIRTABLE_TOKEN.indexOf('REMPLACE') === -1 && AIRTABLE_BASE_ID.indexOf('REMPLACE') === -1; }
 
-/* Lecture : Make interroge Airtable avec le Token et renvoie les champs en JSON. */
+/* Retrouve l'ID de la ligne Airtable correspondant au Token du pilote (la ligne doit déjà exister). */
+async function airtableFindRecordId(){
+  if (!CLIENT_TOKEN || !webhookPret()) return null;
+  try {
+    const formule = encodeURIComponent('{Token}="' + CLIENT_TOKEN + '"');
+    const r = await fetch(AIRTABLE_API + '?filterByFormula=' + formule, {
+      headers: { 'Authorization': 'Bearer ' + AIRTABLE_TOKEN }
+    });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return (d.records && d.records[0]) ? d.records[0].id : null;
+  } catch(e) { return null; }
+}
+
+/* Lecture : on va chercher directement la ligne du pilote dans Airtable. */
 async function atGet() {
   try { const c = localStorage.getItem(LS_KEY); if (c) Object.assign(DATA, JSON.parse(c)); } catch(e) {}
   if (!CLIENT_TOKEN || !webhookPret()) return null;
   try {
-    const r = await fetch(WEBHOOK_PROGRESSION, {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({action:'lire', token: CLIENT_TOKEN})
+    const recId = await airtableFindRecordId();
+    if (!recId) return null;
+    const r = await fetch(AIRTABLE_API + '/' + recId, {
+      headers: { 'Authorization': 'Bearer ' + AIRTABLE_TOKEN }
     });
     if (!r.ok) return null;
     const d = await r.json();
-    return d && d.fields ? d.fields : d;
+    return d.fields || null;
   } catch(e) { return null; }
 }
 
-/* Écriture : cache local immédiat, puis Make écrit dans Airtable. */
+/* Écriture : cache local immédiat, puis mise à jour directe de la ligne Airtable
+   (et création de la ligne si elle n'existe pas encore, avec son Token). */
 async function atPatch(fields) {
   try { localStorage.setItem(LS_KEY, JSON.stringify(DATA)); } catch(e) {}
   if (!CLIENT_TOKEN || !webhookPret()) return;
   try {
-    await fetch(WEBHOOK_PROGRESSION, {
-      method: 'POST', headers: {'Content-Type':'application/json'}, keepalive: true,
-      body: JSON.stringify({action:'ecrire', token: CLIENT_TOKEN, fields: fields})
-    });
+    const recId = await airtableFindRecordId();
+    if (recId) {
+      await fetch(AIRTABLE_API + '/' + recId, {
+        method: 'PATCH', headers: {'Content-Type':'application/json','Authorization':'Bearer '+AIRTABLE_TOKEN}, keepalive: true,
+        // typecast:true : si l'âge "10-12" n'existe pas encore comme choix dans la colonne Age,
+        // Airtable l'ajoute tout seul au lieu de rejeter l'écriture.
+        body: JSON.stringify({ fields: fields, typecast: true })
+      });
+    } else {
+      await fetch(AIRTABLE_API, {
+        method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+AIRTABLE_TOKEN}, keepalive: true,
+        body: JSON.stringify({ fields: Object.assign({ Token: CLIENT_TOKEN }, fields), typecast: true })
+      });
+    }
   } catch(e) {}
 }
 
