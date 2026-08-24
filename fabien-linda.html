@@ -1,0 +1,1053 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0E7A6E">
+<title>Quinze Minutes Ensemble</title>
+</head>
+<body>
+<style id="css">
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body, h1, h2, h3, h4, p, ul, ol, li, figure, dl, dd { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+button, input, select { font: inherit; color: inherit; }
+img, svg { display: block; max-width: 100%; }
+
+:root {
+  --ground: #EDF1F2;
+  --surface: #FFFFFF;
+  --surface-2: #F5F8F8;
+  --ink: #12232B;
+  --ink-2: #4C616A;
+  --ink-3: #7D9199;
+  --line: #DAE2E4;
+  --line-strong: #C2D0D3;
+  --accent: #0E7A6E;
+  --accent-ink: #0A5A51;
+  --accent-soft: #DBEDEA;
+  --on-accent: #FFFFFF;
+  --clay: #B96630;
+  --clay-ink: #A85C2A;
+  --clay-soft: #F7E8DC;
+  --pa: #0E7A6E;
+  --pb: #8E4470;
+  --shadow: 0 1px 2px rgba(18,35,43,.06), 0 8px 24px -12px rgba(18,35,43,.18);
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0D171C;
+    --surface: #152329;
+    --surface-2: #1B2C33;
+    --ink: #E7EEEF;
+    --ink-2: #A9BDC3;
+    --ink-3: #7B9299;
+    --line: #26383F;
+    --line-strong: #33474F;
+    --accent: #45C1B0;
+    --accent-ink: #A2E5DA;
+    --accent-soft: #163936;
+    --on-accent: #0B1519;
+    --clay: #E0925B;
+    --clay-ink: #E8A874;
+    --clay-soft: #34261C;
+    --pa: #45C1B0;
+    --pb: #D68BB6;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0D171C;
+  --surface: #152329;
+  --surface-2: #1B2C33;
+  --ink: #E7EEEF;
+  --ink-2: #A9BDC3;
+  --ink-3: #7B9299;
+  --line: #26383F;
+  --line-strong: #33474F;
+  --accent: #45C1B0;
+  --accent-ink: #A2E5DA;
+  --accent-soft: #163936;
+  --on-accent: #0B1519;
+  --clay: #E0925B;
+  --clay-ink: #E8A874;
+  --clay-soft: #34261C;
+  --pa: #45C1B0;
+  --pb: #D68BB6;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+}
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { max-width: 760px; margin: 0 auto; padding: 22px 16px 72px; display: flex; flex-direction: column; gap: 20px; }
+
+.eyebrow {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px; font-weight: 500; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+h1 { font-size: clamp(28px, 7vw, 38px); font-weight: 700; letter-spacing: -.025em; line-height: 1.05; text-wrap: balance; }
+h2 { font-size: 19px; font-weight: 700; letter-spacing: -.015em; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+.prose { font-family: 'Newsreader', Georgia, serif; font-size: 17px; line-height: 1.62; color: var(--ink-2); font-weight: 400; }
+.prose strong { color: var(--ink); font-weight: 500; }
+.mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+/* ---------- header ---------- */
+.masthead { display: flex; flex-direction: column; gap: 10px; }
+.masthead .sub { color: var(--ink-2); font-size: 14.5px; font-weight: 500; }
+.progressline { display: flex; flex-direction: column; gap: 7px; margin-top: 4px; }
+.progressline .meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.progressline .meta span { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.bar { height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+
+/* ---------- cards ---------- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.card-pad { padding: 18px; }
+section { display: flex; flex-direction: column; gap: 12px; }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 2px; }
+
+/* ---------- today ---------- */
+.today { overflow: hidden; }
+.today .top { padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 3px; border-bottom: 1px solid var(--line); }
+.today .top.done { background: var(--accent-soft); }
+.today .badge-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.pill { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 9px; border-radius: 99px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
+.pill.accent { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+.pill.clay { background: var(--clay-soft); color: var(--clay-ink); border-color: transparent; }
+.today h2 { font-size: 23px; letter-spacing: -.02em; }
+.today .dur { color: var(--ink-2); font-size: 14px; }
+.exlist { list-style: none; }
+.exlist li { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: baseline; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+.exlist li:last-child { border-bottom: 0; }
+.exlist .n { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-3); }
+.exlist .nm { font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+.exlist .cue { font-family: 'Newsreader', Georgia, serif; font-weight: 400; font-size: 14.5px; line-height: 1.45; color: var(--ink-2); margin-top: 2px; }
+.exlist .t { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+.exlist li.recup { padding-top: 7px; padding-bottom: 7px; background: var(--surface-2); }
+.exlist li.recup .rec { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.exlist li.recup .t { color: var(--ink-3); }
+.exlist li.tour { padding-top: 9px; padding-bottom: 9px; background: var(--accent-soft); }
+.exlist li.tour .rec { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-ink); font-weight: 600; }
+.actions { display: flex; gap: 10px; padding: 16px 18px; background: var(--surface-2); border-top: 1px solid var(--line); flex-wrap: wrap; }
+
+button { cursor: pointer; border-radius: 10px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); font-weight: 600; font-size: 14.5px; padding: 11px 16px; transition: transform .08s ease, background .15s ease, border-color .15s ease; }
+button:hover { border-color: var(--ink-3); }
+button:active { transform: translateY(1px); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); border-color: transparent; color: var(--on-accent); }
+button.primary:hover { background: var(--accent-ink); border-color: transparent; color: var(--surface); }
+button.ghost { background: transparent; border-color: var(--line-strong); }
+button.mini { padding: 6px 11px; font-size: 13px; border-radius: 8px; font-weight: 500; }
+button[disabled] { opacity: .45; cursor: not-allowed; }
+.grow { flex: 1 1 auto; }
+
+/* ---------- calendar ---------- */
+/* ---------- liste des séances ---------- */
+.weeks { display: flex; flex-direction: column; gap: 8px; }
+.week { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+.week.current { border-color: var(--accent); box-shadow: var(--shadow); }
+.weekhead { width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 14px; background: transparent; border: 0; border-radius: 0; text-align: left; font-weight: 500; }
+.weekhead:hover { background: var(--surface-2); }
+.weekhead .wn { font-weight: 700; font-size: 15px; letter-spacing: -.01em; white-space: nowrap; }
+.weekhead .wd { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--ink-3); }
+.weekhead .wc { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.weekhead .wc.full { color: var(--accent); font-weight: 600; }
+.weekhead .caret { font-family: 'IBM Plex Mono', monospace; color: var(--ink-3); font-size: 15px; width: 10px; text-align: center; }
+.daylist { border-top: 1px solid var(--line); }
+.dayrow + .dayrow { border-top: 1px solid var(--line); }
+.drhead { display: flex; align-items: center; gap: 11px; padding: 9px 12px; }
+.dayrow.today .drhead { background: var(--accent-soft); }
+.chk { width: 30px; height: 30px; min-width: 30px; border-radius: 9px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; flex: none; color: var(--ink-3); }
+.chk.on { background: var(--accent); border-color: transparent; color: var(--on-accent); }
+.chk.rest { border-style: dashed; background: transparent; cursor: default; opacity: .45; }
+.drmain { flex: 1; min-width: 0; background: transparent; border: 0; padding: 3px 0; text-align: left; display: flex; flex-direction: column; gap: 1px; }
+.drmain:hover .dtitle { color: var(--accent); }
+.drmain .dnum { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--ink-3); letter-spacing: .07em; text-transform: uppercase; }
+.drmain .dtitle { font-size: 14.5px; font-weight: 600; letter-spacing: -.01em; }
+.dayrow.miss .drmain .dtitle, .dayrow.rest .drmain .dtitle { color: var(--ink-3); font-weight: 500; }
+.dtag { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--clay-ink); background: var(--clay-soft); padding: 3px 7px; border-radius: 99px; flex: none; }
+.dbody { padding: 2px 12px 12px; }
+.dbody .exlist li { padding: 9px 0; grid-template-columns: 22px 1fr auto; }
+.dbody .exlist li:first-child { border-top: 1px solid var(--line); }
+
+.statrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+.stat { background: var(--surface); padding: 14px 12px; display: flex; flex-direction: column; gap: 2px; }
+.stat .v { font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; letter-spacing: -.02em; }
+.stat .k { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+
+/* ---------- measures ---------- */
+.people { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 380px) { .people { grid-template-columns: 1fr; } }
+.person { padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.person .who { display: flex; align-items: center; gap: 7px; }
+.person .dot { width: 9px; height: 9px; border-radius: 99px; flex: none; }
+.person .name { font-weight: 600; font-size: 14.5px; }
+.person .cm { font-family: 'IBM Plex Mono', monospace; font-size: 30px; font-weight: 600; letter-spacing: -.03em; line-height: 1; }
+.person .cm small { font-size: 14px; font-weight: 400; color: var(--ink-3); letter-spacing: 0; }
+.person .delta { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; }
+.person .delta.down { color: var(--accent); }
+.person .delta.up { color: var(--clay-ink); }
+.person .delta.flat { color: var(--ink-3); }
+.nameedit { display: flex; gap: 6px; align-items: center; }
+input[type="text"], input[type="number"], input[type="date"], select {
+  background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 9px; padding: 9px 10px; font-size: 14.5px; font-family: inherit; min-width: 0; width: 100%;
+}
+input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.mform { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 8px; align-items: end; padding: 14px; }
+@media (max-width: 560px) { .mform { grid-template-columns: 1fr 1fr; } .mform button { grid-column: 1 / -1; } }
+.mform label { display: flex; flex-direction: column; gap: 5px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+.chart { padding: 6px 10px 12px; }
+.charthead { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 4px 4px; flex-wrap: wrap; }
+.toggle { display: inline-flex; gap: 0; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; flex: none; }
+.toggle button { border: 0; border-radius: 0; background: transparent; padding: 5px 11px; font-size: 12px; color: var(--ink-3); }
+.toggle button.on { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+.toggle button:hover { color: var(--ink); }
+.toggle button.on:hover { color: var(--on-accent); }
+.hist { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 6px; }
+.hist .row { display: flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--ink-2); }
+.hist .row .d { color: var(--ink-3); }
+.hist .row .sp { flex: 1; }
+
+/* ---------- program reference ---------- */
+footer { text-align: center; color: var(--ink-3); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .05em; padding-top: 8px; }
+.banner { background: var(--clay-soft); border: 1px solid var(--clay); color: var(--clay-ink); border-radius: var(--radius); padding: 12px 14px; font-size: 14px; }
+
+/* ---------- player ---------- */
+.player { position: fixed; inset: 0; z-index: 50; background: var(--ground); display: flex; flex-direction: column; padding: 20px 18px calc(20px + env(safe-area-inset-bottom)); gap: 16px; }
+.player .phead { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.player .pbody { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 14px; }
+.player .kind { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
+.player .exname { font-size: clamp(26px, 8vw, 42px); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; text-wrap: balance; max-width: 15ch; }
+.player .clock { font-family: 'IBM Plex Mono', monospace; font-size: clamp(72px, 26vw, 130px); font-weight: 500; letter-spacing: -.05em; line-height: .95; font-variant-numeric: tabular-nums; }
+.player .clock.rest { color: var(--ink-3); }
+.player .cue { font-family: 'Newsreader', Georgia, serif; font-size: 16.5px; line-height: 1.5; color: var(--ink-2); max-width: 34ch; }
+.player .next { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-3); }
+.player .pfoot { display: flex; gap: 10px; }
+.player .pfoot button { flex: 1; padding: 15px; }
+.ring { height: 5px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.ring > i { display: block; height: 100%; background: var(--accent); }
+.ring.rest > i { background: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div id="root"></div>
+
+<script id="state" type="application/json">{"v":1,"start":"2026-09-01","end":"2026-12-20","people":[{"id":"a","name":"Fabien"},{"id":"b","name":"Linda"}],"done":{},"measures":{"a":[],"b":[]}}</script>
+
+<script id="app">
+(function () {
+  'use strict';
+
+  var START = '2026-09-01';
+  var END = '2026-12-20';
+
+  /* ------------------------------------------------------------------ data */
+
+  var WARMUP = [
+    { n: 'Réveil articulaire debout', c: 'Cercles de chevilles, de hanches puis d’épaules, sans forcer. On débloque tout ce qui a dormi.', d: 60 },
+    { n: 'Cercles de bras', c: '15 s vers l’avant, 15 s vers l’arrière, amplitude complète.', d: 30 },
+    { n: 'Rotations du buste', c: 'Mains sur les hanches, bassin fixe, on tourne les épaules de gauche à droite.', d: 30 },
+    { n: 'Squats lents à vide', c: 'Descente sur 3 s, remontée sur 2 s. Sans forcer, juste pour huiler les genoux.', d: 30 },
+    { n: 'Chat / vache', c: 'À quatre pattes : on creuse le dos en inspirant, on l’arrondit en expirant.', d: 30 }
+  ];
+
+  var COOLDOWN = [
+    { n: 'Ischio-jambiers', c: 'Assis, une jambe tendue, buste vers l’avant, dos droit. 15 s par jambe.', d: 30 },
+    { n: 'Fléchisseurs de hanche', c: 'Fente basse, genou arrière au sol, bassin qui avance. 15 s par côté.', d: 30 },
+    { n: 'Position de l’enfant', c: 'À genoux, fesses sur les talons, bras tendus devant. Respirez dans le dos.', d: 30 },
+    { n: 'Respiration ventrale', c: 'Sur le dos, une main sur le ventre : inspirez 4 s par le nez, expirez 6 s. C’est le ventre qui se gonfle, pas la poitrine.', d: 30 }
+  ];
+
+  var COOLDOWN_LONG = COOLDOWN.concat([
+    { n: 'Torsion allongée', c: 'Sur le dos, genoux pliés qui tombent d’un côté, épaules au sol. 30 s par côté.', d: 60 },
+    { n: 'Étirement latéral debout', c: 'Bras tendu au-dessus de la tête, on s’incline sur le côté. 20 s par côté.', d: 40 }
+  ]);
+
+  var SESSIONS = {
+    A: {
+      key: 'A', day: 'Lundi', title: 'Bas du corps & sangle', kind: 'circuit',
+      intro: 'Les grosses masses musculaires : ce sont elles qui font grimper la dépense pendant et après la séance. Et comme c’est lundi, on prend le tour de taille avant de commencer.',
+      ex: [
+        { n: 'Squat, chaise imaginaire', c: 'Pieds largeur des épaules, fesses en arrière comme pour s’asseoir, dos droit, genoux dans l’axe des pieds.', p: 'À partir de la phase 3 : descendre plus bas et marquer 1 s en position basse.' },
+        { n: 'Fente arrière alternée', c: 'Un grand pas en arrière, genou arrière vers le sol, buste droit. On alterne les jambes.', p: 'Une main au mur si l’équilibre manque — ce n’est pas de la triche.' },
+        { n: 'Pont fessier', c: 'Sur le dos, pieds à plat, on monte le bassin en serrant les fessiers, épaules au sol.', p: 'Phase 3+ : une jambe tendue, 20 s de chaque côté.' },
+        { n: 'Planche sur les avant-bras', c: 'Coudes sous les épaules, corps en ligne, nombril rentré, fessiers serrés.', p: 'Genoux au sol en phases 1 et 2, sur les pieds ensuite.' },
+        { n: 'Dead bug', c: 'Sur le dos, bras vers le plafond, genoux à 90°. Tendez bras droit + jambe gauche, puis l’inverse, lentement.', p: 'Le bas du dos reste plaqué au sol : c’est le seul critère qui compte.' }
+      ]
+    },
+    B: {
+      key: 'B', day: 'Mercredi', title: 'Haut du corps & sangle', kind: 'circuit',
+      intro: 'Le haut du corps et le dos — le dos surtout, qui redresse la posture et fait paraître le ventre plus plat en deux semaines.',
+      ex: [
+        { n: 'Pompes contre le mur', c: 'Mains au mur à hauteur d’épaules, corps gainé, on descend le buste vers le mur.', p: 'Phase 3+ : mains sur un plan de travail, puis au sol sur les genoux.' },
+        { n: 'Superman', c: 'À plat ventre, on décolle buste et cuisses de quelques centimètres, regard vers le sol, 2 s en haut.', p: 'Amplitude courte : c’est le dos qui travaille, pas la nuque.' },
+        { n: 'Bird dog', c: 'À quatre pattes, on tend bras droit + jambe gauche à l’horizontale, 2 s, puis on change.', p: 'Le bassin ne doit pas basculer. Imaginez un verre d’eau posé sur le bas du dos.' },
+        { n: 'Planche latérale', c: 'Sur le coude, genoux fléchis au début, bassin bien haut. 20 s de chaque côté.', p: 'Phase 3+ : jambes tendues.' },
+        { n: 'Crunch inversé', c: 'Sur le dos, genoux fléchis ramenés vers la poitrine en décollant le bassin, retour lent.', p: 'Lentement à la descente : c’est là que ça travaille.' }
+      ]
+    },
+    C: {
+      key: 'C', day: 'Vendredi', title: 'Corps entier', kind: 'circuit',
+      intro: 'La séance la plus complète de la semaine, et un peu plus de rythme cardiaque.',
+      ex: [
+        { n: 'Squat + montée sur pointes', c: 'Un squat, puis en remontant on monte sur la pointe des pieds. Contrôlé, sans à-coups.', p: 'Phase 4 : ajoutez une petite impulsion en fin de remontée si les genoux sont d’accord.' },
+        { n: 'Boxe : directs et crochets', c: 'En garde, jambes fléchies, on enchaîne les coups en faisant tourner le buste. Le ventre travaille à chaque rotation.', p: 'Phase 3+ : accélérez la cadence sur les 15 dernières secondes.' },
+        { n: 'Pompes inclinées', c: 'Mains sur un plan de travail ou un rebord solide, corps en ligne, coudes près du corps.', p: 'Plus le support est bas, plus c’est dur : descendez d’un cran quand c’est facile.' },
+        { n: 'Planche + touche d’épaule', c: 'En planche bras tendus, une main touche l’épaule opposée sans que le bassin ne bouge.', p: 'Écartez les pieds pour plus de stabilité.' },
+        { n: 'Ciseaux', c: 'Sur le dos, mains sous les fesses, jambes tendues à 30 cm du sol, on les croise lentement.', p: 'Si le bas du dos se creuse, remontez les jambes plus haut.' }
+      ]
+    },
+    D: {
+      key: 'D', day: 'Mardi & jeudi', title: 'Cardio doux & mobilité', kind: 'circuit', tours: 1,
+      intro: 'La séance facile — celle qui permet de faire ça presque tous les matins sans se dégoûter. Dix blocs d’une minute, sans aucun saut : de la boxe, des jambes et du sol. Si vous préférez et que le temps le permet, une vraie marche rapide de 15 minutes dehors fait exactement le même travail.',
+      ex: [
+        { n: 'Squats enchaînés', c: 'Rythme régulier et souple, sans jamais bloquer les genoux en haut.', d: 60 },
+        { n: 'Boxe : directs', c: 'En garde, coudes près du corps, on enchaîne les coups droits en alternance. Cadence soutenue.', d: 60 },
+        { n: 'Fentes arrière alternées', c: 'Un pas en arrière, genou vers le sol, retour. On alterne, buste droit.', d: 60 },
+        { n: 'Boxe : crochets et uppercuts', c: 'Le buste tourne à chaque coup, les appuis restent en place. C’est la taille qui travaille.', d: 60 },
+        { n: 'Fentes latérales alternées', c: 'Grand pas sur le côté, on s’assoit sur cette jambe, l’autre reste tendue. Alternez.', d: 60 },
+        { n: 'Squat + poussée des bras', c: 'Un squat, et en remontant on pousse les deux bras à la verticale au-dessus de la tête.', d: 60 },
+        { n: 'Grimpeur au sol, version lente', c: 'En position de pompe bras tendus, on ramène un genou vers la poitrine puis l’autre. Contrôlé, bassin bas.', d: 60 },
+        { n: 'Pont fessier dynamique', c: 'Sur le dos, montée-descente du bassin au rythme, fessiers serrés en haut.', d: 60 },
+        { n: 'Montées sur pointes', c: 'Debout, on monte lentement sur la pointe des pieds, 2 s en haut, descente lente. Les mollets brûlent, c’est normal.', d: 60 },
+        { n: 'Mobilité et respiration', c: 'Cercles de hanches et d’épaules, puis grandes respirations. On redescend tranquillement.', d: 60 }
+      ]
+    },
+    E: {
+      key: 'E', day: 'Samedi', title: 'Gainage & souplesse', kind: 'blocks', tours: 2, rest: 20,
+      intro: 'Séance douce du week-end : on renforce la sangle profonde et on rend au dos la souplesse que la semaine lui a prise.',
+      ex: [
+        { n: 'Planche sur les avant-bras', c: 'Corps en ligne, nombril rentré. Genoux au sol si nécessaire.', d: 30 },
+        { n: 'Dead bug', c: 'Lent, le bas du dos plaqué au sol.', d: 40 },
+        { n: 'Planche latérale droite', c: 'Bassin haut, épaules alignées.', d: 20 },
+        { n: 'Planche latérale gauche', c: 'Même chose de l’autre côté.', d: 20 },
+        { n: 'Pont fessier', c: 'Montée en serrant les fessiers, 2 s en haut, descente lente.', d: 40 }
+      ]
+    },
+    R: { key: 'R', day: 'Dimanche', title: 'Repos complet', kind: 'rest', intro: 'Jour off, et c’est une partie du programme : c’est pendant le repos que le muscle se reconstruit. Une balade si le cœur vous en dit, rien de plus. Demain matin, mètre ruban avant la séance.' }
+  };
+
+  var WEEKPLAN = ['R', 'A', 'D', 'B', 'D', 'C', 'E']; // index = getDay() : 0 dimanche
+
+  var PHASES = [
+    { i: 1, name: 'Reprise en douceur', weeks: [1, 3], work: 30, rest: 30, note: 'Versions faciles partout : planche sur les genoux, pompes au mur. L’objectif de ces trois semaines n’est pas la performance, c’est de ne rater aucun matin.' },
+    { i: 2, name: 'On tient le rythme', weeks: [4, 7], work: 40, rest: 20, note: 'Même exercices, effort allongé et repos raccourci. C’est ici que la séance commence à compter.' },
+    { i: 3, name: 'Un cran au-dessus', weeks: [8, 12], work: 45, rest: 15, note: 'On passe aux variantes difficiles listées sous chaque exercice. Toujours 15 minutes.' },
+    { i: 4, name: 'Vitesse de croisière', weeks: [13, 16], work: 45, rest: 15, note: 'Rythme de phase 3, et un 3e tour optionnel les matins où ça va fort. Sinon on tient les 15 minutes jusqu’au 20 décembre.' }
+  ];
+
+
+  /* ------------------------------------------------------------- utilities */
+
+  var MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+  var JOURS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+  var MOIS_C = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
+
+  function iso(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addDays(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+  function dayDiff(a, b) { return Math.round((b - a) / 86400000); }
+  function longDate(d) { return JOURS[d.getDay()] + ' ' + d.getDate() + ' ' + MOIS[d.getMonth()]; }
+  function shortDate(s) { var d = parse(s); return d.getDate() + '/' + String(d.getMonth() + 1).padStart(2, '0'); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function mmss(s) { return String(Math.floor(s / 60)) + ':' + String(s % 60).padStart(2, '0'); }
+
+  function mondayOf(d) { var x = new Date(d.getTime()); var g = (x.getDay() + 6) % 7; return addDays(x, -g); }
+
+  function weekIndex(d) { // 1-based programme week, 0 if before
+    var m0 = mondayOf(parse(START));
+    var n = Math.floor(dayDiff(m0, mondayOf(d)) / 7) + 1;
+    return n;
+  }
+  function phaseFor(w) {
+    for (var i = 0; i < PHASES.length; i++) if (w >= PHASES[i].weeks[0] && w <= PHASES[i].weeks[1]) return PHASES[i];
+    return w < 1 ? PHASES[0] : PHASES[PHASES.length - 1];
+  }
+
+  /* ------------------------------------------------------------------ state */
+
+  var LOCAL_KEY = 'quinze-minutes-ensemble-v1';
+  // Page hébergée : l'état est publié dans la page elle-même, donc partagé.
+  // Fichier ouvert depuis l'ordinateur ou le téléphone : on retombe sur le
+  // stockage du navigateur, qui reste propre à chaque appareil.
+  var shared = !!(window.claude && typeof window.claude.use === 'function');
+  var state = JSON.parse(document.getElementById('state').textContent);
+  if (!shared) {
+    try {
+      var raw = window.localStorage.getItem(LOCAL_KEY);
+      if (raw) { var ls = JSON.parse(raw); if (ls && ls.people && ls.people.length) state = ls; }
+    } catch (e) { /* stockage indisponible : on repart de l'état par défaut */ }
+  }
+  if (!state.measures) state.measures = { a: [], b: [] };
+  if (!state.done) state.done = {};
+  var readOnly = false;
+  var busy = false;
+
+  function buildDoc(s) {
+    var css = document.getElementById('css').textContent;
+    var app = document.getElementById('app').textContent;
+    return '<!doctype html>\n<html lang="fr">\n<head>\n<meta charset="utf-8">\n' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+      '<title>Quinze Minutes Ensemble</title>\n' +
+      '<style id="css">' + css + '<\/style>\n</head>\n<body>\n<div id="root"></div>\n' +
+      '<script id="state" type="application/json">' + JSON.stringify(s).replace(/</g, '\\u003c') + '<\/script>\n' +
+      '<script id="app">' + app + '<\/script>\n</body>\n</html>';
+  }
+
+  function save(next, label) {
+    if (readOnly || busy) return;
+    state = next;
+    if (!shared) {
+      try { window.localStorage.setItem(LOCAL_KEY, JSON.stringify(state)); }
+      catch (e) { flash = 'Impossible d’enregistrer : le stockage de ce navigateur est bloqué (navigation privée ?).'; }
+      render();
+      return;
+    }
+    busy = true;
+    render(label || 'Enregistrement…');
+    window.claude.use('artifact').then(function (api) {
+      if (!api) { readOnly = true; busy = false; render(); return; }
+      return api.publish(buildDoc(state)).then(function () { /* la vue se recharge */ });
+    }).catch(function (err) {
+      busy = false;
+      var code = err && err.code;
+      if (code === 'conflict') return; // la vue se recharge sur la version gagnante
+      if (code === 'not_writer' || code === 'not_granted' || code === 'not_declared' || code === 'capability_disabled' || code === 'capability_removed') {
+        readOnly = true;
+      } else {
+        flash = 'Enregistrement impossible pour le moment. Réessayez dans un instant.';
+      }
+      render();
+    });
+  }
+  var flash = '';
+
+  function clone() { return JSON.parse(JSON.stringify(state)); }
+
+  /* ----------------------------------------------------------- computation */
+
+  function sessionFor(d) { return SESSIONS[WEEKPLAN[d.getDay()]]; }
+
+  function inProgram(d) { var s = parse(START), e = parse(END); return d >= s && d <= e; }
+
+  function streak() {
+    var d = new Date(); d.setHours(0, 0, 0, 0);
+    if (!state.done[iso(d)]) d = addDays(d, -1);
+    var n = 0, guard = 0;
+    while (guard++ < 200) {
+      if (!inProgram(d)) break;
+      if (WEEKPLAN[d.getDay()] === 'R') { d = addDays(d, -1); continue; }
+      if (state.done[iso(d)]) { n++; d = addDays(d, -1); } else break;
+    }
+    return n;
+  }
+
+  function countDone() { return Object.keys(state.done).filter(function (k) { return state.done[k]; }).length; }
+
+  function weekDays(n) { // les jours de la semaine n qui appartiennent au programme
+    var m0 = mondayOf(parse(START)), out = [];
+    for (var i = 0; i < 7; i++) {
+      var d = addDays(m0, (n - 1) * 7 + i);
+      if (inProgram(d)) out.push(d);
+    }
+    return out;
+  }
+  var TOTAL_WEEKS = weekIndex(parse(END));
+  var TOTAL_SESSIONS = (function () {
+    var n = 0;
+    for (var w = 1; w <= TOTAL_WEEKS; w++) weekDays(w).forEach(function (d) { if (WEEKPLAN[d.getDay()] !== 'R') n++; });
+    return n;
+  })();
+
+  function measuresOf(pid) {
+    var a = (state.measures[pid] || []).slice();
+    a.sort(function (x, y) { return x.d < y.d ? -1 : 1; });
+    return a;
+  }
+
+  /* -------------------------------------------------------------- sequence */
+
+  function buildSequence(sess, phase, tours) {
+    var seq = [];
+    WARMUP.forEach(function (w) { seq.push({ k: 'warm', n: w.n, c: w.c, d: w.d }); });
+    if (sess.kind === 'circuit') {
+      var T = tours || sess.tours || 2;
+      for (var t = 1; t <= T; t++) {
+        sess.ex.forEach(function (e, i) {
+          seq.push({ k: 'work', n: e.n, c: e.c, d: phase.work, tag: 'Tour ' + t + ' / ' + T });
+          var nx = sess.ex[i + 1] ? sess.ex[i + 1].n : (t < T ? sess.ex[0].n : 'Étirements');
+          seq.push({ k: 'rest', n: 'Récupération', next: nx, d: phase.rest });
+        });
+      }
+    } else if (sess.kind === 'blocks') {
+      var TT = sess.tours || 1;
+      for (var u = 1; u <= TT; u++) {
+        sess.ex.forEach(function (e, i) {
+          seq.push({ k: 'work', n: e.n, c: e.c, d: e.d, tag: TT > 1 ? 'Tour ' + u + ' / ' + TT : '' });
+          if (sess.rest) {
+            var nx2 = sess.ex[i + 1] ? sess.ex[i + 1].n : (u < TT ? sess.ex[0].n : 'Étirements');
+            seq.push({ k: 'rest', n: 'Récupération', next: nx2, d: sess.rest });
+          }
+        });
+      }
+    }
+    (sess.key === 'E' ? COOLDOWN_LONG : COOLDOWN).forEach(function (w) { seq.push({ k: 'cool', n: w.n, c: w.c, d: w.d }); });
+    return seq;
+  }
+
+  function totalOf(seq) { return seq.reduce(function (a, b) { return a + b.d; }, 0); }
+
+  /* ---------------------------------------------------------------- charts */
+
+  var chartMode = 'abs'; // 'abs' = centimètres bruts, 'delta' = écart depuis le départ
+
+  function chart(w, h) {
+    // L'axe du temps couvre tout le programme : la courbe se dessine
+    // semaine après semaine, de la gauche vers le 20 décembre.
+    var abs = chartMode === 'abs';
+    var series = state.people.map(function (p, idx) {
+      var m = measuresOf(p.id);
+      var base = m.length ? m[0].v : 0;
+      return {
+        name: p.name, color: idx === 0 ? 'var(--pa)' : 'var(--pb)',
+        pts: m.map(function (x) { return { t: parse(x.d).getTime(), v: abs ? x.v : Math.round((x.v - base) * 10) / 10 }; })
+      };
+    });
+    var all = [];
+    series.forEach(function (s) { s.pts.forEach(function (p) { all.push(p); }); });
+
+    var x0 = parse(START).getTime(), x1 = parse(END).getTime();
+    var v0, v1;
+    if (all.length) {
+      var vals = all.map(function (p) { return p.v; }).concat(abs ? [] : [0]);
+      v0 = Math.min.apply(null, vals); v1 = Math.max.apply(null, vals);
+      var pad = Math.max(1, (v1 - v0) * 0.25);
+      v0 -= pad; v1 += pad;
+    } else { v0 = abs ? 75 : -5; v1 = abs ? 105 : 1; }
+
+    var L = 34, R = 12, T = 16, B = 26;
+    function X(t) { return L + (t - x0) / (x1 - x0) * (w - L - R); }
+    function Y(v) { return T + (v1 - v) / (v1 - v0) * (h - T - B); }
+    var g = '';
+
+    // lignes horizontales + graduations
+    for (var i = 0; i <= 3; i++) {
+      var vv = v0 + (v1 - v0) * i / 3, y = Y(vv);
+      g += '<line x1="' + L + '" y1="' + y.toFixed(1) + '" x2="' + (w - R) + '" y2="' + y.toFixed(1) + '" stroke="var(--line)" stroke-width="1"/>' +
+        '<text x="' + (L - 6) + '" y="' + (y + 3.5).toFixed(1) + '" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-3)">' +
+        (abs ? vv.toFixed(0) : (vv > 0 ? '+' : '') + vv.toFixed(1)) + '</text>';
+    }
+
+    // repères de mois
+    [[8, 'sept'], [9, 'oct'], [10, 'nov'], [11, 'déc']].forEach(function (mo) {
+      var t = new Date(2026, mo[0], 1).getTime();
+      if (t < x0 || t > x1) { if (mo[0] !== 8) return; t = x0; }
+      var x = X(t);
+      g += '<line x1="' + x.toFixed(1) + '" y1="' + T + '" x2="' + x.toFixed(1) + '" y2="' + (h - B) + '" stroke="var(--line)" stroke-width="1" stroke-dasharray="2 4"/>';
+      g += '<text x="' + (x + 3).toFixed(1) + '" y="' + (h - 8) + '" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-3)">' + mo[1] + '</text>';
+    });
+
+    // ligne du zéro en mode écart
+    if (!abs) {
+      var yz = Y(0);
+      g += '<line x1="' + L + '" y1="' + yz.toFixed(1) + '" x2="' + (w - R) + '" y2="' + yz.toFixed(1) + '" stroke="var(--line-strong)" stroke-width="1.5" stroke-dasharray="4 3"/>';
+      g += '<text x="' + (w - R) + '" y="' + (yz - 5).toFixed(1) + '" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--ink-3)">départ</text>';
+    }
+
+    // repère « aujourd'hui »
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    if (now.getTime() >= x0 && now.getTime() <= x1) {
+      var xt = X(now.getTime());
+      g += '<line x1="' + xt.toFixed(1) + '" y1="' + T + '" x2="' + xt.toFixed(1) + '" y2="' + (h - B) + '" stroke="var(--clay)" stroke-width="1.5"/>';
+    }
+
+    // les deux courbes
+    series.forEach(function (s) {
+      if (!s.pts.length) return;
+      if (s.pts.length > 1) {
+        var dstr = s.pts.map(function (p, i) { return (i ? 'L' : 'M') + X(p.t).toFixed(1) + ' ' + Y(p.v).toFixed(1); }).join(' ');
+        g += '<path d="' + dstr + '" fill="none" stroke="' + s.color + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>';
+      }
+      s.pts.forEach(function (p, i) {
+        var last = i === s.pts.length - 1;
+        g += '<circle cx="' + X(p.t).toFixed(1) + '" cy="' + Y(p.v).toFixed(1) + '" r="' + (last ? 4.5 : 2.6) + '" fill="' + s.color + '"' + (last ? ' stroke="var(--surface)" stroke-width="2"' : '') + '/>';
+      });
+      var lp = s.pts[s.pts.length - 1];
+      var lx = X(lp.t), anchor = lx > L + 70 ? 'end' : 'start';
+      g += '<text x="' + (anchor === 'end' ? lx - 8 : lx + 8).toFixed(1) + '" y="' + (Y(lp.v) - 9).toFixed(1) + '" text-anchor="' + anchor + '" font-family="IBM Plex Mono, monospace" font-size="10.5" font-weight="600" fill="' + s.color + '">' + esc(s.name) + '</text>';
+    });
+
+    if (!all.length) {
+      g += '<text x="' + (w / 2) + '" y="' + (h / 2) + '" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--ink-3)">la courbe démarre à votre première mesure</text>';
+    }
+
+    return '<div class="charthead">' +
+      '<span class="eyebrow">' + (abs ? 'Tour de taille, en cm' : 'Écart depuis la 1<sup>re</sup> mesure') + '</span>' +
+      '<span class="toggle">' +
+      '<button class="mini' + (abs ? ' on' : '') + '" data-act="mode" data-m="abs">cm</button>' +
+      '<button class="mini' + (abs ? '' : ' on') + '" data-act="mode" data-m="delta">Écart</button>' +
+      '</span></div>' +
+      '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:auto" role="img" aria-label="Évolution du tour de taille de ' +
+      esc(state.people.map(function (p) { return p.name; }).join(' et ')) + ' du 1er septembre au 20 décembre">' + g + '</svg>';
+  }
+
+  // Liste d'exercices avec les récupérations, partagée par la carte du jour
+  // et par le détail d'un jour dans la liste des séances.
+  function exerciseList(sess, ph, withCues) {
+    var seq = buildSequence(sess, ph);
+    var tours = sess.kind === 'circuit' ? (sess.tours || 2) : (sess.tours || 1);
+    var rest = sess.kind === 'circuit' ? ph.rest : (sess.rest || 0);
+    var cool = mmss(totalOf(seq.filter(function (x) { return x.k === 'cool'; })));
+    var o = ['<ul class="exlist">'];
+    o.push('<li><span class="n">—</span><div><div class="nm">Échauffement</div>' +
+      (withCues ? '<div class="cue">' + WARMUP.map(function (x) { return esc(x.n); }).join(' · ') + '</div>' : '') +
+      '</div><span class="t">3:00</span></li>');
+    if (tours > 1) o.push('<li class="tour"><span class="n"></span><div><div class="rec">Le bloc ci-dessous, ' + tours + ' fois</div></div><span class="t"></span></li>');
+    sess.ex.forEach(function (e, i) {
+      var dur = sess.kind === 'circuit' ? ph.work + ' s' : e.d + ' s';
+      o.push('<li><span class="n">' + (i + 1) + '</span><div><div class="nm">' + esc(e.n) + '</div>' +
+        (withCues ? '<div class="cue">' + esc(e.c) + '</div>' : '') + '</div><span class="t">' + dur + '</span></li>');
+      if (rest) o.push('<li class="recup"><span class="n"></span><div><div class="rec">Récupération</div></div><span class="t">' + rest + ' s</span></li>');
+    });
+    o.push('<li><span class="n">—</span><div><div class="nm">Étirements</div>' +
+      (withCues ? '<div class="cue">' + (sess.key === 'E' ? COOLDOWN_LONG : COOLDOWN).map(function (x) { return esc(x.n); }).join(' · ') + '</div>' : '') +
+      '</div><span class="t">' + cool + '</span></li>');
+    o.push('</ul>');
+    return o.join('');
+  }
+
+  /* ------------------------------------------------- liste de toutes les séances */
+
+  // État d'ouverture de la liste : propre à chaque personne qui regarde,
+  // jamais publié. La semaine en cours est dépliée d'entrée.
+  var openWeeks = {};
+  var openDays = {};
+  (function () {
+    var t = new Date(); t.setHours(0, 0, 0, 0);
+    var n = t < parse(START) ? 1 : (t > parse(END) ? TOTAL_WEEKS : weekIndex(t));
+    openWeeks[n] = true;
+  })();
+
+  function allSessions(today, curWeek) {
+    var out = ['<div class="weeks">'];
+    for (var n = 1; n <= TOTAL_WEEKS; n++) {
+      var days = weekDays(n);
+      if (!days.length) continue;
+      var ph = phaseFor(n);
+      var sessions = days.filter(function (d) { return WEEKPLAN[d.getDay()] !== 'R'; });
+      var doneN = sessions.filter(function (d) { return state.done[iso(d)]; }).length;
+      var isCur = n === curWeek;
+      var open = !!openWeeks[n];
+      out.push('<article class="week' + (isCur ? ' current' : '') + '">');
+      out.push('<button class="weekhead" data-act="week" data-n="' + n + '" aria-expanded="' + open + '">');
+      out.push('<span class="wn">S' + n + '</span>');
+      out.push('<span class="wd">' + days[0].getDate() + '–' + days[days.length - 1].getDate() + ' ' + MOIS_C[days[days.length - 1].getMonth()] + ' · phase ' + ph.i + '</span>');
+      out.push('<span class="wc' + (doneN === sessions.length ? ' full' : '') + '">' + doneN + '/' + sessions.length + '</span>');
+      out.push('<span class="caret">' + (open ? '–' : '+') + '</span>');
+      out.push('</button>');
+      if (open) {
+        out.push('<div class="daylist">');
+        days.forEach(function (d) {
+          var k = iso(d), sess = sessionFor(d), rest = sess.kind === 'rest';
+          var done = !!state.done[k], isToday = k === iso(today), past = d < today;
+          var cls = 'dayrow' + (isToday ? ' today' : '') + (rest ? ' rest' : (!done && past ? ' miss' : ''));
+          out.push('<div class="' + cls + '">');
+          out.push('<div class="drhead">');
+          if (rest) {
+            out.push('<span class="chk rest" aria-hidden="true">–</span>');
+          } else {
+            out.push('<button class="chk' + (done ? ' on' : '') + '" data-act="toggle" data-d="' + k + '"' + (readOnly ? ' disabled' : '') +
+              ' aria-pressed="' + done + '" aria-label="' + (done ? 'Annuler' : 'Valider') + ' la séance du ' + longDate(d) + '">' + (done ? '✓' : '') + '</button>');
+          }
+          out.push('<button class="drmain" data-act="day" data-d="' + k + '" aria-expanded="' + (!!openDays[k]) + '">');
+          out.push('<span class="dnum">' + JOURS[d.getDay()].slice(0, 3) + ' ' + d.getDate() + (isToday ? ' · aujourd’hui' : '') + '</span>');
+          out.push('<span class="dtitle">' + esc(sess.title) + '</span>');
+          out.push('</button>');
+          if (!rest && (d.getDay() === 1 || k === START)) out.push('<span class="dtag">mesure</span>');
+          out.push('</div>');
+          if (openDays[k]) {
+            out.push('<div class="dbody">');
+            if (rest) {
+              out.push('<p class="prose" style="font-size:15px;padding-top:10px;border-top:1px solid var(--line)">' + esc(sess.intro) + '</p>');
+            } else {
+              out.push(exerciseList(sess, ph, true));
+              if (isToday) out.push('<div style="padding-top:10px"><button class="primary" data-act="start" style="width:100%">Démarrer la séance guidée</button></div>');
+            }
+            out.push('</div>');
+          }
+          out.push('</div>');
+        });
+        out.push('</div>');
+      }
+      out.push('</article>');
+    }
+    out.push('</div>');
+    return out.join('');
+  }
+
+  /* ---------------------------------------------------------------- render */
+
+  var root = document.getElementById('root');
+
+  function render(busyLabel) {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var tISO = iso(today);
+    var startD = parse(START), endD = parse(END);
+    var before = today < startD;
+    var after = today > endD;
+    var w = weekIndex(today);
+    var ph = phaseFor(before ? 1 : w);
+    var sess = sessionFor(today);
+    var seq = sess.kind === 'rest' ? [] : buildSequence(sess, ph);
+    var totalDays = dayDiff(startD, endD) + 1;
+    var elapsed = Math.min(Math.max(dayDiff(startD, today) + 1, 0), totalDays);
+    var pct = Math.round(elapsed / totalDays * 100);
+
+    var h = [];
+
+    /* header */
+    h.push('<header class="masthead">');
+    h.push('<div class="eyebrow">1<sup>er</sup> septembre → 20 décembre 2026 · 16 semaines</div>');
+    h.push('<h1>Quinze minutes, ensemble</h1>');
+    h.push('<p class="sub">Un programme du matin pour ' + esc(state.people.map(function (p) { return p.name; }).join(' et ')) + '. Court exprès : c’est la seule façon de le faire six jours sur sept.</p>');
+    h.push('<div class="progressline"><div class="meta">');
+    if (before) {
+      h.push('<span>Départ dans ' + dayDiff(today, startD) + ' jour' + (dayDiff(today, startD) > 1 ? 's' : '') + '</span><span>Mardi 1<sup>er</sup> septembre</span>');
+    } else if (after) {
+      h.push('<span>Programme terminé</span><span>' + countDone() + ' séances au total</span>');
+    } else {
+      h.push('<span>Semaine ' + w + ' sur 16 · phase ' + ph.i + '</span><span>' + pct + ' %</span>');
+    }
+    h.push('</div><div class="bar"><i style="width:' + (before ? 0 : pct) + '%"></i></div></div>');
+    h.push('</header>');
+
+    if (readOnly) h.push('<div class="banner">Vous consultez cette page en lecture seule : les validations et les mesures ne seront pas enregistrées.</div>');
+    if (flash) { h.push('<div class="banner">' + esc(flash) + '</div>'); flash = ''; }
+
+    /* today */
+    var doneToday = !!state.done[tISO];
+    h.push('<section>');
+    h.push('<div class="sec-head"><h2>' + (before ? 'Le premier matin' : 'Ce matin') + '</h2><span class="eyebrow">' + esc(longDate(before ? startD : today)) + '</span></div>');
+    var showSess = before ? sessionFor(startD) : sess;
+    var showSeq = showSess.kind === 'rest' ? [] : buildSequence(showSess, ph);
+    h.push('<article class="card today">');
+    h.push('<div class="top' + (doneToday ? ' done' : '') + '">');
+    h.push('<div class="badge-row">');
+    h.push('<span class="pill' + (doneToday ? ' accent' : '') + '">' + (doneToday ? 'Séance validée ✓' : 'Séance ' + showSess.key) + '</span>');
+    h.push('<span class="pill">Phase ' + ph.i + ' · ' + esc(ph.name) + '</span>');
+    if (showSess.kind === 'circuit') {
+      var nt = showSess.tours || 2;
+      h.push('<span class="pill clay">' + ph.work + ' s d’effort / ' + ph.rest + ' s de récup' + (nt > 1 ? ' · ' + nt + ' tours' : '') + '</span>');
+    }
+    if (showSess.kind === 'blocks' && showSess.tours) h.push('<span class="pill clay">récup ' + showSess.rest + ' s · ' + showSess.tours + ' tours</span>');
+    var refDay = before ? startD : today;
+    var isMeasureDay = inProgram(refDay) && (refDay.getDay() === 1 || iso(refDay) === START);
+    if (isMeasureDay) h.push('<span class="pill clay">Mètre ruban</span>');
+    h.push('</div>');
+    h.push('<h2>' + esc(showSess.title) + '</h2>');
+    h.push('<p class="dur">' + (showSess.kind === 'rest' ? 'Repos — et prise des mesures' : mmss(totalOf(showSeq)) + ' au total, échauffement et étirements compris') + '</p>');
+    h.push('</div>');
+
+    if (showSess.kind === 'rest') {
+      h.push('<div class="card-pad prose">' + esc(showSess.intro) + '</div>');
+    } else {
+      h.push(exerciseList(showSess, ph, true));
+      h.push('<div class="actions"><button class="primary grow" data-act="start">' + (before ? 'Essayer la séance guidée' : 'Démarrer la séance guidée') + '</button></div>');
+    }
+
+    if (!before && !after) {
+      h.push('<div class="actions">');
+      if (doneToday) {
+        h.push('<button class="ghost grow" data-act="undo"' + (readOnly || busy ? ' disabled' : '') + '>Annuler la validation</button>');
+      } else {
+        h.push('<button class="' + (showSess.kind === 'rest' ? 'ghost' : '') + ' grow" data-act="done"' + (readOnly || busy ? ' disabled' : '') + '>' + (busyLabel || (showSess.kind === 'rest' ? 'Marquer le dimanche comme fait' : 'C’est fait ✓')) + '</button>');
+      }
+      h.push('</div>');
+    }
+    h.push('</article>');
+    h.push('</section>');
+
+    /* stats + calendar */
+    h.push('<section>');
+    h.push('<div class="sec-head"><h2>Les matins cochés</h2></div>');
+    h.push('<div class="statrow">');
+    h.push('<div class="stat"><span class="v">' + countDone() + '<small style="font-size:14px;color:var(--ink-3)">/' + TOTAL_SESSIONS + '</small></span><span class="k">Séances faites</span></div>');
+    h.push('<div class="stat"><span class="v">' + streak() + '</span><span class="k">Jours d’affilée</span></div>');
+    h.push('<div class="stat"><span class="v">' + Math.round(countDone() * 15 / 60 * 10) / 10 + ' h</span><span class="k">Temps investi</span></div>');
+    h.push('</div>');
+    h.push('</section>');
+
+    /* toutes les séances */
+    h.push('<section>');
+    h.push('<div class="sec-head"><h2>Toutes les séances</h2><span class="eyebrow">' + TOTAL_SESSIONS + ' matins</span></div>');
+    h.push(allSessions(today, before ? 1 : (after ? TOTAL_WEEKS : w)));
+    h.push('</section>');
+
+    /* measures */
+    h.push('<section>');
+    h.push('<div class="sec-head"><h2>Tour de taille</h2><span class="eyebrow">chaque lundi matin</span></div>');
+    if (!before && !after && isMeasureDay) {
+      var manquants = state.people.filter(function (p) {
+        return !(state.measures[p.id] || []).some(function (m) { return m.d === tISO; });
+      });
+      if (manquants.length) {
+        h.push('<div class="banner">' + (iso(today) === START ? 'Premier jour : prenez la mesure de départ' : 'C’est lundi : mètre ruban') + ' pour ' +
+          esc(manquants.map(function (p) { return p.name; }).join(' et ')) + ', avant la séance et avant de boire.</div>');
+      }
+    }
+    h.push('<div class="people">');
+    state.people.forEach(function (p, idx) {
+      var m = measuresOf(p.id);
+      var cur = m.length ? m[m.length - 1] : null;
+      var first = m.length ? m[0] : null;
+      var d = cur && first ? cur.v - first.v : null;
+      h.push('<article class="card person">');
+      h.push('<div class="who"><span class="dot" style="background:' + (idx === 0 ? 'var(--pa)' : 'var(--pb)') + '"></span><span class="name">' + esc(p.name) + '</span>' +
+        (readOnly ? '' : '<button class="mini" data-act="rename" data-id="' + p.id + '" style="margin-left:auto" title="Renommer" aria-label="Renommer ' + esc(p.name) + '">✎</button>') + '</div>');
+      h.push('<div class="cm">' + (cur ? String(cur.v).replace('.', ',') + '<small> cm</small>' : '—<small> cm</small>') + '</div>');
+      if (d !== null && m.length > 1) {
+        var cls = d < -0.05 ? 'down' : (d > 0.05 ? 'up' : 'flat');
+        h.push('<div class="delta ' + cls + '">' + (d > 0 ? '+' : '') + String(Math.round(d * 10) / 10).replace('.', ',') + ' cm depuis le départ</div>');
+      } else {
+        h.push('<div class="delta flat">' + (cur ? 'mesure de départ' : 'pas encore de mesure') + '</div>');
+      }
+      h.push('</article>');
+    });
+    h.push('</div>');
+    h.push('<div class="card chart">' + chart(680, 230) + '</div>');
+    if (!readOnly) {
+      h.push('<form class="card mform" data-act="addm">');
+      h.push('<label>Qui<select name="pid">' + state.people.map(function (p) { return '<option value="' + p.id + '">' + esc(p.name) + '</option>'; }).join('') + '</select></label>');
+      h.push('<label>Date<input type="date" name="date" value="' + tISO + '" required></label>');
+      h.push('<label>Tour de taille<input type="number" name="cm" step="0.1" min="40" max="200" placeholder="cm" required></label>');
+      h.push('<button class="primary" type="submit"' + (busy ? ' disabled' : '') + '>Enregistrer</button>');
+      h.push('</form>');
+    }
+    var hist = [];
+    state.people.forEach(function (p, idx) {
+      measuresOf(p.id).slice(-6).reverse().forEach(function (m) {
+        hist.push({ pid: p.id, name: p.name, idx: idx, d: m.d, v: m.v });
+      });
+    });
+    hist.sort(function (a, b) { return a.d < b.d ? 1 : -1; });
+    if (hist.length) {
+      h.push('<div class="card hist">');
+      hist.slice(0, 10).forEach(function (r) {
+        h.push('<div class="row"><span class="dot" style="width:8px;height:8px;border-radius:99px;background:' + (r.idx === 0 ? 'var(--pa)' : 'var(--pb)') + '"></span><span>' + esc(r.name) + '</span><span class="d">' + shortDate(r.d) + '</span><span class="sp"></span><span>' + String(r.v).replace('.', ',') + ' cm</span>' +
+          (readOnly ? '' : '<button class="mini" data-act="delm" data-id="' + r.pid + '" data-d="' + r.d + '">×</button>') + '</div>');
+      });
+      h.push('</div>');
+    }
+    h.push('</section>');
+
+    h.push('<footer>15 min × 6 jours × 16 semaines · ' + (shared ? 'suivi partagé entre vos deux téléphones' : 'suivi enregistré dans ce navigateur') + '</footer>');
+
+    root.innerHTML = h.join('');
+  }
+
+
+  /* --------------------------------------------------------------- actions */
+
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button[data-act]');
+    if (!b) return;
+    var act = b.getAttribute('data-act');
+    if (act === 'start') { openPlayer(); return; }
+    if (act === 'mode') { chartMode = b.getAttribute('data-m'); render(); return; }
+    if (act === 'week') { var n = b.getAttribute('data-n'); openWeeks[n] = !openWeeks[n]; render(); return; }
+    if (act === 'day') { var dk = b.getAttribute('data-d'); openDays[dk] = !openDays[dk]; render(); return; }
+    if (act === 'toggle') {
+      var kk = b.getAttribute('data-d');
+      var nx = clone();
+      if (nx.done[kk]) delete nx.done[kk]; else nx.done[kk] = true;
+      save(nx);
+      return;
+    }
+    if (act === 'done' || act === 'undo') {
+      var t = iso(new Date());
+      var n = clone();
+      if (act === 'done') n.done[t] = true; else delete n.done[t];
+      save(n);
+      return;
+    }
+    if (act === 'rename') {
+      var id = b.getAttribute('data-id');
+      var p = state.people.filter(function (x) { return x.id === id; })[0];
+      var wrap = b.parentNode;
+      wrap.innerHTML = '<input type="text" id="rn" value="' + esc(p.name) + '" maxlength="24"><button class="mini primary" data-act="rename-ok" data-id="' + id + '">OK</button>';
+      var inp = document.getElementById('rn'); inp.focus(); inp.select();
+      return;
+    }
+    if (act === 'rename-ok') {
+      var id2 = b.getAttribute('data-id');
+      var v = (document.getElementById('rn').value || '').trim().slice(0, 24);
+      if (!v) { render(); return; }
+      var n2 = clone();
+      n2.people.forEach(function (x) { if (x.id === id2) x.name = v; });
+      save(n2);
+      return;
+    }
+    if (act === 'delm') {
+      var pid = b.getAttribute('data-id'), dd = b.getAttribute('data-d');
+      var n3 = clone();
+      n3.measures[pid] = (n3.measures[pid] || []).filter(function (m) { return m.d !== dd; });
+      save(n3);
+      return;
+    }
+  });
+
+  document.addEventListener('submit', function (ev) {
+    var f = ev.target.closest('form[data-act="addm"]');
+    if (!f) return;
+    ev.preventDefault();
+    var pid = f.pid.value, date = f.date.value, cm = parseFloat(String(f.cm.value).replace(',', '.'));
+    if (!date || !isFinite(cm)) return;
+    cm = Math.round(cm * 10) / 10;
+    var n = clone();
+    if (!n.measures[pid]) n.measures[pid] = [];
+    n.measures[pid] = n.measures[pid].filter(function (m) { return m.d !== date; });
+    n.measures[pid].push({ d: date, v: cm });
+    save(n);
+  });
+
+  /* ---------------------------------------------------------------- player */
+
+  var P = null;
+
+  function beep(freq, dur) {
+    try {
+      if (!P.ac) P.ac = new (window.AudioContext || window.webkitAudioContext)();
+      var o = P.ac.createOscillator(), g = P.ac.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, P.ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.22, P.ac.currentTime + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, P.ac.currentTime + dur);
+      o.connect(g); g.connect(P.ac.destination);
+      o.start(); o.stop(P.ac.currentTime + dur + 0.02);
+    } catch (e) { /* silence */ }
+  }
+
+  function openPlayer() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var before = today < parse(START);
+    var d = before ? parse(START) : today;
+    var sess = sessionFor(d);
+    if (sess.kind === 'rest') return;
+    var ph = phaseFor(before ? 1 : weekIndex(today));
+    var seq = buildSequence(sess, ph);
+    P = { seq: seq, i: 0, left: seq[0].d, paused: false, ac: null, el: null, timer: null, lock: null };
+
+    var el = document.createElement('div');
+    el.className = 'player';
+    el.innerHTML =
+      '<div class="phead"><span class="kind" id="p-tag"></span><button class="mini ghost" id="p-quit">Quitter</button></div>' +
+      '<div class="ring" id="p-ring"><i style="width:0%"></i></div>' +
+      '<div class="pbody">' +
+      '<div class="kind" id="p-kind"></div>' +
+      '<div class="exname" id="p-name"></div>' +
+      '<div class="clock" id="p-clock">00</div>' +
+      '<div class="cue" id="p-cue"></div>' +
+      '<div class="next" id="p-next"></div>' +
+      '</div>' +
+      '<div class="pfoot"><button id="p-pause">Pause</button><button id="p-skip" class="ghost">Passer</button></div>';
+    document.body.appendChild(el);
+    P.el = el;
+    document.body.style.overflow = 'hidden';
+
+    if (navigator.wakeLock && navigator.wakeLock.request) {
+      navigator.wakeLock.request('screen').then(function (l) { P.lock = l; }).catch(function () {});
+    }
+
+    el.querySelector('#p-quit').addEventListener('click', closePlayer);
+    el.querySelector('#p-pause').addEventListener('click', function () {
+      P.paused = !P.paused;
+      this.textContent = P.paused ? 'Reprendre' : 'Pause';
+    });
+    el.querySelector('#p-skip').addEventListener('click', function () { next(); });
+
+    beep(660, 0.12);
+    paint();
+    P.timer = setInterval(tick, 1000);
+  }
+
+  function paint() {
+    var s = P.seq[P.i];
+    if (!s) return;
+    var tot = P.seq.length;
+    P.el.querySelector('#p-tag').textContent = (s.tag || '') + (s.tag ? ' · ' : '') + 'Étape ' + (P.i + 1) + '/' + tot;
+    var isRest = s.k === 'rest';
+    P.el.querySelector('#p-kind').textContent = s.k === 'warm' ? 'Échauffement' : s.k === 'cool' ? 'Étirement' : isRest ? 'Récupération · ensuite' : 'Effort';
+    P.el.querySelector('#p-name').textContent = isRest ? s.next : s.n;
+    P.el.querySelector('#p-cue').textContent = isRest ? '' : s.c;
+    P.el.querySelector('#p-next').textContent = isRest ? 'soufflez, on repart à zéro'
+      : (P.seq[P.i + 1] ? 'Ensuite : ' + (P.seq[P.i + 1].k === 'rest' ? 'récupération ' + P.seq[P.i + 1].d + ' s' : P.seq[P.i + 1].n) : 'Dernière étape');
+    var clock = P.el.querySelector('#p-clock');
+    clock.textContent = String(P.left).padStart(2, '0');
+    clock.className = 'clock' + (s.k === 'rest' ? ' rest' : '');
+    var ring = P.el.querySelector('#p-ring');
+    ring.className = 'ring' + (s.k === 'rest' ? ' rest' : '');
+    ring.firstChild.style.width = Math.round((1 - P.left / s.d) * 100) + '%';
+  }
+
+  function next() {
+    P.i++;
+    if (P.i >= P.seq.length) { finish(); return; }
+    P.left = P.seq[P.i].d;
+    beep(P.seq[P.i].k === 'work' ? 880 : 520, 0.16);
+    paint();
+  }
+
+  function tick() {
+    if (!P || P.paused) return;
+    P.left--;
+    if (P.left <= 3 && P.left > 0) beep(600, 0.07);
+    if (P.left <= 0) { next(); return; }
+    paint();
+  }
+
+  function finish() {
+    beep(880, 0.18);
+    setTimeout(function () { beep(1180, 0.3); }, 200);
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    var t = iso(now);
+    closePlayer();
+    if (!readOnly && inProgram(now) && !state.done[t]) {
+      var n = clone(); n.done[t] = true; save(n);
+    }
+  }
+
+  function closePlayer() {
+    if (!P) return;
+    clearInterval(P.timer);
+    if (P.lock && P.lock.release) { try { P.lock.release(); } catch (e) {} }
+    if (P.el && P.el.parentNode) P.el.parentNode.removeChild(P.el);
+    document.body.style.overflow = '';
+    P = null;
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && P) closePlayer();
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
