@@ -164,6 +164,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .weeks{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .origin-banner{padding:14px 18px;border-radius:3px;background:rgba(168,133,42,.08);border:1px solid rgba(168,133,42,.3);margin-bottom:22px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
 .strengths{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:30px}
+.strengths.mental-only{grid-template-columns:1fr}
 @media(max-width:680px){.strengths{grid-template-columns:1fr}}
 .str-card{border:1.5px solid var(--line);border-radius:4px;padding:16px 18px;background:rgba(255,255,255,.45)}
 .str-card .sc-axis{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
@@ -302,6 +303,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .week-tab.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 .week-note{font-size:16px;font-style:italic;color:var(--dim);margin-bottom:28px;min-height:22px}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.cols.mental-only{grid-template-columns:1fr;max-width:640px}
 @media(max-width:760px){.cols{grid-template-columns:1fr}.shell{padding:0 18px}}
 .col-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
 .col-head .dot{width:10px;height:10px;border-radius:50%}
@@ -442,14 +444,14 @@ textarea:focus{outline:none;border-color:var(--gold)}
 <!-- ============ HERO ============ -->
 <section class="screen on" id="hero">
   <div class="hero">
-    <div class="eyebrow">Préparation mentale &amp; physique · BMX Race</div>
+    <div class="eyebrow">Préparation mentale · BMX Race</div>
     <h1>
       <div>ROULE AVEC</div>
       <div class="line2">UNE LONGUEUR</div>
       <div>D'AVANCE</div>
     </h1>
-    <p class="lead">Un programme qui apprend de toi, manche après manche.</p>
-    <p class="sub">Chaque mois, ton coach lit ton ressenti et réadapte ton pilotage mental et ta prépa physique. Rien n'est figé. Tout avance en spirale, comme toi sur la piste.</p>
+    <p class="lead">Un programme 100% mental, qui apprend de toi, manche après manche.</p>
+    <p class="sub">Chaque mois, ton coach lit ton ressenti et réadapte ton travail mental. Rien n'est figé. Tout avance en spirale, comme toi sur la piste.</p>
     <div class="pillars">
       <div class="pillar"><b>A</b><span>Alignement</span></div>
       <div class="pillar"><b>X</b><span>eXigence</span></div>
@@ -467,7 +469,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="sec-head">
       <div class="step-tag">ÉTAPE 2 · LE POINT DE DÉPART</div>
       <h1>DIAGNOSTIC</h1>
-      <div class="serif">On repère d'abord où ça coince, dans la tête et dans le corps.</div>
+      <div class="serif">On repère d'abord où ça coince, dans la tête.</div>
     </div>
     <div class="qwrap">
       <div class="qcount">
@@ -491,7 +493,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="sec-head">
       <div class="step-tag">ÉTAPE 1 · TA FICHE PILOTE</div>
       <h1>TON CADRE</h1>
-      <div class="serif">Pour caler le bon volume, sans jamais te surcharger.</div>
+      <div class="serif">Pour caler ton accompagnement mental, sans jamais aller trop vite.</div>
     </div>
     <div class="qwrap">
       <div class="field">
@@ -501,31 +503,17 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <div class="field">
         <label>Ton âge</label>
         <div style="display:flex;align-items:center;gap:20px">
-          <input type="range" min="10" max="18" value="13" id="ageR" oninput="ageOut()">
-          <span class="rangeval" id="ageV">13</span>
+          <input type="range" min="10" max="60" value="16" id="ageR" oninput="ageOut()">
+          <span class="rangeval" id="ageV">16</span>
         </div>
-      </div>
-      <div class="field">
-        <label>Jours dispos pour le physique</label>
-        <div class="chips" id="daysChips"></div>
-        <p class="gym-note">Choisis les jours où tu peux t'entraîner. On laisse au moins 48h entre deux jours pour la récupération — les jours trop proches se grisent automatiquement.</p>
       </div>
       <div class="field">
         <label>Niveau de compétition</label>
         <div class="chips" id="lvlChips"></div>
       </div>
       <div class="field">
-        <label>Accès à une salle</label>
-        <div class="chips" id="gymChips"></div>
-        <p class="gym-note" id="gymNote" style="display:none"></p>
-      </div>
-      <div class="field">
-        <label>Téléphone du rider</label>
+        <label>Ton téléphone</label>
         <input type="tel" class="txt" id="phoneRider" placeholder="06 00 00 00 00" inputmode="tel">
-      </div>
-      <div class="field">
-        <label>Téléphone des parents</label>
-        <input type="tel" class="txt" id="phoneParent" placeholder="06 00 00 00 00" inputmode="tel">
       </div>
       <button class="btn gold" style="margin-top:8px" onclick="go('diag')">Continuer vers le diagnostic</button>
     </div>
@@ -573,7 +561,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
     </div>
     <div class="profile-strip" id="profileStrip"></div>
 
-    <div class="strengths" id="strengths"></div>
+    <div class="strengths mental-only" id="strengths"></div>
 
     <div class="crosscrawl" id="crossCrawl" style="display:none"></div>
 
@@ -585,21 +573,11 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="weeks" id="weekTabs"></div>
     <p class="week-note serif" id="weekNote"></p>
 
-    <div class="cols">
+    <div class="cols mental-only">
       <div>
         <div class="col-head"><span class="dot m"></span><h2>Mental</h2><small>1 exercice / semaine</small></div>
         <div id="mentalCol"></div>
       </div>
-      <div>
-        <div class="col-head"><span class="dot p"></span><h2>Physique</h2><small id="physCount"></small></div>
-        <div id="physCol"></div>
-      </div>
-    </div>
-
-    <div class="parent-zone">
-      <div class="col-head"><span class="dot pa"></span><h2>Côté parent</h2><small>1 clé d'accompagnement / mois</small></div>
-      <p class="parent-intro serif">Ton rôle compte autant que l'entraînement. Voici comment épauler ton enfant ce mois-ci, sans mettre de pression.</p>
-      <div id="parentCol"></div>
     </div>
 
     <div style="text-align:center;margin-top:44px" id="reportCta">
@@ -708,12 +686,6 @@ textarea:focus{outline:none;border-color:var(--gold)}
     </div>
 
     <div class="rq">
-      <p>Quels jours seras-tu dispo pour le physique le mois prochain ?</p>
-      <div class="chips" id="reportDaysChips"></div>
-      <p class="mini-note" style="text-align:left;margin-top:10px">Tes dispos changent d'un mois à l'autre ? Normal. Ton planning se recale dessus. On laisse au moins 48h entre deux jours choisis.</p>
-    </div>
-
-    <div class="rq">
       <p>Qu'est-ce que tu aimerais réussir le mois prochain ?</p>
       <textarea id="reportGoal" placeholder="Un objectif, une sensation, un moment de course..."></textarea>
     </div>
@@ -787,11 +759,9 @@ function axeChargerProfil(r){
   try{
     const p = JSON.parse(r.profil);
     const compatible = axeReponsesCompatibles(p.mental,'mental')
-      && axeReponsesCompatibles(p.physique,'physique')
       && axeReponsesCompatibles(p.sensoriel,'sensoriel');
     if(compatible){
       if(p.mental) state.mental = p.mental;
-      if(p.physique) state.physique = p.physique;
       if(p.sensoriel) state.sensoriel = p.sensoriel;
     } else {
       console.log('[AXE] Ancien format de diagnostic détecté : réponses ignorées, diagnostic à refaire.');
@@ -799,11 +769,6 @@ function axeChargerProfil(r){
     if(p.prenom) state.prenom = p.prenom;
     if(typeof p.age !== 'undefined') state.age = p.age;
     if(p.niveau) state.level = p.niveau;
-    // rétrocompatibilité : les anciens profils stockaient un simple nombre de jours (1-5),
-    // les nouveaux stockent directement la liste des jours de la semaine choisis
-    if(Array.isArray(p.jours)) state.trainingDays = p.jours;
-    else if(typeof p.jours === 'number') state.trainingDays = joursParDefaut(p.jours);
-    if(typeof p.salle !== 'undefined') state.gym = p.salle;
     if(r.mois) state.month = r.mois;
     if(compatible){
       console.log('[AXE] Profil rechargé depuis la base. Ouverture du programme.');
@@ -817,11 +782,12 @@ function axeChargerProfil(r){
 axeInit();
 
 /* ============ VIDEO DE BIENVENUE ============
-   Colle ci-dessous le lien de ta video d'accueil (YouTube, Vimeo ou fichier .mp4).
-   Elle ne s'affiche qu'une seule fois, apres le tout premier diagnostic.
-   Au diagnostic trimestriel, elle ne revient pas.
+   Colle ci-dessous le lien d'une video d'accueil dediee a ce programme
+   mental-only (YouTube, Vimeo ou fichier .mp4), si tu en enregistres une.
+   Laisse vide pour sauter directement au programme apres le diagnostic
+   (comportement par defaut de cette page).
    ============================================ */
-const VIDEO_BIENVENUE = 'https://youtube.com/shorts/lTinYeuSNxE';
+const VIDEO_BIENVENUE = '';
 const VIDEO_SECOURS_SECONDES = 120;   // au bout de ce delai, une sortie de secours discrete apparait
 
 let axeVideoFinie = false;
@@ -919,12 +885,9 @@ async function axeEnregistrerDiagnostic(){
   const profil = JSON.stringify({
     prenom: state.prenom,
     mental: state.mental,
-    physique: state.physique,
     sensoriel: state.sensoriel,
     age: state.age,
     niveau: state.level,
-    jours: state.trainingDays,
-    salle: state.gym,
     profilMental: mental.title || '',
     canal: sensoriel.canal,
     depart: sensoriel.depart,
@@ -939,10 +902,10 @@ async function axeEnregistrerDiagnostic(){
 }
 
 /* ============ DATA ============ */
-// Diagnostic à 24 questions (9 mental, 9 physique, 6 sensoriel). Chaque question a un id stable
+// Diagnostic 100% mental à 15 questions (9 mental, 6 sensoriel). Chaque question a un id stable
 // (les réponses sont enregistrées par id, plus par position, pour rester fiables même si l'ordre change).
-// Mental et physique : chaque question porte un "tags" = une catégorie par option. Le profil final
-// se construit en cumulant les réponses sur les 9 questions de l'axe, pas sur une seule question.
+// Chaque question mentale porte un "tags" = une catégorie par option. Le profil final se
+// construit en cumulant les réponses sur les 9 questions, pas sur une seule question.
 const diagQuestions=[
   // ---- MENTAL (9 questions, 3 catégories : portillon / rumination / confiance, + une option neutre) ----
   {id:'mental_1',axis:'mental',q:"Au moment de te présenter sur la gate, qu'est-ce qui se passe dans ta tête ?",
@@ -972,34 +935,6 @@ const diagQuestions=[
   {id:'mental_9',axis:'mental',q:"En arrivant sur une piste que tu ne connais pas :",
     opts:["Je me demande si je vais réussir à bien démarrer","Je pense déjà à ce qui pourrait mal tourner","Je me sens moins à l'aise que les pilotes qui la connaissent","Je prends le temps de la découvrir, sans stress"],
     tags:['portillon','rumination','confiance','neutre']},
-  // ---- PHYSIQUE (9 questions, 4 catégories : explosivité / force / stabilité / vitesse) ----
-  {id:'physique_1',axis:'physique',q:"Sur un tour complet, où tu perds le plus d'énergie ?",
-    opts:["Le sprint de départ","Le pumping sur les bosses","La relance en sortie de virage","La fin de course, je coince"],
-    tags:['explosivite','stabilite','force','vitesse']},
-  {id:'physique_2',axis:'physique',q:"Ton point faible physique ressenti :",
-    opts:["Explosivité au départ","Force dans les jambes","Gainage et stabilité","Vitesse et endurance sur la durée"],
-    tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_3',axis:'physique',q:"Après un entraînement intense, ton corps :",
-    opts:["Manque de peps au prochain départ","Manque de force le lendemain","Est moins stable, moins gainé","Récupère lentement en endurance"],
-    tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_4',axis:'physique',q:"Sur la gate, au moment où elle tombe :",
-    opts:["Je démarre plutôt lentement, je manque de peps","Je manque de puissance dans la poussée","Je perds un peu l'équilibre au premier appui","Je pars bien, mais je perds en vitesse pure ensuite"],
-    tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_5',axis:'physique',q:"Dans les bosses (rythm section) :",
-    opts:["Je manque de jus pour sauter fort","Mes jambes fatiguent vite sur les relances","J'ai du mal à rester stable, équilibré","Je perds en vitesse à chaque bosse"],
-    tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_6',axis:'physique',q:"En sortie de virage :",
-    opts:["Je manque d'explosivité pour relancer fort","Je manque de force pour pousser sur le pédalier","Je perds en stabilité, l'appui qui part de travers","Je perds de la vitesse par rapport aux autres"],
-    tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_7',axis:'physique',q:"Sur la fin d'une manche :",
-    opts:["Je n'ai plus l'explosivité du début","Mes jambes n'ont plus de force","Je suis moins stable, plus imprécis","Je ralentis nettement, je manque d'endurance"],
-    tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_8',axis:'physique',q:"Après plusieurs manches dans la même journée :",
-    opts:["Mes départs deviennent moins explosifs","Mes jambes n'ont plus de force","Mon gainage lâche, je suis moins stable","Je perds en vitesse au fil des manches"],
-    tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_9',axis:'physique',q:"S'il fallait choisir une seule chose à muscler en priorité :",
-    opts:["L'explosivité au départ","La force dans les jambes","Le gainage et la stabilité","La vitesse et l'endurance de fin de course"],
-    tags:['explosivite','force','stabilite','vitesse']},
   // ---- SENSORIEL (1 test comportemental + 5 questions de canal dominant, majorité sur 5) ----
   {id:'sens_oeil',axis:'sensoriel',q:"Fais le test : tends les bras, forme un petit triangle avec tes mains, et vise un objet lointain au centre. Ferme l'œil gauche. L'objet reste dans le triangle ?",opts:["Oui, il reste bien au centre","Non, il saute sur le côté"],help:"Ce test révèle ton œil directeur. S'il reste quand tu fermes l'œil gauche, c'est le droit. S'il saute, c'est le gauche."},
   {id:'sens_canal_1',axis:'sensoriel',q:"Quelqu'un t'appelle de loin sans que tu le voies. Tu retrouves d'où vient la voix :",opts:["Tout de suite, l'oreille repère vite","Plutôt en cherchant des yeux"],help:"Ce test observe si ton oreille capte et situe l'info rapidement."},
@@ -1038,29 +973,19 @@ function lowTag(scores, order, excludeKey){
   return best;
 }
 const MENTAL_ORDER=['rumination','confiance','portillon'];
-const PHYS_ORDER=['explosivite','force','stabilite','vitesse'];
 
 // libellés affichés pour le point faible / le point fort de chaque catégorie
 const mentalFaibleLabels={portillon:"la gestion de la pression sur la gate",rumination:"la gestion des erreurs passées",confiance:"la confiance en soi face aux autres pilotes"};
 const mentalFortLabels={portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en course"};
-const physFaibleLabels={explosivite:"l'explosivité au départ",force:"la force dans les jambes",stabilite:"le gainage et la stabilité",vitesse:"la vitesse et l'endurance de fin de course"};
-const physFortLabels={explosivite:"la percussion au démarrage",force:"la puissance dans les jambes",stabilite:"la stabilité sur les bosses",vitesse:"la vivacité en fin de course"};
 
-// analyse des points forts et faibles à partir des 9 questions mentales + 9 questions physiques du diagnostic
+// analyse du point fort et du point faible mental à partir des 9 questions du diagnostic
 function analyse(){
   const mScores=scoreAxis(state.mental,'mental');
   const mTop=topTag(mScores, MENTAL_ORDER, null);
   const mLow=mTop ? lowTag(mScores, ['portillon','rumination','confiance'], mTop) : null;
   const mFaible = mTop ? mentalFaibleLabels[mTop] : 'non évalué';
   const mFort = mLow ? mentalFortLabels[mLow] : 'non évalué';
-
-  const pScores=scoreAxis(state.physique,'physique');
-  const pTop=topTag(pScores, PHYS_ORDER, null);
-  const pLow=pTop ? lowTag(pScores, PHYS_ORDER, pTop) : null;
-  const pFaible = pTop ? physFaibleLabels[pTop] : 'non évalué';
-  const pFort = pLow ? physFortLabels[pLow] : 'non évalué';
-
-  return {mFaible,mFort,pFaible,pFort};
+  return {mFaible,mFort};
 }
 // profil sensoriel : œil directeur (test comportemental) + canal dominant (auditif/visuel),
 // déduit d'un vote à majorité sur 5 questions (3 sur 5 minimum, au lieu de 2 sur 3 auparavant).
@@ -1112,159 +1037,7 @@ const mentalPools={
     {lvl:"Niveau 3 · Ancrer",desc:"Le carnet devient un réflexe silencieux. Avant chaque manche, tu convoques en 5 secondes ta meilleure image des dernières semaines, sans l'écrire. C'est cette image, et pas le stress du moment, qui doit être la dernière chose dans ta tête avant la poussée."},
   ]},
 };
-const physPool={
-  // SALLE : équipement de gym normal, mais uniquement des poids fixes, toujours en nombre pair de kilos.
-  gym:[
-    {title:"Départs explosifs",lvl:"Explosivité",desc:"La puissance qui te sort de la gate.",series:"4 séries",dur:"20 min",moves:[
-      {n:"Presse à cuisses explosive",d:"4 × 5 reps · poussée la plus rapide possible · repos 2 min",poids:"40 kg"},
-      {n:"Fentes sautées (haltères)",d:"4 × 6 par jambe · réception souple · repos 90 s",poids:"2 × 4 kg"},
-      {n:"Sauts sur box",d:"4 × 4 · monter haut, redescendre contrôlé · repos 2 min",poids:"poids du corps"},
-    ]},
-    {title:"Chaîne postérieure",lvl:"Force",desc:"Le moteur de ta relance en sortie de virage.",series:"3 séries",dur:"18 min",moves:[
-      {n:"Soulevé de terre léger",d:"3 × 8 · dos gainé, mouvement lent · repos 2 min",poids:"30 kg"},
-      {n:"Hip thrust",d:"3 × 10 · pause 1 s en haut · repos 90 s",poids:"24 kg"},
-      {n:"Leg curl",d:"3 × 12 · descente contrôlée · repos 75 s",poids:"16 kg"},
-    ]},
-    {title:"Gainage dynamique",lvl:"Stabilité",desc:"Le corps solide qui tient sur les bosses.",series:"3 séries",dur:"12 min",moves:[
-      {n:"Planche sur ballon",d:"3 × 40 s · bassin verrouillé · repos 45 s",poids:"poids du corps"},
-      {n:"Rotations avec disque",d:"3 × 10 par côté · lent · repos 45 s",poids:"4 kg"},
-      {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s",poids:"poids du corps"},
-    ]},
-    {title:"Puissance de relance",lvl:"Puissance",desc:"La force qui te fait regagner les watts perdus en sortie de virage.",series:"3 séries",dur:"20 min",moves:[
-      {n:"Presse à cuisses lourde",d:"3 × 6 · charge plus lourde, contrôle à la descente · repos 2 min 30",poids:"50 kg"},
-      {n:"Rowing buste penché",d:"3 × 8 · dos plat, tirage vers le nombril · repos 90 s",poids:"20 kg"},
-      {n:"Squat gobelet",d:"3 × 10 · descente lente, remontée puissante · repos 90 s",poids:"16 kg"},
-    ]},
-    {title:"Vitesse de jambes",lvl:"Vitesse",desc:"La fréquence de jambes qui fait la différence sur les portions de pumping.",series:"4 séries",dur:"18 min",moves:[
-      {n:"Montées de genoux lestées",d:"4 × 20 s · rythme maximal · repos 60 s",poids:"2 × 2 kg"},
-      {n:"Sauts latéraux",d:"4 × 8 par côté · réactif, temps de contact court au sol · repos 75 s",poids:"poids du corps"},
-      {n:"Fentes bulgares",d:"3 × 8 par jambe · pied arrière surélevé · repos 90 s",poids:"2 × 6 kg"},
-    ]},
-    {title:"Haut du corps, tenue du guidon",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent le guidon dans les bosses, sans se fatiguer avant la fin de la manche.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Tirage poulie haute",d:"3 × 10 · omoplates serrées, contrôle du retour · repos 75 s",poids:"20 kg"},
-      {n:"Développé épaules assis",d:"3 × 8 · mouvement contrôlé, pas de à-coup · repos 90 s",poids:"2 × 6 kg"},
-      {n:"Curl biceps",d:"3 × 10 · lent à la descente · repos 60 s",poids:"2 × 4 kg"},
-    ]},
-    {title:"Gainage rotationnel",lvl:"Rotation",desc:"La rotation du buste qui te fait passer les virages sans perdre d'appui.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Rotations à la poulie",d:"3 × 10 par côté · lent, contrôlé · repos 60 s",poids:"6 kg"},
-      {n:"Woodchop avec disque",d:"3 × 8 par côté · geste diagonal, dynamique · repos 60 s",poids:"8 kg"},
-      {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s",poids:"poids du corps"},
-    ]},
-    {title:"Bas du corps unilatéral",lvl:"Équilibre",desc:"L'équilibre jambe par jambe qui te sauve la mise quand un appui part de travers.",series:"3 séries",dur:"18 min",moves:[
-      {n:"Squat bulgare",d:"3 × 8 par jambe · buste droit, genou aligné · repos 90 s",poids:"2 × 8 kg"},
-      {n:"Fente latérale",d:"3 × 8 par jambe · hanche mobile · repos 75 s",poids:"2 × 4 kg"},
-      {n:"Équilibre sur un pied lesté",d:"3 × 30 s par jambe · gainage actif · repos 45 s",poids:"2 × 2 kg"},
-    ]},
-  ],
-  // MAISON : uniquement le poids du corps. Une chaise ou une table stable peuvent servir d'appui,
-  // jamais de barre, d'élastique ou de matériel à acheter.
-  home:[
-    {title:"Sprints de poussée",lvl:"Explosivité",desc:"Pur poids du corps pour le départ, sans aucun matériel.",series:"4 séries",dur:"18 min",moves:[
-      {n:"Squats sautés",d:"4 × 8 · réception souple, remonter vite · repos 90 s"},
-      {n:"Démarrages au sol",d:"4 × 5 · position basse, explosion sur 5 m · repos 90 s"},
-      {n:"Fentes sautées alternées",d:"4 × 6 par jambe · rythme soutenu · repos 90 s"},
-    ]},
-    {title:"Pont et fentes",lvl:"Force",desc:"La force de relance, chez toi, sans matériel.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Pont fessier une jambe",d:"3 × 10 par jambe · pause 1 s en haut · repos 75 s"},
-      {n:"Fentes marchées",d:"3 × 12 par jambe · buste droit · repos 75 s"},
-      {n:"Chaise au mur",d:"3 × 45 s · cuisses parallèles au sol · repos 60 s"},
-    ]},
-    {title:"Gainage au sol",lvl:"Stabilité",desc:"Le tronc qui verrouille ton pilotage.",series:"3 séries",dur:"12 min",moves:[
-      {n:"Planche",d:"3 × 40 s · corps aligné · repos 45 s"},
-      {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s"},
-      {n:"Superman",d:"3 × 12 · pause 1 s en haut · repos 45 s"},
-    ]},
-    {title:"Appuis sur chaise",lvl:"Puissance",desc:"La poussée des bras et des jambes, avec juste une chaise stable pour t'aider.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Dips sur chaise",d:"3 × 10 · mains sur le bord d'une chaise stable, descente contrôlée · repos 75 s"},
-      {n:"Pompes surélevées",d:"3 × 10 · mains sur une chaise ou une table basse, corps aligné · repos 75 s"},
-      {n:"Squats sautés",d:"3 × 8 · réception souple · repos 90 s"},
-    ]},
-    {title:"Équilibre sur une jambe",lvl:"Équilibre",desc:"L'équilibre sur une jambe, la base de ta stabilité dans les virages.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Fente arrière surélevée",d:"3 × 8 par jambe · pied arrière posé sur une chaise · repos 90 s"},
-      {n:"Squat une jambe assisté",d:"3 × 6 par jambe · une main posée sur une table ou un mur pour l'équilibre · repos 90 s"},
-      {n:"Chaise au mur",d:"3 × 40 s · cuisses parallèles au sol · repos 60 s"},
-    ]},
-    {title:"Vitesse au sol",lvl:"Vitesse",desc:"La fréquence de jambes, sans un gramme de matériel.",series:"4 séries",dur:"16 min",moves:[
-      {n:"Montées de genoux",d:"4 × 20 s · rythme maximal, sur place · repos 60 s"},
-      {n:"Ciseaux au sol",d:"3 × 10 par jambe · rythme rapide, gainage actif · repos 60 s"},
-      {n:"Sauts latéraux",d:"4 × 8 par côté · réactif · repos 75 s"},
-    ]},
-    {title:"Haut du corps sans matériel",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent le guidon, travaillés à la maison.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Pompes classiques",d:"3 × 8 · corps aligné, descente contrôlée · repos 75 s"},
-      {n:"Pompes déclinées",d:"3 × 6 · pieds posés sur une chaise, mains au sol · repos 90 s"},
-      {n:"Gainage bras tendus",d:"3 × 30 s · position de planche haute · repos 45 s"},
-    ]},
-    {title:"Gainage rotationnel au sol",lvl:"Rotation",desc:"La rotation du buste qui te fait passer les virages, sans matériel.",series:"3 séries",dur:"14 min",moves:[
-      {n:"Rotations du buste assis",d:"3 × 10 par côté · pieds surélevés sur une chaise, mains jointes · repos 60 s"},
-      {n:"Superman croisé",d:"3 × 10 par côté · bras et jambe opposés · repos 60 s"},
-      {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s"},
-    ]},
-  ],
-};
-
-const parentPool=[
-  {title:"Le trajet du retour",lvl:"Écoute",desc:"C'est le moment le plus délicat après une course. Voici comment le gérer pour que ton enfant se sente soutenu, pas jugé.",moves:[
-    {n:"La règle des 5 minutes",d:"Pas de débrief technique dans les 5 premières minutes après la course. On laisse retomber l'émotion d'abord."},
-    {n:"Une seule question ouverte",d:"Demande simplement : \"tu as ressenti quoi ?\" plutôt que \"pourquoi tu as raté ?\". On ouvre, on ne referme pas."},
-    {n:"Finir sur du positif",d:"Repère un vrai point réussi dans sa course et cite-le, même si le résultat n'y est pas."},
-  ]},
-  {title:"Gérer la pression de la gate",lvl:"Présence",desc:"Ta propre tension se transmet à ton enfant sans un mot. Ce mois-ci, on travaille ta posture à toi.",moves:[
-    {n:"Le calme avant la manche",d:"Dans les minutes avant le départ, reste en retrait et souriant. Évite les derniers conseils, ils ajoutent de la charge."},
-    {n:"Le geste neutre",d:"Un pouce levé ou un signe simple, sans mot. Il sait que tu es là sans sentir d'attente."},
-    {n:"Observer sans commenter",d:"Note pour toi ce que tu vois, tu en parleras plus tard, à froid, s'il le demande."},
-  ]},
-  {title:"Nourrir la motivation",lvl:"Encouragement",desc:"À cet âge, la motivation vient de l'intérieur. Ton rôle est de l'alimenter sans la remplacer.",moves:[
-    {n:"Valoriser l'effort, pas le résultat",d:"\"J'ai vu que tu as travaillé tes départs\" vaut mieux que \"tu as gagné\". On ancre l'effort."},
-    {n:"Laisser de la place au plaisir",d:"Demande ce qui l'a fait rire ou kiffer sur la piste. Le plaisir est le meilleur carburant longue durée."},
-    {n:"Respecter les jours sans",d:"S'il n'a pas envie un jour, accepte-le sans culpabiliser. La régularité se joue sur des mois, pas sur un jour."},
-  ]},
-  {title:"La peur de la chute",lvl:"Sécurité",desc:"Ta propre peur, même silencieuse, se voit. Ce mois-ci, on travaille comment la garder pour toi sans qu'elle devienne la sienne.",moves:[
-    {n:"Ne pas nommer le pire",d:"Évite les \"fais attention à...\" juste avant le départ. Ça met une image dans sa tête qui n'y était pas."},
-    {n:"Séparer ta peur de sa réalité",d:"Ta peur de parent est normale. Elle ne veut pas dire qu'il prend un vrai risque déraisonnable, elle veut dire que tu l'aimes."},
-    {n:"Après une chute, le corps d'abord",d:"Vérifie qu'il va bien, calmement, avant tout commentaire sur la course. Le reste attend."},
-  ]},
-  {title:"Les jours de doute",lvl:"Patience",desc:"Il y aura des semaines où il aura envie de tout arrêter. C'est un passage, pas un signal d'alarme.",moves:[
-    {n:"Ne pas trancher à chaud",d:"Un \"j'arrête le BMX\" dit un soir de défaite se prend au sérieux, mais ne se décide jamais le soir même."},
-    {n:"Reposer la question à froid",d:"Quelques jours plus tard, redemande calmement ce qu'il en pense, loin de l'émotion de la course."},
-    {n:"Rappeler le pourquoi, pas le comment",d:"Reviens sur ce qui lui plaît dans ce sport, pas sur ses résultats. Le comment peut attendre."},
-  ]},
-  {title:"La comparaison aux autres pilotes",lvl:"Recul",desc:"Sur une piste, la comparaison est partout. Ton rôle est de ramener le regard sur son propre chemin.",moves:[
-    {n:"Comparer à lui-même",d:"\"Par rapport à ta dernière course\" vaut toujours mieux que \"par rapport à untel\". Le seul adversaire qui compte, c'est son mois dernier."},
-    {n:"Nommer ce qui ne se voit pas sur un chrono",d:"La régularité, le sang-froid, la progression technique. Ce que le classement ne raconte pas."},
-    {n:"Filtrer ce qui vient de l'extérieur",d:"Les commentaires d'autres parents ou pilotes n'ont pas à devenir les tiens. Protège son espace."},
-  ]},
-  {title:"Le sommeil et la récupération",lvl:"Hygiène de vie",desc:"Le corps progresse pendant qu'il se repose, pas seulement pendant qu'il roule. Ce mois-ci, on regarde ce point simple et souvent oublié.",moves:[
-    {n:"Une heure de coucher stable",d:"Même approximative, une régularité vaut mieux qu'un horaire parfait mais qui change tous les jours."},
-    {n:"Les écrans avant de dormir",d:"Une coupure 30 minutes avant le coucher, simplement pour que la tête retombe avant le corps."},
-    {n:"Une vraie question médicale, un vrai médecin",d:"Fatigue inhabituelle, douleur qui persiste : ce carnet ne remplace jamais un avis médical. Ce mois-ci, c'est juste un rappel de bon sens."},
-  ]},
-  {title:"Fêter les progrès invisibles",lvl:"Reconnaissance",desc:"Les plus beaux progrès ne se voient pas sur un classement. Ce mois-ci, on apprend à les repérer ensemble.",moves:[
-    {n:"Un carnet à deux mains",d:"Demande-lui ce dont il est fier ce mois-ci. Sa réponse t'en apprendra plus que n'importe quel résultat."},
-    {n:"Nommer la régularité",d:"Avoir tenu son programme un mois entier est déjà une vraie réussite, dis-le lui clairement."},
-    {n:"Un petit rituel de fin de mois",d:"Rien de grand, juste un moment à vous pour marquer le coup. Ça ancre l'idée que l'effort compte, pas que le résultat."},
-  ]},
-  {title:"Gérer un coup dur",lvl:"Soutien",desc:"Une blessure, une mauvaise série, une déception. Ce mois-ci, on parle de ta posture face aux moments difficiles.",moves:[
-    {n:"Le médical d'abord, toujours",d:"En cas de douleur ou de blessure, un avis médical reste la priorité absolue. Ce protocole accompagne, il ne soigne pas."},
-    {n:"Autoriser la pause",d:"S'arrêter n'est pas reculer. Un corps ou une tête qui a besoin de souffler a le droit de le faire, sans culpabilité."},
-    {n:"Rester présent sans forcer",d:"Tu n'as pas besoin de réparer la situation. Être là, simplement, suffit souvent."},
-  ]},
-  {title:"Préparer une compétition importante",lvl:"Anticipation",desc:"Une grande course approche. Ton calme dans les jours qui précèdent compte autant que sa préparation à lui.",moves:[
-    {n:"Alléger les derniers jours",d:"Évite d'ajouter des conseils ou des attentes dans la semaine qui précède. Le travail est fait, il reste à le laisser sortir."},
-    {n:"Préparer la logistique, pas la performance",d:"Occupe-toi du matériel, des horaires, du trajet. Laisse-le se concentrer sur lui, pas sur l'organisation."},
-    {n:"Une phrase simple avant le départ",d:"Quelque chose de court et de chaleureux, jamais un dernier conseil technique. Le moment n'est plus à ça."},
-  ]},
-  {title:"Le rôle du groupe",lvl:"Appartenance",desc:"Les copains de piste comptent souvent plus que n'importe quel discours. Ce mois-ci, on regarde ce que ce groupe lui apporte.",moves:[
-    {n:"S'intéresser à ses coéquipiers",d:"Demande qui il apprécie sur la piste, et pourquoi. Le lien social est un moteur puissant à cet âge."},
-    {n:"Favoriser les moments entre pilotes",d:"Un trajet partagé, un temps libre après l'entraînement. Ce n'est pas du temps perdu pour la performance."},
-    {n:"Rester à ta place",d:"Le groupe est à lui. Ton rôle est de le faciliter, pas de t'y intégrer ou de le commenter."},
-  ]},
-  {title:"Faire le bilan de l'année ensemble",lvl:"Projection",desc:"Un an de protocole, c'est un vrai chemin parcouru. Ce mois-ci, on prend le temps de le regarder ensemble avant de reconduire ou d'ajuster.",moves:[
-    {n:"Relire le chemin, pas seulement les courses",d:"Reprenez ensemble ce qui a changé dans sa manière de gérer la pression, pas seulement ses résultats."},
-    {n:"Lui demander ce qu'il veut pour l'an prochain",d:"Son avis sur la suite compte autant que le tien. C'est son protocole, avant d'être le tien."},
-    {n:"Marquer le cap franchi",d:"Un an de régularité mérite d'être reconnu comme tel, indépendamment des résultats sportifs de la saison."},
-  ]},
-];
-const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
+const state={mental:{},sensoriel:{},prenom:'',age:16,level:'Régional',qi:0,month:1,week:1,report:{},phoneRider:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
   simDate:null,         // date "courante" simulée dans la démo
   startDate:null,       // 1er du mois suivant l'inscription
@@ -1318,14 +1091,12 @@ function go(id){
   // programme n'a pas réellement démarré (1er du mois), même via un accès direct (ex : le
   // petit menu à points sur le côté). En mode démo, on laisse passer pour pouvoir tester.
   if(id==='report' && !modeDemo && !estDemarre()){ id='dash'; }
-  // en quittant la fiche profil vers le diagnostic, on mémorise le prénom et les contacts
+  // en quittant la fiche profil vers le diagnostic, on mémorise le prénom et le téléphone
   if(id==='diag'){
     const pn=document.getElementById('prenomRider');
     const pr=document.getElementById('phoneRider');
-    const pp=document.getElementById('phoneParent');
     if(pn)state.prenom=pn.value.trim()||'';
     if(pr)state.phoneRider=pr.value||'';
-    if(pp)state.phoneParent=pp.value||'';
   }
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
@@ -1335,10 +1106,6 @@ function go(id){
   const stepEl=document.getElementById('stepper');
   if(stepEl) stepEl.style.display = (id==='bienvenue') ? 'none' : '';
   if(id==='diag'){state.qi=0;renderQ();}
-  if(id==='report'){
-    if(!state.report.trainingDays)state.report.trainingDays=[...state.trainingDays];
-    if(typeof refreshReportDaysChips==='function')refreshReportDaysChips();
-  }
   if(id==='start')renderStart();
   if(id==='notes')renderNotesRecap();
   if(id==='trimestre')renderTrimestre();
@@ -1366,7 +1133,7 @@ function renderQ(){
   document.getElementById('qtext').textContent=item.q;
   const tag=document.getElementById('qtag');
   tag.className='qtag '+item.axis;
-  tag.textContent=item.axis==='mental'?'Mental':item.axis==='physique'?'Physique':'Sensoriel';
+  tag.textContent=item.axis==='mental'?'Mental':'Sensoriel';
   const total=String(diagQuestions.length).padStart(2,'0');
   document.getElementById('qnum').textContent=String(state.qi+1).padStart(2,'0')+' / '+total;
   document.getElementById('qbar').style.width=((state.qi)/diagQuestions.length*100)+'%';
@@ -1407,33 +1174,6 @@ function prevQ(){
 function ageOut(){
   state.age=+document.getElementById('ageR').value;
   document.getElementById('ageV').textContent=state.age;
-  updateGymAccess();
-}
-function updateGymAccess(){
-  const note=document.getElementById('gymNote');
-  const tropJeune = state.age<15;
-  if(tropJeune){
-    state.gym=false; // forcé au poids du corps
-    note.style.display='block';
-    note.textContent="Avant 15 ans, je ne propose pas de charges en salle. À cet âge, le corps grandit encore, et le travail au poids du corps est plus sûr et tout aussi efficace pour progresser. L'accès équipement s'ouvrira à partir de 15 ans.";
-  }else{
-    note.style.display='none';
-  }
-  renderGymChips();
-}
-function renderGymChips(){
-  const c=document.getElementById('gymChips');
-  c.innerHTML='';
-  const tropJeune = state.age<15;
-  [true,false].forEach(v=>{
-    const b=document.createElement('button');
-    const isGym = v===true;
-    const disabled = isGym && tropJeune;
-    b.className='chip'+(state.gym===v?' sel':'')+(disabled?' disabled':'');
-    b.textContent = isGym?'Oui, accès salle':'Non, poids du corps';
-    if(!disabled)b.onclick=()=>{state.gym=v;renderGymChips();};
-    c.appendChild(b);
-  });
 }
 function chipGroup(containerId,values,key,fmt){
   const c=document.getElementById(containerId);
@@ -1446,124 +1186,7 @@ function chipGroup(containerId,values,key,fmt){
     c.appendChild(b);
   });
 }
-/* ============ JOURS DE LA SEMAINE (48h entre deux séances) ============ */
-const JOURS_SEMAINE=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
-const JOURS_LABEL={lundi:'Lundi',mardi:'Mardi',mercredi:'Mercredi',jeudi:'Jeudi',vendredi:'Vendredi',samedi:'Samedi',dimanche:'Dimanche'};
-// distance circulaire entre deux jours de la semaine (le dimanche touche le lundi)
-function distanceJours(a,b){
-  const ia=JOURS_SEMAINE.indexOf(a), ib=JOURS_SEMAINE.indexOf(b);
-  const d=Math.abs(ia-ib);
-  return Math.min(d,7-d);
-}
-// un jour est bloqué (grisé) s'il est à moins de 48h (soit adjacent) d'un jour déjà choisi,
-// sauf s'il est lui-même déjà choisi (auquel cas cliquer dessus le déselectionne)
-function jourBloque(list,j){
-  if(list.includes(j))return false;
-  return list.some(sel=>distanceJours(sel,j)===1);
-}
-function joursTries(list){
-  return [...list].sort((a,b)=>JOURS_SEMAINE.indexOf(a)-JOURS_SEMAINE.indexOf(b));
-}
-// rétrocompatibilité : convertit un ancien nombre de jours (1-5) en une liste de jours
-// de la semaine plausible, en respectant toujours les 48h entre deux jours
-function joursParDefaut(n){
-  if(n<=1)return['lundi'];
-  if(n===2)return['lundi','jeudi'];
-  return['lundi','mercredi','vendredi'];
-}
-function renderDaysChips(containerId,list,onChange){
-  const c=document.getElementById(containerId);
-  c.innerHTML='';
-  JOURS_SEMAINE.forEach(j=>{
-    const b=document.createElement('button');
-    const sel=list.includes(j);
-    const bloque=jourBloque(list,j);
-    b.className='chip'+(sel?' sel':'')+(bloque?' disabled':'');
-    b.textContent=JOURS_LABEL[j];
-    if(!bloque){
-      b.onclick=()=>{
-        const idx=list.indexOf(j);
-        if(idx>=0)list.splice(idx,1); else list.push(j);
-        onChange();
-      };
-    }
-    c.appendChild(b);
-  });
-}
 chipGroup('lvlChips',['Départemental','Régional','National'],'level');
-updateGymAccess();
-function refreshDaysChips(){ renderDaysChips('daysChips',state.trainingDays,refreshDaysChips); }
-refreshDaysChips();
-function refreshReportDaysChips(){ renderDaysChips('reportDaysChips',state.report.trainingDays,refreshReportDaysChips); }
-
-/* ============ VOLUME RULE ============ */
-// le nombre de séances réelles dépend de l'âge/niveau/salle, jamais uniquement du nombre
-// de jours cochés : cocher 3 jours ne veut pas forcément dire 3 séances (ex: un pilote de
-// 12 ans ou moins est plafonné à 2 séances même s'il a coché 3 jours dispos)
-function physSessions(){
-  let cap = state.age<=12?2 : state.age<=15?3 : 3;
-  return Math.min(cap, state.trainingDays.length);
-}
-// les jours qui reçoivent réellement une séance cette semaine (les premiers de la semaine
-// en priorité si le nombre de jours cochés dépasse le plafond d'âge)
-function joursSeance(){
-  return joursTries(state.trainingDays).slice(0,physSessions());
-}
-function intensityLabel(){
-  return state.level==='National'?'+ séries, + complexité'
-       : state.level==='Régional'?'volume standard'
-       : 'volume allégé';
-}
-// calcul du poids selon âge et niveau (base = 15 ans, niveau régional)
-// les 10-14 ans n'ont pas accès à la salle, donc jamais concernés
-// arrondit à l'entier pair le plus proche, jamais de kg impair ni de virgule : ce sont toujours des poids fixes de salle
-function roundEven(x){
-  let v = 2*Math.round(x/2);
-  return v<2 ? 2 : v;
-}
-// la charge progresse doucement sur les 6 premiers mois, puis se stabilise : un abonnement de 12, 16 ou 24 mois
-// ne fait jamais grimper les poids indéfiniment, il maintient un palier sûr une fois la progression atteinte
-function coefProgressionMensuelle(){
-  const m = Math.min(state.month, 6);
-  return 1 + (m-1)*0.03; // +3 % par mois jusqu'au mois 6 (+15 %), palier stable ensuite
-}
-function adjustWeight(poidsStr){
-  // on ne touche qu'aux poids chiffrés en kg
-  if(!poidsStr || !/\d/.test(poidsStr) || poidsStr.includes('poids du corps')) return poidsStr;
-  // coefficient d'âge : 15-16 ans = 1.0, 17-18 ans = 1.2
-  let ageCoef = state.age>=17 ? 1.2 : 1.0;
-  // coefficient de niveau : départemental 0.9, régional 1.0, national 1.1
-  let lvlCoef = state.level==='National' ? 1.1 : state.level==='Départemental' ? 0.9 : 1.0;
-  const coef = ageCoef*lvlCoef*coefProgressionMensuelle();
-  // gérer les formats "40 kg" et "2 × 4 kg" : toujours un poids fixe, pair, jamais de virgule
-  return poidsStr.replace(/(\d+(?:\.\d+)?)\s*kg/g,(m,n)=>{
-    return roundEven(+n*coef)+' kg';
-  });
-}
-
-// catégorie physique la plus citée sur les 9 questions physiques du diagnostic (explosivité / force / stabilité / vitesse)
-function poidsFaiblesseKey(){
-  const scores = scoreAxis(state.physique,'physique');
-  return topTag(scores, PHYS_ORDER, null);
-}
-// catégories physiques à renforcer, dérivées de la catégorie dominante du diagnostic
-const PHYS_LVL_MAP={explosivite:['Explosivité'],force:['Force'],stabilite:['Stabilité','Rotation'],vitesse:['Vitesse','Puissance']};
-function poidsFaiblesse(){
-  const key = poidsFaiblesseKey();
-  return key ? (PHYS_LVL_MAP[key]||[]) : []; // diagnostic physique pas encore répondu : rotation neutre, sans priorité
-}
-// construit l'ordre de passage des séances : les catégories du point faible reviennent
-// environ deux fois plus souvent dans le cycle, sans jamais faire disparaître les autres
-function ordreSeances(poolBase){
-  const prio = poidsFaiblesse();
-  let cycle = poolBase.map((_,i)=>i);
-  if(prio.length){
-    const boostIdx = poolBase.reduce((a,x,i)=>{ if(prio.includes(x.lvl)) a.push(i); return a; },[]);
-    const milieu = Math.floor(cycle.length/2);
-    boostIdx.forEach((i,k)=> cycle.splice(milieu+k, 0, i));
-  }
-  return cycle;
-}
 
 /* ============ BUILD PROGRAM ============ */
 function blocageKey(){
@@ -1582,7 +1205,7 @@ function pickMental(){
 // numéro du préparateur pour le contact WhatsApp (format international, sans + ni espaces)
 const WA_NUMBER='33772289457';
 // lien du portail Stripe (Paramètres > Facturation > Portail client) qui permet à
-// chaque pilote/parent de gérer ou résilier son abonnement lui-même. Colle-le ici
+// chaque pilote de gérer ou résilier son abonnement lui-même. Colle-le ici
 // une fois activé côté Stripe. Tant qu'il n'est pas rempli, le bouton reste masqué.
 const LIEN_PORTAIL_ABONNEMENT='https://billing.stripe.com/p/login/fZudR85dO76KftHcZU8IU00';
 function renderStrengths(){
@@ -1603,11 +1226,6 @@ function renderStrengths(){
       <div class="sc-axis">Mental</div>
       <div class="str-line"><span class="pill fort">Point fort</span><b>${a.mFort}</b></div>
       <div class="str-line"><span class="pill faible">À travailler</span><b>${a.mFaible}</b></div>
-    </div>
-    <div class="str-card p">
-      <div class="sc-axis">Physique</div>
-      <div class="str-line"><span class="pill fort">Point fort</span><b>${a.pFort}</b></div>
-      <div class="str-line"><span class="pill faible">À travailler</span><b>${a.pFaible}</b></div>
     </div>
     <div class="str-card se" style="grid-column:1 / -1">
       <div class="sc-axis">Profil sensoriel</div>
@@ -1674,12 +1292,8 @@ function renderNotesRecap(){
   // en démo, on montre les notes saisies ce mois + un exemple de continuité
   let html='';
   const noteMental=(document.getElementById('note-m0')||{}).value||'';
-  const noteParent=(document.getElementById('note-pa0')||{}).value||'';
   if(noteMental){
     html+=`<div class="note-recap"><div class="nr-head"><span class="nr-title">Exercice mental du mois</span><span class="nr-date">Mois ${state.month}</span></div><div class="nr-body"><span class="nr-who">Ma note</span>${noteMental}</div></div>`;
-  }
-  if(noteParent){
-    html+=`<div class="note-recap"><div class="nr-head"><span class="nr-title">Note de parent</span><span class="nr-date">Mois ${state.month}</span></div><div class="nr-body"><span class="nr-who">Parent</span>${noteParent}</div></div>`;
   }
   if(!html){
     html='<div class="trim-empty"><div class="te-ico">📓</div>Tu n\'as pas encore écrit de note ce mois-ci.<br>Ouvre un exercice mental et note ce que tu ressens, tu le retrouveras ici.</div>';
@@ -1698,7 +1312,6 @@ function renderTrimestre(){
     <div class="trim-block">
       <h3>Ce qui a avancé</h3>
       <div class="trim-evo"><span class="arrow">↗</span><div>Sur le plan mental, ton travail sur <b>${a.mFaible}</b> a commencé à porter. Tu t'appuies de plus en plus sur ${a.mFort}.</div></div>
-      <div class="trim-evo"><span class="arrow">↗</span><div>Côté physique, la régularité paie sur <b>${a.pFaible}</b>, pendant que ${a.pFort} reste ton atout.</div></div>
     </div>
     <div class="trim-block">
       <h3>Ton cap pour les 3 prochains mois</h3>
@@ -1716,16 +1329,6 @@ function texteBlocageMentalSemaine(){
   if(key==='rumination') return "Prépare ta consigne de retour au calme avant la course, pas après une mauvaise manche. Relis-la la veille : elle doit être prête à l'avance, pas inventée à chaud.";
   return "Relis ton carnet des preuves avant chaque journée de course. Le but : que ta dernière pensée avant de rouler soit un souvenir solide, pas un doute.";
 }
-// astuce physique de semaine de course, selon le point faible identifié au diagnostic
-// (même mapping que poidsFaiblesse, adapté à la logique d'affûtage avant course plutôt qu'à la charge d'entraînement)
-function texteFaiblessePhysiqueSemaine(){
-  const key = poidsFaiblesseKey();
-  if(key==='explosivite') return "Garde tes jambes fraîches pour l'explosivité : pas de grosse séance jambes dans les 48 h avant la course, tu gardes le peps pour la gate.";
-  if(key==='force') return "Garde de la force en réserve cette semaine : entraînements plus légers, aucune charge lourde à moins de 3 jours de la course.";
-  if(key==='stabilite') return "Quelques minutes de gainage léger chaque jour suffisent à garder ton tronc réactif, sans te fatiguer avant la course.";
-  if(key==='vitesse') return "Attention à ne pas arriver cramé : réduis le volume cette semaine, garde juste un peu de vitesse courte pour rester vif sans épuiser tes réserves.";
-  return "Ton diagnostic physique n'est pas encore complet : cette astuce se précisera une fois qu'il sera fait.";
-}
 function renderCompetition(){
   const el=document.getElementById('compContent');
   const s=analyseSensoriel();
@@ -1736,7 +1339,6 @@ function renderCompetition(){
   let perso=`<div class="comp-jour-j" style="margin-bottom:20px">
     <h3>Ta préparation, sur mesure</h3>
     <div class="comp-tip"><span class="ct-num">🧠</span><div><b>Côté mental.</b> ${texteBlocageMentalSemaine()}</div></div>
-    <div class="comp-tip"><span class="ct-num">💪</span><div><b>Côté physique.</b> ${texteFaiblessePhysiqueSemaine()}</div></div>
   </div>`;
 
   // planning cross crawl de la semaine (tous les jours)
@@ -1921,9 +1523,7 @@ function buildProgram(){
   const stats=[
     ['Âge',state.age+' ans'],
     ['Niveau',state.level],
-    ['Physique',physSessions()+' séances/sem · '+joursTries(state.trainingDays).map(j=>JOURS_LABEL[j]).join(', ')],
-    ['Format',state.gym?'Salle':'Poids du corps'],
-    ['Intensité',intensityLabel()],
+    ['Axe de travail',pickMental().title],
   ];
   stats.forEach(([s,v])=>{
     strip.innerHTML+='<div class="pstat"><span>'+s+'</span><b>'+v+'</b></div>';
@@ -1976,7 +1576,6 @@ function buildProgram(){
   if(state.month>1 && state.report.bloc){
     ob.style.display='flex';
     let txt='Ce mois découle de ton dernier bilan. Tu avais signalé un blocage <b>'+state.report.bloc.toLowerCase()+'</b>, ton programme a été recentré dessus.';
-    if(state.report.trainingDays && state.report.trainingDays.length){txt+=' Tu avais annoncé être dispo le <b>'+joursTries(state.report.trainingDays).map(j=>JOURS_LABEL[j]).join(', ')+'</b>, ton volume a été calé sur ça.';}
     ob.innerHTML='<span class="ob-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></span><div>'+txt+'</div>';
   }else{
     ob.style.display='none';
@@ -2004,101 +1603,29 @@ function buildProgram(){
   renderWeek(started);
 }
 function renderWeek(started){
-  // programme pas encore démarré : on masque les exercices derrière un cadenas
+  // programme pas encore démarré : on masque l'exercice derrière un cadenas
   if(started===false){
     const lockHtml='<div class="col-lock"><div class="cl-ico">🔒</div>Programme verrouillé jusqu\'au démarrage<div class="cl-date">'+fmtDate(state.startDate)+'</div></div>';
     document.getElementById('mentalCol').innerHTML=lockHtml;
-    document.getElementById('physCol').innerHTML=lockHtml;
-    document.getElementById('physCount').textContent='';
-    document.getElementById('parentCol').innerHTML=lockHtml;
     return;
   }
   const wp=weekProgress[state.week-1];
   // mental : 1 exercice, s'approfondit selon la semaine
   const m={...pickMental()};
   m.desc = m.desc + ' Cette semaine : '+wp.tag.toLowerCase()+'.';
-  document.getElementById('mentalCol').innerHTML=exCard(m,true,'m0');
-  // physique
-  let n=physSessions();
-  if(state.week===4)n=Math.max(1,n-1); // semaine de relâchement : une séance en moins
-  const joursSem=joursSeance().slice(0,n);
-  document.getElementById('physCount').textContent=n+' exercices · '+wp.tag.toLowerCase();
-  const pool=state.gym?physPool.gym:physPool.home;
-  // le cycle de séances avance chaque mois (aucune répétition figée sur un abonnement long),
-  // et priorise le point faible physique du diagnostic sans jamais exclure les autres catégories
-  const cycle=ordreSeances(pool);
-  const offset=((state.month-1)*n)%cycle.length;
-  let html='';
-  const semaineVue=new Set();
-  for(let i=0;i<n;i++){
-    let idx=cycle[(offset+i)%cycle.length];
-    let base=pool[idx];
-    // filet de sécurité : jamais deux fois la même séance dans la même semaine
-    let essais=0;
-    while(semaineVue.has(base.title) && essais<pool.length){ idx=(idx+1)%pool.length; base=pool[idx]; essais++; }
-    semaineVue.add(base.title);
-    const p=JSON.parse(JSON.stringify(base));
-    // poids ajusté selon âge et niveau (salle uniquement)
-    if(p.moves)p.moves.forEach(mv=>{if(mv.poids)mv.poids=adjustWeight(mv.poids);});
-    // progression d'intensité sur le mois
-    let bump = state.week===2?1 : state.week===3?2 : 0;
-    if(state.level==='National')bump+=1;
-    if(bump>0)p.series=p.series.replace(/\d+/,x=>+x+bump);
-    if(state.week===4)p.series=p.series.replace(/\d+/,x=>Math.max(2,+x-1));
-    const jourLabel=joursSem[i]?JOURS_LABEL[joursSem[i]]:'';
-    html+=exCard(p,false,'p'+i,jourLabel);
-  }
-  if(state.gym){
-    html+='<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
-  }
-  document.getElementById('physCol').innerHTML=html;
-  // côté parent : 1 clé par mois, tourne avec le mois (spirale)
-  const pa=parentPool[(state.month-1)%parentPool.length];
-  let pmoves=pa.moves.map(m=>`
-    <div class="move"><div class="move-n">${m.n}</div><div class="move-d">${m.d}</div></div>`).join('');
-  document.getElementById('parentCol').innerHTML=`<div class="parent-card">
-    <div class="ex-top"><h3>${pa.title}</h3><span class="parent-lvl">${pa.lvl}</span></div>
-    <p class="desc">${pa.desc}</p>
-    <div class="moves">${pmoves}</div>
-    <button class="note-toggle pa" onclick="toggleNote('pa0')">＋ Mes notes de parent ce mois-ci</button>
-    <div class="note-box" id="box-pa0">
-      <textarea id="note-pa0" placeholder="Ce que tu observes chez ton enfant, ce qui a changé, tes ressentis à toi..." oninput="saveNote('pa0')"></textarea>
-      <div class="note-saved" id="saved-pa0"></div>
-      <div class="obs-flag"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Visible par le coach en lecture seule</div>
-    </div>
-  </div>`;
+  document.getElementById('mentalCol').innerHTML=exCard(m,'m0');
 }
-function exCard(ex,isMental,id,jourLabel){
-  let note = isMental ? `
-    <button class="note-toggle" onclick="toggleNote('${id}')">＋ Mes notes sur cet exercice</button>
-    <div class="note-box" id="box-${id}">
-      <textarea id="note-${id}" placeholder="Ce que tu as ressenti, ce qui a marché ou non..." oninput="saveNote('${id}')"></textarea>
-      <div class="note-saved" id="saved-${id}"></div>
-      <div class="obs-flag"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Visible par ton coach en lecture seule</div>
-    </div>` : '';
-
-  if(isMental){
-    return `<div class="card">
+function exCard(ex,id){
+  return `<div class="card">
       <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
       <p class="desc">${ex.desc}</p>
-      ${note}
+      <button class="note-toggle" onclick="toggleNote('${id}')">＋ Mes notes sur cet exercice</button>
+      <div class="note-box" id="box-${id}">
+        <textarea id="note-${id}" placeholder="Ce que tu as ressenti, ce qui a marché ou non..." oninput="saveNote('${id}')"></textarea>
+        <div class="note-saved" id="saved-${id}"></div>
+        <div class="obs-flag"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Visible par ton coach en lecture seule</div>
+      </div>
     </div>`;
-  }
-
-  // physique : détail des mouvements + bouton valider
-  let moves = (ex.moves||[]).map(m=>`
-    <div class="move">
-      <div class="move-head"><div class="move-n">${m.n}</div>${m.poids?`<span class="poids">${m.poids}</span>`:''}</div>
-      <div class="move-d">${m.d}</div>
-    </div>`).join('');
-  return `<div class="card" id="card-${id}">
-    ${jourLabel?`<span class="day-tag">Séance du ${jourLabel.toLowerCase()}</span>`:''}
-    <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
-    <p class="desc">${ex.desc}</p>
-    <div class="meta"><span><b>${ex.series}</b></span><span><b>${ex.dur}</b></span></div>
-    <div class="moves">${moves}</div>
-    <button class="validate" id="val-${id}" onclick="validateEx('${id}')">Valider la séance</button>
-  </div>`;
 }
 function validateEx(id){
   const b=document.getElementById('val-'+id);
@@ -2143,9 +1670,8 @@ async function axeEnregistrerRapport(){
   if(!axeCode) return; // mode démo
   const bloc = state.report.bloc || '';
   const texte = state.report.text || '';
-  // jours_r reste un entier côté base (pas de migration de schéma) : on envoie le nombre
-  // de jours choisis, le détail des jours de la semaine vit uniquement côté client/JSON diagnostic
-  const jours = (state.report.trainingDays && state.report.trainingDays.length) || state.trainingDays.length || null;
+  // pas de volet physique dans ce protocole : jours_r reste à 0 (entier attendu côté base)
+  const jours = 0;
   try{
     const { error } = await axeDB.rpc('enregistrer_rapport', {
       code: axeCode, mois_r: state.month, bloc_r: bloc, texte_r: texte, jours_r: jours
@@ -2195,8 +1721,6 @@ function submitReport(){
       state.month++;
       state.week=1;
       state.reportDone=false;
-      // recale les jours dispos selon ce que le pilote a indiqué pour le mois prochain
-      if(state.report.trainingDays && state.report.trainingDays.length){state.trainingDays=[...state.report.trainingDays];}
       // le mois suivant démarre au 1er du mois suivant
       state.startDate=firstOfNextMonth(state.startDate);
       // le niveau mental se déduit automatiquement de state.month (voir pickMental)

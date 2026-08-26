@@ -258,7 +258,7 @@ function afficherRiders(riders){
     }
 
     grid.innerHTML += `<div class="rider-card">
-      <div class="rc-top"><h3>${p.profilMental || 'Rider'}</h3>${badgeAcces(r)}</div>
+      <div class="rc-top"><h3>${p.prenom || p.profilMental || 'Rider'}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
       <div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>
       <div class="rc-line"><span>Formule</span><span>${r.formule||'?'}</span></div>

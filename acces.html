@@ -51,7 +51,9 @@ button:disabled{opacity:.5;cursor:default}
 // ====== CONFIG (clé publique anon, prévue pour être visible) ======
 const SUPABASE_URL = 'https://ilsxrdvxvnvlznjuevba.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
-// Nom du fichier de ton protocole (à héberger à côté de acces.html)
+// Nom du fichier de ton protocole par défaut (à héberger à côté de acces.html).
+// Sert de repli : si un code n'a pas de "page_cible" propre en base (cas normal
+// pour tous tes abonnés protocole-axe), c'est ce fichier qui s'ouvre.
 const FICHIER_PROTOCOLE = 'protocole-axe.html';
 // ==================================================================
 
@@ -114,9 +116,16 @@ async function verifier(){
       } else {
         msg.textContent = 'Accès validé. Ouverture de ton programme...';
       }
+      // ===== AIGUILLAGE : quel protocole ouvrir ? =====
+      // Un protocole sur mesure (vendu individuellement) a sa propre page HTML ;
+      // "page_cible" le précise en base. Les abonnés protocole-axe classiques n'ont
+      // rien de spécial en base : ligne.page_cible est alors vide, et on retombe
+      // simplement sur FICHIER_PROTOCOLE, exactement comme avant.
+      const pageProtocole = ligne.page_cible || FICHIER_PROTOCOLE;
+
       // on passe le code ET l'étape au protocole via l'adresse
       setTimeout(()=>{
-        window.location.href = FICHIER_PROTOCOLE + '?code=' + encodeURIComponent(code) + '&etape=' + etape;
+        window.location.href = pageProtocole + '?code=' + encodeURIComponent(code) + '&etape=' + etape;
       }, 800);
     } else {
       msg.className='msg err';
