@@ -94,13 +94,13 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
   <div class="sec-block">
     <div class="sec-head">
       <h1>DEMANDES REÇUES</h1>
-      <div class="serif">Chaque famille qui a ouvert ton lien et validé l'accord parental.</div>
+      <div class="serif">Chaque famille qui a ouvert ton lien BMX, et chaque demande sur-mesure (tout sport) — même sans paiement finalisé.</div>
       <div class="count" id="countPros"></div>
     </div>
     <div class="tbl-wrap" id="prosWrap">
       <table class="pros">
         <thead>
-          <tr><th>Parent</th><th>Pilote</th><th>Email parent</th><th>Date du clic</th><th>Suite</th></tr>
+          <tr><th>Contact</th><th>Pilote</th><th>Sport</th><th>Email</th><th>Date</th><th>Suite</th></tr>
         </thead>
         <tbody id="prosBody"></tbody>
       </table>
@@ -156,28 +156,33 @@ function afficherProspects(){
   const body = document.getElementById('prosBody');
   document.getElementById('countPros').textContent = prospects.length + (prospects.length>1?' demandes':' demande');
   if(!prospects.length){
-    body.innerHTML = '<tr><td colspan="5" class="empty" style="padding:22px 14px">Aucune demande pour le moment. Envoie ton lien d\'autorisation et les familles apparaîtront ici.</td></tr>';
+    body.innerHTML = '<tr><td colspan="6" class="empty" style="padding:22px 14px">Aucune demande pour le moment. Envoie ton lien d\'autorisation et les familles apparaîtront ici.</td></tr>';
     return;
   }
   body.innerHTML = '';
   prospects.forEach(p=>{
     const mail = (p.email_parent||'').toLowerCase().trim();
     const devenuClient = mail && emailsClients.has(mail);
+    const estSurMesure = p.formule === 'Sur mesure - acces annuel';
+    const sportCell = p.sport ? (p.sport + (p.niveau ? (' · '+p.niveau) : '')) : '';
     body.innerHTML += `<tr>
       <td>${p.nom_parent||''}</td>
-      <td>${p.nom_rider||''}</td>
+      <td>${p.nom_rider||(estSurMesure?'—':'')}</td>
+      <td>${sportCell}</td>
       <td class="mail">${p.email_parent||''}</td>
       <td class="date">${dateFr(p.clique_le)}</td>
-      <td>${devenuClient ? '<span class="conv">Client</span>' : (p.parraine_par ? 'Parrainé' : '')}</td>
+      <td>${devenuClient ? '<span class="conv">Client</span>' : (p.parraine_par ? 'Parrainé' : (estSurMesure ? 'Sur mesure' : ''))}</td>
     </tr>`;
   });
 }
 
 function exporterProspects(){
   if(!prospects.length) return;
-  const lignes = [['Nom parent','Nom pilote','Email parent','Date du clic','Parrain']];
+  const lignes = [['Nom parent','Nom pilote','Sport','Email parent','Date du clic','Parrain / statut']];
   prospects.forEach(p=>{
-    lignes.push([p.nom_parent||'', p.nom_rider||'', p.email_parent||'', dateFr(p.clique_le), p.parraine_par||'']);
+    const statut = p.parraine_par || (p.formule==='Sur mesure - acces annuel' ? 'Sur mesure' : '');
+    const sportCell = p.sport ? (p.sport + (p.niveau ? (' · '+p.niveau) : '')) : '';
+    lignes.push([p.nom_parent||'', p.nom_rider||'', sportCell, p.email_parent||'', dateFr(p.clique_le), statut]);
   });
   const csv = '﻿' + lignes.map(l=>l.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');
   const a = document.createElement('a');
@@ -237,6 +242,17 @@ function afficherRiders(riders){
       profilBlock += `<div class="rc-line"><span>Départ conseillé</span><span>${departLabel(p.depart)}</span></div>`;
     }
 
+    // infos du questionnaire sur-mesure (colonnes directes de la fiche, disponibles dès
+    // l'inscription — donc même avant que le diagnostic ne soit fait et que "p" existe).
+    // Ne duplique pas la ligne "Âge · niveau" ci-dessus si le diagnostic l'a déjà remplie.
+    let surMesureBlock = '';
+    if(r.sport){
+      surMesureBlock += `<div class="rc-line"><span>Sport</span><span>${r.sport}</span></div>`;
+    }
+    if(!(p.age || p.niveau) && (r.sexe || r.age || r.niveau)){
+      surMesureBlock += `<div class="rc-line"><span>Profil</span><span>${r.sexe||'?'} · ${r.age||'?'} ans${r.niveau?(' · '+r.niveau):''}</span></div>`;
+    }
+
     // notes de ce rider
     const notes = notesParCode[r.code_acces] || [];
     let notesBlock = '';
@@ -258,14 +274,15 @@ function afficherRiders(riders){
     }
 
     grid.innerHTML += `<div class="rider-card">
-      <div class="rc-top"><h3>${p.prenom || p.profilMental || 'Rider'}</h3>${badgeAcces(r)}</div>
+      <div class="rc-top"><h3>${p.prenom || p.profilMental || r.nom || 'Rider'}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
       <div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>
       <div class="rc-line"><span>Formule</span><span>${r.formule||'?'}</span></div>
       ${estPartenaire?`<div class="rc-line"><span>Statut</span><span class="tag-part">Partenaire éligible</span></div>`:''}
       ${r.parraine_par?`<div class="rc-line"><span>Venu grâce à</span><span>${r.parraine_par}</span></div>`:''}
       <div class="rc-line"><span>Fin d'accès</span><span>${r.date_fin_acces||'?'}</span></div>
-      <div class="rc-line"><span>Contact parent</span><span>${r.email_parent||r.tel_parent||'non renseigné'}</span></div>
+      <div class="rc-line"><span>Contact</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
+      ${surMesureBlock}
       ${profilBlock}
       ${notesBlock}
       ${rapBlock}
