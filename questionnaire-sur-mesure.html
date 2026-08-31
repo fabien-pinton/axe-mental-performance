@@ -159,12 +159,15 @@ async function envoyer(){
   msg.textContent = 'Création de votre protocole en cours...';
 
   try{
-    const { data, error } = await sb.rpc('enregistrer_sur_mesure', {
+    // Tant que le paiement n'est pas confirmé, on n'enregistre QUE la demande (table
+    // "prospects", visible dans "DEMANDES REÇUES"). La fiche d'accès ("abonnes") n'est créée
+    // qu'au moment du paiement (voir la fonction activer_sur_mesure, appelée par Make).
+    const { data, error } = await sb.rpc('enregistrer_prospect_sur_mesure', {
       nom_p: nom,
       sexe_p: sexe,
       age_p: age,
-      niveau_p: niveau,
       sport_p: sport,
+      niveau_p: niveau,
       tel_p: tel,
       email_p: email
     });
@@ -172,12 +175,6 @@ async function envoyer(){
     if(error){ throw error; }
 
     const code = data;
-
-    // Trace la demande côté "espace coach" (DEMANDES REÇUES), même si le paiement n'est
-    // jamais finalisé. Best-effort : une erreur ici ne doit jamais bloquer l'inscription.
-    sb.rpc('enregistrer_prospect_sur_mesure', {
-      nom_p: nom, sexe_p: sexe, age_p: age, sport_p: sport, niveau_p: niveau, tel_p: tel, email_p: email
-    }).catch(()=>{});
 
     const urlPaiement = LIEN_PAIEMENT
       + '?client_reference_id=' + encodeURIComponent(code)
