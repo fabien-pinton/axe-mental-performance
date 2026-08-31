@@ -750,6 +750,15 @@ async function axeInit(){
       const r = data[0];
       console.log('[AXE] Rider connecté. Accès actif :', r.actif, '| étape :', axeEtape, '| mois :', r.mois, '| début du mois :', r.date_debut_mois);
       window.axeRider = r;
+      // rituel des 21 jours, cinéma du start, rituel d'avant-départ, carnet des starts :
+      // rechargés depuis Supabase pour survivre à un changement d'appareil ou un rafraîchissement.
+      if(r.suivi_rituel && typeof r.suivi_rituel === 'object'){
+        const sr = r.suivi_rituel;
+        if(sr.ccDays) state.ccDays = sr.ccDays;
+        if(typeof sr.imageryDays === 'number') state.imageryDays = sr.imageryDays;
+        if(sr.startRoutine) state.startRoutine = sr.startRoutine;
+        if(Array.isArray(sr.startJournal)) state.startJournal = sr.startJournal;
+      }
       // date reelle de demarrage du programme (1er du mois suivant le paiement), renvoyee
       // par Supabase. Tant qu'on n'est pas arrive a cette date, le programme reste verrouille,
       // meme si le paiement et le diagnostic sont deja faits.
@@ -1643,6 +1652,29 @@ function renderCrossCrawl(){
 function toggleCC(d){
   if(state.ccDays[d])delete state.ccDays[d]; else state.ccDays[d]=true;
   renderCrossCrawl();
+  debounceEnregistrerSuiviRituel();
+}
+// Enregistre le rituel des 21 jours + le module "Boss du start" dans Supabase, pour qu'ils
+// survivent à un rafraîchissement / changement d'appareil, et soient visibles côté coach.
+// Anti-rebond (comme les notes) pour ne pas spammer la base à chaque clic/frappe.
+let axeDbSuiviRituel = null;
+function debounceEnregistrerSuiviRituel(){
+  clearTimeout(axeDbSuiviRituel);
+  axeDbSuiviRituel = setTimeout(axeEnregistrerSuiviRituel, 900);
+}
+async function axeEnregistrerSuiviRituel(){
+  if(!axeCode) return; // mode démo
+  const suivi = {
+    ccDays: state.ccDays,
+    imageryDays: state.imageryDays,
+    startRoutine: state.startRoutine,
+    startJournal: state.startJournal
+  };
+  try{
+    const { error } = await axeDB.rpc('enregistrer_suivi_rituel', { code_p: axeCode, suivi_p: suivi });
+    if(error){ console.log('[AXE] Erreur suivi rituel :', error.message); }
+    else{ console.log('[AXE] Suivi rituel enregistré.'); }
+  }catch(e){ console.log('[AXE] Souci suivi rituel :', e.message); }
 }
 function setupWhatsApp(){
   const msg=encodeURIComponent("Bonjour, je suis en lien avec le protocole AXE Mental Performance et j'aurais une question.");
@@ -1860,6 +1892,7 @@ function renderStart(){
 function addImagery(){
   if(state.imageryDays<7)state.imageryDays++;
   renderStart();
+  debounceEnregistrerSuiviRituel();
 }
 function saveRoutine(){
   const wasComplete = !!(state.startRoutine.mot && state.startRoutine.geste);
@@ -1868,6 +1901,7 @@ function saveRoutine(){
   const nowComplete = !!(state.startRoutine.mot && state.startRoutine.geste);
   // ne re-render que si l'état de complétude change (badge/preview), sinon on garderait le focus perdu
   if(wasComplete!==nowComplete)renderStart();
+  debounceEnregistrerSuiviRituel();
 }
 function addJournal(){
   const inp=document.getElementById('jStart');
@@ -1875,6 +1909,7 @@ function addJournal(){
   if(!v)return;
   state.startJournal.push(v);
   renderStart();
+  debounceEnregistrerSuiviRituel();
 }
 function renderSimPanel(){
   const p=document.getElementById('simPanel');

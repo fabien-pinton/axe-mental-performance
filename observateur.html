@@ -273,6 +273,22 @@ function afficherRiders(riders){
       });
     }
 
+    // suivi du rituel (21 jours, cinéma du start, rituel d'avant-départ, carnet des starts) :
+    // enregistré en direct depuis la page du rider, donc à jour dès qu'il valide quelque chose.
+    const sr = r.suivi_rituel || {};
+    const ccCount = sr.ccDays ? Object.keys(sr.ccDays).filter(k=>sr.ccDays[k]).length : 0;
+    const imgDays = sr.imageryDays || 0;
+    const routineOk = !!(sr.startRoutine && sr.startRoutine.mot && sr.startRoutine.geste);
+    const journalCount = (sr.startJournal || []).length;
+    let rituelBlock = '';
+    if(ccCount || imgDays || routineOk || journalCount){
+      rituelBlock += `<div class="rc-sub">Suivi du rituel</div>`;
+      if(ccCount) rituelBlock += `<div class="rc-line"><span>Rituel 21 jours</span><span>${ccCount} / 21</span></div>`;
+      if(imgDays) rituelBlock += `<div class="rc-line"><span>Cinéma du start</span><span>${imgDays} / 7 soirs</span></div>`;
+      if(routineOk) rituelBlock += `<div class="rc-line"><span>Rituel d'avant-départ</span><span>"${sr.startRoutine.mot}" · ${sr.startRoutine.geste}</span></div>`;
+      if(journalCount) rituelBlock += `<div class="rc-line"><span>Carnet des starts</span><span>${journalCount} entrée${journalCount>1?'s':''}</span></div>`;
+    }
+
     grid.innerHTML += `<div class="rider-card">
       <div class="rc-top"><h3>${p.prenom || p.profilMental || r.nom || 'Rider'}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
@@ -284,6 +300,7 @@ function afficherRiders(riders){
       <div class="rc-line"><span>Contact</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
       ${surMesureBlock}
       ${profilBlock}
+      ${rituelBlock}
       ${notesBlock}
       ${rapBlock}
     </div>`;
