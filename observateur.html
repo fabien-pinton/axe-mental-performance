@@ -233,24 +233,29 @@ function afficherRiders(riders){
     try{ if(r.profil_diagnostic) p = JSON.parse(r.profil_diagnostic); }catch(e){}
     const estPartenaire = r.formule && (r.formule.includes('900') || r.formule.includes('fois') || r.formule.includes('an'));
 
+    // nom complet du rider : priorité à la colonne "nom" (nom + prénom, saisi au questionnaire
+    // ou complété manuellement), sinon le prénom du diagnostic, sinon repli neutre.
+    const nomAffiche = r.nom || p.prenom || p.profilMental || 'Rider';
+
+    // profil fusionné entre la fiche directe (r, dispo dès l'inscription) et le diagnostic (p,
+    // dispo après la 1re connexion) — une seule ligne, jamais de doublon entre les deux sources.
+    const sexeAff = r.sexe || '';
+    const ageAff = (typeof p.age !== 'undefined' && p.age !== null) ? p.age : r.age;
+    const niveauAff = p.niveau || r.niveau || '';
     let profilBlock = '';
-    if(p.age || p.niveau){
-      profilBlock += `<div class="rc-line"><span>Âge · niveau</span><span>${p.age||'?'} ans · ${p.niveau||'?'}</span></div>`;
+    if(sexeAff || ageAff || niveauAff){
+      profilBlock += `<div class="rc-line"><span>Profil</span><span>${[sexeAff, (ageAff||ageAff===0)?(ageAff+' ans'):'', niveauAff].filter(Boolean).join(' · ')}</span></div>`;
+    }
+    if(r.sport){
+      profilBlock += `<div class="rc-line"><span>Sport</span><span>${r.sport}</span></div>`;
     }
     if(p.canal){
       profilBlock += `<div class="rc-line"><span>Œil · canal</span><span>${p.oeil||'?'} · ${p.canal}</span></div>`;
       profilBlock += `<div class="rc-line"><span>Départ conseillé</span><span>${departLabel(p.depart)}</span></div>`;
     }
-
-    // infos du questionnaire sur-mesure (colonnes directes de la fiche, disponibles dès
-    // l'inscription — donc même avant que le diagnostic ne soit fait et que "p" existe).
-    // Ne duplique pas la ligne "Âge · niveau" ci-dessus si le diagnostic l'a déjà remplie.
-    let surMesureBlock = '';
-    if(r.sport){
-      surMesureBlock += `<div class="rc-line"><span>Sport</span><span>${r.sport}</span></div>`;
-    }
-    if(!(p.age || p.niveau) && (r.sexe || r.age || r.niveau)){
-      surMesureBlock += `<div class="rc-line"><span>Profil</span><span>${r.sexe||'?'} · ${r.age||'?'} ans${r.niveau?(' · '+r.niveau):''}</span></div>`;
+    // jours de disponibilité pour les exercices physiques, choisis par le rider au diagnostic
+    if(Array.isArray(p.jours) && p.jours.length){
+      profilBlock += `<div class="rc-line"><span>Jours dispo (physique)</span><span>${p.jours.join(', ')}</span></div>`;
     }
 
     // notes de ce rider
@@ -290,15 +295,15 @@ function afficherRiders(riders){
     }
 
     grid.innerHTML += `<div class="rider-card">
-      <div class="rc-top"><h3>${p.prenom || p.profilMental || r.nom || 'Rider'}</h3>${badgeAcces(r)}</div>
+      <div class="rc-top"><h3>${nomAffiche}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
       <div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>
       <div class="rc-line"><span>Formule</span><span>${r.formule||'?'}</span></div>
       ${estPartenaire?`<div class="rc-line"><span>Statut</span><span class="tag-part">Partenaire éligible</span></div>`:''}
       ${r.parraine_par?`<div class="rc-line"><span>Venu grâce à</span><span>${r.parraine_par}</span></div>`:''}
       <div class="rc-line"><span>Fin d'accès</span><span>${r.date_fin_acces||'?'}</span></div>
-      <div class="rc-line"><span>Contact</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
-      ${surMesureBlock}
+      <div class="rc-line"><span>Contact parent</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
+      ${r.tel_rider?`<div class="rc-line"><span>Contact rider</span><span>${r.tel_rider}</span></div>`:''}
       ${profilBlock}
       ${rituelBlock}
       ${notesBlock}
