@@ -336,6 +336,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .phys-weight-note{font-size:12.5px;color:var(--dim);font-style:italic;font-family:'Cormorant Garamond',serif;margin-top:4px;padding:10px 0 0;border-top:1px dashed var(--line);line-height:1.4}
 .move-n{font-weight:600;font-size:14px}
 .move-d{font-size:13px;color:var(--dim)}
+.move-c{font-size:13px;color:var(--ink);line-height:1.5;margin-top:3px}
 .validate{
   width:100%;margin-top:16px;padding:13px;border:1.5px solid var(--physique);border-radius:2px;
   background:transparent;color:var(--physique);font-family:'DM Sans';font-weight:600;font-size:13px;
@@ -1123,90 +1124,91 @@ const mentalPools={
 };
 const physPool={
   // SALLE : équipement de gym normal, mais uniquement des poids fixes, toujours en nombre pair de kilos.
+  // le champ "c" est une explication en langage simple, pour un public non-sportif (parents compris).
   gym:[
     {title:"Départs explosifs",lvl:"Explosivité",desc:"La puissance qui te sort de la gate.",series:"4 séries",dur:"20 min",moves:[
-      {n:"Presse à cuisses explosive",d:"4 × 5 reps · poussée la plus rapide possible · repos 2 min",poids:"40 kg"},
-      {n:"Fentes sautées (haltères)",d:"4 × 6 par jambe · réception souple · repos 90 s",poids:"2 × 4 kg"},
-      {n:"Sauts sur box",d:"4 × 4 · monter haut, redescendre contrôlé · repos 2 min",poids:"poids du corps"},
+      {n:"Presse à cuisses explosive",d:"4 × 5 reps · poussée la plus rapide possible · repos 2 min",c:"Assis(e) sur la machine, jambes pliées à 90°, tu pousses le plus vite possible sans bloquer les genoux à l'arrivée.",poids:"40 kg"},
+      {n:"Fentes sautées (haltères)",d:"4 × 6 par jambe · réception souple · repos 90 s",c:"Un haltère dans chaque main, tu passes d'une fente à l'autre par un petit saut, en changeant de jambe à chaque fois.",poids:"2 × 4 kg"},
+      {n:"Sauts sur box",d:"4 × 4 · monter haut, redescendre contrôlé · repos 2 min",c:"Depuis une position légèrement fléchie, tu sautes à pieds joints sur une plateforme stable, puis tu redescends en marchant, jamais en sautant en arrière.",poids:"poids du corps"},
     ]},
     {title:"Chaîne postérieure",lvl:"Force",desc:"Le moteur de ta relance en sortie de virage.",series:"3 séries",dur:"18 min",moves:[
-      {n:"Soulevé de terre léger",d:"3 × 8 · dos gainé, mouvement lent · repos 2 min",poids:"30 kg"},
-      {n:"Hip thrust",d:"3 × 10 · pause 1 s en haut · repos 90 s",poids:"24 kg"},
-      {n:"Leg curl",d:"3 × 12 · descente contrôlée · repos 75 s",poids:"16 kg"},
+      {n:"Soulevé de terre léger",d:"3 × 8 · dos gainé, mouvement lent · repos 2 min",c:"Barre ou haltères devant les cuisses, dos bien droit, tu plies les hanches (pas le dos) pour descendre la charge le long des jambes, puis tu remontes en poussant sur les talons.",poids:"30 kg"},
+      {n:"Hip thrust",d:"3 × 10 · pause 1 s en haut · repos 90 s",c:"Dos calé contre un banc, pieds au sol, tu pousses le bassin vers le haut jusqu'à aligner cuisses et buste, en serrant les fessiers.",poids:"24 kg"},
+      {n:"Leg curl",d:"3 × 12 · descente contrôlée · repos 75 s",c:"Sur la machine, tu ramènes les talons vers les fessiers en pliant les genoux, puis tu redescends lentement.",poids:"16 kg"},
     ]},
     {title:"Gainage dynamique",lvl:"Stabilité",desc:"Le corps solide qui tient sur les bosses.",series:"3 séries",dur:"12 min",moves:[
-      {n:"Planche sur ballon",d:"3 × 40 s · bassin verrouillé · repos 45 s",poids:"poids du corps"},
-      {n:"Rotations avec disque",d:"3 × 10 par côté · lent · repos 45 s",poids:"4 kg"},
-      {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s",poids:"poids du corps"},
+      {n:"Planche sur ballon",d:"3 × 40 s · bassin verrouillé · repos 45 s",c:"Avant-bras posés sur un gros ballon de gym, corps aligné de la tête aux pieds, tu tiens la position sans laisser le bassin tomber.",poids:"poids du corps"},
+      {n:"Rotations avec disque",d:"3 × 10 par côté · lent · repos 45 s",c:"Assis(e), un disque de poids tenu à deux mains devant la poitrine, tu tournes le buste d'un côté puis de l'autre en gardant le dos droit.",poids:"4 kg"},
+      {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s",c:"Allongé(e) sur le côté, appui sur l'avant-bras, tu soulèves le bassin pour aligner tout le corps, puis tu tiens la position.",poids:"poids du corps"},
     ]},
     {title:"Puissance de relance",lvl:"Puissance",desc:"La force qui te fait regagner les watts perdus en sortie de virage.",series:"3 séries",dur:"20 min",moves:[
-      {n:"Presse à cuisses lourde",d:"3 × 6 · charge plus lourde, contrôle à la descente · repos 2 min 30",poids:"50 kg"},
-      {n:"Rowing buste penché",d:"3 × 8 · dos plat, tirage vers le nombril · repos 90 s",poids:"20 kg"},
-      {n:"Squat gobelet",d:"3 × 10 · descente lente, remontée puissante · repos 90 s",poids:"16 kg"},
+      {n:"Presse à cuisses lourde",d:"3 × 6 · charge plus lourde, contrôle à la descente · repos 2 min 30",c:"Même mouvement que la presse à cuisses explosive, mais avec une charge plus lourde : on contrôle bien la descente, sans jamais bloquer les genoux à fond.",poids:"50 kg"},
+      {n:"Rowing buste penché",d:"3 × 8 · dos plat, tirage vers le nombril · repos 90 s",c:"Buste penché en avant, dos plat, tu tires la barre ou les haltères vers le nombril en serrant les omoplates.",poids:"20 kg"},
+      {n:"Squat gobelet",d:"3 × 10 · descente lente, remontée puissante · repos 90 s",c:"Un haltère tenu à deux mains contre la poitrine, tu descends comme pour t'asseoir sur une chaise basse, dos droit, puis tu remontes.",poids:"16 kg"},
     ]},
     {title:"Vitesse de jambes",lvl:"Vitesse",desc:"La fréquence de jambes qui fait la différence sur les portions de pumping.",series:"4 séries",dur:"18 min",moves:[
-      {n:"Montées de genoux lestées",d:"4 × 20 s · rythme maximal · repos 60 s",poids:"2 × 2 kg"},
-      {n:"Sauts latéraux",d:"4 × 8 par côté · réactif, temps de contact court au sol · repos 75 s",poids:"poids du corps"},
-      {n:"Fentes bulgares",d:"3 × 8 par jambe · pied arrière surélevé · repos 90 s",poids:"2 × 6 kg"},
+      {n:"Montées de genoux lestées",d:"4 × 20 s · rythme maximal · repos 60 s",c:"Sur place, avec de petits poids aux chevilles ou aux mains, tu montes les genoux le plus vite possible, comme un sprint sur place.",poids:"2 × 2 kg"},
+      {n:"Sauts latéraux",d:"4 × 8 par côté · réactif, temps de contact court au sol · repos 75 s",c:"Tu sautes à pieds joints d'un côté puis de l'autre, en touchant le sol le moins longtemps possible à chaque saut.",poids:"poids du corps"},
+      {n:"Fentes bulgares",d:"3 × 8 par jambe · pied arrière surélevé · repos 90 s",c:"Pied arrière posé sur un banc derrière toi, tu descends en pliant la jambe avant jusqu'à ce que le genou arrière frôle le sol.",poids:"2 × 6 kg"},
     ]},
     {title:"Haut du corps, tenue du guidon",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent le guidon dans les bosses, sans se fatiguer avant la fin de la manche.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Tirage poulie haute",d:"3 × 10 · omoplates serrées, contrôle du retour · repos 75 s",poids:"20 kg"},
-      {n:"Développé épaules assis",d:"3 × 8 · mouvement contrôlé, pas de à-coup · repos 90 s",poids:"2 × 6 kg"},
-      {n:"Curl biceps",d:"3 × 10 · lent à la descente · repos 60 s",poids:"2 × 4 kg"},
+      {n:"Tirage poulie haute",d:"3 × 10 · omoplates serrées, contrôle du retour · repos 75 s",c:"Assis(e) face à la machine, tu tires la barre vers le haut de la poitrine en serrant les omoplates, puis tu relâches doucement.",poids:"20 kg"},
+      {n:"Développé épaules assis",d:"3 × 8 · mouvement contrôlé, pas de à-coup · repos 90 s",c:"Assis(e), un haltère dans chaque main au niveau des épaules, tu pousses vers le haut jusqu'à presque tendre les bras.",poids:"2 × 6 kg"},
+      {n:"Curl biceps",d:"3 × 10 · lent à la descente · repos 60 s",c:"Debout, bras le long du corps, tu plies les coudes pour remonter les haltères vers les épaules, sans bouger les épaules.",poids:"2 × 4 kg"},
     ]},
     {title:"Gainage rotationnel",lvl:"Rotation",desc:"La rotation du buste qui te fait passer les virages sans perdre d'appui.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Rotations à la poulie",d:"3 × 10 par côté · lent, contrôlé · repos 60 s",poids:"6 kg"},
-      {n:"Woodchop avec disque",d:"3 × 8 par côté · geste diagonal, dynamique · repos 60 s",poids:"8 kg"},
-      {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s",poids:"poids du corps"},
+      {n:"Rotations à la poulie",d:"3 × 10 par côté · lent, contrôlé · repos 60 s",c:"Debout de profil par rapport à la machine, tu tires la poignée en tournant le buste, bras presque tendus, comme un geste de lancer.",poids:"6 kg"},
+      {n:"Woodchop avec disque",d:"3 × 8 par côté · geste diagonal, dynamique · repos 60 s",c:"Un disque tenu à deux mains, tu pars d'une épaule et tu l'amènes vers la hanche opposée, comme un coup de hache.",poids:"8 kg"},
+      {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s",c:"En position de planche, tu tournes le buste d'un côté en levant un bras vers le plafond, puis tu reviens et tu changes de côté.",poids:"poids du corps"},
     ]},
     {title:"Bas du corps unilatéral",lvl:"Équilibre",desc:"L'équilibre jambe par jambe qui te sauve la mise quand un appui part de travers.",series:"3 séries",dur:"18 min",moves:[
-      {n:"Squat bulgare",d:"3 × 8 par jambe · buste droit, genou aligné · repos 90 s",poids:"2 × 8 kg"},
-      {n:"Fente latérale",d:"3 × 8 par jambe · hanche mobile · repos 75 s",poids:"2 × 4 kg"},
-      {n:"Équilibre sur un pied lesté",d:"3 × 30 s par jambe · gainage actif · repos 45 s",poids:"2 × 2 kg"},
+      {n:"Squat bulgare",d:"3 × 8 par jambe · buste droit, genou aligné · repos 90 s",c:"Pied arrière posé sur un banc, tu descends sur la jambe avant en gardant le buste droit et le genou aligné avec le pied.",poids:"2 × 8 kg"},
+      {n:"Fente latérale",d:"3 × 8 par jambe · hanche mobile · repos 75 s",c:"Un grand pas sur le côté, tu plies la jambe qui reçoit le poids en gardant l'autre tendue, puis tu reviens au centre.",poids:"2 × 4 kg"},
+      {n:"Équilibre sur un pied lesté",d:"3 × 30 s par jambe · gainage actif · repos 45 s",c:"Debout sur une jambe, un petit poids dans chaque main, tu gardes l'équilibre en gainant le ventre.",poids:"2 × 2 kg"},
     ]},
   ],
   // MAISON : uniquement le poids du corps. Une chaise ou une table stable peuvent servir d'appui,
   // jamais de barre, d'élastique ou de matériel à acheter.
   home:[
     {title:"Sprints de poussée",lvl:"Explosivité",desc:"Pur poids du corps pour le départ, sans aucun matériel.",series:"4 séries",dur:"18 min",moves:[
-      {n:"Squats sautés",d:"4 × 8 · réception souple, remonter vite · repos 90 s"},
-      {n:"Démarrages au sol",d:"4 × 5 · position basse, explosion sur 5 m · repos 90 s"},
-      {n:"Fentes sautées alternées",d:"4 × 6 par jambe · rythme soutenu · repos 90 s"},
+      {n:"Squats sautés",d:"4 × 8 · réception souple, remonter vite · repos 90 s",c:"Tu descends comme un squat classique, puis tu sautes le plus haut possible en amortissant bien la réception."},
+      {n:"Démarrages au sol",d:"4 × 5 · position basse, explosion sur 5 m · repos 90 s",c:"Départ accroupi(e), comme sur des starting-blocks, tu t'élances en avant sur quelques mètres, le plus vite possible."},
+      {n:"Fentes sautées alternées",d:"4 × 6 par jambe · rythme soutenu · repos 90 s",c:"Tu passes d'une fente à l'autre par un petit saut, en changeant de jambe à chaque fois, sans matériel."},
     ]},
     {title:"Pont et fentes",lvl:"Force",desc:"La force de relance, chez toi, sans matériel.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Pont fessier une jambe",d:"3 × 10 par jambe · pause 1 s en haut · repos 75 s"},
-      {n:"Fentes marchées",d:"3 × 12 par jambe · buste droit · repos 75 s"},
-      {n:"Chaise au mur",d:"3 × 45 s · cuisses parallèles au sol · repos 60 s"},
+      {n:"Pont fessier une jambe",d:"3 × 10 par jambe · pause 1 s en haut · repos 75 s",c:"Allongé(e) sur le dos, genoux pliés, une jambe tendue en l'air, tu pousses le bassin vers le haut avec l'autre jambe."},
+      {n:"Fentes marchées",d:"3 × 12 par jambe · buste droit · repos 75 s",c:"Tu avances en alternant de grandes fentes, comme si tu marchais, buste droit à chaque pas."},
+      {n:"Chaise au mur",d:"3 × 45 s · cuisses parallèles au sol · repos 60 s",c:"Dos contre un mur, tu descends comme pour t'asseoir sur une chaise invisible, cuisses parallèles au sol, et tu tiens la position."},
     ]},
     {title:"Gainage au sol",lvl:"Stabilité",desc:"Le tronc qui verrouille ton pilotage.",series:"3 séries",dur:"12 min",moves:[
-      {n:"Planche",d:"3 × 40 s · corps aligné · repos 45 s"},
-      {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s"},
-      {n:"Superman",d:"3 × 12 · pause 1 s en haut · repos 45 s"},
+      {n:"Planche",d:"3 × 40 s · corps aligné · repos 45 s",c:"Appui sur les avant-bras et les pointes de pieds, corps bien aligné de la tête aux talons, tu tiens la position sans creuser le dos."},
+      {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s",c:"Allongé(e) sur le côté, appui sur l'avant-bras, tu soulèves le bassin pour aligner tout le corps, puis tu tiens la position."},
+      {n:"Superman",d:"3 × 12 · pause 1 s en haut · repos 45 s",c:"Allongé(e) sur le ventre, tu lèves en même temps les bras et les jambes tendus, comme si tu volais, puis tu redescends doucement."},
     ]},
     {title:"Appuis sur chaise",lvl:"Puissance",desc:"La poussée des bras et des jambes, avec juste une chaise stable pour t'aider.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Dips sur chaise",d:"3 × 10 · mains sur le bord d'une chaise stable, descente contrôlée · repos 75 s"},
-      {n:"Pompes surélevées",d:"3 × 10 · mains sur une chaise ou une table basse, corps aligné · repos 75 s"},
-      {n:"Squats sautés",d:"3 × 8 · réception souple · repos 90 s"},
+      {n:"Dips sur chaise",d:"3 × 10 · mains sur le bord d'une chaise stable, descente contrôlée · repos 75 s",c:"Mains posées sur le bord d'une chaise stable derrière toi, jambes tendues devant, tu descends en pliant les coudes puis tu remontes."},
+      {n:"Pompes surélevées",d:"3 × 10 · mains sur une chaise ou une table basse, corps aligné · repos 75 s",c:"Mains posées sur une chaise ou une table basse, corps aligné, tu descends la poitrine vers l'appui puis tu repousses."},
+      {n:"Squats sautés",d:"3 × 8 · réception souple · repos 90 s",c:"Tu descends comme un squat classique, puis tu sautes en amortissant bien la réception."},
     ]},
     {title:"Équilibre sur une jambe",lvl:"Équilibre",desc:"L'équilibre sur une jambe, la base de ta stabilité dans les virages.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Fente arrière surélevée",d:"3 × 8 par jambe · pied arrière posé sur une chaise · repos 90 s"},
-      {n:"Squat une jambe assisté",d:"3 × 6 par jambe · une main posée sur une table ou un mur pour l'équilibre · repos 90 s"},
-      {n:"Chaise au mur",d:"3 × 40 s · cuisses parallèles au sol · repos 60 s"},
+      {n:"Fente arrière surélevée",d:"3 × 8 par jambe · pied arrière posé sur une chaise · repos 90 s",c:"Pied arrière posé sur une chaise derrière toi, tu descends sur la jambe avant, genou aligné avec le pied."},
+      {n:"Squat une jambe assisté",d:"3 × 6 par jambe · une main posée sur une table ou un mur pour l'équilibre · repos 90 s",c:"Une main posée sur un mur ou une table pour t'équilibrer, tu descends sur une seule jambe puis tu remontes."},
+      {n:"Chaise au mur",d:"3 × 40 s · cuisses parallèles au sol · repos 60 s",c:"Dos contre un mur, tu descends comme pour t'asseoir sur une chaise invisible, cuisses parallèles au sol, et tu tiens la position."},
     ]},
     {title:"Vitesse au sol",lvl:"Vitesse",desc:"La fréquence de jambes, sans un gramme de matériel.",series:"4 séries",dur:"16 min",moves:[
-      {n:"Montées de genoux",d:"4 × 20 s · rythme maximal, sur place · repos 60 s"},
-      {n:"Ciseaux au sol",d:"3 × 10 par jambe · rythme rapide, gainage actif · repos 60 s"},
-      {n:"Sauts latéraux",d:"4 × 8 par côté · réactif · repos 75 s"},
+      {n:"Montées de genoux",d:"4 × 20 s · rythme maximal, sur place · repos 60 s",c:"Sur place, tu montes les genoux le plus haut et le plus vite possible, comme un sprint sur place."},
+      {n:"Ciseaux au sol",d:"3 × 10 par jambe · rythme rapide, gainage actif · repos 60 s",c:"Allongé(e) sur le dos, jambes tendues à quelques centimètres du sol, tu les croises rapidement l'une au-dessus de l'autre, comme des ciseaux."},
+      {n:"Sauts latéraux",d:"4 × 8 par côté · réactif · repos 75 s",c:"Tu sautes à pieds joints d'un côté puis de l'autre, en touchant le sol le moins longtemps possible à chaque saut."},
     ]},
     {title:"Haut du corps sans matériel",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent le guidon, travaillés à la maison.",series:"3 séries",dur:"16 min",moves:[
-      {n:"Pompes classiques",d:"3 × 8 · corps aligné, descente contrôlée · repos 75 s"},
-      {n:"Pompes déclinées",d:"3 × 6 · pieds posés sur une chaise, mains au sol · repos 90 s"},
-      {n:"Gainage bras tendus",d:"3 × 30 s · position de planche haute · repos 45 s"},
+      {n:"Pompes classiques",d:"3 × 8 · corps aligné, descente contrôlée · repos 75 s",c:"Mains au sol un peu plus larges que les épaules, corps aligné, tu descends la poitrine vers le sol puis tu repousses."},
+      {n:"Pompes déclinées",d:"3 × 6 · pieds posés sur une chaise, mains au sol · repos 90 s",c:"Pieds posés sur une chaise, mains au sol, tu fais des pompes dans cette position plus inclinée, plus exigeante pour les épaules."},
+      {n:"Gainage bras tendus",d:"3 × 30 s · position de planche haute · repos 45 s",c:"Position de planche mais bras tendus, mains sous les épaules, corps aligné, tu tiens la position."},
     ]},
     {title:"Gainage rotationnel au sol",lvl:"Rotation",desc:"La rotation du buste qui te fait passer les virages, sans matériel.",series:"3 séries",dur:"14 min",moves:[
-      {n:"Rotations du buste assis",d:"3 × 10 par côté · pieds surélevés sur une chaise, mains jointes · repos 60 s"},
-      {n:"Superman croisé",d:"3 × 10 par côté · bras et jambe opposés · repos 60 s"},
-      {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s"},
+      {n:"Rotations du buste assis",d:"3 × 10 par côté · pieds surélevés sur une chaise, mains jointes · repos 60 s",c:"Assis(e), pieds surélevés sur une chaise, mains jointes devant toi, tu tournes le buste d'un côté à l'autre en touchant le sol à chaque fois."},
+      {n:"Superman croisé",d:"3 × 10 par côté · bras et jambe opposés · repos 60 s",c:"Allongé(e) sur le ventre, tu lèves en même temps un bras et la jambe opposée, tu tiens un instant, puis tu changes de côté."},
+      {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s",c:"En position de planche, tu tournes le buste d'un côté en levant un bras vers le plafond, puis tu reviens et tu changes de côté."},
     ]},
   ],
 };
@@ -2125,6 +2127,7 @@ function exCard(ex,isMental,id,jourLabel){
     <div class="move">
       <div class="move-head"><div class="move-n">${m.n}</div>${m.poids?`<span class="poids">${m.poids}</span>`:''}</div>
       <div class="move-d">${m.d}</div>
+      ${m.c?`<div class="move-c">${m.c}</div>`:''}
     </div>`).join('');
   return `<div class="card" id="card-${id}">
     ${jourLabel?`<span class="day-tag">Séance du ${jourLabel.toLowerCase()}</span>`:''}
