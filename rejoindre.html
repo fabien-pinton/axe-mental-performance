@@ -30,12 +30,13 @@ h1{font-family:'Bebas Neue';font-weight:400;font-size:30px;letter-spacing:.03em;
 .age-row{display:flex;gap:10px;margin-bottom:6px}
 .age-btn{flex:1;padding:13px;border:1.5px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font-family:'DM Sans';font-weight:600;font-size:14px;cursor:pointer;transition:.15s}
 .age-btn.sel{border-color:var(--gold);background:rgba(168,133,42,.08);color:var(--gold)}
-.step2{display:none}
-.step2.on{display:block}
+.step{display:none}
+.step.on{display:block}
 .rider-msg{display:none;background:rgba(168,133,42,.08);border:1px solid rgba(168,133,42,.3);border-radius:8px;padding:20px 22px;font-size:14.5px;color:var(--ink);margin-top:4px}
 .rider-msg.on{display:block}
 .rider-msg b{color:var(--gold)}
 .champ{margin-bottom:13px}
+.champ.hidden{display:none}
 .champ label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:5px;font-weight:600}
 .champ input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:15px;background:#fff;color:var(--ink)}
 .champ input:focus{outline:none;border-color:var(--gold)}
@@ -50,50 +51,59 @@ h1{font-family:'Bebas Neue';font-weight:400;font-size:30px;letter-spacing:.03em;
   </div>
 
   <h1>UNE SECONDE<br>AVANT DE CONTINUER</h1>
-  <div class="intro">Le protocole s'adresse à des jeunes pilotes. La suite doit se faire avec un parent.</div>
+  <div class="intro">Une question de sécurité, avant de découvrir le protocole.</div>
 
-  <!-- Étape 1 : qui es-tu -->
-  <div id="step1">
+  <!-- Étape 1 : majeur ou mineur -->
+  <div id="step1" class="step on">
     <div class="box">
-      <p><b>Tu es un jeune pilote&nbsp;?</b> Bienvenue, tu es au bon endroit. Mais l'inscription et le paiement doivent se faire avec ton parent ou ton responsable légal, à côté de toi.</p>
-      <p><b>Vous êtes le parent&nbsp;?</b> Parfait, c'est vous qui allez pouvoir découvrir le protocole et décider.</p>
+      <p><b>Tu es mineur&nbsp;?</b> Bienvenue, tu es au bon endroit. Mais l'inscription et le paiement doivent se faire avec ton parent ou ton responsable légal, à côté de toi.</p>
+      <p><b>Tu es majeur&nbsp;?</b> Parfait, tu peux découvrir le protocole toi-même, que ce soit pour toi ou pour quelqu'un d'autre.</p>
     </div>
-    <p style="font-size:14px;color:var(--dim);text-align:center;margin-bottom:10px">Qui consulte cette page en ce moment&nbsp;?</p>
+    <p style="font-size:14px;color:var(--dim);text-align:center;margin-bottom:10px">Es-tu majeur ou mineur&nbsp;?</p>
     <div class="age-row">
-      <button class="age-btn" id="ab-parent" onclick="choix('parent')">Je suis le parent</button>
-      <button class="age-btn" id="ab-rider" onclick="choix('rider')">Je suis le pilote</button>
+      <button class="age-btn" id="ab-majeur" onclick="choix('majeur')">Je suis majeur</button>
+      <button class="age-btn" id="ab-mineur" onclick="choix('mineur')">Je suis mineur</button>
     </div>
   </div>
 
-  <!-- Message si pilote -->
+  <!-- Message si mineur -->
   <div class="rider-msg" id="riderMsg">
     <p>Super de te voir motivé&nbsp;! <b>Va chercher ton parent ou ton responsable légal</b>, et revenez ensemble sur cette page. C'est lui qui pourra remplir la suite et découvrir le protocole avec toi.</p>
     <p style="margin-top:12px">Quand il est à côté de toi, appuie ci-dessous.</p>
-    <button class="age-btn" style="margin-top:14px;width:100%" onclick="choix('parent')">Mon parent est là, on continue</button>
+    <button class="age-btn" style="margin-top:14px;width:100%" onclick="confirmerMineur()">Mon parent est là, on continue</button>
   </div>
 
-  <!-- Étape 2 : confirmation parentale -->
-  <div class="step2" id="step2">
+  <!-- Étape 1bis : pour qui, si majeur -->
+  <div id="stepPourQui" class="step">
+    <p style="font-size:14px;color:var(--dim);text-align:center;margin-bottom:10px">Tu t'inscris pour toi-même, ou pour quelqu'un d'autre&nbsp;?</p>
+    <div class="age-row">
+      <button class="age-btn" id="ab-solo" onclick="choixPourQui('solo')">Pour moi-même</button>
+      <button class="age-btn" id="ab-autre" onclick="choixPourQui('autre')">Pour quelqu'un d'autre</button>
+    </div>
+  </div>
+
+  <!-- Étape 2 : confirmation -->
+  <div class="step" id="step2">
     <div class="box">
-      <p>En tant que parent ou responsable légal, je confirme les points suivants avant d'accéder à la présentation et aux formules.</p>
+      <p id="txtIntro">En tant que parent ou responsable légal, je confirme les points suivants avant d'accéder à la présentation et aux formules.</p>
     </div>
 
     <div class="champ">
-      <label for="f_parent">Nom et prénom du parent</label>
+      <label for="f_parent" id="lbl_parent">Nom et prénom du parent</label>
       <input type="text" id="f_parent" autocomplete="name" oninput="maj()">
     </div>
-    <div class="champ">
-      <label for="f_rider">Nom et prénom du pilote</label>
+    <div class="champ" id="champ_rider">
+      <label for="f_rider" id="lbl_rider">Nom et prénom du mineur concerné</label>
       <input type="text" id="f_rider" autocomplete="off" oninput="maj()">
     </div>
     <div class="champ">
-      <label for="f_mail">Email du parent</label>
+      <label for="f_mail" id="lbl_mail">Email du parent</label>
       <input type="email" id="f_mail" autocomplete="email" oninput="maj()">
     </div>
 
-    <div class="check" onclick="tog('c1')"><input type="checkbox" id="c1" onclick="event.stopPropagation();maj()"><label>Je suis le parent ou le responsable légal du jeune pilote concerné.</label></div>
-    <div class="check" onclick="tog('c2')"><input type="checkbox" id="c2" onclick="event.stopPropagation();maj()"><label>Je comprends que toute inscription et tout paiement seront réalisés par moi, adulte, et sous ma responsabilité.</label></div>
-    <div class="check" onclick="tog('c3')"><input type="checkbox" id="c3" onclick="event.stopPropagation();maj()"><label>Je comprends que ce protocole est un accompagnement à la préparation mentale et physique, et qu'il ne se substitue pas à une prise en charge médicale ou thérapeutique.</label></div>
+    <div class="check" onclick="tog('c1')"><input type="checkbox" id="c1" onclick="event.stopPropagation();maj()"><label id="lbl_c1">Je suis le parent ou le responsable légal du mineur concerné.</label></div>
+    <div class="check" onclick="tog('c2')"><input type="checkbox" id="c2" onclick="event.stopPropagation();maj()"><label id="lbl_c2">Je comprends que toute inscription et tout paiement seront réalisés par moi, adulte, et sous ma responsabilité.</label></div>
+    <div class="check" onclick="tog('c3')"><input type="checkbox" id="c3" onclick="event.stopPropagation();maj()"><label>Je comprends que ce protocole est un accompagnement à la préparation mentale (et physique selon la formule choisie), et qu'il ne se substitue pas à une prise en charge médicale ou thérapeutique.</label></div>
     <button class="btn" id="go" onclick="continuer()">Découvrir le protocole</button>
     <p class="mini">En continuant, vous accédez à la présentation et aux formules. Vos coordonnées sont enregistrées uniquement pour le suivi de votre demande, et ne sont jamais transmises à un tiers.</p>
   </div>
@@ -105,17 +115,83 @@ var PAGE_VENTE = 'presentation.html';
 var params = new URLSearchParams(window.location.search);
 var parrain = params.get('parrain');
 
+// mode : 'majeur_solo' (s'inscrit pour lui-même), 'majeur_autre' (majeur, inscrit quelqu'un
+// d'autre), ou 'mineur' (parent/responsable légal d'un mineur)
+var mode = null;
+
+var TXT = {
+  majeur_solo: {
+    intro: "En tant que personne majeure, je confirme les points suivants avant d'accéder à la présentation et aux formules.",
+    lblParent: "Nom et prénom",
+    lblMail: "Email",
+    c1: "Je confirme être majeur(e) et m'inscrire pour moi-même.",
+    c2: "Je comprends que toute inscription et tout paiement seront réalisés par moi-même, sous ma responsabilité.",
+    champRider: false
+  },
+  majeur_autre: {
+    intro: "En tant que personne majeure, je confirme les points suivants avant d'accéder à la présentation et aux formules.",
+    lblParent: "Ton nom et prénom",
+    lblRider: "Nom et prénom du sportif",
+    lblMail: "Ton email",
+    c1: "Je confirme être majeur(e) et inscrire cette personne avec son accord, ou en tant que responsable légal si elle est mineure.",
+    c2: "Je comprends que toute inscription et tout paiement seront réalisés par moi, sous ma responsabilité.",
+    champRider: true
+  },
+  mineur: {
+    intro: "En tant que parent ou responsable légal, je confirme les points suivants avant d'accéder à la présentation et aux formules.",
+    lblParent: "Nom et prénom du parent",
+    lblRider: "Nom et prénom du mineur concerné",
+    lblMail: "Email du parent",
+    c1: "Je suis le parent ou le responsable légal du mineur concerné.",
+    c2: "Je comprends que toute inscription et tout paiement seront réalisés par moi, adulte, et sous ma responsabilité.",
+    champRider: true
+  }
+};
+
+function montrer(id){
+  ['step1','riderMsg','stepPourQui','step2'].forEach(function(s){
+    document.getElementById(s).classList.remove('on');
+  });
+  document.getElementById(id).classList.add('on');
+}
+
+function appliquerTextes(m){
+  var t = TXT[m];
+  document.getElementById('txtIntro').textContent = t.intro;
+  document.getElementById('lbl_parent').textContent = t.lblParent;
+  document.getElementById('lbl_mail').textContent = t.lblMail;
+  document.getElementById('lbl_c1').textContent = t.c1;
+  document.getElementById('lbl_c2').textContent = t.c2;
+  document.getElementById('champ_rider').classList.toggle('hidden', !t.champRider);
+  if(t.champRider){ document.getElementById('lbl_rider').textContent = t.lblRider; }
+}
+
 function choix(qui){
-  document.getElementById('ab-parent').classList.toggle('sel', qui==='parent');
-  document.getElementById('ab-rider').classList.toggle('sel', qui==='rider');
-  if(qui==='rider'){
-    document.getElementById('riderMsg').classList.add('on');
-    document.getElementById('step2').classList.remove('on');
+  document.getElementById('ab-majeur').classList.toggle('sel', qui==='majeur');
+  document.getElementById('ab-mineur').classList.toggle('sel', qui==='mineur');
+  if(qui === 'mineur'){
+    montrer('riderMsg');
   } else {
-    document.getElementById('riderMsg').classList.remove('on');
-    document.getElementById('step2').classList.add('on');
+    montrer('stepPourQui');
   }
 }
+
+function choixPourQui(qui){
+  document.getElementById('ab-solo').classList.toggle('sel', qui==='solo');
+  document.getElementById('ab-autre').classList.toggle('sel', qui==='autre');
+  mode = (qui === 'solo') ? 'majeur_solo' : 'majeur_autre';
+  appliquerTextes(mode);
+  montrer('step2');
+  maj();
+}
+
+function confirmerMineur(){
+  mode = 'mineur';
+  appliquerTextes('mineur');
+  montrer('step2');
+  maj();
+}
+
 function tog(id){ var c=document.getElementById(id); c.checked=!c.checked; maj(); }
 
 function val(id){ return document.getElementById(id).value.trim(); }
@@ -123,7 +199,12 @@ function mailOk(m){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m); }
 
 function maj(){
   var cases = document.getElementById('c1').checked && document.getElementById('c2').checked && document.getElementById('c3').checked;
-  var champs = val('f_parent').length > 2 && val('f_rider').length > 2 && mailOk(val('f_mail'));
+  var champs;
+  if(mode === 'majeur_solo'){
+    champs = val('f_parent').length > 2 && mailOk(val('f_mail'));
+  } else {
+    champs = val('f_parent').length > 2 && val('f_rider').length > 2 && mailOk(val('f_mail'));
+  }
   document.getElementById('go').classList.toggle('on', cases && champs);
 }
 
@@ -146,6 +227,11 @@ function continuer(){
   function partir(){ if(!parti){ parti = true; window.location.href = url; } }
   setTimeout(partir, 3000);
 
+  // nom_parent_p = la personne qui inscrit (celle qui remplit ce formulaire)
+  // nom_rider_p  = le sportif qui suivra le protocole (peut être la même personne)
+  var nomInscripteur = val('f_parent');
+  var nomSportif = (mode === 'majeur_solo') ? nomInscripteur : val('f_rider');
+
   fetch(SB_URL + '/rest/v1/rpc/enregistrer_prospect', {
     method: 'POST',
     headers: {
@@ -154,8 +240,8 @@ function continuer(){
       'Authorization': 'Bearer ' + SB_KEY
     },
     body: JSON.stringify({
-      nom_parent_p: val('f_parent'),
-      nom_rider_p: val('f_rider'),
+      nom_parent_p: nomInscripteur,
+      nom_rider_p: nomSportif,
       email_parent_p: val('f_mail'),
       parrain_p: parrain || ''
     })
