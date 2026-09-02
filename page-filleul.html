@@ -249,24 +249,30 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 
 <!-- OFFERS -->
 <div class="sec">
-  <div class="sec-tag">DEUX FAÇONS DE DÉMARRER</div>
+  <div class="sec-tag">TROIS FAÇONS DE DÉMARRER</div>
   <h2>CHOISIS TA FORMULE</h2>
-  <div class="offers offers-2" id="offersGrid">
+  <div class="offers offers-3" id="offersGrid">
     <div class="offer feat">
       <div class="ribbon">Le plus choisi</div>
       <div class="oname">ANNUEL · EN 1 FOIS</div>
       <div class="op">900<small> €/an</small></div>
-      <div class="odesc">12 mois d'accès d'un coup. L'équivalent de dix mois payés pour douze. Tu deviens <b>partenaire</b> : chaque famille que tu amènes te rapporte 150 euros.</div>
+      <div class="odesc">12 mois d'accès d'un coup, mental et physique. L'équivalent de dix mois payés pour douze. Tu deviens <b>partenaire</b> : chaque famille que tu amènes te rapporte 150 euros.</div>
       <a class="obtn g" href="#" id="btn-900">Payer en une fois</a>
     </div>
     <div class="offer">
       <div class="oname">ANNUEL · EN 3 FOIS</div>
       <div class="op">3 × 300<small> €</small></div>
-      <div class="odesc">Le même accès de 12 mois, réglé en trois fois pour étaler. Toi aussi tu deviens <b>partenaire</b>, avec 150 euros par famille parrainée.</div>
+      <div class="odesc">Le même accès de 12 mois, mental et physique, réglé en trois fois pour étaler. Toi aussi tu deviens <b>partenaire</b>, avec 150 euros par famille parrainée.</div>
       <a class="obtn o" href="#" id="btn-3fois">Payer en trois fois</a>
     </div>
+    <div class="offer">
+      <div class="oname">PROTOCOLE MENTAL</div>
+      <div class="op">500<small> €</small></div>
+      <div class="odesc">Uniquement le suivi mental, quel que soit ton sport, en une fois. Cette offre n'ouvre pas droit au parrainage.</div>
+      <a class="obtn o" href="#" id="btn-mental">Choisir le protocole mental</a>
+    </div>
   </div>
-  <p class="partenaire-note serif">Devenir partenaire, c'est simple : après ton inscription annuelle, tu reçois un lien personnel. Chaque famille qui s'inscrit grâce à lui te fait gagner 150 euros. Ta confiance récompensée.</p>
+  <p class="partenaire-note serif">Devenir partenaire, c'est simple : après ton inscription annuelle (900€), tu reçois un lien personnel. Chaque famille qui s'inscrit grâce à lui pour cette même formule te fait gagner 150 euros. Ta confiance récompensée.</p>
 </div>
 
 <!-- FINAL CTA -->
@@ -312,12 +318,16 @@ function poserVideo(){
 poserVideo();
 
 (function(){
-  // 1. on pose les liens de paiement (uniquement les 2 formules annuelles)
+  // 1. on pose les liens de paiement (les 2 formules annuelles, qui ouvrent droit au
+  //    parrainage) + le lien vers le questionnaire pour l'option "protocole mental"
+  //    (500€, jamais de mensuel pour un filleul — voir questionnaire-sur-mesure.html)
   var map = { 'btn-900':LIENS.annuel, 'btn-3fois':LIENS.trois };
   Object.keys(map).forEach(function(id){
     var b = document.getElementById(id);
     if(b && map[id] && map[id].indexOf('http') === 0){ b.setAttribute('href', map[id]); }
   });
+  var btnMental = document.getElementById('btn-mental');
+  if(btnMental) btnMental.setAttribute('href', 'questionnaire-sur-mesure.html');
 
   // 2. on recupere le code du parrain dans l'adresse (?parrain=AXE-xxxxx)
   var params = new URLSearchParams(window.location.search);
@@ -327,7 +337,8 @@ poserVideo();
   var banner = document.getElementById('parrainBanner');
   if(banner) banner.style.display = 'flex';
 
-  // 3. on attache le code parrain sur chaque bouton, via client_reference_id
+  // 3. on attache le code parrain sur les boutons annuels, via client_reference_id
+  //    (c'est ce qui declenche la recompense de parrainage cote Stripe/Make)
   ['btn-900','btn-3fois'].forEach(function(id){
     var b = document.getElementById(id);
     if(!b) return;
@@ -336,6 +347,15 @@ poserVideo();
     var sep = url.indexOf('?') === -1 ? '?' : '&';
     b.setAttribute('href', url + sep + 'client_reference_id=' + encodeURIComponent(codeParrain));
   });
+
+  // 4. le bouton "protocole mental" recoit le code parrain via ?parrain= (pas
+  //    client_reference_id) : ce lien ne declenche aucune recompense, il sert juste a
+  //    tracer "venu grace a" et a desactiver l'abonnement mensuel sur le questionnaire.
+  if(btnMental){
+    var urlM = btnMental.getAttribute('href');
+    var sepM = urlM.indexOf('?') === -1 ? '?' : '&';
+    btnMental.setAttribute('href', urlM + sepM + 'parrain=' + encodeURIComponent(codeParrain));
+  }
 })();
 </script>
 </body>

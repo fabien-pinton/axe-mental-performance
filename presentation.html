@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>L'offre PILOTE · Le protocole AXE Mental Performance®</title>
+<title>Le protocole AXE Mental Performance®</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -112,9 +112,14 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 .vp-hint{font-size:12px;max-width:34ch}
 .video-frame iframe,.video-frame video{width:100%;height:100%;display:block;border:0}
 .video-cap{font-style:italic;font-size:18px;color:var(--dim);margin-top:16px;max-width:40ch;margin-left:auto;margin-right:auto}
-/* offers 3 col */
+/* offers 3 / 4 col */
 .offers-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+.offers-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+@media(max-width:900px){.offers-4{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.offers-3{grid-template-columns:1fr}}
+@media(max-width:560px){.offers-4{grid-template-columns:1fr}}
+.bmx-tag{display:inline-block;margin-bottom:8px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--physique);background:rgba(122,59,46,.12);padding:3px 9px;border-radius:2px}
+.price-band .bmx-tag{background:rgba(201,169,78,.16);color:var(--gold-soft)}
 .partenaire-note{text-align:center;font-style:italic;font-size:18px;color:var(--ink);max-width:52ch;margin:30px auto 0;padding-top:24px;border-top:1px solid var(--line)}
 .parrain-banner{display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(168,133,42,.1);border:1px solid rgba(168,133,42,.35);border-radius:6px;padding:13px 20px;margin-bottom:24px;font-size:14.5px;color:var(--ink)}
 .parrain-banner .pb-ico{color:var(--gold);font-size:17px}
@@ -141,11 +146,11 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 
 <!-- HERO -->
 <div class="hero">
-  <div class="eyebrow">L'offre PILOTE · préparation mentale &amp; physique BMX Race</div>
+  <div class="eyebrow">Préparation mentale &amp; physique</div>
   <h1>TON ENFANT<br><span class="g">MÉRITE UN VRAI</span><br>ENCADREMENT</h1>
   <p class="lead">Pas une application de plus. Un protocole complet, pensé comme un club, vécu à la maison.</p>
-  <div><span class="age-pill">✓ Conçu pour les pilotes de 10 à 18 ans</span></div>
-  <p class="sub">Le mental, le physique, et le soutien parental réunis dans un seul suivi qui se remoule chaque mois sur ton pilote. Je le conçois et je le pilote moi-même, disponible partout, tout le temps.</p>
+  <div><span class="age-pill">✓ Conçu pour les jeunes sportifs de 10 à 18 ans</span></div>
+  <p class="sub">Le mental, le physique, et le soutien parental réunis dans un seul suivi qui se remoule chaque mois sur ton enfant. Je le conçois et je le pilote moi-même, disponible partout, tout le temps.</p>
 </div>
 
 <!-- VIDEO -->
@@ -162,6 +167,7 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 
 <!-- PRICE -->
 <div class="price-band">
+  <span class="bmx-tag">Spécial BMX</span>
   <div class="amt">89<small> € / mois</small></div>
   <div class="alt">ou 900 € pour l'année, payable en 3 fois</div>
   <div class="promise">Le mensuel est sans engagement. Tu arrêtes quand tu veux, l'accès s'arrête avec.</div>
@@ -177,7 +183,7 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
     <div class="num">01</div>
     <div class="body">
       <h3>Un double suivi, mental et physique</h3>
-      <p>Chaque semaine, un exercice mental calé sur le profil de ton pilote, et deux à trois séances physiques adaptées à son âge, son niveau et ses disponibilités. Le tout construit sur une logique de progression en spirale : rien ne se répète, tout s'approfondit.</p>
+      <p>Chaque semaine, un exercice mental calé sur le profil de ton enfant, et deux à trois séances physiques adaptées à son âge, son niveau et ses disponibilités. Le tout construit sur une logique de progression en spirale : rien ne se répète, tout s'approfondit.</p>
       <span class="accent a-mental">Mental</span> <span class="accent a-phys">Physique</span>
     </div>
   </div>
@@ -195,7 +201,7 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
     <div class="num">03</div>
     <div class="body">
       <h3>Les parents accompagnés, pas spectateurs</h3>
-      <p>Chaque mois, une clé concrète pour épauler ton enfant sans mettre de pression : le trajet du retour de course, la gestion de la gate, l'entretien de la motivation. Un carnet de notes te permet d'écrire ce que tu observes, et de rester pleinement acteur du parcours.</p>
+      <p>Chaque mois, une clé concrète pour épauler ton enfant sans mettre de pression : le trajet du retour de compétition, la gestion du stress avant le départ, l'entretien de la motivation. Un carnet de notes te permet d'écrire ce que tu observes, et de rester pleinement acteur du parcours.</p>
       <span class="accent a-parent">Côté parent</span>
     </div>
   </div>
@@ -215,7 +221,7 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
   <div class="sec-tag">TOUT CE QUI EST INCLUS</div>
   <h2>DANS L'ABONNEMENT</h2>
   <div class="incl-grid">
-    <div class="incl-item"><span class="ck">✓</span><div><b>Diagnostic complet</b> <span>mental et physique à l'entrée, pour pilotes de 10 à 18 ans</span></div></div>
+    <div class="incl-item"><span class="ck">✓</span><div><b>Diagnostic complet</b> <span>mental et physique à l'entrée, pour sportifs de 10 à 18 ans</span></div></div>
     <div class="incl-item"><span class="ck">✓</span><div><b>1 exercice mental par semaine</b> <span>calé sur le profil</span></div></div>
     <div class="incl-item"><span class="ck">✓</span><div><b>2 à 3 séances physiques par semaine</b> <span>selon âge et dispos</span></div></div>
     <div class="incl-item"><span class="ck">✓</span><div><b>Séances en salle ou au poids du corps</b> <span>selon l'accès</span></div></div>
@@ -235,7 +241,7 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
   <p>Une séance de préparation mentale en cabinet, c'est 60 à 90 euros, une seule fois, sans suivi entre deux rendez-vous. Le protocole te donne un accompagnement mental continu, semaine après semaine, plus un cadre physique et l'implication des parents, pour le prix d'une seule séance par mois.</p>
   <div class="compare">
     <div class="cc"><div class="lbl">Une séance de prépa mentale</div><div class="v">60 à 90 €</div><small>une fois, sans suivi</small></div>
-    <div class="cc"><div class="lbl">Le protocole complet</div><div class="v">89 € / mois</div><small>suivi mental continu, chaque semaine</small></div>
+    <div class="cc"><div class="lbl">Le protocole complet (BMX)</div><div class="v">89 € / mois</div><small>suivi mental continu, chaque semaine</small></div>
   </div>
 </div>
 
@@ -250,10 +256,11 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
 
 <!-- OFFERS -->
 <div class="sec">
-  <div class="sec-tag">TROIS FAÇONS DE DÉMARRER</div>
+  <div class="sec-tag">QUATRE FAÇONS DE DÉMARRER</div>
   <h2>CHOISIS TA FORMULE</h2>
-  <div class="offers offers-3">
+  <div class="offers offers-4">
     <div class="offer">
+      <span class="bmx-tag">Spécial BMX</span>
       <div class="oname">MENSUEL</div>
       <div class="op">89<small> €/mois</small></div>
       <div class="odesc">Toute la liberté. Sans engagement, tu arrêtes quand tu veux, l'accès s'arrête avec, sans justification.</div>
@@ -261,26 +268,34 @@ h1{font-family:'Bebas Neue';font-weight:400;letter-spacing:.5px;line-height:.92}
     </div>
     <div class="offer feat">
       <div class="ribbon">Le plus choisi</div>
+      <span class="bmx-tag">Spécial BMX</span>
       <div class="oname">ANNUEL · EN 1 FOIS</div>
       <div class="op">900<small> €/an</small></div>
-      <div class="odesc">12 mois d'accès d'un coup. L'équivalent de dix mois payés pour douze. Tu deviens <b>partenaire</b> : chaque famille que tu amènes te rapporte 150 euros.</div>
+      <div class="odesc">12 mois d'accès d'un coup, mental et physique. L'équivalent de dix mois payés pour douze. Tu deviens <b>partenaire</b> : chaque famille que tu amènes te rapporte 150 euros.</div>
       <a class="obtn g" href="#" id="btn-900">Payer en une fois</a>
     </div>
     <div class="offer">
+      <span class="bmx-tag">Spécial BMX</span>
       <div class="oname">ANNUEL · EN 3 FOIS</div>
       <div class="op">3 × 300<small> €</small></div>
-      <div class="odesc">Le même accès de 12 mois, réglé en trois fois pour étaler. Toi aussi tu deviens <b>partenaire</b>, avec 150 euros par famille parrainée.</div>
+      <div class="odesc">Le même accès de 12 mois, mental et physique, réglé en trois fois pour étaler. Toi aussi tu deviens <b>partenaire</b>, avec 150 euros par famille parrainée.</div>
       <a class="obtn o" href="#" id="btn-3fois">Payer en trois fois</a>
     </div>
+    <div class="offer">
+      <div class="oname">PROTOCOLE MENTAL</div>
+      <div class="op">Dès 49<small> €/mois</small></div>
+      <div class="odesc">Uniquement le suivi mental, quel que soit ton sport <b>et sans limite d'âge</b>. 500€ en une fois, ou 49€/mois sans engagement.</div>
+      <a class="obtn o" href="#" id="btn-mental">Découvrir le protocole mental</a>
+    </div>
   </div>
-  <p class="partenaire-note serif">Devenir partenaire, c'est simple : après ton inscription annuelle, tu reçois un lien personnel. Chaque famille qui s'inscrit grâce à lui te fait gagner 150 euros. Ta confiance récompensée.</p>
+  <p class="partenaire-note serif">Devenir partenaire, c'est simple : après ton inscription annuelle « spécial BMX » (900€), tu reçois un lien personnel. Chaque famille qui s'inscrit grâce à lui pour cette même formule te fait gagner 150 euros. Ta confiance récompensée.</p>
 </div>
 
 <!-- FINAL CTA -->
 <div class="final">
   <h2>PRÊT À LUI DONNER<br>UNE LONGUEUR D'AVANCE ?</h2>
   <p>Choisis ta formule ci-dessus. Dès ton inscription, ton enfant reçoit son accès et démarre par son diagnostic.</p>
-  <p class="disc">J'accompagne la préparation mentale et physique du pilote et de sa famille. Mon accompagnement ne se substitue pas à une prise en charge médicale ou thérapeutique en cas de trouble de santé. Aucune promesse de résultat sportif n'est faite. Le protocole est réservé aux pilotes de 10 à 18 ans.</p>
+  <p class="disc">J'accompagne la préparation mentale et physique du jeune sportif et de sa famille. Mon accompagnement ne se substitue pas à une prise en charge médicale ou thérapeutique en cas de trouble de santé. Aucune promesse de résultat sportif n'est faite. Les formules BMX (mental et physique) sont réservées aux sportifs de 10 à 18 ans ; le protocole mental seul (500€ ou 49€/mois) est ouvert à tout âge.</p>
 </div>
 
 <div class="foot">Le protocole AXE Mental Performance® · Page de vente · Version de travail</div>
@@ -321,12 +336,15 @@ function poserVideo(){
 poserVideo();
 
 (function(){
-  // 1. on pose les liens de paiement
+  // 1. on pose les liens de paiement (3 formules BMX) + le lien vers le questionnaire
+  //    pour l'option "protocole mental" (tout sport, sans engagement possible)
   var map = { 'btn-mensuel':LIENS.mensuel, 'btn-900':LIENS.annuel, 'btn-3fois':LIENS.trois };
   Object.keys(map).forEach(function(id){
     var b = document.getElementById(id);
     if(b && map[id] && map[id].indexOf('http') === 0){ b.setAttribute('href', map[id]); }
   });
+  var btnMental = document.getElementById('btn-mental');
+  if(btnMental) btnMental.setAttribute('href', 'questionnaire-sur-mesure.html');
 
   // 2. on recupere le code du parrain dans l'adresse (?parrain=AXE-xxxxx)
   var params = new URLSearchParams(window.location.search);
@@ -336,7 +354,8 @@ poserVideo();
   var banner = document.getElementById('parrainBanner');
   if(banner) banner.style.display = 'flex';
 
-  // 3. on attache le code parrain sur chaque bouton, via client_reference_id
+  // 3. on attache le code parrain sur les 3 boutons BMX, via client_reference_id
+  //    (c'est ce qui declenche la recompense de parrainage cote Stripe/Make)
   ['btn-mensuel','btn-900','btn-3fois'].forEach(function(id){
     var b = document.getElementById(id);
     if(!b) return;
@@ -345,6 +364,15 @@ poserVideo();
     var sep = url.indexOf('?') === -1 ? '?' : '&';
     b.setAttribute('href', url + sep + 'client_reference_id=' + encodeURIComponent(codeParrain));
   });
+
+  // 4. le bouton "protocole mental" recoit le code parrain via ?parrain= (jamais
+  //    client_reference_id) : aucune recompense associee, juste la tracabilite, et le
+  //    questionnaire desactivera lui-meme l'option mensuelle pour un filleul.
+  if(btnMental){
+    var urlM = btnMental.getAttribute('href');
+    var sepM = urlM.indexOf('?') === -1 ? '?' : '&';
+    btnMental.setAttribute('href', urlM + sepM + 'parrain=' + encodeURIComponent(codeParrain));
+  }
 })();
 </script>
 </body>

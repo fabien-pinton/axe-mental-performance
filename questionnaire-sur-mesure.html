@@ -28,6 +28,15 @@ button:disabled{opacity:.5;cursor:default}
 .msg{margin-top:16px;font-size:14px;text-align:center;min-height:20px}
 .msg.err{color:#9B2C2C}
 .hint{margin-top:22px;font-size:12.5px;color:var(--dim);line-height:1.6;text-align:center}
+.formule-choix{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.formule-btn{border:1.5px solid var(--line);border-radius:6px;background:#fff;padding:14px 10px;text-align:center;cursor:pointer;font-family:'DM Sans';transition:.15s}
+.formule-btn.sel{border-color:var(--gold);background:rgba(168,133,42,.08)}
+.formule-btn .fb-prix{display:block;font-family:'Bebas Neue';font-size:26px;letter-spacing:.02em;color:var(--ink)}
+.formule-btn.sel .fb-prix{color:var(--gold)}
+.formule-btn .fb-sub{display:block;font-size:12px;color:var(--dim);margin-top:2px}
+.formule-btn:disabled{opacity:.4;cursor:default}
+.parrain-note{background:rgba(168,133,42,.08);border:1px solid rgba(168,133,42,.3);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--ink);margin-bottom:18px;text-align:center;display:none}
+.parrain-note.on{display:block}
 
 /* écran de confirmation */
 #confirm{display:none;text-align:center}
@@ -49,7 +58,21 @@ button:disabled{opacity:.5;cursor:default}
     <h1>Bienvenue dans le protocole</h1>
     <div class="serif">Merci pour votre confiance. Quelques informations pour construire votre protocole sur-mesure, quel que soit votre sport.</div>
 
+    <div class="parrain-note" id="parrainNote">Vous arrivez grâce à un membre du protocole. Bienvenue, vous êtes au bon endroit.</div>
+
     <form id="form" onsubmit="return false;">
+      <div class="field">
+        <label>Formule</label>
+        <div class="formule-choix">
+          <button type="button" class="formule-btn sel" id="f-annuel" onclick="choisirFormule('annuel')">
+            <span class="fb-prix">500&nbsp;€</span><span class="fb-sub">en une fois</span>
+          </button>
+          <button type="button" class="formule-btn" id="f-mensuel" onclick="choisirFormule('mensuel')">
+            <span class="fb-prix">49&nbsp;€</span><span class="fb-sub">par mois</span>
+          </button>
+        </div>
+      </div>
+
       <div class="field">
         <label for="nom">Prénom et nom</label>
         <input type="text" id="nom" autocomplete="name" required>
@@ -113,7 +136,7 @@ button:disabled{opacity:.5;cursor:default}
       <div class="axe-sub">MENTAL PERFORMANCE®</div>
     </div>
     <h1>Une dernière étape</h1>
-    <p style="font-size:15px;line-height:1.7;color:var(--ink);margin:0 0 26px">Merci ! Vous allez être redirigé(e) vers le paiement sécurisé (500€, en une fois). Votre protocole s'activera automatiquement dès le paiement confirmé, et vous recevrez votre code d'accès par email dans la foulée.</p>
+    <p style="font-size:15px;line-height:1.7;color:var(--ink);margin:0 0 26px" id="confirmTexte">Merci ! Vous allez être redirigé(e) vers le paiement sécurisé. Votre protocole s'activera automatiquement dès le paiement confirmé, et vous recevrez votre code d'accès par email dans la foulée.</p>
     <a class="cta" id="lienPaiement" href="#">Procéder au paiement</a>
   </div>
 
@@ -130,10 +153,39 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 const msg = document.getElementById('msg');
 const btn = document.getElementById('btn');
 
-// Lien de paiement unique, 500€, formule "sur-mesure, tout sport".
+// Deux formules possibles pour le protocole sur-mesure (tout sport) : en une fois, ou mensuel
+// sans engagement (même principe que le protocole complet : bouton de résiliation dans le
+// programme, fin d'accès à la date anniversaire du dernier mois payé).
 // Le code d'accès généré ici est transmis à Stripe (client_reference_id) :
 // c'est ce qui permet d'activer automatiquement l'accès dès le paiement confirmé.
-const LIEN_PAIEMENT = 'https://buy.stripe.com/6oUdR849Kezcchv2lg8IU0o';
+const LIEN_PAIEMENT = 'https://buy.stripe.com/6oUdR849Kezcchv2lg8IU0o'; // 500€, en une fois
+const LIEN_PAIEMENT_MENSUEL = 'https://buy.stripe.com/3cI7sKbCc4YCgxL3pk8IU0p'; // 49€/mois
+
+let formuleChoisie = 'annuel'; // 'annuel' (500€ en une fois) ou 'mensuel' (49€/mois)
+
+// Code du parrain, s'il est présent dans l'adresse (arrivée depuis page-filleul.html).
+// Le parrainage sur le protocole mental n'ouvre pas droit à la récompense (réservée au
+// protocole complet à 900€), mais on garde la traçabilité "venu grâce à", et on retire
+// la possibilité de l'abonnement mensuel pour un filleul (comme pour le protocole complet).
+const paramsUrl = new URLSearchParams(window.location.search);
+const codeParrain = paramsUrl.get('parrain') || '';
+if(codeParrain){
+  document.getElementById('parrainNote').classList.add('on');
+  const btnMensuel = document.getElementById('f-mensuel');
+  btnMensuel.disabled = true;
+  btnMensuel.title = "L'abonnement mensuel n'est pas disponible via un lien de parrainage.";
+}
+
+function choisirFormule(f){
+  if(f === 'mensuel' && codeParrain) return; // sécurité : jamais de mensuel pour un filleul
+  formuleChoisie = f;
+  document.getElementById('f-annuel').classList.toggle('sel', f === 'annuel');
+  document.getElementById('f-mensuel').classList.toggle('sel', f === 'mensuel');
+  const txt = document.getElementById('confirmTexte');
+  txt.textContent = f === 'mensuel'
+    ? "Merci ! Vous allez être redirigé(e) vers le paiement sécurisé (49€/mois, sans engagement). Votre protocole s'activera automatiquement dès le premier paiement confirmé, et vous recevrez votre code d'accès par email dans la foulée."
+    : "Merci ! Vous allez être redirigé(e) vers le paiement sécurisé (500€, en une fois). Votre protocole s'activera automatiquement dès le paiement confirmé, et vous recevrez votre code d'accès par email dans la foulée.";
+}
 
 async function envoyer(){
   const nom = document.getElementById('nom').value.trim();
@@ -159,6 +211,8 @@ async function envoyer(){
   msg.textContent = 'Création de votre protocole en cours...';
 
   try{
+    const estMensuel = formuleChoisie === 'mensuel' && !codeParrain; // jamais de mensuel pour un filleul
+
     // Tant que le paiement n'est pas confirmé, on n'enregistre QUE la demande (table
     // "prospects", visible dans "DEMANDES REÇUES"). La fiche d'accès ("abonnes") n'est créée
     // qu'au moment du paiement (voir la fonction activer_sur_mesure, appelée par Make).
@@ -169,14 +223,17 @@ async function envoyer(){
       sport_p: sport,
       niveau_p: niveau,
       tel_p: tel,
-      email_p: email
+      email_p: email,
+      mensuel_p: estMensuel,
+      parrain_p: codeParrain || null
     });
 
     if(error){ throw error; }
 
     const code = data;
 
-    const urlPaiement = LIEN_PAIEMENT
+    const lienBase = estMensuel ? LIEN_PAIEMENT_MENSUEL : LIEN_PAIEMENT;
+    const urlPaiement = lienBase
       + '?client_reference_id=' + encodeURIComponent(code)
       + '&prefilled_email=' + encodeURIComponent(email);
 

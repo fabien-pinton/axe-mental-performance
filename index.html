@@ -919,6 +919,24 @@ nav.scrolled {
   align-items: stretch;
 }
 
+.offres-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+.offre-card.free.autre-sport {
+  border: 1.5px dashed rgba(168,133,42,0.4);
+}
+.offre-card.free.autre-sport .offre-badge {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+}
+
 .offre-card.mid {
   background: var(--cream-3);
   border: 2px solid var(--gold);
@@ -960,8 +978,14 @@ nav.scrolled {
 .axe-video-play { width: 60px; height: 60px; border-radius: 50%; background: var(--gold); color: #FDFAF5; display: grid; place-items: center; font-size: 20px; padding-left: 3px; }
 .axe-video-txt { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.06em; color: rgba(247,243,236,0.8); }
 
+@media (max-width: 1100px) {
+  .offres-grid-4 { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 900px) {
   .offres-grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .offres-grid-4 { grid-template-columns: 1fr; }
 }
 
 .offre-card {
@@ -1811,9 +1835,9 @@ Un pilote de 11 ans n'a pas les mêmes besoins qu'un pilote de 17 ans. Le diagno
   <div class="section">
     <div class="section-tag reveal">Le protocole</div>
     <h2 class="section-title reveal">CHOISIS TA<br>FORMULE</h2>
-    <p class="section-subtitle reveal">Un seul protocole, complet, mental et physique. Trois façons d'y accéder. Après ton inscription, un parent valide l'accord parental avant toute chose.</p>
+    <p class="section-subtitle reveal">Un seul protocole, complet, mental et physique. Trois façons d'y accéder pour le BMX, une quatrième si ton pilote pratique un autre sport. Après ton inscription, un parent valide l'accord parental avant toute chose.</p>
 
-    <div class="offres-grid-3 reveal">
+    <div class="offres-grid-4 reveal">
 
       <!-- MENSUEL -->
       <div class="offre-card free">
@@ -1866,6 +1890,23 @@ Un pilote de 11 ans n'a pas les mêmes besoins qu'un pilote de 17 ans. Le diagno
           <li>3 prélèvements au total, puis plus rien</li>
         </ul>
         <a href="https://fabien-pinton.fr/rejoindre.html" class="offre-btn">Payer en 3 fois</a>
+      </div>
+
+      <!-- SUR-MESURE, TOUT SPORT -->
+      <div class="offre-card free autre-sport">
+        <div class="offre-badge">Tout sport</div>
+        <div class="offre-title">PROTOCOLE MENTAL</div>
+        <div class="offre-subtitle">Ton pilote fait un autre sport ?</div>
+        <div class="offre-price">Dès 49<span style="font-size:20px">€</span></div>
+        <div class="offre-price-sub">par mois, ou 500€ en une fois</div>
+        <div class="offre-sep"></div>
+        <ul class="offre-features">
+          <li>Uniquement le suivi mental, quel que soit le sport</li>
+          <li>Diagnostic d'entrée et exercice mental hebdomadaire</li>
+          <li>Programme réadapté chaque mois selon le ressenti</li>
+          <li>Mensuel sans engagement, résiliable à tout moment</li>
+        </ul>
+        <a href="https://fabien-pinton.fr/rejoindre.html" class="offre-btn">Découvrir le protocole mental</a>
       </div>
 
     </div>
