@@ -1483,8 +1483,19 @@ function computeAutoWeek(){
   if(!state.startDate) return 1;
   const maintenant = new Date();
   if(maintenant < state.startDate) return 1; // pas encore démarré
-  const diffJours = Math.floor((maintenant - state.startDate) / 86400000);
-  return Math.min(4, Math.max(1, Math.floor(diffJours/7) + 1));
+  // semaines calées sur le vrai calendrier (lundi à dimanche), pas sur un simple compte de
+  // 7 jours depuis le 1er : si le mois démarre un mardi par exemple, la semaine 1 ne dure
+  // que jusqu'au dimanche suivant (6 jours), et le lundi d'après appartient déjà à la
+  // semaine 2 — pas à la semaine 1, même s'il tombe moins de 7 jours après le début.
+  const dow = state.startDate.getDay(); // 0=dimanche ... 1=lundi ... 6=samedi
+  const joursAvantSemaine2 = ((8 - dow) % 7) || 7;
+  const debutS2 = addDays(state.startDate, joursAvantSemaine2);
+  const debutS3 = addDays(debutS2, 7);
+  const debutS4 = addDays(debutS3, 7);
+  if(maintenant < debutS2) return 1;
+  if(maintenant < debutS3) return 2;
+  if(maintenant < debutS4) return 3;
+  return 4;
 }
 // le programme a-t-il réellement démarré ? (même règle que dans buildProgram, mais réutilisable
 // ailleurs, notamment pour verrouiller l'accès au rapport mensuel tant qu'on n'y est pas)
