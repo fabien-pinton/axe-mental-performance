@@ -735,7 +735,11 @@ const axeDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 // Lecture de la session : code du rider + étape demandée, passés dans l'adresse
 const axeParams = new URLSearchParams(window.location.search);
 const axeCode = axeParams.get('code') || sessionStorage.getItem('axe_code') || '';
-const axeEtape = axeParams.get('etape') || '';
+// "etape" vient normalement de l'adresse (redirection depuis acces.html). Si elle est absente
+// (retour direct sur cette page : favori, onglet rouvert, lien renvoyé sans le paramètre...),
+// on la recalcule nous-mêmes une fois les infos du rider chargées, avec exactement la même
+// règle que acces.html, plutôt que de rester bloqué sur l'écran d'inscription par défaut.
+let axeEtape = axeParams.get('etape') || '';
 // true seulement en démo locale (sans code réel). Un vrai pilote ne doit jamais voir
 // le panneau de simulation, ni dépendre d'une date simulée : son mois vient de Supabase.
 const modeDemo = !axeCode;
@@ -759,6 +763,9 @@ async function axeInit(){
         if(typeof sr.imageryDays === 'number') state.imageryDays = sr.imageryDays;
         if(sr.startRoutine) state.startRoutine = sr.startRoutine;
         if(Array.isArray(sr.startJournal)) state.startJournal = sr.startJournal;
+        // séances physiques validées, par mois + semaine (ex: "2-1" = mois 2, semaine 1) :
+        // rechargées ici pour que "Séance validée" reste affiché quand le rider revient.
+        if(sr.physSeances && typeof sr.physSeances === 'object') state.physSeances = sr.physSeances;
       }
       // date reelle de demarrage du programme (1er du mois suivant le paiement), renvoyee
       // par Supabase. Tant qu'on n'est pas arrive a cette date, le programme reste verrouille,
@@ -768,6 +775,19 @@ async function axeInit(){
         state.startDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
       }
       axePremiereFois = !r.date_diag;   // premier diagnostic de sa vie : il verra la video d'accueil
+      if(!axeEtape){
+        // etape absente de l'adresse : recalcul local, meme regle que acces.html
+        // (date_diag vide => diagnostic ; date_diag > 3 mois => diagnostic ; sinon => programme)
+        if(!r.date_diag){
+          axeEtape = 'diagnostic';
+        } else {
+          const dernier = new Date(r.date_diag);
+          const troisMois = new Date();
+          troisMois.setMonth(troisMois.getMonth() - 3);
+          axeEtape = (dernier < troisMois) ? 'diagnostic' : 'programme';
+        }
+        console.log('[AXE] Étape recalculée localement (absente de l\'adresse) :', axeEtape);
+      }
       // Si le rider revient à son programme ET qu'un profil est enregistré : on le recharge
       if(axeEtape === 'programme' && r.profil){
         axeChargerProfil(r);
@@ -822,7 +842,13 @@ function axeChargerProfil(r){
     } else {
       go('diag');
     }
-  }catch(e){ console.log('[AXE] Profil illisible, diagnostic à refaire :', e.message); }
+  }catch(e){
+    // Un profil illisible (donnée corrompue en base, ancien format...) ne doit jamais
+    // laisser le pilote bloqué en silence sur l'écran d'accueil : on l'envoie refaire
+    // le diagnostic, comme pour un profil incompatible.
+    console.log('[AXE] Profil illisible, diagnostic à refaire :', e.message);
+    go('diag');
+  }
 }
 axeInit();
 
@@ -1276,6 +1302,8 @@ const parentPool=[
   ]},
 ];
 const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
+  physSeances:{},       // séances physiques validées, par clé "mois-semaine" : {ids:{p0:true,...}, total:n, done:n}
+  weekAuto:true,        // tant que vrai, la semaine affichée suit la vraie date (calcul auto) ; passe à false dès qu'un vrai pilote clique lui-même sur un onglet SEM
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
   simDate:null,         // date "courante" simulée dans la démo
   startDate:null,       // 1er du mois suivant l'inscription
@@ -1304,6 +1332,17 @@ function weekOpenDate(w){
 function isWeekUnlocked(w){
   if(!state.simDate||!state.startDate)return false;
   return state.simDate>=weekOpenDate(w);
+}
+// pour un vrai pilote : quelle semaine (1 à 4) correspond à la vraie date du jour, selon
+// le même découpage que weekOpenDate (des tranches de 7 jours depuis le début du mois).
+// La semaine 4 absorbe le reste du mois (jusqu'à 10 jours selon les mois), exactement
+// comme les onglets qui se déverrouillent progressivement en démo.
+function computeAutoWeek(){
+  if(!state.startDate) return 1;
+  const maintenant = new Date();
+  if(maintenant < state.startDate) return 1; // pas encore démarré
+  const diffJours = Math.floor((maintenant - state.startDate) / 86400000);
+  return Math.min(4, Math.max(1, Math.floor(diffJours/7) + 1));
 }
 // le programme a-t-il réellement démarré ? (même règle que dans buildProgram, mais réutilisable
 // ailleurs, notamment pour verrouiller l'accès au rapport mensuel tant qu'on n'y est pas)
@@ -1515,6 +1554,13 @@ function physSessions(){
   let cap = state.age<=12?2 : state.age<=15?3 : 3;
   return Math.min(cap, state.trainingDays.length);
 }
+// clé de suivi des séances physiques validées pour la semaine affichée : "mois-semaine"
+// (ex: "2-3" = mois 2, semaine 3). Sert à retrouver l'état "validé" au rechargement,
+// et c'est cette même clé que le coach retrouve dans sa page observateur.
+function physWeekKey(){ return state.month+'-'+state.week; }
+function validatedBtnHtml(){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"><path d="M20 6L9 17l-5-5"/></svg>Séance validée';
+}
 // les jours qui reçoivent réellement une séance cette semaine (les premiers de la semaine
 // en priorité si le nombre de jours cochés dépasse le plafond d'âge)
 function joursSeance(){
@@ -1670,7 +1716,8 @@ async function axeEnregistrerSuiviRituel(){
     ccDays: state.ccDays,
     imageryDays: state.imageryDays,
     startRoutine: state.startRoutine,
-    startJournal: state.startJournal
+    startJournal: state.startJournal,
+    physSeances: state.physSeances
   };
   try{
     const { error } = await axeDB.rpc('enregistrer_suivi_rituel', { code_p: axeCode, suivi_p: suivi });
@@ -1951,6 +1998,12 @@ function buildProgram(){
     state.startDate=firstOfNextMonth(signup); // planning démarre le 1er du mois suivant
     state.simDate=new Date(signup);           // au départ, on est le jour de l'inscription
   }
+  // pour un vrai pilote, la semaine affichée par défaut suit la vraie date du jour (comme
+  // les onglets se déverrouillent en démo), tant qu'il n'a pas cliqué lui-même sur un autre
+  // onglet pour aller consulter une autre semaine (state.weekAuto repasse alors à false).
+  if(!modeDemo && state.weekAuto){
+    state.week = computeAutoWeek();
+  }
   go('dash');
   // strip
   const strip=document.getElementById('profileStrip');
@@ -1996,7 +2049,7 @@ function buildProgram(){
     const b=document.createElement('button');
     b.className='week-tab'+(w===state.week?' on':'')+(unlocked?'':' locked');
     b.innerHTML='SEM '+w;
-    if(unlocked){b.onclick=()=>{state.week=w;buildProgram();};}
+    if(unlocked){b.onclick=()=>{state.week=w;state.weekAuto=false;buildProgram();};}
     else{b.title='Ouvre le '+fmtDate(weekOpenDate(w));}
     tabs.appendChild(b);
   }
@@ -2067,6 +2120,12 @@ function renderWeek(started){
   const offset=((state.month-1)*n)%cycle.length;
   let html='';
   const semaineVue=new Set();
+  // suivi des séances validées pour cette semaine : on garde les validations déjà
+  // enregistrées (rechargées depuis Supabase) et on rafraîchit le total attendu, pour
+  // que "1/2 séances validées" reste juste même si le nombre de séances change.
+  const wk = physWeekKey();
+  if(!state.physSeances[wk]) state.physSeances[wk] = {ids:{}, total:n, done:0};
+  else state.physSeances[wk].total = n;
   for(let i=0;i<n;i++){
     let idx=cycle[(offset+i)%cycle.length];
     let base=pool[idx];
@@ -2083,7 +2142,8 @@ function renderWeek(started){
     if(bump>0)p.series=p.series.replace(/\d+/,x=>+x+bump);
     if(state.week===4)p.series=p.series.replace(/\d+/,x=>Math.max(2,+x-1));
     const jourLabel=joursSem[i]?JOURS_LABEL[joursSem[i]]:'';
-    html+=exCard(p,false,'p'+i,jourLabel);
+    const doneInit = !!state.physSeances[wk].ids['p'+i];
+    html+=exCard(p,false,'p'+i,jourLabel,doneInit);
   }
   if(state.gym){
     html+='<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
@@ -2105,7 +2165,7 @@ function renderWeek(started){
     </div>
   </div>`;
 }
-function exCard(ex,isMental,id,jourLabel){
+function exCard(ex,isMental,id,jourLabel,doneInit){
   let note = isMental ? `
     <button class="note-toggle" onclick="toggleNote('${id}')">＋ Mes notes sur cet exercice</button>
     <div class="note-box" id="box-${id}">
@@ -2129,25 +2189,35 @@ function exCard(ex,isMental,id,jourLabel){
       <div class="move-d">${m.d}</div>
       ${m.c?`<div class="move-c">${m.c}</div>`:''}
     </div>`).join('');
-  return `<div class="card" id="card-${id}">
+  return `<div class="card${doneInit?' done':''}" id="card-${id}">
     ${jourLabel?`<span class="day-tag">Séance du ${jourLabel.toLowerCase()}</span>`:''}
     <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
     <p class="desc">${ex.desc}</p>
     <div class="meta"><span><b>${ex.series}</b></span><span><b>${ex.dur}</b></span></div>
     <div class="moves">${moves}</div>
-    <button class="validate" id="val-${id}" onclick="validateEx('${id}')">Valider la séance</button>
+    <button class="validate" id="val-${id}" onclick="validateEx('${id}')">${doneInit?validatedBtnHtml():'Valider la séance'}</button>
   </div>`;
 }
 function validateEx(id){
   const b=document.getElementById('val-'+id);
   const card=document.getElementById('card-'+id);
+  const wk = physWeekKey();
+  if(!state.physSeances[wk]) state.physSeances[wk] = {ids:{}, total:physSessions(), done:0};
+  const seances = state.physSeances[wk];
   if(card.classList.contains('done')){
     card.classList.remove('done');
     b.innerHTML='Valider la séance';
+    delete seances.ids[id];
   }else{
     card.classList.add('done');
-    b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"><path d="M20 6L9 17l-5-5"/></svg>Séance validée';
+    b.innerHTML=validatedBtnHtml();
+    seances.ids[id]=true;
   }
+  seances.done = Object.keys(seances.ids).filter(k=>seances.ids[k]).length;
+  // enregistrement Supabase après une courte pause (même debounce que le rituel des 21 jours),
+  // pour que "Séance validée" reste affiché au retour du rider ET soit visible côté coach.
+  clearTimeout(axeDbSuiviRituel);
+  axeDbSuiviRituel = setTimeout(axeEnregistrerSuiviRituel, 900);
 }
 function toggleNote(id){document.getElementById('box-'+id).classList.toggle('on');}
 function saveNote(id){

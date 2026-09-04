@@ -701,7 +701,11 @@ const axeDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 // Lecture de la session : code du rider + étape demandée, passés dans l'adresse
 const axeParams = new URLSearchParams(window.location.search);
 const axeCode = axeParams.get('code') || sessionStorage.getItem('axe_code') || '';
-const axeEtape = axeParams.get('etape') || '';
+// "etape" vient normalement de l'adresse (redirection depuis acces.html). Si elle est absente
+// (retour direct sur cette page : favori, onglet rouvert, lien renvoyé sans le paramètre...),
+// on la recalcule nous-mêmes une fois les infos du rider chargées, avec exactement la même
+// règle que acces.html, plutôt que de rester bloqué sur l'écran d'inscription par défaut.
+let axeEtape = axeParams.get('etape') || '';
 // true seulement en démo locale (sans code réel). Un vrai pilote ne doit jamais voir
 // le panneau de simulation, ni dépendre d'une date simulée : son mois vient de Supabase.
 const modeDemo = !axeCode;
@@ -742,6 +746,19 @@ async function axeInit(){
         state.startDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
       }
       axePremiereFois = !r.date_diag;   // premier diagnostic de sa vie : il verra la video d'accueil
+      if(!axeEtape){
+        // etape absente de l'adresse : recalcul local, meme regle que acces.html
+        // (date_diag vide => diagnostic ; date_diag > 3 mois => diagnostic ; sinon => programme)
+        if(!r.date_diag){
+          axeEtape = 'diagnostic';
+        } else {
+          const dernier = new Date(r.date_diag);
+          const troisMois = new Date();
+          troisMois.setMonth(troisMois.getMonth() - 3);
+          axeEtape = (dernier < troisMois) ? 'diagnostic' : 'programme';
+        }
+        console.log('[AXE] Étape recalculée localement (absente de l\'adresse) :', axeEtape);
+      }
       // Si le rider revient à son programme ET qu'un profil est enregistré : on le recharge
       if(axeEtape === 'programme' && r.profil){
         axeChargerProfil(r);
@@ -789,7 +806,13 @@ function axeChargerProfil(r){
     } else {
       go('diag');
     }
-  }catch(e){ console.log('[AXE] Profil illisible, diagnostic à refaire :', e.message); }
+  }catch(e){
+    // Un profil illisible (donnée corrompue en base, ancien format...) ne doit jamais
+    // laisser le pilote bloqué en silence sur l'écran d'accueil : on l'envoie refaire
+    // le diagnostic, comme pour un profil incompatible.
+    console.log('[AXE] Profil illisible, diagnostic à refaire :', e.message);
+    go('diag');
+  }
 }
 axeInit();
 
@@ -1422,6 +1445,7 @@ function buildMentalPools(l){
 }
 let mentalPools=buildMentalPools(SPORT_LEXICON.bmx);
 const state={mental:{},sensoriel:{},prenom:'',age:16,level:'Régional',sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
+  weekAuto:true,        // tant que vrai, la semaine affichée suit la vraie date (calcul auto) ; passe à false dès qu'un vrai pilote clique lui-même sur un onglet SEM
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
   simDate:null,         // date "courante" simulée dans la démo
   startDate:null,       // 1er du mois suivant l'inscription
@@ -1450,6 +1474,17 @@ function weekOpenDate(w){
 function isWeekUnlocked(w){
   if(!state.simDate||!state.startDate)return false;
   return state.simDate>=weekOpenDate(w);
+}
+// pour un vrai pilote : quelle semaine (1 à 4) correspond à la vraie date du jour, selon
+// le même découpage que weekOpenDate (des tranches de 7 jours depuis le début du mois).
+// La semaine 4 absorbe le reste du mois (jusqu'à 10 jours selon les mois), exactement
+// comme les onglets qui se déverrouillent progressivement en démo.
+function computeAutoWeek(){
+  if(!state.startDate) return 1;
+  const maintenant = new Date();
+  if(maintenant < state.startDate) return 1; // pas encore démarré
+  const diffJours = Math.floor((maintenant - state.startDate) / 86400000);
+  return Math.min(4, Math.max(1, Math.floor(diffJours/7) + 1));
 }
 // le programme a-t-il réellement démarré ? (même règle que dans buildProgram, mais réutilisable
 // ailleurs, notamment pour verrouiller l'accès au rapport mensuel tant qu'on n'y est pas)
@@ -1930,6 +1965,12 @@ function buildProgram(){
     state.startDate=firstOfNextMonth(signup); // planning démarre le 1er du mois suivant
     state.simDate=new Date(signup);           // au départ, on est le jour de l'inscription
   }
+  // pour un vrai pilote, la semaine affichée par défaut suit la vraie date du jour (comme
+  // les onglets se déverrouillent en démo), tant qu'il n'a pas cliqué lui-même sur un autre
+  // onglet pour aller consulter une autre semaine (state.weekAuto repasse alors à false).
+  if(!modeDemo && state.weekAuto){
+    state.week = computeAutoWeek();
+  }
   go('dash');
   // strip
   const strip=document.getElementById('profileStrip');
@@ -1973,7 +2014,7 @@ function buildProgram(){
     const b=document.createElement('button');
     b.className='week-tab'+(w===state.week?' on':'')+(unlocked?'':' locked');
     b.innerHTML='SEM '+w;
-    if(unlocked){b.onclick=()=>{state.week=w;buildProgram();};}
+    if(unlocked){b.onclick=()=>{state.week=w;state.weekAuto=false;buildProgram();};}
     else{b.title='Ouvre le '+fmtDate(weekOpenDate(w));}
     tabs.appendChild(b);
   }
