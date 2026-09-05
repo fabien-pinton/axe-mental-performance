@@ -176,6 +176,13 @@ if(codeParrain){
   btnMensuel.title = "L'abonnement mensuel n'est pas disponible via un lien de parrainage.";
 }
 
+// pré-sélection de la formule si on arrive depuis la page de vente (bouton "Payer en
+// une fois" ou "Choisir le mensuel" sur presentation.html) : ?formule=annuel|mensuel
+const formuleUrl = paramsUrl.get('formule');
+if(formuleUrl === 'mensuel' || formuleUrl === 'annuel'){
+  choisirFormule(formuleUrl);
+}
+
 function choisirFormule(f){
   if(f === 'mensuel' && codeParrain) return; // sécurité : jamais de mensuel pour un filleul
   formuleChoisie = f;
