@@ -146,14 +146,23 @@ async function toggleRec(){
   try{
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     chunks = [];
-    mediaRecorder = new MediaRecorder(stream);
+    // Le format réellement produit dépend du navigateur : Chrome/Firefox/Edge (ordinateur,
+    // Android) enregistrent en webm/opus, mais Safari (iPhone/iPad) ne sait produire que du
+    // mp4/aac. On demande le meilleur format supporté au lieu d'en imposer un, puis on se
+    // fie au mimeType RÉEL du MediaRecorder pour étiqueter le fichier — c'est cette étiquette
+    // fausse (toujours "webm" même sur iPhone) qui empêchait la lecture du message côté rider.
+    const candidats = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/aac'];
+    let mimeChoisi = '';
+    for(const c of candidats){ if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(c)){ mimeChoisi = c; break; } }
+    mediaRecorder = mimeChoisi ? new MediaRecorder(stream, { mimeType: mimeChoisi }) : new MediaRecorder(stream);
     mediaRecorder.ondataavailable = e => { if(e.data.size>0) chunks.push(e.data); };
     mediaRecorder.onstop = () => {
       stream.getTracks().forEach(t=>t.stop());
       clearInterval(recInterval);
       btn.classList.remove('recording');
       document.getElementById('recHint').textContent = 'Enregistrement terminé — écoute-le avant d\'envoyer';
-      blobAudio = new Blob(chunks, { type: 'audio/webm' });
+      const mimeReel = mediaRecorder.mimeType || mimeChoisi || 'audio/webm';
+      blobAudio = new Blob(chunks, { type: mimeReel });
       const preview = document.getElementById('preview');
       preview.src = URL.createObjectURL(blobAudio);
       preview.style.display = 'block';
@@ -195,10 +204,12 @@ async function envoyerMessage(){
   statusEl.className = 'status';
   statusEl.textContent = 'Envoi en cours...';
   try{
-    const ext = (blobAudio.type && blobAudio.type.includes('webm')) ? 'webm' : (blobAudio.name ? blobAudio.name.split('.').pop() : 'mp3');
+    const typeBrut = (blobAudio.type || '').split(';')[0]; // enlève un éventuel ";codecs=..."
+    const extParType = { 'audio/webm':'webm', 'audio/mp4':'m4a', 'audio/aac':'aac', 'audio/ogg':'ogg', 'audio/mpeg':'mp3', 'audio/wav':'wav' };
+    const ext = extParType[typeBrut] || (blobAudio.name ? blobAudio.name.split('.').pop() : 'mp3');
     const chemin = code + '/' + Date.now() + '.' + ext;
     const up = await db.storage.from('messages-vocaux').upload(chemin, blobAudio, {
-      contentType: blobAudio.type || 'audio/mpeg',
+      contentType: typeBrut || 'audio/mpeg',
       upsert: false
     });
     if(up.error) throw up.error;
