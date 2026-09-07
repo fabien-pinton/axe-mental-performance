@@ -379,6 +379,8 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .scale button{flex:1;padding:14px 0;border:1.5px solid var(--line);border-radius:2px;background:transparent;cursor:pointer;font-family:'DM Sans';font-size:13px;transition:.18s var(--ease)}
 .scale button:hover{border-color:var(--ink)}
 .scale button.sel{background:var(--gold);color:var(--cream);border-color:var(--gold)}
+.scale.compact{flex-wrap:wrap;gap:6px}
+.scale.compact button{flex:0 0 auto;width:40px;padding:9px 0;font-size:12px}
 
 /* ---------- regen animation ---------- */
 .regen{text-align:center;padding:120px 0;display:none}
@@ -591,7 +593,8 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="crosscrawl" id="crossCrawl" style="display:none"></div>
 
     <div class="action-bar" style="margin-top:22px;margin-bottom:34px">
-      <button class="act-btn start" onclick="go('start')" style="grid-column:1/-1"><span class="ab-ico">🚀</span><span><b>Devenir un boss du start</b><small>Mes jeux express, sans effort en plus</small></span></button>
+      <button class="act-btn start" onclick="go('start')"><span class="ab-ico">🚀</span><span><b>Devenir un boss du start</b><small>Mes jeux express, sans effort en plus</small></span></button>
+      <button class="act-btn comp" onclick="go('debrief')"><span class="ab-ico">🎤</span><span><b>Débrief express</b><small>Juste après une course, 30 secondes</small></span></button>
     </div>
 
     <div class="sim-panel" id="simPanel"></div>
@@ -634,6 +637,41 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <div class="serif" id="compSerif">La routine qui te met en condition, du lundi jusqu'à la gate.</div>
     </div>
     <div id="compContent"></div>
+    <div style="text-align:center;margin-top:34px"><button class="btn ghost" onclick="go('dash')">← Retour au programme</button></div>
+  </div>
+</section>
+
+<!-- ============ DÉBRIEF EXPRESS ============ -->
+<section class="screen" id="debrief">
+  <div class="report">
+    <div class="sec-head">
+      <div class="step-tag">JUSTE APRÈS LA COURSE</div>
+      <h1>DÉBRIEF EXPRESS</h1>
+      <div class="serif">30 secondes, à chaud. C'est plus fiable qu'un souvenir reconstruit dans un mois.</div>
+    </div>
+
+    <div class="rq">
+      <p>Ta routine de départ, elle a tenu ?</p>
+      <div class="scale" style="flex-wrap:wrap">
+        <button onclick="dScale(this,'routine','Oui, complètement')">Oui, complètement</button>
+        <button onclick="dScale(this,'routine','Plutôt oui')">Plutôt oui</button>
+        <button onclick="dScale(this,'routine','Pas vraiment')">Pas vraiment</button>
+        <button onclick="dScale(this,'routine','Non')">Non</button>
+      </div>
+    </div>
+
+    <div class="rq">
+      <p>Qu'est-ce qui t'a gêné aujourd'hui ?</p>
+      <textarea id="debGene" placeholder="Une phrase suffit. Rien à écrire si tout s'est bien passé."></textarea>
+    </div>
+
+    <div class="rq">
+      <p>Ta confiance aujourd'hui, sur 10 ?</p>
+      <div class="scale compact" id="debConfScale"></div>
+    </div>
+
+    <button class="btn gold" onclick="submitDebrief()">Envoyer mon débrief</button>
+    <p class="mini-note" style="margin-top:20px">Ton coach le reçoit directement, sans attendre le rapport de fin de mois.</p>
     <div style="text-align:center;margin-top:34px"><button class="btn ghost" onclick="go('dash')">← Retour au programme</button></div>
   </div>
 </section>
@@ -1642,6 +1680,7 @@ function go(id){
   if(id==='notes')renderNotesRecap();
   if(id==='trimestre')renderTrimestre();
   if(id==='competition')renderCompetition();
+  if(id==='debrief')renderDebriefConf();
 }
 function buildStepper(active){
   const wrap=document.getElementById('stepper');
@@ -2252,6 +2291,44 @@ function rScale(btn,q,val){
   btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   state.report[q]=val;
+}
+// ===== DÉBRIEF EXPRESS POST-COMPÉTITION =====
+const debriefState = { routine:null, confiance:null };
+function dScale(btn,key,val){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  debriefState[key]=val;
+}
+function renderDebriefConf(){
+  const el=document.getElementById('debConfScale');
+  if(!el || el.dataset.built) return;
+  let html='';
+  for(let i=0;i<=10;i++){ html+=`<button onclick="dScale(this,'confiance',${i})">${i}</button>`; }
+  el.innerHTML=html;
+  el.dataset.built='1';
+}
+async function submitDebrief(){
+  const champGene=document.getElementById('debGene');
+  const gene = champGene.value.trim();
+  if(axeCode){
+    try{
+      const { error } = await axeDB.rpc('enregistrer_debrief_competition', {
+        code_p: axeCode, mois_p: state.month, routine_p: debriefState.routine, gene_p: gene, confiance_p: debriefState.confiance
+      });
+      if(error){ console.log('[AXE] Erreur débrief :', error.message); }
+      else{ console.log('[AXE] Débrief enregistré.'); }
+    }catch(e){ console.log('[AXE] Souci débrief :', e.message); }
+  } else {
+    console.log('[AXE] Débrief non enregistré (mode démo).');
+  }
+  champGene.value='';
+  document.querySelectorAll('#debrief .scale button').forEach(b=>b.classList.remove('sel'));
+  debriefState.routine=null; debriefState.confiance=null;
+  const btn=document.querySelector('#debrief .btn.gold');
+  const original=btn.textContent;
+  btn.disabled=true;
+  btn.textContent='Envoyé, merci !';
+  setTimeout(()=>{ btn.textContent=original; btn.disabled=false; go('dash'); },1300);
 }
 function submitReport(){
   state.report.text=document.getElementById('reportText').value;
