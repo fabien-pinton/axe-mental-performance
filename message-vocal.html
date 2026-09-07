@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Message vocal · AXE Mental Performance®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1A1612;--cream:#FDFAF5;--gold:#A8852A;--parent:#5D6F4A;--line:rgba(26,22,18,.14);--dim:rgba(26,22,18,.6);--ease:cubic-bezier(.4,0,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:16px 30px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(253,250,245,.94);backdrop-filter:blur(8px);z-index:10}
+.axe-letters{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28px;letter-spacing:.18em;color:var(--gold);line-height:.9;padding-right:.18em}
+.axe-sub{font-family:'DM Sans';font-weight:600;font-size:7px;letter-spacing:.34em;color:var(--gold);border-top:1px solid rgba(168,133,42,.4);padding-top:3px;margin-top:3px;text-align:center}
+.role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.wrap{max-width:640px;margin:0 auto;padding:40px 24px 80px}
+.login{max-width:400px;margin:80px auto;text-align:center}
+.login h1{font-family:'Bebas Neue';font-weight:400;font-size:34px;letter-spacing:.04em;margin-bottom:8px}
+.login .serif{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--dim);margin-bottom:28px}
+input,select,textarea{width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:5px;font-size:15px;background:#fff;color:var(--ink);font-family:'DM Sans',sans-serif}
+.login input{text-align:center;font-size:16px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+button{border:none;border-radius:5px;background:var(--ink);color:var(--cream);font-family:'DM Sans';font-weight:600;font-size:15px;cursor:pointer;padding:14px}
+button:disabled{opacity:.45;cursor:default}
+.login button{width:100%;margin-top:14px}
+.login .msg{margin-top:16px;font-size:14px;min-height:20px;color:#9B2C2C}
+.sec-head h1{font-family:'Bebas Neue';font-weight:400;font-size:34px;letter-spacing:.03em}
+.sec-head .serif{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--dim);margin-bottom:26px}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;font-weight:600}
+.rec-zone{border:1.5px dashed var(--line);border-radius:6px;padding:26px;text-align:center;margin-bottom:20px}
+.rec-btn{width:74px;height:74px;border-radius:50%;background:#9B2C2C;color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;cursor:pointer;border:none;transition:.2s var(--ease)}
+.rec-btn.recording{animation:recPulse 1s infinite}
+@keyframes recPulse{0%,100%{box-shadow:0 0 0 0 rgba(155,44,44,.4)}50%{box-shadow:0 0 0 14px rgba(155,44,44,0)}}
+.rec-hint{font-size:13px;color:var(--dim)}
+.rec-timer{font-family:ui-monospace,monospace;font-size:15px;margin:8px 0}
+audio{width:100%;margin-top:14px;display:none}
+.sep{text-align:center;font-size:12px;color:var(--dim);margin:18px 0;letter-spacing:.08em;text-transform:uppercase}
+.filebtn{display:block;text-align:center;padding:14px;border:1.5px solid var(--line);border-radius:5px;cursor:pointer;font-size:14px;color:var(--dim)}
+.filebtn input{display:none}
+.send-btn{width:100%;margin-top:8px}
+.status{margin-top:16px;font-size:14px;min-height:20px;text-align:center}
+.status.ok{color:#5D6F4A}
+.status.err{color:#9B2C2C}
+.hist{margin-top:44px;padding-top:26px;border-top:1px solid var(--line)}
+.hist h2{font-family:'Bebas Neue';font-size:20px;letter-spacing:.03em;margin-bottom:12px}
+.hist-item{font-size:13px;color:var(--dim);display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px dashed var(--line)}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="bar">
+  <div style="display:flex;flex-direction:column;align-items:center">
+    <div class="axe-letters">AXE</div>
+    <div class="axe-sub">MENTAL PERFORMANCE®</div>
+  </div>
+  <div class="role">Message vocal</div>
+</div>
+
+<div class="wrap" id="loginScreen">
+  <div class="login">
+    <h1>MESSAGE VOCAL</h1>
+    <div class="serif">Entre ta clé pour laisser un message à un rider.</div>
+    <input type="password" id="cle" placeholder="Ta clé coach" autocomplete="off">
+    <button onclick="entrer()">Continuer</button>
+    <div class="msg" id="msg"></div>
+  </div>
+</div>
+
+<div class="wrap" id="board" style="display:none">
+  <div class="sec-head">
+    <h1>LAISSER UN MESSAGE</h1>
+    <div class="serif">Comme sur un répondeur — il le verra clignoter dès qu'il ouvre son application.</div>
+  </div>
+
+  <div class="field">
+    <label>Pour quel rider ?</label>
+    <select id="riderSelect"></select>
+  </div>
+
+  <div class="rec-zone">
+    <button class="rec-btn" id="recBtn" onclick="toggleRec()">🎙️</button>
+    <div class="rec-timer" id="recTimer">0:00</div>
+    <div class="rec-hint" id="recHint">Clique pour enregistrer directement depuis ce navigateur</div>
+    <audio id="preview" controls></audio>
+  </div>
+
+  <div class="sep">— ou —</div>
+  <label class="filebtn" id="fileBtnLabel">
+    Choisir un fichier audio existant
+    <input type="file" id="fileInput" accept="audio/*" onchange="onFileChosen(event)">
+  </label>
+
+  <button class="send-btn" id="sendBtn" onclick="envoyerMessage()" disabled style="margin-top:22px">Envoyer le message</button>
+  <div class="status" id="status"></div>
+
+  <div class="hist">
+    <h2>Derniers messages envoyés</h2>
+    <div id="histList"><p class="rec-hint">Rien envoyé pour l'instant depuis cette page.</p></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ilsxrdvxvnvlznjuevba.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const msg = document.getElementById('msg');
+let cleActuelle = '';
+let riders = [];
+let blobAudio = null; // Blob prêt à être envoyé (enregistré ou choisi)
+
+document.getElementById('cle').addEventListener('keydown', e=>{ if(e.key==='Enter') entrer(); });
+
+async function entrer(){
+  const cle = document.getElementById('cle').value;
+  msg.textContent = '';
+  if(!cle){ msg.textContent = 'Entre ta clé.'; return; }
+  msg.textContent = 'Chargement...';
+  try{
+    const r = await db.rpc('liste_riders', { cle: cle });
+    if(r.error){ msg.textContent = 'Clé incorrecte.'; return; }
+    cleActuelle = cle;
+    riders = (r.data || []).slice().sort((a,b)=>(a.nom||a.code_acces||'').localeCompare(b.nom||b.code_acces||''));
+    const sel = document.getElementById('riderSelect');
+    sel.innerHTML = riders.map(x=>`<option value="${x.code_acces}">${x.nom || x.code_acces} (${x.code_acces})</option>`).join('');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('board').style.display = 'block';
+  }catch(e){ msg.textContent = 'Souci : ' + e.message; }
+}
+
+/* ===== Enregistrement direct au micro ===== */
+let mediaRecorder = null;
+let chunks = [];
+let recInterval = null;
+let recSeconds = 0;
+
+async function toggleRec(){
+  const btn = document.getElementById('recBtn');
+  if(mediaRecorder && mediaRecorder.state === 'recording'){
+    mediaRecorder.stop();
+    return;
+  }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    chunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => { if(e.data.size>0) chunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      stream.getTracks().forEach(t=>t.stop());
+      clearInterval(recInterval);
+      btn.classList.remove('recording');
+      document.getElementById('recHint').textContent = 'Enregistrement terminé — écoute-le avant d\'envoyer';
+      blobAudio = new Blob(chunks, { type: 'audio/webm' });
+      const preview = document.getElementById('preview');
+      preview.src = URL.createObjectURL(blobAudio);
+      preview.style.display = 'block';
+      document.getElementById('sendBtn').disabled = false;
+    };
+    mediaRecorder.start();
+    btn.classList.add('recording');
+    recSeconds = 0;
+    document.getElementById('recTimer').textContent = '0:00';
+    document.getElementById('recHint').textContent = 'Enregistrement en cours — reclique pour arrêter';
+    recInterval = setInterval(()=>{
+      recSeconds++;
+      const m = Math.floor(recSeconds/60), s = recSeconds%60;
+      document.getElementById('recTimer').textContent = m+':'+String(s).padStart(2,'0');
+    }, 1000);
+  }catch(e){
+    document.getElementById('recHint').textContent = "Micro non accessible depuis ce navigateur — utilise plutôt un fichier audio.";
+  }
+}
+
+function onFileChosen(e){
+  const f = e.target.files[0];
+  if(!f) return;
+  blobAudio = f;
+  const preview = document.getElementById('preview');
+  preview.src = URL.createObjectURL(f);
+  preview.style.display = 'block';
+  document.getElementById('sendBtn').disabled = false;
+}
+
+let historique = [];
+
+async function envoyerMessage(){
+  const code = document.getElementById('riderSelect').value;
+  if(!code || !blobAudio) return;
+  const statusEl = document.getElementById('status');
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.disabled = true;
+  statusEl.className = 'status';
+  statusEl.textContent = 'Envoi en cours...';
+  try{
+    const ext = (blobAudio.type && blobAudio.type.includes('webm')) ? 'webm' : (blobAudio.name ? blobAudio.name.split('.').pop() : 'mp3');
+    const chemin = code + '/' + Date.now() + '.' + ext;
+    const up = await db.storage.from('messages-vocaux').upload(chemin, blobAudio, {
+      contentType: blobAudio.type || 'audio/mpeg',
+      upsert: false
+    });
+    if(up.error) throw up.error;
+    const pub = db.storage.from('messages-vocaux').getPublicUrl(chemin);
+    const urlAudio = pub.data.publicUrl;
+    const { error } = await db.rpc('axe_envoyer_message_vocal', { cle: cleActuelle, code_p: code, url_p: urlAudio });
+    if(error) throw error;
+    statusEl.className = 'status ok';
+    const nomRider = (riders.find(r=>r.code_acces===code)||{}).nom || code;
+    statusEl.textContent = 'Message envoyé à ' + nomRider + '. Il le verra clignoter à sa prochaine ouverture.';
+    historique.unshift({ nom: nomRider, code, date: new Date() });
+    document.getElementById('histList').innerHTML = historique.slice(0,8).map(h=>
+      `<div class="hist-item"><span>${h.nom} (${h.code})</span><span>${h.date.toLocaleDateString('fr-FR')} à ${h.date.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span></div>`
+    ).join('');
+    // reset pour un prochain message
+    blobAudio = null;
+    document.getElementById('preview').style.display = 'none';
+    document.getElementById('fileInput').value = '';
+    document.getElementById('recTimer').textContent = '0:00';
+    document.getElementById('recHint').textContent = 'Clique pour enregistrer directement depuis ce navigateur';
+  }catch(e){
+    statusEl.className = 'status err';
+    statusEl.textContent = 'Souci lors de l\'envoi : ' + (e.message || e);
+  }finally{
+    sendBtn.disabled = !blobAudio ? true : false;
+  }
+}
+</script>
+</body>
+</html>

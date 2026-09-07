@@ -66,6 +66,18 @@ body{
 }
 .axe-sub sup{font-size:6px;vertical-align:super}
 .bar .role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.bar-right{display:flex;align-items:center;gap:16px}
+.vm-bell{display:none;position:relative;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--cream);align-items:center;justify-content:center;font-size:17px;cursor:pointer;border:none;animation:vmPulse 1.6s infinite}
+.vm-bell .vm-dot{position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:#C0392B;border:2px solid var(--cream)}
+@keyframes vmPulse{0%,100%{box-shadow:0 0 0 0 rgba(26,22,18,.35)}50%{box-shadow:0 0 0 9px rgba(26,22,18,0)}}
+.vm-overlay{display:none;position:fixed;inset:0;background:rgba(26,22,18,.55);z-index:200;align-items:center;justify-content:center;padding:20px}
+.vm-overlay.on{display:flex}
+.vm-modal{background:var(--cream);border-radius:6px;padding:32px;max-width:420px;width:100%;text-align:center}
+.vm-modal .vm-ico{font-size:34px;margin-bottom:10px}
+.vm-modal h3{font-family:'Bebas Neue';font-size:24px;letter-spacing:.03em;margin-bottom:6px}
+.vm-modal p{font-size:14px;color:var(--dim);margin-bottom:20px}
+.vm-modal audio{width:100%;margin-bottom:20px}
+.vm-modal button{width:100%;padding:14px;border:none;border-radius:5px;background:var(--ink);color:var(--cream);font-family:'DM Sans';font-weight:600;font-size:14px;cursor:pointer}
 
 /* ---------- generic ---------- */
 .eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:600}
@@ -173,6 +185,11 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .str-line .pill.sens{background:rgba(93,111,74,.16);color:var(--parent)}
 .str-line .pill.depart{background:rgba(168,133,42,.16);color:var(--gold)}
 .depart-why{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--dim);margin-top:6px;padding-left:2px}
+.streak-banner{display:none;align-items:center;gap:16px;border:1.5px solid var(--gold);border-radius:6px;padding:14px 20px;margin-bottom:22px;background:rgba(168,133,42,.06);cursor:pointer;transition:.2s var(--ease)}
+.streak-banner:hover{transform:translateY(-2px);border-color:var(--gold-soft)}
+.streak-banner .streak-flame{flex-shrink:0;line-height:1;transition:font-size .3s var(--ease)}
+.streak-banner b{font-family:'Bebas Neue';font-size:21px;letter-spacing:.03em;color:var(--gold)}
+.streak-banner .streak-sub{font-size:12px;color:var(--dim)}
 .crosscrawl{border:1.5px solid var(--parent);border-radius:5px;padding:22px;margin-bottom:26px;background:rgba(93,111,74,.05)}
 .crosscrawl .cc-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
 .crosscrawl h2{font-family:'Bebas Neue';font-size:24px;letter-spacing:.04em;font-weight:400;color:var(--parent)}
@@ -207,6 +224,11 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .act-btn.start{border-color:var(--gold);color:var(--gold)}
 .act-btn.start:hover{background:var(--gold);color:var(--cream)}
 .act-btn.start:hover small{color:rgba(255,255,255,.85)}
+.act-btn.jourj{border:1.5px solid var(--gold);background:var(--gold);color:var(--cream);justify-content:center}
+.act-btn.jourj b{font-family:'Bebas Neue';font-size:18px;letter-spacing:.05em;font-weight:400}
+.act-btn.jourj small{color:rgba(255,255,255,.85)}
+.act-btn.jourj:hover{background:#8f7325;border-color:#8f7325}
+.act-btn.jourj .ab-ico{font-size:26px}
 .start-promise{display:flex;gap:14px;align-items:center;border:1.5px solid rgba(93,111,74,.4);background:rgba(93,111,74,.06);border-radius:6px;padding:16px 20px;margin-bottom:26px;font-size:14.5px}
 .start-promise .sp-ico{font-size:26px;flex-shrink:0}
 .start-card{border:1.5px solid var(--line);border-radius:6px;padding:22px;margin-bottom:16px;background:rgba(255,255,255,.5)}
@@ -310,6 +332,13 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .col-head .dot.pa{background:var(--parent)}
 .parent-zone{margin-top:38px;padding:30px;border:1.5px solid var(--line);border-radius:3px;background:rgba(93,111,74,.05)}
 .parent-intro{font-size:18px;font-style:italic;color:var(--dim);margin:0 0 20px;max-width:60ch}
+.feu-tricolore{display:flex;align-items:center;gap:14px;border-radius:4px;padding:14px 18px;margin-bottom:22px;background:#fff}
+.feu-tricolore .fd{width:16px;height:16px;border-radius:50%;flex:none}
+.feu-tricolore.vert{border:1.5px solid #5D6F4A}.feu-tricolore.vert .fd{background:#5D6F4A}
+.feu-tricolore.orange{border:1.5px solid #C08A2E}.feu-tricolore.orange .fd{background:#C08A2E}
+.feu-tricolore.rouge{border:1.5px solid #9B2C2C}.feu-tricolore.rouge .fd{background:#9B2C2C}
+.feu-tricolore b{display:block;font-size:14.5px}
+.feu-tricolore span.fsub{font-size:12.5px;color:var(--dim)}
 .parent-card{border:1.5px solid rgba(93,111,74,.35);border-radius:3px;padding:22px;background:rgba(255,255,255,.5)}
 .parent-card h3{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;margin-bottom:9px}
 .parent-card .desc{font-size:14px;color:var(--dim);margin-bottom:14px}
@@ -364,6 +393,8 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .report .rq p{font-family:'Cormorant Garamond',serif;font-size:24px;margin-bottom:14px;line-height:1.2}
 .scale{display:flex;gap:10px}
 .scale button{flex:1;padding:14px 0;border:1.5px solid var(--line);border-radius:2px;background:transparent;cursor:pointer;font-family:'DM Sans';font-size:13px;transition:.18s var(--ease)}
+.scale.compact{flex-wrap:wrap;gap:6px}
+.scale.compact button{flex:0 0 auto;width:40px;padding:9px 0;font-size:12px}
 .scale button:hover{border-color:var(--ink)}
 .scale button.sel{background:var(--gold);color:var(--cream);border-color:var(--gold)}
 
@@ -433,7 +464,20 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <div class="axe-sub">MENTAL PERFORMANCE<sup>®</sup></div>
     </div>
   </div>
-  <div class="role" id="roleTag">Espace pilote</div>
+  <div class="bar-right">
+    <button class="vm-bell" id="vmBell" onclick="ouvrirMessageVocal()" title="Message de ton coach"><span id="vmDot" style="display:none" class="vm-dot"></span>🎙️</button>
+    <div class="role" id="roleTag">Espace pilote</div>
+  </div>
+</div>
+
+<div class="vm-overlay" id="vmOverlay">
+  <div class="vm-modal">
+    <div class="vm-ico">🎙️</div>
+    <h3>Message de ton coach</h3>
+    <p>Comme sur un répondeur — écoute-le tranquillement.</p>
+    <audio id="vmAudio" controls></audio>
+    <button onclick="fermerMessageVocal()">Fermer</button>
+  </div>
 </div>
 
 <div class="stepper" id="stepper"></div>
@@ -576,6 +620,8 @@ textarea:focus{outline:none;border-color:var(--gold)}
 
     <div class="strengths" id="strengths"></div>
 
+    <div class="streak-banner" id="streakBanner" onclick="go('start')"></div>
+
     <div class="crosscrawl" id="crossCrawl" style="display:none"></div>
 
     <div class="sim-panel" id="simPanel"></div>
@@ -600,6 +646,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="parent-zone">
       <div class="col-head"><span class="dot pa"></span><h2>Côté parent</h2><small>1 clé d'accompagnement / mois</small></div>
       <p class="parent-intro serif">Ton rôle compte autant que l'entraînement. Voici comment épauler ton enfant ce mois-ci, sans mettre de pression.</p>
+      <div id="feuTricolore"></div>
       <div id="parentCol"></div>
     </div>
 
@@ -611,8 +658,10 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div style="text-align:center;margin-top:22px" id="trimCta"></div>
 
     <div class="action-bar">
+      <button class="act-btn jourj" onclick="go('jourj')" style="grid-column:1/-1"><span class="ab-ico">🏆</span><span><b>JOUR DE COURSE</b><small>Le matin d'une course : uniquement l'essentiel, rien d'autre à lire</small></span></button>
       <button class="act-btn start" onclick="go('start')"><span class="ab-ico">🚀</span><span><b>Devenir un boss du start</b><small>Mes jeux express, sans effort en plus</small></span></button>
       <button class="act-btn comp" onclick="go('competition')"><span class="ab-ico">🏁</span><span><b>Ma semaine de compétition</b><small>Le protocole spécial jour J</small></span></button>
+      <button class="act-btn comp" onclick="go('debrief')"><span class="ab-ico">🎤</span><span><b>Débrief express</b><small>Juste après une course, 30 secondes</small></span></button>
       <button class="act-btn" onclick="go('notes')"><span class="ab-ico">📓</span><span><b>Mon carnet</b><small>Revoir toutes mes notes</small></span></button>
       <a class="act-btn wa" id="waRider" target="_blank"><span class="ab-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 00-8.5 15.3L2 22l4.8-1.5A10 10 0 1012 2z"/></svg></span><span><b>Écrire à mon préparateur</b><small>Une question ? Contacte-le sur WhatsApp</small></span></a>
       <a class="act-btn abo" id="btnAbonnement" target="_blank"><span class="ab-ico">⚙️</span><span><b>Gérer mon abonnement</b><small>Modifier ou résilier mon paiement</small></span></a>
@@ -629,6 +678,19 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <div class="serif">La routine qui te met en condition, du lundi jusqu'à la gate.</div>
     </div>
     <div id="compContent"></div>
+    <div style="text-align:center;margin-top:34px"><button class="btn ghost" onclick="go('dash')">← Retour au programme</button></div>
+  </div>
+</section>
+
+<!-- ============ JOUR DE COURSE (mode simplifié) ============ -->
+<section class="screen" id="jourj">
+  <div class="dash">
+    <div class="sec-head">
+      <div class="step-tag">CE MATIN</div>
+      <h1>JOUR DE COURSE</h1>
+      <div class="serif">Rien d'autre à lire. Juste ta routine de départ et ton astuce du jour.</div>
+    </div>
+    <div id="jourjContent"></div>
     <div style="text-align:center;margin-top:34px"><button class="btn ghost" onclick="go('dash')">← Retour au programme</button></div>
   </div>
 </section>
@@ -660,6 +722,40 @@ textarea:focus{outline:none;border-color:var(--gold)}
     </div>
     <div id="notesRecap"></div>
     <div style="text-align:center;margin-top:34px"><button class="btn ghost" onclick="go('dash')">← Retour au programme</button></div>
+  </div>
+</section>
+
+<!-- ============ DÉBRIEF EXPRESS (juste après une compétition) ============ -->
+<section class="screen" id="debrief">
+  <div class="report">
+    <div class="sec-head">
+      <div class="step-tag">JUSTE APRÈS LA COURSE</div>
+      <h1>DÉBRIEF EXPRESS</h1>
+      <div class="serif">30 secondes, à chaud. C'est plus fiable qu'un souvenir reconstruit dans un mois.</div>
+    </div>
+
+    <div class="rq">
+      <p>Ta routine de départ, elle a tenu ?</p>
+      <div class="scale" style="flex-wrap:wrap">
+        <button onclick="dScale(this,'routine','Oui, complètement')">Oui, complètement</button>
+        <button onclick="dScale(this,'routine','Plutôt oui')">Plutôt oui</button>
+        <button onclick="dScale(this,'routine','Pas vraiment')">Pas vraiment</button>
+        <button onclick="dScale(this,'routine','Non')">Non</button>
+      </div>
+    </div>
+
+    <div class="rq">
+      <p>Qu'est-ce qui t'a gêné aujourd'hui ?</p>
+      <textarea id="debGene" placeholder="Une phrase suffit. Rien à écrire si tout s'est bien passé."></textarea>
+    </div>
+
+    <div class="rq">
+      <p>Ta confiance aujourd'hui, sur 10 ?</p>
+      <div class="scale compact" id="debConfScale"></div>
+    </div>
+
+    <button class="btn gold" onclick="submitDebrief()">Envoyer mon débrief</button>
+    <p class="mini-note" style="margin-top:20px">Ton coach le reçoit directement, sans attendre le rapport de fin de mois.</p>
   </div>
 </section>
 
@@ -796,7 +892,51 @@ async function axeInit(){
     } else {
       console.log('[AXE] Code inconnu.');
     }
+    axeVerifierMessagesVocaux();
   }catch(e){ console.log('[AXE] Souci connexion :', e.message); }
+}
+
+// ===== MESSAGE VOCAL DU COACH (comme un répondeur) =====
+// file d'attente des messages non écoutés, du plus récent au plus ancien
+let axeMessagesVocaux = [];
+async function axeVerifierMessagesVocaux(){
+  if(!axeCode) return;
+  try{
+    const { data, error } = await axeDB.rpc('recuperer_messages_vocaux', { code_p: axeCode });
+    if(error){ console.log('[AXE] Erreur messages vocaux :', error.message); return; }
+    axeMessagesVocaux = (data || []).filter(m=>!m.lu);
+    const bell = document.getElementById('vmBell');
+    const dot = document.getElementById('vmDot');
+    if(!bell) return;
+    if(axeMessagesVocaux.length){
+      bell.style.display = 'flex';
+      dot.style.display = 'block';
+    } else {
+      bell.style.display = 'none';
+    }
+  }catch(e){ console.log('[AXE] Souci messages vocaux :', e.message); }
+}
+function ouvrirMessageVocal(){
+  if(!axeMessagesVocaux.length) return;
+  const m = axeMessagesVocaux[0];
+  document.getElementById('vmAudio').src = m.url_audio;
+  document.getElementById('vmOverlay').classList.add('on');
+  if(axeCode){
+    axeDB.rpc('marquer_message_vocal_lu', { id_p: m.id, code_p: axeCode }).then(()=>{}).catch(()=>{});
+  }
+}
+function fermerMessageVocal(){
+  document.getElementById('vmOverlay').classList.remove('on');
+  const audio = document.getElementById('vmAudio');
+  audio.pause();
+  // on retire le message écouté de la file, et on met à jour la pastille pour les suivants
+  axeMessagesVocaux.shift();
+  const bell = document.getElementById('vmBell');
+  const dot = document.getElementById('vmDot');
+  if(bell){
+    if(axeMessagesVocaux.length){ dot.style.display='block'; }
+    else { bell.style.display='none'; }
+  }
 }
 
 // Un profil enregistré avant le passage au diagnostic à 24 questions garde ses réponses sous
@@ -974,6 +1114,16 @@ async function axeEnregistrerDiagnostic(){
     if(error){ console.log('[AXE] Erreur enregistrement diagnostic :', error.message); }
     else{ console.log('[AXE] Diagnostic enregistré dans la base.'); }
   }catch(e){ console.log('[AXE] Souci enregistrement :', e.message); }
+  // instantané des scores bruts (en plus, jamais à la place) : sert uniquement à construire
+  // la comparaison "score de départ vs score actuel" du bilan trimestriel. N'affecte jamais
+  // le profil courant ni l'enregistrement ci-dessus.
+  try{
+    const scores = { mental: scoreAxis(state.mental,'mental'), physique: scoreAxis(state.physique,'physique') };
+    const { error: errHist } = await axeDB.rpc('enregistrer_diagnostic_historique', {
+      code_p: axeCode, mois_p: state.month, scores_p: scores, labels_p: forces
+    });
+    if(errHist){ console.log('[AXE] Erreur historique diagnostic :', errHist.message); }
+  }catch(e){ console.log('[AXE] Souci historique diagnostic :', e.message); }
 }
 
 /* ============ DATA ============ */
@@ -1434,6 +1584,8 @@ function go(id){
   if(id==='notes')renderNotesRecap();
   if(id==='trimestre')renderTrimestre();
   if(id==='competition')renderCompetition();
+  if(id==='debrief')renderDebriefConf();
+  if(id==='jourj')renderJourCourse();
 }
 function buildStepper(active){
   const wrap=document.getElementById('stepper');
@@ -1823,7 +1975,7 @@ function renderNotesRecap(){
   }
   el.innerHTML=html;
 }
-function renderTrimestre(){
+async function renderTrimestre(){
   const el=document.getElementById('trimContent');
   if(state.month<3){
     const cible=state.startDate?fmtDate(firstOfNextMonth(addDays(state.startDate,62))):'';
@@ -1831,12 +1983,43 @@ function renderTrimestre(){
     return;
   }
   const a=analyse();
+  // comparaison chiffrée "score de départ vs score actuel" : construite à partir de
+  // l'historique des diagnostics (un instantané à chaque diagnostic). N'apparaît que
+  // s'il existe au moins deux instantanés (le premier diagnostic + un plus récent) —
+  // sinon on garde le bloc "Ce qui a avancé" tel quel, sans rien casser.
+  let evoHtml = '';
+  if(axeCode){
+    try{
+      const { data, error } = await axeDB.rpc('recuperer_historique_diagnostic', { code_p: axeCode });
+      if(!error && data && data.length>=2){
+        const premier = data[0], dernier = data[data.length-1];
+        const fmtScore = (obj,key)=> (obj && obj[key]) ? obj[key] : 0;
+        const ligne = (titre,axe,key)=>{
+          const av = fmtScore(premier.scores && premier.scores[axe], key);
+          const ap = fmtScore(dernier.scores && dernier.scores[axe], key);
+          const mieux = ap < av; // moins de réponses "en ce sens" = le point a moins pesé
+          return `<div class="trim-evo"><span class="arrow" style="color:${mieux?'var(--parent)':'var(--dim)'}">${mieux?'↘':'→'}</span><div><b>${titre}</b> : ${av}/9 au premier diagnostic → <b>${ap}/9</b> aujourd'hui${mieux?', en net recul':''}.</div></div>`;
+        };
+        const mKey = Object.keys(premier.labels||{}).length ? null : null; // (garde-fou, non utilisé)
+        // on suit précisément la catégorie qui était le point faible au premier diagnostic
+        const mFaibleKey = {"la gestion de la pression sur la gate":"portillon","la gestion des erreurs passées":"rumination","la confiance en soi face aux autres pilotes":"confiance"}[premier.labels && premier.labels.mFaible] || null;
+        const pFaibleKey = {"l'explosivité au départ":"explosivite","la force dans les jambes":"force","le gainage et la stabilité":"stabilite","la vitesse et l'endurance de fin de course":"vitesse"}[premier.labels && premier.labels.pFaible] || null;
+        evoHtml = `<div class="trim-block" style="background:rgba(168,133,42,.05);border-color:rgba(168,133,42,.3)">
+          <h3>Ton évolution chiffrée</h3>
+          ${mFaibleKey?ligne('Mental — '+ (premier.labels.mFaible||''), 'mental', mFaibleKey):''}
+          ${pFaibleKey?ligne('Physique — '+ (premier.labels.pFaible||''), 'physique', pFaibleKey):''}
+          <div class="trim-evo" style="border:none;padding-top:10px"><div style="font-size:12.5px;color:var(--dim);font-style:italic">Comparé à ton diagnostic du ${fmtDate(new Date(premier.created_at))}.</div></div>
+        </div>`;
+      }
+    }catch(e){ console.log('[AXE] Souci historique diagnostic (affichage) :', e.message); }
+  }
   el.innerHTML=`
     <div class="trim-block">
       <h3>Ce qui a avancé</h3>
       <div class="trim-evo"><span class="arrow">↗</span><div>Sur le plan mental, ton travail sur <b>${a.mFaible}</b> a commencé à porter. Tu t'appuies de plus en plus sur ${a.mFort}.</div></div>
       <div class="trim-evo"><span class="arrow">↗</span><div>Côté physique, la régularité paie sur <b>${a.pFaible}</b>, pendant que ${a.pFort} reste ton atout.</div></div>
     </div>
+    ${evoHtml}
     <div class="trim-block">
       <h3>Ton cap pour les 3 prochains mois</h3>
       <div class="trim-evo"><span class="arrow">→</span><div>On continue d'approfondir en spirale, sans brûler les étapes. Chaque mois construit sur le précédent.</div></div>
@@ -1863,6 +2046,58 @@ function texteFaiblessePhysiqueSemaine(){
   if(key==='vitesse') return "Attention à ne pas arriver cramé : réduis le volume cette semaine, garde juste un peu de vitesse courte pour rester vif sans épuiser tes réserves.";
   return "Ton diagnostic physique n'est pas encore complet : cette astuce se précisera une fois qu'il sera fait.";
 }
+// astuces d'activation sensorielle du jour J, selon le profil de départ (son / lumière) —
+// utilisée à la fois par "Ma semaine de compétition" et par le mode simplifié "Jour de course"
+function astuceSensorielleDuJour(s){
+  if(s.depart==='son'){
+    return `
+      <div class="comp-tip"><span class="ct-num">1</span><div><b>Réveille tes oreilles.</b> Frotte doucement le pavillon de tes deux oreilles entre le pouce et l'index, de haut en bas, une dizaine de fois. Tu les rends plus vives au signal.</div></div>
+      <div class="comp-tip"><span class="ct-num">2</span><div><b>Cale-toi sur le son.</b> Sur la gate, ferme les yeux une seconde et concentre-toi uniquement sur le bruit du départ. C'est lui ton déclencheur, pas la lumière.</div></div>
+      <div class="comp-tip"><span class="ct-num">3</span><div><b>Respiration d'ancrage.</b> Trois respirations lentes, en écoutant les sons autour de toi. Tu ancres ton attention sur ton canal fort, l'ouïe.</div></div>`;
+  } else if(s.depart==='lumière'){
+    return `
+      <div class="comp-tip"><span class="ct-num">1</span><div><b>Réveille tes yeux.</b> Sans bouger la tête, balaie du regard de gauche à droite puis de haut en bas, une dizaine d'allers-retours. Tu actives ta vision périphérique.</div></div>
+      <div class="comp-tip"><span class="ct-num">2</span><div><b>Fixe les feux.</b> Sur la gate, garde les feux dans ton champ de vision, jamais la grille. C'est le changement des feux qui te déclenche, pas le mouvement de la grille, ni le son.</div></div>
+      <div class="comp-tip"><span class="ct-num">3</span><div><b>Clignements nets.</b> Quelques clignements francs juste avant, pour une vision claire et réactive au top départ.</div></div>`;
+  }
+  return `<div class="comp-tip"><span class="ct-num">!</span><div>Ton profil de départ n'est pas encore déterminé. Refais la partie sensorielle de ton diagnostic pour débloquer tes astuces personnalisées du jour J.</div></div>`;
+}
+// mode "Jour de course" : le matin d'une course, on ne garde QUE deux choses — la routine
+// de départ déjà construite dans "Boss du start", et l'astuce sensorielle du jour. Rien
+// d'autre à lire à un moment où la tête est ailleurs.
+function renderJourCourse(){
+  const el=document.getElementById('jourjContent');
+  const s=analyseSensoriel();
+  const ancrage = s.depart==='son'?'un son dans ta tête (le "clac" de la grille, ou un mot claqué)'
+    : s.depart==='lumière'?'une image nette (la grille qui tombe, ta roue qui jaillit)'
+    : 'ton image ou ton son de départ préféré';
+  const routinePrete = !!(state.startRoutine.mot && state.startRoutine.geste);
+  const routineHtml = routinePrete
+    ? `<div class="comp-jour-j" style="margin-bottom:20px">
+        <h3>🎯 Ta routine de départ</h3>
+        <div class="routine-preview on">
+          Dans les 20 secondes avant la gate :
+          <ol>
+            <li>3 respirations lentes.</li>
+            <li>Tu ancres <b>${ancrage}</b>.</li>
+            <li>Tu dis ton mot dans ta tête : <b>${state.startRoutine.mot}</b></li>
+            <li>Ton geste : <b>${state.startRoutine.geste}</b></li>
+            <li>Prêt. Tu ne penses plus à rien, tu réagis.</li>
+          </ol>
+        </div>
+      </div>`
+    : `<div class="comp-jour-j" style="margin-bottom:20px">
+        <h3>🎯 Ta routine de départ</h3>
+        <p style="font-size:14px;color:var(--dim);margin-top:8px">Tu n'as pas encore construit ton rituel d'avant-départ. Va le préparer en 2 minutes dans <b>Devenir un boss du start</b> — idéalement avant, pas le matin même d'une course.</p>
+      </div>`;
+  el.innerHTML = `
+    ${routineHtml}
+    <div class="comp-jour-j">
+      <h3>✨ Ton astuce sensorielle du jour</h3>
+      <p style="font-size:14px;color:var(--dim);margin-bottom:8px">15 à 20 minutes avant ta première manche, après ton cross crawl :</p>
+      ${astuceSensorielleDuJour(s)}
+    </div>`;
+}
 function renderCompetition(){
   const el=document.getElementById('compContent');
   const s=analyseSensoriel();
@@ -1884,21 +2119,8 @@ function renderCompetition(){
   });
   planning+=`<div class="comp-day" style="border-color:var(--gold)"><div class="cd-day" style="color:var(--gold)">Jour J</div><div class="cd-body"><b>Cross crawl au réveil</b> comme d'habitude, puis les astuces d'activation ci-dessous, 15 à 20 minutes avant ta première manche.</div></div>`;
 
-  // tips du jour J selon départ son ou lumière
-  let tips='';
-  if(s.depart==='son'){
-    tips=`
-      <div class="comp-tip"><span class="ct-num">1</span><div><b>Réveille tes oreilles.</b> Frotte doucement le pavillon de tes deux oreilles entre le pouce et l'index, de haut en bas, une dizaine de fois. Tu les rends plus vives au signal.</div></div>
-      <div class="comp-tip"><span class="ct-num">2</span><div><b>Cale-toi sur le son.</b> Sur la gate, ferme les yeux une seconde et concentre-toi uniquement sur le bruit du départ. C'est lui ton déclencheur, pas la lumière.</div></div>
-      <div class="comp-tip"><span class="ct-num">3</span><div><b>Respiration d'ancrage.</b> Trois respirations lentes, en écoutant les sons autour de toi. Tu ancres ton attention sur ton canal fort, l'ouïe.</div></div>`;
-  } else if(s.depart==='lumière'){
-    tips=`
-      <div class="comp-tip"><span class="ct-num">1</span><div><b>Réveille tes yeux.</b> Sans bouger la tête, balaie du regard de gauche à droite puis de haut en bas, une dizaine d'allers-retours. Tu actives ta vision périphérique.</div></div>
-      <div class="comp-tip"><span class="ct-num">2</span><div><b>Fixe les feux.</b> Sur la gate, garde les feux dans ton champ de vision, jamais la grille. C'est le changement des feux qui te déclenche, pas le mouvement de la grille, ni le son.</div></div>
-      <div class="comp-tip"><span class="ct-num">3</span><div><b>Clignements nets.</b> Quelques clignements francs juste avant, pour une vision claire et réactive au top départ.</div></div>`;
-  } else {
-    tips=`<div class="comp-tip"><span class="ct-num">!</span><div>Ton profil de départ n'est pas encore déterminé. Refais la partie sensorielle de ton diagnostic pour débloquer tes astuces personnalisées du jour J.</div></div>`;
-  }
+  // tips du jour J selon départ son ou lumière (fonction partagée avec le mode "Jour de course")
+  const tips = astuceSensorielleDuJour(s);
 
   el.innerHTML=`
     ${banner}
@@ -1910,6 +2132,59 @@ function renderCompetition(){
       <p style="font-size:14px;color:var(--dim);margin-bottom:8px">15 à 20 minutes avant ta première manche, après ton cross crawl :</p>
       ${tips}
     </div>`;
+}
+// nombre de semaines consécutives (en remontant depuis la semaine en cours) où au moins
+// une séance physique a été validée, sans aucune rupture : un symbole de continuité
+// plus parlant que des cases isolées, et affiché en haut du tableau de bord (pas caché
+// tout en bas dans la barre d'actions) pour que le rider le voie tout de suite.
+function calculStreakSemaines(){
+  let streak = 0;
+  let m = state.month, w = state.week;
+  while(m>=1){
+    const s = state.physSeances[m+'-'+w];
+    if(!s || !(s.done>0)) break;
+    streak++;
+    w--;
+    if(w<1){ w=4; m--; }
+  }
+  return streak;
+}
+function renderStreak(){
+  const el=document.getElementById('streakBanner');
+  if(!el) return;
+  const n = calculStreakSemaines();
+  if(n<=0){ el.style.display='none'; return; }
+  el.style.display='flex';
+  const taille = Math.min(42, 22+n*2.5);
+  el.innerHTML = `<span class="streak-flame" style="font-size:${taille}px">🔥</span><div><b>${n} semaine${n>1?'s':''}</b> sans rupture<br><span class="streak-sub">Au moins une séance validée chaque semaine — clique pour voir tes badges de boss du start</span></div>`;
+}
+// feu tricolore côté parent : un coup d'œil sur les validations de la semaine en cours,
+// sans avoir à tout lire. Basé uniquement sur les séances physiques de la semaine (le
+// signal le plus clair qui repart à zéro chaque semaine) : vert si tout est validé (ou
+// rien n'est encore prévu), orange si c'est en cours, rouge seulement si rien n'a été
+// validé alors que tous les jours de séance prévus cette semaine sont déjà passés.
+function calculFeuTricolore(){
+  const wk = physWeekKey();
+  const s = state.physSeances[wk] || {done:0,total:0};
+  if(s.total<=0) return {couleur:'vert', texte:'Rien de prévu à valider cette semaine.'};
+  if(s.done>=s.total) return {couleur:'vert', texte:'Toutes les séances prévues cette semaine sont validées.'};
+  if(s.done>0) return {couleur:'orange', texte:s.done+' / '+s.total+' séance'+(s.total>1?'s':'')+' validée'+(s.done>1?'s':'')+' cette semaine, c\'est en cours.'};
+  const jours = joursSeance();
+  if(!jours.length) return {couleur:'vert', texte:'Rien de prévu à valider cette semaine.'};
+  const dernierJour = jours[jours.length-1];
+  const idxDernier = JOURS_SEMAINE.indexOf(dernierJour);
+  const idxAuj = (new Date().getDay()+6)%7; // lundi=0 ... dimanche=6 (aligné sur JOURS_SEMAINE)
+  if(idxAuj > idxDernier){
+    return {couleur:'rouge', texte:'Aucune séance validée cette semaine, alors qu\'elle est déjà terminée. Un petit mot peut aider.'};
+  }
+  return {couleur:'orange', texte:'Pas encore de séance validée cette semaine, mais elle n\'est pas finie.'};
+}
+function renderFeuTricolore(){
+  const el=document.getElementById('feuTricolore');
+  if(!el) return;
+  const f = calculFeuTricolore();
+  const label = f.couleur==='vert'?'Tout va bien' : f.couleur==='orange'?'En cours' : 'À surveiller';
+  el.innerHTML = `<div class="feu-tricolore ${f.couleur}"><div class="fd"></div><div><b>${label}</b><span class="fsub">${f.texte}</span></div></div>`;
 }
 // ===== MODULE START (ludique, zéro effort ajouté) =====
 function renderStart(){
@@ -2075,6 +2350,7 @@ function buildProgram(){
     strip.innerHTML+='<div class="pstat"><span>'+s+'</span><b>'+v+'</b></div>';
   });
   renderStrengths();
+  renderStreak();
   renderCrossCrawl();
   setupWhatsApp();
   setupAbonnement();
@@ -2163,6 +2439,8 @@ function renderWeek(started){
     document.getElementById('physCol').innerHTML=lockHtml;
     document.getElementById('physCount').textContent='';
     document.getElementById('parentCol').innerHTML=lockHtml;
+    const feuLock=document.getElementById('feuTricolore');
+    if(feuLock) feuLock.innerHTML='';
     return;
   }
   const wp=weekProgress[state.week-1];
@@ -2203,11 +2481,20 @@ function renderWeek(started){
     const p=JSON.parse(JSON.stringify(base));
     // poids ajusté selon âge et niveau (salle uniquement)
     if(p.moves)p.moves.forEach(mv=>{if(mv.poids)mv.poids=adjustWeight(mv.poids);});
-    // progression d'intensité sur le mois
+    // progression d'intensité sur le mois : le nombre de séries du bloc ET celui de
+    // chaque exercice qui le compose montent (ou redescendent en semaine 4) ensemble,
+    // pour que l'affichage du bloc corresponde toujours à ce qui est écrit exercice par
+    // exercice (avant ce correctif, seul le total du bloc bougeait, pas le détail).
     let bump = state.week===2?1 : state.week===3?2 : 0;
     if(state.level==='National')bump+=1;
-    if(bump>0)p.series=p.series.replace(/\d+/,x=>+x+bump);
-    if(state.week===4)p.series=p.series.replace(/\d+/,x=>Math.max(2,+x-1));
+    const ajusteSeries = txt => {
+      let t = txt;
+      if(bump>0) t = t.replace(/\d+/, x=>+x+bump);
+      if(state.week===4) t = t.replace(/\d+/, x=>Math.max(2,+x-1));
+      return t;
+    };
+    p.series = ajusteSeries(p.series);
+    if(p.moves) p.moves.forEach(mv=>{ mv.d = ajusteSeries(mv.d); });
     const jourLabel=joursSem[i]?JOURS_LABEL[joursSem[i]]:'';
     const doneInit = !!state.physSeances[wk].ids['p'+i];
     html+=exCard(p,false,'p'+i,jourLabel,doneInit);
@@ -2218,6 +2505,7 @@ function renderWeek(started){
     html+='<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
   }
   document.getElementById('physCol').innerHTML=html;
+  renderFeuTricolore();
   // côté parent : 1 clé par mois, tourne avec le mois (spirale)
   const pa=parentPool[(state.month-1)%parentPool.length];
   let pmoves=pa.moves.map(m=>`
@@ -2262,7 +2550,7 @@ function exCard(ex,isMental,id,jourLabel,doneInit){
     ${jourLabel?`<span class="day-tag">Séance du ${jourLabel.toLowerCase()}</span>`:''}
     <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
     <p class="desc">${ex.desc}</p>
-    <div class="meta"><span><b>${ex.series}</b></span><span><b>${ex.dur}</b></span></div>
+    <div class="meta"><span><b>${ex.series}</b> · <b>${ex.dur}</b></span></div>
     <div class="moves">${moves}</div>
     <button class="validate" id="val-${id}" onclick="validateEx('${id}')">${doneInit?validatedBtnHtml():'Valider la séance'}</button>
   </div>`;
@@ -2335,6 +2623,47 @@ function rScale(btn,q,val){
   btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   state.report[q]=val;
+}
+
+/* ============ DÉBRIEF EXPRESS (post-compétition) ============ */
+const debriefState = { routine:null, confiance:null };
+function dScale(btn,key,val){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  debriefState[key]=val;
+}
+// construit la petite échelle 0-10 une seule fois (pas besoin de la reconstruire à chaque ouverture)
+function renderDebriefConf(){
+  const el=document.getElementById('debConfScale');
+  if(!el || el.dataset.built) return;
+  let html='';
+  for(let i=0;i<=10;i++){ html+=`<button onclick="dScale(this,'confiance',${i})">${i}</button>`; }
+  el.innerHTML=html;
+  el.dataset.built='1';
+}
+async function submitDebrief(){
+  const champGene=document.getElementById('debGene');
+  const gene = champGene.value.trim();
+  if(axeCode){
+    try{
+      const { error } = await axeDB.rpc('enregistrer_debrief_competition', {
+        code_p: axeCode, mois_p: state.month, routine_p: debriefState.routine, gene_p: gene, confiance_p: debriefState.confiance
+      });
+      if(error){ console.log('[AXE] Erreur débrief :', error.message); }
+      else{ console.log('[AXE] Débrief enregistré.'); }
+    }catch(e){ console.log('[AXE] Souci débrief :', e.message); }
+  } else {
+    console.log('[AXE] Débrief non enregistré (mode démo).');
+  }
+  // on remet l'écran à zéro pour la prochaine fois, et petit message de confirmation
+  champGene.value='';
+  document.querySelectorAll('#debrief .scale button').forEach(b=>b.classList.remove('sel'));
+  debriefState.routine=null; debriefState.confiance=null;
+  const btn=document.querySelector('#debrief .btn.gold');
+  const original=btn.textContent;
+  btn.disabled=true;
+  btn.textContent='Envoyé, merci !';
+  setTimeout(()=>{ btn.textContent=original; btn.disabled=false; go('dash'); },1300);
 }
 function submitReport(){
   state.report.text=document.getElementById('reportText').value;

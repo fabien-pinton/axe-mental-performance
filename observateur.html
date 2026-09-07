@@ -193,6 +193,7 @@ function exporterProspects(){
 
 let notesParCode = {};
 let rapportsParCode = {};
+let debriefsParCode = {};
 
 async function chargerNotesRapports(cle){
   // on lit toutes les notes et rapports via des fonctions coach dédiées (à créer si besoin)
@@ -202,14 +203,16 @@ async function chargerNotesRapports(cle){
     if(!n.error && n.data){ n.data.forEach(x=>{ (notesParCode[x.code_acces]=notesParCode[x.code_acces]||[]).push(x); }); }
     const r = await db.rpc('liste_rapports', { cle: cle });
     if(!r.error && r.data){ r.data.forEach(x=>{ (rapportsParCode[x.code_acces]=rapportsParCode[x.code_acces]||[]).push(x); }); }
+    const d = await db.rpc('liste_debriefs', { cle: cle });
+    if(!d.error && d.data){ d.data.forEach(x=>{ (debriefsParCode[x.code_acces]=debriefsParCode[x.code_acces]||[]).push(x); }); }
     // re-render si on a du contenu
-    if((!n.error && n.data && n.data.length) || (!r.error && r.data && r.data.length)){
-      // relance l'affichage avec notes/rapports
+    if((!n.error && n.data && n.data.length) || (!r.error && r.data && r.data.length) || (!d.error && d.data && d.data.length)){
+      // relance l'affichage avec notes/rapports/débriefs
       const cle2 = document.getElementById('cle').value;
       const { data } = await db.rpc('liste_riders', { cle: cle2 });
       if(data) afficherRiders(data);
     }
-  }catch(e){ /* silencieux : notes/rapports optionnels */ }
+  }catch(e){ /* silencieux : notes/rapports/débriefs optionnels */ }
 }
 
 function badgeAcces(r){
@@ -266,6 +269,17 @@ function afficherRiders(riders){
       const who = (n.auteur === 'parent') ? 'Parent' : 'Rider';
       notesBlock += `<div class="${cls}"><span class="rc-who">${who} · mois ${n.mois||'?'}</span>${n.texte}</div>`;
     });
+
+    // débriefs express juste après une compétition (routine tenue, gêne ressentie, confiance /10)
+    const debriefs = debriefsParCode[r.code_acces] || [];
+    let debriefBlock = '';
+    if(debriefs.length){
+      debriefBlock += `<div class="rc-sub">Débriefs de compétition</div>`;
+      debriefs.slice(0,3).forEach(db2=>{
+        debriefBlock += `<div class="rc-line"><span>${dateFr(db2.created_at)}</span><span>Routine tenue : ${db2.routine_tenue||'?'} · Confiance ${db2.confiance!=null?db2.confiance+'/10':'?'}</span></div>`;
+        if(db2.gene){ debriefBlock += `<div class="rc-note"><span class="rc-who">Ce qui l'a gêné</span>${db2.gene}</div>`; }
+      });
+    }
 
     // rapports de ce rider
     const rapports = rapportsParCode[r.code_acces] || [];
@@ -328,6 +342,7 @@ function afficherRiders(riders){
       ${profilBlock}
       ${rituelBlock}
       ${physBlock}
+      ${debriefBlock}
       ${notesBlock}
       ${rapBlock}
     </div>`;

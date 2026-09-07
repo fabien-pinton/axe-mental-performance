@@ -66,6 +66,18 @@ body{
 }
 .axe-sub sup{font-size:6px;vertical-align:super}
 .bar .role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.bar-right{display:flex;align-items:center;gap:16px}
+.vm-bell{display:none;position:relative;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--cream);align-items:center;justify-content:center;font-size:17px;cursor:pointer;border:none;animation:vmPulse 1.6s infinite}
+.vm-bell .vm-dot{position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:#C0392B;border:2px solid var(--cream)}
+@keyframes vmPulse{0%,100%{box-shadow:0 0 0 0 rgba(26,22,18,.35)}50%{box-shadow:0 0 0 9px rgba(26,22,18,0)}}
+.vm-overlay{display:none;position:fixed;inset:0;background:rgba(26,22,18,.55);z-index:200;align-items:center;justify-content:center;padding:20px}
+.vm-overlay.on{display:flex}
+.vm-modal{background:var(--cream);border-radius:6px;padding:32px;max-width:420px;width:100%;text-align:center}
+.vm-modal .vm-ico{font-size:34px;margin-bottom:10px}
+.vm-modal h3{font-family:'Bebas Neue';font-size:24px;letter-spacing:.03em;margin-bottom:6px}
+.vm-modal p{font-size:14px;color:var(--dim);margin-bottom:20px}
+.vm-modal audio{width:100%;margin-bottom:20px}
+.vm-modal button{width:100%;padding:14px;border:none;border-radius:5px;background:var(--ink);color:var(--cream);font-family:'DM Sans';font-weight:600;font-size:14px;cursor:pointer}
 
 /* ---------- generic ---------- */
 .eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:600}
@@ -434,7 +446,20 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <div class="axe-sub">MENTAL PERFORMANCE<sup>®</sup></div>
     </div>
   </div>
-  <div class="role" id="roleTag">Espace pilote</div>
+  <div class="bar-right">
+    <button class="vm-bell" id="vmBell" onclick="ouvrirMessageVocal()" title="Message de ton coach"><span id="vmDot" style="display:none" class="vm-dot"></span>🎙️</button>
+    <div class="role" id="roleTag">Espace pilote</div>
+  </div>
+</div>
+
+<div class="vm-overlay" id="vmOverlay">
+  <div class="vm-modal">
+    <div class="vm-ico">🎙️</div>
+    <h3>Message de ton coach</h3>
+    <p>Comme sur un répondeur — écoute-le tranquillement.</p>
+    <audio id="vmAudio" controls></audio>
+    <button onclick="fermerMessageVocal()">Fermer</button>
+  </div>
 </div>
 
 <div class="stepper" id="stepper"></div>
@@ -767,7 +792,51 @@ async function axeInit(){
     } else {
       console.log('[AXE] Code inconnu.');
     }
+    axeVerifierMessagesVocaux();
   }catch(e){ console.log('[AXE] Souci connexion :', e.message); }
+}
+
+// ===== MESSAGE VOCAL DU COACH (comme un répondeur) =====
+// file d'attente des messages non écoutés, du plus récent au plus ancien
+let axeMessagesVocaux = [];
+async function axeVerifierMessagesVocaux(){
+  if(!axeCode) return;
+  try{
+    const { data, error } = await axeDB.rpc('recuperer_messages_vocaux', { code_p: axeCode });
+    if(error){ console.log('[AXE] Erreur messages vocaux :', error.message); return; }
+    axeMessagesVocaux = (data || []).filter(m=>!m.lu);
+    const bell = document.getElementById('vmBell');
+    const dot = document.getElementById('vmDot');
+    if(!bell) return;
+    if(axeMessagesVocaux.length){
+      bell.style.display = 'flex';
+      dot.style.display = 'block';
+    } else {
+      bell.style.display = 'none';
+    }
+  }catch(e){ console.log('[AXE] Souci messages vocaux :', e.message); }
+}
+function ouvrirMessageVocal(){
+  if(!axeMessagesVocaux.length) return;
+  const m = axeMessagesVocaux[0];
+  document.getElementById('vmAudio').src = m.url_audio;
+  document.getElementById('vmOverlay').classList.add('on');
+  if(axeCode){
+    axeDB.rpc('marquer_message_vocal_lu', { id_p: m.id, code_p: axeCode }).then(()=>{}).catch(()=>{});
+  }
+}
+function fermerMessageVocal(){
+  document.getElementById('vmOverlay').classList.remove('on');
+  const audio = document.getElementById('vmAudio');
+  audio.pause();
+  // on retire le message écouté de la file, et on met à jour la pastille pour les suivants
+  axeMessagesVocaux.shift();
+  const bell = document.getElementById('vmBell');
+  const dot = document.getElementById('vmDot');
+  if(bell){
+    if(axeMessagesVocaux.length){ dot.style.display='block'; }
+    else { bell.style.display='none'; }
+  }
 }
 
 // Un profil enregistré avant le passage au diagnostic à 24 questions garde ses réponses sous
