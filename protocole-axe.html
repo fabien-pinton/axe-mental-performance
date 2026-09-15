@@ -3108,7 +3108,7 @@ function renderWeek(started){
   // plus de séances affichées que de jours d'entraînement qui tombent vraiment dedans.
   n = joursSem.length;
   document.getElementById('physCount').textContent = n>0
-    ? (n+' exercices · '+wp.tag.toLowerCase())
+    ? (n+' exercice'+(n>1?'s':'')+' · '+wp.tag.toLowerCase())
     : 'Pas de séance cette semaine (le mois démarre en cours de semaine)';
   const pool=state.gym?physPool.gym:physPool.home;
   // le cycle de séances avance chaque mois (aucune répétition figée sur un abonnement long),
