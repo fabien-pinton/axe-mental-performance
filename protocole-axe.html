@@ -2020,12 +2020,25 @@ const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['
   paymentOk:true,       // info de paiement reçue (simulée)
   reportDone:false,     // le rapport du mois a-t-il été rempli
 };
-const weekProgress=[
-  {tag:"Mise en route",note:"Semaine d'installation. On pose les bases, on soigne l'exécution avant la charge."},
-  {tag:"Montée en charge",note:"On ajoute une série et on raccourcit un peu les repos. Le corps encaisse plus."},
-  {tag:"Pic du mois",note:"Semaine la plus exigeante. Intensité maximale, c'est là que tu progresses le plus."},
-  {tag:"Relâchement",note:"On lève le pied pour absorber le travail. Volume réduit, récupération active."},
-];
+// Phases d'entraînement par semaine RÉELLE du mois (et non par index fixe 1 à 4) : les 3
+// premières semaines suivent toujours la même progression (mise en route → montée en charge →
+// pic), la TOUTE DERNIÈRE semaine réelle du mois est toujours la semaine de relâchement (c'est
+// elle qui ouvre le bilan mensuel, quel que soit son numéro). La plupart des mois comptent 4
+// semaines réelles, mais quand le 1er du mois tombe un jour tel que la dernière semaine
+// calendaire déborde sur une semaine civile de plus (ex. septembre 2026, où le lundi 28
+// appartient à une semaine à part entière), une ou plusieurs semaines de "Maintien"
+// s'intercalent entre le pic et le relâchement, à charge constante (ni montée, ni descente).
+const PHASES = {
+  1:{tag:"Mise en route",note:"Semaine d'installation. On pose les bases, on soigne l'exécution avant la charge."},
+  2:{tag:"Montée en charge",note:"On ajoute une série et on raccourcit un peu les repos. Le corps encaisse plus."},
+  3:{tag:"Pic du mois",note:"Semaine la plus exigeante. Intensité maximale, c'est là que tu progresses le plus."},
+  maintien:{tag:"Maintien",note:"On tient l'intensité du pic, sans la faire encore monter : le corps consolide avant de lever le pied."},
+  relachement:{tag:"Relâchement",note:"On lève le pied pour absorber le travail. Volume réduit, récupération active."},
+};
+function phaseOfWeek(w, total){
+  if(w>=total) return PHASES.relachement; // toujours la toute dernière semaine réelle du mois
+  return PHASES[w] || PHASES.maintien;    // semaines 1 à 3 : progression fixe ; au-delà : maintien
+}
 
 /* ============ LOGIQUE DE DATES ET VERROUS ============ */
 function firstOfNextMonth(d){
@@ -2033,36 +2046,68 @@ function firstOfNextMonth(d){
 }
 function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
 function fmtDate(d){return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long'});}
-// date d'ouverture de la semaine w (1 à 4) du mois en cours, calée sur le vrai calendrier
-// (lundi à dimanche) et pas sur un simple compte de 7 jours depuis le 1er : si le mois
-// démarre un mardi par exemple, la semaine 1 ne dure que jusqu'au dimanche suivant (6
-// jours), et la semaine 2 démarre bien le lundi d'après — jamais 7 jours pile après le 1er.
-function weekOpenDate(w){
-  if(w<=1) return new Date(state.startDate);
-  const dow = state.startDate.getDay(); // 0=dimanche ... 1=lundi ... 6=samedi
+// date d'ouverture de la semaine w (1, 2, 3, ... — pas de plafond fixe) du mois en cours,
+// calée sur le vrai calendrier (lundi à dimanche) et pas sur un simple compte de 7 jours
+// depuis le 1er : si le mois démarre un mardi par exemple, la semaine 1 ne dure que jusqu'au
+// dimanche suivant (6 jours), et la semaine 2 démarre bien le lundi d'après — jamais 7 jours
+// pile après le 1er. Les semaines 2, 3, 4, 5... s'enchaînent ensuite de lundi en lundi.
+// version générique : date d'ouverture de la semaine w pour un mois qui démarre le "debut"
+// donné (sert aussi à recalculer les mois passés, ex. le calcul de la série de semaines).
+function weekOpenDateFrom(debut, w){
+  if(w<=1) return new Date(debut);
+  const dow = debut.getDay(); // 0=dimanche ... 1=lundi ... 6=samedi
   const joursAvantSemaine2 = ((8 - dow) % 7) || 7;
-  const debutS2 = addDays(state.startDate, joursAvantSemaine2);
-  if(w===2) return debutS2;
-  const debutS3 = addDays(debutS2, 7);
-  if(w===3) return debutS3;
-  return addDays(debutS3, 7); // semaine 4
+  return addDays(debut, joursAvantSemaine2 + (w-2)*7);
+}
+function weekOpenDate(w){
+  return weekOpenDateFrom(state.startDate, w);
 }
 function isWeekUnlocked(w){
   if(!state.simDate||!state.startDate)return false;
   return state.simDate>=weekOpenDate(w);
 }
-// pour un vrai pilote : quelle semaine (1 à 4) correspond à la vraie date du jour, selon
-// le même découpage calendaire que weekOpenDate. La semaine 4 absorbe le reste du mois
-// (jusqu'à 10 jours selon les mois), exactement comme les onglets qui se déverrouillent
-// progressivement en démo.
+// dernier jour du mois où démarre le programme en cours (state.startDate est toujours le 1er
+// de ce mois — voir buildProgram/rollover de mois plus bas).
+function finDeMois(d){
+  return new Date(d.getFullYear(), d.getMonth()+1, 0);
+}
+// nombre réel de semaines d'un mois qui démarre le "debut" donné : 4 la plupart du temps,
+// parfois 5 (et exceptionnellement 6) selon le jour de semaine sur lequel tombe le 1er — la
+// dernière semaine est toujours celle qui contient le dernier jour du mois, jamais une semaine
+// tronquée ni une semaine de 10 jours qui engloberait un lundi en trop (ex. le 28 septembre 2026).
+function nbSemainesPour(debut){
+  if(!debut) return 4;
+  const fin = finDeMois(debut);
+  let w=1;
+  while(weekOpenDateFrom(debut, w+1) <= fin){ w++; }
+  return w;
+}
+// nombre réel d'onglets "SEM x" à afficher pour le mois en cours.
+function nbSemainesMois(){
+  return nbSemainesPour(state.startDate);
+}
+// 1er du mois du mois de programme numéro "moisProg" (state.startDate est le 1er du mois de
+// programme state.month : on décale d'autant de mois qu'il faut pour remonter ou avancer).
+function debutDuMoisProg(moisProg){
+  if(!state.startDate) return null;
+  return new Date(state.startDate.getFullYear(), state.startDate.getMonth() + (moisProg - state.month), 1);
+}
+// nombre réel de semaines d'un mois de programme donné (utile pour remonter dans les mois passés).
+function nbSemainesDuMoisProg(moisProg){
+  const d = debutDuMoisProg(moisProg);
+  return d ? nbSemainesPour(d) : 4;
+}
+// pour un vrai pilote : quelle semaine correspond à la vraie date du jour, selon le même
+// découpage calendaire que weekOpenDate — jusqu'à la toute dernière semaine réelle du mois
+// (nbSemainesMois), jamais figée à 4.
 function computeAutoWeek(){
   if(!state.startDate) return 1;
   const maintenant = new Date();
   if(maintenant < state.startDate) return 1; // pas encore démarré
-  if(maintenant < weekOpenDate(2)) return 1;
-  if(maintenant < weekOpenDate(3)) return 2;
-  if(maintenant < weekOpenDate(4)) return 3;
-  return 4;
+  const total = nbSemainesMois();
+  let w=1;
+  while(w<total && maintenant>=weekOpenDate(w+1)){ w++; }
+  return w;
 }
 // le programme a-t-il réellement démarré ? (même règle que dans buildProgram, mais réutilisable
 // ailleurs, notamment pour verrouiller l'accès au rapport mensuel tant qu'on n'y est pas)
@@ -2070,16 +2115,39 @@ function estDemarre(){
   const maintenant=new Date();
   return modeDemo ? (state.simDate>=state.startDate) : (!state.startDate || maintenant>=state.startDate);
 }
-// le bilan de fin de mois ("rapport mensuel") n'est ouvert qu'à partir de la dernière
-// semaine du mois (semaine 4), et seulement tant qu'il n'a déjà été envoyé ce mois-ci —
-// jamais avant, jamais après (jusqu'à la validation).
-function rapportOuvert(){
-  return estDemarre() && state.week===4 && !state.reportDone;
+// date de référence : la vraie date du jour pour un pilote réel, la date simulée en démo locale.
+function dateRef(){
+  return modeDemo ? state.simDate : new Date();
 }
-// le bilan des 3 mois ("mon évolution") n'est ouvert qu'en dernière semaine (semaine 4)
-// d'un mois multiple de 3 (mois 3, 6, 9, 12...), et se répète ainsi tous les 3 mois.
+// date à laquelle le bilan du mois s'ouvre : 7 derniers jours du mois, toujours.
+// (On ne l'accroche PAS au dernier onglet de semaine : selon le calendrier, cette dernière
+// semaine peut ne durer qu'un ou deux jours — ex. le 30 novembre 2026 ou le 31 mai 2027 —
+// ce qui laisserait une fenêtre bien trop courte pour envoyer son bilan.)
+function dateOuvertureBilan(){
+  if(!state.startDate) return null;
+  return addDays(finDeMois(state.startDate), -6);
+}
+// sommes-nous dans la fenêtre du bilan ? Ouverte sur les 7 derniers jours du mois, et elle ne
+// se referme pas toute seule ensuite : si le mois suivant tarde à s'ouvrir côté serveur (bilan
+// ou paiement en attente), le pilote doit toujours pouvoir envoyer son bilan, jamais se retrouver
+// coincé avec un bouton disparu.
+function fenetreBilanOuverte(){
+  const ouverture = dateOuvertureBilan();
+  const ref = dateRef();
+  if(!ouverture || !ref) return false;
+  const jour = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate());
+  const seuil = new Date(ouverture.getFullYear(), ouverture.getMonth(), ouverture.getDate());
+  return jour >= seuil;
+}
+// le bilan de fin de mois ("rapport mensuel") n'est ouvert que dans cette fenêtre, et seulement
+// tant qu'il n'a pas déjà été envoyé ce mois-ci.
+function rapportOuvert(){
+  return estDemarre() && fenetreBilanOuverte() && !state.reportDone;
+}
+// le bilan des 3 mois ("mon évolution") suit la même fenêtre, mais uniquement sur un mois
+// multiple de 3 (mois 3, 6, 9, 12...), et se répète ainsi tous les 3 mois.
 function trimestreOuvert(){
-  return estDemarre() && (state.month%3===0) && state.week===4;
+  return estDemarre() && (state.month%3===0) && fenetreBilanOuverte();
 }
 // prochain mois où le bilan des 3 mois s'ouvrira (le mois en cours si c'est déjà un
 // multiple de 3, sinon le prochain multiple de 3)
@@ -2114,8 +2182,8 @@ function go(id){
   // jusqu'à son envoi — jamais avant, jamais après — même via un accès direct (ex : le petit
   // menu à points sur le côté). En mode démo, on laisse passer pour pouvoir tester.
   if(id==='report' && !modeDemo && !rapportOuvert()){ id='dash'; }
-  // verrou : le bilan des 3 mois n'est ouvert qu'en semaine 4 d'un mois multiple de 3 —
-  // même via un accès direct. En mode démo, on laisse passer pour pouvoir tester.
+  // verrou : le bilan des 3 mois n'est ouvert que sur les 7 derniers jours d'un mois multiple
+  // de 3 — même via un accès direct. En mode démo, on laisse passer pour pouvoir tester.
   if(id==='trimestre' && !modeDemo && !trimestreOuvert()){ id='dash'; }
   // en quittant la fiche profil vers le diagnostic, on mémorise le prénom et les contacts
   if(id==='diag'){
@@ -2719,7 +2787,9 @@ function calculStreakSemaines(){
     if(!s || !(s.done>0)) break;
     streak++;
     w--;
-    if(w<1){ w=4; m--; }
+    // en remontant d'un mois, on repart de la DERNIÈRE semaine réelle de ce mois-là (4, 5 ou 6
+    // selon son calendrier), sinon on sauterait une semaine validée et la série casserait à tort.
+    if(w<1){ m--; if(m<1) break; w = nbSemainesDuMoisProg(m); }
   }
   return streak;
 }
@@ -2950,7 +3020,8 @@ function buildProgram(){
   // réellement démarré (started) : pas de verrou semaine par semaine côté réel.
   const tabs=document.getElementById('weekTabs');
   tabs.innerHTML='';
-  for(let w=1;w<=4;w++){
+  const totalSem = nbSemainesMois();
+  for(let w=1;w<=totalSem;w++){
     const unlocked = modeDemo ? isWeekUnlocked(w) : started;
     const b=document.createElement('button');
     b.className='week-tab'+(w===state.week?' on':'')+(unlocked?'':' locked');
@@ -2962,10 +3033,10 @@ function buildProgram(){
   // si la semaine courante n'est pas déverrouillée, on se cale sur la dernière ouverte (démo uniquement)
   if(modeDemo && !isWeekUnlocked(state.week)){
     let last=1;
-    for(let w=1;w<=4;w++){if(isWeekUnlocked(w))last=w;}
+    for(let w=1;w<=totalSem;w++){if(isWeekUnlocked(w))last=w;}
     state.week=last;
   }
-  document.getElementById('weekNote').textContent = started?weekProgress[state.week-1].note:'';
+  document.getElementById('weekNote').textContent = started?phaseOfWeek(state.week,totalSem).note:'';
   document.getElementById('monthPill').textContent='MOIS '+state.month+' · SEMAINE '+state.week;
   // bannière : d'où vient ce mois
   const ob=document.getElementById('originBanner');
@@ -2977,23 +3048,23 @@ function buildProgram(){
   }else{
     ob.style.display='none';
   }
-  // le bilan de fin de mois n'est ouvert qu'à partir de la dernière semaine du mois
-  // (semaine 4), et seulement jusqu'à ce qu'il soit envoyé — pas avant, pas après.
+  // le bilan de fin de mois n'est ouvert que sur les 7 derniers jours du mois, et seulement
+  // jusqu'à ce qu'il soit envoyé.
   const cta=document.getElementById('reportCta');
   if(!started){
     cta.style.display='none';
   }else if(state.reportDone){
     cta.style.display='block';
-    cta.innerHTML='<p class="serif" style="font-size:18px;font-style:italic;color:var(--dim)">Ton rapport de ce mois est bien envoyé. Rendez-vous en semaine 4 du mois prochain pour le suivant.</p>';
+    cta.innerHTML='<p class="serif" style="font-size:18px;font-style:italic;color:var(--dim)">Ton rapport de ce mois est bien envoyé. Rendez-vous dans les 7 derniers jours du mois prochain pour le suivant.</p>';
   }else if(rapportOuvert()){
     cta.style.display='block';
     cta.innerHTML='<p class="serif" style="font-size:20px;font-style:italic;color:var(--dim);margin-bottom:18px">Fin du mois ? C\'est l\'heure du bilan.</p><button class="btn gold" onclick="go(\'report\')">Faire mon rapport mensuel</button>';
   }else{
     cta.style.display='block';
-    cta.innerHTML='<p class="serif" style="font-size:18px;font-style:italic;color:var(--dim)">Ton bilan de fin de mois s\'ouvrira en semaine 4, le '+fmtDate(weekOpenDate(4))+'.</p>';
+    cta.innerHTML='<p class="serif" style="font-size:18px;font-style:italic;color:var(--dim)">Ton bilan de fin de mois s\'ouvrira le '+fmtDate(dateOuvertureBilan())+'.</p>';
   }
-  // le bilan des 3 mois ("mon évolution") n'est proposé qu'en semaine 4 d'un mois multiple
-  // de 3 (mois 3, 6, 9, 12...) — jamais avant, jamais en dehors de cette fenêtre.
+  // le bilan des 3 mois ("mon évolution") n'est proposé que sur les 7 derniers jours d'un mois
+  // multiple de 3 (mois 3, 6, 9, 12...) — jamais avant, jamais en dehors de cette fenêtre.
   const trimCta=document.getElementById('trimCta');
   if(!started){
     trimCta.style.display='none';
@@ -3002,7 +3073,7 @@ function buildProgram(){
     trimCta.innerHTML='<button class="act-btn" onclick="go(\'trimestre\')" style="display:inline-flex;max-width:420px;margin:0 auto"><span class="ab-ico">📈</span><span><b>Mon bilan des 3 mois</b><small>Trois mois de travail, vus d\'un coup</small></span></button>';
   }else{
     trimCta.style.display='block';
-    trimCta.innerHTML='<p class="serif" style="font-size:15px;font-style:italic;color:var(--dim)">Ton bilan des 3 mois s\'ouvrira en semaine 4 du mois '+prochainBilanTrimestriel()+'.</p>';
+    trimCta.innerHTML='<p class="serif" style="font-size:15px;font-style:italic;color:var(--dim)">Ton bilan des 3 mois s\'ouvrira dans les 7 derniers jours du mois '+prochainBilanTrimestriel()+'.</p>';
   }
   renderWeek(started);
 }
@@ -3022,14 +3093,16 @@ function renderWeek(started){
     if(feuLock) feuLock.innerHTML='';
     return;
   }
-  const wp=weekProgress[state.week-1];
+  const totalSem = nbSemainesMois();
+  const isRelache = state.week>=totalSem; // toujours la toute dernière semaine réelle du mois
+  const wp=phaseOfWeek(state.week,totalSem);
   // mental : 1 exercice, s'approfondit selon la semaine
   const m={...pickMental()};
   m.desc = m.desc + ' Cette semaine : '+wp.tag.toLowerCase()+'.';
   document.getElementById('mentalCol').innerHTML=exCard(m,true,'m0');
   // physique
   let n=physSessions();
-  if(state.week===4)n=Math.max(1,n-1); // semaine de relâchement : une séance en moins
+  if(isRelache)n=Math.max(1,n-1); // semaine de relâchement : une séance en moins
   let joursSem=joursSeance().slice(0,n);
   // la semaine 1 peut être incomplète (le mois ne démarre pas forcément un lundi) : jamais
   // plus de séances affichées que de jours d'entraînement qui tombent vraiment dedans.
@@ -3061,15 +3134,18 @@ function renderWeek(started){
     // poids ajusté selon âge et niveau (salle uniquement)
     if(p.moves)p.moves.forEach(mv=>{if(mv.poids)mv.poids=adjustWeight(mv.poids);});
     // progression d'intensité sur le mois : le nombre de séries du bloc ET celui de
-    // chaque exercice qui le compose montent (ou redescendent en semaine 4) ensemble,
+    // chaque exercice qui le compose montent (ou redescendent en toute dernière semaine, la
+    // semaine de relâchement) ensemble,
     // pour que l'affichage du bloc corresponde toujours à ce qui est écrit exercice par
     // exercice (avant ce correctif, seul le total du bloc bougeait, pas le détail).
-    let bump = state.week===2?1 : state.week===3?2 : 0;
+    // semaine 1 : base · semaine 2 : +1 · semaine 3 (pic) et semaines de maintien : +2,
+    // à charge constante · toute dernière semaine réelle (relâchement) : -1.
+    let bump = state.week===2?1 : (state.week>=3 && !isRelache)?2 : 0;
     if(state.level==='National')bump+=1;
     const ajusteSeries = txt => {
       let t = txt;
       if(bump>0) t = t.replace(/\d+/, x=>+x+bump);
-      if(state.week===4) t = t.replace(/\d+/, x=>Math.max(2,+x-1));
+      if(isRelache) t = t.replace(/\d+/, x=>Math.max(2,+x-1));
       return t;
     };
     p.series = ajusteSeries(p.series);
