@@ -487,14 +487,14 @@ textarea:focus{outline:none;border-color:var(--gold)}
 <!-- ============ HERO ============ -->
 <section class="screen on" id="hero">
   <div class="hero">
-    <div class="eyebrow">Préparation mentale &amp; physique · BMX Race</div>
-    <h1>
+    <div class="eyebrow" id="heroEyebrow">Préparation mentale &amp; physique · BMX Race</div>
+    <h1 id="heroTitle">
       <div>ROULE AVEC</div>
       <div class="line2">UNE LONGUEUR</div>
       <div>D'AVANCE</div>
     </h1>
-    <p class="lead">Un programme qui apprend de toi, manche après manche.</p>
-    <p class="sub">Chaque mois, ton coach lit ton ressenti et réadapte ton pilotage mental et ta prépa physique. Rien n'est figé. Tout avance en spirale, comme toi sur la piste.</p>
+    <p class="lead" id="heroLead">Un programme qui apprend de toi, manche après manche.</p>
+    <p class="sub" id="heroSub">Chaque mois, ton coach lit ton ressenti et réadapte ton pilotage mental et ta prépa physique. Rien n'est figé. Tout avance en spirale, comme toi sur la piste.</p>
     <div class="pillars">
       <div class="pillar"><b>A</b><span>Alignement</span></div>
       <div class="pillar"><b>X</b><span>eXigence</span></div>
@@ -534,7 +534,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
 <section class="screen" id="profil">
   <div class="diag">
     <div class="sec-head">
-      <div class="step-tag">ÉTAPE 1 · TA FICHE PILOTE</div>
+      <div class="step-tag" id="ficheStepTag">ÉTAPE 1 · TA FICHE PILOTE</div>
       <h1>TON CADRE</h1>
       <div class="serif">Pour caler le bon volume, sans jamais te surcharger.</div>
     </div>
@@ -546,7 +546,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <div class="field">
         <label>Ton âge</label>
         <div style="display:flex;align-items:center;gap:20px">
-          <input type="range" min="10" max="18" value="13" id="ageR" oninput="ageOut()">
+          <input type="range" min="10" max="70" value="13" id="ageR" oninput="ageOut()">
           <span class="rangeval" id="ageV">13</span>
         </div>
       </div>
@@ -568,7 +568,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
         <label>Téléphone du rider</label>
         <input type="tel" class="txt" id="phoneRider" placeholder="06 00 00 00 00" inputmode="tel">
       </div>
-      <div class="field">
+      <div class="field" id="fieldPhoneParent">
         <label>Téléphone des parents</label>
         <input type="tel" class="txt" id="phoneParent" placeholder="06 00 00 00 00" inputmode="tel">
       </div>
@@ -625,9 +625,9 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="crosscrawl" id="crossCrawl" style="display:none"></div>
 
     <div class="action-bar" style="margin-top:22px;margin-bottom:34px">
-      <button class="act-btn jourj" onclick="go('jourj')" style="grid-column:1/-1"><span class="ab-ico">🏆</span><span><b>JOUR DE COURSE</b><small>Le matin d'une course : uniquement l'essentiel, rien d'autre à lire</small></span></button>
+      <button class="act-btn jourj" onclick="go('jourj')" style="grid-column:1/-1"><span class="ab-ico">🏆</span><span><b id="btnJourjTitle">JOUR DE COURSE</b><small id="btnJourjSub">Le matin d'une course : uniquement l'essentiel, rien d'autre à lire</small></span></button>
       <button class="act-btn start" onclick="go('start')"><span class="ab-ico">🚀</span><span><b>Devenir un boss du start</b><small>Mes jeux express, sans effort en plus</small></span></button>
-      <button class="act-btn comp" onclick="go('debrief')"><span class="ab-ico">🎤</span><span><b>Débrief express</b><small>Juste après une course, 30 secondes</small></span></button>
+      <button class="act-btn comp" onclick="go('debrief')"><span class="ab-ico">🎤</span><span><b>Débrief express</b><small id="btnDebriefSub">Juste après une course, 30 secondes</small></span></button>
     </div>
 
     <div class="sim-panel" id="simPanel"></div>
@@ -649,7 +649,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
       </div>
     </div>
 
-    <div class="parent-zone">
+    <div class="parent-zone" id="parentZone">
       <div class="col-head"><span class="dot pa"></span><h2>Côté parent</h2><small>1 clé d'accompagnement / mois</small></div>
       <p class="parent-intro serif">Ton rôle compte autant que l'entraînement. Voici comment épauler ton enfant ce mois-ci, sans mettre de pression.</p>
       <div id="feuTricolore"></div>
@@ -678,7 +678,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="sec-head">
       <div class="step-tag">PROTOCOLE SPÉCIAL</div>
       <h1>SEMAINE DE COMPÉTITION</h1>
-      <div class="serif">La routine qui te met en condition, du lundi jusqu'à la gate.</div>
+      <div class="serif" id="compSerif">La routine qui te met en condition, du lundi jusqu'à la gate.</div>
     </div>
     <div id="compContent"></div>
     <div style="text-align:center;margin-top:34px"><button class="btn ghost" onclick="go('dash')">← Retour au programme</button></div>
@@ -690,7 +690,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
   <div class="dash">
     <div class="sec-head">
       <div class="step-tag">CE MATIN</div>
-      <h1>JOUR DE COURSE</h1>
+      <h1 id="jourjH1">JOUR DE COURSE</h1>
       <div class="serif">Rien d'autre à lire. Juste ta routine de départ et ton astuce du jour.</div>
     </div>
     <div id="jourjContent"></div>
@@ -702,8 +702,8 @@ textarea:focus{outline:none;border-color:var(--gold)}
 <section class="screen" id="start">
   <div class="dash">
     <div class="sec-head">
-      <div class="step-tag">MON LABO DU START</div>
-      <h1>BOSS DU START</h1>
+      <div class="step-tag" id="startStepTag">MON LABO DU START</div>
+      <h1 id="startH1">BOSS DU START</h1>
       <div class="serif">Personne ne part mieux que toi. On travaille ça sans une minute d'effort en plus, juste des micro-jeux malins.</div>
     </div>
     <div class="start-promise">
@@ -732,7 +732,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
 <section class="screen" id="debrief">
   <div class="report">
     <div class="sec-head">
-      <div class="step-tag">JUSTE APRÈS LA COURSE</div>
+      <div class="step-tag" id="debriefStepTag">JUSTE APRÈS LA COURSE</div>
       <h1>DÉBRIEF EXPRESS</h1>
       <div class="serif">30 secondes, à chaud. C'est plus fiable qu'un souvenir reconstruit dans un mois.</div>
     </div>
@@ -796,11 +796,11 @@ textarea:focus{outline:none;border-color:var(--gold)}
 
     <div class="rq">
       <p>Sur quel moment tu as senti le plus de blocage ?</p>
-      <div class="scale" data-q="bloc" style="flex-wrap:wrap">
+      <div class="scale" data-q="bloc" id="blocOptions" style="flex-wrap:wrap">
         <button onclick="rScale(this,'bloc','Sur la gate')">Sur la gate</button>
-        <button onclick="rScale(this,'bloc','Dans la première ligne droite')">1re ligne droite</button>
-        <button onclick="rScale(this,'bloc','Dans les virages')">Les virages</button>
-        <button onclick="rScale(this,'bloc','Sur les bosses')">Les bosses</button>
+        <button onclick="rScale(this,'bloc','1re ligne droite')">1re ligne droite</button>
+        <button onclick="rScale(this,'bloc','Les virages')">Les virages</button>
+        <button onclick="rScale(this,'bloc','Les bosses')">Les bosses</button>
       </div>
     </div>
 
@@ -856,6 +856,13 @@ async function axeInit(){
       const r = data[0];
       console.log('[AXE] Rider connecté. Accès actif :', r.actif, '| étape :', axeEtape, '| mois :', r.mois, '| début du mois :', r.date_debut_mois);
       window.axeRider = r;
+      // sport déclaré par le client (offre sur-mesure, tout sport) : adapte tout le contenu
+      // texte (diagnostic, exercices, semaine de compétition, module start...) à sa discipline.
+      // Anciens comptes sans "sport" en base (BMX historique) : sportKey('') retombe sur 'bmx',
+      // rien ne change pour eux.
+      state.sport = sportKey(r.sport);
+      rebuildSportContent();
+      applySportBranding();
       // rituel des 21 jours, cinéma du start, rituel d'avant-départ, carnet des starts :
       // rechargés depuis Supabase pour survivre à un changement d'appareil ou un rafraîchissement.
       if(r.suivi_rituel && typeof r.suivi_rituel === 'object'){
@@ -892,6 +899,10 @@ async function axeInit(){
       // Si le rider revient à son programme ET qu'un profil est enregistré : on le recharge
       if(axeEtape === 'programme' && r.profil){
         axeChargerProfil(r);
+        // l'âge réel du rider n'est connu qu'après le chargement du profil ci-dessus : on
+        // reconstruit les contenus dépendants de l'âge (questions, exercices mentaux) avec
+        // la bonne tranche, sinon un rider adulte garderait les contenus de l'âge par défaut.
+        rebuildSportContent();
       }
     } else {
       console.log('[AXE] Code inconnu.');
@@ -1135,71 +1146,507 @@ async function axeEnregistrerDiagnostic(){
 // (les réponses sont enregistrées par id, plus par position, pour rester fiables même si l'ordre change).
 // Mental et physique : chaque question porte un "tags" = une catégorie par option. Le profil final
 // se construit en cumulant les réponses sur les 9 questions de l'axe, pas sur une seule question.
-const diagQuestions=[
+/* ============ SPORT (contenu sur-mesure, tout sport) ============
+   Le protocole a été conçu pour le BMX Race, puis ouvert à tout sport. Plutôt que de dupliquer
+   toute la page par sport, chaque texte sensible au sport passe par un "jeton" pris dans
+   SPORT_LEXICON, choisi via le sport déclaré par le client (colonne "sport" dans Supabase).
+   - Un pilote BMX qui n'a pas encore de "sport" en base (comptes déjà inscrits) retombe sur
+     'bmx' : AUCUN changement de texte pour les abonnés déjà inscrits.
+   - Champs "Cap" volontairement omis : on écrit les jetons directement dans la casse voulue au
+     point d'usage (voir Cap() plus bas pour les rares cas où il faut capitaliser dynamiquement). */
+const SPORT_LEXICON = {
+  bmx:{
+    nom:"BMX Race", verbeHero:"ROULE AVEC",
+    lieu:"la piste", unite:"manche", uniteArt:"la manche", uniteIndef:"une manche",
+    uniteSuivante:"la manche suivante", uniteDecisive:"une manche décisive", uniteMauvaise:"une mauvaise manche",
+    uniteApresUnite:"manche après manche", jourApresJour:"course après course",
+    jourMot:"course", jourMotPluriel:"courses", uniteJournal:"Course",
+    auDepart:"sur la gate", auDepartCap:"Sur la gate",
+    justeAvantDepart:"Juste avant que la gate ne tombe",
+    lieuInconnu:"En arrivant sur une piste que tu ne connais pas",
+    pairs:"les autres pilotes", pairsQuiConnaissent:"les pilotes qui la connaissent",
+    revers:"Après une chute à l'entraînement",
+    gesteRisque:"J'appréhende de reprendre la même figure ou le même virage",
+    plateauDepart:"Quand tu regardes le plateau de départ d'une course importante",
+    pretVerbe:"prêt à courir", grosseCompet:"une grosse course", delaCompet:"de la course",
+    erreursPrecedentes:"mes erreurs des courses précédentes", avantCompet:"avant la course",
+    verbePratique:"rouler",
+    ambianceSonore:"Les sons : bruits de vélo, cris, annonces",
+    gateNom:"la gate", jusquauDepart:"jusqu'à la gate", portiqueEtPairs:"le bruit du portique et les autres pilotes à côté de toi",
+    pousseeMot:"la poussée",
+    signalSonore:"le bruit du signal de départ (la gate)", signalVisuel:"les feux de la gate",
+    lieuDepartCourt:"la gate",
+    bossTitre:"BOSS DU START", roleMot:"pilote",
+    clacSon:'le "clac" de la grille, ou un mot claqué', imageVisu:"la grille qui tombe, ta roue qui jaillit",
+    imgStep1:"Tu es sur la grille, calme. Tu sens tes mains sur le guidon.",
+    imgStep2:"Le signal tombe. Tu pars pile au bon moment, explosif et net.",
+    imgStep3:"Tu prends la première ligne droite en tête. Tu ressens la vitesse.",
+    gesteEx:"serrer le guidon 2 fois, souffler fort...",
+    jourAvantDepart:"Le jour de course, dans les 20 secondes avant la gate :",
+    surLieu:"sur la gate",
+    aprèsCompet:"Après une course", joursDeCompet:"les jours où tu roules",
+    blocOptions:["Sur la gate","1re ligne droite","Les virages","Les bosses"],
+    // ---- jetons physiques (ajoutés pour le protocole complet mental + physique) ----
+    auDepartCourt:"au départ", auDemarrageCourt:"au démarrage",
+    stabiliteContexte:"sur les bosses",
+    phasesIntenses:"les bosses (rythm section)",
+    sortieAction:"en sortie de virage", virageMot:"les virages",
+    hautCorpsPhrase:"le guidon dans les bosses",
+    tourMot:"un tour complet", jarreteMot:"j'arrête le BMX",
+    debriefStepTag:"JUSTE APRÈS LA COURSE",
+  },
+  motocross:{
+    nom:"Motocross", verbeHero:"ROULE AVEC",
+    lieu:"la piste", unite:"manche", uniteArt:"la manche", uniteIndef:"une manche",
+    uniteSuivante:"la manche suivante", uniteDecisive:"une manche décisive", uniteMauvaise:"une mauvaise manche",
+    uniteApresUnite:"manche après manche", jourApresJour:"course après course",
+    jourMot:"course", jourMotPluriel:"courses", uniteJournal:"Course",
+    auDepart:"sur la grille de départ", auDepartCap:"Sur la grille de départ",
+    justeAvantDepart:"Juste avant que la grille ne se baisse",
+    lieuInconnu:"En arrivant sur une piste que tu ne connais pas",
+    pairs:"les autres pilotes", pairsQuiConnaissent:"les pilotes qui la connaissent",
+    revers:"Après une chute à l'entraînement",
+    gesteRisque:"J'appréhende de reprendre le même saut ou le même virage",
+    plateauDepart:"Quand tu regardes le plateau de départ d'une course importante",
+    pretVerbe:"prêt à courir", grosseCompet:"une grosse course", delaCompet:"de la course",
+    erreursPrecedentes:"mes erreurs des courses précédentes", avantCompet:"avant la course",
+    verbePratique:"rouler",
+    ambianceSonore:"Les sons : bruits de moteurs, cris, annonces",
+    gateNom:"la grille de départ", jusquauDepart:"jusqu'à la grille de départ", portiqueEtPairs:"le bruit des moteurs qui chauffent et les autres pilotes à côté de toi",
+    pousseeMot:"l'accélération",
+    signalSonore:"le bruit du signal de départ (la grille)", signalVisuel:"les feux ou le drapeau du départ",
+    lieuDepartCourt:"la grille",
+    bossTitre:"BOSS DU START", roleMot:"pilote",
+    clacSon:'le "clac" de la grille, ou un mot claqué', imageVisu:"la grille qui tombe, ta moto qui bondit",
+    imgStep1:"Tu es sur la grille, calme. Tu sens tes mains sur le guidon, le moteur qui vibre.",
+    imgStep2:"Le signal tombe. Tu pars pile au bon moment, explosif et net.",
+    imgStep3:"Tu prends le holeshot, en tête dans le premier virage. Tu ressens la vitesse.",
+    gesteEx:"serrer le guidon 2 fois, souffler fort...",
+    jourAvantDepart:"Le jour de course, dans les 20 secondes avant la grille :",
+    surLieu:"sur la grille",
+    aprèsCompet:"Après une course", joursDeCompet:"les jours où tu roules",
+    blocOptions:["Sur la grille","Le holeshot","Les virages","Les sauts"],
+    auDepartCourt:"au départ", auDemarrageCourt:"au démarrage",
+    stabiliteContexte:"sur les bosses",
+    phasesIntenses:"les bosses",
+    sortieAction:"en sortie de virage", virageMot:"les virages",
+    hautCorpsPhrase:"le guidon dans les bosses",
+    tourMot:"un tour complet", jarreteMot:"j'arrête la moto",
+    debriefStepTag:"JUSTE APRÈS LA COURSE",
+  },
+  football:{
+    nom:"Football", verbeHero:"JOUE AVEC",
+    lieu:"le terrain", unite:"match", uniteArt:"le match", uniteIndef:"un match",
+    uniteSuivante:"le match suivant", uniteDecisive:"un match décisif", uniteMauvaise:"un mauvais match",
+    uniteApresUnite:"match après match", jourApresJour:"match après match",
+    jourMot:"match", jourMotPluriel:"matchs", uniteJournal:"Match",
+    auDepart:"sur le terrain, juste avant le coup d'envoi", auDepartCap:"Sur le terrain, juste avant le coup d'envoi",
+    justeAvantDepart:"Juste avant le coup de sifflet du coup d'envoi",
+    lieuInconnu:"En arrivant sur un terrain que tu ne connais pas",
+    pairs:"les autres joueurs", pairsQuiConnaissent:"les joueurs qui le connaissent",
+    revers:"Après une erreur à l'entraînement",
+    gesteRisque:"J'appréhende de retenter le même geste ou la même situation",
+    plateauDepart:"Quand tu regardes la feuille de match d'une rencontre importante",
+    pretVerbe:"prêt à jouer", grosseCompet:"un gros match", delaCompet:"du match",
+    erreursPrecedentes:"mes erreurs des matchs précédents", avantCompet:"avant le match",
+    verbePratique:"jouer",
+    ambianceSonore:"Les sons : coup de sifflet, cris des joueurs, public",
+    gateNom:"le coup d'envoi", jusquauDepart:"jusqu'au coup d'envoi", portiqueEtPairs:"le bruit du sifflet et les autres joueurs autour de toi",
+    pousseeMot:"le coup d'envoi",
+    signalSonore:"le coup de sifflet de l'arbitre", signalVisuel:"le geste de l'arbitre au coup d'envoi",
+    lieuDepartCourt:"le terrain",
+    bossTitre:"BOSS DU DÉPART", roleMot:"athlète",
+    clacSon:"le coup de sifflet, ou un mot claqué", imageVisu:"le ballon qui part, ta première foulée",
+    imgStep1:"Tu es sur le terrain, calme, prêt à jouer.",
+    imgStep2:"Le coup d'envoi est donné. Tu es dedans, pile au bon moment.",
+    imgStep3:"Tu touches ton premier ballon avec justesse. Tu sens le rythme du match.",
+    gesteEx:"toucher le ballon 2 fois, souffler fort...",
+    jourAvantDepart:"Le jour de match, dans les 20 secondes avant le coup d'envoi :",
+    surLieu:"sur le terrain",
+    aprèsCompet:"Après un match", joursDeCompet:"les jours où tu joues",
+    blocOptions:["Avant le coup d'envoi","Les duels","Après une erreur","Les fins de match serrées"],
+    auDepartCourt:"au coup d'envoi", auDemarrageCourt:"au coup d'envoi",
+    stabiliteContexte:"en duel",
+    phasesIntenses:"les courses répétées",
+    sortieAction:"en phase de relance", virageMot:"les changements de direction",
+    hautCorpsPhrase:"l'équilibre du buste en duel",
+    tourMot:"un match complet", jarreteMot:"j'arrête le foot",
+    debriefStepTag:"JUSTE APRÈS LE MATCH",
+  },
+  tennis:{
+    nom:"Tennis", verbeHero:"JOUE AVEC",
+    lieu:"le court", unite:"match", uniteArt:"le match", uniteIndef:"un match",
+    uniteSuivante:"le match suivant", uniteDecisive:"un match décisif", uniteMauvaise:"un mauvais match",
+    uniteApresUnite:"match après match", jourApresJour:"match après match",
+    jourMot:"match", jourMotPluriel:"matchs", uniteJournal:"Match",
+    auDepart:"sur le court, juste avant de servir", auDepartCap:"Sur le court, juste avant de servir",
+    justeAvantDepart:"Juste avant de servir ton premier point",
+    lieuInconnu:"En arrivant sur un court que tu ne connais pas",
+    pairs:"les autres joueurs", pairsQuiConnaissent:"les joueurs qui le connaissent",
+    revers:"Après une erreur à l'entraînement",
+    gesteRisque:"J'appréhende de retenter le même coup ou la même situation",
+    plateauDepart:"Quand tu regardes le tableau d'un tournoi important",
+    pretVerbe:"prêt à jouer", grosseCompet:"un gros match", delaCompet:"du match",
+    erreursPrecedentes:"mes erreurs des matchs précédents", avantCompet:"avant le match",
+    verbePratique:"jouer",
+    ambianceSonore:"Les sons : bruit de balle, arbitre, public",
+    gateNom:"le service", jusquauDepart:"jusqu'au service", portiqueEtPairs:"le bruit du public et ton adversaire en face de toi",
+    pousseeMot:"le service",
+    signalSonore:"l'annonce de l'arbitre ou du speaker", signalVisuel:"le geste de l'arbitre ou de ton adversaire",
+    lieuDepartCourt:"le court",
+    bossTitre:"BOSS DU DÉPART", roleMot:"athlète",
+    clacSon:"le bruit de la balle qui part, ou un mot claqué", imageVisu:"la balle qui part, ton premier geste",
+    imgStep1:"Tu es sur le court, calme, prêt à servir.",
+    imgStep2:"Tu lances la balle. Ton geste est fluide, précis, explosif.",
+    imgStep3:"Tu prends le premier point du match. Tu sens ton bras libre.",
+    gesteEx:"rebondir la balle 3 fois, souffler fort...",
+    jourAvantDepart:"Le jour de match, dans les 20 secondes avant de servir :",
+    surLieu:"sur le court",
+    aprèsCompet:"Après un match", joursDeCompet:"les jours où tu joues",
+    blocOptions:["Au service","Les balles de break","Après une erreur","Les fins de set serrées"],
+    auDepartCourt:"au service", auDemarrageCourt:"au service",
+    stabiliteContexte:"sur les longs échanges",
+    phasesIntenses:"les longs échanges",
+    sortieAction:"en sortie d'échange", virageMot:"les changements d'appui",
+    hautCorpsPhrase:"la raquette sur les longs échanges",
+    tourMot:"un match complet", jarreteMot:"j'arrête le tennis",
+    debriefStepTag:"JUSTE APRÈS LE MATCH",
+  },
+  basket:{
+    nom:"Basketball", verbeHero:"JOUE AVEC",
+    lieu:"le terrain", unite:"match", uniteArt:"le match", uniteIndef:"un match",
+    uniteSuivante:"le match suivant", uniteDecisive:"un match décisif", uniteMauvaise:"un mauvais match",
+    uniteApresUnite:"match après match", jourApresJour:"match après match",
+    jourMot:"match", jourMotPluriel:"matchs", uniteJournal:"Match",
+    auDepart:"sur le terrain, juste avant le coup d'envoi", auDepartCap:"Sur le terrain, juste avant le coup d'envoi",
+    justeAvantDepart:"Juste avant le coup de sifflet du coup d'envoi",
+    lieuInconnu:"En arrivant sur un terrain que tu ne connais pas",
+    pairs:"les autres joueurs", pairsQuiConnaissent:"les joueurs qui le connaissent",
+    revers:"Après une erreur à l'entraînement",
+    gesteRisque:"J'appréhende de retenter le même geste ou la même situation",
+    plateauDepart:"Quand tu regardes la feuille de match d'une rencontre importante",
+    pretVerbe:"prêt à jouer", grosseCompet:"un gros match", delaCompet:"du match",
+    erreursPrecedentes:"mes erreurs des matchs précédents", avantCompet:"avant le match",
+    verbePratique:"jouer",
+    ambianceSonore:"Les sons : coup de sifflet, cris des joueurs, public",
+    gateNom:"le coup d'envoi", jusquauDepart:"jusqu'au coup d'envoi", portiqueEtPairs:"le bruit du sifflet et les autres joueurs autour de toi",
+    pousseeMot:"le coup d'envoi",
+    signalSonore:"le coup de sifflet de l'arbitre", signalVisuel:"le geste de l'arbitre au coup d'envoi",
+    lieuDepartCourt:"le terrain",
+    bossTitre:"BOSS DU DÉPART", roleMot:"athlète",
+    clacSon:"le coup de sifflet, ou un mot claqué", imageVisu:"le ballon qui part, ta première action",
+    imgStep1:"Tu es sur le terrain, calme, prêt à jouer.",
+    imgStep2:"Le coup d'envoi est donné. Tu es dedans, pile au bon moment.",
+    imgStep3:"Tu touches ton premier ballon avec justesse. Tu sens le rythme du match.",
+    gesteEx:"toucher le ballon 2 fois, souffler fort...",
+    jourAvantDepart:"Le jour de match, dans les 20 secondes avant le coup d'envoi :",
+    surLieu:"sur le terrain",
+    aprèsCompet:"Après un match", joursDeCompet:"les jours où tu joues",
+    blocOptions:["Avant le coup d'envoi","Les duels","Après une erreur","Les fins de match serrées"],
+    auDepartCourt:"au coup d'envoi", auDemarrageCourt:"au coup d'envoi",
+    stabiliteContexte:"en contact",
+    phasesIntenses:"les sprints répétés",
+    sortieAction:"en sortie d'appui", virageMot:"les changements de direction",
+    hautCorpsPhrase:"l'équilibre du buste en contact",
+    tourMot:"un match complet", jarreteMot:"j'arrête le basket",
+    debriefStepTag:"JUSTE APRÈS LE MATCH",
+  },
+  natation:{
+    nom:"Natation", verbeHero:"NAGE AVEC",
+    lieu:"le bassin", unite:"course", uniteArt:"la course", uniteIndef:"une course",
+    uniteSuivante:"la course suivante", uniteDecisive:"une course décisive", uniteMauvaise:"une mauvaise course",
+    uniteApresUnite:"course après course", jourApresJour:"course après course",
+    jourMot:"course", jourMotPluriel:"courses", uniteJournal:"Course",
+    auDepart:"sur le plot de départ", auDepartCap:"Sur le plot de départ",
+    justeAvantDepart:"Juste avant le coup de sifflet du départ",
+    lieuInconnu:"En arrivant dans un bassin que tu ne connais pas",
+    pairs:"les autres nageurs", pairsQuiConnaissent:"les nageurs qui le connaissent",
+    revers:"Après un faux départ à l'entraînement",
+    gesteRisque:"J'appréhende de repartir sur le même départ ou le même virage",
+    plateauDepart:"Quand tu regardes les séries d'une compétition importante",
+    pretVerbe:"prêt à nager", grosseCompet:"une grosse course", delaCompet:"de la course",
+    erreursPrecedentes:"mes erreurs des courses précédentes", avantCompet:"avant la course",
+    verbePratique:"nager",
+    ambianceSonore:"Les sons : coups de sifflet, éclaboussures, public",
+    gateNom:"le plot de départ", jusquauDepart:"jusqu'au plot de départ", portiqueEtPairs:"le coup de sifflet et les autres nageurs à côté de toi",
+    pousseeMot:"la poussée au mur",
+    signalSonore:"le coup de sifflet ou le bip du starter", signalVisuel:"les lumières ou le signal visuel du starter",
+    lieuDepartCourt:"le plot",
+    bossTitre:"BOSS DU DÉPART", roleMot:"athlète",
+    clacSon:"le bip du départ, ou un mot claqué", imageVisu:"le plot qui bascule, ton premier mouvement dans l'eau",
+    imgStep1:"Tu es sur le plot, calme. Tu sens tes appuis sous tes pieds.",
+    imgStep2:"Le signal claque. Tu pars pile au bon moment, explosif et net.",
+    imgStep3:"Tu prends tes premiers mètres en tête. Tu ressens la glisse.",
+    gesteEx:"ajuster mes lunettes 2 fois, souffler fort...",
+    jourAvantDepart:"Le jour de course, dans les 20 secondes avant le départ :",
+    surLieu:"dans l'eau",
+    aprèsCompet:"Après une course", joursDeCompet:"les jours où tu nages",
+    blocOptions:["Sur le plot","Le premier virage","Les 50 derniers mètres","Après un faux départ"],
+    auDepartCourt:"au départ", auDemarrageCourt:"au départ",
+    stabiliteContexte:"sur les virages",
+    phasesIntenses:"les longueurs enchaînées",
+    sortieAction:"en sortie de virage", virageMot:"les virages",
+    hautCorpsPhrase:"la propulsion à chaque coup de bras",
+    tourMot:"une course complète", jarreteMot:"j'arrête la natation",
+    debriefStepTag:"JUSTE APRÈS LA COURSE",
+  },
+  athletisme:{
+    nom:"Athlétisme", verbeHero:"COURS AVEC",
+    lieu:"la piste", unite:"course", uniteArt:"la course", uniteIndef:"une course",
+    uniteSuivante:"la course suivante", uniteDecisive:"une course décisive", uniteMauvaise:"une mauvaise course",
+    uniteApresUnite:"course après course", jourApresJour:"course après course",
+    jourMot:"course", jourMotPluriel:"courses", uniteJournal:"Course",
+    auDepart:"sur la ligne de départ", auDepartCap:"Sur la ligne de départ",
+    justeAvantDepart:"Juste avant le coup de feu du départ",
+    lieuInconnu:"En arrivant sur une piste que tu ne connais pas",
+    pairs:"les autres athlètes", pairsQuiConnaissent:"les athlètes qui la connaissent",
+    revers:"Après un faux départ à l'entraînement",
+    gesteRisque:"J'appréhende de repartir sur le même départ ou la même course",
+    plateauDepart:"Quand tu regardes les séries d'une compétition importante",
+    pretVerbe:"prêt à courir", grosseCompet:"une grosse course", delaCompet:"de la course",
+    erreursPrecedentes:"mes erreurs des courses précédentes", avantCompet:"avant la course",
+    verbePratique:"courir",
+    ambianceSonore:"Les sons : starter, chrono, public",
+    gateNom:"la ligne de départ", jusquauDepart:"jusqu'à la ligne de départ", portiqueEtPairs:"le coup de feu et les autres athlètes à côté de toi",
+    pousseeMot:"l'appel dans les blocks",
+    signalSonore:"le coup de feu ou le bip du starter", signalVisuel:"les starting-blocks et le signal visuel du starter",
+    lieuDepartCourt:"la ligne de départ",
+    bossTitre:"BOSS DU DÉPART", roleMot:"athlète",
+    clacSon:"le coup de feu du départ, ou un mot claqué", imageVisu:"les starting-blocks qui claquent, ta première foulée",
+    imgStep1:"Tu es dans les starting-blocks, calme. Tu sens tes appuis.",
+    imgStep2:"Le coup de feu claque. Tu pars pile au bon moment, explosif et net.",
+    imgStep3:"Tu prends tes premières foulées en tête. Tu ressens la vitesse.",
+    gesteEx:"taper les blocks 2 fois, souffler fort...",
+    jourAvantDepart:"Le jour de course, dans les 20 secondes avant le départ :",
+    surLieu:"sur la piste",
+    aprèsCompet:"Après une course", joursDeCompet:"les jours où tu cours",
+    blocOptions:["Sur la ligne de départ","Le premier 100m","La fin de course","Après un faux départ"],
+    auDepartCourt:"au départ", auDemarrageCourt:"au démarrage",
+    stabiliteContexte:"en appui",
+    phasesIntenses:"les relances d'appui",
+    sortieAction:"en sortie de virage", virageMot:"les virages",
+    hautCorpsPhrase:"le buste droit à pleine vitesse",
+    tourMot:"une course complète", jarreteMot:"j'arrête l'athlé",
+    debriefStepTag:"JUSTE APRÈS LA COURSE",
+  },
+  judo:{
+    nom:"Judo", verbeHero:"COMBATS AVEC",
+    lieu:"le tatami", unite:"combat", uniteArt:"le combat", uniteIndef:"un combat",
+    uniteSuivante:"le combat suivant", uniteDecisive:"un combat décisif", uniteMauvaise:"un mauvais combat",
+    uniteApresUnite:"combat après combat", jourApresJour:"combat après combat",
+    jourMot:"combat", jourMotPluriel:"combats", uniteJournal:"Combat",
+    auDepart:"sur le tatami, face à ton adversaire", auDepartCap:"Sur le tatami, face à ton adversaire",
+    justeAvantDepart:"Juste avant que l'arbitre ne lance le combat",
+    lieuInconnu:"En arrivant sur un tatami que tu ne connais pas",
+    pairs:"les autres judokas", pairsQuiConnaissent:"les judokas qui le connaissent",
+    revers:"Après une défaite à l'entraînement",
+    gesteRisque:"J'appréhende de retenter la même prise ou la même situation",
+    plateauDepart:"Quand tu regardes le tableau d'une compétition importante",
+    pretVerbe:"prêt à combattre", grosseCompet:"un gros combat", delaCompet:"du combat",
+    erreursPrecedentes:"mes erreurs des combats précédents", avantCompet:"avant le combat",
+    verbePratique:"combattre",
+    ambianceSonore:"Les sons : cris, tatami, arbitre",
+    gateNom:"le début du combat", jusquauDepart:"jusqu'au début du combat", portiqueEtPairs:"les cris du tatami et ton adversaire en face de toi",
+    pousseeMot:"le premier engagement",
+    signalSonore:"le \"Hajime\" de l'arbitre", signalVisuel:"le geste de l'arbitre au \"Hajime\"",
+    lieuDepartCourt:"le tatami",
+    bossTitre:"BOSS DU DÉPART", roleMot:"athlète",
+    clacSon:'le "Hajime" de l\'arbitre, ou un mot claqué', imageVisu:"le premier geste de ton adversaire, ta première prise",
+    imgStep1:"Tu es sur le tatami, calme, face à ton adversaire.",
+    imgStep2:"L'arbitre lance le combat. Tu es dedans, pile au bon moment.",
+    imgStep3:"Tu places ta première prise avec justesse. Tu sens le combat démarrer.",
+    gesteEx:"ajuster ma ceinture, souffler fort...",
+    jourAvantDepart:"Le jour de combat, dans les 20 secondes avant que l'arbitre ne lance le combat :",
+    surLieu:"sur le tatami",
+    aprèsCompet:"Après un combat", joursDeCompet:"les jours où tu combats",
+    blocOptions:["Avant le combat","Les premières prises","Après une pénalité","Les golden score"],
+    auDepartCourt:"à l'engagement", auDemarrageCourt:"à l'engagement",
+    stabiliteContexte:"au sol",
+    phasesIntenses:"les enchaînements au sol",
+    sortieAction:"en sortie de prise", virageMot:"les projections",
+    hautCorpsPhrase:"chaque prise et chaque garde",
+    tourMot:"un combat complet", jarreteMot:"j'arrête le judo",
+    debriefStepTag:"JUSTE APRÈS LE COMBAT",
+  },
+  generique:{
+    nom:"", verbeHero:"AVANCE AVEC",
+    lieu:"le terrain de jeu", unite:"épreuve", uniteArt:"l'épreuve", uniteIndef:"une épreuve",
+    uniteSuivante:"l'épreuve suivante", uniteDecisive:"une épreuve décisive", uniteMauvaise:"une mauvaise épreuve",
+    uniteApresUnite:"étape après étape", jourApresJour:"épreuve après épreuve",
+    jourMot:"compétition", jourMotPluriel:"compétitions", uniteJournal:"Épreuve",
+    auDepart:"juste avant le début de l'épreuve", auDepartCap:"Juste avant le début de l'épreuve",
+    justeAvantDepart:"Juste avant le signal de départ",
+    lieuInconnu:"En arrivant sur un lieu de compétition que tu ne connais pas",
+    pairs:"les autres concurrents", pairsQuiConnaissent:"les concurrents qui le connaissent",
+    revers:"Après un échec à l'entraînement",
+    gesteRisque:"J'appréhende de retenter le même geste",
+    plateauDepart:"Quand tu regardes le programme d'une compétition importante",
+    pretVerbe:"prêt", grosseCompet:"une grosse compétition", delaCompet:"de l'épreuve",
+    erreursPrecedentes:"mes erreurs des épreuves précédentes", avantCompet:"avant l'épreuve",
+    verbePratique:"démarrer",
+    ambianceSonore:"Les sons autour de toi pendant l'épreuve",
+    gateNom:"le moment du départ", jusquauDepart:"jusqu'au moment du départ", portiqueEtPairs:"le signal de départ et les autres concurrents autour de toi",
+    pousseeMot:"le démarrage",
+    signalSonore:"le signal sonore du départ", signalVisuel:"le signal visuel du départ",
+    lieuDepartCourt:"l'aire de départ",
+    bossTitre:"BOSS DU DÉPART", roleMot:"athlète",
+    clacSon:"le signal du départ, ou un mot claqué", imageVisu:"le signal qui tombe, ton premier geste",
+    imgStep1:"Tu es à ta place, calme, prêt à démarrer.",
+    imgStep2:"Le signal est donné. Tu pars pile au bon moment, explosif et net.",
+    imgStep3:"Tu prends ton rythme dès le début. Tu sens l'épreuve démarrer.",
+    gesteEx:"un geste répété avant le départ, souffler fort...",
+    jourAvantDepart:"Le jour J, dans les 20 secondes avant le départ :",
+    surLieu:"au moment de démarrer",
+    aprèsCompet:"Après une épreuve", joursDeCompet:"les jours de compétition",
+    blocOptions:["Avant le départ","Le début de l'épreuve","Après une erreur","La fin de l'épreuve"],
+    auDepartCourt:"au départ", auDemarrageCourt:"au démarrage",
+    stabiliteContexte:"en action",
+    phasesIntenses:"les phases intenses",
+    sortieAction:"en sortie d'action", virageMot:"les changements d'appui",
+    hautCorpsPhrase:"l'effort à chaque geste",
+    tourMot:"une épreuve complète", jarreteMot:"j'arrête",
+    debriefStepTag:"JUSTE APRÈS L'ÉPREUVE",
+  },
+};
+// mots-clés qui font correspondre le texte libre saisi par le client (colonne "sport") à
+// une des fiches ci-dessus. Repli sur "generique" si rien ne correspond.
+function normalizeTxt(s){
+  return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+}
+function sportKey(raw){
+  const t = normalizeTxt(raw);
+  if(!t) return 'bmx'; // pas de sport en base (comptes déjà inscrits) : on garde le comportement d'origine
+  if(/bmx/.test(t)) return 'bmx';
+  if(/moto.?cross|\bmx\b/.test(t)) return 'motocross';
+  if(/foot(ball)?\b|futsal/.test(t)) return 'football';
+  if(/tennis(?! de table)/.test(t)) return 'tennis';
+  if(/basket/.test(t)) return 'basket';
+  if(/natation|nage|swim/.test(t)) return 'natation';
+  if(/athle|athlet|course a pied|sprint|demi[- ]fond/.test(t)) return 'athletisme';
+  if(/judo/.test(t)) return 'judo';
+  return 'generique';
+}
+// jeton actif pour la session en cours (mis à jour dans axeChargerProfil() dès qu'on connaît le sport du client)
+function L(){ return SPORT_LEXICON[state.sport] || SPORT_LEXICON.bmx; }
+// capitalise la première lettre (pour les jetons utilisés en début de phrase/option)
+function Cap(s){ s=String(s||''); return s.charAt(0).toUpperCase()+s.slice(1); }
+// met en minuscule la première lettre (pour recoller un jeton "Après une course" au milieu d'une phrase)
+function lowerFirst(s){ s=String(s||''); return s.charAt(0).toLowerCase()+s.slice(1); }
+// "de "+article -> contracte l'élision ("de le X" => "du X"), pour recoller un jeton comme l.gateNom
+// ou l.lieu après "de" sans avoir à écrire une variante par sport.
+function contractDe(art){ art=String(art||''); if(/^le /.test(art)) return 'du '+art.slice(3); if(/^les /.test(art)) return 'des '+art.slice(4); return 'de '+art; }
+// mot qui décrit "la pratique" du sport actif, pour les phrases du type "ton ... a bien répondu"
+const PRATIQUE_NOM={rouler:'ton pilotage',jouer:'ton jeu',nager:'ta nage',courir:'ta course',combattre:'ton combat',démarrer:'ta pratique'};
+// conjugaison "il ... " de l.verbePratique, pour des phrases du type "pas seulement pendant qu'il roule"
+const VERBE_IL={rouler:'roule',jouer:'joue',nager:'nage',courir:'court',combattre:'combat',démarrer:'démarre'};
+
+let diagQuestions=buildDiagQuestions(SPORT_LEXICON.bmx, 'ado');
+// tranche d'âge du sportif : conditionne la formulation des questions du diagnostic et des
+// exercices mentaux (formats plus courts et plus concrets pour les 10-12 ans, la formulation
+// standard, déjà adaptée à un lecteur ado/adulte, sert aussi bien les 13-17 ans que les 18 ans et +).
+function ageTier(age){ return age<=12 ? 'enfant' : (age<=17 ? 'ado' : 'adulte'); }
+function buildDiagQuestions(l, tier){
+  const kid = tier === 'enfant';
+  return [
   // ---- MENTAL (9 questions, 3 catégories : portillon / rumination / confiance, + une option neutre) ----
-  {id:'mental_1',axis:'mental',q:"Au moment de te présenter sur la gate, qu'est-ce qui se passe dans ta tête ?",
-    opts:["Je repense à mes erreurs passées","Mon cœur s'emballe, je perds mes moyens","Je doute de mon niveau par rapport aux autres","Je suis concentré, plutôt calme"],
+  {id:'mental_1',axis:'mental',
+    q: kid ? ("Juste avant "+l.auDepart+", qu'est-ce qui se passe dans ta tête ?") : ("Au moment de te présenter "+l.auDepart+", qu'est-ce qui se passe dans ta tête ?"),
+    opts: kid ? ["Je repense à mes erreurs d'avant","Mon cœur bat très fort, je perds mes moyens","Je me dis que les autres sont meilleurs que moi","Je suis calme et concentré(e)"]
+              : ["Je repense à mes erreurs passées","Mon cœur s'emballe, je perds mes moyens","Je doute de mon niveau par rapport aux autres","Je suis concentré, plutôt calme"],
     tags:['rumination','portillon','confiance','neutre']},
-  {id:'mental_2',axis:'mental',q:"Quand une manche se passe mal, ta réaction la plus fréquente ?",
-    opts:["Je rejoue la scène en boucle dans ma tête","J'ai peur de refaire la même erreur à la manche suivante","Je me dis que je ne suis pas assez bon","Je passe vite à la suivante, sans y repenser"],
+  {id:'mental_2',axis:'mental',
+    q: kid ? ("Quand "+l.uniteIndef+" se passe mal, qu'est-ce que tu fais le plus souvent ?") : ("Quand "+l.uniteIndef+" se passe mal, ta réaction la plus fréquente ?"),
+    opts: kid ? ["Je repense à ça encore et encore","J'ai peur de refaire la même erreur à "+l.uniteSuivante,"Je me dis que je ne suis pas assez fort(e)","Je passe vite à autre chose"]
+              : ["Je rejoue la scène en boucle dans ma tête","J'ai peur de refaire la même erreur à "+l.uniteSuivante,"Je me dis que je ne suis pas assez bon","Je passe vite à la suivante, sans y repenser"],
     tags:['rumination','portillon','confiance','neutre']},
-  {id:'mental_3',axis:'mental',q:"La nuit avant une grosse course :",
-    opts:["Je dors mal, des images de la course tournent en boucle","J'ai du mal à m'endormir, le cœur qui bat déjà","J'ai des doutes sur mon niveau","Je dors plutôt bien, serein"],
+  {id:'mental_3',axis:'mental',q:"La nuit avant "+l.grosseCompet+" :",
+    opts: kid ? ["Je dors mal, j'y pense tout le temps","J'ai du mal à m'endormir, mon cœur bat vite","Je me dis que je ne suis pas prêt(e)","Je dors plutôt bien, tranquille"]
+              : ["Je dors mal, des images "+l.delaCompet+" tournent en boucle","J'ai du mal à m'endormir, le cœur qui bat déjà","J'ai des doutes sur mon niveau","Je dors plutôt bien, serein"],
     tags:['rumination','portillon','confiance','neutre']},
-  {id:'mental_4',axis:'mental',q:"Juste avant que la gate ne tombe :",
-    opts:["Mes jambes tremblent, j'ai du mal à respirer","Je repense à ma dernière chute ou ma dernière erreur","Je me demande si les autres sont meilleurs que moi","Je suis concentré sur ma routine, sans stress"],
+  {id:'mental_4',axis:'mental',q:l.justeAvantDepart+" :",
+    opts: kid ? ["Mes jambes tremblent, j'ai du mal à respirer","Je repense à ma dernière erreur","Je me demande si les autres sont meilleurs que moi","Je suis concentré(e), sans stress"]
+              : ["Mes jambes tremblent, j'ai du mal à respirer","Je repense à ma dernière erreur","Je me demande si les autres sont meilleurs que moi","Je suis concentré sur ma routine, sans stress"],
     tags:['portillon','rumination','confiance','neutre']},
-  {id:'mental_5',axis:'mental',q:"Après une chute à l'entraînement :",
-    opts:["J'y repense pendant plusieurs jours","J'appréhende de reprendre la même figure ou le même virage","Je me sens moins légitime que les autres pilotes","Je remonte et je passe à autre chose rapidement"],
+  {id:'mental_5',axis:'mental',q:l.revers+" :",
+    opts: kid ? ["J'y repense pendant plusieurs jours",l.gesteRisque,"Je me sens moins bon(ne) que "+l.pairs,"Je me relève vite et je passe à autre chose"]
+              : ["J'y repense pendant plusieurs jours",l.gesteRisque,"Je me sens moins légitime que "+l.pairs,"Je remonte et je passe à autre chose rapidement"],
     tags:['rumination','portillon','confiance','neutre']},
-  {id:'mental_6',axis:'mental',q:"Quand tu regardes le plateau de départ d'une course importante :",
-    opts:["Je me sens tendu, j'ai peur de mal démarrer","Je pense déjà à l'erreur que je pourrais refaire","Je me compare aux autres pilotes et je doute","Je me sens à ma place, prêt à courir"],
+  {id:'mental_6',axis:'mental',q:l.plateauDepart+" :",
+    opts: kid ? ["Je suis stressé(e), j'ai peur de mal commencer","Je pense déjà à une erreur possible","Je me compare aux autres et je doute","Je me sens à ma place, "+l.pretVerbe]
+              : ["Je me sens tendu, j'ai peur de mal démarrer","Je pense déjà à l'erreur que je pourrais refaire","Je me compare à "+l.pairs+" et je doute","Je me sens à ma place, "+l.pretVerbe],
     tags:['portillon','rumination','confiance','neutre']},
-  {id:'mental_7',axis:'mental',q:"Pendant l'échauffement avant une manche décisive :",
-    opts:["Je n'arrive pas à me concentrer, trop de pression","Je pense à mes erreurs des courses précédentes","Je me sens moins prêt que je ne le voudrais","Je me sens bien, concentré sur mes appuis"],
+  {id:'mental_7',axis:'mental',
+    q: kid ? ("Juste avant "+l.uniteDecisive+", pendant que tu t'échauffes :") : ("Pendant l'échauffement avant "+l.uniteDecisive+" :"),
+    opts: kid ? ["Je n'arrive pas à me concentrer, j'ai trop la pression","Je pense à "+l.erreursPrecedentes,"Je me sens moins prêt(e) que je le voudrais","Je me sens bien, concentré(e)"]
+              : ["Je n'arrive pas à me concentrer, trop de pression","Je pense à "+l.erreursPrecedentes,"Je me sens moins prêt que je ne le voudrais","Je me sens bien, concentré sur mes appuis"],
     tags:['portillon','rumination','confiance','neutre']},
-  {id:'mental_8',axis:'mental',q:"Quand un adulte (coach, parent) te parle juste avant ton départ :",
-    opts:["Ça ajoute du stress, j'ai déjà du mal à me concentrer","Ça me ramène à une erreur qu'on m'a déjà reprochée","Je me demande si je suis à la hauteur de ce qu'on attend","Ça ne me perturbe pas, je reste concentré sur moi"],
+  {id:'mental_8',axis:'mental',
+    q: kid ? "Quand quelqu'un (ton coach, tes parents) te parle juste avant ton départ :" : "Quand quelqu'un (coach, proche) te parle juste avant ton départ :",
+    opts: kid ? ["Ça me stresse encore plus","Ça me rappelle une erreur qu'on m'a reprochée","Je me demande si je vais y arriver","Ça ne me dérange pas, je reste concentré(e)"]
+              : ["Ça ajoute du stress, j'ai déjà du mal à me concentrer","Ça me ramène à une erreur qu'on m'a déjà reprochée","Je me demande si je suis à la hauteur de ce qu'on attend","Ça ne me perturbe pas, je reste concentré sur moi"],
     tags:['portillon','rumination','confiance','neutre']},
-  {id:'mental_9',axis:'mental',q:"En arrivant sur une piste que tu ne connais pas :",
-    opts:["Je me demande si je vais réussir à bien démarrer","Je pense déjà à ce qui pourrait mal tourner","Je me sens moins à l'aise que les pilotes qui la connaissent","Je prends le temps de la découvrir, sans stress"],
+  {id:'mental_9',axis:'mental',q:l.lieuInconnu+" :",
+    opts: kid ? ["Je me demande si je vais réussir à bien démarrer","Je pense à ce qui pourrait mal se passer","Je me sens moins à l'aise que "+l.pairsQuiConnaissent,"Je prends le temps de regarder, sans stress"]
+              : ["Je me demande si je vais réussir à bien démarrer","Je pense déjà à ce qui pourrait mal tourner","Je me sens moins à l'aise que "+l.pairsQuiConnaissent,"Je prends le temps de la découvrir, sans stress"],
     tags:['portillon','rumination','confiance','neutre']},
   // ---- PHYSIQUE (9 questions, 4 catégories : explosivité / force / stabilité / vitesse) ----
-  {id:'physique_1',axis:'physique',q:"Sur un tour complet, où tu perds le plus d'énergie ?",
-    opts:["Le sprint de départ","Le pumping sur les bosses","La relance en sortie de virage","La fin de course, je coince"],
+  {id:'physique_1',axis:'physique',q:"Sur "+l.tourMot+", où tu perds le plus d'énergie ?",
+    opts: kid ? ["Au départ, dès le sprint",Cap(l.phasesIntenses),"Quand je dois relancer "+l.sortieAction,"À la fin, je fatigue"]
+              : ["Le sprint de départ",Cap(l.phasesIntenses),"La relance "+l.sortieAction,"La fin de "+l.jourMot+", je coince"],
     tags:['explosivite','stabilite','force','vitesse']},
-  {id:'physique_2',axis:'physique',q:"Ton point faible physique ressenti :",
-    opts:["Explosivité au départ","Force dans les jambes","Gainage et stabilité","Vitesse et endurance sur la durée"],
+  {id:'physique_2',axis:'physique',
+    q: kid ? "Dans ton corps, qu'est-ce qui est le moins fort ?" : "Ton point faible physique ressenti :",
+    opts: kid ? ["Partir vite "+l.auDepartCourt,"La force dans mes jambes","Tenir bien droit, sans bouger","Aller vite longtemps"]
+              : ["Explosivité "+l.auDepartCourt,"Force dans les jambes","Gainage et stabilité","Vitesse et endurance sur la durée"],
     tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_3',axis:'physique',q:"Après un entraînement intense, ton corps :",
-    opts:["Manque de peps au prochain départ","Manque de force le lendemain","Est moins stable, moins gainé","Récupère lentement en endurance"],
+  {id:'physique_3',axis:'physique',
+    q: kid ? "Après un entraînement fatigant, ton corps :" : "Après un entraînement intense, ton corps :",
+    opts: kid ? ["N'a plus de peps au départ suivant","N'a plus de force le lendemain","Est moins stable","Récupère lentement"]
+              : ["Manque de peps au prochain départ","Manque de force le lendemain","Est moins stable, moins gainé","Récupère lentement en endurance"],
     tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_4',axis:'physique',q:"Sur la gate, au moment où elle tombe :",
-    opts:["Je démarre plutôt lentement, je manque de peps","Je manque de puissance dans la poussée","Je perds un peu l'équilibre au premier appui","Je pars bien, mais je perds en vitesse pure ensuite"],
+  {id:'physique_4',axis:'physique',q:Cap(l.auDepart)+", au moment décisif :",
+    opts: kid ? ["Je démarre doucement, je manque de peps","Je n'ai pas assez de force pour pousser fort","Je perds l'équilibre au début","Je pars bien mais je ralentis après"]
+              : ["Je démarre plutôt lentement, je manque de peps","Je manque de puissance dans la poussée","Je perds un peu l'équilibre au premier appui","Je pars bien, mais je perds en vitesse pure ensuite"],
     tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_5',axis:'physique',q:"Dans les bosses (rythm section) :",
-    opts:["Je manque de jus pour sauter fort","Mes jambes fatiguent vite sur les relances","J'ai du mal à rester stable, équilibré","Je perds en vitesse à chaque bosse"],
+  {id:'physique_5',axis:'physique',q:Cap(l.phasesIntenses)+" :",
+    opts: kid ? ["Je n'ai plus de force pour tenir","Mes jambes fatiguent vite","J'ai du mal à rester stable","Je ralentis à chaque effort"]
+              : ["Je manque de jus pour tenir fort","Mes jambes fatiguent vite sur les relances","J'ai du mal à rester stable, équilibré","Je perds en vitesse à chaque phase intense"],
     tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_6',axis:'physique',q:"En sortie de virage :",
-    opts:["Je manque d'explosivité pour relancer fort","Je manque de force pour pousser sur le pédalier","Je perds en stabilité, l'appui qui part de travers","Je perds de la vitesse par rapport aux autres"],
+  {id:'physique_6',axis:'physique',q:Cap(l.sortieAction)+" :",
+    opts: kid ? ["Je n'arrive pas à repartir vite","Je n'ai pas assez de force pour pousser","Je perds l'équilibre","Je suis moins rapide que les autres"]
+              : ["Je manque d'explosivité pour relancer fort","Je manque de force pour pousser","Je perds en stabilité, l'appui qui part de travers","Je perds de la vitesse par rapport aux autres"],
     tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_7',axis:'physique',q:"Sur la fin d'une manche :",
-    opts:["Je n'ai plus l'explosivité du début","Mes jambes n'ont plus de force","Je suis moins stable, plus imprécis","Je ralentis nettement, je manque d'endurance"],
+  {id:'physique_7',axis:'physique',q:"Sur la fin "+l.delaCompet+" :",
+    opts: kid ? ["Je n'ai plus autant de peps qu'au début","Mes jambes n'ont plus de force","Je suis moins stable","Je ralentis beaucoup"]
+              : ["Je n'ai plus l'explosivité du début","Mes jambes n'ont plus de force","Je suis moins stable, plus imprécis","Je ralentis nettement, je manque d'endurance"],
     tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_8',axis:'physique',q:"Après plusieurs manches dans la même journée :",
-    opts:["Mes départs deviennent moins explosifs","Mes jambes n'ont plus de force","Mon gainage lâche, je suis moins stable","Je perds en vitesse au fil des manches"],
+  {id:'physique_8',axis:'physique',q:"Après plusieurs "+l.jourMotPluriel+" dans la même journée :",
+    opts: kid ? ["Je pars moins vite","Mes jambes n'ont plus de force","Je tiens moins bien, moins stable","Je suis plus lent(e) au fil de la journée"]
+              : ["Mes départs deviennent moins explosifs","Mes jambes n'ont plus de force","Mon gainage lâche, je suis moins stable","Je perds en vitesse au fil de la journée"],
     tags:['explosivite','force','stabilite','vitesse']},
-  {id:'physique_9',axis:'physique',q:"S'il fallait choisir une seule chose à muscler en priorité :",
-    opts:["L'explosivité au départ","La force dans les jambes","Le gainage et la stabilité","La vitesse et l'endurance de fin de course"],
+  {id:'physique_9',axis:'physique',
+    q: kid ? "S'il fallait travailler une seule chose en priorité :" : "S'il fallait choisir une seule chose à muscler en priorité :",
+    opts: kid ? ["Partir plus vite "+l.auDepartCourt,"Avoir plus de force dans les jambes","Être plus stable, ne pas bouger","Être plus rapide et tenir jusqu'à la fin"]
+              : ["L'explosivité "+l.auDepartCourt,"La force dans les jambes","Le gainage et la stabilité","La vitesse et l'endurance de fin de "+l.jourMot],
     tags:['explosivite','force','stabilite','vitesse']},
   // ---- SENSORIEL (1 test comportemental + 5 questions de canal dominant, majorité sur 5) ----
-  {id:'sens_oeil',axis:'sensoriel',q:"Fais le test : tends les bras, forme un petit triangle avec tes mains, et vise un objet lointain au centre. Ferme l'œil gauche. L'objet reste dans le triangle ?",opts:["Oui, il reste bien au centre","Non, il saute sur le côté"],help:"Ce test révèle ton œil directeur. S'il reste quand tu fermes l'œil gauche, c'est le droit. S'il saute, c'est le gauche."},
-  {id:'sens_canal_1',axis:'sensoriel',q:"Quelqu'un t'appelle de loin sans que tu le voies. Tu retrouves d'où vient la voix :",opts:["Tout de suite, l'oreille repère vite","Plutôt en cherchant des yeux"],help:"Ce test observe si ton oreille capte et situe l'info rapidement."},
-  {id:'sens_canal_2',axis:'sensoriel',q:"Pour retenir une consigne d'entraînement, ce qui marche le mieux pour toi :",opts:["Qu'on me l'explique à voix haute","Qu'on me la montre ou me la dessine"],help:"Comment tu enregistres le mieux une information : par l'oreille ou par l'œil."},
-  {id:'sens_canal_3',axis:'sensoriel',q:"Dans le bruit et l'agitation d'une compétition, ce qui te déconcentre le plus :",opts:["Les bruits, les cris, les annonces","Les mouvements, l'agitation visuelle autour"],help:"Ton canal le plus sensible est souvent aussi ton canal dominant."},
-  {id:'sens_canal_4',axis:'sensoriel',q:"Quand tu apprends une nouvelle trajectoire ou une nouvelle figure, ce qui t'aide le plus :",opts:["Qu'on me l'explique avec des mots","Qu'on me la montre en vidéo ou en démonstration"],help:"Comment tu apprends le mieux un nouveau geste : par l'explication ou par l'image."},
-  {id:'sens_canal_5',axis:'sensoriel',q:"Sur la piste, en pleine course, ce qui te donne le plus d'informations sur ce qui se passe autour de toi :",opts:["Les sons : bruits de vélo, cris, annonces","Ce que je vois : mouvements, positions des autres"],help:"Ton canal le plus utilisé en course, dans le feu de l'action."},
-];
+  {id:'sens_oeil',axis:'sensoriel',
+    q: kid ? "Essaie ce petit jeu : tends les bras, fais un petit triangle avec tes mains, et regarde à travers un objet loin devant toi. Ferme l'œil gauche. Est-ce que l'objet reste dans le triangle ?" : "Fais le test : tends les bras, forme un petit triangle avec tes mains, et vise un objet lointain au centre. Ferme l'œil gauche. L'objet reste dans le triangle ?",
+    opts:["Oui, il reste bien au centre","Non, il saute sur le côté"],help:"Ce test révèle ton œil directeur. S'il reste quand tu fermes l'œil gauche, c'est le droit. S'il saute, c'est le gauche."},
+  {id:'sens_canal_1',axis:'sensoriel',
+    q: kid ? "Quelqu'un t'appelle de loin, mais tu ne le vois pas. Tu trouves d'où vient sa voix :" : "Quelqu'un t'appelle de loin sans que tu le voies. Tu retrouves d'où vient la voix :",
+    opts:["Tout de suite, l'oreille repère vite","Plutôt en cherchant des yeux"],help:"Ce test observe si ton oreille capte et situe l'info rapidement."},
+  {id:'sens_canal_2',axis:'sensoriel',
+    q: kid ? "Pour bien retenir une consigne, ce qui marche le mieux pour toi :" : "Pour retenir une consigne d'entraînement, ce qui marche le mieux pour toi :",
+    opts:["Qu'on me l'explique à voix haute","Qu'on me la montre ou me la dessine"],help:"Comment tu enregistres le mieux une information : par l'oreille ou par l'œil."},
+  {id:'sens_canal_3',axis:'sensoriel',
+    q: kid ? "Pendant une compétition, quand il y a du bruit et du monde, ce qui te déconcentre le plus :" : "Dans le bruit et l'agitation d'une compétition, ce qui te déconcentre le plus :",
+    opts:["Les bruits, les cris, les annonces","Les mouvements, l'agitation visuelle autour"],help:"Ton canal le plus sensible est souvent aussi ton canal dominant."},
+  {id:'sens_canal_4',axis:'sensoriel',
+    q: kid ? "Quand tu apprends un nouveau geste, ce qui t'aide le plus :" : "Quand tu apprends une nouvelle trajectoire ou une nouvelle figure, ce qui t'aide le plus :",
+    opts:["Qu'on me l'explique avec des mots","Qu'on me la montre en vidéo ou en démonstration"],help:"Comment tu apprends le mieux un nouveau geste : par l'explication ou par l'image."},
+  {id:'sens_canal_5',axis:'sensoriel',q:"Sur "+l.lieu+", en pleine "+l.unite+", ce qui te donne le plus d'informations sur ce qui se passe autour de toi :",opts:[l.ambianceSonore,"Ce que je vois : mouvements, positions des autres"],help:"Ton canal le plus utilisé "+l.avantCompet.replace('avant','en')+", dans le feu de l'action."},
+  ]; }
 
 /* Cumule les réponses d'un axe en score par catégorie (id -> catégorie via "tags"), en ignorant
    les questions non répondues et l'option neutre. Un score par question au lieu d'une seule
@@ -1232,11 +1679,13 @@ function lowTag(scores, order, excludeKey){
 const MENTAL_ORDER=['rumination','confiance','portillon'];
 const PHYS_ORDER=['explosivite','force','stabilite','vitesse'];
 
-// libellés affichés pour le point faible / le point fort de chaque catégorie
-const mentalFaibleLabels={portillon:"la gestion de la pression sur la gate",rumination:"la gestion des erreurs passées",confiance:"la confiance en soi face aux autres pilotes"};
-const mentalFortLabels={portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en course"};
-const physFaibleLabels={explosivite:"l'explosivité au départ",force:"la force dans les jambes",stabilite:"le gainage et la stabilité",vitesse:"la vitesse et l'endurance de fin de course"};
-const physFortLabels={explosivite:"la percussion au démarrage",force:"la puissance dans les jambes",stabilite:"la stabilité sur les bosses",vitesse:"la vivacité en fin de course"};
+// libellés affichés pour le point faible / le point fort de chaque catégorie (valeurs par
+// défaut BMX ; reconstruits pour le bon sport dans rebuildSportContent(), appelé dès qu'on
+// connaît le sport du client — cf. axeInit()).
+let mentalFaibleLabels={portillon:"la gestion de la pression sur la gate",rumination:"la gestion des erreurs passées",confiance:"la confiance en soi face aux autres pilotes"};
+let mentalFortLabels={portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en course"};
+let physFaibleLabels={explosivite:"l'explosivité au départ",force:"la force dans les jambes",stabilite:"le gainage et la stabilité",vitesse:"la vitesse et l'endurance de fin de course"};
+let physFortLabels={explosivite:"la percussion au démarrage",force:"la puissance dans les jambes",stabilite:"la stabilité sur les bosses",vitesse:"la vivacité en fin de course"};
 
 // analyse des points forts et faibles à partir des 9 questions mentales + 9 questions physiques du diagnostic
 function analyse(){
@@ -1287,58 +1736,77 @@ function analyseSensoriel(){
   return {oeil, canal, depart, confiance, auditif, visuel};
 }
 
-const mentalPools={
-  'portillon':{title:"Ancrage sur la gate",niveaux:[
-    {lvl:"Niveau 1 · Repérer",desc:"3 minutes avant chaque manche, tu poses une routine en 4 temps : regard, respiration, mot-clé, poussée. Tu notes ce que tu ressens juste après."},
-    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 4 temps, tu les muscles. À l'entraînement, tu les répètes 3 fois d'affilée en imaginant le bruit du portique et les autres pilotes à côté de toi. Tu notes, pour chacune, ce qui a tenu et ce qui a lâché."},
-    {lvl:"Niveau 3 · Ancrer",desc:"Ta routine doit maintenant tenir en 10 secondes, pas en 3 minutes. Un seul regard, une seule respiration, ton mot-clé, la poussée. Le jour de course, tu ne la penses plus, elle se déclenche toute seule."},
+function buildMentalPools(l, tier){
+  const pratique = PRATIQUE_NOM[l.verbePratique] || 'ta pratique';
+  const kid = tier === 'enfant';
+  return {
+  'portillon':{title:"Ancrage "+l.auDepart,niveaux: kid ? [
+    {lvl:"Niveau 1 · Repérer",desc:"Avant chaque "+l.unite+", tu joues à un petit jeu en 4 étapes : tu regardes, tu respires un grand coup, tu dis ton mot magique dans ta tête, et "+l.pousseeMot+". Juste après, tu notes comment tu te sens (content, stressé, fier...)."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes ton jeu en 4 étapes, et tu t'entraînes à le faire encore mieux. À l'entraînement, tu le refais 3 fois de suite en imaginant "+l.portiqueEtPairs+". À chaque fois, tu notes ce qui a bien marché et ce qui était plus dur."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Ton jeu doit maintenant se faire tout seul, en 10 secondes à peine : un regard, un souffle, ton mot magique, "+l.pousseeMot+". Le jour de "+l.jourMot+", tu n'as même plus besoin d'y penser, ça se déclenche tout seul, comme par magie."},
+  ] : [
+    {lvl:"Niveau 1 · Repérer",desc:"3 minutes avant chaque "+l.unite+", tu poses une routine en 4 temps : regard, respiration, mot-clé, "+l.pousseeMot+". Tu notes ce que tu ressens juste après."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 4 temps, tu les muscles. À l'entraînement, tu les répètes 3 fois d'affilée en imaginant "+l.portiqueEtPairs+". Tu notes, pour chacune, ce qui a tenu et ce qui a lâché."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Ta routine doit maintenant tenir en 10 secondes, pas en 3 minutes. Un seul regard, une seule respiration, ton mot-clé, "+l.pousseeMot+". Le jour de "+l.jourMot+", tu ne la penses plus, elle se déclenche toute seule."},
   ]},
-  'rumination':{title:"Vider le sac après la manche",niveaux:[
-    {lvl:"Niveau 1 · Repérer",desc:"Après chaque course, 90 secondes pour écrire une chose ratée et une chose réussie. On coupe la boucle avant qu'elle tourne."},
-    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque course, et tu ajoutes une question : qu'est-ce que je ferais différemment la prochaine fois, en une phrase courte. Le but n'est plus seulement de vider, c'est de transformer ce qui reste en une consigne simple pour la manche suivante."},
-    {lvl:"Niveau 3 · Ancrer",desc:"Ta consigne du niveau 2 doit maintenant apparaître toute seule, dans les 10 secondes qui suivent une manche ratée, avant même que tu aies eu le temps de ruminer. Continue d'écrire une fois par semaine, pour vérifier qu'elle est toujours là."},
+  'rumination':{title:"Vider le sac après "+l.uniteArt,niveaux: kid ? [
+    {lvl:"Niveau 1 · Repérer",desc:"Après chaque "+l.jourMot+", tu prends 90 secondes (le temps de compter jusqu'à 90 !) pour écrire une chose qui n'a pas marché et une chose que tu as réussie. Comme ça, tu arrêtes d'y repenser en boucle."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque "+l.jourMot+", et tu ajoutes une question toute simple : la prochaine fois, qu'est-ce que je ferais différemment ? Une phrase courte suffit."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Ta réponse doit maintenant te venir toute seule, très vite, juste après "+l.uniteMauvaise+". Continue à écrire une fois par semaine, pour vérifier qu'elle est toujours dans ta tête."},
+  ] : [
+    {lvl:"Niveau 1 · Repérer",desc:"Après chaque "+l.jourMot+", 90 secondes pour écrire une chose ratée et une chose réussie. On coupe la boucle avant qu'elle tourne."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque "+l.jourMot+", et tu ajoutes une question : qu'est-ce que je ferais différemment la prochaine fois, en une phrase courte. Le but n'est plus seulement de vider, c'est de transformer ce qui reste en une consigne simple pour "+l.uniteSuivante+"."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Ta consigne du niveau 2 doit maintenant apparaître toute seule, dans les 10 secondes qui suivent "+l.uniteMauvaise+", avant même que tu aies eu le temps de ruminer. Continue d'écrire une fois par semaine, pour vérifier qu'elle est toujours là."},
   ]},
-  'confiance':{title:"Le carnet des preuves",niveaux:[
-    {lvl:"Niveau 1 · Repérer",desc:"Chaque semaine, tu notes 3 moments où ton pilotage a bien répondu. On construit la confiance sur du concret, pas sur des mots."},
+  'confiance':{title:"Le carnet des preuves",niveaux: kid ? [
+    {lvl:"Niveau 1 · Repérer",desc:"Chaque semaine, tu notes 3 moments où "+pratique+" a bien marché. Comme ça, tu vois par toi-même que tu progresses, pas juste dans ta tête."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu continues ton carnet, et une fois par semaine, avant l'entraînement, tu relis tes 3 dernières notes à voix basse. Ça aide ta tête à se souvenir que tu es capable."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Avant chaque "+l.unite+", tu repenses en 5 secondes à ton meilleur souvenir des dernières semaines, sans l'écrire cette fois. C'est cette image-là qui doit être dans ta tête juste avant "+l.pousseeMot+", pas le stress."},
+  ] : [
+    {lvl:"Niveau 1 · Repérer",desc:"Chaque semaine, tu notes 3 moments où "+pratique+" a bien répondu. On construit la confiance sur du concret, pas sur des mots."},
     {lvl:"Niveau 2 · Exposer",desc:"Ton carnet des preuves continue, et tu ajoutes une relecture. Une fois par semaine, avant l'entraînement, tu relis tes 3 dernières notes à voix basse. Le but : que ta tête associe la confiance à un vrai souvenir, pas à une pensée en l'air."},
-    {lvl:"Niveau 3 · Ancrer",desc:"Le carnet devient un réflexe silencieux. Avant chaque manche, tu convoques en 5 secondes ta meilleure image des dernières semaines, sans l'écrire. C'est cette image, et pas le stress du moment, qui doit être la dernière chose dans ta tête avant la poussée."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Le carnet devient un réflexe silencieux. Avant chaque "+l.unite+", tu convoques en 5 secondes ta meilleure image des dernières semaines, sans l'écrire. C'est cette image, et pas le stress du moment, qui doit être la dernière chose dans ta tête avant "+l.pousseeMot+"."},
   ]},
-};
-const physPool={
+  };
+}
+let mentalPools=buildMentalPools(SPORT_LEXICON.bmx, 'ado');
+function buildPhysPool(l){
+  const pratique = PRATIQUE_NOM[l.verbePratique] || 'ta pratique';
+  return {
   // SALLE : équipement de gym normal, mais uniquement des poids fixes, toujours en nombre pair de kilos.
   // le champ "c" est une explication en langage simple, pour un public non-sportif (parents compris).
   gym:[
-    {title:"Départs explosifs",lvl:"Explosivité",desc:"La puissance qui te sort de la gate.",series:"4 séries",dur:"20 min",moves:[
+    {title:"Départs explosifs",lvl:"Explosivité",desc:"La puissance qui te sort "+l.auDepartCourt+".",series:"4 séries",dur:"20 min",moves:[
       {n:"Presse à cuisses explosive",d:"4 × 5 reps · poussée la plus rapide possible · repos 2 min",c:"Assis(e) sur la machine, jambes pliées à 90°, tu pousses le plus vite possible sans bloquer les genoux à l'arrivée.",poids:"40 kg"},
       {n:"Fentes sautées (haltères)",d:"4 × 6 par jambe · réception souple · repos 90 s",c:"Un haltère dans chaque main, tu passes d'une fente à l'autre par un petit saut, en changeant de jambe à chaque fois.",poids:"2 × 4 kg"},
       {n:"Sauts sur box",d:"4 × 4 · monter haut, redescendre contrôlé · repos 2 min",c:"Depuis une position légèrement fléchie, tu sautes à pieds joints sur une plateforme stable, puis tu redescends en marchant, jamais en sautant en arrière.",poids:"poids du corps"},
     ]},
-    {title:"Chaîne postérieure",lvl:"Force",desc:"Le moteur de ta relance en sortie de virage.",series:"3 séries",dur:"18 min",moves:[
+    {title:"Chaîne postérieure",lvl:"Force",desc:"Le moteur de ta relance "+l.sortieAction+".",series:"3 séries",dur:"18 min",moves:[
       {n:"Soulevé de terre léger",d:"3 × 8 · dos gainé, mouvement lent · repos 2 min",c:"Barre ou haltères devant les cuisses, dos bien droit, tu plies les hanches (pas le dos) pour descendre la charge le long des jambes, puis tu remontes en poussant sur les talons.",poids:"30 kg"},
       {n:"Hip thrust",d:"3 × 10 · pause 1 s en haut · repos 90 s",c:"Dos calé contre un banc, pieds au sol, tu pousses le bassin vers le haut jusqu'à aligner cuisses et buste, en serrant les fessiers.",poids:"24 kg"},
       {n:"Leg curl",d:"3 × 12 · descente contrôlée · repos 75 s",c:"Sur la machine, tu ramènes les talons vers les fessiers en pliant les genoux, puis tu redescends lentement.",poids:"16 kg"},
     ]},
-    {title:"Gainage dynamique",lvl:"Stabilité",desc:"Le corps solide qui tient sur les bosses.",series:"3 séries",dur:"12 min",moves:[
+    {title:"Gainage dynamique",lvl:"Stabilité",desc:"Le corps solide qui tient "+l.stabiliteContexte+".",series:"3 séries",dur:"12 min",moves:[
       {n:"Planche sur ballon",d:"3 × 40 s · bassin verrouillé · repos 45 s",c:"Avant-bras posés sur un gros ballon de gym, corps aligné de la tête aux pieds, tu tiens la position sans laisser le bassin tomber.",poids:"poids du corps"},
       {n:"Rotations avec disque",d:"3 × 10 par côté · lent · repos 45 s",c:"Assis(e), un disque de poids tenu à deux mains devant la poitrine, tu tournes le buste d'un côté puis de l'autre en gardant le dos droit.",poids:"4 kg"},
       {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s",c:"Allongé(e) sur le côté, appui sur l'avant-bras, tu soulèves le bassin pour aligner tout le corps, puis tu tiens la position.",poids:"poids du corps"},
     ]},
-    {title:"Puissance de relance",lvl:"Puissance",desc:"La force qui te fait regagner les watts perdus en sortie de virage.",series:"3 séries",dur:"20 min",moves:[
+    {title:"Puissance de relance",lvl:"Puissance",desc:"La force qui te fait regagner ta vitesse "+l.sortieAction+".",series:"3 séries",dur:"20 min",moves:[
       {n:"Presse à cuisses lourde",d:"3 × 6 · charge plus lourde, contrôle à la descente · repos 2 min 30",c:"Même mouvement que la presse à cuisses explosive, mais avec une charge plus lourde : on contrôle bien la descente, sans jamais bloquer les genoux à fond.",poids:"50 kg"},
       {n:"Rowing buste penché",d:"3 × 8 · dos plat, tirage vers le nombril · repos 90 s",c:"Buste penché en avant, dos plat, tu tires la barre ou les haltères vers le nombril en serrant les omoplates.",poids:"20 kg"},
       {n:"Squat gobelet",d:"3 × 10 · descente lente, remontée puissante · repos 90 s",c:"Un haltère tenu à deux mains contre la poitrine, tu descends comme pour t'asseoir sur une chaise basse, dos droit, puis tu remontes.",poids:"16 kg"},
     ]},
-    {title:"Vitesse de jambes",lvl:"Vitesse",desc:"La fréquence de jambes qui fait la différence sur les portions de pumping.",series:"4 séries",dur:"18 min",moves:[
+    {title:"Vitesse de jambes",lvl:"Vitesse",desc:"La fréquence de jambes qui fait la différence sur "+l.phasesIntenses+".",series:"4 séries",dur:"18 min",moves:[
       {n:"Montées de genoux lestées",d:"4 × 20 s · rythme maximal · repos 60 s",c:"Sur place, avec de petits poids aux chevilles ou aux mains, tu montes les genoux le plus vite possible, comme un sprint sur place.",poids:"2 × 2 kg"},
       {n:"Sauts latéraux",d:"4 × 8 par côté · réactif, temps de contact court au sol · repos 75 s",c:"Tu sautes à pieds joints d'un côté puis de l'autre, en touchant le sol le moins longtemps possible à chaque saut.",poids:"poids du corps"},
       {n:"Fentes bulgares",d:"3 × 8 par jambe · pied arrière surélevé · repos 90 s",c:"Pied arrière posé sur un banc derrière toi, tu descends en pliant la jambe avant jusqu'à ce que le genou arrière frôle le sol.",poids:"2 × 6 kg"},
     ]},
-    {title:"Haut du corps, tenue du guidon",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent le guidon dans les bosses, sans se fatiguer avant la fin de la manche.",series:"3 séries",dur:"16 min",moves:[
+    {title:"Haut du corps",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent "+l.hautCorpsPhrase+", sans se fatiguer avant la fin de "+l.uniteArt+".",series:"3 séries",dur:"16 min",moves:[
       {n:"Tirage poulie haute",d:"3 × 10 · omoplates serrées, contrôle du retour · repos 75 s",c:"Assis(e) face à la machine, tu tires la barre vers le haut de la poitrine en serrant les omoplates, puis tu relâches doucement.",poids:"20 kg"},
       {n:"Développé épaules assis",d:"3 × 8 · mouvement contrôlé, pas de à-coup · repos 90 s",c:"Assis(e), un haltère dans chaque main au niveau des épaules, tu pousses vers le haut jusqu'à presque tendre les bras.",poids:"2 × 6 kg"},
       {n:"Curl biceps",d:"3 × 10 · lent à la descente · repos 60 s",c:"Debout, bras le long du corps, tu plies les coudes pour remonter les haltères vers les épaules, sans bouger les épaules.",poids:"2 × 4 kg"},
     ]},
-    {title:"Gainage rotationnel",lvl:"Rotation",desc:"La rotation du buste qui te fait passer les virages sans perdre d'appui.",series:"3 séries",dur:"16 min",moves:[
+    {title:"Gainage rotationnel",lvl:"Rotation",desc:"La rotation du buste qui te fait passer "+l.virageMot+" sans perdre d'appui.",series:"3 séries",dur:"16 min",moves:[
       {n:"Rotations à la poulie",d:"3 × 10 par côté · lent, contrôlé · repos 60 s",c:"Debout de profil par rapport à la machine, tu tires la poignée en tournant le buste, bras presque tendus, comme un geste de lancer.",poids:"6 kg"},
       {n:"Woodchop avec disque",d:"3 × 8 par côté · geste diagonal, dynamique · repos 60 s",c:"Un disque tenu à deux mains, tu pars d'une épaule et tu l'amènes vers la hanche opposée, comme un coup de hache.",poids:"8 kg"},
       {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s",c:"En position de planche, tu tournes le buste d'un côté en levant un bras vers le plafond, puis tu reviens et tu changes de côté.",poids:"poids du corps"},
@@ -1362,7 +1830,7 @@ const physPool={
       {n:"Fentes marchées",d:"3 × 12 par jambe · buste droit · repos 75 s",c:"Tu avances en alternant de grandes fentes, comme si tu marchais, buste droit à chaque pas."},
       {n:"Chaise au mur",d:"3 × 45 s · cuisses parallèles au sol · repos 60 s",c:"Dos contre un mur, tu descends comme pour t'asseoir sur une chaise invisible, cuisses parallèles au sol, et tu tiens la position."},
     ]},
-    {title:"Gainage au sol",lvl:"Stabilité",desc:"Le tronc qui verrouille ton pilotage.",series:"3 séries",dur:"12 min",moves:[
+    {title:"Gainage au sol",lvl:"Stabilité",desc:"Le tronc qui verrouille "+pratique+".",series:"3 séries",dur:"12 min",moves:[
       {n:"Planche",d:"3 × 40 s · corps aligné · repos 45 s",c:"Appui sur les avant-bras et les pointes de pieds, corps bien aligné de la tête aux talons, tu tiens la position sans creuser le dos."},
       {n:"Gainage latéral",d:"3 × 30 s par côté · repos 40 s",c:"Allongé(e) sur le côté, appui sur l'avant-bras, tu soulèves le bassin pour aligner tout le corps, puis tu tiens la position."},
       {n:"Superman",d:"3 × 12 · pause 1 s en haut · repos 45 s",c:"Allongé(e) sur le ventre, tu lèves en même temps les bras et les jambes tendus, comme si tu volais, puis tu redescends doucement."},
@@ -1372,7 +1840,7 @@ const physPool={
       {n:"Pompes surélevées",d:"3 × 10 · mains sur une chaise ou une table basse, corps aligné · repos 75 s",c:"Mains posées sur une chaise ou une table basse, corps aligné, tu descends la poitrine vers l'appui puis tu repousses."},
       {n:"Squats sautés",d:"3 × 8 · réception souple · repos 90 s",c:"Tu descends comme un squat classique, puis tu sautes en amortissant bien la réception."},
     ]},
-    {title:"Équilibre sur une jambe",lvl:"Équilibre",desc:"L'équilibre sur une jambe, la base de ta stabilité dans les virages.",series:"3 séries",dur:"16 min",moves:[
+    {title:"Équilibre sur une jambe",lvl:"Équilibre",desc:"L'équilibre sur une jambe, la base de ta stabilité dans "+l.virageMot+".",series:"3 séries",dur:"16 min",moves:[
       {n:"Fente arrière surélevée",d:"3 × 8 par jambe · pied arrière posé sur une chaise · repos 90 s",c:"Pied arrière posé sur une chaise derrière toi, tu descends sur la jambe avant, genou aligné avec le pied."},
       {n:"Squat une jambe assisté",d:"3 × 6 par jambe · une main posée sur une table ou un mur pour l'équilibre · repos 90 s",c:"Une main posée sur un mur ou une table pour t'équilibrer, tu descends sur une seule jambe puis tu remontes."},
       {n:"Chaise au mur",d:"3 × 40 s · cuisses parallèles au sol · repos 60 s",c:"Dos contre un mur, tu descends comme pour t'asseoir sur une chaise invisible, cuisses parallèles au sol, et tu tiens la position."},
@@ -1382,51 +1850,61 @@ const physPool={
       {n:"Ciseaux au sol",d:"3 × 10 par jambe · rythme rapide, gainage actif · repos 60 s",c:"Allongé(e) sur le dos, jambes tendues à quelques centimètres du sol, tu les croises rapidement l'une au-dessus de l'autre, comme des ciseaux."},
       {n:"Sauts latéraux",d:"4 × 8 par côté · réactif · repos 75 s",c:"Tu sautes à pieds joints d'un côté puis de l'autre, en touchant le sol le moins longtemps possible à chaque saut."},
     ]},
-    {title:"Haut du corps sans matériel",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent le guidon, travaillés à la maison.",series:"3 séries",dur:"16 min",moves:[
+    {title:"Haut du corps sans matériel",lvl:"Haut du corps",desc:"Les bras et les épaules qui tiennent "+l.hautCorpsPhrase+", travaillés à la maison.",series:"3 séries",dur:"16 min",moves:[
       {n:"Pompes classiques",d:"3 × 8 · corps aligné, descente contrôlée · repos 75 s",c:"Mains au sol un peu plus larges que les épaules, corps aligné, tu descends la poitrine vers le sol puis tu repousses."},
       {n:"Pompes déclinées",d:"3 × 6 · pieds posés sur une chaise, mains au sol · repos 90 s",c:"Pieds posés sur une chaise, mains au sol, tu fais des pompes dans cette position plus inclinée, plus exigeante pour les épaules."},
       {n:"Gainage bras tendus",d:"3 × 30 s · position de planche haute · repos 45 s",c:"Position de planche mais bras tendus, mains sous les épaules, corps aligné, tu tiens la position."},
     ]},
-    {title:"Gainage rotationnel au sol",lvl:"Rotation",desc:"La rotation du buste qui te fait passer les virages, sans matériel.",series:"3 séries",dur:"14 min",moves:[
+    {title:"Gainage rotationnel au sol",lvl:"Rotation",desc:"La rotation du buste qui te fait passer "+l.virageMot+", sans matériel.",series:"3 séries",dur:"14 min",moves:[
       {n:"Rotations du buste assis",d:"3 × 10 par côté · pieds surélevés sur une chaise, mains jointes · repos 60 s",c:"Assis(e), pieds surélevés sur une chaise, mains jointes devant toi, tu tournes le buste d'un côté à l'autre en touchant le sol à chaque fois."},
       {n:"Superman croisé",d:"3 × 10 par côté · bras et jambe opposés · repos 60 s",c:"Allongé(e) sur le ventre, tu lèves en même temps un bras et la jambe opposée, tu tiens un instant, puis tu changes de côté."},
       {n:"Planche avec rotation",d:"3 × 8 par côté · bassin stable · repos 60 s",c:"En position de planche, tu tournes le buste d'un côté en levant un bras vers le plafond, puis tu reviens et tu changes de côté."},
     ]},
   ],
-};
+  };
+}
+let physPool=buildPhysPool(SPORT_LEXICON.bmx);
 
-const parentPool=[
-  {title:"Le trajet du retour",lvl:"Écoute",desc:"C'est le moment le plus délicat après une course. Voici comment le gérer pour que ton enfant se sente soutenu, pas jugé.",moves:[
-    {n:"La règle des 5 minutes",d:"Pas de débrief technique dans les 5 premières minutes après la course. On laisse retomber l'émotion d'abord."},
+function buildParentPool(l){
+  const pratique = PRATIQUE_NOM[l.verbePratique] || 'ta pratique';
+  const pairsBare = l.pairs.replace(/^les autres /,'');
+  const apresIncident = l.revers.replace(/ à l'entraînement$/,''); // "Après une chute" / "Après une erreur" / "Après une défaite"...
+  // genre de l.jourMot déduit de l.grosseCompet ("une grosse course" / "un gros match"), pour accorder
+  // "ta dernière .../ton dernier ..." sans avoir à ajouter un jeton de genre par sport.
+  const jourFem = /^une /.test(l.grosseCompet);
+  const dernierJour = (jourFem?'ta dernière ':'ton dernier ')+l.jourMot;
+  return [
+  {title:"Le trajet du retour",lvl:"Écoute",desc:l.aprèsCompet+", c'est le moment le plus délicat. Voici comment le gérer pour que ton enfant se sente soutenu, pas jugé.",moves:[
+    {n:"La règle des 5 minutes",d:"Pas de débrief technique dans les 5 premières minutes "+lowerFirst(l.aprèsCompet)+". On laisse retomber l'émotion d'abord."},
     {n:"Une seule question ouverte",d:"Demande simplement : \"tu as ressenti quoi ?\" plutôt que \"pourquoi tu as raté ?\". On ouvre, on ne referme pas."},
-    {n:"Finir sur du positif",d:"Repère un vrai point réussi dans sa course et cite-le, même si le résultat n'y est pas."},
+    {n:"Finir sur du positif",d:"Repère un vrai point réussi et cite-le, même si le résultat n'y est pas."},
   ]},
-  {title:"Gérer la pression de la gate",lvl:"Présence",desc:"Ta propre tension se transmet à ton enfant sans un mot. Ce mois-ci, on travaille ta posture à toi.",moves:[
-    {n:"Le calme avant la manche",d:"Dans les minutes avant le départ, reste en retrait et souriant. Évite les derniers conseils, ils ajoutent de la charge."},
+  {title:"Gérer la pression "+contractDe(l.gateNom),lvl:"Présence",desc:"Ta propre tension se transmet à ton enfant sans un mot. Ce mois-ci, on travaille ta posture à toi.",moves:[
+    {n:"Le calme avant "+l.uniteArt,d:"Dans les minutes avant le départ, reste en retrait et souriant. Évite les derniers conseils, ils ajoutent de la charge."},
     {n:"Le geste neutre",d:"Un pouce levé ou un signe simple, sans mot. Il sait que tu es là sans sentir d'attente."},
     {n:"Observer sans commenter",d:"Note pour toi ce que tu vois, tu en parleras plus tard, à froid, s'il le demande."},
   ]},
   {title:"Nourrir la motivation",lvl:"Encouragement",desc:"À cet âge, la motivation vient de l'intérieur. Ton rôle est de l'alimenter sans la remplacer.",moves:[
     {n:"Valoriser l'effort, pas le résultat",d:"\"J'ai vu que tu as travaillé tes départs\" vaut mieux que \"tu as gagné\". On ancre l'effort."},
-    {n:"Laisser de la place au plaisir",d:"Demande ce qui l'a fait rire ou kiffer sur la piste. Le plaisir est le meilleur carburant longue durée."},
+    {n:"Laisser de la place au plaisir",d:"Demande ce qui l'a fait rire ou kiffer sur "+l.lieu+". Le plaisir est le meilleur carburant longue durée."},
     {n:"Respecter les jours sans",d:"S'il n'a pas envie un jour, accepte-le sans culpabiliser. La régularité se joue sur des mois, pas sur un jour."},
   ]},
-  {title:"La peur de la chute",lvl:"Sécurité",desc:"Ta propre peur, même silencieuse, se voit. Ce mois-ci, on travaille comment la garder pour toi sans qu'elle devienne la sienne.",moves:[
+  {title:"La peur d'"+apresIncident.replace(/^Après /,''),lvl:"Sécurité",desc:"Ta propre peur, même silencieuse, se voit. Ce mois-ci, on travaille comment la garder pour toi sans qu'elle devienne la sienne.",moves:[
     {n:"Ne pas nommer le pire",d:"Évite les \"fais attention à...\" juste avant le départ. Ça met une image dans sa tête qui n'y était pas."},
     {n:"Séparer ta peur de sa réalité",d:"Ta peur de parent est normale. Elle ne veut pas dire qu'il prend un vrai risque déraisonnable, elle veut dire que tu l'aimes."},
-    {n:"Après une chute, le corps d'abord",d:"Vérifie qu'il va bien, calmement, avant tout commentaire sur la course. Le reste attend."},
+    {n:apresIncident+", le corps d'abord",d:"Vérifie qu'il va bien, calmement, avant tout commentaire. Le reste attend."},
   ]},
   {title:"Les jours de doute",lvl:"Patience",desc:"Il y aura des semaines où il aura envie de tout arrêter. C'est un passage, pas un signal d'alarme.",moves:[
-    {n:"Ne pas trancher à chaud",d:"Un \"j'arrête le BMX\" dit un soir de défaite se prend au sérieux, mais ne se décide jamais le soir même."},
-    {n:"Reposer la question à froid",d:"Quelques jours plus tard, redemande calmement ce qu'il en pense, loin de l'émotion de la course."},
+    {n:"Ne pas trancher à chaud",d:"Un \""+l.jarreteMot+"\" dit un soir de défaite se prend au sérieux, mais ne se décide jamais le soir même."},
+    {n:"Reposer la question à froid",d:"Quelques jours plus tard, redemande calmement ce qu'il en pense, loin de l'émotion "+contractDe(l.jourMot)+"."},
     {n:"Rappeler le pourquoi, pas le comment",d:"Reviens sur ce qui lui plaît dans ce sport, pas sur ses résultats. Le comment peut attendre."},
   ]},
-  {title:"La comparaison aux autres pilotes",lvl:"Recul",desc:"Sur une piste, la comparaison est partout. Ton rôle est de ramener le regard sur son propre chemin.",moves:[
-    {n:"Comparer à lui-même",d:"\"Par rapport à ta dernière course\" vaut toujours mieux que \"par rapport à untel\". Le seul adversaire qui compte, c'est son mois dernier."},
+  {title:"La comparaison aux "+pairsBare,lvl:"Recul",desc:"Sur "+l.lieu+", la comparaison est partout. Ton rôle est de ramener le regard sur son propre chemin.",moves:[
+    {n:"Comparer à lui-même",d:"\"Par rapport à "+dernierJour+"\" vaut toujours mieux que \"par rapport à untel\". Le seul adversaire qui compte, c'est son mois dernier."},
     {n:"Nommer ce qui ne se voit pas sur un chrono",d:"La régularité, le sang-froid, la progression technique. Ce que le classement ne raconte pas."},
-    {n:"Filtrer ce qui vient de l'extérieur",d:"Les commentaires d'autres parents ou pilotes n'ont pas à devenir les tiens. Protège son espace."},
+    {n:"Filtrer ce qui vient de l'extérieur",d:"Les commentaires d'autres parents ou "+pairsBare+" n'ont pas à devenir les tiens. Protège son espace."},
   ]},
-  {title:"Le sommeil et la récupération",lvl:"Hygiène de vie",desc:"Le corps progresse pendant qu'il se repose, pas seulement pendant qu'il roule. Ce mois-ci, on regarde ce point simple et souvent oublié.",moves:[
+  {title:"Le sommeil et la récupération",lvl:"Hygiène de vie",desc:"Le corps progresse pendant qu'il se repose, pas seulement pendant qu'il "+(VERBE_IL[l.verbePratique]||'pratique')+". Ce mois-ci, on regarde ce point simple et souvent oublié.",moves:[
     {n:"Une heure de coucher stable",d:"Même approximative, une régularité vaut mieux qu'un horaire parfait mais qui change tous les jours."},
     {n:"Les écrans avant de dormir",d:"Une coupure 30 minutes avant le coucher, simplement pour que la tête retombe avant le corps."},
     {n:"Une vraie question médicale, un vrai médecin",d:"Fatigue inhabituelle, douleur qui persiste : ce carnet ne remplace jamais un avis médical. Ce mois-ci, c'est juste un rappel de bon sens."},
@@ -1441,23 +1919,99 @@ const parentPool=[
     {n:"Autoriser la pause",d:"S'arrêter n'est pas reculer. Un corps ou une tête qui a besoin de souffler a le droit de le faire, sans culpabilité."},
     {n:"Rester présent sans forcer",d:"Tu n'as pas besoin de réparer la situation. Être là, simplement, suffit souvent."},
   ]},
-  {title:"Préparer une compétition importante",lvl:"Anticipation",desc:"Une grande course approche. Ton calme dans les jours qui précèdent compte autant que sa préparation à lui.",moves:[
+  {title:"Préparer une compétition importante",lvl:"Anticipation",desc:Cap(l.grosseCompet)+" approche. Ton calme dans les jours qui précèdent compte autant que sa préparation à lui.",moves:[
     {n:"Alléger les derniers jours",d:"Évite d'ajouter des conseils ou des attentes dans la semaine qui précède. Le travail est fait, il reste à le laisser sortir."},
     {n:"Préparer la logistique, pas la performance",d:"Occupe-toi du matériel, des horaires, du trajet. Laisse-le se concentrer sur lui, pas sur l'organisation."},
     {n:"Une phrase simple avant le départ",d:"Quelque chose de court et de chaleureux, jamais un dernier conseil technique. Le moment n'est plus à ça."},
   ]},
-  {title:"Le rôle du groupe",lvl:"Appartenance",desc:"Les copains de piste comptent souvent plus que n'importe quel discours. Ce mois-ci, on regarde ce que ce groupe lui apporte.",moves:[
-    {n:"S'intéresser à ses coéquipiers",d:"Demande qui il apprécie sur la piste, et pourquoi. Le lien social est un moteur puissant à cet âge."},
-    {n:"Favoriser les moments entre pilotes",d:"Un trajet partagé, un temps libre après l'entraînement. Ce n'est pas du temps perdu pour la performance."},
+  {title:"Le rôle du groupe",lvl:"Appartenance",desc:"Les copains "+contractDe(l.lieu)+" comptent souvent plus que n'importe quel discours. Ce mois-ci, on regarde ce que ce groupe lui apporte.",moves:[
+    {n:"S'intéresser à ses coéquipiers",d:"Demande qui il apprécie sur "+l.lieu+", et pourquoi. Le lien social est un moteur puissant à cet âge."},
+    {n:"Favoriser les moments entre "+pairsBare,d:"Un trajet partagé, un temps libre après l'entraînement. Ce n'est pas du temps perdu pour la performance."},
     {n:"Rester à ta place",d:"Le groupe est à lui. Ton rôle est de le faciliter, pas de t'y intégrer ou de le commenter."},
   ]},
   {title:"Faire le bilan de l'année ensemble",lvl:"Projection",desc:"Un an de protocole, c'est un vrai chemin parcouru. Ce mois-ci, on prend le temps de le regarder ensemble avant de reconduire ou d'ajuster.",moves:[
-    {n:"Relire le chemin, pas seulement les courses",d:"Reprenez ensemble ce qui a changé dans sa manière de gérer la pression, pas seulement ses résultats."},
+    {n:"Relire le chemin, pas seulement les "+l.jourMotPluriel,d:"Reprenez ensemble ce qui a changé dans sa manière de gérer la pression, pas seulement ses résultats."},
     {n:"Lui demander ce qu'il veut pour l'an prochain",d:"Son avis sur la suite compte autant que le tien. C'est son protocole, avant d'être le tien."},
     {n:"Marquer le cap franchi",d:"Un an de régularité mérite d'être reconnu comme tel, indépendamment des résultats sportifs de la saison."},
   ]},
-];
-const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
+  ];
+}
+let parentPool=buildParentPool(SPORT_LEXICON.bmx);
+
+// Reconstruit tout le contenu dépendant du sport (diagnostic, labels forts/faibles, pools
+// mentaux/physiques/parents), à appeler dès qu'on connaît le sport du client (cf. axeInit()).
+// Sans effet visible pour un compte BMX historique (SPORT_LEXICON.bmx reproduit exactement
+// les textes d'origine).
+function rebuildSportContent(){
+  const l = L();
+  const tier = ageTier(state.age);
+  diagQuestions = buildDiagQuestions(l, tier);
+  const faceAuxPairs = "face aux "+l.pairs.replace(/^les /,'');
+  mentalFaibleLabels = {portillon:"la gestion de la pression "+l.auDepart,rumination:"la gestion des erreurs passées",confiance:"la confiance en soi "+faceAuxPairs};
+  mentalFortLabels = {portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en "+l.jourMot};
+  physFaibleLabels = {explosivite:"l'explosivité "+l.auDepartCourt,force:"la force dans les jambes",stabilite:"le gainage et la stabilité",vitesse:"la vitesse et l'endurance de fin de "+l.jourMot};
+  physFortLabels = {explosivite:"la percussion "+l.auDemarrageCourt,force:"la puissance dans les jambes",stabilite:"la stabilité "+l.stabiliteContexte,vitesse:"la vivacité en fin de "+l.jourMot};
+  mentalPools = buildMentalPools(l, tier);
+  physPool = buildPhysPool(l);
+  parentPool = buildParentPool(l);
+}
+
+// reconstruit, pour CHAQUE sport de la fiche, les libellés faible/fort mental + physique, afin
+// de reconnaître un ancien libellé enregistré en base (diagnostics_historique.labels) quel que
+// soit le sport du client au moment où il a été écrit — utilisé par renderTrimestre() plus bas.
+function buildFaibleKeyMaps(){
+  const mMap={}, pMap={};
+  Object.keys(SPORT_LEXICON).forEach(function(k){
+    const l = SPORT_LEXICON[k];
+    const faceAuxPairs = l.pairs.replace(/^les /,'');
+    mMap["la gestion de la pression "+l.auDepart] = 'portillon';
+    mMap["la gestion des erreurs passées"] = 'rumination';
+    mMap["la confiance en soi face aux "+faceAuxPairs] = 'confiance';
+    pMap["l'explosivité "+l.auDepartCourt] = 'explosivite';
+    pMap["la force dans les jambes"] = 'force';
+    pMap["le gainage et la stabilité"] = 'stabilite';
+    pMap["la vitesse et l'endurance de fin de "+l.jourMot] = 'vitesse';
+  });
+  return {mMap:mMap, pMap:pMap};
+}
+
+// Met à jour tous les textes statiques (hors contenu généré par render...) selon le sport actif.
+// Sans effet si les éléments n'existent pas encore dans le DOM : chaque accès est protégé.
+function applySportBranding(){
+  const l = L();
+  const set = function(id, txt){ const el=document.getElementById(id); if(el) el.textContent = txt; };
+  const pratique = PRATIQUE_NOM[l.verbePratique] || 'ta pratique';
+
+  set('heroEyebrow', 'Préparation mentale & physique · '+l.nom);
+  const heroTitleEl = document.getElementById('heroTitle');
+  if(heroTitleEl){
+    heroTitleEl.innerHTML = '<div>'+l.verbeHero+'</div><div class="line2">UNE LONGUEUR</div><div>D\'AVANCE</div>';
+  }
+  set('heroLead', 'Un programme qui apprend de toi, '+l.uniteApresUnite+'.');
+  const heroLieuPhrase = (state.sport==='natation') ? 'dans l\'eau' : ('sur '+l.lieu);
+  set('heroSub', 'Chaque mois, ton coach lit ton ressenti et réadapte '+pratique+' mental et ta prépa physique. Rien n\'est figé. Tout avance en spirale, comme toi '+heroLieuPhrase+'.');
+  set('ficheStepTag', 'ÉTAPE 1 · TA FICHE '+l.roleMot.toUpperCase());
+  set('startStepTag', 'MON LABO DU '+l.bossTitre.split(' ').pop());
+  set('startH1', l.bossTitre);
+  set('compSerif', 'La routine qui te met en condition, du lundi '+l.jusquauDepart+'.');
+  set('jourjH1', 'JOUR DE '+l.jourMot.toUpperCase());
+  set('btnJourjTitle', 'JOUR DE '+l.jourMot.toUpperCase());
+  set('debriefStepTag', l.debriefStepTag);
+  set('btnJourjSub', "Le matin de "+l.jourMot+" : uniquement l'essentiel, rien d'autre à lire");
+  set('btnDebriefSub', 'Juste '+lowerFirst(l.aprèsCompet)+', 30 secondes');
+  const roleTagEl = document.getElementById('roleTag');
+  if(roleTagEl && roleTagEl.textContent !== 'Espace coach'){ roleTagEl.textContent = 'Espace '+l.roleMot; }
+
+  // boutons "sur quel moment as-tu senti le plus de blocage" (rapport mensuel), générés dynamiquement
+  const blocEl = document.getElementById('blocOptions');
+  if(blocEl){
+    blocEl.innerHTML = l.blocOptions.map(function(opt){
+      return '<button onclick="rScale(this,\'bloc\',\''+opt.replace(/'/g,"\\'")+'\')">'+opt+'</button>';
+    }).join('');
+  }
+}
+
+const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
   physSeances:{},       // séances physiques validées, par clé "mois-semaine" : {ids:{p0:true,...}, total:n, done:n}
   weekAuto:true,        // tant que vrai, la semaine affichée suit la vraie date (calcul auto) ; passe à false dès qu'un vrai pilote clique lui-même sur un onglet SEM
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
@@ -1575,7 +2129,7 @@ function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   window.scrollTo({top:0,behavior:'instant'});
-  document.getElementById('roleTag').textContent = id==='obs'?'Espace coach':'Espace pilote';
+  document.getElementById('roleTag').textContent = id==='obs'?'Espace coach':('Espace '+L().roleMot);
   buildStepper(id);
   const stepEl=document.getElementById('stepper');
   if(stepEl) stepEl.style.display = (id==='bienvenue') ? 'none' : '';
@@ -1657,6 +2211,12 @@ function ageOut(){
   state.age=+document.getElementById('ageR').value;
   document.getElementById('ageV').textContent=state.age;
   updateGymAccess();
+  const fp=document.getElementById('fieldPhoneParent');
+  if(fp) fp.style.display = state.age<18 ? '' : 'none';
+  // les questions du diagnostic et les exercices mentaux changent de formulation selon la
+  // tranche d'âge (plus courts et concrets pour les 10-12 ans) : on reconstruit dès que
+  // l'âge bouge, avant même que le diagnostic ne démarre.
+  rebuildSportContent();
 }
 function updateGymAccess(){
   const note=document.getElementById('gymNote');
@@ -1799,16 +2359,20 @@ function roundEven(x){
   return v<2 ? 2 : v;
 }
 // la charge progresse doucement sur les 6 premiers mois, puis se stabilise : un abonnement de 12, 16 ou 24 mois
-// ne fait jamais grimper les poids indéfiniment, il maintient un palier sûr une fois la progression atteinte
+// ne fait jamais grimper les poids indéfiniment, il maintient un palier sûr une fois la progression atteinte.
+// À partir de 40 ans, la montée en charge est plus prudente (récupération articulaire) : +2 %/mois
+// au lieu de +3 %/mois, pour un palier final plus bas (+10 % au lieu de +15 % au mois 6).
 function coefProgressionMensuelle(){
   const m = Math.min(state.month, 6);
-  return 1 + (m-1)*0.03; // +3 % par mois jusqu'au mois 6 (+15 %), palier stable ensuite
+  const pas = state.age>=40 ? 0.02 : 0.03;
+  return 1 + (m-1)*pas;
 }
 function adjustWeight(poidsStr){
   // on ne touche qu'aux poids chiffrés en kg
   if(!poidsStr || !/\d/.test(poidsStr) || poidsStr.includes('poids du corps')) return poidsStr;
-  // coefficient d'âge : 15-16 ans = 1.0, 17-18 ans = 1.2
-  let ageCoef = state.age>=17 ? 1.2 : 1.0;
+  // coefficient d'âge : 15-16 ans = 1.0, 17-39 ans = 1.2 (charge pleine adulte),
+  // 40-54 ans = 1.1, 55 ans et + = 1.0 — paliers de prudence articulaire/récupération
+  let ageCoef = state.age>=55 ? 1.0 : state.age>=40 ? 1.1 : state.age>=17 ? 1.2 : 1.0;
   // coefficient de niveau : départemental 0.9, régional 1.0, national 1.1
   let lvlCoef = state.level==='National' ? 1.1 : state.level==='Départemental' ? 0.9 : 1.0;
   const coef = ageCoef*lvlCoef*coefProgressionMensuelle();
@@ -2006,8 +2570,9 @@ async function renderTrimestre(){
         };
         const mKey = Object.keys(premier.labels||{}).length ? null : null; // (garde-fou, non utilisé)
         // on suit précisément la catégorie qui était le point faible au premier diagnostic
-        const mFaibleKey = {"la gestion de la pression sur la gate":"portillon","la gestion des erreurs passées":"rumination","la confiance en soi face aux autres pilotes":"confiance"}[premier.labels && premier.labels.mFaible] || null;
-        const pFaibleKey = {"l'explosivité au départ":"explosivite","la force dans les jambes":"force","le gainage et la stabilité":"stabilite","la vitesse et l'endurance de fin de course":"vitesse"}[premier.labels && premier.labels.pFaible] || null;
+        const faibleMaps = buildFaibleKeyMaps();
+        const mFaibleKey = faibleMaps.mMap[premier.labels && premier.labels.mFaible] || null;
+        const pFaibleKey = faibleMaps.pMap[premier.labels && premier.labels.pFaible] || null;
         evoHtml = `<div class="trim-block" style="background:rgba(168,133,42,.05);border-color:rgba(168,133,42,.3)">
           <h3>Ton évolution chiffrée</h3>
           ${mFaibleKey?ligne('Mental — '+ (premier.labels.mFaible||''), 'mental', mFaibleKey):''}
@@ -2036,32 +2601,35 @@ async function renderTrimestre(){
 // astuce mentale de semaine de course, selon le blocage identifié au diagnostic
 function texteBlocageMentalSemaine(){
   const key = blocageKey();
-  if(key==='portillon') return "Ressors ton rituel des 20 secondes construit dans \"Boss du start\", et utilise-le à chaque manche de la semaine, même à l'entraînement. Ne l'improvise jamais le jour J, il doit déjà être automatique.";
-  if(key==='rumination') return "Prépare ta consigne de retour au calme avant la course, pas après une mauvaise manche. Relis-la la veille : elle doit être prête à l'avance, pas inventée à chaud.";
-  return "Relis ton carnet des preuves avant chaque journée de course. Le but : que ta dernière pensée avant de rouler soit un souvenir solide, pas un doute.";
+  const l = L();
+  if(key==='portillon') return "Ressors ton rituel des 20 secondes construit dans \""+Cap(l.bossTitre.toLowerCase())+"\", et utilise-le à chaque "+l.unite+" de la semaine, même à l'entraînement. Ne l'improvise jamais le jour J, il doit déjà être automatique.";
+  if(key==='rumination') return "Prépare ta consigne de retour au calme "+l.avantCompet+", pas après "+l.uniteMauvaise+". Relis-la la veille : elle doit être prête à l'avance, pas inventée à chaud.";
+  return "Relis ton carnet des preuves avant chaque journée de "+l.jourMot+". Le but : que ta dernière pensée avant de "+l.verbePratique+" soit un souvenir solide, pas un doute.";
 }
 // astuce physique de semaine de course, selon le point faible identifié au diagnostic
 // (même mapping que poidsFaiblesse, adapté à la logique d'affûtage avant course plutôt qu'à la charge d'entraînement)
 function texteFaiblessePhysiqueSemaine(){
   const key = poidsFaiblesseKey();
-  if(key==='explosivite') return "Garde tes jambes fraîches pour l'explosivité : pas de grosse séance jambes dans les 48 h avant la course, tu gardes le peps pour la gate.";
-  if(key==='force') return "Garde de la force en réserve cette semaine : entraînements plus légers, aucune charge lourde à moins de 3 jours de la course.";
-  if(key==='stabilite') return "Quelques minutes de gainage léger chaque jour suffisent à garder ton tronc réactif, sans te fatiguer avant la course.";
+  const l = L();
+  if(key==='explosivite') return "Garde tes jambes fraîches pour l'explosivité : pas de grosse séance jambes dans les 48 h "+l.avantCompet+", tu gardes le peps pour "+l.gateNom+".";
+  if(key==='force') return "Garde de la force en réserve cette semaine : entraînements plus légers, aucune charge lourde à moins de 3 jours "+l.delaCompet+".";
+  if(key==='stabilite') return "Quelques minutes de gainage léger chaque jour suffisent à garder ton tronc réactif, sans te fatiguer "+l.avantCompet+".";
   if(key==='vitesse') return "Attention à ne pas arriver cramé : réduis le volume cette semaine, garde juste un peu de vitesse courte pour rester vif sans épuiser tes réserves.";
   return "Ton diagnostic physique n'est pas encore complet : cette astuce se précisera une fois qu'il sera fait.";
 }
 // astuces d'activation sensorielle du jour J, selon le profil de départ (son / lumière) —
 // utilisée à la fois par "Ma semaine de compétition" et par le mode simplifié "Jour de course"
 function astuceSensorielleDuJour(s){
+  const l = L();
   if(s.depart==='son'){
     return `
       <div class="comp-tip"><span class="ct-num">1</span><div><b>Réveille tes oreilles.</b> Frotte doucement le pavillon de tes deux oreilles entre le pouce et l'index, de haut en bas, une dizaine de fois. Tu les rends plus vives au signal.</div></div>
-      <div class="comp-tip"><span class="ct-num">2</span><div><b>Cale-toi sur le son.</b> Sur la gate, ferme les yeux une seconde et concentre-toi uniquement sur le bruit du départ. C'est lui ton déclencheur, pas la lumière.</div></div>
+      <div class="comp-tip"><span class="ct-num">2</span><div><b>Cale-toi sur le son.</b> ${Cap(l.surLieu)}, ferme les yeux une seconde et concentre-toi uniquement sur le bruit du départ. C'est lui ton déclencheur, pas la lumière.</div></div>
       <div class="comp-tip"><span class="ct-num">3</span><div><b>Respiration d'ancrage.</b> Trois respirations lentes, en écoutant les sons autour de toi. Tu ancres ton attention sur ton canal fort, l'ouïe.</div></div>`;
   } else if(s.depart==='lumière'){
     return `
       <div class="comp-tip"><span class="ct-num">1</span><div><b>Réveille tes yeux.</b> Sans bouger la tête, balaie du regard de gauche à droite puis de haut en bas, une dizaine d'allers-retours. Tu actives ta vision périphérique.</div></div>
-      <div class="comp-tip"><span class="ct-num">2</span><div><b>Fixe les feux.</b> Sur la gate, garde les feux dans ton champ de vision, jamais la grille. C'est le changement des feux qui te déclenche, pas le mouvement de la grille, ni le son.</div></div>
+      <div class="comp-tip"><span class="ct-num">2</span><div><b>Fixe les feux.</b> ${Cap(l.surLieu)}, garde les feux dans ton champ de vision. C'est le changement des feux qui te déclenche, pas un autre mouvement, ni le son.</div></div>
       <div class="comp-tip"><span class="ct-num">3</span><div><b>Clignements nets.</b> Quelques clignements francs juste avant, pour une vision claire et réactive au top départ.</div></div>`;
   }
   return `<div class="comp-tip"><span class="ct-num">!</span><div>Ton profil de départ n'est pas encore déterminé. Refais la partie sensorielle de ton diagnostic pour débloquer tes astuces personnalisées du jour J.</div></div>`;
@@ -2071,16 +2639,17 @@ function astuceSensorielleDuJour(s){
 // d'autre à lire à un moment où la tête est ailleurs.
 function renderJourCourse(){
   const el=document.getElementById('jourjContent');
+  const l=L();
   const s=analyseSensoriel();
-  const ancrage = s.depart==='son'?'un son dans ta tête (le "clac" de la grille, ou un mot claqué)'
-    : s.depart==='lumière'?'une image nette (la grille qui tombe, ta roue qui jaillit)'
+  const ancrage = s.depart==='son'?('un son dans ta tête ('+l.clacSon+')')
+    : s.depart==='lumière'?('une image nette ('+l.imageVisu+')')
     : 'ton image ou ton son de départ préféré';
   const routinePrete = !!(state.startRoutine.mot && state.startRoutine.geste);
   const routineHtml = routinePrete
     ? `<div class="comp-jour-j" style="margin-bottom:20px">
         <h3>🎯 Ta routine de départ</h3>
         <div class="routine-preview on">
-          Dans les 20 secondes avant la gate :
+          Dans les 20 secondes avant ${l.gateNom} :
           <ol>
             <li>3 respirations lentes.</li>
             <li>Tu ancres <b>${ancrage}</b>.</li>
@@ -2092,18 +2661,19 @@ function renderJourCourse(){
       </div>`
     : `<div class="comp-jour-j" style="margin-bottom:20px">
         <h3>🎯 Ta routine de départ</h3>
-        <p style="font-size:14px;color:var(--dim);margin-top:8px">Tu n'as pas encore construit ton rituel d'avant-départ. Va le préparer en 2 minutes dans <b>Devenir un boss du start</b> — idéalement avant, pas le matin même d'une course.</p>
+        <p style="font-size:14px;color:var(--dim);margin-top:8px">Tu n'as pas encore construit ton rituel d'avant-départ. Va le préparer en 2 minutes dans <b>Devenir un boss du start</b> — idéalement avant, pas le matin même de compétition.</p>
       </div>`;
   el.innerHTML = `
     ${routineHtml}
     <div class="comp-jour-j">
       <h3>✨ Ton astuce sensorielle du jour</h3>
-      <p style="font-size:14px;color:var(--dim);margin-bottom:8px">15 à 20 minutes avant ta première manche, après ton cross crawl :</p>
+      <p style="font-size:14px;color:var(--dim);margin-bottom:8px">15 à 20 minutes avant ta première ${l.unite}, après ton cross crawl :</p>
       ${astuceSensorielleDuJour(s)}
     </div>`;
 }
 function renderCompetition(){
   const el=document.getElementById('compContent');
+  const l=L();
   const s=analyseSensoriel();
   // bandeau profil sensoriel
   const departTxt = s.depart==='son'?'un départ au SON du signal':s.depart==='lumière'?'un départ à la VUE, sur les feux':'à déterminer avec ton diagnostic';
@@ -2121,7 +2691,7 @@ function renderCompetition(){
   jours.forEach(j=>{
     planning+=`<div class="comp-day"><div class="cd-day">${j}</div><div class="cd-body"><b>Cross crawl du matin</b>, au réveil avec ton verre d'eau, 1 à 2 minutes. Le socle, tous les jours de la semaine.</div></div>`;
   });
-  planning+=`<div class="comp-day" style="border-color:var(--gold)"><div class="cd-day" style="color:var(--gold)">Jour J</div><div class="cd-body"><b>Cross crawl au réveil</b> comme d'habitude, puis les astuces d'activation ci-dessous, 15 à 20 minutes avant ta première manche.</div></div>`;
+  planning+=`<div class="comp-day" style="border-color:var(--gold)"><div class="cd-day" style="color:var(--gold)">Jour J</div><div class="cd-body"><b>Cross crawl au réveil</b> comme d'habitude, puis les astuces d'activation ci-dessous, 15 à 20 minutes avant ta première ${l.unite}.</div></div>`;
 
   // tips du jour J selon départ son ou lumière (fonction partagée avec le mode "Jour de course")
   const tips = astuceSensorielleDuJour(s);
@@ -2133,7 +2703,7 @@ function renderCompetition(){
     ${planning}
     <div class="comp-jour-j">
       <h3>Le jour J · activer ton canal fort</h3>
-      <p style="font-size:14px;color:var(--dim);margin-bottom:8px">15 à 20 minutes avant ta première manche, après ton cross crawl :</p>
+      <p style="font-size:14px;color:var(--dim);margin-bottom:8px">15 à 20 minutes avant ta première ${l.unite}, après ton cross crawl :</p>
       ${tips}
     </div>`;
 }
@@ -2192,11 +2762,12 @@ function renderFeuTricolore(){
 }
 // ===== MODULE START (ludique, zéro effort ajouté) =====
 function renderStart(){
+  const l=L();
   const s=analyseSensoriel();
   const el=document.getElementById('startContent');
   // ancrage sensoriel personnalisé pour la routine
-  const ancrage = s.depart==='son'?'un son dans ta tête (le "clac" de la grille, ou un mot claqué)'
-    : s.depart==='lumière'?'une image nette (la grille qui tombe, ta roue qui jaillit)'
+  const ancrage = s.depart==='son'?('un son dans ta tête ('+l.clacSon+')')
+    : s.depart==='lumière'?('une image nette ('+l.imageVisu+')')
     : 'ton image ou ton son de départ préféré';
   // badges selon progression
   const bImagery = state.imageryDays>=7;
@@ -2222,9 +2793,9 @@ function renderStart(){
       <div class="sc-head"><span class="sc-emoji">🎬</span><h3>Le cinéma du start</h3><span class="sc-when">Le soir, dans ton lit</span></div>
       <div class="sc-body">Juste avant de dormir, ferme les yeux <b>60 secondes</b> et passe-toi le film de ton start parfait. Une seule fois. Tu ne bouges pas, tu ne forces pas, tu regardes le film dans ta tête.</div>
       <ul class="start-steps">
-        <li>Tu es sur la grille, calme. Tu sens tes mains sur le guidon.</li>
-        <li>Le signal tombe. Tu pars pile au bon moment, explosif et net.</li>
-        <li>Tu prends la première ligne droite en tête. Tu ressens la vitesse.</li>
+        <li>${l.imgStep1}</li>
+        <li>${l.imgStep2}</li>
+        <li>${l.imgStep3}</li>
       </ul>
       <div class="sc-body dim">La visualisation est une des rares techniques mentales prouvées par la science. 60 secondes par soir, c'est du repos, pas du travail.</div>
       <div class="imagery-track">
@@ -2237,14 +2808,14 @@ function renderStart(){
     <!-- 2. Routine de pré-départ -->
     <div class="start-card">
       <div class="sc-head"><span class="sc-emoji">🎯</span><h3>Mon rituel d'avant-départ</h3><span class="sc-when">À construire une fois</span></div>
-      <div class="sc-body">Tu crées ta petite séquence à toi, toujours la même, à faire dans les dernières secondes avant la gate. Tu la construis maintenant, et ensuite elle est à toi pour toujours. <b>Rien à refaire en semaine.</b></div>
+      <div class="sc-body">Tu crées ta petite séquence à toi, toujours la même, à faire dans les dernières secondes avant ${l.gateNom}. Tu la construis maintenant, et ensuite elle est à toi pour toujours. <b>Rien à refaire en semaine.</b></div>
       <div class="sc-body"><b>Ton ancrage sensoriel :</b> comme ton canal fort est ${s.canal}, accroche-toi à ${ancrage}.</div>
       <div class="routine-build">
         <input type="text" id="rMot" placeholder="Ton mot déclencheur (ex : GO, feu, chasse...)" value="${state.startRoutine.mot||''}" oninput="saveRoutine()">
-        <input type="text" id="rGeste" placeholder="Ton petit geste (ex : serrer le guidon 2 fois, souffler fort...)" value="${state.startRoutine.geste||''}" oninput="saveRoutine()">
+        <input type="text" id="rGeste" placeholder="Ton petit geste (ex : ${l.gesteEx})" value="${state.startRoutine.geste||''}" oninput="saveRoutine()">
       </div>
       <div class="routine-preview${bRoutine?' on':''}" id="routinePreview">
-        <b>Ton rituel est prêt.</b> Le jour de course, dans les 20 secondes avant la gate :
+        <b>Ton rituel est prêt.</b> ${l.jourAvantDepart}
         <ol>
           <li>3 respirations lentes.</li>
           <li>Tu ancres <b>${ancrage}</b>.</li>
@@ -2258,19 +2829,19 @@ function renderStart(){
     <!-- 3. Cross crawl (déjà fait le matin) -->
     <div class="start-card">
       <div class="sc-head"><span class="sc-emoji">🔄</span><h3>Ton cross crawl, secret du start</h3><span class="sc-when">Déjà dans ta matinée</span></div>
-      <div class="sc-body">Tu le fais déjà chaque matin, on ne rajoute rien. On te dit juste pourquoi il compte pour ton start : le cross crawl met ton corps et ta tête en cohérence, gauche-droite, avant l'effort. C'est ta mise en route corps-esprit, exactement ce qui te sert sur la gate.</div>
-      <div class="sc-body dim">Le jour de course, ton cross crawl du matin fait partie de ta préparation du start. Tu es déjà en train de bosser sans le savoir.</div>
+      <div class="sc-body">Tu le fais déjà chaque matin, on ne rajoute rien. On te dit juste pourquoi il compte pour ton start : le cross crawl met ton corps et ta tête en cohérence, gauche-droite, avant l'effort. C'est ta mise en route corps-esprit, exactement ce qui te sert ${l.surLieu}.</div>
+      <div class="sc-body dim">Le jour de ${l.jourMot}, ton cross crawl du matin fait partie de ta préparation du start. Tu es déjà en train de bosser sans le savoir.</div>
     </div>
 
     <!-- 4. Journal du start -->
     <div class="start-card">
-      <div class="sc-head"><span class="sc-emoji">📖</span><h3>Le carnet secret de mes starts</h3><span class="sc-when">Les jours de course seulement</span></div>
-      <div class="sc-body">Après une course, en <b>3 mots ou 3 lignes</b>, tu notes comment tu as vécu ton départ. Jamais en semaine, seulement les jours où tu roules. Petit à petit, tu deviens l'expert de ton propre start.</div>
+      <div class="sc-head"><span class="sc-emoji">📖</span><h3>Le carnet secret de mes starts</h3><span class="sc-when">Les jours de ${l.jourMot} seulement</span></div>
+      <div class="sc-body">${l.aprèsCompet}, en <b>3 mots ou 3 lignes</b>, tu notes comment tu as vécu ton départ. Jamais en semaine, seulement ${l.joursDeCompet}. Petit à petit, tu deviens l'expert de ton propre start.</div>
       <div class="routine-build">
         <input type="text" id="jStart" placeholder="Mon départ aujourd'hui : un mot ou une phrase" onkeydown="if(event.key==='Enter')addJournal()">
         <button class="imagery-btn" onclick="addJournal()" style="align-self:flex-start">Ajouter à mon carnet</button>
       </div>
-      ${state.startJournal.length?`<div class="jlog">${state.startJournal.map((j,i)=>`<div class="jlog-entry"><span class="je-num">Course ${i+1}</span><br>${j}</div>`).join('')}</div>`:'<div class="sc-body dim" style="margin-top:10px">Ton carnet est vide pour l\'instant. Il se remplira course après course.</div>'}
+      ${state.startJournal.length?`<div class="jlog">${state.startJournal.map((j,i)=>`<div class="jlog-entry"><span class="je-num">${l.uniteJournal} ${i+1}</span><br>${j}</div>`).join('')}</div>`:'<div class="sc-body dim" style="margin-top:10px">Ton carnet est vide pour l\'instant. Il se remplira '+l.jourApresJour+'.</div>'}
     </div>`;
 }
 function addImagery(){
@@ -2436,6 +3007,10 @@ function buildProgram(){
   renderWeek(started);
 }
 function renderWeek(started){
+  // côté parent : uniquement pour les mineurs. À partir de 18 ans, le sportif gère seul,
+  // pas de tiers "accompagnant" imposé dans le suivi.
+  const parentZoneEl=document.getElementById('parentZone');
+  if(parentZoneEl) parentZoneEl.style.display = state.age<18 ? '' : 'none';
   // programme pas encore démarré : on masque les exercices derrière un cadenas
   if(started===false){
     const lockHtml='<div class="col-lock"><div class="cl-ico">🔒</div>Programme verrouillé jusqu\'au démarrage<div class="cl-date">'+fmtDate(state.startDate)+'</div></div>';
@@ -2509,6 +3084,8 @@ function renderWeek(started){
     html+='<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
   }
   document.getElementById('physCol').innerHTML=html;
+  // côté parent : uniquement pour les mineurs (voir toggle du conteneur en tête de fonction)
+  if(state.age>=18){ document.getElementById('parentCol').innerHTML=''; return; }
   renderFeuTricolore();
   // côté parent : 1 clé par mois, tourne avec le mois (spirale)
   const pa=parentPool[(state.month-1)%parentPool.length];
