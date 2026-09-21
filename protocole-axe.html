@@ -1818,7 +1818,8 @@ function buildPhysPool(l){
     ]},
   ],
   // MAISON : uniquement le poids du corps. Une chaise ou une table stable peuvent servir d'appui,
-  // jamais de barre, d'élastique ou de matériel à acheter.
+  // jamais de barre, d'élastique ou de matériel à acheter (seule exception : les profils
+  // spécifiques déclarés dans PROFILS_SPECIFIQUES, ex. un sportif équipé d'une barre de traction).
   home:[
     {title:"Sprints de poussée",lvl:"Explosivité",desc:"Pur poids du corps pour le départ, sans aucun matériel.",series:"4 séries",dur:"18 min",moves:[
       {n:"Squats sautés",d:"4 × 8 · réception souple, remonter vite · repos 90 s",c:"Tu descends comme un squat classique, puis tu sautes le plus haut possible en amortissant bien la réception."},
@@ -2415,7 +2416,7 @@ function joursSeance(){
   return jours.slice(0,physSessions());
 }
 function intensityLabel(){
-  return state.level==='National'?'+ séries, + complexité'
+  return state.level==='National'?'volume élevé, repos courts, variantes avancées'
        : state.level==='Régional'?'volume standard'
        : 'volume allégé';
 }
@@ -2441,13 +2442,143 @@ function adjustWeight(poidsStr){
   // coefficient d'âge : 15-16 ans = 1.0, 17-39 ans = 1.2 (charge pleine adulte),
   // 40-54 ans = 1.1, 55 ans et + = 1.0 — paliers de prudence articulaire/récupération
   let ageCoef = state.age>=55 ? 1.0 : state.age>=40 ? 1.1 : state.age>=17 ? 1.2 : 1.0;
-  // coefficient de niveau : départemental 0.9, régional 1.0, national 1.1
-  let lvlCoef = state.level==='National' ? 1.1 : state.level==='Départemental' ? 0.9 : 1.0;
+  // coefficient de niveau : départemental 0.9, régional 1.0, national 1.15
+  let lvlCoef = state.level==='National' ? 1.15 : state.level==='Départemental' ? 0.9 : 1.0;
   const coef = ageCoef*lvlCoef*coefProgressionMensuelle();
   // gérer les formats "40 kg" et "2 × 4 kg" : toujours un poids fixe, pair, jamais de virgule
   return poidsStr.replace(/(\d+(?:\.\d+)?)\s*kg/g,(m,n)=>{
     return roundEven(+n*coef)+' kg';
   });
+}
+
+/* ============ NIVEAU NATIONAL : EXIGENCE PHYSIQUE RENFORCÉE ============ */
+// Un pilote national ne se contente pas d'une série de plus : plus de répétitions, des repos
+// raccourcis, des variantes plus dures des mêmes mouvements, et un finisher en fin de séance.
+// La semaine de relâchement reste une vraie semaine d'absorption (pas de finisher, repos normaux,
+// volume à peine au-dessus du régional) : on ne supprime jamais la récupération.
+// Les variantes avancées et le finisher ne s'appliquent qu'à partir de 14 ans ; en dessous, un
+// national garde les mouvements standards, avec seulement le volume et les repos renforcés.
+const VARIANTES_NATIONAL = {
+  // maison
+  "Squats sautés":{n:"Squats sautés, pause basse 2 s",c:"Tu descends en squat, tu tiens 2 secondes tout en bas, puis tu exploses vers le haut. La pause supprime l'élan : c'est la jambe seule qui produit la force."},
+  "Démarrages au sol":{n:"Démarrages depuis position allongée",c:"Allongé(e) sur le ventre, tu te relèves le plus vite possible et tu t'élances sur 5 m. Tu travailles la réaction ET l'explosion."},
+  "Pont fessier une jambe":{n:"Pont fessier une jambe, pied sur une chaise",c:"Même pont fessier, mais le pied d'appui posé sur une chaise : l'amplitude augmente et l'arrière de la cuisse travaille beaucoup plus."},
+  "Fentes marchées":{n:"Fentes marchées, pause basse 2 s",c:"À chaque pas, tu tiens 2 secondes en bas, genou arrière à un doigt du sol, avant de repousser."},
+  "Chaise au mur":{n:"Chaise au mur sur une jambe",d:"3 × 30 s par jambe · cuisse parallèle au sol · repos 60 s",c:"Dos contre le mur, cuisses parallèles au sol, tu décolles un pied et tu tiens sur une seule jambe."},
+  "Planche":{n:"Planche avec touches d'épaules",c:"En planche bras tendus, tu viens toucher l'épaule opposée avec une main, puis l'autre, sans que le bassin bouge."},
+  "Gainage latéral":{n:"Gainage latéral, jambe du dessus levée",c:"En gainage sur le côté, tu lèves la jambe du dessus et tu la tiens en l'air tout le temps de l'exercice."},
+  "Superman":{n:"Superman, tenue 3 s en haut",c:"Allongé(e) sur le ventre, tu lèves bras et jambes tendus et tu tiens 3 secondes en haut à chaque répétition."},
+  "Dips sur chaise":{n:"Dips sur chaise, pieds sur une 2e chaise",c:"Mains sur une chaise derrière toi, pieds posés sur une autre chaise devant : tout le poids passe dans les bras."},
+  "Pompes surélevées":{n:"Pompes classiques",d:"3 × 10 · mains au sol, corps aligné · repos 75 s",c:"Mains au sol un peu plus larges que les épaules, corps aligné, tu descends la poitrine jusqu'au sol puis tu repousses."},
+  "Fente arrière surélevée":{n:"Fente bulgare, descente en 3 s",c:"Pied arrière sur une chaise, tu descends en comptant 3 secondes, puis tu remontes fort."},
+  "Squat une jambe assisté":{n:"Squat une jambe jusqu'à une chaise",c:"Sans appui des mains, tu descends sur une seule jambe jusqu'à effleurer une chaise derrière toi, puis tu remontes."},
+  "Ciseaux au sol":{n:"Ciseaux au sol, épaules décollées",c:"Même ciseaux, mais tête et épaules décollées du sol pendant toute la série : le haut des abdos travaille aussi."},
+  "Sauts latéraux":{n:"Sauts latéraux sur une jambe",d:"4 × 8 par jambe · réactif, réception stable · repos 75 s",c:"Tu sautes d'un côté à l'autre sur une seule jambe, en stabilisant chaque réception."},
+  "Pompes classiques":{n:"Pompes claquées",c:"Tu descends en pompe, puis tu repousses assez fort pour décoller les mains et taper dans tes mains avant de te réceptionner."},
+  "Pompes déclinées":{n:"Pompes déclinées, descente en 3 s",c:"Pieds sur une chaise, mains au sol, tu descends en comptant 3 secondes, puis tu repousses."},
+  "Gainage bras tendus":{n:"Gainage bras tendus, une jambe levée",c:"En planche haute, tu lèves une jambe, puis tu changes à mi-temps."},
+  "Rotations du buste assis":{n:"Rotations du buste, pieds décollés",c:"Assis(e), pieds décollés du sol (sans chaise), tu tournes le buste d'un côté à l'autre."},
+  "Superman croisé":{n:"Superman croisé, tenue 3 s",c:"Bras et jambe opposés levés, tu tiens 3 secondes avant de changer de côté."},
+  "Planche avec rotation":{n:"Planche avec rotation, pause 2 s",c:"En planche, tu ouvres le buste bras vers le plafond et tu tiens 2 secondes en haut avant de revenir."},
+  // salle (les charges montent déjà via adjustWeight)
+  "Sauts sur box":{n:"Sauts sur box haute",c:"Même saut, sur une plateforme plus haute : cherche la hauteur maximale que tu peux atteindre proprement."},
+  "Planche sur ballon":{n:"Planche sur ballon, pieds joints",c:"Avant-bras sur le ballon, pieds collés l'un à l'autre : la base est plus étroite, le gainage bien plus exigeant."},
+  "Équilibre sur un pied lesté":{n:"Équilibre sur un pied, yeux fermés",c:"Debout sur une jambe avec les petits poids, tu fermes les yeux : l'équilibre ne repose plus que sur tes appuis."},
+};
+// finisher de fin de séance, selon la qualité travaillée par le bloc
+const FINISHER_NATIONAL = {
+  "Explosivité":{n:"Finisher · Burpees sautés",d:"3 × 10 · enchaînés sans pause · repos 45 s",c:"Accroupi(e), mains au sol, jambes lancées en arrière, retour, puis saut le plus haut possible. Dix d'affilée."},
+  "Force":{n:"Finisher · Fentes sautées",d:"3 × 12 par jambe · rythme soutenu · repos 60 s",c:"Tu changes de jambe en l'air à chaque fente, jusqu'au bout de la série, sans t'arrêter."},
+  "Stabilité":{n:"Finisher · Planche montées de genoux",d:"3 × 45 s · bassin stable · repos 30 s",c:"En planche bras tendus, tu ramènes les genoux vers la poitrine l'un après l'autre, le plus vite possible."},
+  "Puissance":{n:"Finisher · Complexe pompes + squats sautés",d:"3 tours · 10 pompes + 10 squats sautés · repos 60 s",c:"Dix pompes, puis enchaîne tout de suite dix squats sautés. C'est un tour."},
+  "Équilibre":{n:"Finisher · Sauts unipodaux",d:"3 × 8 par jambe · réception tenue 1 s · repos 45 s",c:"Tu sautes en avant sur une seule jambe et tu tiens la réception une seconde avant le saut suivant."},
+  "Vitesse":{n:"Finisher · Sprints sur place",d:"6 × 15 s · à fond · repos 30 s",c:"Montées de genoux à vitesse maximale pendant 15 secondes, 30 secondes de pause, six fois."},
+  "Haut du corps":{n:"Finisher · Pompes jusqu'à l'échec",d:"2 × max · forme propre jusqu'au bout · repos 90 s",c:"Autant de pompes que possible en gardant le corps aligné. Arrête-toi dès que la forme se casse."},
+  "Rotation":{n:"Finisher · Mountain climbers croisés",d:"3 × 30 s · genou vers le coude opposé · repos 30 s",c:"En planche, tu ramènes chaque genou vers le coude opposé, le plus vite possible."},
+};
+// "repos 90 s" / "repos 2 min" / "repos 2 min 30" -> secondes
+function reposEnSecondes(txt){
+  const m = txt.match(/repos\s+(\d+)\s*(s|min)(?:\s*(\d+))?/);
+  if(!m) return null;
+  return m[2]==='min' ? (+m[1])*60 + (m[3]?+m[3]:0) : +m[1];
+}
+function formatRepos(sec){
+  if(sec<120) return sec+' s';
+  const mn=Math.floor(sec/60), s=sec%60;
+  return s ? mn+' min '+s : mn+' min';
+}
+// renforce la ligne "3 × 10 · ... · repos 90 s" d'un exercice pour un national
+function durcirLigneNational(d, relache){
+  let t = d;
+  // répétitions (ou secondes) : +30 % (+15 % en relâchement) ; secondes : +50 % (+25 %)
+  t = t.replace(/×\s*(\d+)(\s*s\b)?/, (m,n,sec)=>{
+    if(sec){ const v = Math.round((+n)*(relache?1.25:1.5)/5)*5; return '× '+v+' s'; }
+    return '× '+Math.round((+n)*(relache?1.15:1.3));
+  });
+  // repos raccourcis d'environ 30 %, jamais sous 30 s (inchangés en relâchement)
+  if(!relache){
+    const s = reposEnSecondes(t);
+    if(s){ const v = Math.max(30, Math.round(s*0.7/15)*15); t = t.replace(/repos\s+\d+\s*(s|min)(\s*\d+)?/, 'repos '+formatRepos(v)); }
+  }
+  return t;
+}
+function appliquerExigenceNational(p, relache){
+  if(state.level!=='National' || !p.moves) return p;
+  const avance = state.age>=14;
+  p.moves = p.moves.map(mv=>{
+    let m = {...mv};
+    const v = avance ? VARIANTES_NATIONAL[m.n] : null;
+    if(v){
+      m.n=v.n; m.c=v.c;
+      // la variante garde le nombre de séries déjà ajusté pour la semaine
+      if(v.d){ const s=(m.d.match(/^\s*(\d+)/)||[])[1]; m.d = s ? v.d.replace(/^\s*\d+/, s) : v.d; }
+    }
+    m.d = durcirLigneNational(m.d, relache);
+    return m;
+  });
+  if(avance && !relache){
+    const f = FINISHER_NATIONAL[p.lvl];
+    if(f) p.moves.push({n:f.n, d:f.d, c:f.c, poids:'finisher'});
+  }
+  // la séance dure plus longtemps
+  if(p.dur) p.dur = p.dur.replace(/(\d+)\s*min/, (m,n)=>Math.round((+n)*(relache?1.1:1.3))+' min');
+  return p;
+}
+
+/* ============ PROFILS SPÉCIFIQUES (par code d'accès, jamais par prénom) ============ */
+// Réglages réservés à un sportif précis. On l'identifie par son code d'accès, unique, et
+// non par son prénom (un autre sportif du même prénom ne doit jamais hériter de ces réglages).
+const PROFILS_SPECIFIQUES = {
+  'robin060809': { barreTraction:true },   // Robin : dispose d'une barre de traction à la maison
+};
+function profilSpecifique(){
+  return PROFILS_SPECIFIQUES[(axeCode||'').toLowerCase()] || {};
+}
+// Bloc barre de traction : grosses séries de tirage, en deux versions qui alternent d'une
+// séance à l'autre. Le volume progresse dans le mois (mise en route -> pic) et d'un mois sur
+// l'autre (plafonné au mois 5), et redescend en semaine de relâchement.
+function blocBarreTraction(indexSeance, relache, totalSem){
+  const w = state.week;
+  const plusSemaine = relache ? -2 : (w===1 ? 0 : (w===2 ? 2 : 3));
+  const plusMois = Math.min(Math.max(state.month-1,0), 4);
+  // plafonds : 20 répétitions en traction classique, 10 en explosif (au-delà, on ne travaille
+  // plus la force mais l'endurance pure, et l'explosivité s'effondre)
+  const reps = (base, facteur) => Math.min(facteur ? 10 : 20, Math.max(4, base + Math.round((plusSemaine + plusMois)*(facteur||1))));
+  const series = base => relache ? base-1 : base;
+  const secondes = base => Math.max(20, base + (relache ? -10 : (w===1?0:(w===2?10:15))) + plusMois*5);
+  const versionA = ((indexSeance + w) % 2) === 0;
+  if(versionA){
+    return [
+      {n:"Barre · Tractions pronation strictes",d:series(5)+" × "+reps(12)+" · menton au-dessus de la barre, bras tendus en bas · repos 90 s",c:"Mains en pronation (paumes vers l'avant), un peu plus larges que les épaules. Tu montes jusqu'à passer le menton au-dessus de la barre et tu redescends bras complètement tendus. Aucun balancement.",poids:"barre de traction"},
+      {n:"Barre · Tractions supination, descente en 3 s",d:series(4)+" × "+reps(10)+" · descente freinée sur 3 s · repos 90 s",c:"Paumes vers toi, mains écartées de la largeur des épaules. Montée dynamique, puis tu freines la descente en comptant 3 secondes.",poids:"barre de traction"},
+      {n:"Barre · Suspension active",d:series(3)+" × "+secondes(40)+" s · omoplates serrées, épaules loin des oreilles · repos 45 s",c:"Suspendu(e) bras tendus, tu tires les épaules vers le bas et tu serres les omoplates sans plier les coudes. C'est la position de base de toute bonne traction.",poids:"barre de traction"},
+    ];
+  }
+  return [
+    {n:"Barre · Tractions explosives",d:series(5)+" × "+reps(6,0.5)+" · poitrine vers la barre, le plus vite possible · repos 2 min",c:"Depuis la suspension bras tendus, tu tires le plus fort possible pour amener la poitrine à la barre. Chaque répétition doit être aussi rapide que la première : dès que ça ralentit, la série s'arrête.",poids:"barre de traction"},
+    {n:"Barre · Tractions prise large",d:series(4)+" × "+reps(10)+" · coudes vers les hanches · repos 90 s",c:"Mains nettement plus larges que les épaules. Tu tires en pensant à ramener les coudes vers les hanches : c'est le dos qui travaille, pas les bras.",poids:"barre de traction"},
+    {n:"Barre · Relevés de jambes suspendu",d:series(4)+" × "+reps(10)+" · pieds jusqu'à la barre, sans balancer · repos 60 s",c:"Suspendu(e), jambes tendues, tu montes les pieds jusqu'à toucher la barre (ou le plus haut possible), puis tu redescends lentement sans te balancer.",poids:"barre de traction"},
+  ];
 }
 
 // catégorie physique la plus citée sur les 9 questions physiques du diagnostic (explosivité / force / stabilité / vitesse)
@@ -3140,8 +3271,10 @@ function renderWeek(started){
     // exercice (avant ce correctif, seul le total du bloc bougeait, pas le détail).
     // semaine 1 : base · semaine 2 : +1 · semaine 3 (pic) et semaines de maintien : +2,
     // à charge constante · toute dernière semaine réelle (relâchement) : -1.
+    // (le niveau national ne rajoute plus de série ici : son exigence passe par les répétitions,
+    // les repos, les variantes et le finisher — voir appliquerExigenceNational — pour ne pas
+    // empiler un volume de sauts excessif sur une même séance)
     let bump = state.week===2?1 : (state.week>=3 && !isRelache)?2 : 0;
-    if(state.level==='National')bump+=1;
     const ajusteSeries = txt => {
       let t = txt;
       if(bump>0) t = t.replace(/\d+/, x=>+x+bump);
@@ -3150,14 +3283,34 @@ function renderWeek(started){
     };
     p.series = ajusteSeries(p.series);
     if(p.moves) p.moves.forEach(mv=>{ mv.d = ajusteSeries(mv.d); });
+    // niveau national : répétitions, repos, variantes avancées et finisher
+    appliquerExigenceNational(p, isRelache);
+    // profil spécifique : bloc barre de traction ajouté à la séance (volume déjà calibré,
+    // il ne repasse donc pas par les ajustements de séries ci-dessus)
+    if(profilSpecifique().barreTraction && p.moves){
+      p.moves = p.moves.concat(blocBarreTraction(i, isRelache, totalSem));
+      p.desc = p.desc + ' Et ton bloc barre de traction.';
+      if(p.dur) p.dur = p.dur.replace(/(\d+)\s*min/, (m,n)=>(+n + (isRelache?10:15))+' min');
+    }
     const jourLabel=joursSem[i]?JOURS_LABEL[joursSem[i]]:'';
     const doneInit = !!state.physSeances[wk].ids['p'+i];
     html+=exCard(p,false,'p'+i,jourLabel,doneInit);
   }
   if(n===0){
     html='<p class="phys-weight-note">Ton mois a démarré en cours de semaine : ta première vraie séance arrive dès la semaine 2.</p>';
-  } else if(state.gym){
-    html+='<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
+  } else {
+    if(state.gym){
+      html+='<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
+    }
+    if(state.level==='National'){
+      html+='<p class="phys-weight-note">'+(isRelache
+        ? 'Niveau national, semaine de relâchement : '+(state.age>=14?'tu gardes les variantes avancées, mais ':'')+'pas de finisher, des repos normaux et un volume réduit. Tu absorbes le travail du mois.'
+        : 'Niveau national : plus de répétitions, des repos raccourcis'+(state.age>=14 ? ', des variantes plus dures et un finisher en fin de séance' : '')+'. Si la forme se dégrade, tu arrêtes la série : une répétition propre vaut mieux que trois bâclées.')
+        +'</p>';
+    }
+    if(profilSpecifique().barreTraction){
+      html+='<p class="phys-weight-note">Chaque séance se termine par ton bloc barre de traction, en deux versions qui alternent : volume de tirage, puis tirage explosif et gainage suspendu. Le nombre de répétitions monte chaque semaine et chaque mois.</p>';
+    }
   }
   document.getElementById('physCol').innerHTML=html;
   // côté parent : uniquement pour les mineurs (voir toggle du conteneur en tête de fonction)
