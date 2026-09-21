@@ -801,6 +801,7 @@ async function axeInit(){
       if(r.suivi_rituel && typeof r.suivi_rituel === 'object'){
         const sr = r.suivi_rituel;
         if(sr.ccDays) state.ccDays = sr.ccDays;
+        if(sr.ccMois) state.ccMois = sr.ccMois;
         if(typeof sr.imageryDays === 'number') state.imageryDays = sr.imageryDays;
         if(sr.startRoutine) state.startRoutine = sr.startRoutine;
         if(Array.isArray(sr.startJournal)) state.startJournal = sr.startJournal;
@@ -1449,6 +1450,7 @@ function rebuildSportContent(){
   mentalFaibleLabels = {portillon:"la gestion de la pression "+l.auDepart,rumination:"la gestion des erreurs passées",confiance:"la confiance en soi "+faceAuxPairs};
   mentalFortLabels = {portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en compétition"};
   mentalPools = buildMentalPools(l, tier);
+  mentalMissions = buildMentalMissions(l, tier);
 }
 
 // Met à jour tous les textes statiques (hors contenu généré par render...) selon le sport actif.
@@ -1580,12 +1582,12 @@ function buildMentalPools(l, tier){
     {lvl:"Niveau 3 · Ancrer",desc:"Ta routine doit maintenant tenir en 10 secondes, pas en 3 minutes. Un seul regard, une seule respiration, ton mot-clé, "+l.pousseeMot+". Le jour de "+l.jourMot+", tu ne la penses plus, elle se déclenche toute seule."},
   ]},
   'rumination':{title:"Vider le sac après "+l.uniteArt,niveaux: kid ? [
-    {lvl:"Niveau 1 · Repérer",desc:"Après chaque "+l.jourMot+", tu prends 90 secondes (le temps de compter jusqu'à 90 !) pour écrire une chose qui n'a pas marché et une chose que tu as réussie. Comme ça, tu arrêtes d'y repenser en boucle."},
-    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque "+l.jourMot+", et tu ajoutes une question toute simple : la prochaine fois, qu'est-ce que je ferais différemment ? Une phrase courte suffit."},
+    {lvl:"Niveau 1 · Repérer",desc:"Après chaque séance ou "+l.jourMot+", tu prends 90 secondes (le temps de compter jusqu'à 90 !) pour écrire une chose qui n'a pas marché et une chose que tu as réussie. Comme ça, tu arrêtes d'y repenser en boucle."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque séance ou "+l.jourMot+", et tu ajoutes une question toute simple : la prochaine fois, qu'est-ce que je ferais différemment ? Une phrase courte suffit."},
     {lvl:"Niveau 3 · Ancrer",desc:"Ta réponse doit maintenant te venir toute seule, très vite, juste après "+l.uniteMauvaise+". Continue à écrire une fois par semaine, pour vérifier qu'elle est toujours dans ta tête."},
   ] : [
-    {lvl:"Niveau 1 · Repérer",desc:"Après chaque "+l.jourMot+", 90 secondes pour écrire une chose ratée et une chose réussie. On coupe la boucle avant qu'elle tourne."},
-    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque "+l.jourMot+", et tu ajoutes une question : qu'est-ce que je ferais différemment la prochaine fois, en une phrase courte. Le but n'est plus seulement de vider, c'est de transformer ce qui reste en une consigne simple pour "+l.uniteSuivante+"."},
+    {lvl:"Niveau 1 · Repérer",desc:"Après chaque séance ou "+l.jourMot+", 90 secondes pour écrire une chose ratée et une chose réussie. On coupe la boucle avant qu'elle tourne."},
+    {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque séance ou "+l.jourMot+", et tu ajoutes une question : qu'est-ce que je ferais différemment la prochaine fois, en une phrase courte. Le but n'est plus seulement de vider, c'est de transformer ce qui reste en une consigne simple pour "+l.uniteSuivante+"."},
     {lvl:"Niveau 3 · Ancrer",desc:"Ta consigne du niveau 2 doit maintenant apparaître toute seule, dans les 10 secondes qui suivent "+l.uniteMauvaise+", avant même que tu aies eu le temps de ruminer. Continue d'écrire une fois par semaine, pour vérifier qu'elle est toujours là."},
   ]},
   'confiance':{title:"Le carnet des preuves",niveaux: kid ? [
@@ -1600,7 +1602,186 @@ function buildMentalPools(l, tier){
   };
 }
 let mentalPools=buildMentalPools(SPORT_LEXICON.bmx, 'ado');
-const state={mental:{},sensoriel:{},prenom:'',age:16,level:'Régional',sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',ccDays:{},imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
+
+/* ============ MISSIONS MENTALES HEBDOMADAIRES ============ */
+// L'exercice du mois (ci-dessus) fixe la compétence travaillée. Chaque semaine, il se traduit
+// en UNE mission concrète, toujours faisable sans compétition, avec un lieu précis :
+//   M1 = à la maison, au calme, pour installer        (semaine de mise en route)
+//   E1 = à l'entraînement                              (montée en charge)
+//   E2 = à l'entraînement, sous fatigue / contrainte   (pic du mois, puis semaines de maintien)
+//   M2 = à la maison, bilan et consolidation          (semaine de relâchement)
+// Une compétition n'est jamais nécessaire : quand il y en a une, « Ma semaine de compétition »
+// prend le relais pour les jours J.
+function missionsAdo(l){
+  const pratique = PRATIQUE_NOM[l.verbePratique] || 'ta pratique';
+  const M = (dur, txt) => ({loc:'maison', dur, txt});
+  const E = (dur, txt) => ({loc:'entrainement', dur, txt});
+  return {
+  portillon:[
+    { M1:M("10 min","Construis ta routine au calme. Choisis ton point de regard et ton mot-clé, puis écris tes 4 temps sur une feuille : regard, respiration, mot-clé, "+l.pousseeMot+". Répète-la 10 fois debout, en mimant le départ. Au début elle dure environ 3 minutes : c'est normal."),
+      E1:E("pendant la séance","À chaque départ de la séance, tu déroules tes 4 temps avant de partir, sans exception, même sur les départs « pour rien ». À la fin, note sur combien de départs tu l'as vraiment faite."),
+      E2:E("pendant la séance","Même routine, mais concentre-toi sur les départs de fin de séance, quand tu es fatigué(e) : c'est là qu'elle saute en premier. Objectif : la tenir jusqu'au tout dernier départ."),
+      M2:M("10 min","Bilan de ta routine. Note sur ta feuille le temps qui tient bien, celui que tu oublies, et combien de temps elle dure maintenant. Puis refais-la 5 fois, calmement, les yeux fermés.") },
+    { M1:M("10 min","Répétition sous pression imaginaire. Assis(e), les yeux fermés, imagine "+l.portiqueEtPairs+", le public, l'enjeu. Dès que tu sens le cœur monter, lance ta routine. 5 fois de suite. Note ce qui a lâché à chaque fois."),
+      E1:E("pendant la séance","Demande à ton entraîneur ou à un partenaire de créer un peu de pression sur 3 départs : un départ chronométré, un départ contre quelqu'un, un départ annoncé « celui-là compte ». Routine complète sur les trois. Note celui qui t'a le plus déstabilisé(e)."),
+      E2:E("pendant la séance","3 départs d'affilée avec un repos court, routine complète à chaque fois. Si un temps saute, tu recommences la série. Le but : que ta routine résiste à la fatigue et à l'enchaînement."),
+      M2:M("10 min","Relis tes notes des dernières semaines. Quelle situation te déstabilise le plus ? Écris une phrase : « Quand [cette situation], je commence par [un temps de ma routine]. » C'est ta consigne pour le mois prochain.") },
+    { M1:M("10 min","Compression de ta routine. Devant un miroir ou en te filmant, fais tes 4 temps en 10 secondes : un regard, une respiration, ton mot-clé, "+l.pousseeMot+". 10 fois. Si tu dépasses 10 secondes, tu recommences."),
+      E1:E("pendant la séance","Routine en 10 secondes sur chaque départ, sans y réfléchir. Ton entraîneur ou un proche vérifie seulement une chose : est-ce qu'elle a eu lieu ? Tu ne comptes pas, tu fais."),
+      E2:E("pendant la séance","Départs surprise : quelqu'un lance le départ sans prévenir, quand tu ne t'y attends pas. Ta routine doit se déclencher en moins de 10 secondes. C'est le vrai test de l'ancrage."),
+      M2:M("5 min","Visualise un jour de "+l.jourMot+" entier, du réveil jusqu'au départ, avec ta routine de 10 secondes au bon moment. 5 minutes, les yeux fermés. Puis note si elle est venue toute seule, ou si tu as dû y penser.") },
+  ],
+  rumination:[
+    { M1:M("10 min","Prépare ton carnet de débrief : trois colonnes, « une chose ratée », « une chose réussie », « la consigne ». Repense à ta dernière séance et remplis une ligne en 90 secondes chrono, pas plus."),
+      E1:E("juste après la séance","Juste après la séance, avant même de te changer : 90 secondes de débrief dans ton carnet ou sur ton téléphone. Une chose ratée, une chose réussie. Même si la séance était bonne. Même si elle était nulle."),
+      E2:E("pendant la séance","Dès qu'un exercice rate pendant la séance, fais un mini-débrief de 10 secondes dans ta tête — « raté : … / prochaine fois : … » — puis passe à la suite. Tu t'entraînes à couper la boucle sur le moment."),
+      M2:M("10 min","Relis tous tes débriefs du mois. Qu'est-ce qui revient le plus souvent dans la colonne « ratée » ? Entoure-le : c'est ton axe de travail. Et dans la colonne « réussie », qu'est-ce qui revient ?") },
+    { M1:M("10 min","Reprends les 3 erreurs qui t'ont le plus trotté dans la tête ce mois-ci. Pour chacune, écris une consigne courte : « la prochaine fois, je… ». Un geste concret, pas un souhait."),
+      E1:E("après et au début de chaque séance","Après chaque séance : 90 secondes de débrief ET une consigne pour la suivante. Au début de la séance d'après, relis la consigne et applique-la dès le premier exercice."),
+      E2:E("pendant la séance","Choisis un exercice que tu rates souvent et fais-le exprès plusieurs fois. À chaque raté, applique ta consigne tout de suite au lieu de t'énerver. Compte combien de fois tu es reparti(e) immédiatement."),
+      M2:M("10 min","Relis tes consignes du mois : lesquelles ont vraiment marché ? Garde les 2 meilleures, barre les autres. Ce sont tes consignes de référence.") },
+    { M1:M("5 min","Pense à 5 erreurs typiques de ton sport. Pour chacune, dis ta consigne à voix haute en moins de 10 secondes. Si tu hésites, réécris-la jusqu'à ce qu'elle sorte toute seule."),
+      E1:E("pendant la séance","Plus de carnet pendant la séance : après une erreur, ta consigne doit arriver toute seule dans ta tête en moins de 10 secondes. Le carnet, seulement à la fin, une fois dans la semaine."),
+      E2:E("pendant la séance","Demande qu'on relance l'exercice tout de suite après ton erreur, sans pause. Tu dois être reparti(e) avec ta consigne avant d'avoir le temps de ruminer."),
+      M2:M("10 min","Débrief du mois, par écrit : combien de fois une erreur t'a encore suivi(e) plus d'une journée ? Compare avec ton premier mois. C'est ta vraie progression.") },
+  ],
+  confiance:[
+    { M1:M("10 min","Ouvre ton carnet des preuves et écris 3 moments récents où "+pratique+" a bien marché. Pas des résultats : des gestes, des choix, des moments où tu as tenu. Précis : où, quand, quoi."),
+      E1:E("pendant la séance","Pendant chaque séance, repère UN moment réussi, même petit. Juste après, note-le en une phrase. Objectif en fin de semaine : au moins 2 nouvelles preuves."),
+      E2:E("pendant la séance","Sur ta séance la plus dure de la semaine, trouve quand même ta preuve. C'est justement les jours difficiles qu'elles comptent le plus."),
+      M2:M("10 min","Relis toutes tes preuves du mois à voix basse et compte-les. Laquelle te fait le plus d'effet ? Souligne-la.") },
+    { M1:M("5 min, 2 soirs","Choisis tes 3 preuves les plus fortes et relis-les à voix basse, lentement, en revoyant la scène à chaque fois. 3 minutes. À refaire deux soirs cette semaine."),
+      E1:E("avant la séance","Avant de commencer la séance, 30 secondes : relis tes 3 dernières preuves. Puis entraîne-toi. À la fin, note si tu as senti une différence en début de séance."),
+      E2:E("pendant la séance","Quand tu doutes pendant la séance — un exercice qui coince, quelqu'un qui va plus vite — rappelle-toi une preuve précise dans ta tête avant de repartir."),
+      M2:M("10 min","Écris une phrase qui résume tes preuves du mois, à la première personne : « Je suis capable de… ». Elle doit être vraie et vérifiable dans ton carnet.") },
+    { M1:M("5 min","Sans carnet : yeux fermés, convoque ta meilleure preuve en 5 secondes, avec l'image, le son, la sensation. 10 fois, en changeant de preuve. Si l'image ne vient pas vite, relis une fois ton carnet et recommence."),
+      E1:E("pendant la séance","Avant chaque exercice important de la séance, 5 secondes pour convoquer ta meilleure image, puis tu y vas. Sans rien écrire."),
+      E2:E("pendant la séance","En fin de séance, quand la fatigue et le doute arrivent, l'image doit venir toute seule. Si le doute arrive avant elle, arrête-toi 5 secondes et convoque-la exprès."),
+      M2:M("10 min","Le point du mois : est-ce que l'image vient toute seule avant de t'élancer ? Écris oui, parfois ou pas encore. Puis ajoute 3 nouvelles preuves au carnet pour le mois prochain.") },
+  ],
+  };
+}
+// 10-12 ans : phrases courtes, défis, un parent peut aider ; même progression que la version ado
+function missionsEnfant(l){
+  const pratique = PRATIQUE_NOM[l.verbePratique] || 'ta pratique';
+  const M = (dur, txt) => ({loc:'maison', dur, txt});
+  const E = (dur, txt) => ({loc:'entrainement', dur, txt});
+  return {
+  portillon:[
+    { M1:M("10 min","Invente ta routine de départ en 4 étapes : 1) tu regardes un point devant toi, 2) tu respires un grand coup, 3) tu dis ton mot magique dans ta tête, 4) "+l.pousseeMot+". Écris-la ou dessine-la, puis entraîne-toi 10 fois dans ta chambre. Un parent peut vérifier que tu fais bien les 4 étapes."),
+      E1:E("pendant l'entraînement","Avant chaque départ, tu fais tes 4 étapes. Même pour les départs pour rire ! À la fin, compte : sur combien de départs tu as pensé à les faire ?"),
+      E2:E("pendant l'entraînement","À la fin de l'entraînement, quand tu es fatigué(e), c'est là qu'on oublie le plus. Ton défi : faire tes 4 étapes jusqu'au tout dernier départ."),
+      M2:M("10 min","Avec un parent, regarde ta feuille : quelle étape tu fais toujours ? Laquelle tu oublies ? Entoure celle à travailler le mois prochain. Puis refais ta routine 5 fois, les yeux fermés.") },
+    { M1:M("10 min","Assis(e) sur ton lit, ferme les yeux et imagine que tu es au départ d'une vraie "+l.jourMot+", avec "+l.portiqueEtPairs+". Quand ton cœur bat plus fort, fais tes 4 étapes. Recommence 5 fois."),
+      E1:E("pendant l'entraînement","Demande à ton coach 3 départs spéciaux : un avec le chrono, un contre un copain, un « celui-là compte ! ». Tes 4 étapes à chaque fois. Lequel t'a le plus stressé(e) ?"),
+      E2:E("pendant l'entraînement","Défi : 3 départs à la suite, avec juste un petit repos. Tes 4 étapes à chaque fois. Si tu en oublies une, on recommence les 3 !"),
+      M2:M("5 min","Écris ta phrase du mois : « Quand je suis stressé(e), je commence par… » (choisis une de tes 4 étapes). Tu la relis avant chaque entraînement du mois prochain.") },
+    { M1:M("10 min","Défi chrono ! Fais tes 4 étapes en 10 secondes maximum, devant un miroir. Un parent peut chronométrer. 10 essais. Plus de 10 secondes ? On recommence."),
+      E1:E("pendant l'entraînement","Ta routine rapide avant chaque départ, sans compter. Ton coach ou un parent regarde juste si tu l'as bien faite."),
+      E2:E("pendant l'entraînement","Départs surprise : ton coach lance le départ quand tu ne t'y attends pas. Ta routine doit arriver toute seule, super vite, comme un réflexe."),
+      M2:M("5 min","Le soir, les yeux fermés, imagine ton prochain jour de "+l.jourMot+" : le réveil, le trajet, l'arrivée, et ta routine rapide juste avant le départ. Puis dis à un parent si elle est venue toute seule.") },
+  ],
+  rumination:[
+    { M1:M("10 min","Prépare ton carnet avec 3 colonnes : « ce qui n'a pas marché », « ce qui a marché », « la prochaine fois ». Pense à ton dernier entraînement et remplis une ligne en 90 secondes. Un parent peut lancer le chrono."),
+      E1:E("juste après l'entraînement","Juste après l'entraînement, avant de te changer : 90 secondes pour ton carnet. Une chose ratée, une chose réussie. Même si c'était super. Même si c'était nul."),
+      E2:E("pendant l'entraînement","Quand un exercice rate, dis dans ta tête « raté… la prochaine fois, je… » et passe vite à la suite, comme si tu appuyais sur un bouton « suivant »."),
+      M2:M("10 min","Avec un parent, relis ton carnet du mois. Qu'est-ce qui revient le plus souvent dans « ce qui n'a pas marché » ? Entoure-le. Et de quoi es-tu le plus fier(ère) ?") },
+    { M1:M("10 min","Choisis 3 erreurs qui t'ont embêté(e) ce mois-ci. Pour chacune, écris « La prochaine fois, je… » avec quelque chose que tu peux vraiment faire."),
+      E1:E("après et au début de l'entraînement","Après chaque entraînement : ton carnet (90 secondes) et une phrase pour le prochain. Au début de l'entraînement suivant, relis-la et essaie de la faire tout de suite."),
+      E2:E("pendant l'entraînement","Choisis un exercice que tu rates souvent et refais-le plusieurs fois. À chaque raté, applique ta phrase au lieu de t'énerver. Compte combien de fois tu es reparti(e) tout de suite."),
+      M2:M("5 min","Relis tes phrases « La prochaine fois, je… » du mois. Lesquelles ont marché ? Garde tes 2 préférées pour le mois prochain.") },
+    { M1:M("5 min","Jeu de rapidité : un parent te dit une erreur (« tu as raté ton départ »), tu réponds ta phrase en moins de 10 secondes. 5 erreurs, 5 réponses. Si tu hésites, réécris ta phrase."),
+      E1:E("pendant l'entraînement","Pas de carnet pendant l'entraînement : quand tu rates, ta phrase doit arriver toute seule, très vite. Le carnet, juste une fois à la fin de la semaine."),
+      E2:E("pendant l'entraînement","Demande à ton coach de relancer l'exercice tout de suite après ton erreur. Tu repars avec ta phrase avant d'avoir le temps d'être triste ou énervé(e)."),
+      M2:M("5 min","Avec un parent : ce mois-ci, combien de fois une erreur t'a embêté(e) jusqu'au lendemain ? Compare avec ton tout premier mois. Tu verras ce que tu as gagné.") },
+  ],
+  confiance:[
+    { M1:M("10 min","Ouvre ton carnet des preuves et écris 3 moments où "+pratique+" a bien marché. Pas « j'ai gagné » : un geste réussi, un moment où tu as été courageux(se). Où ? Quand ? Qu'as-tu fait ?"),
+      E1:E("pendant l'entraînement","À chaque entraînement, cherche UN moment réussi, même tout petit, et écris-le après en une phrase. À la fin de la semaine : au moins 2 nouvelles preuves."),
+      E2:E("pendant l'entraînement","Pendant ton entraînement le plus dur de la semaine, trouve quand même ta preuve. C'est les jours difficiles qu'elles sont les plus précieuses."),
+      M2:M("10 min","Relis toutes tes preuves du mois à voix haute, à un parent si tu veux. Combien en as-tu ? Laquelle te rend le plus fier(ère) ? Mets une étoile à côté.") },
+    { M1:M("5 min, 2 soirs","Choisis tes 3 preuves préférées et relis-les doucement à voix basse, en imaginant la scène comme un film. Deux soirs cette semaine, avant de dormir."),
+      E1:E("avant l'entraînement","Avant l'entraînement, 30 secondes : relis tes 3 dernières preuves, puis va t'entraîner. À la fin, demande-toi si tu t'es senti(e) plus fort(e) au début."),
+      E2:E("pendant l'entraînement","Quand tu doutes pendant l'entraînement — un exercice difficile, quelqu'un qui va plus vite — pense à une de tes preuves avant de repartir. Juste une."),
+      M2:M("5 min","Écris ta phrase de champion(ne) : « Je suis capable de… ». Elle doit être vraie : la preuve est dans ton carnet !") },
+    { M1:M("5 min","Yeux fermés, fais venir ta meilleure preuve dans ta tête en 5 secondes : ce que tu voyais, entendais, ressentais. 10 fois, avec des preuves différentes. Si l'image ne vient pas, relis ton carnet une fois."),
+      E1:E("pendant l'entraînement","Avant chaque exercice important, 5 secondes : fais venir ta meilleure image, et vas-y. Plus besoin d'écrire."),
+      E2:E("pendant l'entraînement","À la fin de l'entraînement, quand tu es fatigué(e), l'image doit venir toute seule. Si c'est le doute qui arrive en premier, arrête-toi 5 secondes et fais venir l'image exprès."),
+      M2:M("10 min","Avec un parent : est-ce que ta meilleure image vient toute seule avant de partir ? Oui, parfois, ou pas encore ? Puis ajoute 3 nouvelles preuves dans ton carnet pour le mois prochain.") },
+  ],
+  };
+}
+// 18 ans et plus : autonomie, vocabulaire précis, logique d'indicateurs ; même progression
+function missionsAdulte(l){
+  const pratique = PRATIQUE_NOM[l.verbePratique] || 'ta pratique';
+  const M = (dur, txt) => ({loc:'maison', dur, txt});
+  const E = (dur, txt) => ({loc:'entrainement', dur, txt});
+  return {
+  portillon:[
+    { M1:M("10 min","Formalise ta séquence d'avant-départ : un point de fixation visuelle, une expiration longue, ton mot-clé, puis "+l.pousseeMot+". Écris-la, puis répète-la 10 fois à blanc. À ce stade elle dure environ 3 minutes : l'objectif n'est pas encore la vitesse, c'est la précision."),
+      E1:E("pendant la séance","Séquence complète avant chaque départ de la séance, sans exception — y compris ceux que tu juges secondaires. En fin de séance, note ton taux d'application : x départs sur y."),
+      E2:E("pendant la séance","Même séquence, en ciblant la fin de séance, quand la fatigue s'installe : c'est là qu'on la saute. Objectif : 100 % d'application jusqu'au dernier départ."),
+      M2:M("10 min","Fais le point : quelle étape est solide, laquelle saute, quelle durée atteint ta séquence aujourd'hui. Puis 5 répétitions à blanc, yeux fermés, en vérifiant la fluidité des enchaînements.") },
+    { M1:M("10 min","Exposition en imagerie : yeux fermés, reconstruis un contexte d'échéance — "+l.portiqueEtPairs+", l'enjeu, la montée d'activation. Quand tu sens le rythme cardiaque grimper, lance ta séquence. 5 répétitions, en notant chaque fois l'étape qui a cédé."),
+      E1:E("pendant la séance","Avec ton coach ou un partenaire, crée de la pression sur 3 départs : un chronométré, un en opposition directe, un annoncé comme décisif. Séquence complète sur les trois, puis identifie la contrainte la plus déstabilisante pour toi."),
+      E2:E("pendant la séance","Enchaîne 3 départs avec une récupération courte, séquence intégrale à chaque fois. Une étape omise, et la série est à refaire. Tu travailles la tenue de la séquence sous fatigue et sous répétition."),
+      M2:M("10 min","Relis tes notes du mois et identifie le déclencheur qui te fait perdre le plus de moyens. Formule une règle : « Face à [déclencheur], je commence par [étape]. » C'est ton point de vigilance du mois suivant.") },
+    { M1:M("10 min","Compression de la séquence : face à un miroir ou filmé, réduis tes 4 temps à 10 secondes — une fixation, une expiration, le mot-clé, "+l.pousseeMot+". 10 répétitions ; toute répétition au-delà de 10 secondes est à refaire."),
+      E1:E("pendant la séance","Séquence de 10 secondes sur chaque départ, sans contrôle conscient. Un tiers vérifie uniquement qu'elle a lieu. Tu n'analyses plus, tu exécutes."),
+      E2:E("pendant la séance","Départs non annoncés : un partenaire donne le signal sans prévenir. La séquence doit se déclencher en moins de 10 secondes. C'est le test de l'automatisation."),
+      M2:M("5 min","Imagerie d'une journée d'échéance complète, du réveil au départ, en y plaçant ta séquence de 10 secondes. 5 minutes. Puis évalue honnêtement : a-t-elle émergé seule, ou as-tu dû la convoquer ?") },
+  ],
+  rumination:[
+    { M1:M("10 min","Mets en place ton support de débrief : trois colonnes — « n'a pas fonctionné », « a fonctionné », « consigne ». Applique-le à ta dernière séance en 90 secondes chronométrées. La contrainte de temps est volontaire : elle empêche l'analyse de tourner à la rumination."),
+      E1:E("juste après la séance","Dans les minutes qui suivent la séance, avant de passer à autre chose : 90 secondes de débrief écrit. Un point négatif, un point positif, systématiquement, quelle que soit ton impression générale."),
+      E2:E("pendant la séance","Dès qu'un exercice échoue, débrief mental de 10 secondes — « erreur : … / correction : … » — puis reprise immédiate. Tu entraînes la coupure de boucle en temps réel."),
+      M2:M("10 min","Relis tes débriefs du mois et repère la récurrence dominante dans la colonne « n'a pas fonctionné » : c'est ton axe prioritaire. Fais le même exercice sur la colonne positive.") },
+    { M1:M("10 min","Sélectionne les 3 erreurs qui ont le plus occupé ton esprit ce mois-ci. Pour chacune, rédige une consigne opérationnelle : un comportement observable, pas une intention (« je garde les yeux sur la sortie », pas « je serai plus concentré »)."),
+      E1:E("après et au début de chaque séance","Après chaque séance : 90 secondes de débrief et une consigne pour la suivante. En début de séance suivante, relis-la et applique-la dès le premier exercice. Chaque séance s'appuie ainsi sur la précédente."),
+      E2:E("pendant la séance","Place-toi volontairement en difficulté sur un exercice que tu rates régulièrement. À chaque échec, applique immédiatement ta consigne plutôt que de réagir émotionnellement. Compte tes reprises immédiates."),
+      M2:M("10 min","Passe en revue tes consignes du mois et évalue leur efficacité réelle. Conserve les deux plus opérantes et abandonne les autres : ce sont tes consignes de référence.") },
+    { M1:M("5 min","Liste 5 erreurs caractéristiques de ta discipline et, pour chacune, énonce ta consigne à voix haute en moins de 10 secondes. Toute hésitation signifie qu'elle doit être reformulée."),
+      E1:E("pendant la séance","Plus de support écrit pendant la séance : après une erreur, la consigne doit émerger d'elle-même en moins de 10 secondes. L'écrit se limite à un point hebdomadaire."),
+      E2:E("pendant la séance","Demande une relance immédiate après chaque erreur, sans temps mort. Tu dois être reparti avec ta consigne avant que la rumination ait le temps de s'installer."),
+      M2:M("10 min","Bilan écrit : combien de fois une erreur a-t-elle encore occupé ton esprit plus de 24 heures ce mois-ci ? Compare avec ton premier mois de protocole. C'est ton indicateur de progression réel.") },
+  ],
+  confiance:[
+    { M1:M("10 min","Initialise ton carnet des preuves : 3 situations récentes où "+pratique+" a répondu. Pas des résultats, des comportements — un choix juste, une exécution propre, un moment où tu as tenu sous contrainte. Contexte précis : où, quand, quoi."),
+      E1:E("pendant la séance","À chaque séance, identifie un moment réussi, même modeste, et consigne-le en une phrase juste après. Objectif de la semaine : au moins deux preuves nouvelles."),
+      E2:E("pendant la séance","Sur la séance la plus exigeante de la semaine, cherche délibérément ta preuve. Ce sont celles qui ont le plus de valeur, et celles que la mémoire retient le moins."),
+      M2:M("10 min","Relis toutes tes preuves du mois à voix basse et compte-les. Identifie celle qui produit l'effet le plus fort : elle devient ta référence.") },
+    { M1:M("5 min, 2 soirs","Sélectionne tes 3 preuves les plus fortes et relis-les lentement, à voix basse, en reconstruisant chaque scène. Trois minutes, deux soirs cette semaine. Le but : ancrer la confiance sur des souvenirs concrets plutôt que sur des affirmations."),
+      E1:E("avant la séance","En début de séance, 30 secondes de relecture de tes 3 dernières preuves, puis entraînement. À la fin, évalue l'effet sur ton engagement dans les premières minutes."),
+      E2:E("pendant la séance","Quand le doute apparaît en séance — un exercice qui résiste, un partenaire plus rapide — convoque une preuve précise avant de reprendre. Tu opposes au doute une contre-preuve."),
+      M2:M("10 min","Rédige une phrase de synthèse à la première personne : « Je suis capable de… ». Elle doit être factuelle et vérifiable dans ton carnet, pas une formule de motivation.") },
+    { M1:M("5 min","Sans support : yeux fermés, convoque ta meilleure preuve en 5 secondes, en mobilisant l'image, le son et la sensation. 10 répétitions en variant les preuves. Si l'accès est lent, relis le carnet puis recommence."),
+      E1:E("pendant la séance","Avant chaque exercice clé, 5 secondes pour activer ta meilleure image, puis exécution. Plus aucun écrit en séance."),
+      E2:E("pendant la séance","En fin de séance, sous fatigue, l'image doit émerger spontanément. Si le doute la précède, marque un arrêt de 5 secondes et convoque-la volontairement."),
+      M2:M("10 min","Point mensuel : l'image émerge-t-elle spontanément avant l'effort ? Oui, parfois, pas encore. Puis ajoute 3 preuves nouvelles au carnet pour le mois suivant.") },
+  ],
+  };
+}
+// choix de la version selon la tranche d'âge (enfant 10-12 · ado 13-17 · adulte 18+)
+function buildMentalMissions(l, tier){
+  return tier==='enfant' ? missionsEnfant(l) : tier==='adulte' ? missionsAdulte(l) : missionsAdo(l);
+}
+let mentalMissions=buildMentalMissions(SPORT_LEXICON.bmx, 'ado');
+// mission de la semaine affichée, selon la phase réelle du mois (voir phaseOfWeek)
+function pickMentalHebdo(){
+  const key = blocageKey();
+  const niv = Math.min(Math.max(state.month-1,0), 2);
+  const set = (mentalMissions[key]||mentalMissions.portillon)[niv];
+  const total = nbSemainesMois(), w = state.week;
+  let code, rappel=false;
+  if(w>=total) code='M2';
+  else if(w===1) code='M1';
+  else if(w===2) code='E1';
+  else { code='E2'; rappel = w>3; } // pic, puis semaines de maintien : on consolide le même exercice
+  const ms = set[code];
+  return {loc:ms.loc, dur:ms.dur, txt:ms.txt, rappel};
+}
+
+const state={mental:{},sensoriel:{},prenom:'',age:16,level:'Régional',sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',ccDays:{},ccMois:'',imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
   weekAuto:true,        // tant que vrai, la semaine affichée suit la vraie date (calcul auto) ; passe à false dès qu'un vrai pilote clique lui-même sur un onglet SEM
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
   simDate:null,         // date "courante" simulée dans la démo
@@ -1900,10 +2081,30 @@ function renderStrengths(){
       ${departPourquoi?`<div class="depart-why">${departPourquoi}</div>`:''}
     </div>`;
 }
+// Le rituel des 21 jours repart de zéro le 1er de chaque mois (mois calendaire). Les jours
+// cochés restent au format historique {1:true, 2:true...} ; le mois auquel ils appartiennent
+// est mémorisé à part (ccMois = "AAAA-MM"), pour ne rien casser côté coach.
+function moisCourantCC(){
+  const d = (typeof dateRef==='function' && dateRef()) || new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+}
+function verifierCycleCC(){
+  const cle = moisCourantCC();
+  if(!state.ccMois){
+    // données d'avant cette mise à jour : rattachées au mois en cours, pour ne rien faire perdre
+    state.ccMois = cle;
+    if(axeCode) debounceEnregistrerSuiviRituel();
+    return;
+  }
+  if(state.ccMois !== cle){
+    state.ccDays = {};
+    state.ccMois = cle;
+    if(axeCode) debounceEnregistrerSuiviRituel();
+  }
+}
 function renderCrossCrawl(){
   const el=document.getElementById('crossCrawl');
-  // rituel fondateur : uniquement le mois 1
-  if(state.month!==1){el.style.display='none';return;}
+  verifierCycleCC();
   el.style.display='block';
   let grid='';
   let doneCount=0;
@@ -1916,15 +2117,16 @@ function renderCrossCrawl(){
   el.innerHTML=`
     <div class="cc-head">
       <h2>Le rituel des 21 jours</h2>
-      <span class="cc-badge">Ce mois-ci · impératif</span>
+      <span class="cc-badge">Ce mois-ci · nouveau cycle chaque 1er du mois</span>
     </div>
-    <p class="cc-intro">Chaque matin au réveil, avant tout le reste, tu fais ton cross crawl avec un grand verre d'eau. C'est le socle du protocole, la routine qui met le corps et la tête en marche pour la journée. À faire 21 jours de suite, sans sauter un jour.</p>
+    <p class="cc-intro">Chaque matin au réveil, avant tout le reste, tu fais ton cross crawl avec un grand verre d'eau. C'est le socle du protocole, la routine qui met le corps et la tête en marche pour la journée. À faire 21 jours de suite, sans sauter un jour. Le compteur repart à zéro le 1er de chaque mois : chaque mois, un nouveau cycle de 21 jours.</p>
     <p class="cc-how">Comment faire : bois d'abord ton verre d'eau. Puis, debout, touche ton genou droit avec ton coude gauche, puis ton genou gauche avec ton coude droit. Continue en alternance, tranquillement, pendant une à deux minutes. Coordonné et sans forcer.</p>
     <div class="cc-grid">${grid}</div>
     <div class="cc-progress"><b>${doneCount} / 21</b> jours validés</div>
     <div class="cc-congrats${congrats?' on':''}">Bravo, 21 jours tenus. Le socle est posé. Ce rituel restera ton point d'ancrage avant chaque semaine de compétition.</div>`;
 }
 function toggleCC(d){
+  verifierCycleCC();
   if(state.ccDays[d])delete state.ccDays[d]; else state.ccDays[d]=true;
   renderCrossCrawl();
   debounceEnregistrerSuiviRituel();
@@ -1941,6 +2143,7 @@ async function axeEnregistrerSuiviRituel(){
   if(!axeCode) return; // mode démo
   const suivi = {
     ccDays: state.ccDays,
+    ccMois: state.ccMois,
     imageryDays: state.imageryDays,
     startRoutine: state.startRoutine,
     startJournal: state.startJournal
@@ -2313,13 +2516,20 @@ function renderWeek(started){
   const wp=phaseOfWeek(state.week, nbSemainesMois());
   // mental : 1 exercice, s'approfondit selon la semaine
   const m={...pickMental()};
-  m.desc = m.desc + ' Cette semaine : '+wp.tag.toLowerCase()+'.';
+  // la mission de la semaine : toujours faisable sans compétition, avec un lieu précis
+  const mh = pickMentalHebdo();
+  m.loc = mh.loc==='maison' ? '🏠 Cette semaine · à faire à la maison' : '📍 Cette semaine · à faire à l\'entraînement';
+  m.mission = {titre:'Ta mission · '+mh.dur, txt:(mh.rappel?'On garde l\'exercice de la semaine du pic, pour le consolider. ':'')+mh.txt};
+  m.phase = wp.tag;
   document.getElementById('mentalCol').innerHTML=exCard(m,'m0');
 }
 function exCard(ex,id){
   return `<div class="card">
+      ${ex.loc?`<span class="day-tag" style="color:var(--mental)">${ex.loc}</span>`:''}
       <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
-      <p class="desc">${ex.desc}</p>
+      <p class="desc">${ex.mission?'<b style="color:var(--ink);font-weight:600">Objectif du mois · </b>':''}${ex.desc}</p>
+      ${ex.mission?`<div class="moves"><div class="move"><div class="move-n">${ex.mission.titre}${ex.phase?' · '+ex.phase.toLowerCase():''}</div><div class="move-d">${ex.mission.txt}</div></div></div>
+      <p class="phys-weight-note">Pas de compétition nécessaire : cette mission se fait sur une semaine normale. Si tu as une compétition, garde-la et ouvre aussi « Ma semaine de compétition » pour le jour J.</p>`:''}
       <button class="note-toggle" onclick="toggleNote('${id}')">＋ Mes notes sur cet exercice</button>
       <div class="note-box" id="box-${id}">
         <textarea id="note-${id}" placeholder="Ce que tu as ressenti, ce qui a marché ou non..." oninput="saveNote('${id}')"></textarea>
