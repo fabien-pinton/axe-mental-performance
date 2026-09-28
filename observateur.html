@@ -56,6 +56,13 @@ table.pros tr:last-child td{border-bottom:none}
 table.pros td.date{color:var(--dim);white-space:nowrap;font-size:12.5px}
 table.pros td.mail{font-family:ui-monospace,monospace;font-size:12px}
 table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(93,135,74,.14);color:#5D874A;font-weight:700}
+.filtres{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.filtre{border:1.5px solid var(--line);background:#fff;border-radius:18px;padding:7px 15px;font-size:12.5px;font-family:'DM Sans',sans-serif;color:var(--ink);cursor:pointer;transition:.15s}
+.filtre.on{border-color:var(--gold);background:rgba(168,133,42,.1);color:var(--gold);font-weight:600}
+.demo-tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:2px;background:rgba(168,133,42,.16);color:var(--gold);white-space:nowrap}
+.demo-sub{font-size:11.5px;color:var(--dim);margin-top:4px;line-height:1.45}
+.demo-non{color:rgba(26,22,18,.3)}
+.src{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);display:block;margin-top:3px}
 .exp{margin-top:14px;font-size:12px;color:var(--dim);background:none;border:1px solid var(--line);border-radius:3px;padding:8px 14px;cursor:pointer;font-family:'DM Sans',sans-serif}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -94,13 +101,18 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
   <div class="sec-block">
     <div class="sec-head">
       <h1>DEMANDES REÇUES</h1>
-      <div class="serif">Chaque famille qui a ouvert ton lien BMX, et chaque demande sur-mesure (tout sport) — même sans paiement finalisé.</div>
+      <div class="serif">Chaque personne qui a ouvert ton lien, testé la démo ou rempli le questionnaire — même sans paiement finalisé. Survole un profil de démo pour voir le détail des trois axes.</div>
       <div class="count" id="countPros"></div>
+    </div>
+    <div class="filtres" id="filtres">
+      <button class="filtre on" data-f="tous" onclick="filtrer('tous')">Toutes les demandes</button>
+      <button class="filtre" data-f="demo" onclick="filtrer('demo')">Ont fait la démo</button>
+      <button class="filtre" data-f="sansdemo" onclick="filtrer('sansdemo')">Pas encore testé</button>
     </div>
     <div class="tbl-wrap" id="prosWrap">
       <table class="pros">
         <thead>
-          <tr><th>Contact</th><th>Pilote</th><th>Sport</th><th>Email</th><th>Date</th><th>Suite</th></tr>
+          <tr><th>Contact</th><th>Pilote</th><th>Sport</th><th>Démo</th><th>Email</th><th>Date</th><th>Suite</th></tr>
         </thead>
         <tbody id="prosBody"></tbody>
       </table>
@@ -152,39 +164,101 @@ function dateFr(d){
   return x.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}) + ' à ' + x.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
 }
 
+// Libellé court de l'axe dominant, calculé sur les trois scores de la démo.
+const AXES_DEMO = [['portillon','Pression au départ'],['rumination','Erreurs qui tournent'],['confiance','Doute face aux autres']];
+function libelleDemo(p){
+  const a = p.demo_axes;
+  if(a && typeof a === 'object'){
+    let best = null, max = 0;
+    AXES_DEMO.forEach(function(x){
+      const v = Number(a[x[0]] || 0);
+      if(v > max){ max = v; best = x[1]; }
+    });
+    if(best) return best;
+    return 'Base solide';
+  }
+  return p.demo_profil || 'Démo faite';
+}
+function detailDemo(p){
+  const bouts = [];
+  if(p.demo_entree) bouts.push(p.demo_entree);
+  if(p.demo_canal) bouts.push(p.demo_canal + (p.demo_oeil ? ' · œil ' + p.demo_oeil : ''));
+  if(p.demo_exercice === true) bouts.push('exercice fait');
+  return bouts.join(' · ');
+}
+function titreDemo(p){
+  const a = p.demo_axes || {};
+  const scores = AXES_DEMO.map(function(x){ return x[1] + ' : ' + (a[x[0]] || 0); }).join('\n');
+  return (p.demo_profil || '') + (p.demo_le ? '\nLe ' + dateFr(p.demo_le) : '') + '\n' + scores;
+}
+const LIB_SOURCE = {rejoindre:'Lien rejoindre', questionnaire:'Questionnaire', demo:'Salon / démo', demo_lien:'Démo via lien'};
+
+let filtreActif = 'tous';
+function filtrer(f){
+  filtreActif = f;
+  document.querySelectorAll('.filtre').forEach(function(b){ b.classList.toggle('on', b.dataset.f === f); });
+  afficherProspects();
+}
+
 function afficherProspects(){
   const body = document.getElementById('prosBody');
-  document.getElementById('countPros').textContent = prospects.length + (prospects.length>1?' demandes':' demande');
-  if(!prospects.length){
-    body.innerHTML = '<tr><td colspan="6" class="empty" style="padding:22px 14px">Aucune demande pour le moment. Envoie ton lien d\'autorisation et les familles apparaîtront ici.</td></tr>';
+  const avecDemo = prospects.filter(function(p){ return !!p.demo_le; }).length;
+  document.getElementById('countPros').textContent =
+    prospects.length + (prospects.length > 1 ? ' demandes' : ' demande')
+    + (avecDemo ? ' · ' + avecDemo + ' ' + (avecDemo > 1 ? 'ont testé le protocole' : 'a testé le protocole') : '');
+
+  const liste = prospects.filter(function(p){
+    if(filtreActif === 'demo') return !!p.demo_le;
+    if(filtreActif === 'sansdemo') return !p.demo_le;
+    return true;
+  });
+
+  if(!liste.length){
+    body.innerHTML = '<tr><td colspan="7" class="empty" style="padding:22px 14px">'
+      + (prospects.length ? 'Aucune demande dans ce filtre.' : 'Aucune demande pour le moment. Envoie ton lien et les familles apparaîtront ici.')
+      + '</td></tr>';
     return;
   }
   body.innerHTML = '';
-  prospects.forEach(p=>{
+  liste.forEach(function(p){
     const mail = (p.email_parent||'').toLowerCase().trim();
     const devenuClient = mail && emailsClients.has(mail);
-    const estSurMesure = p.formule === 'Sur mesure - acces annuel';
+    const estSurMesure = (p.formule || '').indexOf('Sur mesure') === 0;
     const sportCell = p.sport ? (p.sport + (p.niveau ? (' · '+p.niveau) : '')) : '';
-    body.innerHTML += `<tr>
-      <td>${p.nom_parent||''}</td>
-      <td>${p.nom_rider||(estSurMesure?'—':'')}</td>
-      <td>${sportCell}</td>
-      <td class="mail">${p.email_parent||''}</td>
-      <td class="date">${dateFr(p.clique_le)}</td>
-      <td>${devenuClient ? '<span class="conv">Client</span>' : (p.parraine_par ? 'Parrainé' : (estSurMesure ? 'Sur mesure' : ''))}</td>
-    </tr>`;
+    const src = LIB_SOURCE[p.source] || '';
+    const cellDemo = p.demo_le
+      ? '<span class="demo-tag" title="' + String(titreDemo(p)).replace(/"/g,'&quot;') + '">' + libelleDemo(p) + '</span>'
+        + (detailDemo(p) ? '<div class="demo-sub">' + detailDemo(p) + '</div>' : '')
+      : '<span class="demo-non">—</span>';
+    const suite = devenuClient ? '<span class="conv">Client</span>'
+                : (p.parraine_par ? 'Parrainé' : (estSurMesure ? 'Sur mesure' : ''));
+    body.innerHTML += '<tr>'
+      + '<td>' + (p.nom_parent||'') + (src ? '<span class="src">' + src + '</span>' : '') + '</td>'
+      + '<td>' + (p.nom_rider || (estSurMesure ? '—' : '')) + '</td>'
+      + '<td>' + sportCell + '</td>'
+      + '<td>' + cellDemo + '</td>'
+      + '<td class="mail">' + (p.email_parent||'') + '</td>'
+      + '<td class="date">' + dateFr(p.clique_le) + '</td>'
+      + '<td>' + suite + '</td>'
+      + '</tr>';
   });
 }
 
 function exporterProspects(){
   if(!prospects.length) return;
-  const lignes = [['Nom parent','Nom pilote','Sport','Email parent','Date du clic','Parrain / statut']];
-  prospects.forEach(p=>{
-    const statut = p.parraine_par || (p.formule==='Sur mesure - acces annuel' ? 'Sur mesure' : '');
-    const sportCell = p.sport ? (p.sport + (p.niveau ? (' · '+p.niveau) : '')) : '';
-    lignes.push([p.nom_parent||'', p.nom_rider||'', sportCell, p.email_parent||'', dateFr(p.clique_le), statut]);
+  const lignes = [['Nom contact','Nom pilote','Sport','Niveau','Email','Date du clic','Origine','Démo faite le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait','Parrain / statut']];
+  prospects.forEach(function(p){
+    const estSurMesure = (p.formule || '').indexOf('Sur mesure') === 0;
+    const statut = p.parraine_par || (estSurMesure ? 'Sur mesure' : '');
+    lignes.push([
+      p.nom_parent||'', p.nom_rider||'', p.sport||'', p.niveau||'', p.email_parent||'',
+      dateFr(p.clique_le), LIB_SOURCE[p.source] || p.source || '',
+      p.demo_le ? dateFr(p.demo_le) : '', p.demo_profil||'', p.demo_entree||'',
+      p.demo_canal||'', p.demo_oeil||'', p.demo_exercice === true ? 'oui' : (p.demo_le ? 'non' : ''),
+      statut
+    ]);
   });
-  const csv = '﻿' + lignes.map(l=>l.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');
+  const csv = '\ufeff' + lignes.map(function(l){ return l.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(';'); }).join('\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8;'}));
   a.download = 'demandes-axe.csv';

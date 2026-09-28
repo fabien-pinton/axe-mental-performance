@@ -250,6 +250,15 @@ async function envoyer(){
 
     const code = data;
 
+    // Si la personne a déjà fait la démo (page rejoindre ou salon), son profil mental
+    // est reporté sur cette fiche : le coach l'a sous les yeux avant de construire le mois.
+    // Appel volontairement non bloquant : un échec ici ne doit jamais retarder le paiement.
+    fetch(SUPABASE_URL + '/rest/v1/rpc/axe_reporter_demo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON },
+      body: JSON.stringify({ code_p: code })
+    }).catch(function(){});
+
     const lienBase = estMensuel ? LIEN_PAIEMENT_MENSUEL : LIEN_PAIEMENT;
     const urlPaiement = lienBase
       + '?client_reference_id=' + encodeURIComponent(code)

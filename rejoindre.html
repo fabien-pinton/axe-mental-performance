@@ -30,6 +30,9 @@ h1{font-family:'Bebas Neue';font-weight:400;font-size:30px;letter-spacing:.03em;
 .age-row{display:flex;gap:10px;margin-bottom:6px}
 .age-btn{flex:1;padding:13px;border:1.5px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font-family:'DM Sans';font-weight:600;font-size:14px;cursor:pointer;transition:.15s}
 .age-btn.sel{border-color:var(--gold);background:rgba(168,133,42,.08);color:var(--gold)}
+.lien-btn{display:block;width:100%;padding:16px;border-radius:6px;background:var(--gold);color:#fff;font-weight:600;font-size:15px;letter-spacing:.02em;text-align:center;text-decoration:none;transition:.18s}
+.lien-btn .s{display:block;font-size:12px;font-weight:400;opacity:.85;margin-top:3px}
+.lien-btn.sec{background:transparent;color:var(--ink);border:1.5px solid var(--line);font-weight:500;margin-top:10px}
 .step{display:none}
 .step.on{display:block}
 .rider-msg{display:none;background:rgba(168,133,42,.08);border:1px solid rgba(168,133,42,.3);border-radius:8px;padding:20px 22px;font-size:14.5px;color:var(--ink);margin-top:4px}
@@ -113,6 +116,16 @@ h1{font-family:'Bebas Neue';font-weight:400;font-size:30px;letter-spacing:.03em;
     <button class="btn" id="go" onclick="continuer()">Découvrir le protocole</button>
     <p class="mini">En continuant, vous accédez à la présentation et aux formules. Vos coordonnées sont enregistrées uniquement pour le suivi de votre demande, et ne sont jamais transmises à un tiers.</p>
   </div>
+
+  <!-- Étape 3 : on fait essayer avant de montrer les prix -->
+  <div class="step" id="stepFin">
+    <div class="box" style="background:rgba(168,133,42,.07);border-color:rgba(168,133,42,.35)">
+      <p><b>C'est noté, merci.</b> Avant de regarder les formules, prenez cinq minutes pour essayer le protocole : un vrai diagnostic, votre profil mental, et un exercice à faire tout de suite, debout.</p>
+      <p>C'est la façon la plus honnête de savoir si c'est fait pour vous.</p>
+    </div>
+    <a class="lien-btn" id="lienDemo" href="demo-axe.html">Essayer le protocole<span class="s">5 minutes · diagnostic, profil et exercice</span></a>
+    <a class="lien-btn sec" id="lienVente" href="presentation.html">Voir directement les formules</a>
+  </div>
   <div class="lum">
     <div class="s">Le mantra</div>
     <p>« Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres <span class="g">la permission que leur lumière brille. »</span></p>
@@ -160,7 +173,7 @@ var TXT = {
 };
 
 function montrer(id){
-  ['step1','riderMsg','stepPourQui','step2'].forEach(function(s){
+  ['step1','riderMsg','stepPourQui','step2','stepFin'].forEach(function(s){
     document.getElementById(s).classList.remove('on');
   });
   document.getElementById(id).classList.add('on');
@@ -230,20 +243,32 @@ function continuer(){
   envoye = true;
   btn.textContent = 'Un instant...';
 
-  var url = PAGE_VENTE;
-  if(parrain){ url += '?parrain=' + encodeURIComponent(parrain); }
-
-  // filet de sécurité : on part au bout de 3 secondes quoi qu'il arrive
-  var parti = false;
-  function partir(){ if(!parti){ parti = true; window.location.href = url; } }
-  setTimeout(partir, 3000);
+  var suffixe = parrain ? ('?parrain=' + encodeURIComponent(parrain)) : '';
+  document.getElementById('lienVente').setAttribute('href', PAGE_VENTE + suffixe);
 
   // nom_parent_p = la personne qui inscrit (celle qui remplit ce formulaire)
   // nom_rider_p  = le sportif qui suivra le protocole (peut être la même personne)
   var nomInscripteur = val('f_parent');
   var nomSportif = (mode === 'majeur_solo') ? nomInscripteur : val('f_rider');
 
-  fetch(SB_URL + '/rest/v1/rpc/enregistrer_prospect', {
+  var affiche = false;
+  function montrerSuite(jeton){
+    if(affiche) return;
+    affiche = true;
+    // le jeton relie la démo à cette fiche : le coach voit les deux au même endroit
+    var d = 'demo-axe.html';
+    var sep = '?';
+    if(jeton){ d += sep + 't=' + encodeURIComponent(jeton); sep = '&'; }
+    if(parrain){ d += sep + 'parrain=' + encodeURIComponent(parrain); }
+    document.getElementById('lienDemo').setAttribute('href', d);
+    montrer('stepFin');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // filet de sécurité : si la base ne répond pas, on avance quand même, sans jeton
+  setTimeout(function(){ montrerSuite(null); }, 4000);
+
+  fetch(SB_URL + '/rest/v1/rpc/axe_rejoindre', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -251,12 +276,15 @@ function continuer(){
       'Authorization': 'Bearer ' + SB_KEY
     },
     body: JSON.stringify({
-      nom_parent_p: nomInscripteur,
+      nom_p: nomInscripteur,
       nom_rider_p: nomSportif,
-      email_parent_p: val('f_mail'),
+      email_p: val('f_mail'),
       parrain_p: parrain || ''
     })
-  }).then(partir).catch(partir);
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){ montrerSuite(d && d.token ? d.token : null); })
+  .catch(function(){ montrerSuite(null); });
 }
 </script>
 </body>
