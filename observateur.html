@@ -62,6 +62,9 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 .demo-tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:2px;background:rgba(168,133,42,.16);color:var(--gold);white-space:nowrap}
 .demo-sub{font-size:11.5px;color:var(--dim);margin-top:4px;line-height:1.45}
 .demo-non{color:rgba(26,22,18,.3)}
+.etat{font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:2px;font-weight:700;white-space:nowrap}
+.etat.demo{background:rgba(168,133,42,.16);color:var(--gold)}
+.etat.cli{background:rgba(93,135,74,.14);color:#5D874A}
 .src{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);display:block;margin-top:3px}
 .exp{margin-top:14px;font-size:12px;color:var(--dim);background:none;border:1px solid var(--line);border-radius:3px;padding:8px 14px;cursor:pointer;font-family:'DM Sans',sans-serif}
 </style>
@@ -101,7 +104,7 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
   <div class="sec-block">
     <div class="sec-head">
       <h1>DEMANDES REÇUES</h1>
-      <div class="serif">Chaque personne qui a ouvert ton lien, testé la démo ou rempli le questionnaire — même sans paiement finalisé. Survole un profil de démo pour voir le détail des trois axes.</div>
+      <div class="serif">Une ligne par personne, quel que soit le nombre de fois qu'elle est passée. Vide = coordonnées seules, Démo = a testé le protocole, Client = a payé.</div>
       <div class="count" id="countPros"></div>
     </div>
     <div class="filtres" id="filtres">
@@ -112,7 +115,7 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
     <div class="tbl-wrap" id="prosWrap">
       <table class="pros">
         <thead>
-          <tr><th>Contact</th><th>Pilote</th><th>Sport</th><th>Démo</th><th>Email</th><th>Date</th><th>Suite</th></tr>
+          <tr><th>Contact</th><th>Pilote</th><th>Sport</th><th>Profil démo</th><th>Email</th><th>Date</th><th>Suite</th></tr>
         </thead>
         <tbody id="prosBody"></tbody>
       </table>
@@ -166,16 +169,23 @@ function dateFr(d){
 
 // Libellé court de l'axe dominant, calculé sur les trois scores de la démo.
 const AXES_DEMO = [['portillon','Pression au départ'],['rumination','Erreurs qui tournent'],['confiance','Doute face aux autres']];
+const CHAMPS_DEMO = ['demo_le','demo_profil','demo_entree','demo_axes','demo_canal','demo_oeil','demo_exercice'];
+const CHAMPS_COMBLE = ['nom_parent','nom_rider','sport','niveau','age','sexe','tel','parraine_par','formule','code_acces','source'];
+
+function axesDe(p){
+  let a = p.demo_axes;
+  if(typeof a === 'string'){ try{ a = JSON.parse(a); }catch(e){ a = null; } }
+  return (a && typeof a === 'object') ? a : null;
+}
 function libelleDemo(p){
-  const a = p.demo_axes;
-  if(a && typeof a === 'object'){
+  const a = axesDe(p);
+  if(a){
     let best = null, max = 0;
     AXES_DEMO.forEach(function(x){
       const v = Number(a[x[0]] || 0);
       if(v > max){ max = v; best = x[1]; }
     });
-    if(best) return best;
-    return 'Base solide';
+    return best || 'Base solide';
   }
   return p.demo_profil || 'Démo faite';
 }
@@ -187,11 +197,57 @@ function detailDemo(p){
   return bouts.join(' · ');
 }
 function titreDemo(p){
-  const a = p.demo_axes || {};
+  const a = axesDe(p) || {};
   const scores = AXES_DEMO.map(function(x){ return x[1] + ' : ' + (a[x[0]] || 0); }).join('\n');
   return (p.demo_profil || '') + (p.demo_le ? '\nLe ' + dateFr(p.demo_le) : '') + '\n' + scores;
 }
 const LIB_SOURCE = {rejoindre:'Lien rejoindre', questionnaire:'Questionnaire', demo:'Salon / démo', demo_lien:'Démo via lien'};
+
+// Une personne = une ligne. Plusieurs fiches peuvent exister pour le même email
+// (lien rejoindre, puis démo, puis questionnaire) : on les fusionne en gardant
+// la plus avancée comme base, et en comblant ses trous avec les autres.
+function fusionnerParEmail(liste){
+  const parMail = new Map();
+  const sansMail = [];
+  liste.forEach(function(p){
+    const m = (p.email_parent || '').toLowerCase().trim();
+    if(!m){ sansMail.push(p); return; }
+    if(!parMail.has(m)) parMail.set(m, []);
+    parMail.get(m).push(p);
+  });
+
+  const recent = function(a,b){ return new Date(b.clique_le||0) - new Date(a.clique_le||0); };
+  const fusionnees = [];
+  parMail.forEach(function(fiches){
+    if(fiches.length === 1){ fusionnees.push(fiches[0]); return; }
+    const avecCode = fiches.filter(function(f){ return !!f.code_acces; });
+    const base = Object.assign({}, (avecCode.length ? avecCode : fiches).slice().sort(recent)[0]);
+
+    fiches.forEach(function(f){
+      CHAMPS_COMBLE.forEach(function(c){
+        if((base[c] === null || base[c] === undefined || base[c] === '') && f[c]) base[c] = f[c];
+      });
+    });
+    // le bloc démo se reprend en entier, depuis la démo la plus récente
+    const avecDemo = fiches.filter(function(f){ return !!f.demo_le; })
+                           .sort(function(a,b){ return new Date(b.demo_le) - new Date(a.demo_le); });
+    if(avecDemo.length){ CHAMPS_DEMO.forEach(function(c){ base[c] = avecDemo[0][c]; }); }
+    // on garde la trace la plus récente, pour que le tri reste parlant
+    base.clique_le = fiches.slice().sort(recent)[0].clique_le;
+    base._fiches = fiches.length;
+    fusionnees.push(base);
+  });
+
+  return fusionnees.concat(sansMail).sort(recent);
+}
+
+// "" = a seulement laissé ses coordonnées · "Démo" = a testé · "Client" = a payé
+function statutDe(p){
+  const mail = (p.email_parent || '').toLowerCase().trim();
+  if(mail && emailsClients.has(mail)) return 'client';
+  if(p.demo_le) return 'demo';
+  return '';
+}
 
 let filtreActif = 'tous';
 function filtrer(f){
@@ -200,40 +256,47 @@ function filtrer(f){
   afficherProspects();
 }
 
-function afficherProspects(){
-  const body = document.getElementById('prosBody');
-  const avecDemo = prospects.filter(function(p){ return !!p.demo_le; }).length;
-  document.getElementById('countPros').textContent =
-    prospects.length + (prospects.length > 1 ? ' demandes' : ' demande')
-    + (avecDemo ? ' · ' + avecDemo + ' ' + (avecDemo > 1 ? 'ont testé le protocole' : 'a testé le protocole') : '');
-
-  const liste = prospects.filter(function(p){
+function listeAffichee(){
+  const base = fusionnerParEmail(prospects);
+  return base.filter(function(p){
     if(filtreActif === 'demo') return !!p.demo_le;
     if(filtreActif === 'sansdemo') return !p.demo_le;
     return true;
   });
+}
 
+function afficherProspects(){
+  const body = document.getElementById('prosBody');
+  const toutes = fusionnerParEmail(prospects);
+  const nbDemo = toutes.filter(function(p){ return statutDe(p) === 'demo'; }).length;
+  const nbClient = toutes.filter(function(p){ return statutDe(p) === 'client'; }).length;
+  const bouts = [toutes.length + (toutes.length > 1 ? ' personnes' : ' personne')];
+  if(nbDemo) bouts.push(nbDemo + ' en démo');
+  if(nbClient) bouts.push(nbClient + (nbClient > 1 ? ' clients' : ' client'));
+  document.getElementById('countPros').textContent = bouts.join(' · ');
+
+  const liste = listeAffichee();
   if(!liste.length){
     body.innerHTML = '<tr><td colspan="7" class="empty" style="padding:22px 14px">'
-      + (prospects.length ? 'Aucune demande dans ce filtre.' : 'Aucune demande pour le moment. Envoie ton lien et les familles apparaîtront ici.')
+      + (toutes.length ? 'Personne dans ce filtre.' : 'Aucune demande pour le moment. Envoie ton lien et les familles apparaîtront ici.')
       + '</td></tr>';
     return;
   }
   body.innerHTML = '';
   liste.forEach(function(p){
-    const mail = (p.email_parent||'').toLowerCase().trim();
-    const devenuClient = mail && emailsClients.has(mail);
     const estSurMesure = (p.formule || '').indexOf('Sur mesure') === 0;
     const sportCell = p.sport ? (p.sport + (p.niveau ? (' · '+p.niveau) : '')) : '';
-    const src = LIB_SOURCE[p.source] || '';
+    const origine = [LIB_SOURCE[p.source] || '', p.parraine_par ? 'parrainé' : ''].filter(Boolean).join(' · ');
     const cellDemo = p.demo_le
       ? '<span class="demo-tag" title="' + String(titreDemo(p)).replace(/"/g,'&quot;') + '">' + libelleDemo(p) + '</span>'
         + (detailDemo(p) ? '<div class="demo-sub">' + detailDemo(p) + '</div>' : '')
       : '<span class="demo-non">—</span>';
-    const suite = devenuClient ? '<span class="conv">Client</span>'
-                : (p.parraine_par ? 'Parrainé' : (estSurMesure ? 'Sur mesure' : ''));
+    const st = statutDe(p);
+    const suite = st === 'client' ? '<span class="etat cli">Client</span>'
+                : st === 'demo'   ? '<span class="etat demo">Démo</span>'
+                : '';
     body.innerHTML += '<tr>'
-      + '<td>' + (p.nom_parent||'') + (src ? '<span class="src">' + src + '</span>' : '') + '</td>'
+      + '<td>' + (p.nom_parent||'') + (origine ? '<span class="src">' + origine + '</span>' : '') + '</td>'
       + '<td>' + (p.nom_rider || (estSurMesure ? '—' : '')) + '</td>'
       + '<td>' + sportCell + '</td>'
       + '<td>' + cellDemo + '</td>'
@@ -245,17 +308,16 @@ function afficherProspects(){
 }
 
 function exporterProspects(){
-  if(!prospects.length) return;
-  const lignes = [['Nom contact','Nom pilote','Sport','Niveau','Email','Date du clic','Origine','Démo faite le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait','Parrain / statut']];
-  prospects.forEach(function(p){
-    const estSurMesure = (p.formule || '').indexOf('Sur mesure') === 0;
-    const statut = p.parraine_par || (estSurMesure ? 'Sur mesure' : '');
+  const liste = fusionnerParEmail(prospects);
+  if(!liste.length) return;
+  const LIB_ETAT = {client:'Client', demo:'Démo', '':''};
+  const lignes = [['Nom contact','Nom pilote','Sport','Niveau','Email','Dernière activité','Origine','Statut','Démo faite le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait']];
+  liste.forEach(function(p){
     lignes.push([
       p.nom_parent||'', p.nom_rider||'', p.sport||'', p.niveau||'', p.email_parent||'',
-      dateFr(p.clique_le), LIB_SOURCE[p.source] || p.source || '',
+      dateFr(p.clique_le), LIB_SOURCE[p.source] || p.source || '', LIB_ETAT[statutDe(p)],
       p.demo_le ? dateFr(p.demo_le) : '', p.demo_profil||'', p.demo_entree||'',
-      p.demo_canal||'', p.demo_oeil||'', p.demo_exercice === true ? 'oui' : (p.demo_le ? 'non' : ''),
-      statut
+      p.demo_canal||'', p.demo_oeil||'', p.demo_exercice === true ? 'oui' : (p.demo_le ? 'non' : '')
     ]);
   });
   const csv = '\ufeff' + lignes.map(function(l){ return l.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(';'); }).join('\n');
