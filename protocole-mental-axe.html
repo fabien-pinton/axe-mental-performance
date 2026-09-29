@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Le protocole AXE Mental Performance®</title>
+<script src="installer.js"></script>
 <link rel="manifest" href="manifest-mental.webmanifest">
 <meta name="theme-color" content="#0A0907">
 <link rel="icon" href="icones/favicon.ico" sizes="any">
@@ -850,6 +851,8 @@ function axeDemanderCode(message){
   document.getElementById('axeVerrouBtn').addEventListener('click', valider);
   champ.addEventListener('keydown', function(e){ if(e.key === 'Enter') valider(); });
   if(message){ document.getElementById('axeVerrouMsg').textContent = message; }
+  // proposition d'installation sur l'écran d'accueil, au moment le plus naturel
+  if(window.axeBoutonInstaller){ window.axeBoutonInstaller(d.firstElementChild, 'or'); }
   setTimeout(function(){ try{ champ.focus(); }catch(e){} }, 120);
 }
 const axeCode = axeParams.get('code') || sessionStorage.getItem('axe_code') || '';

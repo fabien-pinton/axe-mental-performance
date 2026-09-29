@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Espace coach · AXE Mental Performance®</title>
+<script src="installer.js"></script>
 <link rel="manifest" href="manifest-coach.webmanifest">
 <meta name="theme-color" content="#0A0907">
 <link rel="icon" href="icones/favicon.ico" sizes="any">
@@ -167,6 +168,7 @@ function oublierCle(){
   document.getElementById('msg').textContent = '';
 }
 window.addEventListener('DOMContentLoaded', ()=>{
+  if(window.axeBoutonInstaller){ window.axeBoutonInstaller(document.querySelector('#loginScreen .login'), 'sombre'); }
   const c = cleMemorisee();
   if(c){
     document.getElementById('cle').value = c;
