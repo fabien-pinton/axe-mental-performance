@@ -4,12 +4,12 @@
    Choix volontaire : le RÉSEAU D'ABORD pour les pages. Une mise à jour du protocole est
    donc visible immédiatement par les riders, sans avoir à vider quoi que ce soit.       */
 
-const VERSION = 'axe-v1';
+const VERSION = 'axe-v2';   // changé : force le rafraîchissement du cache des icônes
 const FOND = [
-  'icones/axe-192.png',
-  'icones/axe-512.png',
-  'icones/axe-512-maskable.png',
-  'icones/axe-apple-180.png'
+  'axe-192.png',
+  'axe-512.png',
+  'axe-512-maskable.png',
+  'axe-apple-180.png'
 ];
 
 self.addEventListener('install', e => {

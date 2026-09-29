@@ -7,9 +7,9 @@
 <script src="installer.js"></script>
 <link rel="manifest" href="manifest-parent.webmanifest">
 <meta name="theme-color" content="#0A0907">
-<link rel="icon" href="icones/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="192x192" href="icones/parent-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icones/parent-apple-180.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="parent-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="parent-apple-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -170,7 +170,7 @@ function demanderCode(message){
   d.id = 'verrou';
   d.setAttribute('style','position:fixed;inset:0;z-index:99999;background:#0A0907;display:flex;align-items:center;justify-content:center;padding:28px;overflow:auto');
   d.innerHTML = '<div style="width:100%;max-width:340px;text-align:center">'
-    + '<img src="icones/parent-192.png" alt="AXE" style="width:76px;height:76px;border-radius:14px;margin-bottom:26px" onerror="this.style.display=\'none\'">'
+    + '<img src="parent-192.png" alt="AXE" style="width:76px;height:76px;border-radius:14px;margin-bottom:26px" onerror="this.style.display=\'none\'">'
     + '<div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:17px;color:rgba(232,226,216,.72);line-height:1.5;margin-bottom:26px">Entrez le code d\'accès de votre enfant pour ouvrir votre espace.</div>'
     + '<input id="verrouChamp" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="Son code d\'accès" style="width:100%;padding:15px 16px;border:1.5px solid rgba(201,162,39,.45);border-radius:6px;background:#14120F;color:#E8E2D8;font-size:16px;text-align:center;letter-spacing:.06em;outline:none">'
     + '<button id="verrouBtn" style="width:100%;margin-top:14px;padding:15px;border:none;border-radius:6px;background:#C9A227;color:#0A0907;font-family:DM Sans,system-ui,sans-serif;font-weight:600;font-size:15px;cursor:pointer">Ouvrir mon espace</button>'
