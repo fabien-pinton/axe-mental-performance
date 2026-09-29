@@ -386,6 +386,14 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .note-saved{font-size:11px;color:var(--gold);margin-top:6px;height:14px;letter-spacing:.04em}
 .obs-flag{font-size:11px;color:var(--dim);display:flex;align-items:center;gap:6px;margin-top:8px}
 .obs-flag .eye{width:13px;height:13px;opacity:.6}
+.ress-label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:'DM Sans';font-weight:700;color:var(--physique);margin-bottom:7px}
+/* cadre d'une séance adaptée pour raison médicale (profil spécifique) */
+.med-frame{border:1.5px solid var(--physique);border-radius:2px;padding:18px 20px;margin-bottom:22px;background:rgba(255,255,255,.55)}
+.med-frame .mf-t{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--physique);font-family:'DM Sans';font-weight:700;margin-bottom:12px}
+.med-frame ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.med-frame li{font-size:13px;line-height:1.5;color:var(--ink);padding-left:16px;position:relative}
+.med-frame li::before{content:"—";position:absolute;left:0;color:var(--physique)}
+.med-frame .mf-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13.5px;color:var(--dim);margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);line-height:1.45}
 
 /* ---------- report ---------- */
 .report{padding:60px 0 90px;max-width:660px}
@@ -2638,7 +2646,10 @@ function adjustWeight(poidsStr){
   let ageCoef = state.age>=55 ? 1.0 : state.age>=40 ? 1.1 : state.age>=17 ? 1.2 : 1.0;
   // coefficient de niveau : départemental 0.9, régional 1.0, national 1.15
   let lvlCoef = state.level==='National' ? 1.15 : state.level==='Départemental' ? 0.9 : 1.0;
-  const coef = ageCoef*lvlCoef*coefProgressionMensuelle();
+  let coef = ageCoef*lvlCoef*coefProgressionMensuelle();
+  // profil allégé (raison médicale) : charges volontairement en retrait
+  const spe = profilSpecifique().allege;
+  if(spe && spe.coefCharge) coef *= spe.coefCharge;
   // gérer les formats "40 kg" et "2 × 4 kg" : toujours un poids fixe, pair, jamais de virgule
   return poidsStr.replace(/(\d+(?:\.\d+)?)\s*kg/g,(m,n)=>{
     return roundEven(+n*coef)+' kg';
@@ -2744,9 +2755,45 @@ function appliquerExigenceNational(p, relache){
 // non par son prénom (un autre sportif du même prénom ne doit jamais hériter de ces réglages).
 const PROFILS_SPECIFIQUES = {
   'robin060809': { barreTraction:true },   // Robin : dispose d'une barre de traction à la maison
+  // Thimeo : suivi médical en cours (reins) + suivi par une nutritionniste, et une seule
+  // séance physique par semaine. Séance volontairement modérée : pas d'exigence "national",
+  // pas de finisher, pas de travail jusqu'à l'échec, charges réduites, repos allongés.
+  // Aucune consigne de boisson ni d'alimentation n'est donnée ici : c'est le domaine de sa
+  // nutritionniste et de son médecin. Le ressenti après séance est obligatoire.
+  'thimeo-12j': { allege:{ ressentiObligatoire:true, coefCharge:0.8 } },
 };
 function profilSpecifique(){
   return PROFILS_SPECIFIQUES[(axeCode||'').toLowerCase()] || {};
+}
+/* ---- séance allégée (profil médical) : l'inverse exact de l'exigence "national" ---- */
+// moins de répétitions, des maintiens plus courts, des repos nettement plus longs, et jamais
+// plus de 3 séries. On ne retire aucun mouvement : on baisse la dose, pas la qualité du travail.
+function allegerLigne(d){
+  let t = d;
+  t = t.replace(/^(\s*)(\d+)/, (m,sp,n)=> sp + Math.min(3, +n));      // 3 séries maximum
+  t = t.replace(/×\s*(\d+)(\s*s\b)?/, (m,n,sec)=>{
+    if(sec) return '× ' + Math.max(15, Math.round((+n)*0.7/5)*5) + ' s'; // maintiens : -30 %
+    return '× ' + Math.max(4, Math.round((+n)*0.75));                    // répétitions : -25 %
+  });
+  const sec = reposEnSecondes(t);
+  if(sec){ const v = Math.max(90, Math.round(sec*1.5/15)*15);            // repos : +50 %, 90 s mini
+    t = t.replace(/repos\s+\d+\s*(s|min)(\s*\d+)?/, 'repos '+formatRepos(v)); }
+  return t;
+}
+// Cadre affiché au-dessus des séances d'un profil allégé. Volontairement muet sur les boissons
+// et l'alimentation : ces consignes-là appartiennent à la nutritionniste et au médecin.
+function cadreMedicalHtml(){
+  return '<div class="med-frame">'
+   + '<div class="mf-t">Séance adaptée · suivi médical en cours</div><ul>'
+   + '<li><b>Jamais jusqu\'à l\'échec.</b> À la fin de chaque série, tu dois pouvoir en faire deux de plus. Si ce n\'est pas le cas, tu arrêtes la série là, même s\'il reste des répétitions écrites.</li>'
+   + '<li><b>Volume allégé, récupération allongée.</b> Moins de répétitions, des repos plus longs, aucun finisher : c\'est voulu, ce n\'est pas une erreur du programme.</li>'
+   + '<li><b>Montée en charge très progressive.</b> On ne cherche pas la performance ce mois-ci, on cherche une séance que tu répètes sans t\'abîmer.</li>'
+   + '<li><b>Boissons et alimentation : on ne touche à rien ici.</b> Tu suis uniquement ce que ta nutritionniste et ton médecin ont fixé, avant comme après la séance. Aucune quantité n\'est prescrite dans ce programme.</li>'
+   + '<li><b>Aucun complément</b> — protéines, créatine, boissons énergisantes, gélules — sans l\'accord de ta nutritionniste et de ton médecin.</li>'
+   + '<li><b>Pas d\'anti-inflammatoire</b> (type ibuprofène) pour faire passer des courbatures, sauf s\'il t\'a été prescrit par ton médecin.</li>'
+   + '<li><b>On arrête la séance et on prévient tout de suite</b> en cas de douleur inhabituelle, de courbatures très fortes au-delà de 48 h, d\'urines foncées, de nausées, de vertiges, ou d\'une fatigue anormale les jours suivants.</li>'
+   + '<li><b>Ton ressenti après chaque séance est obligatoire</b> (champ en bas de la séance). Sans lui, la séance ne peut pas être validée : c\'est lui qui sert à régler la séance suivante.</li>'
+   + '</ul><p class="mf-note">Ce cadre est prudent par défaut, en l\'absence de consigne médicale écrite. Montre-le à ton médecin : s\'il demande autre chose, c\'est lui qui a raison, et on ajuste le programme derrière.</p></div>';
 }
 // Bloc barre de traction : grosses séries de tirage, en deux versions qui alternent d'une
 // séance à l'autre. Le volume progresse dans le mois (mise en route -> pic) et d'un mois sur
@@ -3462,11 +3509,12 @@ function renderWeek(started){
     ? (n+' exercice'+(n>1?'s':'')+' · '+wp.tag.toLowerCase())
     : 'Pas de séance cette semaine (le mois démarre en cours de semaine)';
   const pool=state.gym?physPool.gym:physPool.home;
+  const cadreMed = profilSpecifique().allege ? cadreMedicalHtml() : '';
   // le cycle de séances avance chaque mois (aucune répétition figée sur un abonnement long),
   // et priorise le point faible physique du diagnostic sans jamais exclure les autres catégories
   const cycle=ordreSeances(pool);
   const offset=((state.month-1)*n)%cycle.length;
-  let html='';
+  let html=cadreMed;
   const semaineVue=new Set();
   // suivi des séances validées pour cette semaine : on garde les validations déjà
   // enregistrées (rechargées depuis Supabase) et on rafraîchit le total attendu, pour
@@ -3495,6 +3543,8 @@ function renderWeek(started){
     // les repos, les variantes et le finisher — voir appliquerExigenceNational — pour ne pas
     // empiler un volume de sauts excessif sur une même séance)
     let bump = state.week===2?1 : (state.week>=3 && !isRelache)?2 : 0;
+    // profil allégé : la progression du mois existe toujours, mais plafonnée à une série
+    if(profilSpecifique().allege) bump = Math.min(bump, 1);
     const ajusteSeries = txt => {
       let t = txt;
       if(bump>0) t = t.replace(/\d+/, x=>+x+bump);
@@ -3503,8 +3553,16 @@ function renderWeek(started){
     };
     p.series = ajusteSeries(p.series);
     if(p.moves) p.moves.forEach(mv=>{ mv.d = ajusteSeries(mv.d); });
-    // niveau national : répétitions, repos, variantes avancées et finisher
-    appliquerExigenceNational(p, isRelache);
+    // profil allégé (raison médicale) : on n'applique JAMAIS l'exigence national par-dessus,
+    // et on redescend le volume au lieu de le durcir
+    const alg = profilSpecifique().allege;
+    if(alg){
+      p.series = allegerLigne(p.series);
+      if(p.moves) p.moves.forEach(mv=>{ mv.d = allegerLigne(mv.d); });
+    } else {
+      // niveau national : répétitions, repos, variantes avancées et finisher
+      appliquerExigenceNational(p, isRelache);
+    }
     // profil spécifique : bloc barre de traction ajouté à la séance (volume déjà calibré,
     // il ne repasse donc pas par les ajustements de séries ci-dessus)
     if(profilSpecifique().barreTraction && p.moves){
@@ -3517,12 +3575,20 @@ function renderWeek(started){
     html+=exCard(p,false,'p'+i,jourLabel,doneInit);
   }
   if(n===0){
-    html='<p class="phys-weight-note">Ton mois a démarré en cours de semaine : ta première vraie séance arrive dès la semaine 2.</p>';
+    html=cadreMed+'<p class="phys-weight-note">Ton mois a démarré en cours de semaine : ta première vraie séance arrive dès la semaine 2.</p>';
   } else {
     if(state.gym){
-      html+='<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
+      html+= profilSpecifique().allege
+        ? '<p class="phys-weight-note">Les charges sont volontairement en retrait de ce que ton âge et ton niveau donneraient normalement. Elles montent doucement, et uniquement si tes ressentis suivent.</p>'
+        : '<p class="phys-weight-note">Les charges sont calées sur ton âge ('+state.age+' ans) et ton niveau ('+state.level.toLowerCase()+'). Elles montent avec toi.</p>';
     }
-    if(state.level==='National'){
+    if(profilSpecifique().allege){
+      html+='<p class="phys-weight-note">'+(n===1
+        ? 'Une seule séance par semaine : elle est complète, mais tenue à une intensité modérée. Mieux vaut une séance que tu répètes toute la saison qu\'une séance dure que ton corps ne digère pas.'
+        : 'Séances tenues à une intensité modérée, avec de vrais temps de récupération entre les séries.')
+        +' Si une séance te laisse plus fatigué que d\'habitude, écris-le dans ton ressenti : la suivante sera revue à la baisse.</p>';
+    }
+    if(state.level==='National' && !profilSpecifique().allege){
       html+='<p class="phys-weight-note">'+(isRelache
         ? 'Niveau national, semaine de relâchement : '+(state.age>=14?'tu gardes les variantes avancées, mais ':'')+'pas de finisher, des repos normaux et un volume réduit. Tu absorbes le travail du mois.'
         : 'Niveau national : plus de répétitions, des repos raccourcis'+(state.age>=14 ? ', des variantes plus dures et un finisher en fin de séance' : '')+'. Si la forme se dégrade, tu arrêtes la série : une répétition propre vaut mieux que trois bâclées.')
@@ -3579,18 +3645,39 @@ function exCard(ex,isMental,id,jourLabel,doneInit){
       <div class="move-d">${m.d}</div>
       ${m.c?`<div class="move-c">${m.c}</div>`:''}
     </div>`).join('');
+  // profil allégé (raison médicale) : le ressenti est demandé sur la séance elle-même, et
+  // conditionne sa validation. Il part dans les notes du coach comme n'importe quelle note.
+  const ressenti = (profilSpecifique().allege||{}).ressentiObligatoire ? `
+    <div class="note-box on" id="box-r${id}" style="margin-top:16px">
+      <label class="ress-label" for="note-r${id}">Ton ressenti sur cette séance · obligatoire</label>
+      <textarea id="note-r${id}" placeholder="Comment tu t'es senti pendant et après : les jambes, la respiration, l'énergie, une douleur éventuelle, la fatigue et le sommeil des jours suivants. Même court, mais honnête." oninput="saveNote('r${id}')"></textarea>
+      <div class="note-saved" id="saved-r${id}"></div>
+      <div class="obs-flag"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Transmis à ton coach. C'est lui qui règle la séance suivante.</div>
+    </div>` : '';
   return `<div class="card${doneInit?' done':''}" id="card-${id}">
     ${jourLabel?`<span class="day-tag">Séance du ${jourLabel.toLowerCase()}</span>`:''}
     <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
     <p class="desc">${ex.desc}</p>
     <div class="meta"><span><b>${ex.series}</b> · <b>${ex.dur}</b></span></div>
     <div class="moves">${moves}</div>
+    ${ressenti}
     <button class="validate" id="val-${id}" onclick="validateEx('${id}')">${doneInit?validatedBtnHtml():'Valider la séance'}</button>
   </div>`;
 }
 function validateEx(id){
   const b=document.getElementById('val-'+id);
   const card=document.getElementById('card-'+id);
+  // profil allégé : pas de validation sans ressenti écrit (on ne bloque jamais la dévalidation)
+  if((profilSpecifique().allege||{}).ressentiObligatoire && !card.classList.contains('done')){
+    const champ=document.getElementById('note-r'+id);
+    if(champ && !champ.value.trim()){
+      const box=document.getElementById('box-r'+id); if(box) box.classList.add('on');
+      const s=document.getElementById('saved-r'+id);
+      if(s){ s.textContent='Écris d\'abord ton ressenti : c\'est lui qui règle la séance suivante.'; s.style.color='var(--physique)'; }
+      champ.focus();
+      return;
+    }
+  }
   const wk = physWeekKey();
   if(!state.physSeances[wk]) state.physSeances[wk] = {ids:{}, total:physSessions(), done:0};
   const seances = state.physSeances[wk];
@@ -3612,6 +3699,7 @@ function validateEx(id){
 function toggleNote(id){document.getElementById('box-'+id).classList.toggle('on');}
 function saveNote(id){
   const s=document.getElementById('saved-'+id);
+  s.style.color='';
   s.textContent='Enregistré ✓ visible côté coach';
   clearTimeout(window['t'+id]);
   window['t'+id]=setTimeout(()=>s.textContent='',1800);
