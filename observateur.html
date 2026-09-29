@@ -4,6 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Espace coach · AXE Mental Performance®</title>
+<link rel="manifest" href="manifest-coach.webmanifest">
+<meta name="theme-color" content="#0A0907">
+<link rel="icon" href="icones/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="icones/coach-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icones/coach-apple-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Coach">
+<meta name="application-name" content="Coach">
+<script>
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
+  window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -24,6 +39,10 @@ body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .login input:focus{outline:none;border-color:var(--gold)}
 .login button{width:100%;margin-top:14px;padding:14px;border:none;border-radius:5px;background:var(--ink);color:var(--cream);font-family:'DM Sans';font-weight:600;font-size:15px;cursor:pointer}
 .login .msg{margin-top:16px;font-size:14px;min-height:20px;color:#9B2C2C}
+.login .garder{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:16px;font-size:13.5px;color:var(--dim);cursor:pointer}
+.login .garder input{width:17px;height:17px;accent-color:var(--gold);cursor:pointer}
+.oublier{display:block;margin:26px auto 0;background:none;border:1px solid var(--line);color:var(--dim);font-family:'DM Sans';font-size:12.5px;padding:8px 16px;border-radius:999px;cursor:pointer}
+.oublier:hover{border-color:var(--gold);color:var(--gold)}
 /* Grid */
 .sec-head{margin-bottom:24px}
 .sec-head h1{font-family:'Bebas Neue';font-weight:400;font-size:38px;letter-spacing:.03em}
@@ -87,12 +106,14 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
     <div class="serif">Entre ta clé pour voir tes riders.</div>
     <input type="password" id="cle" placeholder="Ta clé coach" autocomplete="off">
     <button onclick="entrer()">Ouvrir mon tableau de bord</button>
+    <label class="garder"><input type="checkbox" id="garderCle"> Rester connecté sur cet appareil</label>
     <div class="msg" id="msg"></div>
   </div>
 </div>
 
 <!-- Tableau de bord -->
 <div class="wrap" id="board" style="display:none">
+  <button class="oublier" style="margin-top:0;margin-bottom:22px" onclick="oublierCle()">Retirer ma clé de cet appareil</button>
   <div class="sec-head">
     <h1>MES RIDERS</h1>
     <div class="serif">Chaque fiche, en direct de ta base.</div>
@@ -133,6 +154,27 @@ const msg = document.getElementById('msg');
 
 document.getElementById('cle').addEventListener('keydown', e=>{ if(e.key==='Enter') entrer(); });
 
+/* Espace coach installé sur l'écran d'accueil : sans ça, il faudrait retaper la clé à chaque
+   ouverture. La clé n'est gardée QUE si tu coches la case, et elle ne quitte jamais l'appareil. */
+const CLE_MEMO = 'axe_cle_coach';
+function cleMemorisee(){ try{ return localStorage.getItem(CLE_MEMO) || ''; }catch(e){ return ''; } }
+function oublierCle(){
+  try{ localStorage.removeItem(CLE_MEMO); }catch(e){}
+  document.getElementById('board').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'block';
+  document.getElementById('cle').value = '';
+  document.getElementById('garderCle').checked = false;
+  document.getElementById('msg').textContent = '';
+}
+window.addEventListener('DOMContentLoaded', ()=>{
+  const c = cleMemorisee();
+  if(c){
+    document.getElementById('cle').value = c;
+    document.getElementById('garderCle').checked = true;
+    entrer();
+  }
+});
+
 let prospects = [];
 
 async function entrer(){
@@ -143,7 +185,11 @@ async function entrer(){
   try{
     // 1. on valide la clé sur les prospects : cette fonction refuse une clé fausse
     const p = await db.rpc('liste_prospects', { cle: cle });
-    if(p.error){ msg.textContent = 'Clé incorrecte.'; return; }
+    if(p.error){
+      msg.textContent = 'Clé incorrecte.';
+      try{ localStorage.removeItem(CLE_MEMO); }catch(e){}
+      return;
+    }
     prospects = p.data || [];
 
     // 2. clé valide : on ouvre le tableau de bord, même si aucun rider encore
@@ -153,6 +199,12 @@ async function entrer(){
     const r = await db.rpc('liste_riders', { cle: cle });
     const riders = (r.error || !r.data) ? [] : r.data;
     indexerClients(riders);
+
+    // la clé est valide : on la garde sur l'appareil uniquement si la case est cochée
+    try{
+      if(document.getElementById('garderCle').checked) localStorage.setItem(CLE_MEMO, cle);
+      else localStorage.removeItem(CLE_MEMO);
+    }catch(e){}
 
     afficherRiders(riders);
     afficherProspects();

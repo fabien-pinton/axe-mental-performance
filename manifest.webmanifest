@@ -1,0 +1,38 @@
+{
+  "name": "AXE Mental Performance",
+  "short_name": "AXE",
+  "description": "Ton protocole mental et physique, jour après jour.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "protocole-axe.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0907",
+  "theme_color": "#0A0907",
+  "categories": [
+    "sports",
+    "health",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "icones/axe-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icones/axe-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icones/axe-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

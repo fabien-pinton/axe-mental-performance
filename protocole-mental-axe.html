@@ -4,6 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Le protocole AXE Mental Performance®</title>
+<link rel="manifest" href="manifest-mental.webmanifest">
+<meta name="theme-color" content="#0A0907">
+<link rel="icon" href="icones/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icones/axe-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icones/axe-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icones/axe-apple-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AXE">
+<meta name="application-name" content="AXE">
+<script>
+/* installation sur l'écran d'accueil : le service worker n'est enregistré que sur un vrai
+   site en HTTPS (ou en local). Ouvert depuis un fichier, la page fonctionne exactement pareil. */
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -781,7 +801,63 @@ const axeDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Lecture de la session : code du rider + étape demandée, passés dans l'adresse
 const axeParams = new URLSearchParams(window.location.search);
+try{ localStorage.removeItem('axe_code'); }catch(e){}   // purge d'une éventuelle mémorisation précédente
+
+/* ============ CODE D'ACCÈS DEMANDÉ À CHAQUE OUVERTURE ============
+   L'application installée sur l'écran d'accueil s'ouvre sans code dans l'adresse.
+   Le code n'est JAMAIS conservé d'une ouverture à l'autre : il ne vit que le temps de la
+   session (sessionStorage, effacé à la fermeture). L'adresse est nettoyée dès le chargement,
+   pour qu'un code ne traîne ni dans l'historique ni dans un raccourci d'écran d'accueil.
+   ?demo=1 ouvre la page en démonstration locale, sans code.                                */
+const axeModeDemoUrl = axeParams.get('demo') === '1';
+
+function axeDemanderCode(message){
+  try{ sessionStorage.removeItem('axe_code'); }catch(e){}
+  if(document.getElementById('axeVerrou')){
+    if(message){ document.getElementById('axeVerrouMsg').textContent = message; }
+    return;
+  }
+  const d = document.createElement('div');
+  d.id = 'axeVerrou';
+  d.setAttribute('style','position:fixed;inset:0;z-index:99999;background:#0A0907;display:flex;'
+    +'align-items:center;justify-content:center;padding:28px;overflow:auto');
+  d.innerHTML =
+    '<div style="width:100%;max-width:340px;text-align:center">'
+    + '<img src="icones/axe-192.png" alt="AXE" style="width:76px;height:76px;border-radius:14px;margin-bottom:26px" '
+    +   'onerror="this.style.display=\'none\'">'
+    + '<div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:17px;'
+    +   'color:rgba(232,226,216,.72);line-height:1.5;margin-bottom:26px">Entre ton code d\'accès pour ouvrir ton protocole.</div>'
+    + '<input id="axeVerrouChamp" type="text" inputmode="text" autocapitalize="off" autocorrect="off" '
+    +   'spellcheck="false" autocomplete="off" placeholder="Ton code d\'accès" '
+    +   'style="width:100%;padding:15px 16px;border:1.5px solid rgba(201,162,39,.45);border-radius:6px;'
+    +   'background:#14120F;color:#E8E2D8;font-size:16px;text-align:center;letter-spacing:.06em;outline:none">'
+    + '<button id="axeVerrouBtn" style="width:100%;margin-top:14px;padding:15px;border:none;border-radius:6px;'
+    +   'background:#C9A227;color:#0A0907;font-family:DM Sans,system-ui,sans-serif;font-weight:600;'
+    +   'font-size:15px;letter-spacing:.02em;cursor:pointer">Ouvrir mon protocole</button>'
+    + '<div id="axeVerrouMsg" style="margin-top:16px;min-height:20px;font-size:13.5px;color:#D98B6A"></div>'
+    + '<div style="margin-top:22px;font-size:12px;color:rgba(232,226,216,.4);line-height:1.5">'
+    +   'Ton code t\'a été envoyé par email. Il est demandé à chaque ouverture, et n\'est jamais gardé sur l\'appareil.</div>'
+    + '</div>';
+  document.body.appendChild(d);
+  document.documentElement.style.overflow = 'hidden';
+  const champ = document.getElementById('axeVerrouChamp');
+  const valider = function(){
+    const v = (champ.value || '').trim();
+    if(!v){ document.getElementById('axeVerrouMsg').textContent = 'Entre ton code.'; return; }
+    try{ sessionStorage.setItem('axe_code', v); }catch(e){}
+    location.replace(location.pathname + '?code=' + encodeURIComponent(v));
+  };
+  document.getElementById('axeVerrouBtn').addEventListener('click', valider);
+  champ.addEventListener('keydown', function(e){ if(e.key === 'Enter') valider(); });
+  if(message){ document.getElementById('axeVerrouMsg').textContent = message; }
+  setTimeout(function(){ try{ champ.focus(); }catch(e){} }, 120);
+}
 const axeCode = axeParams.get('code') || sessionStorage.getItem('axe_code') || '';
+// le code ne survit pas à la fermeture : mémorisé pour la session en cours uniquement
+if(axeCode){ try{ sessionStorage.setItem('axe_code', axeCode); }catch(e){} }
+// l'adresse est nettoyée : aucun code ne reste dans l'historique ni dans un raccourci
+if(axeParams.get('code')){ try{ history.replaceState(null, '', location.pathname); }catch(e){} }
+if(!axeCode && !axeModeDemoUrl){ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', function(){ axeDemanderCode(''); }); } else { axeDemanderCode(''); } }
 // "etape" vient normalement de l'adresse (redirection depuis acces.html). Si elle est absente
 // (retour direct sur cette page : favori, onglet rouvert, lien renvoyé sans le paramètre...),
 // on la recalcule nous-mêmes une fois les infos du rider chargées, avec exactement la même
@@ -848,6 +924,7 @@ async function axeInit(){
       }
     } else {
       console.log('[AXE] Code inconnu.');
+      axeDemanderCode('Ce code ne correspond à aucun accès. Vérifie-le, ou écris-nous.');
     }
     axeVerifierMessagesVocaux();
   }catch(e){ console.log('[AXE] Souci connexion :', e.message); }

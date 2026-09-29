@@ -1,0 +1,38 @@
+{
+  "name": "AXE · Espace coach",
+  "short_name": "Coach",
+  "description": "Tes riders et tes demandes reçues, en direct.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "observateur.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0907",
+  "theme_color": "#0A0907",
+  "categories": [
+    "sports",
+    "health",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "icones/coach-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icones/coach-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icones/coach-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
