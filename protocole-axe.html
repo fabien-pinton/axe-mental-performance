@@ -879,7 +879,9 @@ const axeDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Lecture de la session : code du rider + étape demandée, passés dans l'adresse
 const axeParams = new URLSearchParams(window.location.search);
-try{ localStorage.removeItem('axe_code'); }catch(e){}   // purge d'une éventuelle mémorisation précédente
+// le code n'est relu sur l'appareil que si la personne a coché « retenir mon code »
+const axeCodeGarde = (function(){ try{ return localStorage.getItem('axe_code_garde')==='oui'
+  ? (localStorage.getItem('axe_code')||'') : ''; }catch(e){ return ''; } })();
 
 /* ============ CODE D'ACCÈS DEMANDÉ À CHAQUE OUVERTURE ============
    L'application installée sur l'écran d'accueil s'ouvre sans code dans l'adresse.
@@ -888,6 +890,36 @@ try{ localStorage.removeItem('axe_code'); }catch(e){}   // purge d'une éventuel
    pour qu'un code ne traîne ni dans l'historique ni dans un raccourci d'écran d'accueil.
    ?demo=1 ouvre la page en démonstration locale, sans code.                                */
 const axeModeDemoUrl = axeParams.get('demo') === '1';
+
+
+/* Bas de page : installation sur l'écran d'accueil, et retrait du code mémorisé. */
+function axeOutilsBasDePage(){
+  if(document.getElementById('axeOutils')) return;
+  const ancre = document.querySelector('.lum-foot') || document.querySelector('.lumiere');
+  if(!ancre || !ancre.parentNode) return;
+  const z = document.createElement('div');
+  z.id = 'axeOutils';
+  z.style.cssText = 'text-align:center;padding:26px 22px 4px';
+  ancre.parentNode.insertBefore(z, ancre);   // juste au-dessus du mantra, dans le flux
+  if(window.axeBoutonInstaller){ window.axeBoutonInstaller(z, 'sombre'); }
+  let garde = false;
+  try{ garde = localStorage.getItem('axe_code_garde') === 'oui'; }catch(e){}
+  if(garde){
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = 'Retirer mon code de cet appareil';
+    b.style.cssText = 'display:block;margin:16px auto 0;background:none;border:none;color:rgba(26,22,18,.55);'
+      + 'font-family:DM Sans,system-ui,sans-serif;font-size:12.5px;text-decoration:underline;cursor:pointer;padding:6px';
+    b.addEventListener('click', function(){
+      try{ localStorage.removeItem('axe_code'); localStorage.removeItem('axe_code_garde');
+           sessionStorage.removeItem('axe_code'); }catch(e){}
+      b.textContent = 'Code retiré. Il sera redemandé à la prochaine ouverture.';
+      b.disabled = true; b.style.textDecoration = 'none';
+    });
+    z.appendChild(b);
+  }
+}
+window.addEventListener('load', function(){ setTimeout(axeOutilsBasDePage, 500); });
 
 function axeDemanderCode(message){
   try{ sessionStorage.removeItem('axe_code'); }catch(e){}
@@ -912,9 +944,11 @@ function axeDemanderCode(message){
     + '<button id="axeVerrouBtn" style="width:100%;margin-top:14px;padding:15px;border:none;border-radius:6px;'
     +   'background:#C9A227;color:#0A0907;font-family:DM Sans,system-ui,sans-serif;font-weight:600;'
     +   'font-size:15px;letter-spacing:.02em;cursor:pointer">Ouvrir mon protocole</button>'
+    + '<label style="display:flex;align-items:flex-start;justify-content:center;gap:9px;margin-top:16px;font-size:12.5px;color:rgba(232,226,216,.62);cursor:pointer;text-align:left;line-height:1.45">'
+    +   '<input type="checkbox" id="axeVerrouGarder" style="width:17px;height:17px;flex-shrink:0;margin-top:1px;accent-color:#C9A227;cursor:pointer"> Retenir mon code sur ce téléphone</label>'
     + '<div id="axeVerrouMsg" style="margin-top:16px;min-height:20px;font-size:13.5px;color:#D98B6A"></div>'
     + '<div style="margin-top:22px;font-size:12px;color:rgba(232,226,216,.4);line-height:1.5">'
-    +   'Ton code t\'a été envoyé par email. Il est demandé à chaque ouverture, et n\'est jamais gardé sur l\'appareil.</div>'
+    +   'Ton code t\'a été envoyé par email. Il n\'est gardé sur l\'appareil que si tu coches la case ci-dessus.</div>'
     + '</div>';
   document.body.appendChild(d);
   document.documentElement.style.overflow = 'hidden';
@@ -922,7 +956,12 @@ function axeDemanderCode(message){
   const valider = function(){
     const v = (champ.value || '').trim();
     if(!v){ document.getElementById('axeVerrouMsg').textContent = 'Entre ton code.'; return; }
-    try{ sessionStorage.setItem('axe_code', v); }catch(e){}
+    try{
+      sessionStorage.setItem('axe_code', v);
+      const garder = document.getElementById('axeVerrouGarder');
+      if(garder && garder.checked){ localStorage.setItem('axe_code', v); localStorage.setItem('axe_code_garde','oui'); }
+      else { localStorage.removeItem('axe_code'); localStorage.removeItem('axe_code_garde'); }
+    }catch(e){}
     location.replace(location.pathname + '?code=' + encodeURIComponent(v));
   };
   document.getElementById('axeVerrouBtn').addEventListener('click', valider);
@@ -930,9 +969,11 @@ function axeDemanderCode(message){
   if(message){ document.getElementById('axeVerrouMsg').textContent = message; }
   // proposition d'installation sur l'écran d'accueil, au moment le plus naturel
   if(window.axeBoutonInstaller){ window.axeBoutonInstaller(d.firstElementChild, 'or'); }
+  try{ const g=document.getElementById('axeVerrouGarder');
+       if(g && localStorage.getItem('axe_code_garde')==='oui') g.checked = true; }catch(e){}
   setTimeout(function(){ try{ champ.focus(); }catch(e){} }, 120);
 }
-const axeCode = axeParams.get('code') || sessionStorage.getItem('axe_code') || '';
+const axeCode = axeParams.get('code') || sessionStorage.getItem('axe_code') || axeCodeGarde || '';
 // le code ne survit pas à la fermeture : mémorisé pour la session en cours uniquement
 if(axeCode){ try{ sessionStorage.setItem('axe_code', axeCode); }catch(e){} }
 // l'adresse est nettoyée : aucun code ne reste dans l'historique ni dans un raccourci

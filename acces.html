@@ -4,11 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Accès · Le protocole AXE Mental Performance®</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="axe-192.png">
+<meta name="theme-color" content="#FDFAF5">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1A1612;--cream:#FDFAF5;--gold:#A8852A;--line:rgba(26,22,18,.14);--dim:rgba(26,22,18,.6)}
+:root{--ink:#1A1612;--cream:#FDFAF5;--gold:#A8852A;--parent:#5D6F4A;--line:rgba(26,22,18,.14);--dim:rgba(26,22,18,.6)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px}
 .card{max-width:440px;width:100%;text-align:center}
@@ -26,23 +29,74 @@ button:disabled{opacity:.5;cursor:default}
 .msg.ok{color:#5D6F4A}
 .hint{margin-top:26px;font-size:12.5px;color:var(--dim);line-height:1.6}
 .hint a{color:var(--gold)}
+
+/* ---- choix du rôle ---- */
+.roles{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.role{display:flex;align-items:center;gap:15px;text-align:left;width:100%;margin:0;padding:18px 20px;
+  background:#fff;border:1.5px solid var(--line);border-radius:5px;color:var(--ink);cursor:pointer;transition:.18s}
+.role:hover{background:#fff;border-color:var(--gold)}
+.role .ico{width:44px;height:44px;border-radius:9px;flex-shrink:0;object-fit:cover}
+.role .t{font-family:'DM Sans';font-weight:600;font-size:15.5px;letter-spacing:.01em;display:block;margin-bottom:3px}
+.role .d{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14.5px;color:var(--dim);display:block;line-height:1.4}
+.role.parent:hover{border-color:var(--parent)}
+
+/* ---- retenir le code ---- */
+.garder{display:flex;align-items:flex-start;justify-content:center;gap:9px;margin-top:16px;
+  font-size:13px;color:var(--dim);cursor:pointer;text-align:left;line-height:1.45}
+.garder input{width:18px;height:18px;flex-shrink:0;margin-top:1px;accent-color:var(--gold);cursor:pointer;padding:0}
+.lien{background:none;border:none;color:var(--dim);font-family:'DM Sans';font-size:12.5px;
+  text-decoration:underline;cursor:pointer;padding:8px;margin-top:10px;width:auto}
+.lien:hover{background:none;color:var(--gold)}
+.retour{margin-top:18px}
+.etape{display:none}
+.etape.on{display:block;animation:apparait .28s ease}
+@keyframes apparait{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 <div class="card">
   <div class="axe-letters">AXE</div>
   <div class="axe-sub">MENTAL PERFORMANCE®</div>
-  <h1>TON ESPACE PILOTE</h1>
-  <div class="serif">Entre ton code d'accès pour ouvrir ton protocole.</div>
 
-  <input type="text" id="code" placeholder="Ton code d'accès (ex : AXE-...)" autocomplete="off">
-  <button id="btn" onclick="verifier()">Ouvrir mon protocole</button>
+  <!-- ÉTAPE 1 : qui êtes-vous ? -->
+  <div class="etape on" id="etapeRole">
+    <h1>BIENVENUE</h1>
+    <div class="serif">Choisissez votre espace.</div>
+    <div class="roles">
+      <button class="role" onclick="choisirRole('sportif')">
+        <img class="ico" src="axe-192.png" alt="" onerror="this.style.display='none'">
+        <span><span class="t">Je suis le sportif</span><span class="d">Mon diagnostic, mon programme du mois, mon rituel.</span></span>
+      </button>
+      <button class="role parent" onclick="choisirRole('parent')">
+        <img class="ico" src="parent-192.png" alt="" onerror="this.style.display='none'">
+        <span><span class="t">Je suis un parent</span><span class="d">Où il en est cette semaine, ses débriefs, ma clé du mois.</span></span>
+      </button>
+    </div>
+    <div class="hint">
+      Vous avez reçu votre code par email après l'inscription.<br>
+      C'est le même code pour les deux espaces.
+    </div>
+  </div>
 
-  <div class="msg" id="msg"></div>
+  <!-- ÉTAPE 2 : le code -->
+  <div class="etape" id="etapeCode">
+    <h1 id="titreCode">TON ESPACE SPORTIF</h1>
+    <div class="serif" id="sousTitreCode">Entre ton code d'accès pour ouvrir ton protocole.</div>
 
-  <div class="hint">
-    Tu as reçu ton code par email après ton inscription.<br>
-    Une question ? Écris à ton préparateur.
+    <input type="text" id="code" placeholder="Ton code d'accès (ex : AXE-...)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <button id="btn" onclick="verifier()">Ouvrir mon espace</button>
+
+    <label class="garder"><input type="checkbox" id="garderCode"> Retenir mon code sur ce téléphone, pour ne plus avoir à le saisir</label>
+
+    <div class="msg" id="msg"></div>
+
+    <button class="lien" id="btnOublier" style="display:none" onclick="oublierCode()">Retirer mon code de cet appareil</button>
+    <button class="lien retour" onclick="revenirRole()">← Changer d'espace</button>
+
+    <div class="hint" id="astuceInstall">
+      Une fois dans votre espace, un bouton <b>« Installer l'application »</b> vous permettra
+      de l'ajouter sur votre écran d'accueil, avec son icône.
+    </div>
   </div>
 </div>
 
@@ -55,16 +109,61 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 // Sert de repli : si un code n'a pas de "page_cible" propre en base (cas normal
 // pour tous tes abonnés protocole-axe), c'est ce fichier qui s'ouvre.
 const FICHIER_PROTOCOLE = 'protocole-axe.html';
+const FICHIER_PARENT    = 'espace-parent.html';
+// clés de mémorisation sur l'appareil (jamais envoyées ailleurs)
+const MEMO_CODE = 'axe_code';        // le code lui-même, uniquement si la case est cochée
+const MEMO_GARDE = 'axe_code_garde'; // trace du consentement explicite
+const MEMO_ROLE = 'axe_role';        // sportif ou parent
 // ==================================================================
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 const msg = document.getElementById('msg');
 const btn = document.getElementById('btn');
+let role = 'sportif';
 
-// Permet aussi d'ouvrir directement avec ?code=... dans l'adresse
+function lire(cle){ try{ return localStorage.getItem(cle) || ''; }catch(e){ return ''; } }
+function ecrire(cle, val){ try{ localStorage.setItem(cle, val); }catch(e){} }
+function effacer(cle){ try{ localStorage.removeItem(cle); }catch(e){} }
+
 const params = new URLSearchParams(window.location.search);
-if(params.get('code')){
-  document.getElementById('code').value = params.get('code');
+
+function choisirRole(r){
+  role = r;
+  ecrire(MEMO_ROLE, r);
+  document.getElementById('titreCode').textContent = (r==='parent') ? 'VOTRE ESPACE PARENT' : 'TON ESPACE SPORTIF';
+  document.getElementById('sousTitreCode').textContent = (r==='parent')
+    ? "Entrez le code d'accès de votre enfant pour ouvrir votre espace."
+    : "Entre ton code d'accès pour ouvrir ton protocole.";
+  document.getElementById('code').placeholder = (r==='parent') ? "Son code d'accès" : "Ton code d'accès (ex : AXE-...)";
+  document.getElementById('etapeRole').classList.remove('on');
+  document.getElementById('etapeCode').classList.add('on');
+  msg.className='msg'; msg.textContent='';
+  btn.disabled = false;
+
+  // code déjà retenu sur cet appareil : on le pré-remplit, la personne n'a plus qu'à valider
+  const garde = lire(MEMO_GARDE) === 'oui';
+  const memo = garde ? lire(MEMO_CODE) : '';
+  const champ = document.getElementById('code');
+  if(params.get('code')) champ.value = params.get('code');
+  else if(memo) champ.value = memo;
+  document.getElementById('garderCode').checked = garde;
+  document.getElementById('btnOublier').style.display = memo ? 'block' : 'none';
+  setTimeout(function(){ try{ champ.focus(); }catch(e){} }, 120);
+}
+
+function revenirRole(){
+  document.getElementById('etapeCode').classList.remove('on');
+  document.getElementById('etapeRole').classList.add('on');
+}
+
+function oublierCode(){
+  effacer(MEMO_CODE); effacer(MEMO_GARDE);
+  try{ sessionStorage.removeItem('axe_code'); }catch(e){}
+  document.getElementById('code').value = '';
+  document.getElementById('garderCode').checked = false;
+  document.getElementById('btnOublier').style.display = 'none';
+  msg.className='msg ok';
+  msg.textContent = "Code retiré de cet appareil.";
 }
 
 // Entrée clavier = valider
@@ -96,6 +195,21 @@ async function verifier(){
       msg.className='msg ok';
       // on mémorise le code pour la session
       sessionStorage.setItem('axe_code', code);
+      // et sur l'appareil, uniquement si la personne l'a demandé explicitement
+      if(document.getElementById('garderCode').checked){
+        ecrire(MEMO_CODE, code); ecrire(MEMO_GARDE, 'oui');
+      } else {
+        effacer(MEMO_CODE); effacer(MEMO_GARDE);
+      }
+
+      // ===== ESPACE PARENT : pas de diagnostic, pas d'étape, on ouvre directement =====
+      if(role === 'parent'){
+        msg.textContent = 'Accès validé. Ouverture de votre espace...';
+        setTimeout(()=>{
+          window.location.href = FICHIER_PARENT + '?code=' + encodeURIComponent(code);
+        }, 800);
+        return;
+      }
 
       // ===== AIGUILLAGE : diagnostic ou programme ? =====
       // date_diag vide => jamais fait => diagnostic (1re connexion)
@@ -138,6 +252,12 @@ async function verifier(){
     btn.disabled = false;
   }
 }
+
+// au chargement : si un rôle a déjà été choisi sur cet appareil, on va droit au but
+(function(){
+  const rMemo = params.get('role') || lire(MEMO_ROLE);
+  if(rMemo === 'sportif' || rMemo === 'parent'){ choisirRole(rMemo); }
+})();
 </script>
 </body>
 </html>
