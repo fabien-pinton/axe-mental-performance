@@ -3119,6 +3119,21 @@ function moisCourantCC(){
   const d = (typeof dateRef==='function' && dateRef()) || new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
 }
+/* À quel mois AXE appartient un cycle de 21 jours qui vient de se terminer ?
+   Piège : quand le 1er du mois tombe, la base a déjà fait avancer le mois (le sportif rouvre
+   son application, verifier_acces passe au mois suivant). Si on rattachait le cycle à
+   state.month, le 21/21 de septembre serait compté sur le mois d'octobre.
+   On le rattache donc au mois AXE qui tournait pendant ce mois calendaire-là, en comptant
+   les mois d'écart avec le début du mois en cours. */
+function moisAxeDuCycle(cleCycle){
+  if(!cleCycle) return state.month;
+  const p = String(cleCycle).split('-');
+  const an = Number(p[0]), mo = Number(p[1]);
+  if(!an || !mo || !state.startDate) return state.month;
+  const ecart = (state.startDate.getFullYear()*12 + state.startDate.getMonth())
+              - (an*12 + (mo-1));
+  return (ecart > 0) ? Math.max(1, state.month - ecart) : state.month;
+}
 function verifierCycleCC(){
   const cle = moisCourantCC();
   if(!state.ccMois){
@@ -3134,7 +3149,7 @@ function verifierCycleCC(){
     const tenus = Object.keys(state.ccDays).filter(d=>state.ccDays[d]).length;
     if(tenus){
       state.ccArchives = state.ccArchives || {};
-      state.ccArchives[state.ccMois] = { jours: tenus, moisAxe: state.month, img: state.imageryDays || 0 };
+      state.ccArchives[state.ccMois] = { jours: tenus, moisAxe: moisAxeDuCycle(state.ccMois), img: state.imageryDays || 0 };
     }
     state.ccDays = {};
     state.ccMois = cle;
