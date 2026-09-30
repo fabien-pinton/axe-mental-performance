@@ -72,6 +72,10 @@ body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .mc-nom::before{content:'▸ ';color:var(--gold);font-size:11px}
 .mois-clos.ouvert .mc-nom::before{content:'▾ '}
 .mc-res{display:block;font-size:12px;color:var(--dim);padding-left:13px;margin-top:1px}
+.rc-sub.repliable{cursor:pointer;border-top:1px dashed var(--line);padding-top:12px}
+.rc-sub.repliable::before{content:'▸ ';font-size:10px}
+.rc-sub.repliable.ouvert::before{content:'▾ '}
+.rc-sub.repliable:hover{opacity:.75}
 .mc-vide{font-size:12px;color:var(--dim);font-style:italic;margin-top:9px;padding-left:12px;border-left:2px solid var(--line)}
 .mc-ok{color:#2F6B45;font-weight:700}
 .mc-non{color:#B08A2E;font-weight:700}
@@ -235,8 +239,12 @@ function basculerMois(id){
   const d = document.getElementById(id);
   if(!d) return;
   d.classList.toggle('on');
+  const ouvert = d.classList.contains('on');
   const bloc = d.closest('.mois-clos');
-  if(bloc) bloc.classList.toggle('ouvert', d.classList.contains('on'));
+  if(bloc){ bloc.classList.toggle('ouvert', ouvert); return; }
+  // l'historique : c'est le titre juste au-dessus qui porte le chevron
+  const titre = d.previousElementSibling;
+  if(titre && titre.classList.contains('repliable')) titre.classList.toggle('ouvert', ouvert);
 }
 
 function dateFr(d){
@@ -593,20 +601,37 @@ function afficherRiders(riders){
     // ---- les mois terminés : une ligne chacun, dépliable ----
     let closBlock = '';
     if(moisCourant > 1){
-      closBlock += `<div class="rc-sub">Mois terminés</div>`;
-      for(let m = 1; m < moisCourant; m++){
+      // Le mois qui vient de se terminer reste lisible d'emblée : c'est celui qui sert à
+      // monter le suivant. Les plus anciens partent dans un historique replié, sinon une
+      // fiche de 12 mois devient interminable.
+      const ligneMoisClos = (m, texteVisible) => {
         const rit = (m in rituelMois) ? (rituelMois[m] + '/21') : '—';
         const s   = seancesMois[m] || {done:0, total:0};
         const sea = s.total ? (s.done + '/' + s.total) : '—';
         const id  = 'det-' + idx + '-' + m;
-        closBlock += `<div class="mois-clos">
+        const dedans = texteVisible ? semainesDuMois(m) : (semainesDuMois(m) + ecritsDuMois(m));
+        return `<div class="mois-clos">
           <div class="mc-top" onclick="basculerMois('${id}')">
             <span class="mc-nom">Mois ${m}</span>
             <span class="mc-res">Rituel ${rit} · Séances ${sea}</span>
           </div>
-          <div class="mc-det" id="${id}">${semainesDuMois(m)}</div>
-          ${ecritsDuMois(m)}
+          <div class="mc-det" id="${id}">${dedans}</div>
+          ${texteVisible ? ecritsDuMois(m) : ''}
         </div>`;
+      };
+
+      const dernierClos = moisCourant - 1;
+      closBlock += `<div class="rc-sub">Mois ${dernierClos} · terminé</div>`;
+      closBlock += ligneMoisClos(dernierClos, true);
+
+      if(moisCourant > 2){
+        const combien = moisCourant - 2;
+        const idH = 'hist-' + idx;
+        closBlock += `<div class="rc-sub repliable" onclick="basculerMois('${idH}')">`
+          + `Historique · ${combien} mois de plus</div>`
+          + `<div class="mc-det" id="${idH}">`;
+        for(let m = 1; m <= combien; m++) closBlock += ligneMoisClos(m, false);
+        closBlock += `</div>`;
       }
     }
 
@@ -653,6 +678,21 @@ function afficherRiders(riders){
           + (change ? ` <span class="mc-non">(${jd} au lieu de ${joursProfil})</span>` : '')
           + `</span></div>`;
       }
+      // âge et niveau redéclarés : c'est ce qui recale les charges et les exigences
+      const ageDecl = Number(dernierRapport.age) || null;
+      const nivDecl = (dernierRapport.niveau || '').trim();
+      const ageProfil = (p.age || p.age === 0) ? Number(p.age) : null;
+      const nivProfil = (p.niveau || '').trim();
+      if(ageDecl){
+        const bouge = (ageProfil !== null && ageDecl !== ageProfil);
+        suiteBlock += `<div class="rc-line"><span>Âge déclaré</span><span>${ageDecl} ans`
+          + (bouge ? ` <span class="mc-non">(au lieu de ${ageProfil})</span>` : '') + `</span></div>`;
+      }
+      if(nivDecl){
+        const bouge = (nivProfil && nivDecl !== nivProfil);
+        suiteBlock += `<div class="rc-line"><span>Niveau déclaré</span><span>${nivDecl}`
+          + (bouge ? ` <span class="mc-non">(au lieu de ${nivProfil})</span>` : '') + `</span></div>`;
+      }
     }
 
     grid.innerHTML += `<div class="rider-card">
@@ -668,8 +708,8 @@ function afficherRiders(riders){
       ${r.tel_rider?`<div class="rc-line"><span>Contact rider</span><span>${r.tel_rider}</span></div>`:''}
       ${profilBlock}
       ${suiteBlock}
-      ${closBlock}
       ${moisBlock}
+      ${closBlock}
       ${debriefBlock}
     </div>`;
   });

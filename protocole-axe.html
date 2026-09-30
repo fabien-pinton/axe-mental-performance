@@ -855,6 +855,18 @@ textarea:focus{outline:none;border-color:var(--gold)}
     </div>
 
     <div class="rq">
+      <p>Tu as quel âge aujourd'hui ?</p>
+      <div class="chips" id="reportAgeChips"></div>
+      <p class="mini-note" style="text-align:left;margin-top:10px">On le redemande chaque mois : une année de plus change les charges, les temps de récupération et le volume qu'on peut te demander.</p>
+    </div>
+
+    <div class="rq">
+      <p>À quel niveau tu cours en ce moment ?</p>
+      <div class="chips" id="reportLvlChips"></div>
+      <p class="mini-note" style="text-align:left;margin-top:10px">Si tu es monté (ou descendu) de niveau, dis-le : les exigences du mois prochain se calent dessus.</p>
+    </div>
+
+    <div class="rq">
       <p>Qu'est-ce que tu aimerais réussir le mois prochain ?</p>
       <textarea id="reportGoal" placeholder="Un objectif, une sensation, un moment de course..."></textarea>
     </div>
@@ -2561,6 +2573,7 @@ function go(id){
   if(id==='report'){
     if(!state.report.trainingDays)state.report.trainingDays=[...state.trainingDays];
     if(typeof refreshReportDaysChips==='function')refreshReportDaysChips();
+    if(typeof refreshReportProfil==='function')refreshReportProfil();
   }
   if(id==='start')renderStart();
   if(id==='notes')renderNotesRecap();
@@ -2728,6 +2741,39 @@ updateGymAccess();
 function refreshDaysChips(){ renderDaysChips('daysChips',state.trainingDays,refreshDaysChips); }
 refreshDaysChips();
 function refreshReportDaysChips(){ renderDaysChips('reportDaysChips',state.report.trainingDays,refreshReportDaysChips); }
+
+/* L'âge et le niveau sont redemandés à chaque bilan : ils changent en cours de saison et
+   ils pilotent les charges, la récupération et les exigences. Pré-remplis avec ce qu'on a
+   déjà, pour que le sportif n'ait rien à faire si rien n'a bougé.
+   Ils ne s'appliquent qu'au mois SUIVANT, quand la base fait avancer le mois. */
+const NIVEAUX_AXE = ['Départemental','Régional','National'];
+function refreshReportProfil(){
+  if(state.report.age === undefined)     state.report.age = state.age;
+  if(state.report.niveau === undefined)  state.report.niveau = state.level;
+  const ages = [];
+  for(let a = Math.max(6, (state.age||13) - 1); a <= Math.min(25, (state.age||13) + 2); a++) ages.push(a);
+  if(ages.indexOf(state.report.age) < 0 && state.report.age) ages.unshift(state.report.age);
+  chipsSimples('reportAgeChips', ages, state.report.age, function(v){
+    state.report.age = v; refreshReportProfil();
+  }, function(v){ return v + ' ans'; });
+  chipsSimples('reportLvlChips', NIVEAUX_AXE, state.report.niveau, function(v){
+    state.report.niveau = v; refreshReportProfil();
+  }, null);
+}
+/* petites pastilles autonomes : ne touchent pas à state tant que le bilan n'est pas envoyé */
+function chipsSimples(containerId, valeurs, courant, onPick, fmt){
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML = '';
+  valeurs.forEach(function(v){
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip' + (courant === v ? ' sel' : '');
+    b.textContent = fmt ? fmt(v) : v;
+    b.onclick = function(){ onPick(v); };
+    c.appendChild(b);
+  });
+}
 
 /* ============ VOLUME RULE ============ */
 // le nombre de séances réelles dépend de l'âge/niveau/salle, jamais uniquement du nombre
@@ -3957,10 +4003,14 @@ async function axeEnregistrerRapport(){
   const jours = (listeJours && listeJours.length) || null;
   const joursNoms = (listeJours && listeJours.length)
     ? joursTries(listeJours).map(j => JOURS_LABEL[j] || j).join(', ') : null;
+  // âge et niveau déclarés dans le bilan : la base les appliquera au profil quand le mois
+  // avancera, pas avant. Un mois en cours ne doit pas changer de charges en pleine route.
+  const ageDecl = Number(state.report.age) || null;
+  const nivDecl = state.report.niveau || null;
   try{
     const { error } = await axeDB.rpc('enregistrer_rapport', {
       code: axeCode, mois_r: state.month, bloc_r: bloc, texte_r: texte,
-      jours_r: jours, jours_noms_r: joursNoms
+      jours_r: jours, jours_noms_r: joursNoms, age_r: ageDecl, niveau_r: nivDecl
     });
     if(error){ console.log('[AXE] Erreur rapport :', error.message); }
     else{ console.log('[AXE] Rapport du mois '+state.month+' enregistré.'); }
