@@ -261,6 +261,18 @@ function continuer(){
     if(jeton){ d += sep + 't=' + encodeURIComponent(jeton); sep = '&'; }
     if(parrain){ d += sep + 'parrain=' + encodeURIComponent(parrain); }
     document.getElementById('lienDemo').setAttribute('href', d);
+    // Les coordonnées viennent d'être données ici : on les dépose sur cet appareil, rattachées
+    // au jeton, pour que la démo n'ait pas à les redemander. Rien ne part ailleurs, et la démo
+    // les efface dès qu'elle s'en est servie.
+    try{
+      if(jeton){
+        localStorage.setItem('axe_demo_invite', JSON.stringify({
+          t: jeton,
+          nom: nomInscripteur || '',
+          email: val('f_mail') || ''
+        }));
+      }
+    }catch(e){}
     montrer('stepFin');
     window.scrollTo({top:0,behavior:'smooth'});
   }

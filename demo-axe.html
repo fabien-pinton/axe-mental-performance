@@ -410,7 +410,7 @@ h2.t{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:clamp(
 <section class="screen" id="s-recap">
   <div class="tag">Pour finir</div>
   <h2 class="t">GARDEZ VOTRE PROFIL</h2>
-  <p class="lead">Fabien vous envoie votre profil et votre exercice, avec le lien pour aller plus loin.</p>
+  <p class="lead" id="recapLead">Fabien vous envoie votre profil et votre exercice, avec le lien pour aller plus loin.</p>
 
   <div class="card gold" style="margin-top:18px">
     <div class="ctag">Ce qui vous sera envoyé</div>
@@ -548,7 +548,8 @@ function recommencer(volontaire){
   st.idx=0; st.questions=[]; st.rep={};
   st.score={portillon:0,rumination:0,confiance:0,neutre:0};
   st.oeil=null; st.canal={auditif:0,visuel:0};
-  st.dominant=null; st.exFait=false; st.lead=null;
+  st.dominant=null; st.exFait=false; st.lead=null; st.invite=null;
+  try{ localStorage.removeItem('axe_demo_invite'); }catch(e){}
   ['f-prenom','f-age','f-mail','f-nom','exT1','exT2'].forEach(function(id){
     const e=document.getElementById(id); if(e) e.value='';
   });
@@ -1080,6 +1081,18 @@ function majRecap(){
   document.getElementById('recapLigne').textContent = r.ligne;
   const p = document.getElementById('f-prenom').value.trim();
   const n = document.getElementById('f-nom');
+  // venu de « rejoindre » : son adresse est déjà connue, on la remet sans rien lui demander.
+  // Le nom retenu est celui de la personne qui a laissé ses coordonnées — c'est elle qu'on
+  // salue dans l'email, pas forcément le sportif dont le prénom a servi à la démo.
+  if(st.invite){
+    const m = document.getElementById('f-mail');
+    if(!m.value) m.value = st.invite.email;
+    if(st.invite.nom) n.value = st.invite.nom;
+    document.getElementById('btnMail').textContent = 'Recevoir mon profil à cette adresse';
+    const intro = document.getElementById('recapLead');
+    if(intro) intro.textContent = 'Fabien vous envoie votre profil et votre exercice à l\'adresse que vous venez de laisser.';
+    majMailBtn();
+  }
   if(p && !n.value) n.value = p;
   progres(94);
 }
@@ -1192,6 +1205,8 @@ function terminer(envoi){
           : 'Fabien vous envoie votre profil. En attendant, scannez pour retrouver le protocole chez vous.')
       : 'Votre profil est transmis à Fabien. Scannez pour retrouver le protocole tranquillement.';
   }
+  try{ localStorage.removeItem('axe_demo_invite'); }catch(e){}   // ne sert qu'une fois
+  st.invite = null;
   progres(100);
   go('s-fin');
   synchroniser(true);
@@ -1351,6 +1366,13 @@ function viderLeads(){
     const t = (params.get('t') || '').trim();
     // un jeton relie cette démo à une fiche déjà créée sur la page « rejoindre »
     if(/^[0-9a-fA-F-]{32,36}$/.test(t)) st.token = t;
+    // coordonnées déjà laissées sur « rejoindre », sur ce même appareil : on ne les redemande pas
+    if(st.token){
+      try{
+        const inv = JSON.parse(localStorage.getItem('axe_demo_invite') || 'null');
+        if(inv && inv.t === st.token && inv.email) st.invite = inv;
+      }catch(e){}
+    }
   }catch(e){}
 })();
 progres(0);
