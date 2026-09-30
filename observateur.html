@@ -543,9 +543,13 @@ function afficherRiders(riders){
     const notesDuMois   = m => notes.filter(n => Number(n.mois) === m);
     const rapportDuMois = m => rapports.find(rp => Number(rp.mois) === m);
 
+    // le retour mensuel du parent (clé « bilan ») est un bilan au même titre que celui du
+    // sportif : il porte le même nom. Les autres notes restent de simples notes de carte.
+    const estBilanParent = n => n.auteur === 'parent' && (n.cle || 'bilan') === 'bilan';
     const ligneNote = n => {
       const cls   = (n.auteur === 'parent') ? 'rc-note pa' : 'rc-note';
-      const qui   = (n.auteur === 'parent') ? 'Parent' : 'Sportif';
+      const qui   = estBilanParent(n) ? 'Bilan du parent'
+                  : (n.auteur === 'parent') ? 'Parent' : 'Sportif';
       const quand = dateFr(n.modifie_le || n.created_at).split(' à ')[0];
       return `<div class="${cls}"><span class="rc-who">${qui}${quand?(' · '+quand):''}</span>${n.texte}</div>`;
     };
@@ -562,8 +566,8 @@ function afficherRiders(riders){
         h += `<div class="mc-vide">Bilan du sportif — pas de bilan ce mois-là</div>`;
       }
       const notesM = notesDuMois(m);
-      if(notesM.length){ notesM.forEach(n=>{ h += ligneNote(n); }); }
-      else { h += `<div class="mc-vide">Parent — pas de retour ce mois-là</div>`; }
+      notesM.forEach(n=>{ h += ligneNote(n); });
+      if(!notesM.some(estBilanParent)){ h += `<div class="mc-vide">Bilan du parent — pas de retour ce mois-là</div>`; }
       return h;
     };
 
@@ -577,9 +581,14 @@ function afficherRiders(riders){
 
     // ---- rappel en haut de fiche : où en est le bilan du mois en cours ----
     const bilanCourant = rapportDuMois(moisCourant);
-    const bilanLigne = bilanCourant
-      ? `<div class="rc-line"><span>Bilan mois ${moisCourant}</span><span class="tag-env">Bilan envoyé · ${dateFr(bilanCourant.created_at).split(' à ')[0]}</span></div>`
-      : `<div class="rc-line"><span>Bilan mois ${moisCourant}</span><span class="tag-att">Pas encore envoyé</span></div>`;
+    const bilanParentCourant = notesDuMois(moisCourant).find(estBilanParent);
+    const bilanLigne =
+        (bilanCourant
+          ? `<div class="rc-line"><span>Bilan sportif · mois ${moisCourant}</span><span class="tag-env">Envoyé · ${dateFr(bilanCourant.created_at).split(' à ')[0]}</span></div>`
+          : `<div class="rc-line"><span>Bilan sportif · mois ${moisCourant}</span><span class="tag-att">Pas encore envoyé</span></div>`)
+      + (bilanParentCourant
+          ? `<div class="rc-line"><span>Bilan parent · mois ${moisCourant}</span><span class="tag-env">Écrit · ${dateFr(bilanParentCourant.modifie_le || bilanParentCourant.created_at).split(' à ')[0]}</span></div>`
+          : `<div class="rc-line"><span>Bilan parent · mois ${moisCourant}</span><span class="tag-att">Pas encore écrit</span></div>`);
 
     // ---- les mois terminés : une ligne chacun, dépliable ----
     let closBlock = '';
@@ -612,8 +621,14 @@ function afficherRiders(riders){
     });
     if(bilanCourant && bilanCourant.texte){
       moisBlock += `<div class="rc-note"><span class="rc-who">Bilan du sportif · ${dateFr(bilanCourant.created_at).split(' à ')[0]}</span>${bilanCourant.texte}</div>`;
+    } else {
+      moisBlock += `<div class="mc-vide">Bilan du sportif — pas encore envoyé</div>`;
     }
     notesDuMois(moisCourant).forEach(n=>{ moisBlock += ligneNote(n); });
+    // un silence du parent doit se voir : sinon on ne distingue pas « rien écrit » de « rien chargé »
+    if(!bilanParentCourant){
+      moisBlock += `<div class="mc-vide">Bilan du parent — pas encore écrit</div>`;
+    }
 
     // ---- ce qu'il a demandé pour la suite : la matière pour construire le mois suivant ----
     // Le bilan envoyé à la fin d'un mois porte le bloc voulu et le nombre de jours dispo :
