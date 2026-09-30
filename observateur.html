@@ -62,6 +62,21 @@ body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .rc-line span:last-child{color:var(--ink);text-align:right}
 .mono{font-family:ui-monospace,monospace;font-size:12px;background:rgba(26,22,18,.05);padding:2px 6px;border-radius:3px}
 .tag-part{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--parent);background:rgba(93,111,74,.14);padding:2px 8px;border-radius:2px}
+.tag-env{font-size:11px;font-weight:700;letter-spacing:.05em;color:#2F6B45;background:rgba(47,107,69,.13);padding:2px 8px;border-radius:2px}
+.tag-att{font-size:11px;font-weight:700;letter-spacing:.05em;color:#8A6A1F;background:rgba(168,133,42,.14);padding:2px 8px;border-radius:2px}
+/* un mois terminé : une seule ligne, qu'on déplie d'un clic */
+.mois-clos{border-top:1px dashed var(--line);padding:6px 0 10px}
+.mc-top{display:block;cursor:pointer}
+.mc-top:hover{background:rgba(201,162,39,.06)}
+.mc-nom{display:block;font-size:13px;font-weight:600;color:var(--ink)}
+.mc-nom::before{content:'▸ ';color:var(--gold);font-size:11px}
+.mois-clos.ouvert .mc-nom::before{content:'▾ '}
+.mc-res{display:block;font-size:12px;color:var(--dim);padding-left:13px;margin-top:1px}
+.mc-vide{font-size:12px;color:var(--dim);font-style:italic;margin-top:9px;padding-left:12px;border-left:2px solid var(--line)}
+.mc-ok{color:#2F6B45;font-weight:700}
+.mc-non{color:#B08A2E;font-weight:700}
+.mc-det{display:none;margin:2px 0 8px;padding-left:12px;border-left:2px solid rgba(201,162,39,.3)}
+.mc-det.on{display:block}
 .rc-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--ink);margin-top:12px;padding-left:12px;border-left:2px solid var(--gold)}
 .rc-note.pa{border-left-color:var(--parent);margin-top:9px}
 .rc-who{display:block;font-family:'DM Sans';font-style:normal;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
@@ -213,6 +228,15 @@ async function entrer(){
     afficherProspects();
     chargerNotesRapports(cle);
   }catch(e){ msg.textContent = 'Souci : ' + e.message; }
+}
+
+/* un mois terminé s'ouvre et se referme d'un clic sur sa ligne */
+function basculerMois(id){
+  const d = document.getElementById(id);
+  if(!d) return;
+  d.classList.toggle('on');
+  const bloc = d.closest('.mois-clos');
+  if(bloc) bloc.classList.toggle('ouvert', d.classList.contains('on'));
 }
 
 function dateFr(d){
@@ -435,7 +459,7 @@ function afficherRiders(riders){
     grid.innerHTML = '<div class="empty">Aucun rider inscrit pour le moment.</div>';
     return;
   }
-  riders.forEach(r=>{
+  riders.forEach((r, idx)=>{
     // profil décodé
     let p = {};
     try{ if(r.profil_diagnostic) p = JSON.parse(r.profil_diagnostic); }catch(e){}
@@ -466,15 +490,6 @@ function afficherRiders(riders){
       profilBlock += `<div class="rc-line"><span>Jours dispo (physique)</span><span>${p.jours.join(', ')}</span></div>`;
     }
 
-    // notes de ce rider
-    const notes = notesParCode[r.code_acces] || [];
-    let notesBlock = '';
-    notes.slice(-4).forEach(n=>{
-      const cls = (n.auteur === 'parent') ? 'rc-note pa' : 'rc-note';
-      const who = (n.auteur === 'parent') ? 'Parent' : 'Rider';
-      notesBlock += `<div class="${cls}"><span class="rc-who">${who} · mois ${n.mois||'?'}</span>${n.texte}</div>`;
-    });
-
     // débriefs express juste après une compétition (routine tenue, gêne ressentie, confiance /10)
     const debriefs = debriefsParCode[r.code_acces] || [];
     let debriefBlock = '';
@@ -486,58 +501,150 @@ function afficherRiders(riders){
       });
     }
 
-    // rapports de ce rider
+    // =====================================================================================
+    // Tout ce qui est daté est regroupé PAR MOIS.
+    // Un mois terminé tient sur une seule ligne (rituel, séances, rapport parent, bilan) ;
+    // on clique dessus pour retrouver le détail. Seul le mois en cours reste déplié.
+    // =====================================================================================
+    const notes    = notesParCode[r.code_acces]    || [];
     const rapports = rapportsParCode[r.code_acces] || [];
-    let rapBlock = '';
-    if(rapports.length){
-      rapBlock += `<div class="rc-sub">Rapports de fin de mois</div>`;
-      rapports.slice(-3).forEach(rp=>{
-        rapBlock += `<div class="rc-line"><span>Mois ${rp.mois||'?'}</span><span>${rp.bloc||'-'}${rp.jours_dispo?(' · '+rp.jours_dispo+'j'):''}</span></div>`;
-        if(rp.texte){ rapBlock += `<div class="rc-note"><span class="rc-who">Ressenti</span>${rp.texte}</div>`; }
-      });
-    }
+    const sr       = r.suivi_rituel || {};
+    const moisCourant = Number(r.mois_en_cours || 1);
 
-    // suivi du rituel (21 jours, cinéma du start, rituel d'avant-départ, carnet des starts) :
-    // enregistré en direct depuis la page du rider, donc à jour dès qu'il valide quelque chose.
-    const sr = r.suivi_rituel || {};
-    const ccCount = sr.ccDays ? Object.keys(sr.ccDays).filter(k=>sr.ccDays[k]).length : 0;
-    const imgDays = sr.imageryDays || 0;
-    const routineOk = !!(sr.startRoutine && sr.startRoutine.mot && sr.startRoutine.geste);
+    const ccCount      = sr.ccDays ? Object.keys(sr.ccDays).filter(k=>sr.ccDays[k]).length : 0;
+    const imgDays      = sr.imageryDays || 0;
+    const routineOk    = !!(sr.startRoutine && sr.startRoutine.mot && sr.startRoutine.geste);
     const journalCount = (sr.startJournal || []).length;
-    let rituelBlock = '';
-    if(ccCount || imgDays || routineOk || journalCount){
-      rituelBlock += `<div class="rc-sub">Suivi du rituel</div>`;
-      if(ccCount) rituelBlock += `<div class="rc-line"><span>Rituel 21 jours</span><span>${ccCount} / 21</span></div>`;
-      if(imgDays) rituelBlock += `<div class="rc-line"><span>Cinéma du start</span><span>${imgDays} / 7 soirs</span></div>`;
-      if(routineOk) rituelBlock += `<div class="rc-line"><span>Rituel d'avant-départ</span><span>"${sr.startRoutine.mot}" · ${sr.startRoutine.geste}</span></div>`;
-      if(journalCount) rituelBlock += `<div class="rc-line"><span>Carnet des starts</span><span>${journalCount} entrée${journalCount>1?'s':''}</span></div>`;
+
+    // séances physiques : le cumul du mois, et le détail semaine par semaine
+    const physS = sr.physSeances || {};
+    const seancesMois = {}, semainesMois = {};
+    Object.keys(physS).forEach(k=>{
+      const m = Number(k.split('-')[0]), w = Number(k.split('-')[1]);
+      const e = physS[k] || {};
+      const o = seancesMois[m] = seancesMois[m] || {done:0, total:0};
+      o.done += e.done || 0; o.total += e.total || 0;
+      (semainesMois[m] = semainesMois[m] || []).push({semaine:w, done:e.done||0, total:e.total||0});
+    });
+    Object.keys(semainesMois).forEach(m=>semainesMois[m].sort((a,b)=>a.semaine-b.semaine));
+
+    // rituel des 21 jours : le compteur du mois en cours est vivant, les mois passés
+    // viennent de l'archive écrite par l'application du sportif au changement de cycle.
+    const archives = sr.ccArchives || {};
+    const rituelMois = {};
+    Object.keys(archives).forEach(k=>{
+      const a = archives[k] || {};
+      const m = Number(a.moisAxe || 0);
+      if(!m) return;
+      if(!(m in rituelMois) || (a.jours||0) > rituelMois[m]) rituelMois[m] = a.jours || 0;
+    });
+    rituelMois[moisCourant] = ccCount;
+
+    const notesDuMois   = m => notes.filter(n => Number(n.mois) === m);
+    const rapportDuMois = m => rapports.find(rp => Number(rp.mois) === m);
+
+    const ligneNote = n => {
+      const cls   = (n.auteur === 'parent') ? 'rc-note pa' : 'rc-note';
+      const qui   = (n.auteur === 'parent') ? 'Parent' : 'Sportif';
+      const quand = dateFr(n.modifie_le || n.created_at).split(' à ')[0];
+      return `<div class="${cls}"><span class="rc-who">${qui}${quand?(' · '+quand):''}</span>${n.texte}</div>`;
+    };
+
+    // Ce qui a été ÉCRIT pendant le mois reste toujours lisible, même mois replié :
+    // c'est le fond, pas du détail. Seul le découpage semaine par semaine se cache.
+    const ecritsDuMois = m => {
+      let h = '';
+      const rp = rapportDuMois(m);
+      if(rp && (rp.texte || rp.bloc)){
+        const quand = dateFr(rp.created_at).split(' à ')[0];
+        h += `<div class="rc-note"><span class="rc-who">Bilan du sportif${quand?(' · '+quand):''}</span>${rp.texte || '<i>bilan envoyé sans commentaire</i>'}</div>`;
+      } else {
+        h += `<div class="mc-vide">Bilan du sportif — pas de bilan ce mois-là</div>`;
+      }
+      const notesM = notesDuMois(m);
+      if(notesM.length){ notesM.forEach(n=>{ h += ligneNote(n); }); }
+      else { h += `<div class="mc-vide">Parent — pas de retour ce mois-là</div>`; }
+      return h;
+    };
+
+    const semainesDuMois = m => {
+      let h = '';
+      (semainesMois[m] || []).forEach(s=>{
+        h += `<div class="rc-line"><span>Semaine ${s.semaine}</span><span>${s.done} / ${s.total} séance${s.total>1?'s':''}</span></div>`;
+      });
+      return h || `<div class="mc-vide">Aucune séance enregistrée ce mois-là</div>`;
+    };
+
+    // ---- rappel en haut de fiche : où en est le bilan du mois en cours ----
+    const bilanCourant = rapportDuMois(moisCourant);
+    const bilanLigne = bilanCourant
+      ? `<div class="rc-line"><span>Bilan mois ${moisCourant}</span><span class="tag-env">Bilan envoyé · ${dateFr(bilanCourant.created_at).split(' à ')[0]}</span></div>`
+      : `<div class="rc-line"><span>Bilan mois ${moisCourant}</span><span class="tag-att">Pas encore envoyé</span></div>`;
+
+    // ---- les mois terminés : une ligne chacun, dépliable ----
+    let closBlock = '';
+    if(moisCourant > 1){
+      closBlock += `<div class="rc-sub">Mois terminés</div>`;
+      for(let m = 1; m < moisCourant; m++){
+        const rit = (m in rituelMois) ? (rituelMois[m] + '/21') : '—';
+        const s   = seancesMois[m] || {done:0, total:0};
+        const sea = s.total ? (s.done + '/' + s.total) : '—';
+        const id  = 'det-' + idx + '-' + m;
+        closBlock += `<div class="mois-clos">
+          <div class="mc-top" onclick="basculerMois('${id}')">
+            <span class="mc-nom">Mois ${m}</span>
+            <span class="mc-res">Rituel ${rit} · Séances ${sea}</span>
+          </div>
+          <div class="mc-det" id="${id}">${semainesDuMois(m)}</div>
+          ${ecritsDuMois(m)}
+        </div>`;
+      }
     }
 
-    // séances physiques validées, par mois + semaine : enregistrées en direct depuis la
-    // page du rider dès qu'il coche "Valider la séance", et ça reste affiché "validé"
-    // même s'il ferme et rouvre son application.
-    const physS = sr.physSeances || {};
-    const physKeys = Object.keys(physS).sort((a,b)=>{
-      const [am,aw] = a.split('-').map(Number);
-      const [bm,bw] = b.split('-').map(Number);
-      return (am-bm) || (aw-bw);
+    // ---- le mois en cours, déplié ----
+    let moisBlock = `<div class="rc-sub">Mois ${moisCourant} · en cours</div>`;
+    if(ccCount)      moisBlock += `<div class="rc-line"><span>Rituel 21 jours</span><span>${ccCount} / 21</span></div>`;
+    if(imgDays)      moisBlock += `<div class="rc-line"><span>Cinéma du start</span><span>${imgDays} / 7 soirs</span></div>`;
+    if(routineOk)    moisBlock += `<div class="rc-line"><span>Rituel d'avant-départ</span><span>"${sr.startRoutine.mot}" · ${sr.startRoutine.geste}</span></div>`;
+    if(journalCount) moisBlock += `<div class="rc-line"><span>Carnet des starts</span><span>${journalCount} entrée${journalCount>1?'s':''}</span></div>`;
+    (semainesMois[moisCourant] || []).forEach(s=>{
+      moisBlock += `<div class="rc-line"><span>Semaine ${s.semaine}</span><span>${s.done} / ${s.total} séance${s.total>1?'s':''} validée${s.total>1?'s':''}</span></div>`;
     });
-    let physBlock = '';
-    if(physKeys.length){
-      physBlock += `<div class="rc-sub">Séances physiques</div>`;
-      physKeys.slice(-8).forEach(k=>{
-        const [mo, we] = k.split('-');
-        const e = physS[k] || {};
-        const done = e.done || 0;
-        const total = e.total || 0;
-        physBlock += `<div class="rc-line"><span>Mois ${mo} · Semaine ${we}</span><span>${done} / ${total} séance${total>1?'s':''} validée${total>1?'s':''}</span></div>`;
-      });
+    if(bilanCourant && bilanCourant.texte){
+      moisBlock += `<div class="rc-note"><span class="rc-who">Bilan du sportif · ${dateFr(bilanCourant.created_at).split(' à ')[0]}</span>${bilanCourant.texte}</div>`;
+    }
+    notesDuMois(moisCourant).forEach(n=>{ moisBlock += ligneNote(n); });
+
+    // ---- ce qu'il a demandé pour la suite : la matière pour construire le mois suivant ----
+    // Le bilan envoyé à la fin d'un mois porte le bloc voulu et le nombre de jours dispo :
+    // c'est sur cette base que se monte le mois d'après.
+    let suiteBlock = '';
+    const dernierRapport = rapports.slice().sort((a,b)=>Number(a.mois)-Number(b.mois)).pop();
+    if(dernierRapport && (dernierRapport.bloc || dernierRapport.jours_dispo)){
+      const moisVise = Number(dernierRapport.mois) + 1;
+      const dejaLance = moisVise <= moisCourant;
+      const joursProfil = (Array.isArray(p.jours) && p.jours.length) ? p.jours.length : null;
+      const jd = Number(dernierRapport.jours_dispo) || 0;
+      const change = (joursProfil && jd && jd !== joursProfil);
+      suiteBlock += `<div class="rc-sub">${dejaLance ? ('Mois '+moisVise+' · monté sur') : ('Mois '+moisVise+' · à préparer')}</div>`;
+      if(dernierRapport.bloc){
+        suiteBlock += `<div class="rc-line"><span>Bloc demandé</span><span>${dernierRapport.bloc}</span></div>`;
+      }
+      // les jours eux-mêmes si le sportif les a nommés, sinon le nombre seul (anciens bilans)
+      const noms = (dernierRapport.jours_noms || '').trim();
+      if(noms || jd){
+        suiteBlock += `<div class="rc-line"><span>Jours dispo annoncés</span><span>`
+          + (noms || (jd + ' jour' + (jd>1?'s':'')))
+          + (change ? ` <span class="mc-non">(${jd} au lieu de ${joursProfil})</span>` : '')
+          + `</span></div>`;
+      }
     }
 
     grid.innerHTML += `<div class="rider-card">
       <div class="rc-top"><h3>${nomAffiche}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
       <div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>
+      ${bilanLigne}
       <div class="rc-line"><span>Formule</span><span>${r.formule||'?'}</span></div>
       ${estPartenaire?`<div class="rc-line"><span>Statut</span><span class="tag-part">Partenaire éligible</span></div>`:''}
       ${r.parraine_par?`<div class="rc-line"><span>Venu grâce à</span><span>${r.parraine_par}</span></div>`:''}
@@ -545,11 +652,10 @@ function afficherRiders(riders){
       <div class="rc-line"><span>Contact parent</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
       ${r.tel_rider?`<div class="rc-line"><span>Contact rider</span><span>${r.tel_rider}</span></div>`:''}
       ${profilBlock}
-      ${rituelBlock}
-      ${physBlock}
+      ${suiteBlock}
+      ${closBlock}
+      ${moisBlock}
       ${debriefBlock}
-      ${notesBlock}
-      ${rapBlock}
     </div>`;
   });
 }

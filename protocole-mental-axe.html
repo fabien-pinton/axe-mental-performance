@@ -937,6 +937,7 @@ async function axeInit(){
         const sr = r.suivi_rituel;
         if(sr.ccDays) state.ccDays = sr.ccDays;
         if(sr.ccMois) state.ccMois = sr.ccMois;
+        if(sr.ccArchives) state.ccArchives = sr.ccArchives;
         if(typeof sr.imageryDays === 'number') state.imageryDays = sr.imageryDays;
         if(sr.startRoutine) state.startRoutine = sr.startRoutine;
         if(Array.isArray(sr.startJournal)) state.startJournal = sr.startJournal;
@@ -1033,7 +1034,7 @@ function axeReponsesCompatibles(obj, axis){
 // Si les réponses mental/physique/sensoriel sont dans l'ancien format (incompatible avec
 // le diagnostic actuel), on garde uniquement les infos encore valables (âge, niveau, jours,
 // salle, mois) et on renvoie le pilote refaire le diagnostic au lieu d'ouvrir le tableau de bord.
-function axeChargerProfil(r){
+async function axeChargerProfil(r){
   try{
     const p = JSON.parse(r.profil);
     const compatible = axeReponsesCompatibles(p.mental,'mental')
@@ -1051,6 +1052,9 @@ function axeChargerProfil(r){
     if(compatible){
       console.log('[AXE] Profil rechargé depuis la base. Ouverture du programme.');
       if(!modeDemo) axeProgrammeActif = true; // verrouille l'inscription/le diagnostic dans le menu à points
+      // le bilan du mois précédent oriente ce mois-ci : il doit être relu depuis la base,
+      // sinon il n'existe que le temps d'une session et le programme repart du diagnostic
+      await axeChargerDernierBilan();
       buildProgram();
       go('dash');
     } else {
@@ -1226,6 +1230,9 @@ const SPORT_LEXICON = {
     surLieu:"sur la gate",
     aprèsCompet:"Après une course", joursDeCompet:"les jours où tu roules",
     blocOptions:["Sur la gate","1re ligne droite","Les virages","Les bosses"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","confiance","confiance"],
   },
   motocross:{
     nom:"Motocross", verbeHero:"ROULE AVEC",
@@ -1258,6 +1265,9 @@ const SPORT_LEXICON = {
     surLieu:"sur la grille",
     aprèsCompet:"Après une course", joursDeCompet:"les jours où tu roules",
     blocOptions:["Sur la grille","Le holeshot","Les virages","Les sauts"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","confiance","confiance"],
   },
   football:{
     nom:"Football", verbeHero:"JOUE AVEC",
@@ -1290,6 +1300,9 @@ const SPORT_LEXICON = {
     surLieu:"sur le terrain",
     aprèsCompet:"Après un match", joursDeCompet:"les jours où tu joues",
     blocOptions:["Avant le coup d'envoi","Les duels","Après une erreur","Les fins de match serrées"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","rumination","confiance"],
   },
   tennis:{
     nom:"Tennis", verbeHero:"JOUE AVEC",
@@ -1322,6 +1335,9 @@ const SPORT_LEXICON = {
     surLieu:"sur le court",
     aprèsCompet:"Après un match", joursDeCompet:"les jours où tu joues",
     blocOptions:["Au service","Les balles de break","Après une erreur","Les fins de set serrées"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","rumination","confiance"],
   },
   basket:{
     nom:"Basketball", verbeHero:"JOUE AVEC",
@@ -1354,6 +1370,9 @@ const SPORT_LEXICON = {
     surLieu:"sur le terrain",
     aprèsCompet:"Après un match", joursDeCompet:"les jours où tu joues",
     blocOptions:["Avant le coup d'envoi","Les duels","Après une erreur","Les fins de match serrées"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","rumination","confiance"],
   },
   natation:{
     nom:"Natation", verbeHero:"NAGE AVEC",
@@ -1386,6 +1405,9 @@ const SPORT_LEXICON = {
     surLieu:"dans l'eau",
     aprèsCompet:"Après une course", joursDeCompet:"les jours où tu nages",
     blocOptions:["Sur le plot","Le premier virage","Les 50 derniers mètres","Après un faux départ"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","confiance","rumination"],
   },
   athletisme:{
     nom:"Athlétisme", verbeHero:"COURS AVEC",
@@ -1418,6 +1440,9 @@ const SPORT_LEXICON = {
     surLieu:"sur la piste",
     aprèsCompet:"Après une course", joursDeCompet:"les jours où tu cours",
     blocOptions:["Sur la ligne de départ","Le premier 100m","La fin de course","Après un faux départ"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","confiance","rumination"],
   },
   judo:{
     nom:"Judo", verbeHero:"COMBATS AVEC",
@@ -1450,6 +1475,9 @@ const SPORT_LEXICON = {
     surLieu:"sur le tatami",
     aprèsCompet:"Après un combat", joursDeCompet:"les jours où tu combats",
     blocOptions:["Avant le combat","Les premières prises","Après une pénalité","Les golden score"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","rumination","confiance"],
   },
   generique:{
     nom:"", verbeHero:"AVANCE AVEC",
@@ -1482,6 +1510,9 @@ const SPORT_LEXICON = {
     surLieu:"au moment de démarrer",
     aprèsCompet:"Après une épreuve", joursDeCompet:"les jours de compétition",
     blocOptions:["Avant le départ","Le début de l'épreuve","Après une erreur","La fin de l'épreuve"],
+    // à quel blocage mental chaque moment renvoie (même ordre que blocOptions) :
+    // avant le départ → portillon · pendant l'action → confiance · après une faute → rumination
+    blocCles:["portillon","confiance","rumination","confiance"],
   },
 };
 // mots-clés qui font correspondre le texte libre saisi par le client (colonne "sport") à
@@ -2172,8 +2203,24 @@ function chipGroup(containerId,values,key,fmt){
 chipGroup('lvlChips',['Départemental','Régional','National'],'level');
 
 /* ============ BUILD PROGRAM ============ */
+/* Le bilan de fin de mois déclare OÙ ça bloque maintenant (sur la gate, dans les virages...).
+   Chaque moment renvoie à un blocage mental (blocCles, juste à côté de blocOptions).
+   Cette déclaration-là est plus récente que le diagnostic d'inscription : c'est donc elle
+   qui oriente l'exercice mental du mois suivant. Sans bilan, on reste sur le diagnostic. */
+function cleBlocageDuBilan(){
+  const b = state.report && state.report.bloc;
+  if(!b) return null;
+  const l = (typeof SPORT_LEXICON !== 'undefined' && SPORT_LEXICON[state.sport]) || null;
+  if(!l || !Array.isArray(l.blocOptions) || !Array.isArray(l.blocCles)) return null;
+  const i = l.blocOptions.indexOf(b);
+  if(i < 0) return null;
+  const cle = l.blocCles[i];
+  return (cle && mentalPools && mentalPools[cle]) ? cle : null;
+}
 function blocageKey(){
-  // choisit le blocage mental dominant sur les 9 questions mentales du diagnostic
+  // priorité au dernier bilan ; à défaut, le blocage dominant des 9 questions du diagnostic
+  const duBilan = cleBlocageDuBilan();
+  if(duBilan) return duBilan;
   const scores = scoreAxis(state.mental,'mental');
   return topTag(scores, MENTAL_ORDER, null) || 'portillon';
 }
@@ -2233,6 +2280,14 @@ function verifierCycleCC(){
     return;
   }
   if(state.ccMois !== cle){
+    // Avant de repartir à zéro, on archive le cycle qui se termine : sinon le coach perd
+    // définitivement le compte du mois passé (21/21, 18/21...). On garde le numéro du mois
+    // AXE d'alors, c'est lui qui sert de repère dans l'espace coach.
+    const tenus = Object.keys(state.ccDays).filter(d=>state.ccDays[d]).length;
+    if(tenus){
+      state.ccArchives = state.ccArchives || {};
+      state.ccArchives[state.ccMois] = { jours: tenus, moisAxe: state.month, img: state.imageryDays || 0 };
+    }
     state.ccDays = {};
     state.ccMois = cle;
     if(axeCode) debounceEnregistrerSuiviRituel();
@@ -2280,6 +2335,7 @@ async function axeEnregistrerSuiviRituel(){
   const suivi = {
     ccDays: state.ccDays,
     ccMois: state.ccMois,
+    ccArchives: state.ccArchives || {},
     imageryDays: state.imageryDays,
     startRoutine: state.startRoutine,
     startJournal: state.startJournal
@@ -2685,7 +2741,26 @@ function validateEx(id){
     b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"><path d="M20 6L9 17l-5-5"/></svg>Séance validée';
   }
 }
-function toggleNote(id){document.getElementById('box-'+id).classList.toggle('on');}
+function toggleNote(id){
+  const box=document.getElementById('box-'+id);
+  box.classList.toggle('on');
+  if(box.classList.contains('on')) axeRelireNote(id);
+}
+/* À l'ouverture d'un bloc de notes, on réaffiche ce qui a déjà été écrit ce mois-ci.
+   Sans ça, le champ revient vide à chaque visite et on retape la même chose. */
+async function axeRelireNote(id){
+  if(!axeCode) return;
+  const champ=document.getElementById('note-'+id);
+  if(!champ || champ.value.trim()) return;
+  const auteur = (id==='pa0') ? 'parent' : 'rider';
+  const cle    = (id==='pa0') ? 'bilan'  : id;
+  try{
+    const { data, error } = await axeDB.rpc('lire_note', {
+      code: axeCode, auteur_note: auteur, mois_note: state.month, cle_note: cle
+    });
+    if(!error && data && !champ.value.trim()) champ.value = data;
+  }catch(e){}
+}
 function saveNote(id){
   const s=document.getElementById('saved-'+id);
   s.textContent='Enregistré ✓ visible côté coach';
@@ -2702,9 +2777,12 @@ async function axeEnregistrerNote(id){
   const texte=champ.value.trim();
   if(!texte) return;
   const auteur = (id==='pa0') ? 'parent' : 'rider';
+  // la clé identifie l'emplacement : on réécrit toujours la même ligne au lieu d'en empiler une
+  // nouvelle à chaque pause de frappe. 'bilan' = la note du mois du parent, commune aux deux espaces.
+  const cle    = (id==='pa0') ? 'bilan'  : id;
   try{
     const { error } = await axeDB.rpc('enregistrer_note', {
-      code: axeCode, auteur_note: auteur, texte_note: texte, mois_note: state.month
+      code: axeCode, auteur_note: auteur, texte_note: texte, mois_note: state.month, cle_note: cle
     });
     if(error){ console.log('[AXE] Erreur note :', error.message); }
     else{ console.log('[AXE] Note ('+auteur+') enregistrée.'); }
@@ -2713,6 +2791,20 @@ async function axeEnregistrerNote(id){
 function bindNotes(){}
 
 /* ============ REPORT ============ */
+/* Relit le bilan du mois PRÉCÉDENT. C'est celui-là qui oriente le mois en cours :
+   un bilan envoyé pour le mois en cours prépare le suivant, il ne doit rien changer tout de suite. */
+async function axeChargerDernierBilan(){
+  if(!axeCode || state.month < 2) return;
+  try{
+    const { data, error } = await axeDB.rpc('lire_rapport', { code: axeCode, mois_p: state.month - 1 });
+    const rp = (!error && data && data.length) ? data[0] : null;
+    if(rp && rp.bloc){
+      state.report.bloc = rp.bloc;
+      console.log('[AXE] Bilan du mois ' + (state.month - 1) + ' relu : ' + rp.bloc);
+    }
+  }catch(e){ console.log('[AXE] Souci relecture bilan :', e.message); }
+}
+
 async function axeEnregistrerRapport(){
   if(!axeCode) return; // mode démo
   const bloc = state.report.bloc || '';

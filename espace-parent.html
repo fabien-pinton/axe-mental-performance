@@ -330,6 +330,7 @@ async function ouvrir(){
   rendreSeances(suivi);
   rendreCleDuMois(r.sport);
   chargerDebriefs();
+  chargerNoteParent();
 
   document.getElementById('contenu').style.display = 'block';
   const v = document.getElementById('verrou'); if(v) v.remove();
@@ -418,8 +419,24 @@ async function chargerDebriefs(){
   }
 }
 
-/* notes du parent : même canal que dans l'espace du pilote */
+/* Notes du parent : même canal que dans l'espace du pilote.
+   Une seule note par mois : on réécrit toujours la même ligne (clé « bilan »), on n'empile
+   plus une version à chaque pause de frappe. Le coach voit donc un seul texte, le dernier. */
+const CLE_NOTE_PARENT = 'bilan';
 let minuteurNote = null;
+
+/* on réaffiche ce que le parent avait déjà écrit, sinon il croit sa note perdue et la retape */
+async function chargerNoteParent(){
+  if(!etat.code) return;
+  try{
+    const { data, error } = await axeDB.rpc('lire_note', {
+      code: etat.code, auteur_note: 'parent', mois_note: etat.mois, cle_note: CLE_NOTE_PARENT
+    });
+    const champ = document.getElementById('pNote');
+    if(!error && data && champ && !champ.value.trim()){ champ.value = data; }
+  }catch(e){}
+}
+
 document.getElementById('pNote').addEventListener('input', function(){
   const etatEl = document.getElementById('pNoteEtat');
   etatEl.textContent = 'Enregistré ✓ visible par votre coach';
@@ -428,7 +445,10 @@ document.getElementById('pNote').addEventListener('input', function(){
     const texte = document.getElementById('pNote').value.trim();
     if(!texte || !etat.code) return;
     try{
-      await axeDB.rpc('enregistrer_note', { code: etat.code, auteur_note: 'parent', texte_note: texte, mois_note: etat.mois });
+      await axeDB.rpc('enregistrer_note', {
+        code: etat.code, auteur_note: 'parent', texte_note: texte,
+        mois_note: etat.mois, cle_note: CLE_NOTE_PARENT
+      });
     }catch(e){}
   }, 1200);
   setTimeout(function(){ etatEl.textContent=''; }, 2200);
