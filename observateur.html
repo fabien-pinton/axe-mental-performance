@@ -243,7 +243,9 @@ function clePersonne(p){
   return (m && n) ? (m + ' | ' + n) : null;
 }
 
-const CHAMPS_DEMO = ['demo_le','demo_profil','demo_entree','demo_axes','demo_canal','demo_oeil','demo_exercice'];
+const CHAMPS_DEMO = ['demo_le','demo_profil','demo_entree','demo_axes','demo_canal','demo_oeil','demo_exercice','demo_envoi'];
+// ce que le visiteur a demandé en fin de démonstration
+const LIB_ENVOI = {profil:'Profil envoyé', lien:'Lien envoyé'};
 const CHAMPS_COMBLE = ['nom_rider','sport','niveau','age','sexe','tel','parraine_par','formule','code_acces','source'];
 const LIB_SOURCE = {rejoindre:'Lien rejoindre', questionnaire:'Questionnaire', demo:'Salon / démo', demo_lien:'Démo via lien'};
 
@@ -358,8 +360,10 @@ function afficherProspects(){
     const sportCell = p.sport ? (p.sport + (p.niveau ? (' · '+p.niveau) : '')) : '';
     const origine = [LIB_SOURCE[p.source] || '', p.parraine_par ? 'parrainé' : ''].filter(Boolean).join(' · ');
     const st = statutDe(p);
+    const envoi = LIB_ENVOI[p.demo_envoi] || '';
     const suite = st === 'client' ? '<span class="etat cli">Client</span>'
-                : st === 'demo'   ? '<span class="etat demo">Démo</span>'
+                : st === 'demo'   ? ('<span class="etat demo">Démo</span>'
+                                     + (envoi ? '<span class="src">' + envoi + '</span>' : ''))
                 : '';
     body.innerHTML += '<tr>'
       + '<td>' + (p.nom_parent||'') + (origine ? '<span class="src">' + origine + '</span>' : '') + '</td>'
@@ -376,12 +380,12 @@ function exporterProspects(){
   const liste = fusionnerFiches(prospects);
   if(!liste.length) return;
   const LIB_ETAT = {client:'Client', demo:'Démo', '':''};
-  const lignes = [['Contact','Sportif','Sport','Niveau','Email','Dernière activité','Origine','Statut','Démo faite le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait']];
+  const lignes = [['Contact','Sportif','Sport','Niveau','Email','Dernière activité','Origine','Statut','Démo faite le','Email envoyé','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait']];
   liste.forEach(function(p){
     lignes.push([
       p.nom_parent||'', p.nom_rider||'', p.sport||'', p.niveau||'', p.email_parent||'',
       dateFr(p.clique_le), LIB_SOURCE[p.source] || p.source || '', LIB_ETAT[statutDe(p)],
-      p.demo_le ? dateFr(p.demo_le) : '', p.demo_profil||'', p.demo_entree||'',
+      p.demo_le ? dateFr(p.demo_le) : '', LIB_ENVOI[p.demo_envoi] || '', p.demo_profil||'', p.demo_entree||'',
       p.demo_canal||'', p.demo_oeil||'', p.demo_exercice === true ? 'oui' : (p.demo_le ? 'non' : '')
     ]);
   });

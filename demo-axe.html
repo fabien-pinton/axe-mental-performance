@@ -421,8 +421,9 @@ h2.t{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:clamp(
   <div class="field"><label for="f-mail">Votre email</label><input id="f-mail" type="email" inputmode="email" autocomplete="email" placeholder="prenom@exemple.fr" oninput="majMailBtn()"></div>
   <div class="field"><label for="f-nom">Votre nom (facultatif)</label><input id="f-nom" type="text" autocomplete="name" placeholder="Pour que Fabien vous retrouve"></div>
 
-  <button class="btn gold" id="btnMail" style="margin-top:20px" disabled onclick="enregistrerLead()">Recevoir mon profil</button>
-  <button class="linkbtn" onclick="terminer(false)">Non merci, juste le lien</button>
+  <button class="btn gold" id="btnMail" style="margin-top:20px" disabled onclick="terminer('profil')">Recevoir mon profil complet</button>
+  <button class="btn ghost" id="btnLien" style="margin-top:10px" disabled onclick="terminer('lien')">Juste le lien du protocole</button>
+  <button class="linkbtn" onclick="terminer(null)">Je préfère ne rien laisser</button>
   <p class="small" style="margin-top:14px">Votre email sert uniquement à vous envoyer ce résultat et à vous recontacter. Rien d'autre, aucune liste.</p>
 </section>
 
@@ -1085,7 +1086,10 @@ function majRecap(){
 
 function majMailBtn(){
   const v = (document.getElementById('f-mail').value||'').trim();
-  document.getElementById('btnMail').disabled = !(v.length > 4 && v.indexOf('@') > 0 && v.indexOf('.') > 1);
+  const ok = !(v.length > 4 && v.indexOf('@') > 0 && v.indexOf('.') > 1);
+  document.getElementById('btnMail').disabled = ok;
+  const bl = document.getElementById('btnLien');
+  if(bl) bl.disabled = ok;   // le lien aussi part par email : une adresse est nécessaire
 }
 
 /* ---------- stockage local puis base (le local fait foi hors ligne) ---------- */
@@ -1130,7 +1134,8 @@ async function synchroniser(silencieux){
             canal_p: l.canal || null,
             oeil_p: l.oeil || null,
             exercice_p: !!l.exercice,
-            source_p: l.token ? 'demo_lien' : 'demo'
+            source_p: l.token ? 'demo_lien' : 'demo',
+            envoi_p: l.envoi || null
           })
         });
         if(rep.ok){ l.sync = true; envoyes++; } else { echec = true; break; }
@@ -1149,10 +1154,12 @@ async function synchroniser(silencieux){
   }
 }
 
-// Fin du parcours : on garde le visiteur, avec ou sans email.
-function terminer(avecEmail){
+// Fin du parcours. "envoi" vaut 'profil' (email complet), 'lien' (email court avec le seul
+// lien), ou null quand la personne ne laisse pas d'adresse — dans ce cas aucun mail n'est
+// préparé, mais la démo est quand même enregistrée si elle vient d'un lien personnel.
+function terminer(envoi){
   const r = resumeTexte();
-  const email = avecEmail ? (document.getElementById('f-mail').value||'').trim() : '';
+  const email = envoi ? (document.getElementById('f-mail').value||'').trim() : '';
   const nom = (document.getElementById('f-nom').value||'').trim() || st.prenom || '';
 
   if(email || st.token){
@@ -1167,17 +1174,22 @@ function terminer(avecEmail){
              confiance:st.score.confiance, neutre:st.score.neutre},
       canal: r.canal || '', oeil: r.oeil || '',
       exercice: !!st.exFait,
+      envoi: envoi || null,
       sync: false
     };
     st.lead = lead;
     const arr = lireLeads(); arr.push(lead); ecrireLeads(arr);
   }
 
-  document.getElementById('btnEnvoyerMtn').style.display = email ? 'block' : 'none';
+  const btnEnv = document.getElementById('btnEnvoyerMtn');
+  btnEnv.style.display = email ? 'block' : 'none';
+  btnEnv.textContent = (envoi === 'lien') ? '✉️ Envoyer le lien maintenant' : '✉️ Envoyer le profil maintenant';
   if(email || st.token){
     document.getElementById('finTag').textContent = "C'est noté";
     document.getElementById('finSous').textContent = email
-      ? 'Fabien vous envoie votre profil. En attendant, scannez pour retrouver le protocole chez vous.'
+      ? ((envoi === 'lien')
+          ? 'Le lien part sur votre adresse. En attendant, scannez pour le retrouver tout de suite.'
+          : 'Fabien vous envoie votre profil. En attendant, scannez pour retrouver le protocole chez vous.')
       : 'Votre profil est transmis à Fabien. Scannez pour retrouver le protocole tranquillement.';
   }
   progres(100);
@@ -1185,10 +1197,28 @@ function terminer(avecEmail){
   synchroniser(true);
 }
 
-function enregistrerLead(){ terminer(true); }
+function enregistrerLead(){ terminer('profil'); }   // conservé : ancien appel éventuel
 
 /* ---------- envoi par email (depuis l'app mail du coach) ---------- */
+// Email court : la personne n'a voulu que le lien. On ne lui renvoie pas son profil.
+function corpsEmailLien(lead){
+  return [
+    'Bonjour ' + (lead.nom || '') + ',',
+    '',
+    'Comme convenu, voici le lien pour decouvrir le protocole et les formules :',
+    'https://fabien-pinton.fr/rejoindre.html',
+    '',
+    'Vous pouvez repondre directement a cet email, je vous reponds personnellement.',
+    '',
+    'Fabien Pinton',
+    'AXE Mental Performance(R)',
+    '07.72.28.94.57',
+    '',
+    '« Si nous laissons notre lumiere briller, nous donnons inconsciemment aux autres la permission que leur lumiere brille. »'
+  ].join('\n');
+}
 function corpsEmail(lead){
+  if(lead && lead.envoi === 'lien') return corpsEmailLien(lead);
   const L1 = 'Bonjour ' + (lead.nom || '') + ',';
   const lignes = [
     L1, '',
@@ -1218,7 +1248,9 @@ function corpsEmail(lead){
 function envoyerLead(lead){
   const ld = lead || st.lead;
   if(!ld || !ld.email){ toast('Aucun contact à envoyer'); return; }
-  const sujet = 'Votre profil mental — AXE Mental Performance';
+  const sujet = (ld.envoi === 'lien')
+    ? 'Le lien du protocole — AXE Mental Performance'
+    : 'Votre profil mental — AXE Mental Performance';
   const url = 'mailto:' + encodeURIComponent(ld.email)
             + '?subject=' + encodeURIComponent(sujet)
             + '&body=' + encodeURIComponent(corpsEmail(ld));
@@ -1260,10 +1292,11 @@ function rendreListeCoach(){
       const etat = l.sync ? '<span style="color:var(--vert)">● dans l\'espace coach</span>'
                           : (aEnvoyer(l) ? '<span style="color:var(--gold)">● à transmettre</span>'
                                          : '<span style="color:var(--faint)">● appareil seulement</span>');
+      const quoi = l.envoi === 'lien' ? 'lien à envoyer' : (l.envoi === 'profil' ? 'profil à envoyer' : 'aucun email demandé');
       d.innerHTML = '<div class="info"><div class="nm">' + (l.nom || 'Sans nom') + ' · <span style="font-weight:400;color:var(--dim)">' + l.sport + '</span></div>'
-                  + '<div class="mt">' + hh + ' · ' + (l.age||'?') + ' ans · ' + (l.niveau||'?') + '<br>' + (l.email||'pas d\'email') + '<br>' + l.entree + '<br>' + etat + '</div></div>';
+                  + '<div class="mt">' + hh + ' · ' + (l.age||'?') + ' ans · ' + (l.niveau||'?') + '<br>' + (l.email||'pas d\'email') + '<br>' + l.entree + '<br>' + quoi + '<br>' + etat + '</div></div>';
       const b = document.createElement('button');
-      b.className = 'mini g'; b.textContent = 'Envoyer';
+      b.className = 'mini g'; b.textContent = (l.envoi === 'lien') ? 'Lien' : 'Profil';
       b.onclick = function(){ envoyerLead(l); };
       if(l.email) d.appendChild(b);
       box.appendChild(d);
