@@ -1005,8 +1005,16 @@ let axePremiereFois = false;   // vrai si le rider n'a jamais fait de diagnostic
 async function axeInit(){
   if(!axeCode){ console.log('[AXE] Pas de code : mode démo local.'); return; }
   try{
-    const { data, error } = await axeDB.rpc('verifier_acces', { code: axeCode });
+    const { data, error } = await axeDB.rpc('axe_verifier_acces', { code: axeCode });
     if(error){ console.log('[AXE] Erreur lecture :', error.message); return; }
+    // trop d'essais ratés depuis cette connexion : on le dit, au lieu de laisser croire
+    // que le code est faux. Le compte à rebours vient du serveur, il ne se contourne pas.
+    if(data && data.length && data[0].bloque === true){
+      const min = Math.max(1, Math.ceil((Number(data[0].attente_s) || 900) / 60));
+      axeDemanderCode("Trop d'essais. Réessaie dans " + min + " minute" + (min>1?'s':'')
+                    + ". Si tu as perdu ton code, écris à ton préparateur.");
+      return;
+    }
     if(data && data.length){
       const r = data[0];
       console.log('[AXE] Rider connecté. Accès actif :', r.actif, '| étape :', axeEtape, '| mois :', r.mois, '| début du mois :', r.date_debut_mois);

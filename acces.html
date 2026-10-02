@@ -98,6 +98,26 @@ button:disabled{opacity:.5;cursor:default}
       de l'ajouter sur votre écran d'accueil, avec son icône.
     </div>
   </div>
+
+  <!-- ÉTAPE 3 : choisir son propre code (proposée une seule fois, à la première connexion) -->
+  <div class="etape" id="etapeChoix">
+    <h1>TON CODE À TOI</h1>
+    <div class="serif">Le code qu'on t'a donné n'est pas très parlant. Tu peux le remplacer
+      par celui que tu veux : c'est celui-là que tu entreras désormais.</div>
+
+    <input type="text" id="nouveauCode" placeholder="Ton nouveau code" autocomplete="off"
+           autocapitalize="off" autocorrect="off" spellcheck="false">
+    <button id="btnChoix" onclick="enregistrerNouveauCode()">C'est mon nouveau code</button>
+
+    <div class="msg" id="msgChoix"></div>
+
+    <button class="lien" onclick="garderCodeActuel()">Garder le code actuel</button>
+
+    <div class="hint">
+      Quatre caractères minimum, sans espace. Choisis-en un dont tu te souviendras :
+      c'est la seule clé de ton protocole, et personne ne peut le retrouver à ta place.
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -114,12 +134,15 @@ const FICHIER_PARENT    = 'espace-parent.html';
 const MEMO_CODE = 'axe_code';        // le code lui-même, uniquement si la case est cochée
 const MEMO_GARDE = 'axe_code_garde'; // trace du consentement explicite
 const MEMO_ROLE = 'axe_role';        // sportif ou parent
+const MEMO_REFUS = 'axe_code_perso_refuse'; // « garder le code actuel », pour ne plus reproposer
 // ==================================================================
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 const msg = document.getElementById('msg');
 const btn = document.getElementById('btn');
 let role = 'sportif';
+let destination = '';   // où l'on part une fois le code validé
+let codeValide  = '';   // le code qui vient d'être accepté
 
 function lire(cle){ try{ return localStorage.getItem(cle) || ''; }catch(e){ return ''; } }
 function ecrire(cle, val){ try{ localStorage.setItem(cle, val); }catch(e){} }
@@ -156,6 +179,78 @@ function revenirRole(){
   document.getElementById('etapeRole').classList.add('on');
 }
 
+/* ===== CHOISIR SON PROPRE CODE =====
+   Proposé au sportif tant qu'il ne l'a pas fait, et seulement s'il n'a pas déjà dit non
+   sur cet appareil. Le parent n'y a pas accès : le code appartient au sportif. */
+function proposerCodePerso(ligne, code){
+  if(role === 'parent') return false;
+  if(ligne.code_personnalise === true) return false;
+  if(lire(MEMO_REFUS) === 'oui') return false;
+  codeValide = code;
+  setTimeout(function(){
+    document.getElementById('etapeCode').classList.remove('on');
+    document.getElementById('etapeChoix').classList.add('on');
+    const champ = document.getElementById('nouveauCode');
+    if(champ){ champ.value = ''; try{ champ.focus(); }catch(e){} }
+  }, 700);
+  return true;
+}
+
+function garderCodeActuel(){
+  ecrire(MEMO_REFUS, 'oui');   // on ne le reproposera plus sur cet appareil
+  window.location.href = destination;
+}
+
+async function enregistrerNouveauCode(){
+  const champ = document.getElementById('nouveauCode');
+  const m     = document.getElementById('msgChoix');
+  const b     = document.getElementById('btnChoix');
+  const neuf  = (champ.value || '').trim();
+  m.className = 'msg'; m.textContent = '';
+
+  if(neuf.length < 4){
+    m.className='msg err'; m.textContent = "Il faut au moins 4 caractères."; return;
+  }
+  if(/\s/.test(neuf)){
+    m.className='msg err'; m.textContent = "Pas d'espace dans le code."; return;
+  }
+
+  b.disabled = true;
+  m.textContent = 'Enregistrement...';
+  try{
+    const { data, error } = await sb.rpc('axe_choisir_code',
+      { code_actuel: codeValide, nouveau_code: neuf });
+    if(error) throw error;
+
+    if(!data || data.ok !== true){
+      const raison = data ? data.raison : '';
+      m.className = 'msg err';
+      m.textContent =
+          raison === 'pris'        ? "Ce code est déjà utilisé. Essaie-en un autre."
+        : raison === 'longueur'    ? "Il faut entre 4 et 40 caractères."
+        : raison === 'caracteres'  ? "Lettres, chiffres, point, tiret ou tiret bas uniquement."
+        : raison === 'inactif'     ? "Ton accès n'est plus actif. Contacte ton préparateur."
+        : "Ce code n'a pas pu être enregistré. Réessaie.";
+      b.disabled = false;
+      return;
+    }
+
+    // le code a changé : on remplace partout où il était mémorisé, puis on repart dessus
+    const vrai = data.code || neuf;
+    sessionStorage.setItem('axe_code', vrai);
+    if(lire(MEMO_CODE)) ecrire(MEMO_CODE, vrai);
+    destination = destination.replace('code=' + encodeURIComponent(codeValide),
+                                      'code=' + encodeURIComponent(vrai));
+    m.className = 'msg ok';
+    m.textContent = 'C\'est noté. Désormais, ton code est « ' + vrai + ' ».';
+    setTimeout(function(){ window.location.href = destination; }, 1600);
+  }catch(e){
+    m.className='msg err';
+    m.textContent = "Un souci est survenu. Réessaie dans un instant.";
+    b.disabled = false;
+  }
+}
+
 function oublierCode(){
   effacer(MEMO_CODE); effacer(MEMO_GARDE);
   try{ sessionStorage.removeItem('axe_code'); }catch(e){}
@@ -179,8 +274,19 @@ async function verifier(){
   msg.textContent = 'Vérification en cours...';
 
   try{
-    const { data, error } = await sb.rpc('verifier_acces', { code: code });
+    const { data, error } = await sb.rpc('axe_verifier_acces', { code: code });
     if(error){ throw error; }
+
+    // trop d'essais ratés depuis cette connexion : on met en attente, sans rien révéler
+    if(data && data.length && data[0].bloque === true){
+      const s = Number(data[0].attente_s) || 900;
+      const min = Math.max(1, Math.ceil(s / 60));
+      msg.className='msg err';
+      msg.textContent = "Trop d'essais. Réessaie dans " + min + " minute" + (min>1?'s':'')
+                      + ". Si tu as perdu ton code, écris à ton préparateur.";
+      btn.disabled = false;
+      return;
+    }
 
     // data est un tableau : vide si le code n'existe pas
     if(!data || data.length === 0){
@@ -205,9 +311,8 @@ async function verifier(){
       // ===== ESPACE PARENT : pas de diagnostic, pas d'étape, on ouvre directement =====
       if(role === 'parent'){
         msg.textContent = 'Accès validé. Ouverture de votre espace...';
-        setTimeout(()=>{
-          window.location.href = FICHIER_PARENT + '?code=' + encodeURIComponent(code);
-        }, 800);
+        destination = FICHIER_PARENT + '?code=' + encodeURIComponent(code);
+        setTimeout(()=>{ window.location.href = destination; }, 800);
         return;
       }
 
@@ -238,9 +343,9 @@ async function verifier(){
       const pageProtocole = ligne.page_cible || FICHIER_PROTOCOLE;
 
       // on passe le code ET l'étape au protocole via l'adresse
-      setTimeout(()=>{
-        window.location.href = pageProtocole + '?code=' + encodeURIComponent(code) + '&etape=' + etape;
-      }, 800);
+      destination = pageProtocole + '?code=' + encodeURIComponent(code) + '&etape=' + etape;
+      if(proposerCodePerso(ligne, code)) return;
+      setTimeout(()=>{ window.location.href = destination; }, 800);
     } else {
       msg.className='msg err';
       msg.textContent = "Ton accès a expiré ou n'est plus actif. Contacte ton préparateur pour le renouveler.";

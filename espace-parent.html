@@ -296,8 +296,15 @@ async function ouvrir(){
   etat.code = codeUrl;
   let r;
   try{
-    const { data, error } = await axeDB.rpc('verifier_acces', { code: codeUrl });
+    const { data, error } = await axeDB.rpc('axe_verifier_acces', { code: codeUrl });
     if(error){ demanderCode('Connexion impossible pour le moment. Réessayez dans un instant.'); return; }
+    // trop d'essais ratés depuis cette connexion : on le dit clairement
+    if(data && data.length && data[0].bloque === true){
+      const min = Math.max(1, Math.ceil((Number(data[0].attente_s) || 900) / 60));
+      demanderCode("Trop d'essais. Réessayez dans " + min + " minute" + (min>1?'s':'')
+                 + ". Si vous avez perdu le code, écrivez à votre coach.");
+      return;
+    }
     if(!data || !data.length){ demanderCode('Ce code ne correspond à aucun accès.'); return; }
     r = data[0];
   }catch(e){ demanderCode('Connexion impossible pour le moment.'); return; }
