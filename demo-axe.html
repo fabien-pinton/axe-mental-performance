@@ -1216,47 +1216,56 @@ function enregistrerLead(){ terminer('profil'); }   // conservé : ancien appel 
 
 /* ---------- envoi par email (depuis l'app mail du coach) ---------- */
 // Email court : la personne n'a voulu que le lien. On ne lui renvoie pas son profil.
+/* Dit noir sur blanc ce que vaut la démo : un aperçu de la méthode, pas un diagnostic.
+   Le vrai diagnostic du protocole est bien plus complet, et peut conclure autre chose. */
+const AVERTISSEMENT_DEMO =
+  "Ces résultats viennent de la démo : elle donne une idée de ma façon de travailler, "
++ "ce n'est pas un diagnostic. Dans le protocole, le diagnostic complet compte 15 questions, "
++ "un test sensoriel et un volet physique, c'est lui qui donne un profil fiable, et il peut "
++ "aboutir à autre chose que ce que vous venez de lire.";
 function corpsEmailLien(lead){
   return [
     'Bonjour ' + (lead.nom || '') + ',',
     '',
-    'Comme convenu, voici le lien pour decouvrir le protocole et les formules :',
+    'Comme convenu, voici le lien pour découvrir le protocole et les formules :',
     'https://fabien-pinton.fr/rejoindre.html',
     '',
-    'Vous pouvez repondre directement a cet email, je vous reponds personnellement.',
+    'Vous pouvez répondre directement à cet email, je vous réponds personnellement.',
     '',
     'Fabien Pinton',
-    'AXE Mental Performance(R)',
+    'AXE Mental Performance®',
     '07.72.28.94.57',
     '',
-    '« Si nous laissons notre lumiere briller, nous donnons inconsciemment aux autres la permission que leur lumiere brille. »'
+    '« Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres la permission que leur lumière brille. »'
   ].join('\n');
 }
 function corpsEmail(lead){
   if(lead && lead.envoi === 'lien') return corpsEmailLien(lead);
-  const L1 = 'Bonjour ' + (lead.nom || '') + ',';
   const lignes = [
-    L1, '',
-    'Merci pour le temps passé sur le stand. Voici ce que le diagnostic a fait ressortir :',
+    'Bonjour ' + (lead.nom || '') + ',',
+    '',
+    "Merci d'avoir pris le temps de faire la démo. Voici ce qu'elle a fait ressortir :",
     '',
     'Profil : ' + lead.profil,
-    'Point d\'entrée du protocole : ' + lead.entree,
+    "Point d'entrée du protocole : " + lead.entree,
     'Sport : ' + lead.sport + (lead.age ? ' · ' + lead.age + ' ans' : '') + (lead.niveau ? ' · ' + lead.niveau : ''),
   ];
-  if(lead.canal) lignes.push('Canal dominant : ' + lead.canal + (lead.oeil ? ' · oeil directeur ' + lead.oeil : ''));
+  if(lead.canal) lignes.push('Canal dominant : ' + lead.canal + (lead.oeil ? ' · œil directeur ' + lead.oeil : ''));
   lignes.push('');
-  lignes.push('Ce que vous avez vu au salon est un extrait. Le diagnostic du protocole compte 15 questions et ne reprend aucune de celles d\'aujourd\'hui : vous ne referez pas deux fois le meme parcours. Et surtout, votre programme se reconstruit chaque mois a partir de votre bilan : personne ne recoit deux fois le meme mois.');
+  lignes.push(AVERTISSEMENT_DEMO);
   lignes.push('');
-  lignes.push('Pour decouvrir le protocole et les formules :');
+  lignes.push('Et une fois lancé, le programme se reconstruit chaque mois à partir de votre bilan : personne ne reçoit deux fois le même mois.');
+  lignes.push('');
+  lignes.push('Pour découvrir le protocole et les formules :');
   lignes.push('https://fabien-pinton.fr/rejoindre.html');
   lignes.push('');
-  lignes.push('Vous pouvez repondre directement a cet email, je vous reponds personnellement.');
+  lignes.push('Vous pouvez répondre directement à cet email, je vous réponds personnellement.');
   lignes.push('');
   lignes.push('Fabien Pinton');
-  lignes.push('AXE Mental Performance(R)');
+  lignes.push('AXE Mental Performance®');
   lignes.push('07.72.28.94.57');
   lignes.push('');
-  lignes.push('« Si nous laissons notre lumiere briller, nous donnons inconsciemment aux autres la permission que leur lumiere brille. »');
+  lignes.push('« Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres la permission que leur lumière brille. »');
   return lignes.join('\n');
 }
 

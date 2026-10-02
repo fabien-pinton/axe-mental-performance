@@ -106,6 +106,13 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 .etat.demo{background:rgba(168,133,42,.16);color:var(--gold)}
 .etat.cli{background:rgba(93,135,74,.14);color:#5D874A}
 .src{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);display:block;margin-top:3px}
+.src.ok{color:#2F6B45;font-weight:700}
+.mini{display:inline-block;margin:5px 5px 0 0;padding:4px 9px;border-radius:999px;cursor:pointer;
+  font-family:'DM Sans',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;
+  background:transparent;border:1px solid var(--line);color:var(--dim);white-space:nowrap}
+.mini:hover{border-color:var(--gold);color:var(--gold)}
+.mini.gold{border-color:rgba(168,133,42,.6);color:var(--gold)}
+.mini.gold:hover{background:rgba(168,133,42,.1)}
 .exp{margin-top:14px;font-size:12px;color:var(--dim);background:none;border:1px solid var(--line);border-radius:3px;padding:8px 14px;cursor:pointer;font-family:'DM Sans',sans-serif}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -198,6 +205,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 });
 
 let prospects = [];
+let cleCoach  = '';   // la clé validée, pour les actions qui écrivent (marquer un mail envoyé)
 
 async function entrer(){
   const cle = document.getElementById('cle').value;
@@ -213,6 +221,7 @@ async function entrer(){
       return;
     }
     prospects = p.data || [];
+    cleCoach  = cle;
 
     // 2. clé valide : on ouvre le tableau de bord, même si aucun rider encore
     document.getElementById('loginScreen').style.display = 'none';
@@ -276,8 +285,107 @@ function clePersonne(p){
 }
 
 const CHAMPS_DEMO = ['demo_le','demo_profil','demo_entree','demo_axes','demo_canal','demo_oeil','demo_exercice','demo_envoi'];
-// ce que le visiteur a demandé en fin de démonstration
-const LIB_ENVOI = {profil:'Profil envoyé', lien:'Lien envoyé'};
+let parDemoId = {};   // les fiches fusionnées, retrouvables depuis les boutons d'envoi
+
+/* ============ LE MAIL DE FIN DE DÉMONSTRATION ============
+   Même texte que celui préparé par la page de démonstration, mais reconstruit ici depuis
+   la base : tu peux donc l'écrire depuis n'importe quel appareil, même si la démonstration
+   a été faite sur le téléphone de la personne. Le bouton ouvre ton logiciel de messagerie
+   (Outlook, Mail...) avec tout déjà écrit. Il reste à relire et à envoyer. */
+/* Dit noir sur blanc ce que vaut la démo : un aperçu de la méthode, pas un diagnostic.
+   Le vrai diagnostic du protocole est bien plus complet, et peut conclure autre chose. */
+const AVERTISSEMENT_DEMO =
+  "Ces résultats viennent de la démo : elle donne une idée de ma façon de travailler, "
++ "ce n'est pas un diagnostic. Dans le protocole, le diagnostic complet compte 15 questions, "
++ "un test sensoriel et un volet physique, c'est lui qui donne un profil fiable, et il peut "
++ "aboutir à autre chose que ce que vous venez de lire.";
+function corpsMailLien(p){
+  return [
+    'Bonjour ' + (p.nom_parent || '') + ',',
+    '',
+    'Comme convenu, voici le lien pour découvrir le protocole et les formules :',
+    'https://fabien-pinton.fr/rejoindre.html',
+    '',
+    'Vous pouvez répondre directement à cet email, je vous réponds personnellement.',
+    '',
+    'Fabien Pinton',
+    'AXE Mental Performance®',
+    '07.72.28.94.57',
+    '',
+    '« Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres la permission que leur lumière brille. »'
+  ].join('\n');
+}
+function corpsMailProfil(p){
+  const l = [
+    'Bonjour ' + (p.nom_parent || '') + ',',
+    '',
+    "Merci d'avoir pris le temps de faire la démo. Voici ce qu'elle a fait ressortir :",
+    '',
+    'Profil : ' + (p.demo_profil || ''),
+    "Point d'entrée du protocole : " + (p.demo_entree || ''),
+    'Sport : ' + (p.sport || '') + (p.age ? ' · ' + p.age + ' ans' : '') + (p.niveau ? ' · ' + p.niveau : '')
+  ];
+  if(p.demo_canal){
+    l.push('Canal dominant : ' + p.demo_canal + (p.demo_oeil ? ' · œil directeur ' + p.demo_oeil : ''));
+  }
+  l.push('');
+  l.push(AVERTISSEMENT_DEMO);
+  l.push('');
+  l.push('Et une fois lancé, le programme se reconstruit chaque mois à partir de votre bilan : personne ne reçoit deux fois le même mois.');
+  l.push('');
+  l.push('Pour découvrir le protocole et les formules :');
+  l.push('https://fabien-pinton.fr/rejoindre.html');
+  l.push('');
+  l.push('Vous pouvez répondre directement à cet email, je vous réponds personnellement.');
+  l.push('');
+  l.push('Fabien Pinton');
+  l.push('AXE Mental Performance®');
+  l.push('07.72.28.94.57');
+  l.push('');
+  l.push('« Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres la permission que leur lumière brille. »');
+  return l.join('\n');
+}
+
+function ecrireMail(id){
+  const p = parDemoId[id];
+  if(!p || !p.email_parent){ alert('Pas d\'adresse email sur cette fiche.'); return; }
+  const lien  = (p.demo_envoi === 'lien');
+  const objet = lien ? 'Le lien du protocole AXE Mental Performance'
+                     : ((p.nom_rider || p.nom_parent || '') + ' — son profil mental AXE');
+  const corps = lien ? corpsMailLien(p) : corpsMailProfil(p);
+  window.location.href = 'mailto:' + encodeURIComponent(p.email_parent)
+    + '?subject=' + encodeURIComponent(objet)
+    + '&body='    + encodeURIComponent(corps);
+}
+
+async function marquerEnvoye(id, envoye){
+  const p = parDemoId[id];
+  try{
+    const r = await db.rpc('axe_marquer_mail_envoye',
+      { cle: cleCoach, prospect_id: id, envoye: !!envoye });
+    if(r.error || !r.data || r.data.ok !== true){ alert('Impossible d\'enregistrer. Réessaie.'); return; }
+    if(p) p.mail_envoye_le = r.data.envoye_le || null;
+    // on met à jour la fiche d'origine aussi, pour que ça tienne après un rafraîchissement
+    prospects.forEach(function(f){ if(f.id === id) f.mail_envoye_le = r.data.envoye_le || null; });
+    afficherProspects();
+  }catch(e){ alert('Impossible d\'enregistrer. Réessaie.'); }
+}
+
+/* ce qu'on affiche sous la pastille « Démo » : à envoyer, ou envoyé le... */
+function blocEnvoi(p, libelle){
+  if(!p.demo_envoi) return '';
+  if(!p.email_parent) return '<span class="src">' + libelle + ' · pas d\'email</span>';
+  if(p.mail_envoye_le){
+    return '<span class="src ok">Envoyé le ' + dateFr(p.mail_envoye_le).split(' à ')[0] + '</span>'
+         + '<button class="mini" onclick="marquerEnvoye(' + p.demo_id + ', false)">annuler</button>';
+  }
+  return '<span class="src">' + libelle + '</span>'
+       + '<button class="mini gold" onclick="ecrireMail(' + p.demo_id + ')">✉️ Écrire le mail</button>'
+       + '<button class="mini" onclick="marquerEnvoye(' + p.demo_id + ', true)">✓ c\'est envoyé</button>';
+}
+// Ce que le visiteur a DEMANDÉ en fin de démonstration. L'envoi, lui, est manuel :
+// tant que tu n'as pas écrit à cette personne, elle n'a rien reçu. D'où « à envoyer ».
+const LIB_ENVOI = {profil:'Profil à envoyer', lien:'Lien à envoyer'};
 const CHAMPS_COMBLE = ['nom_rider','sport','niveau','age','sexe','tel','parraine_par','formule','code_acces','source'];
 const LIB_SOURCE = {rejoindre:'Lien rejoindre', questionnaire:'Questionnaire', demo:'Salon / démo', demo_lien:'Démo via lien'};
 
@@ -342,7 +450,13 @@ function fusionnerFiches(liste){
     // le bloc démo se reprend en entier, depuis la démo la plus récente
     const avecDemo = fiches.filter(function(f){ return !!f.demo_le; })
                            .sort(function(a,b){ return new Date(b.demo_le) - new Date(a.demo_le); });
-    if(avecDemo.length){ CHAMPS_DEMO.forEach(function(c){ base[c] = avecDemo[0][c]; }); }
+    if(avecDemo.length){
+      CHAMPS_DEMO.forEach(function(c){ base[c] = avecDemo[0][c]; });
+      // l'identifiant de la fiche qui porte la démo : c'est elle qu'on marquera « envoyé »
+      base.demo_id        = avecDemo[0].id;
+      base.mail_envoye_le = avecDemo[0].mail_envoye_le || null;
+      base.demo_source    = avecDemo[0].source || base.source;
+    }
 
     // pour la colonne « Contact », on préfère le vrai contact quand il diffère du sportif
     const sportif = cleSportif(base);
@@ -355,7 +469,16 @@ function fusionnerFiches(liste){
     out.push(base);
   });
 
-  return out.concat(isolees).sort(recent);
+  // Une fiche seule n'est pas passée par la fusion : on lui pose quand même les repères
+  // d'envoi, sinon le bouton « Écrire le mail » ne saurait pas quelle fiche il vise.
+  const toutes = out.concat(isolees);
+  toutes.forEach(function(f){
+    if(f.demo_le && f.demo_id === undefined){
+      f.demo_id     = f.id;
+      f.demo_source = f.source;
+    }
+  });
+  return toutes.sort(recent);
 }
 
 let filtreActif = 'tous';
@@ -387,15 +510,16 @@ function afficherProspects(){
     return;
   }
   body.innerHTML = '';
+  parDemoId = {};
   liste.forEach(function(p){
+    if(p.demo_id) parDemoId[p.demo_id] = p;
     const estSurMesure = (p.formule || '').indexOf('Sur mesure') === 0;
     const sportCell = p.sport ? (p.sport + (p.niveau ? (' · '+p.niveau) : '')) : '';
     const origine = [LIB_SOURCE[p.source] || '', p.parraine_par ? 'parrainé' : ''].filter(Boolean).join(' · ');
     const st = statutDe(p);
     const envoi = LIB_ENVOI[p.demo_envoi] || '';
     const suite = st === 'client' ? '<span class="etat cli">Client</span>'
-                : st === 'demo'   ? ('<span class="etat demo">Démo</span>'
-                                     + (envoi ? '<span class="src">' + envoi + '</span>' : ''))
+                : st === 'demo'   ? ('<span class="etat demo">Démo</span>' + blocEnvoi(p, envoi))
                 : '';
     body.innerHTML += '<tr>'
       + '<td>' + (p.nom_parent||'') + (origine ? '<span class="src">' + origine + '</span>' : '') + '</td>'
@@ -412,12 +536,13 @@ function exporterProspects(){
   const liste = fusionnerFiches(prospects);
   if(!liste.length) return;
   const LIB_ETAT = {client:'Client', demo:'Démo', '':''};
-  const lignes = [['Contact','Sportif','Sport','Niveau','Email','Dernière activité','Origine','Statut','Démo faite le','Email envoyé','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait']];
+  const lignes = [['Contact','Sportif','Sport','Niveau','Email','Dernière activité','Origine','Statut','Démo faite le','Email demandé','Mail envoyé le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait']];
   liste.forEach(function(p){
     lignes.push([
       p.nom_parent||'', p.nom_rider||'', p.sport||'', p.niveau||'', p.email_parent||'',
       dateFr(p.clique_le), LIB_SOURCE[p.source] || p.source || '', LIB_ETAT[statutDe(p)],
-      p.demo_le ? dateFr(p.demo_le) : '', LIB_ENVOI[p.demo_envoi] || '', p.demo_profil||'', p.demo_entree||'',
+      p.demo_le ? dateFr(p.demo_le) : '', LIB_ENVOI[p.demo_envoi] || '',
+      p.mail_envoye_le ? dateFr(p.mail_envoye_le) : '', p.demo_profil||'', p.demo_entree||'',
       p.demo_canal||'', p.demo_oeil||'', p.demo_exercice === true ? 'oui' : (p.demo_le ? 'non' : '')
     ]);
   });
