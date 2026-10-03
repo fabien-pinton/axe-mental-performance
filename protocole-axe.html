@@ -329,6 +329,77 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .sim-panel .sim-sep{width:1px;height:22px;background:var(--line);margin:0 2px}
 .sim-panel .toggle-pay{margin-left:auto}
 .sim-panel .toggle-pay.off{color:#A83C2A;border-color:#A83C2A}
+/* ---- Bandeau « À faire aujourd'hui » : la boussole du quotidien ---- */
+.todo{margin-bottom:24px}
+.todo-bilan{display:flex;gap:12px;align-items:center;width:100%;text-align:left;cursor:pointer;
+  border:1.5px solid var(--gold);border-radius:6px;padding:14px 18px;margin-bottom:14px;
+  background:rgba(168,133,42,.1);font-family:inherit;transition:.2s var(--ease)}
+.todo-bilan:hover{transform:translateY(-2px)}
+.todo-bilan .tb-ico{font-size:21px;line-height:1;flex-shrink:0}
+.todo-bilan>span:last-child{flex:1;text-align:left}
+.todo-bilan b{display:block;text-align:left;font-family:'Bebas Neue';font-size:19px;letter-spacing:.03em;color:var(--gold);line-height:1.2}
+.todo-bilan small{display:block;text-align:left;font-size:12px;color:var(--dim);margin-top:3px}
+.todo-box{border:1px solid var(--line-strong);border-radius:6px;padding:16px 18px;background:rgba(255,255,255,.4)}
+.todo-head{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:700;margin-bottom:10px}
+.todo-line{display:flex;gap:12px;align-items:center;width:100%;text-align:left;cursor:pointer;
+  background:none;border:none;border-top:1px dashed var(--line);padding:11px 0;font-family:inherit;
+  font-size:14.5px;color:var(--ink);transition:.15s var(--ease)}
+.todo-line:first-of-type{border-top:none;padding-top:2px}
+.todo-line:hover{color:var(--gold)}
+.todo-line .tl-ico{font-size:17px;line-height:1;flex-shrink:0}
+.todo-line .tl-txt{flex:1}
+.todo-line .tl-txt small{display:block;font-size:12px;color:var(--dim);margin-top:1px}
+.todo-line .tl-go{color:var(--gold);font-size:17px;flex-shrink:0}
+.todo-fini{font-size:14.5px;color:var(--ink)}
+.todo-fini small{display:block;font-size:12px;color:var(--dim);margin-top:3px}
+/* ce qui est resté en plan hier : présent, mais en retrait */
+.todo-box.hier{margin-top:12px;background:rgba(122,59,46,.04);border-color:rgba(122,59,46,.25)}
+.todo-box.hier .todo-head{color:var(--physique)}
+.todo-line.fige{cursor:default}
+.todo-line.fige:hover{color:var(--ink)}
+/* ---- ce qui attend le nouveau client, avant le diagnostic ---- */
+.parcours{max-width:460px;margin:34px auto 6px;text-align:left;border:1px solid var(--line-strong);
+  border-radius:6px;padding:20px 22px;background:rgba(255,255,255,.35)}
+.parcours-head{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);
+  font-weight:700;margin-bottom:14px}
+.parcours-etape{display:flex;gap:13px;align-items:flex-start;padding:9px 0;border-top:1px dashed var(--line)}
+.parcours-etape:first-of-type{border-top:none;padding-top:0}
+.parcours-etape .pe-num{flex-shrink:0;width:23px;height:23px;border-radius:50%;border:1.5px solid var(--gold);
+  color:var(--gold);font-family:'Bebas Neue';font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.parcours-etape .pe-txt b{display:block;font-size:14.5px;color:var(--ink)}
+.parcours-etape .pe-txt small{display:block;font-size:12.5px;line-height:1.55;color:var(--dim);margin-top:2px}
+.parcours-fin{font-size:12.5px;line-height:1.55;color:var(--dim);margin-top:14px;padding-top:12px;
+  border-top:1px dashed var(--line);font-style:italic}
+/* ---- raccourcis sous les bandeaux : le débrief et le mode d'emploi ---- */
+.raccourcis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:-10px 0 24px}
+@media(max-width:560px){ .raccourcis{grid-template-columns:1fr} }
+.racc{text-align:left;cursor:pointer;font-family:inherit;background:none;
+  border:1px solid var(--line-strong);border-radius:6px;padding:13px 15px;transition:.2s var(--ease)}
+.racc:hover{border-color:var(--gold);transform:translateY(-2px)}
+.racc b{display:block;font-size:14.5px;color:var(--ink)}
+.racc small{display:block;font-size:12px;line-height:1.5;color:var(--dim);margin-top:3px}
+/* ---- le mode d'emploi, ouvrable à tout moment ---- */
+.aide-fond{position:fixed;inset:0;background:rgba(10,9,7,.55);z-index:900;display:flex;
+  align-items:center;justify-content:center;padding:20px;overflow:auto}
+.aide-boite{background:var(--cream,#FDFAF5);border-radius:8px;max-width:460px;width:100%;
+  padding:26px 24px;max-height:88vh;overflow:auto}
+.aide-boite h2{font-family:'Bebas Neue';font-weight:400;font-size:24px;letter-spacing:.04em;margin-bottom:4px}
+.aide-boite .aide-sous{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;
+  color:var(--dim);margin-bottom:18px}
+.aide-bloc{border-top:1px dashed var(--line);padding:14px 0}
+.aide-bloc:first-of-type{border-top:none}
+.aide-bloc b{display:block;font-size:14.5px;margin-bottom:5px}
+.aide-bloc p{font-size:13.5px;line-height:1.6;color:var(--dim)}
+.aide-bloc p+p{margin-top:7px}
+/* ---- son anniversaire : la seule journée où la page ne demande rien ---- */
+.anniv{border:1.5px solid var(--gold);border-radius:6px;padding:22px 20px;margin-bottom:14px;
+  background:rgba(168,133,42,.1);text-align:center}
+.anniv b{display:block;font-family:'Bebas Neue';font-size:27px;letter-spacing:.07em;color:var(--gold)}
+.anniv p{font-size:14px;line-height:1.65;color:var(--ink);margin-top:9px;max-width:330px;
+  margin-left:auto;margin-right:auto}
+/* ---- phrase d'aide sous un geste à faire ---- */
+.geste-aide{font-size:12.5px;line-height:1.55;color:var(--dim);margin-top:10px;padding-left:11px;
+  border-left:2px solid rgba(168,133,42,.4)}
 .lock-banner{padding:16px 18px;border-radius:3px;background:rgba(26,22,18,.04);border:1px solid var(--line-strong);margin-bottom:22px;font-size:14px;display:flex;gap:11px;align-items:flex-start}
 .lock-banner .lk-ico{flex-shrink:0;color:var(--ink);margin-top:1px}
 .lock-banner b{color:var(--ink)}
@@ -538,6 +609,24 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <div class="pillar"><b>X</b><span>eXigence</span></div>
       <div class="pillar"><b>E</b><span>Engagement</span></div>
     </div>
+    <!-- Ce qui attend le nouveau client. Il vient de payer, il ouvre sa page : avant de
+         lui poser une quinzaine de questions, on lui dit où il va et combien de temps. -->
+    <div class="parcours">
+      <div class="parcours-head">Voilà comment ça va se passer</div>
+      <div class="parcours-etape">
+        <span class="pe-num">1</span>
+        <span class="pe-txt"><b>Ta fiche</b><small>Ton prénom, ton âge, tes jours dispos. Une minute.</small></span>
+      </div>
+      <div class="parcours-etape">
+        <span class="pe-num">2</span>
+        <span class="pe-txt"><b>Ton diagnostic</b><small>Des questions sur ta tête, ton corps et tes sens. Trois minutes, aucune bonne réponse à trouver.</small></span>
+      </div>
+      <div class="parcours-etape">
+        <span class="pe-num">3</span>
+        <span class="pe-txt"><b>Ton programme se construit</b><small>Il se cale sur tes réponses, ton âge et tes jours. Puis il se reconstruit chaque mois à partir de ton bilan.</small></span>
+      </div>
+      <p class="parcours-fin">Ensuite, ta page t'indique chaque jour ce qu'il te reste à faire. Tu n'as rien à retenir.</p>
+    </div>
     <div class="cta-row">
       <button class="btn gold" onclick="go('profil')">Commencer mon inscription</button>
     </div>
@@ -587,6 +676,10 @@ textarea:focus{outline:none;border-color:var(--gold)}
           <input type="range" min="10" max="70" value="13" id="ageR" oninput="ageOut()">
           <span class="rangeval" id="ageV">13</span>
         </div>
+      </div>
+      <div class="field">
+        <label>Ta date de naissance</label>
+        <input type="date" class="txt" id="naissance" oninput="majNaissance()">
       </div>
       <div class="field">
         <label>Jours dispos pour le physique</label>
@@ -655,6 +748,21 @@ textarea:focus{outline:none;border-color:var(--gold)}
       </div>
       <div class="month-pill" id="monthPill">MOIS 1 · SEMAINE 1</div>
     </div>
+    <!-- ce qu'il reste à faire aujourd'hui : rempli par renderTodo() -->
+    <div class="todo" id="todoBanner"></div>
+
+    <!-- juste sous les bandeaux : ce qui ne se planifie pas, mais qui doit rester à portée -->
+    <div class="raccourcis">
+      <button class="racc" onclick="go('debrief')">
+        <b>Tu as couru ?</b>
+        <small>Ton débrief express, 30 secondes à chaud. C'est ce qui me sert le plus.</small>
+      </button>
+      <button class="racc" onclick="ouvrirAide()">
+        <b>Comment ça marche ?</b>
+        <small>Ce que tu trouves ici, ce que tu fais, et ce que j'en fais.</small>
+      </button>
+    </div>
+
     <div class="profile-strip" id="profileStrip"></div>
 
     <div class="strengths" id="strengths"></div>
@@ -1034,6 +1142,7 @@ async function axeInit(){
         if(sr.ccMois) state.ccMois = sr.ccMois;
         if(sr.ccArchives) state.ccArchives = sr.ccArchives;
         if(typeof sr.imageryDays === 'number') state.imageryDays = sr.imageryDays;
+        if(sr.badgeCinema === true) state.badgeCinema = true;
         if(sr.startRoutine) state.startRoutine = sr.startRoutine;
         if(Array.isArray(sr.startJournal)) state.startJournal = sr.startJournal;
         // séances physiques validées, par mois + semaine (ex: "2-1" = mois 2, semaine 1) :
@@ -1150,6 +1259,7 @@ async function axeChargerProfil(r){
     }
     if(p.prenom) state.prenom = p.prenom;
     if(typeof p.age !== 'undefined') state.age = p.age;
+    if(p.naissance) state.naissance = p.naissance;
     if(p.niveau) state.level = p.niveau;
     // rétrocompatibilité : les anciens profils stockaient un simple nombre de jours (1-5),
     // les nouveaux stockent directement la liste des jours de la semaine choisis
@@ -1163,6 +1273,7 @@ async function axeChargerProfil(r){
       // le bilan du mois précédent oriente ce mois-ci : il doit être relu depuis la base,
       // sinon il n'existe que le temps d'une session et le programme repart du diagnostic
       await axeChargerDernierBilan();
+      await axeChargerEtatNoteMentale();
       buildProgram();
       go('dash');
     } else {
@@ -1284,6 +1395,7 @@ async function axeEnregistrerDiagnostic(){
     physique: state.physique,
     sensoriel: state.sensoriel,
     age: state.age,
+    naissance: state.naissance || '',
     niveau: state.level,
     jours: state.trainingDays,
     salle: state.gym,
@@ -2387,7 +2499,7 @@ function applySportBranding(){
   }
 }
 
-const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',ccDays:{},ccMois:'',imageryDays:0,startRoutine:{mot:'',geste:''},startJournal:[],
+const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',naissance:'',ccDays:{},ccMois:'',imageryDays:0,badgeCinema:false,noteMentaleFaite:false,startRoutine:{mot:'',geste:''},startJournal:[],
   physSeances:{},       // séances physiques validées, par clé "mois-semaine" : {ids:{p0:true,...}, total:n, done:n}
   weekAuto:true,        // tant que vrai, la semaine affichée suit la vraie date (calcul auto) ; passe à false dès qu'un vrai pilote clique lui-même sur un onglet SEM
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
@@ -2652,6 +2764,19 @@ function prevQ(){
 }
 
 /* ============ PROFIL ============ */
+/* la date de naissance ne sert qu'à une chose : mettre son protocole en pause le jour de
+   son anniversaire. On la garde telle quelle, au format du champ (AAAA-MM-JJ). */
+function majNaissance(){
+  const c = document.getElementById('naissance');
+  state.naissance = c ? (c.value || '') : '';
+}
+function estSonAnniversaire(){
+  if(!state.naissance) return false;
+  const p = String(state.naissance).split('-');
+  if(p.length !== 3) return false;
+  const ref = dateRef() || new Date();
+  return (Number(p[1]) === ref.getMonth() + 1) && (Number(p[2]) === ref.getDate());
+}
 function ageOut(){
   state.age=+document.getElementById('ageR').value;
   document.getElementById('ageV').textContent=state.age;
@@ -3161,6 +3286,10 @@ function verifierCycleCC(){
     }
     state.ccDays = {};
     state.ccMois = cle;
+    // le film du soir suit le même cycle : 7 soirs à refaire chaque mois. Le badge, lui,
+    // reste acquis une fois décroché — on ne retire pas une fierté déjà gagnée.
+    if(state.imageryDays >= 7) state.badgeCinema = true;
+    state.imageryDays = 0;
     if(axeCode) debounceEnregistrerSuiviRituel();
   }
 }
@@ -3184,6 +3313,7 @@ function renderCrossCrawl(){
     <p class="cc-intro">Chaque matin au réveil, avant tout le reste, tu fais ton cross crawl avec un grand verre d'eau. C'est le socle du protocole, la routine qui met le corps et la tête en marche pour la journée. À faire 21 jours de suite, sans sauter un jour. Le compteur repart à zéro le 1er de chaque mois : chaque mois, un nouveau cycle de 21 jours.</p>
     <p class="cc-how">Comment faire : bois d'abord ton verre d'eau. Puis, debout, touche ton genou droit avec ton coude gauche, puis ton genou gauche avec ton coude droit. Continue en alternance, tranquillement, pendant une à deux minutes. Coordonné et sans forcer.</p>
     <div class="cc-grid">${grid}</div>
+    <p class="geste-aide">Appuie sur la case du jour, chaque matin après ton verre d'eau. Une case cochée = un jour tenu. Si tu t'es trompé, réappuie dessus pour la décocher.</p>
     <div class="cc-progress"><b>${doneCount} / 21</b> jours validés</div>
     <div class="cc-congrats${congrats?' on':''}">Bravo, 21 jours tenus. Le socle est posé. Ce rituel restera ton point d'ancrage avant chaque semaine de compétition.</div>`;
 }
@@ -3191,6 +3321,7 @@ function toggleCC(d){
   verifierCycleCC();
   if(state.ccDays[d])delete state.ccDays[d]; else state.ccDays[d]=true;
   renderCrossCrawl();
+  renderTodo();
   debounceEnregistrerSuiviRituel();
 }
 // Enregistre le rituel des 21 jours + le module "Boss du start" dans Supabase, pour qu'ils
@@ -3208,6 +3339,7 @@ async function axeEnregistrerSuiviRituel(){
     ccMois: state.ccMois,
     ccArchives: state.ccArchives || {},
     imageryDays: state.imageryDays,
+    badgeCinema: !!state.badgeCinema,
     startRoutine: state.startRoutine,
     startJournal: state.startJournal,
     physSeances: state.physSeances
@@ -3481,7 +3613,7 @@ function renderStart(){
     : s.depart==='lumière'?('une image nette ('+l.imageVisu+')')
     : 'ton image ou ton son de départ préféré';
   // badges selon progression
-  const bImagery = state.imageryDays>=7;
+  const bImagery = state.imageryDays>=7 || state.badgeCinema===true;
   const bRoutine = !!(state.startRoutine.mot && state.startRoutine.geste);
   const bJournal = state.startJournal.length>=3;
   const stars = '★'.repeat(Math.min(state.imageryDays,7))+'☆'.repeat(Math.max(0,7-state.imageryDays));
@@ -3557,8 +3689,256 @@ function renderStart(){
 }
 function addImagery(){
   if(state.imageryDays<7)state.imageryDays++;
+  // le badge, lui, se garde à vie : le compteur repart chaque mois, pas la fierté
+  if(state.imageryDays>=7) state.badgeCinema = true;
   renderStart();
+  renderTodo();
   debounceEnregistrerSuiviRituel();
+}
+
+/* =====================================================================================
+   LE BANDEAU « À FAIRE AUJOURD'HUI »
+   Le tableau de bord est riche : sans ça, un pilote de 12 ans doit deviner où appuyer.
+   Ici, la page lui dit ce qui reste, dans l'ordre de sa journée, et l'emmène au bon
+   endroit d'un clic. Quand tout est fait, elle le dit aussi : c'est une récompense.
+   ===================================================================================== */
+function joursRestantsBilan(){
+  const fin = finDeMois(state.startDate);
+  const ref = dateRef();
+  if(!fin || !ref) return 0;
+  const a = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate());
+  const b = new Date(fin.getFullYear(), fin.getMonth(), fin.getDate());
+  return Math.max(0, Math.round((b - a) / 86400000));
+}
+/* la case du rituel qui correspond à aujourd'hui : le cycle suit les 21 premiers jours
+   du mois calendaire, donc la case N = le N du mois. Au-delà du 21, plus de case à cocher. */
+function caseRituelDuJour(){
+  const ref = dateRef();
+  if(!ref) return 0;
+  const j = ref.getDate();
+  return (j >= 1 && j <= 21) ? j : 0;
+}
+/* la séance physique prévue aujourd'hui, si le jour de la semaine en fait partie */
+function seanceDuJour(){
+  const ref = dateRef();
+  if(!ref) return null;
+  const nom = JOURS_SEMAINE[(ref.getDay() + 6) % 7];   // getDay() : 0 = dimanche
+  const jours = joursSeance();
+  const i = jours.indexOf(nom);
+  if(i < 0) return null;
+  const wk = physWeekKey();
+  const faite = !!((state.physSeances[wk] || {}).ids || {})['p' + i];
+  return { index: i, jour: JOURS_LABEL[nom] || nom, faite: faite };
+}
+function allerVers(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+}
+/* la semaine de programme à laquelle appartient une date (même règle que l'affichage) */
+function semainePour(d){
+  if(!state.startDate || !d) return state.week;
+  const total = nbSemainesMois();
+  let w = 1;
+  while(w < total && d >= weekOpenDate(w+1)){ w++; }
+  return w;
+}
+/* Ce qui n'a pas été validé hier. On ne parle QUE de ce qui est daté : la case du rituel
+   et la séance physique. Le film du soir, lui, n'est qu'un compteur du mois : on ne saurait
+   pas dire quel soir il a été fait, donc on ne l'accuse de rien. */
+function manquesDHier(){
+  const ref = dateRef();
+  if(!ref || !state.startDate) return [];
+  const hier = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate() - 1);
+  if(hier < state.startDate) return [];   // le programme n'avait pas commencé
+  const out = [];
+
+  // le rituel : seulement si hier est dans le même mois calendaire (sinon le cycle a été remis à zéro)
+  if(hier.getMonth() === ref.getMonth() && hier.getFullYear() === ref.getFullYear()){
+    const c = hier.getDate();
+    if(c >= 1 && c <= 21 && !state.ccDays[c]){
+      out.push({ titre:'Ton cross crawl d\'hier', sous:'La case ' + c + ' est restée vide. Tu peux encore la cocher.',
+                 aller:'crossCrawl' });
+    }
+  }
+
+  // la séance physique d'hier, si hier en était un jour
+  const nom = JOURS_SEMAINE[(hier.getDay() + 6) % 7];
+  const semHier = semainePour(hier);
+  const jours = (function(){
+    const j = joursTries(state.trainingDays);
+    return j.slice(0, physSessions());
+  })();
+  const i = jours.indexOf(nom);
+  if(i >= 0){
+    const cle = state.month + '-' + semHier;
+    const faite = !!(((state.physSeances[cle] || {}).ids || {})['p' + i]);
+    if(!faite){
+      out.push({ titre:'Ta séance physique d\'hier',
+                 sous:'Elle n\'a pas été validée. Si tu l\'as faite, va la valider ; sinon, on repart aujourd\'hui.',
+                 aller:(semHier === state.week) ? ('card-p' + i) : null });
+    }
+  }
+  return out;
+}
+
+/* =====================================================================================
+   LE MODE D'EMPLOI, OUVRABLE À TOUT MOMENT
+   La vidéo d'accueil ne passe qu'une fois, le tout premier jour. Un pilote de 12 ans
+   oublie, et un parent arrive souvent trois semaines plus tard sans l'avoir vue.
+   ===================================================================================== */
+function ouvrirAide(){
+  if(document.getElementById('aideFond')) return;
+  const d = document.createElement('div');
+  d.className = 'aide-fond';
+  d.id = 'aideFond';
+  d.innerHTML = `
+    <div class="aide-boite" onclick="event.stopPropagation()">
+      <h2>COMMENT ÇA MARCHE</h2>
+      <div class="aide-sous">En trois points. Tu peux rouvrir cette page quand tu veux.</div>
+
+      <div class="aide-bloc">
+        <b>Ce que tu trouves ici</b>
+        <p>Ton mois en cours, découpé en semaines. Deux colonnes : <b>Mental</b>, un exercice
+        pour le mois, et <b>Physique</b>, tes séances de la semaine.</p>
+        <p>Et des outils pour les jours qui comptent : ton labo du start, ta semaine de
+        compétition, ton jour de course, ton débrief d'après-course, ton carnet.</p>
+      </div>
+
+      <div class="aide-bloc">
+        <b>Ce que tu fais</b>
+        <p><b>Chaque matin</b> : ton cross crawl, et tu coches la case du jour.</p>
+        <p><b>Chaque semaine</b> : tes séances physiques, que tu valides une fois faites,
+        avec ton ressenti. Et ton exercice mental, où tu écris ce que tu remarques.</p>
+        <p><b>Chaque soir</b> : une minute de film du start, dans ton lit.</p>
+        <p><b>Après une course</b> : ton débrief express, 30 secondes à chaud.</p>
+        <p><b>À la fin du mois</b> : ton bilan. Ta page te prévient quand il s'ouvre.</p>
+      </div>
+
+      <div class="aide-bloc">
+        <b>Ce que j'en fais</b>
+        <p>Tout ce que tu coches et tout ce que tu écris m'arrive. C'est là-dessus que je
+        construis ton mois suivant : ton exercice mental, le volume de tes séances, les
+        charges. Personne ne reçoit deux fois le même mois.</p>
+        <p>Si tu ne me dis rien, je construis à l'aveugle. Même court, écris honnête.</p>
+      </div>
+
+      <div style="text-align:center;margin-top:20px">
+        <button class="btn gold" onclick="fermerAide()">J'ai compris</button>
+      </div>
+    </div>`;
+  d.addEventListener('click', fermerAide);
+  document.body.appendChild(d);
+}
+function fermerAide(){
+  const d = document.getElementById('aideFond');
+  if(d) d.remove();
+}
+
+function renderTodo(){
+  const zone = document.getElementById('todoBanner');
+  if(!zone) return;
+  // tant que le programme n'a pas démarré, il n'y a rien à faire : on n'affiche rien
+  if(!estDemarre()){ zone.innerHTML = ''; return; }
+
+  // Le jour de son anniversaire, le protocole s'arrête. Rien à cocher, rien à rattraper.
+  // C'est la seule journée de l'année où cette page ne lui demande rien.
+  if(estSonAnniversaire()){
+    let a = '<div class="anniv"><b>BON ANNIVERSAIRE</b>'
+          + '<p>Aujourd\'hui, c\'est ton jour de chance : ton protocole fait une pause. '
+          + 'Tu l\'as bien méritée. Profite de ta journée, on se retrouve demain.</p></div>';
+    // une seule exception : le tout dernier jour pour envoyer son bilan
+    if(rapportOuvert() && joursRestantsBilan() <= 0){
+      a += '<button class="todo-bilan" onclick="go(\'report\')">'
+         + '<span><b>Une seule chose quand même : c\'est le dernier jour pour ton bilan.</b>'
+         + '<small>Cinq minutes, et tu es tranquille.</small></span></button>';
+    }
+    zone.innerHTML = a;
+    return;
+  }
+
+  let html = '';
+
+  // 1. le bilan de fin de mois, dès que sa fenêtre s'ouvre : c'est ce qui conditionne
+  //    le mois suivant, il ne doit pas se découvrir en bas de page
+  if(rapportOuvert()){
+    const j = joursRestantsBilan();
+    const txt = j <= 0 ? "C'est le dernier jour pour envoyer ton bilan du mois."
+              : j === 1 ? "Il te reste 1 jour pour envoyer ton bilan du mois."
+              : "Il te reste " + j + " jours pour envoyer ton bilan du mois.";
+    html += '<button class="todo-bilan" onclick="go(\'report\')">'
+          + '<span><b>' + txt + '</b>'
+          + '<small>C\'est lui qui construit ton mois prochain. Compte cinq minutes.</small></span>'
+          + '</button>';
+  }
+
+  // 2. les gestes du jour, dans l'ordre où ils arrivent : le matin, la journée, le soir
+  const lignes = [];
+  const caseJour = caseRituelDuJour();
+  if(caseJour && !state.ccDays[caseJour]){
+    lignes.push({ titre:'Ton cross crawl du matin',
+                  sous:'Case ' + caseJour + ' du rituel, pas encore cochée', aller:'crossCrawl' });
+  }
+  // l'exercice mental du mois : il n'a rien à cocher, c'est sa note qui fait foi.
+  // Tant qu'elle est vide, la page le lui rappelle — sinon il pourrait traverser tout
+  // un mois sans jamais ouvrir la colonne Mental, dans un protocole mental.
+  if(!state.noteMentaleFaite){
+    lignes.push({ titre:'Ton exercice mental du mois',
+                  sous:'Ouvre-le et écris ce que tu ressens : c\'est ce qui construit ton mois prochain',
+                  aller:'mentalCol' });
+  }
+  const seance = seanceDuJour();
+  if(seance && !seance.faite){
+    lignes.push({ titre:'Ta séance physique du ' + seance.jour.toLowerCase(),
+                  sous:'À valider une fois faite, avec ton ressenti', aller:'card-p' + seance.index });
+  }
+  // le film reste rappelé tant que les 7 soirs du mois ne sont pas faits
+  if(state.imageryDays < 7){
+    lignes.push({ titre:'Ton film du start',
+                  sous:state.imageryDays + ' soir' + (state.imageryDays>1?'s':'') + ' sur 7 ce mois-ci, à faire le soir dans ton lit',
+                  ecran:'start' });
+  }
+  const bossFait = (state.imageryDays >= 7 || state.badgeCinema === true)
+                && !!(state.startRoutine.mot && state.startRoutine.geste)
+                && state.startJournal.length >= 3;
+  if(!bossFait){
+    lignes.push({ titre:'Deviens un boss du start',
+                  sous:'Tes badges ne sont pas tous débloqués', ecran:'start' });
+  }
+
+  if(lignes.length){
+    html += '<div class="todo-box"><div class="todo-head">À faire aujourd\'hui</div>';
+    lignes.forEach(function(l){
+      const action = l.ecran ? ('go(\'' + l.ecran + '\')') : ('allerVers(\'' + l.aller + '\')');
+      html += '<button class="todo-line" onclick="' + action + '">'
+            + '<span class="tl-txt">' + l.titre + '<small>' + l.sous + '</small></span>'
+            + '<span class="tl-go">→</span></button>';
+    });
+    html += '</div>';
+  } else if(!rapportOuvert()){
+    html += '<div class="todo-box"><div class="todo-fini">'
+          + '<span><b>Tout est fait aujourd\'hui, à demain.</b>'
+          + '<small>C\'est la régularité qui construit le mois, pas les gros jours.</small></span>'
+          + '</div></div>';
+  }
+
+  // ---- ce qui est resté en plan hier : on le dit, sans en faire un reproche ----
+  const hier = manquesDHier();
+  if(hier.length){
+    html += '<div class="todo-box hier"><div class="todo-head">Hier, tu n\'as pas validé</div>';
+    hier.forEach(function(l){
+      if(l.aller){
+        html += '<button class="todo-line" onclick="allerVers(\'' + l.aller + '\')">'
+              + '<span class="tl-txt">' + l.titre + '<small>' + l.sous + '</small></span>'
+              + '<span class="tl-go">→</span></button>';
+      } else {
+        html += '<div class="todo-line fige">'
+              + '<span class="tl-txt">' + l.titre + '<small>' + l.sous + '</small></span></div>';
+      }
+    });
+    html += '</div>';
+  }
+
+  zone.innerHTML = html;
 }
 function saveRoutine(){
   const wasComplete = !!(state.startRoutine.mot && state.startRoutine.geste);
@@ -3638,6 +4018,7 @@ function buildProgram(){
   renderStrengths();
   renderStreak();
   renderCrossCrawl();
+  renderTodo();
   setupWhatsApp();
   setupAbonnement();
   renderSimPanel();
@@ -3882,6 +4263,7 @@ function exCard(ex,isMental,id,jourLabel,doneInit){
       ${ex.mission?`<div class="moves"><div class="move"><div class="move-n">${ex.mission.titre}${ex.phase?' · '+ex.phase.toLowerCase():''}</div><div class="move-d">${ex.mission.txt}</div></div></div>
       <p class="phys-weight-note">Pas de compétition nécessaire : cette mission se fait sur une semaine normale. Si tu as une compétition, garde-la et ouvre aussi « Ma semaine de compétition » pour le jour J.</p>`:''}
       ${note}
+      <p class="geste-aide">Ouvre « mes notes » juste au-dessus et écris ce que tu ressens au fil du mois : c'est ce qui me sert à choisir ton exercice du mois prochain.</p>
     </div>`;
   }
 
@@ -3909,6 +4291,7 @@ function exCard(ex,isMental,id,jourLabel,doneInit){
     <div class="moves">${moves}</div>
     ${ressenti}
     <button class="validate" id="val-${id}" onclick="validateEx('${id}')">${doneInit?validatedBtnHtml():'Valider la séance'}</button>
+    <p class="geste-aide">Appuie sur ce bouton une fois la séance faite, pas avant. Écris ton ressenti juste au-dessus : c'est lui qui règle la séance suivante.</p>
   </div>`;
 }
 function validateEx(id){
@@ -3938,6 +4321,7 @@ function validateEx(id){
     seances.ids[id]=true;
   }
   seances.done = Object.keys(seances.ids).filter(k=>seances.ids[k]).length;
+  renderTodo();
   // enregistrement Supabase après une courte pause (même debounce que le rituel des 21 jours),
   // pour que "Séance validée" reste affiché au retour du rider ET soit visible côté coach.
   clearTimeout(axeDbSuiviRituel);
@@ -3988,7 +4372,10 @@ async function axeEnregistrerNote(id){
       code: axeCode, auteur_note: auteur, texte_note: texte, mois_note: state.month, cle_note: cle
     });
     if(error){ console.log('[AXE] Erreur note :', error.message); }
-    else{ console.log('[AXE] Note ('+auteur+') enregistrée.'); }
+    else{
+      console.log('[AXE] Note ('+auteur+') enregistrée.');
+      if(id === 'm0'){ state.noteMentaleFaite = true; renderTodo(); }
+    }
   }catch(e){ console.log('[AXE] Souci note :', e.message); }
 }
 function bindNotes(){}
@@ -4013,6 +4400,18 @@ async function axeChargerDernierBilan(){
     }
     console.log('[AXE] Bilan du mois ' + (state.month - 1) + ' relu : ' + (rp.bloc || 'sans bloc'));
   }catch(e){ console.log('[AXE] Souci relecture bilan :', e.message); }
+}
+
+/* La note de l'exercice mental n'a pas de case à cocher : on regarde simplement si elle
+   existe déjà ce mois-ci, pour savoir s'il faut la rappeler dans « à faire aujourd'hui ». */
+async function axeChargerEtatNoteMentale(){
+  if(!axeCode) return;
+  try{
+    const { data, error } = await axeDB.rpc('lire_note', {
+      code: axeCode, auteur_note: 'rider', mois_note: state.month, cle_note: 'm0'
+    });
+    state.noteMentaleFaite = !error && !!(data && String(data).trim());
+  }catch(e){}
 }
 
 async function axeEnregistrerRapport(){

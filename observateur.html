@@ -671,12 +671,21 @@ function afficherRiders(riders){
     // le retour mensuel du parent (clé « bilan ») est un bilan au même titre que celui du
     // sportif : il porte le même nom. Les autres notes restent de simples notes de carte.
     const estBilanParent = n => n.auteur === 'parent' && (n.cle || 'bilan') === 'bilan';
+    /* d'où vient une note : la clé dit l'emplacement où elle a été écrite.
+       m0 = l'exercice mental du mois · rp0, rp1... = le ressenti d'une séance physique */
+    const nomDeNote = n => {
+      if(estBilanParent(n)) return 'Bilan du parent';
+      if(n.auteur === 'parent') return 'Note du parent';
+      const cle = n.cle || '';
+      if(/^m\d*$/.test(cle))  return 'Son exercice mental';
+      const m = cle.match(/^rp(\d+)$/);
+      if(m) return 'Ressenti · séance ' + (Number(m[1]) + 1);
+      return 'Note du sportif';
+    };
     const ligneNote = n => {
       const cls   = (n.auteur === 'parent') ? 'rc-note pa' : 'rc-note';
-      const qui   = estBilanParent(n) ? 'Bilan du parent'
-                  : (n.auteur === 'parent') ? 'Parent' : 'Sportif';
       const quand = dateFr(n.modifie_le || n.created_at).split(' à ')[0];
-      return `<div class="${cls}"><span class="rc-who">${qui}${quand?(' · '+quand):''}</span>${n.texte}</div>`;
+      return `<div class="${cls}"><span class="rc-who">${nomDeNote(n)}${quand?(' · '+quand):''}</span>${n.texte}</div>`;
     };
 
     // Ce qui a été ÉCRIT pendant le mois reste toujours lisible, même mois replié :
@@ -690,9 +699,12 @@ function afficherRiders(riders){
       } else {
         h += `<div class="mc-vide">Bilan du sportif — pas de bilan ce mois-là</div>`;
       }
-      const notesM = notesDuMois(m);
-      notesM.forEach(n=>{ h += ligneNote(n); });
-      if(!notesM.some(estBilanParent)){ h += `<div class="mc-vide">Bilan du parent — pas de retour ce mois-là</div>`; }
+      // Un mois terminé ne garde que les deux bilans. Tous les ressentis de séance et les
+      // notes d'exercice du mois disparaissent de la fiche : ils ont servi à construire le
+      // mois suivant, ils n'encombrent plus. Ils restent en base, rien n'est supprimé.
+      const bilanP = notesDuMois(m).find(estBilanParent);
+      if(bilanP){ h += ligneNote(bilanP); }
+      else { h += `<div class="mc-vide">Bilan du parent — pas de retour ce mois-là</div>`; }
       return h;
     };
 
@@ -766,10 +778,18 @@ function afficherRiders(riders){
     } else {
       moisBlock += `<div class="mc-vide">Bilan du sportif — pas encore envoyé</div>`;
     }
-    notesDuMois(moisCourant).forEach(n=>{ moisBlock += ligneNote(n); });
-    // un silence du parent doit se voir : sinon on ne distingue pas « rien écrit » de « rien chargé »
-    if(!bilanParentCourant){
+    if(bilanParentCourant){ moisBlock += ligneNote(bilanParentCourant); }
+    else {
+      // un silence du parent doit se voir : sinon on ne distingue pas « rien écrit » de « rien chargé »
       moisBlock += `<div class="mc-vide">Bilan du parent — pas encore écrit</div>`;
+    }
+    // Le détail du mois en cours : chaque ressenti de séance, chaque note d'exercice, du
+    // sportif comme du parent. C'est la matière vivante du mois ; elle quittera la fiche
+    // quand le mois sera terminé, il ne restera que les deux bilans.
+    const detail = notesDuMois(moisCourant).filter(n => !estBilanParent(n));
+    if(detail.length){
+      moisBlock += `<div class="rc-sub">Ce qui a été écrit ce mois-ci</div>`;
+      detail.forEach(n=>{ moisBlock += ligneNote(n); });
     }
 
     // ---- ce qu'il a demandé pour la suite : la matière pour construire le mois suivant ----

@@ -56,7 +56,21 @@ header{position:sticky;top:0;z-index:20;background:rgba(253,250,245,.94);backdro
 .case{aspect-ratio:1;border:1px solid var(--line);border-radius:3px;display:flex;align-items:center;
   justify-content:center;font-size:11px;color:var(--dim);background:#fff}
 .case.on{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:600}
+.annonce-p{font-size:14px;line-height:1.65;color:var(--ink);margin-top:12px}
+.annonce-p:first-child{margin-top:0}
+.annonce-p b{font-weight:600}
 .lecture{font-size:11.5px;color:var(--dim);margin-top:12px;font-style:italic;font-family:'Cormorant Garamond',serif}
+/* l'avancement du jour, en lecture seule */
+.todo-l{display:flex;gap:13px;align-items:flex-start;padding:12px 0;border-top:1px dashed var(--line)}
+.todo-l:first-child{border-top:none;padding-top:2px}
+.todo-l .tl-etat{flex-shrink:0;min-width:58px;text-align:center;font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;font-weight:700;padding:3px 7px;border-radius:2px;margin-top:2px;
+  background:rgba(168,133,42,.14);color:#8A6A1F}
+.todo-l.ok .tl-etat{background:rgba(93,111,74,.16);color:#4A6238}
+.todo-l.manque .tl-etat{background:rgba(122,59,46,.12);color:#7A3B2E}
+.todo-l .tl-txt b{display:block;font-size:14.5px;font-weight:600}
+.todo-l .tl-txt small{display:block;font-size:12.5px;color:var(--dim);line-height:1.5;margin-top:2px}
+.todo-l.ok .tl-txt b{color:var(--dim);font-weight:500}
 .mouvement{padding:13px 0;border-bottom:1px dashed var(--line)}
 .mouvement:last-child{border-bottom:none}
 .mouvement .m-n{font-weight:600;font-size:14px;margin-bottom:3px}
@@ -98,24 +112,21 @@ footer{text-align:center;font-size:11px;color:var(--dim);padding:30px 22px 0;let
     </div>
 
     <div class="bloc">
-      <h2>OÙ IL EN EST CETTE SEMAINE</h2>
-      <div class="sous">Un coup d'œil, sans avoir à le lui demander.</div>
-      <div id="pFeu"></div>
+      <h2>CE QU'IL A À FAIRE AUJOURD'HUI</h2>
+      <div class="sous">En lecture seule : c'est lui qui coche, depuis son espace. Vous voyez juste où il en est.</div>
+      <div id="pTodo"><div class="vide">Chargement…</div></div>
     </div>
 
-    <div class="bloc">
-      <h2>SON RITUEL DU MOIS</h2>
-      <div class="sous">Le rituel se construit sur 21 jours. Ce qui compte, c'est la régularité, pas la performance.</div>
-      <div class="jauge"><span class="n" id="pCcN">0</span><span class="t" id="pCcT">jour sur 21</span></div>
-      <div class="grille" id="pCcGrille"></div>
-      <div class="lecture">Affichage en lecture seule : c'est votre enfant qui coche, depuis son espace.</div>
+    <div class="bloc" id="pHierBloc" style="display:none">
+      <h2>CE QUI N'A PAS ÉTÉ VALIDÉ HIER</h2>
+      <div class="sous">Pour savoir, sans avoir à le lui demander. Un jour manqué n'est pas grave ; trois de suite méritent une question.</div>
+      <div id="pHier"></div>
     </div>
 
-    <div class="bloc">
-      <h2>SES SÉANCES PHYSIQUES</h2>
-      <div class="sous">Les séances validées pour la semaine en cours.</div>
-      <div class="jauge"><span class="n" id="pSeanceN">0</span><span class="t" id="pSeanceT">séance validée</span></div>
-      <div class="lecture" id="pSeanceNote"></div>
+    <div class="bloc" id="pAnnonceBloc" style="display:none">
+      <h2>CE QUI VOUS ATTEND CE MOIS-CI</h2>
+      <div class="sous">Ce que le protocole travaille, et ce que vous pouvez observer.</div>
+      <div id="pAnnonce"></div>
     </div>
 
     <div class="bloc">
@@ -126,14 +137,8 @@ footer{text-align:center;font-size:11px;color:var(--dim);padding:30px 22px 0;let
     </div>
 
     <div class="bloc">
-      <h2>SES DÉBRIEFS DE COMPÉTITION</h2>
-      <div class="sous">Ce qu'il a écrit après ses courses, avec ses mots à lui.</div>
-      <div id="pDebriefs"><div class="vide">Chargement…</div></div>
-    </div>
-
-    <div class="bloc">
-      <h2>VOS NOTES</h2>
-      <div class="sous">Ce que vous observez chez lui, ce qui a changé, vos ressentis à vous. Votre coach les lit.</div>
+      <h2>VOTRE BILAN DU MOIS</h2>
+      <div class="sous">Ce que vous avez observé chez lui ce mois-ci : ce qui a changé, ce qui coince encore, vos ressentis à vous. Un seul texte par mois, que vous pouvez compléter quand vous voulez.</div>
       <textarea id="pNote" placeholder="Ce mois-ci, j'ai remarqué que..."></textarea>
       <div class="enregistre" id="pNoteEtat"></div>
       <div class="oeil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Visible par votre coach, en lecture seule.</div>
@@ -328,15 +333,15 @@ async function ouvrir(){
   etat.semaine = semaineCourante(etat.debut);
 
   const prenom = profil.prenom || r.nom || 'Votre enfant';
+  etat.prenom = prenom;
   document.getElementById('pPrenom').textContent = prenom;
   document.getElementById('pQuand').textContent = 'Mois ' + etat.mois + ' · Semaine ' + etat.semaine;
   document.title = 'Espace parent · ' + prenom;
 
-  rendreFeu(suivi);
-  rendreRituel(suivi);
-  rendreSeances(suivi);
+  rendreTodo(suivi);
+  rendreHier(suivi);
+  chargerAnnonceMois(suivi);
   rendreCleDuMois(r.sport);
-  chargerDebriefs();
   chargerNoteParent();
 
   document.getElementById('contenu').style.display = 'block';
@@ -345,54 +350,300 @@ async function ouvrir(){
 }
 
 /* feu tricolore : exactement la même règle que dans l'espace du pilote */
-function rendreFeu(suivi){
-  const seances = (suivi.physSeances || {})[etat.mois + '-' + etat.semaine] || {done:0,total:0};
-  const plafond = etat.age<=12 ? 2 : 3;
+/* =====================================================================================
+   CE QU'IL A À FAIRE AUJOURD'HUI — en lecture seule.
+   Exactement la même lecture que dans l'espace du sportif, mais le parent ne coche rien :
+   il voit ce qui est fait et ce qui reste. Et, séparément, ce qui est resté en plan hier.
+   ===================================================================================== */
+const JOURS_LABEL_P = {lundi:'lundi',mardi:'mardi',mercredi:'mercredi',jeudi:'jeudi',
+                       vendredi:'vendredi',samedi:'samedi',dimanche:'dimanche'};
+
+/* la semaine de programme à laquelle appartient une date : exactement la même règle que
+   semaineCourante(), qui aligne les semaines sur les lundis après la date de démarrage. */
+function semainePourDate(d){
+  if(!etat.debut || !d) return etat.semaine;
+  if(d < etat.debut) return 1;
+  const total = nbSemaines(etat.debut);
+  let w = 1;
+  while(w < total && d >= ouvertureSemaine(etat.debut, w + 1)){ w++; }
+  return w;
+}
+/* les jours de séance retenus pour la semaine, dans l'ordre d'affichage du sportif */
+function joursSeanceParent(semaine){
+  const plafond = etat.age <= 12 ? 2 : 3;
   let prevus = etat.jours.slice().sort((a,b)=>JOURS.indexOf(a)-JOURS.indexOf(b));
-  if(etat.semaine === 1){
+  if(semaine === 1){
     const presents = joursPresentsSemaine1(etat.debut);
     prevus = prevus.filter(j=>presents.has(j));
   }
-  prevus = prevus.slice(0, Math.min(plafond, etat.jours.length));
-
-  let couleur, texte;
-  if(!seances.total){ couleur='vert'; texte='Rien de prévu à valider cette semaine.'; }
-  else if(seances.done >= seances.total){ couleur='vert'; texte='Toutes les séances prévues cette semaine sont validées.'; }
-  else if(seances.done > 0){
-    couleur='orange';
-    texte = seances.done+' séance'+(seances.done>1?'s':'')+' validée'+(seances.done>1?'s':'')
-          + ' sur '+seances.total+" cette semaine, c'est en cours.";
-  } else if(!prevus.length){ couleur='vert'; texte='Rien de prévu à valider cette semaine.'; }
-  else {
-    const iDernier = JOURS.indexOf(prevus[prevus.length-1]);
-    const iAuj = (new Date().getDay()+6)%7;
-    if(iAuj > iDernier){ couleur='rouge'; texte="Aucune séance validée cette semaine, alors qu'elle est déjà terminée. Un petit mot peut aider."; }
-    else { couleur='orange'; texte="Pas encore de séance validée cette semaine, mais elle n'est pas finie."; }
-  }
-  const titre = couleur==='vert' ? 'Tout va bien' : couleur==='orange' ? 'En cours' : 'À surveiller';
-  document.getElementById('pFeu').innerHTML =
-    '<div class="feu '+couleur+'"><div class="pastille"></div><div><b>'+titre+'</b><span>'+texte+'</span></div></div>';
+  return prevus.slice(0, Math.min(plafond, etat.jours.length));
 }
 
-function rendreRituel(suivi){
+function rendreTodo(suivi){
+  const el = document.getElementById('pTodo');
+  if(!el) return;
+  const auj = new Date();
   const memeMois = !suivi.ccMois || suivi.ccMois === moisCourantCC();
-  const jours = memeMois ? (suivi.ccDays || {}) : {};
-  let n = 0;
-  for(const k in jours){ if(jours[k]) n++; }
-  document.getElementById('pCcN').textContent = n;
-  document.getElementById('pCcT').textContent = (n>1?'jours cochés sur 21':'jour coché sur 21') + (memeMois ? '' : ' (nouveau mois, le compteur repart)');
+  const coches = memeMois ? (suivi.ccDays || {}) : {};
+  const lignes = [];
+
+  // le rituel du jour
+  const caseJour = (auj.getDate() >= 1 && auj.getDate() <= 21) ? auj.getDate() : 0;
+  if(caseJour){
+    lignes.push({ titre:'Son cross crawl du matin',
+                  sous:'Case ' + caseJour + ' du rituel des 21 jours',
+                  fait: !!coches[caseJour] });
+  }
+
+  // la séance physique du jour, s'il y en a une
+  const nomJour = JOURS[(auj.getDay() + 6) % 7];
+  const jours = joursSeanceParent(etat.semaine);
+  const i = jours.indexOf(nomJour);
+  if(i >= 0){
+    const cle = etat.mois + '-' + etat.semaine;
+    const faite = !!((((suivi.physSeances || {})[cle] || {}).ids || {})['p' + i]);
+    lignes.push({ titre:'Sa séance physique du ' + (JOURS_LABEL_P[nomJour] || nomJour),
+                  sous:'Il la valide lui-même une fois faite, avec son ressenti',
+                  fait: faite });
+  }
+
+  // le film du soir : un compteur sur le mois, pas une case du jour
+  const films = (typeof suivi.imageryDays === 'number') ? suivi.imageryDays : 0;
+  lignes.push({ titre:'Son film du start',
+                sous: films + ' soir' + (films>1?'s':'') + ' sur 7 ce mois-ci, le soir dans son lit',
+                fait: films >= 7 });
+
+  if(!lignes.length){
+    el.innerHTML = '<div class="vide">Rien de prévu aujourd\'hui.</div>';
+    return;
+  }
+  const reste = lignes.filter(function(l){ return !l.fait; }).length;
   let html = '';
-  for(let i=1;i<=21;i++){ html += '<div class="case'+(jours[i]?' on':'')+'">'+i+'</div>'; }
-  document.getElementById('pCcGrille').innerHTML = html;
+  lignes.forEach(function(l){
+    html += '<div class="todo-l' + (l.fait ? ' ok' : '') + '">'
+          + '<span class="tl-etat">' + (l.fait ? 'fait' : 'à faire') + '</span>'
+          + '<span class="tl-txt"><b>' + echapper(l.titre) + '</b><small>' + echapper(l.sous) + '</small></span>'
+          + '</div>';
+  });
+  if(!reste){
+    html += '<div class="lecture">Tout est fait pour aujourd\'hui. Vous n\'avez rien à lui rappeler.</div>';
+  }
+  el.innerHTML = html;
 }
 
-function rendreSeances(suivi){
-  const s = (suivi.physSeances || {})[etat.mois + '-' + etat.semaine] || {done:0,total:0};
-  document.getElementById('pSeanceN').textContent = s.done || 0;
-  document.getElementById('pSeanceT').textContent =
-    (s.total ? 'sur ' + s.total + ' prévue' + (s.total>1?'s':'') + ' cette semaine' : 'cette semaine');
-  document.getElementById('pSeanceNote').textContent =
-    etat.jours.length ? 'Jours prévus : ' + etat.jours.join(', ') + '.' : '';
+function rendreHier(suivi){
+  const bloc = document.getElementById('pHierBloc');
+  const el = document.getElementById('pHier');
+  if(!bloc || !el) return;
+  const auj = new Date();
+  const hier = new Date(auj.getFullYear(), auj.getMonth(), auj.getDate() - 1);
+  const manques = [];
+
+  if(etat.debut && hier >= etat.debut){
+    // le rituel : seulement si hier est dans le même mois (sinon le cycle a été remis à zéro)
+    if(hier.getMonth() === auj.getMonth() && hier.getFullYear() === auj.getFullYear()){
+      const memeMois = !suivi.ccMois || suivi.ccMois === moisCourantCC();
+      const coches = memeMois ? (suivi.ccDays || {}) : {};
+      const c = hier.getDate();
+      if(c >= 1 && c <= 21 && !coches[c]){
+        manques.push({ titre:'Son cross crawl', sous:'La case ' + c + ' est restée vide.' });
+      }
+    }
+    // la séance physique d'hier, si hier en était un jour
+    const nomHier = JOURS[(hier.getDay() + 6) % 7];
+    const semHier = semainePourDate(hier);
+    const joursH = joursSeanceParent(semHier);
+    const iH = joursH.indexOf(nomHier);
+    if(iH >= 0){
+      const cleH = etat.mois + '-' + semHier;
+      const faiteH = !!((((suivi.physSeances || {})[cleH] || {}).ids || {})['p' + iH]);
+      if(!faiteH){
+        manques.push({ titre:'Sa séance physique', sous:'Celle du ' + (JOURS_LABEL_P[nomHier] || nomHier) + " n'a pas été validée." });
+      }
+    }
+  }
+
+  if(!manques.length){ bloc.style.display = 'none'; return; }
+  bloc.style.display = '';
+  el.innerHTML = manques.map(function(m){
+    return '<div class="todo-l manque"><span class="tl-etat">manqué</span>'
+         + '<span class="tl-txt"><b>' + echapper(m.titre) + '</b><small>' + echapper(m.sous) + '</small></span></div>';
+  }).join('');
+}
+
+/* =====================================================================================
+   CE QUI VOUS ATTEND CE MOIS-CI — visible uniquement côté parent.
+   Le texte se compose à partir de quatre choses : le mois de programme (qui détermine le
+   niveau de l'exercice mental), le moment de blocage déclaré au dernier bilan, l'âge, et
+   ce qu'il a réellement tenu depuis le début du mois. Rien n'est annoncé à l'avance :
+   chaque mois ne parle que de lui-même.
+   ===================================================================================== */
+
+/* le mois de programme décide du niveau de l'exercice mental : repérer, exposer, ancrer */
+function texteDuMois(mois, prenom){
+  if(mois <= 1){
+    return prenom + " démarre. Ce mois-ci, on installe : son exercice mental est au niveau "
+         + "« repérer ». Il apprend à remarquer ce qui se passe dans sa tête avant un départ, "
+         + "sans rien essayer de changer encore. Vous ne verrez donc pas grand-chose de "
+         + "l'extérieur, et c'est normal. Ce que vous pouvez voir, c'est un matin où il râle "
+         + "de faire son rituel. Côté séances, la troisième semaine est la plus chargée du "
+         + "mois, la dernière est volontairement allégée.";
+  }
+  if(mois === 2){
+    return "Son exercice mental passe au niveau « exposer » : il ne se contente plus de "
+         + "remarquer, il provoque la situation à l'entraînement pour s'y habituer. C'est "
+         + "souvent le mois où il est un peu plus à cran. C'est le signe que ça travaille.";
+  }
+  if(mois === 3){
+    return "Son exercice mental passe au niveau « ancrer » : sa routine doit maintenant tenir "
+         + "en dix secondes et se déclencher toute seule, sans qu'il y pense. C'est aussi le "
+         + "mois de son premier bilan des trois mois, où l'on regarde ensemble le chemin parcouru.";
+  }
+  if(mois % 3 === 0){
+    return "Le socle est posé, on affine. Ce mois-ci est recentré sur ce qu'il a déclaré à son "
+         + "dernier bilan. C'est aussi un mois de bilan des trois mois : on fait le point sur "
+         + "le trimestre écoulé.";
+  }
+  return "Le socle est posé, on affine. Ce mois-ci est recentré sur ce qu'il a déclaré à son "
+       + "dernier bilan, et son exercice mental reste au niveau « ancrer ».";
+}
+
+/* le moment de blocage déclaré : avant le départ, pendant l'action, ou après une erreur */
+function texteDuBloc(bloc){
+  if(!bloc) return '';
+  const b = String(bloc).toLowerCase();
+  const avant  = /(gate|grille|plot|ligne de d|avant le|avant la|au service|coup d.envoi|avant le combat|avant le d)/.test(b);
+  const apres  = /(apr[eè]s une erreur|apr[eè]s une p[eé]nalit|faux d[eé]part|apr[eè]s un)/.test(b);
+  if(avant){
+    return "Il a déclaré bloquer <b>" + echapper(bloc).toLowerCase() + "</b>. Son mois est "
+         + "recentré là-dessus : son travail porte sur les secondes qui précèdent le départ. "
+         + "Vous devriez le voir plus posé à ce moment-là, sans que ce soit encore constant.";
+  }
+  if(apres){
+    return "Il a déclaré bloquer <b>" + echapper(bloc).toLowerCase() + "</b>. Son mois est "
+         + "recentré là-dessus : on travaille sa capacité à tourner la page en course. Vous "
+         + "devriez le voir récupérer plus vite après un raté, sans que ce soit encore constant.";
+  }
+  return "Il a déclaré bloquer <b>" + echapper(bloc).toLowerCase() + "</b>. Son mois est "
+       + "recentré là-dessus : vous devriez l'observer plus engagé à ce moment de la course, "
+       + "mais pas encore régulier. Cela tiendra une manche sur deux.";
+}
+
+/* l'âge : ce que le parent doit surveiller, et ce qui n'est pas de la fatigue */
+function texteDeLAge(age){
+  if(!age) return '';
+  if(age <= 12){
+    return "À " + age + " ans, il est à l'âge où le corps change vite. S'il se plaint des "
+         + "genoux ou des talons après les séances, ce n'est pas de la fatigue, c'est la "
+         + "croissance : dites-le-moi, j'allège.";
+  }
+  if(age <= 15){
+    return "À " + age + " ans, il peut traverser une poussée de croissance : des gestes "
+         + "soudain moins précis, une coordination qui se dérègle quelques semaines. Ce n'est "
+         + "ni une régression ni un manque de travail. Signalez-le-moi, j'adapte la charge.";
+  }
+  return "À " + age + " ans, il encaisse davantage, et c'est la récupération qui devient le "
+       + "facteur limitant. Le sommeil compte autant que les séances : si les nuits sont "
+       + "courtes, dites-le-moi avant que ça se voie en course.";
+}
+
+/* Ce qu'il a tenu sur le mois de programme précédent. Le rituel vient de l'archive écrite
+   au changement de cycle ; les séances se relisent directement, elles ne s'effacent pas. */
+function bilanDuMoisPrecedent(suivi){
+  const m = etat.mois - 1;
+  if(m < 1) return null;
+  let rituel = null;
+  const arch = suivi.ccArchives || {};
+  for(const k in arch){
+    const a = arch[k] || {};
+    if(Number(a.moisAxe) === m){
+      const j = Number(a.jours) || 0;
+      rituel = (rituel === null) ? j : Math.max(rituel, j);
+    }
+  }
+  let faites = 0, prevues = 0;
+  const phys = suivi.physSeances || {};
+  for(const k in phys){
+    if(String(k).split('-')[0] !== String(m)) continue;
+    faites  += (phys[k].done  || 0);
+    prevues += (phys[k].total || 0);
+  }
+  if(rituel === null && !prevues) return null;
+  return { rituel: rituel, faites: faites, prevues: prevues };
+}
+
+/* ce qu'il a réellement tenu depuis le début du mois, pour nuancer le ton */
+function texteDuRythme(suivi){
+  const auj = new Date();
+  const possible = Math.min(auj.getDate(), 21);
+  const memeMois = !suivi.ccMois || suivi.ccMois === moisCourantCC();
+  const coches = memeMois ? (suivi.ccDays || {}) : {};
+  let n = 0;
+  for(const k in coches){ if(coches[k]) n++; }
+
+  // les séances du mois, toutes semaines confondues
+  let faites = 0, prevues = 0;
+  const phys = suivi.physSeances || {};
+  for(const k in phys){
+    if(String(k).split('-')[0] !== String(etat.mois)) continue;
+    faites  += (phys[k].done  || 0);
+    prevues += (phys[k].total || 0);
+  }
+
+  // Début de mois : le cycle vient de repartir à zéro, il n'y a rien à juger. En revanche,
+  // le mois qui vient de se terminer, lui, est complet : c'est de celui-là qu'on parle.
+  if(possible < 4){
+    const prec = bilanDuMoisPrecedent(suivi);
+    if(prec){
+      const bouts = [];
+      if(prec.rituel !== null) bouts.push(prec.rituel + " matin" + (prec.rituel>1?'s':'') + " de rituel sur 21");
+      if(prec.prevues) bouts.push(prec.faites + " séance" + (prec.faites>1?'s':'') + " sur " + prec.prevues);
+      const parfait = (prec.rituel === 21) && prec.prevues && (prec.faites >= prec.prevues);
+      return "Son mois précédent est derrière lui : " + bouts.join(" et ") + ". "
+           + (parfait ? "Un mois complet, sans rien lâcher. Dites-le-lui. "
+                      : "")
+           + "Son nouveau cycle de 21 jours vient de repartir à zéro.";
+    }
+    return "Le mois vient de commencer : le rythme se dessinera dans les prochains jours.";
+  }
+  if(!n && !faites){
+    return "Rien n'a été coché ce mois-ci. Avant de le pousser, demandez-lui simplement si "
+         + "son application s'ouvre bien : c'est le plus souvent là que ça coince.";
+  }
+  const partRituel  = n / possible;
+  const partSeances = prevues ? (faites / prevues) : 1;
+  if(partRituel >= 0.7 || partSeances >= 0.75){
+    return "Il a tenu son rythme ce mois-ci : " + n + " matin" + (n>1?'s':'') + " de rituel"
+         + (prevues ? (" et " + faites + " séance" + (faites>1?'s':'') + " sur " + prevues) : "")
+         + ". Vous pouvez vous appuyer dessus.";
+  }
+  return "Il a été irrégulier ce mois-ci : " + n + " matin" + (n>1?'s':'') + " de rituel"
+       + (prevues ? (" et " + faites + " séance" + (faites>1?'s':'') + " sur " + prevues) : "")
+       + ". À cet âge, ce n'est pas un problème de volonté, c'est un rythme qui s'installe. "
+       + "Un rappel bienveillant vaut mieux qu'une remarque sur le résultat.";
+}
+
+/* On lit le bilan du mois précédent : c'est lui qui porte le moment de blocage déclaré. */
+async function chargerAnnonceMois(suivi){
+  let bloc = '';
+  if(etat.mois > 1){
+    try{
+      const { data, error } = await axeDB.rpc('lire_rapport', { code: etat.code, mois_p: etat.mois - 1 });
+      if(!error && data && data.length) bloc = data[0].bloc || '';
+    }catch(e){}
+  }
+  const morceaux = [
+    texteDuMois(etat.mois, etat.prenom || 'Votre enfant'),
+    texteDuBloc(bloc),
+    texteDeLAge(etat.age),
+    texteDuRythme(suivi)
+  ].filter(Boolean);
+
+  const el = document.getElementById('pAnnonce');
+  const bl = document.getElementById('pAnnonceBloc');
+  if(!el || !bl) return;
+  el.innerHTML = morceaux.map(function(t){ return '<p class="annonce-p">' + t + '</p>'; }).join('');
+  bl.style.display = '';
 }
 
 function rendreCleDuMois(sport){
@@ -406,25 +657,6 @@ function rendreCleDuMois(sport){
   }).join('');
 }
 
-async function chargerDebriefs(){
-  const el = document.getElementById('pDebriefs');
-  try{
-    const { data, error } = await axeDB.rpc('recuperer_debriefs_competition', { code_p: etat.code, limite: 6 });
-    if(error || !data || !data.length){
-      el.innerHTML = '<div class="vide">Aucun débrief pour le moment. Ils apparaîtront ici dès sa prochaine compétition.</div>';
-      return;
-    }
-    el.innerHTML = data.map(function(d){
-      const lignes = [];
-      if(d.routine) lignes.push('<div class="d-l"><b>Sa routine :</b> '+echapper(d.routine)+'</div>');
-      if(d.gene)    lignes.push('<div class="d-l"><b>Ce qui l\'a gêné :</b> '+echapper(d.gene)+'</div>');
-      if(d.confiance != null) lignes.push('<div class="d-l"><b>Sa confiance :</b> '+echapper(d.confiance)+' / 10</div>');
-      return '<div class="debrief"><div class="d-date">'+echapper(dateFr(d.created_at) || ('Mois '+(d.mois||'?')))+'</div>'+lignes.join('')+'</div>';
-    }).join('');
-  }catch(e){
-    el.innerHTML = '<div class="vide">Les débriefs ne se chargent pas pour le moment.</div>';
-  }
-}
 
 /* Notes du parent : même canal que dans l'espace du pilote.
    Une seule note par mois : on réécrit toujours la même ligne (clé « bilan »), on n'empile
