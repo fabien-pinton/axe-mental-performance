@@ -4276,13 +4276,25 @@ function exCard(ex,isMental,id,jourLabel,doneInit){
     </div>`).join('');
   // profil allégé (raison médicale) : le ressenti est demandé sur la séance elle-même, et
   // conditionne sa validation. Il part dans les notes du coach comme n'importe quelle note.
+  // Le ressenti de séance existe pour TOUT LE MONDE : c'est lui qui règle la séance suivante,
+  // et c'est la matière que le coach lit en premier. Pour un profil allégé (raison médicale),
+  // il est ouvert d'office et obligatoire : sans lui, la séance ne peut pas être validée.
+  // Pour les autres, il est replié et facultatif, comme les notes de l'exercice mental.
+  const PLACEHOLDER_RESSENTI = "Comment tu t'es senti pendant et après : les jambes, la respiration, l'énergie, une douleur éventuelle, la fatigue et le sommeil des jours suivants. Même court, mais honnête.";
+  const OEIL_COACH = `<div class="obs-flag"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Transmis à ton coach. C'est lui qui règle la séance suivante.</div>`;
   const ressenti = (profilSpecifique().allege||{}).ressentiObligatoire ? `
     <div class="note-box on" id="box-r${id}" style="margin-top:16px">
       <label class="ress-label" for="note-r${id}">Ton ressenti sur cette séance · obligatoire</label>
-      <textarea id="note-r${id}" placeholder="Comment tu t'es senti pendant et après : les jambes, la respiration, l'énergie, une douleur éventuelle, la fatigue et le sommeil des jours suivants. Même court, mais honnête." oninput="saveNote('r${id}')"></textarea>
+      <textarea id="note-r${id}" placeholder="${PLACEHOLDER_RESSENTI}" oninput="saveNote('r${id}')"></textarea>
       <div class="note-saved" id="saved-r${id}"></div>
-      <div class="obs-flag"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Transmis à ton coach. C'est lui qui règle la séance suivante.</div>
-    </div>` : '';
+      ${OEIL_COACH}
+    </div>` : `
+    <button class="note-toggle" onclick="toggleNote('r${id}')">＋ Mon ressenti sur cette séance</button>
+    <div class="note-box" id="box-r${id}">
+      <textarea id="note-r${id}" placeholder="${PLACEHOLDER_RESSENTI}" oninput="saveNote('r${id}')"></textarea>
+      <div class="note-saved" id="saved-r${id}"></div>
+      ${OEIL_COACH}
+    </div>`;
   return `<div class="card${doneInit?' done':''}" id="card-${id}">
     ${jourLabel?`<span class="day-tag">Séance du ${jourLabel.toLowerCase()}</span>`:''}
     <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
@@ -4291,7 +4303,7 @@ function exCard(ex,isMental,id,jourLabel,doneInit){
     <div class="moves">${moves}</div>
     ${ressenti}
     <button class="validate" id="val-${id}" onclick="validateEx('${id}')">${doneInit?validatedBtnHtml():'Valider la séance'}</button>
-    <p class="geste-aide">Appuie sur ce bouton une fois la séance faite, pas avant. Écris ton ressenti juste au-dessus : c'est lui qui règle la séance suivante.</p>
+    <p class="geste-aide">Appuie sur ce bouton une fois la séance faite, pas avant. Et ouvre « mon ressenti » juste au-dessus pour me dire comment ça s'est passé : c'est là-dessus que je règle ta séance suivante.</p>
   </div>`;
 }
 function validateEx(id){
