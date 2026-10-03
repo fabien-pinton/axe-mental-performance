@@ -670,6 +670,8 @@ function afficherRiders(riders){
 
     // le retour mensuel du parent (clé « bilan ») est un bilan au même titre que celui du
     // sportif : il porte le même nom. Les autres notes restent de simples notes de carte.
+    /* le parent n'écrit plus que dans son espace à lui, sous la clé 'bilan', et son enfant
+       n'y a pas accès : ce qu'il dit ici ne sort pas vers le sportif. */
     const estBilanParent = n => n.auteur === 'parent' && (n.cle || 'bilan') === 'bilan';
     /* d'où vient une note : la clé dit l'emplacement où elle a été écrite.
        m0 = l'exercice mental du mois · rp0, rp1... = le ressenti d'une séance physique */

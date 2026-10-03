@@ -312,6 +312,11 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .note-recap .nr-date{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 .note-recap .nr-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--ink);padding-left:12px;border-left:2px solid var(--gold)}
 .note-recap .nr-who{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-style:normal;font-family:'DM Sans';margin-bottom:4px}
+/* le carnet est groupé par mois : le mois en cours d'abord, puis tous les précédents */
+.nr-mois{display:flex;align-items:baseline;gap:10px;margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.nr-mois:first-child{margin-top:0}
+.nr-mois b{font-family:'Bebas Neue';font-size:21px;letter-spacing:.06em;font-weight:400}
+.nr-mois span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 .trim-block{border:1.5px solid var(--line);border-radius:4px;padding:22px;margin-bottom:16px;background:rgba(255,255,255,.45)}
 .trim-block h3{font-family:'Bebas Neue';font-size:22px;letter-spacing:.04em;font-weight:400;margin-bottom:12px}
 .trim-evo{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
@@ -796,12 +801,9 @@ textarea:focus{outline:none;border-color:var(--gold)}
       </div>
     </div>
 
-    <div class="parent-zone" id="parentZone">
-      <div class="col-head"><span class="dot pa"></span><h2>Côté parent</h2><small>1 clé d'accompagnement / mois</small></div>
-      <p class="parent-intro serif">Ton rôle compte autant que l'entraînement. Voici comment épauler ton enfant ce mois-ci, sans mettre de pression.</p>
-      <div id="feuTricolore"></div>
-      <div id="parentCol"></div>
-    </div>
+    <!-- Plus rien du côté parent sur cette page : le parent a son espace à lui, où il
+         retrouve la même clé du mois et où il écrit son bilan. Les deux espaces sont
+         étanches, dans les deux sens. -->
 
     <div style="text-align:center;margin-top:44px" id="reportCta">
       <p class="serif" style="font-size:20px;font-style:italic;color:var(--dim);margin-bottom:18px">Fin du mois ? C'est l'heure du bilan.</p>
@@ -2122,11 +2124,11 @@ function missionsAdo(l){
       M2:M("10 min","Débrief du mois, par écrit : combien de fois une erreur t'a encore suivi(e) plus d'une journée ? Compare avec ton premier mois. C'est ta vraie progression.") },
   ],
   confiance:[
-    { M1:M("10 min","Ouvre ton carnet des preuves et écris 3 moments récents où "+pratique+" a bien marché. Pas des résultats : des gestes, des choix, des moments où tu as tenu. Précis : où, quand, quoi."),
+    { M1:M("10 min","Ouvre ton carnet des preuves — « Mes notes sur cet exercice », juste en dessous, ou un carnet papier si tu préfères écrire à la main. Écris 3 moments récents où "+pratique+" a bien marché. Pas des résultats : des gestes, des choix, des moments où tu as tenu. Précis : où, quand, quoi."),
       E1:E("pendant la séance","Pendant chaque séance, repère UN moment réussi, même petit. Juste après, note-le en une phrase. Objectif en fin de semaine : au moins 2 nouvelles preuves."),
       E2:E("pendant la séance","Sur ta séance la plus dure de la semaine, trouve quand même ta preuve. C'est justement les jours difficiles qu'elles comptent le plus."),
       M2:M("10 min","Relis toutes tes preuves du mois à voix basse et compte-les. Laquelle te fait le plus d'effet ? Souligne-la.") },
-    { M1:M("5 min, 2 soirs","Choisis tes 3 preuves les plus fortes et relis-les à voix basse, lentement, en revoyant la scène à chaque fois. 3 minutes. À refaire deux soirs cette semaine."),
+    { M1:M("5 min, 2 soirs","Ouvre « Mon carnet » et relis les preuves que tu as écrites le mois dernier. Garde les 3 plus fortes : celles où tu te revois le plus nettement. Si tu ne les retrouves pas, réécris-en 3 de mémoire, ce sont les plus marquantes de toute façon. Puis relis ces 3 preuves à voix basse, lentement, en reconstruisant la scène à chaque fois : le lieu, ce que tu voyais, ce que tu entendais. 3 minutes, deux soirs cette semaine."),
       E1:E("avant la séance","Avant de commencer la séance, 30 secondes : relis tes 3 dernières preuves. Puis entraîne-toi. À la fin, note si tu as senti une différence en début de séance."),
       E2:E("pendant la séance","Quand tu doutes pendant la séance — un exercice qui coince, quelqu'un qui va plus vite — rappelle-toi une preuve précise dans ta tête avant de repartir."),
       M2:M("10 min","Écris une phrase qui résume tes preuves du mois, à la première personne : « Je suis capable de… ». Elle doit être vraie et vérifiable dans ton carnet.") },
@@ -2172,11 +2174,11 @@ function missionsEnfant(l){
       M2:M("5 min","Avec un parent : ce mois-ci, combien de fois une erreur t'a embêté(e) jusqu'au lendemain ? Compare avec ton tout premier mois. Tu verras ce que tu as gagné.") },
   ],
   confiance:[
-    { M1:M("10 min","Ouvre ton carnet des preuves et écris 3 moments où "+pratique+" a bien marché. Pas « j'ai gagné » : un geste réussi, un moment où tu as été courageux(se). Où ? Quand ? Qu'as-tu fait ?"),
+    { M1:M("10 min","Écris 3 moments où "+pratique+" a bien marché : ce sont tes preuves. Écris-les dans « Mes notes sur cet exercice », juste en dessous, ou sur un carnet à toi. Pas « j'ai gagné » : un geste réussi, un moment où tu as été courageux(se). Où ? Quand ? Qu'as-tu fait ?"),
       E1:E("pendant l'entraînement","À chaque entraînement, cherche UN moment réussi, même tout petit, et écris-le après en une phrase. À la fin de la semaine : au moins 2 nouvelles preuves."),
       E2:E("pendant l'entraînement","Pendant ton entraînement le plus dur de la semaine, trouve quand même ta preuve. C'est les jours difficiles qu'elles sont les plus précieuses."),
       M2:M("10 min","Relis toutes tes preuves du mois à voix haute, à un parent si tu veux. Combien en as-tu ? Laquelle te rend le plus fier(ère) ? Mets une étoile à côté.") },
-    { M1:M("5 min, 2 soirs","Choisis tes 3 preuves préférées et relis-les doucement à voix basse, en imaginant la scène comme un film. Deux soirs cette semaine, avant de dormir."),
+    { M1:M("5 min, 2 soirs","Ouvre « Mon carnet » : tu y retrouves tout ce que tu as écrit le mois dernier. Relis les moments où "+pratique+" a bien marché : ce sont tes preuves. Garde les 3 dont tu es le plus fier(ère). Si tu ne les retrouves pas, réécris-en 3 de mémoire. Puis, deux soirs cette semaine avant de dormir, relis ces 3 preuves à voix basse, tout doucement, en revoyant la scène dans ta tête comme un film : où tu étais, ce que tu voyais, ce que tu entendais."),
       E1:E("avant l'entraînement","Avant l'entraînement, 30 secondes : relis tes 3 dernières preuves, puis va t'entraîner. À la fin, demande-toi si tu t'es senti(e) plus fort(e) au début."),
       E2:E("pendant l'entraînement","Quand tu doutes pendant l'entraînement — un exercice difficile, quelqu'un qui va plus vite — pense à une de tes preuves avant de repartir. Juste une."),
       M2:M("5 min","Écris ta phrase de champion(ne) : « Je suis capable de… ». Elle doit être vraie : la preuve est dans ton carnet !") },
@@ -2222,11 +2224,11 @@ function missionsAdulte(l){
       M2:M("10 min","Bilan écrit : combien de fois une erreur a-t-elle encore occupé ton esprit plus de 24 heures ce mois-ci ? Compare avec ton premier mois de protocole. C'est ton indicateur de progression réel.") },
   ],
   confiance:[
-    { M1:M("10 min","Initialise ton carnet des preuves : 3 situations récentes où "+pratique+" a répondu. Pas des résultats, des comportements — un choix juste, une exécution propre, un moment où tu as tenu sous contrainte. Contexte précis : où, quand, quoi."),
+    { M1:M("10 min","Initialise ton carnet des preuves — « Mes notes sur cet exercice », juste en dessous, ou le support de ton choix : 3 situations récentes où "+pratique+" a répondu. Pas des résultats, des comportements — un choix juste, une exécution propre, un moment où tu as tenu sous contrainte. Contexte précis : où, quand, quoi."),
       E1:E("pendant la séance","À chaque séance, identifie un moment réussi, même modeste, et consigne-le en une phrase juste après. Objectif de la semaine : au moins deux preuves nouvelles."),
       E2:E("pendant la séance","Sur la séance la plus exigeante de la semaine, cherche délibérément ta preuve. Ce sont celles qui ont le plus de valeur, et celles que la mémoire retient le moins."),
       M2:M("10 min","Relis toutes tes preuves du mois à voix basse et compte-les. Identifie celle qui produit l'effet le plus fort : elle devient ta référence.") },
-    { M1:M("5 min, 2 soirs","Sélectionne tes 3 preuves les plus fortes et relis-les lentement, à voix basse, en reconstruisant chaque scène. Trois minutes, deux soirs cette semaine. Le but : ancrer la confiance sur des souvenirs concrets plutôt que sur des affirmations."),
+    { M1:M("5 min, 2 soirs","Ouvre « Mon carnet » et reprends les preuves consignées le mois dernier : sélectionne les 3 plus fortes — celles dont la scène te revient le plus nettement. Relis-les lentement, à voix basse, en reconstruisant chaque scène. Trois minutes, deux soirs cette semaine. Le but : ancrer la confiance sur des souvenirs concrets plutôt que sur des affirmations."),
       E1:E("avant la séance","En début de séance, 30 secondes de relecture de tes 3 dernières preuves, puis entraînement. À la fin, évalue l'effet sur ton engagement dans les premières minutes."),
       E2:E("pendant la séance","Quand le doute apparaît en séance — un exercice qui résiste, un partenaire plus rapide — convoque une preuve précise avant de reprendre. Tu opposes au doute une contre-preuve."),
       M2:M("10 min","Rédige une phrase de synthèse à la première personne : « Je suis capable de… ». Elle doit être factuelle et vérifiable dans ton carnet, pas une formule de motivation.") },
@@ -3367,22 +3369,78 @@ function setupAbonnement(){
   if(pret && estMensuel){ btn.href = LIEN_PORTAIL_ABONNEMENT; btn.style.display = ''; }
   else { btn.style.display = 'none'; } // portail pas configuré, ou formule non-mensuelle : on cache plutôt qu'un lien mort ou hors-sujet
 }
-function renderNotesRecap(){
-  const el=document.getElementById('notesRecap');
-  // en démo, on montre les notes saisies ce mois + un exemple de continuité
-  let html='';
-  const noteMental=(document.getElementById('note-m0')||{}).value||'';
-  const noteParent=(document.getElementById('note-pa0')||{}).value||'';
-  if(noteMental){
-    html+=`<div class="note-recap"><div class="nr-head"><span class="nr-title">Exercice mental du mois</span><span class="nr-date">Mois ${state.month}</span></div><div class="nr-body"><span class="nr-who">Ma note</span>${noteMental}</div></div>`;
+/* Le carnet rassemble tout ce que le sportif a écrit, mois par mois. Les notes des mois
+   passés ne vivent qu'en base : sans cette relecture, son carnet se vidait au premier
+   jour de chaque mois. Seules SES notes remontent — le bilan que le parent écrit dans
+   son espace est destiné au coach, pas à lui. */
+function axeEchappe(t){
+  return String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+}
+/* la clé dit où la note a été écrite : m0 = l'exercice mental du mois,
+   rp0, rp1... = le ressenti d'une séance physique */
+function axeNomDeMaNote(cle){
+  if(/^m\d*$/.test(cle)) return 'Mon exercice mental';
+  const m = String(cle).match(/^rp(\d+)$/);
+  if(m) return 'Ma séance ' + (Number(m[1]) + 1);
+  return 'Ma note';
+}
+function axeRangDeMaNote(cle){
+  if(/^m\d*$/.test(cle)) return 0;
+  const m = String(cle).match(/^rp(\d+)$/);
+  return m ? 1 + Number(m[1]) : 97;
+}
+async function renderNotesRecap(){
+  const el = document.getElementById('notesRecap');
+  if(!el) return;
+
+  const parMois = {};
+  const ranger = n => { (parMois[n.mois] = parMois[n.mois] || {})[n.cle] = n; };
+
+  // tout ce qui est enregistré, du premier mois au mois en cours
+  if(axeCode){
+    try{
+      const { data, error } = await axeDB.rpc('axe_mes_notes', { code: axeCode });
+      if(!error && Array.isArray(data)){
+        data.forEach(n => ranger({ mois: Number(n.mois) || 1, cle: n.cle || '',
+                                   texte: n.texte || '', quand: n.modifie_le || '' }));
+      }
+    }catch(err){ console.log('[AXE] Carnet : notes des mois passés non relues.', err); }
   }
-  if(noteParent){
-    html+=`<div class="note-recap"><div class="nr-head"><span class="nr-title">Note de parent</span><span class="nr-date">Mois ${state.month}</span></div><div class="nr-body"><span class="nr-who">Parent</span>${noteParent}</div></div>`;
-  }
+
+  // ce qui est à l'écran passe devant : il doit relire ce qu'il vient juste de taper
+  document.querySelectorAll('textarea[id^="note-"]').forEach(t => {
+    const cle = t.id.slice(5);
+    if(!(t.value || '').trim()) return;
+    ranger({ mois: state.month, cle: cle, texte: t.value, quand: '' });
+  });
+
+  let html = '';
+  Object.keys(parMois).map(Number).sort((a,b) => b-a).forEach(m => {
+    const notes = Object.keys(parMois[m])
+      .sort((a,b) => axeRangDeMaNote(a) - axeRangDeMaNote(b))
+      .map(k => parMois[m][k]);
+    if(!notes.length) return;
+    const combien = notes.length + (notes.length > 1 ? ' notes' : ' note');
+    html += `<div class="nr-mois"><b>Mois ${m}</b><span>${m === state.month ? 'ce mois-ci · ' + combien : combien}</span></div>`;
+    notes.forEach(n => {
+      let quand = '';
+      if(n.quand){
+        const d = new Date(n.quand);
+        if(!isNaN(d)) quand = d.toLocaleDateString('fr-FR', {day:'numeric', month:'long'});
+      }
+      html += `<div class="note-recap"><div class="nr-head">`
+            + `<span class="nr-title">${axeNomDeMaNote(n.cle)}</span>`
+            + `<span class="nr-date">${quand}</span></div>`
+            + `<div class="nr-body">${axeEchappe(n.texte)}</div></div>`;
+    });
+  });
+
   if(!html){
-    html='<div class="trim-empty"><div class="te-ico">📓</div>Tu n\'as pas encore écrit de note ce mois-ci.<br>Ouvre un exercice mental et note ce que tu ressens, tu le retrouveras ici.</div>';
+    html = '<div class="trim-empty"><div class="te-ico">\U0001F4D3</div>Tu n\'as encore rien écrit.<br>'
+         + 'Ouvre un exercice mental et note ce que tu ressens, tu le retrouveras ici, '
+         + 'mois après mois.</div>';
   }
-  el.innerHTML=html;
+  el.innerHTML = html;
 }
 async function renderTrimestre(){
   const el=document.getElementById('trimContent');
@@ -4100,19 +4158,14 @@ function buildProgram(){
   renderWeek(started);
 }
 function renderWeek(started){
-  // côté parent : uniquement pour les mineurs. À partir de 18 ans, le sportif gère seul,
-  // pas de tiers "accompagnant" imposé dans le suivi.
-  const parentZoneEl=document.getElementById('parentZone');
-  if(parentZoneEl) parentZoneEl.style.display = state.age<18 ? '' : 'none';
+  // cette page est celle du sportif, et rien d'autre : la clé du mois du parent et son
+  // bilan vivent dans l'espace parent, que le sportif n'ouvre pas.
   // programme pas encore démarré : on masque les exercices derrière un cadenas
   if(started===false){
     const lockHtml='<div class="col-lock"><div class="cl-ico">🔒</div>Programme verrouillé jusqu\'au démarrage<div class="cl-date">'+fmtDate(state.startDate)+'</div></div>';
     document.getElementById('mentalCol').innerHTML=lockHtml;
     document.getElementById('physCol').innerHTML=lockHtml;
     document.getElementById('physCount').textContent='';
-    document.getElementById('parentCol').innerHTML=lockHtml;
-    const feuLock=document.getElementById('feuTricolore');
-    if(feuLock) feuLock.innerHTML='';
     return;
   }
   const totalSem = nbSemainesMois();
@@ -4227,24 +4280,6 @@ function renderWeek(started){
     }
   }
   document.getElementById('physCol').innerHTML=html;
-  // côté parent : uniquement pour les mineurs (voir toggle du conteneur en tête de fonction)
-  if(state.age>=18){ document.getElementById('parentCol').innerHTML=''; return; }
-  renderFeuTricolore();
-  // côté parent : 1 clé par mois, tourne avec le mois (spirale)
-  const pa=parentPool[(state.month-1)%parentPool.length];
-  let pmoves=pa.moves.map(m=>`
-    <div class="move"><div class="move-n">${m.n}</div><div class="move-d">${m.d}</div></div>`).join('');
-  document.getElementById('parentCol').innerHTML=`<div class="parent-card">
-    <div class="ex-top"><h3>${pa.title}</h3><span class="parent-lvl">${pa.lvl}</span></div>
-    <p class="desc">${pa.desc}</p>
-    <div class="moves">${pmoves}</div>
-    <button class="note-toggle pa" onclick="toggleNote('pa0')">＋ Mes notes de parent ce mois-ci</button>
-    <div class="note-box" id="box-pa0">
-      <textarea id="note-pa0" placeholder="Ce que tu observes chez ton enfant, ce qui a changé, tes ressentis à toi..." oninput="saveNote('pa0')"></textarea>
-      <div class="note-saved" id="saved-pa0"></div>
-      <div class="obs-flag"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Visible par le coach en lecture seule</div>
-    </div>
-  </div>`;
 }
 function exCard(ex,isMental,id,jourLabel,doneInit){
   let note = isMental ? `
@@ -4350,8 +4385,10 @@ async function axeRelireNote(id){
   if(!axeCode) return;
   const champ=document.getElementById('note-'+id);
   if(!champ || champ.value.trim()) return;
-  const auteur = (id==='pa0') ? 'parent' : 'rider';
-  const cle    = (id==='pa0') ? 'bilan'  : id;
+  // tout ce qui s'écrit ici est signé du sportif : cette page n'a aucun accès, ni en
+  // lecture ni en écriture, à ce que son parent dépose de son côté.
+  const auteur = 'rider';
+  const cle    = id;
   try{
     const { data, error } = await axeDB.rpc('lire_note', {
       code: axeCode, auteur_note: auteur, mois_note: state.month, cle_note: cle
@@ -4375,10 +4412,10 @@ async function axeEnregistrerNote(id){
   if(!champ) return;
   const texte=champ.value.trim();
   if(!texte) return;
-  const auteur = (id==='pa0') ? 'parent' : 'rider';
-  // la clé identifie l'emplacement : on réécrit toujours la même ligne au lieu d'en empiler une
-  // nouvelle à chaque pause de frappe. 'bilan' = la note du mois du parent, commune aux deux espaces.
-  const cle    = (id==='pa0') ? 'bilan'  : id;
+  // la clé identifie l'emplacement : on réécrit toujours la même ligne au lieu d'en empiler
+  // une nouvelle à chaque pause de frappe. Rien de parental ne transite par cette page.
+  const auteur = 'rider';
+  const cle    = id;
   try{
     const { error } = await axeDB.rpc('enregistrer_note', {
       code: axeCode, auteur_note: auteur, texte_note: texte, mois_note: state.month, cle_note: cle
