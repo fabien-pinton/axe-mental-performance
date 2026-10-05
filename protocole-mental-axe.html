@@ -2560,13 +2560,16 @@ function setupWhatsApp(){
 function setupAbonnement(){
   const btn=document.getElementById('btnAbonnement');
   if(!btn) return;
-  // le bouton ne concerne que la formule mensuelle : les formules annuelles
-  // (1 fois ou 3 fois) ne sont pas vendues "sans engagement", pas de résiliation
+  // l'abonnement est l'affaire de celui qui paye : pour un mineur, il se gère dans
+  // l'espace parent, et ce bouton n'a rien à faire sous les yeux de l'enfant. Un majeur,
+  // lui, n'a pas d'espace parent : il le garde ici.
+  // Et seulement pour la formule mensuelle : les formules annuelles (1 fois ou 3 fois)
+  // ne sont pas vendues "sans engagement", il n'y a rien à résilier.
   const formule = (window.axeRider && window.axeRider.formule) ? String(window.axeRider.formule).toLowerCase() : '';
   const estMensuel = formule.indexOf('mensuel') !== -1;
   const pret = typeof LIEN_PORTAIL_ABONNEMENT === 'string' && LIEN_PORTAIL_ABONNEMENT.indexOf('http') === 0;
-  if(pret && estMensuel){ btn.href = LIEN_PORTAIL_ABONNEMENT; btn.style.display = ''; }
-  else { btn.style.display = 'none'; } // portail pas configuré, ou formule non-mensuelle : on cache plutôt qu'un lien mort ou hors-sujet
+  if(pret && estMensuel && state.age >= 18){ btn.href = LIEN_PORTAIL_ABONNEMENT; btn.style.display = ''; }
+  else { btn.style.display = 'none'; }
 }
 /* Le carnet rassemble tout ce que le sportif a écrit, mois par mois. Les notes des mois
    passés ne vivent qu'en base : sans cette relecture, son carnet se vidait au premier
