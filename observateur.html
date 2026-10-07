@@ -569,8 +569,18 @@ async function chargerNotesRapports(cle){
   }catch(e){ /* silencieux : notes/rapports/débriefs optionnels */ }
 }
 
+/* La fin d'accès est une DATE, pas un instant : la comparer à l'heure qu'il est
+   faisait passer un client en « Expiré » dès le matin de son dernier jour, alors que
+   la base, elle, le compte encore actif (date_fin_acces >= current_date). On compare
+   donc deux dates, au début de journée, exactement comme la base. */
 function badgeAcces(r){
-  const actif = (r.statut === 'actif') && r.date_fin_acces && (new Date(r.date_fin_acces) >= new Date());
+  let actif = false;
+  if(r.statut === 'actif' && r.date_fin_acces){
+    const p = String(r.date_fin_acces).slice(0,10).split('-');
+    const fin = new Date(Number(p[0]), Number(p[1])-1, Number(p[2]));
+    const auj = new Date(); auj.setHours(0,0,0,0);
+    actif = fin >= auj;
+  }
   if(actif) return '<span class="badge ok">Actif</span>';
   return '<span class="badge alert">Expiré</span>';
 }
