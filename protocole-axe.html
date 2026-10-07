@@ -4370,6 +4370,16 @@ function renderWeek(started){
   monterVocaux();
   axeChargerVocauxEnvoyes();
 }
+/* L'en-tête d'une séance : ce qu'elle coûte, en une ligne.
+   Les trois exercices d'une séance ne partagent jamais la même dose — l'un tient 40 s,
+   l'autre fait 10 répétitions par côté — donc on ne peut pas annoncer « 4 séries × 40 s »
+   en haut sans mentir sur deux exercices. On annonce le nombre d'exercices et les séries,
+   et chaque dose reste écrite sur sa propre ligne, juste en dessous. */
+function enTeteSeance(ex){
+  const n = (ex.moves || []).length;
+  if(!n) return ex.series || '';
+  return n + ' exercice' + (n>1?'s':'') + ' · ' + (ex.series || '') + (n>1 ? ' chacun' : '');
+}
 function exCard(ex,isMental,id,jourLabel,doneInit){
   let note = isMental ? `
     <button class="note-toggle" onclick="toggleNote('${id}')">＋ Mes notes sur cet exercice</button>
@@ -4422,7 +4432,7 @@ function exCard(ex,isMental,id,jourLabel,doneInit){
     ${jourLabel?`<span class="day-tag">Séance du ${jourLabel.toLowerCase()}</span>`:''}
     <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
     <p class="desc">${ex.desc}</p>
-    <div class="meta"><span><b>${ex.series}</b> · <b>${ex.dur}</b></span></div>
+    <div class="meta"><span>${enTeteSeance(ex)}</span></div>
     <div class="moves">${moves}</div>
     ${ressenti}
     <button class="validate" id="val-${id}" onclick="validateEx('${id}')">${doneInit?validatedBtnHtml():'Valider la séance'}</button>
