@@ -83,6 +83,13 @@ body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .mc-det.on{display:block}
 .rc-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--ink);margin-top:12px;padding-left:12px;border-left:2px solid var(--gold)}
 .rc-note.pa{border-left-color:var(--parent);margin-top:9px}
+.rc-vocal{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px;padding:11px 13px;
+  border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:3px;background:rgba(168,133,42,.05)}
+.rc-vocal .v-qui{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.rc-vocal .v-quand{font-size:10.5px;color:var(--dim);letter-spacing:.04em}
+.rc-vocal audio{flex:1 1 220px;min-width:0;height:34px}
+.rc-vocal .v-neuf{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  color:#fff;background:var(--gold);padding:2px 7px;border-radius:2px}
 .rc-who{display:block;font-family:'DM Sans';font-style:normal;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
 .rc-sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:16px 0 4px}
 .empty{color:var(--dim);font-style:italic;font-size:13px;margin-top:20px}
@@ -548,6 +555,7 @@ function exporterProspects(){
 let notesParCode = {};
 let rapportsParCode = {};
 let debriefsParCode = {};
+let vocauxParCode = {};
 
 async function chargerNotesRapports(cle){
   // on lit toutes les notes et rapports via des fonctions coach dédiées (à créer si besoin)
@@ -557,10 +565,13 @@ async function chargerNotesRapports(cle){
     if(!n.error && n.data){ n.data.forEach(x=>{ (notesParCode[x.code_acces]=notesParCode[x.code_acces]||[]).push(x); }); }
     const r = await db.rpc('liste_rapports', { cle: cle });
     if(!r.error && r.data){ r.data.forEach(x=>{ (rapportsParCode[x.code_acces]=rapportsParCode[x.code_acces]||[]).push(x); }); }
+    const v = await db.rpc('axe_liste_vocaux', { cle: cle });
+    if(!v.error && v.data){ v.data.forEach(x=>{ (vocauxParCode[x.code_acces]=vocauxParCode[x.code_acces]||[]).push(x); }); }
     const d = await db.rpc('liste_debriefs', { cle: cle });
     if(!d.error && d.data){ d.data.forEach(x=>{ (debriefsParCode[x.code_acces]=debriefsParCode[x.code_acces]||[]).push(x); }); }
     // re-render si on a du contenu
-    if((!n.error && n.data && n.data.length) || (!r.error && r.data && r.data.length) || (!d.error && d.data && d.data.length)){
+    if((!n.error && n.data && n.data.length) || (!r.error && r.data && r.data.length)
+       || (!d.error && d.data && d.data.length) || (!v.error && v.data && v.data.length)){
       // relance l'affichage avec notes/rapports/débriefs
       const cle2 = document.getElementById('cle').value;
       const { data } = await db.rpc('liste_riders', { cle: cle2 });
@@ -573,6 +584,22 @@ async function chargerNotesRapports(cle){
    faisait passer un client en « Expiré » dès le matin de son dernier jour, alors que
    la base, elle, le compte encore actif (date_fin_acces >= current_date). On compare
    donc deux dates, au début de journée, exactement comme la base. */
+/* Quand le coach lance un message, il est marqué écouté : la pastille « nouveau »
+   ne doit pas réapparaître à chaque ouverture du tableau de bord. */
+function brancherVocaux(){
+  document.querySelectorAll('audio[data-vocal-id]').forEach(function(a){
+    if(a.dataset.branche) return;
+    a.dataset.branche = '1';
+    a.addEventListener('play', function(){
+      const id = Number(a.dataset.vocalId);
+      const cle = document.getElementById('cle').value;
+      const pastille = a.parentElement.querySelector('.v-neuf');
+      if(pastille) pastille.remove();
+      db.rpc('axe_vocal_ecoute', { cle: cle, id_p: id }).catch(function(){});
+    }, { once: true });
+  });
+}
+
 function badgeAcces(r){
   let actif = false;
   if(r.statut === 'actif' && r.date_fin_acces){
@@ -642,6 +669,7 @@ function afficherRiders(riders){
     // on clique dessus pour retrouver le détail. Seul le mois en cours reste déplié.
     // =====================================================================================
     const notes    = notesParCode[r.code_acces]    || [];
+    const vocaux   = vocauxParCode[r.code_acces]   || [];
     const rapports = rapportsParCode[r.code_acces] || [];
     const sr       = r.suivi_rituel || {};
     const moisCourant = Number(r.mois_en_cours || 1);
@@ -702,6 +730,25 @@ function afficherRiders(riders){
 
     // Ce qui a été ÉCRIT pendant le mois reste toujours lisible, même mois replié :
     // c'est le fond, pas du détail. Seul le découpage semaine par semaine se cache.
+    /* Les messages vocaux du sportif et du parent : nommés comme les écrits, et marqués
+       « nouveau » tant que le coach ne les a pas ouverts. */
+    const nomDuVocal = v => {
+      if(v.auteur === 'parent') return 'Message du parent';
+      const cx = v.contexte || '';
+      const m = cx.match(/^rp(\d+)$/);
+      if(m) return 'Vocal · séance ' + (Number(m[1]) + 1);
+      return 'Message du sportif';
+    };
+    const ligneVocal = v => {
+      const quand = dateFr(v.created_at).split(' à ')[0];
+      const duree = v.duree_s ? (' · ' + Math.floor(v.duree_s/60) + ':' + String(v.duree_s%60).padStart(2,'0')) : '';
+      return `<div class="rc-vocal"><span class="v-qui">${nomDuVocal(v)}</span>`
+           + `<span class="v-quand">${quand}${duree}</span>`
+           + (v.lu ? '' : '<span class="v-neuf">nouveau</span>')
+           + `<audio controls preload="none" src="${v.url_audio}" data-vocal-id="${v.id}"></audio></div>`;
+    };
+    const vocauxDuMois = m => (vocaux.filter(v => (v.mois || 1) === m)).map(ligneVocal).join('');
+
     const ecritsDuMois = m => {
       let h = '';
       const rp = rapportDuMois(m);
@@ -711,12 +758,13 @@ function afficherRiders(riders){
       } else {
         h += `<div class="mc-vide">Bilan du sportif — pas de bilan ce mois-là</div>`;
       }
-      // Un mois terminé ne garde que les deux bilans. Tous les ressentis de séance et les
-      // notes d'exercice du mois disparaissent de la fiche : ils ont servi à construire le
-      // mois suivant, ils n'encombrent plus. Ils restent en base, rien n'est supprimé.
+      // Un mois terminé ne garde que les deux bilans — et les messages vocaux. Les notes
+      // écrites disparaissent de la fiche, elles ont servi à construire le mois suivant.
+      // La voix, elle, reste : c'est rare, c'est long à produire, et ça se réécoute.
       const bilanP = notesDuMois(m).find(estBilanParent);
       if(bilanP){ h += ligneNote(bilanP); }
       else { h += `<div class="mc-vide">Bilan du parent — pas de retour ce mois-là</div>`; }
+      h += vocauxDuMois(m);
       return h;
     };
 
@@ -799,9 +847,11 @@ function afficherRiders(riders){
     // sportif comme du parent. C'est la matière vivante du mois ; elle quittera la fiche
     // quand le mois sera terminé, il ne restera que les deux bilans.
     const detail = notesDuMois(moisCourant).filter(n => !estBilanParent(n));
-    if(detail.length){
-      moisBlock += `<div class="rc-sub">Ce qui a été écrit ce mois-ci</div>`;
+    const vocauxCourants = vocauxDuMois(moisCourant);
+    if(detail.length || vocauxCourants){
+      moisBlock += `<div class="rc-sub">Ce qui a été dit et écrit ce mois-ci</div>`;
       detail.forEach(n=>{ moisBlock += ligneNote(n); });
+      moisBlock += vocauxCourants;
     }
 
     // ---- ce qu'il a demandé pour la suite : la matière pour construire le mois suivant ----
@@ -862,6 +912,7 @@ function afficherRiders(riders){
       ${debriefBlock}
     </div>`;
   });
+  brancherVocaux();
 }
 </script>
 </body>
