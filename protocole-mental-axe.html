@@ -569,6 +569,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="vocal.js"></script>
+<script src="briques.js"></script>
 </head>
 <body>
 
@@ -771,6 +772,9 @@ textarea:focus{outline:none;border-color:var(--gold)}
       <p>Une question, un doute, une bonne nouvelle : enregistre, il écoute et il te répond.</p>
       <div class="vocal" id="vocalLibre"></div>
     </div>
+
+    <!-- ses propres mots, ressortis par la page : une preuve, sa consigne, ses deux repères -->
+    <div class="bq-accueil" id="bqAccueil" style="display:none"></div>
 
     <div class="strengths mental-only" id="strengths"></div>
 
@@ -1114,6 +1118,10 @@ async function axeInit(){
         if(sr.badgeCinema === true) state.badgeCinema = true;
         if(sr.startRoutine) state.startRoutine = sr.startRoutine;
         if(Array.isArray(sr.startJournal)) state.startJournal = sr.startJournal;
+        // les réponses aux briques des exercices mentaux : preuves, consignes, chronos,
+        // cases, notes sur 10. Un seul objet plat, qui porte aussi les mois précédents —
+        // c'est lui qui permet à une preuve de mois 1 de ressortir au mois 3.
+        if(sr.bq && typeof sr.bq === 'object') state.bq = sr.bq;
       }
       // date reelle de demarrage du programme (1er du mois suivant le paiement), renvoyee
       // par Supabase. Tant qu'on n'est pas arrive a cette date, le programme reste verrouille,
@@ -1794,6 +1802,7 @@ function rebuildSportContent(){
   mentalFortLabels = {portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en compétition"};
   mentalPools = buildMentalPools(l, tier);
   mentalMissions = buildMentalMissions(l, tier);
+  if(window.AxeBriques) mentalBriques = AxeBriques.table(l, tier);
 }
 
 // Met à jour tous les textes statiques (hors contenu généré par render...) selon le sport actif.
@@ -2109,6 +2118,10 @@ function buildMentalMissions(l, tier){
   return tier==='enfant' ? missionsEnfant(l) : tier==='adulte' ? missionsAdulte(l) : missionsAdo(l);
 }
 let mentalMissions=buildMentalMissions(SPORT_LEXICON.bmx, 'ado');
+// Les briques interactives qui accompagnent ces missions : mêmes axes, mêmes niveaux,
+// mêmes phases. Elles sont reconstruites avec les missions dès que le sport ou l'âge
+// du sportif est connu (rebuildSportContent), pour parler sa discipline et son âge.
+let mentalBriques = window.AxeBriques ? AxeBriques.table(SPORT_LEXICON.bmx, 'ado') : null;
 // mission de la semaine affichée, selon la phase réelle du mois (voir phaseOfWeek)
 function pickMentalHebdo(){
   const key = blocageKey();
@@ -2121,10 +2134,13 @@ function pickMentalHebdo(){
   else if(w===2) code='E1';
   else { code='E2'; rappel = w>3; } // pic, puis semaines de maintien : on consolide le même exercice
   const ms = set[code];
-  return {loc:ms.loc, dur:ms.dur, txt:ms.txt, rappel};
+  // `code` et `niv` servent aux briques interactives : ce sont eux qui désignent
+  // l'exercice à monter sous la mission, et la clé où ses réponses sont rangées.
+  return {loc:ms.loc, dur:ms.dur, txt:ms.txt, rappel, code, niv};
 }
 
 const state={mental:{},sensoriel:{},prenom:'',age:16,level:'Régional',sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',naissance:'',ccDays:{},ccMois:'',imageryDays:0,badgeCinema:false,noteMentaleFaite:false,startRoutine:{mot:'',geste:''},startJournal:[],
+  bq:{},                // les briques des exercices mentaux : un objet plat, clés "m3|confiance|M1.preuve1"
   weekAuto:true,        // tant que vrai, la semaine affichée suit la vraie date (calcul auto) ; passe à false dès qu'un vrai pilote clique lui-même sur un onglet SEM
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
   simDate:null,         // date "courante" simulée dans la démo
@@ -2509,6 +2525,79 @@ function moisAxeDuCycle(cleCycle){
               - (an*12 + (mo-1));
   return (ecart > 0) ? Math.max(1, state.month - ecart) : state.month;
 }
+/* ===================================================================================
+   LA DATE D'ALLUMAGE
+   Les retournements commencent le 1er novembre, et pas un jour avant. Les sportifs sont
+   en cours de mois : on ne change pas leur exercice au milieu d'un cycle. Jusque-là, la
+   page est exactement celle qu'ils connaissent. Le 1er au matin, le retournement apparaît
+   sous la mission, sans qu'ils aient rien à installer ni à cliquer.
+   Une seule ligne à changer si la date doit bouger.
+   =================================================================================== */
+const BRIQUES_DEBUT = new Date(2026, 10, 1);   // 1er novembre 2026, à minuit
+function briquesOuvertes(){
+  const d = (typeof dateRef === 'function' && dateRef()) || new Date();
+  return d >= BRIQUES_DEBUT;
+}
+/* ===================================================================================
+   LES BRIQUES DES EXERCICES MENTAUX
+   Le moteur (briques.js) ne connaît rien de cette page : on lui dit seulement où lire,
+   où écrire et comment enregistrer. Tout va dans state.bq, un objet plat rangé dans le
+   même JSON `suivi_rituel` que le rituel des 21 jours — donc aucune table en plus, et le
+   coach retrouve tout dans la fiche du sportif.
+   =================================================================================== */
+if(window.AxeBriques){
+  AxeBriques.init({
+    lire:   function(k){ return state.bq[k]; },
+    ecrire: function(k,v){
+      // une valeur vide n'a pas à occuper une ligne : on la retire, et `dernier()`
+      // remonte alors à ce qui avait été écrit avant.
+      if(v === null || v === undefined || v === '') delete state.bq[k];
+      else state.bq[k] = v;
+    },
+    tout:   function(){ return state.bq; },
+    /* Le moment que le sportif a désigné dans son bilan de fin de mois — « Les virages »,
+       « Après une erreur ». C'est lui le sujet de tout le mois : les saisies portent
+       dessus, et il le voit écrit en haut de son exercice. Vide au premier mois, où
+       aucun bilan n'a encore été envoyé : les questions passent alors en version générique. */
+    bloc:   function(){ return (state.month > 1 && state.report && state.report.bloc) || ''; },
+    enregistrer: function(){
+      debounceEnregistrerSuiviRituel();
+      // ce qu'il vient d'écrire doit ressortir tout de suite sur son accueil : sans ça,
+      // sa première preuve n'apparaîtrait qu'au prochain chargement de la page, et le
+      // principe entier — « ce que j'écris me revient » — passerait inaperçu.
+      try{ renderRappelAccueil(); }catch(e){}
+    }
+  });
+}
+/* La clé de la mission affichée : mois AXE, axe du blocage, phase de la semaine.
+   C'est elle qui permet de comparer un mois 1 et un mois 3 côté coach. */
+function cleMission(){
+  // si briques.js n'a pas été chargé, on ne casse rien : la page garde son ancien
+  // comportement et le bouton de validation n'apparaît simplement pas.
+  if(!window.AxeBriques) return '';
+  const h = pickMentalHebdo();
+  return AxeBriques.cleDe(state.month, blocageKey(), h.code);
+}
+function missionFaite(cle){
+  const k = cle || cleMission();
+  return k ? !!state.bq[k + '.fait'] : false;
+}
+/* Le bouton de validation de la mission mentale. Il existe pour une seule raison :
+   le coach doit savoir si la mission a été faite ou non, sans avoir à deviner.
+   Comme pour une séance physique, on peut le dévalider — une erreur de clic ne doit
+   jamais devenir une donnée fausse. */
+function validerMission(cle){
+  const k = cle + '.fait';
+  if(state.bq[k]) delete state.bq[k]; else state.bq[k] = true;
+  const b = document.getElementById('bqValider');
+  if(b){
+    const fait = !!state.bq[k];
+    b.classList.toggle('fait', fait);
+    b.innerHTML = fait ? '\u2713 Mission faite cette semaine' : 'Marquer la mission faite';
+  }
+  renderTodo();
+  debounceEnregistrerSuiviRituel();
+}
 function verifierCycleCC(){
   const cle = moisCourantCC();
   if(!state.ccMois){
@@ -2583,7 +2672,8 @@ async function axeEnregistrerSuiviRituel(){
     imageryDays: state.imageryDays,
     badgeCinema: !!state.badgeCinema,
     startRoutine: state.startRoutine,
-    startJournal: state.startJournal
+    startJournal: state.startJournal,
+    bq: state.bq
   };
   try{
     const { error } = await axeDB.rpc('enregistrer_suivi_rituel', { code_p: axeCode, suivi_p: suivi });
@@ -2983,9 +3073,13 @@ function renderTodo(){
                   sous:'Case ' + caseJour + ' du rituel, pas encore cochée', aller:'crossCrawl' });
   }
   // l'exercice mental du mois : il n'a rien à cocher, c'est sa note qui fait foi.
-  if(!state.noteMentaleFaite){
-    lignes.push({ titre:'Ton exercice mental du mois',
-                  sous:'Ouvre-le et écris ce que tu ressens : c\'est ce qui construit ton mois prochain',
+  /* La mission mentale de la semaine. Ce n'est pas un geste quotidien : on ne la rappelle
+     donc pas chaque matin, ce serait un reproche plutôt qu'un rappel. À partir du jeudi,
+     si elle n'est pas marquée faite, la page le dit — il reste trois jours pour la faire. */
+  const jourSem = (function(){ const d = dateRef(); return d ? (d.getDay()+6)%7 : 0; })();
+  if(briquesOuvertes() && jourSem >= 3 && !missionFaite()){
+    lignes.push({ titre:'Ton retournement de la semaine',
+                  sous:'Pas encore fait. Il te reste quelques jours.',
                   aller:'mentalCol' });
   }
   if(state.imageryDays < 7){
@@ -3191,7 +3285,10 @@ function buildProgram(){
     trimCta.style.display='block';
     trimCta.innerHTML='<p class="serif" style="font-size:15px;font-style:italic;color:var(--dim)">Ton bilan des 3 mois s\'ouvrira dans les 7 derniers jours du mois '+prochainBilanTrimestriel()+'.</p>';
   }
+  // ses propres mots sur l'accueil : rendus après la semaine, pour qu'une preuve
+  // écrite à l'instant dans la carte mentale y apparaisse sans recharger la page
   renderWeek(started);
+  renderRappelAccueil();
 }
 function renderWeek(started){
   // programme pas encore démarré : on masque l'exercice derrière un cadenas
@@ -3208,24 +3305,117 @@ function renderWeek(started){
   m.loc = mh.loc==='maison' ? '🏠 Cette semaine · à faire à la maison' : '📍 Cette semaine · à faire à l\'entraînement';
   m.mission = {titre:'Ta mission · '+mh.dur, txt:(mh.rappel?'On garde l\'exercice de la semaine du pic, pour le consolider. ':'')+mh.txt};
   m.phase = wp.tag;
+  /* Les briques interactives de la semaine : elles sont désignées par l'axe du blocage,
+     le niveau du mois et la phase de la semaine — exactement les mêmes coordonnées que
+     la mission elle-même. `couper()` arrête les chronos de la semaine précédente avant
+     que la carte ne soit remplacée, sinon un compte à rebours continuerait à tourner
+     dans le vide et enregistrerait n'importe quoi. */
+  const axeMental = blocageKey();
+  if(window.AxeBriques){
+    AxeBriques.couper();
+    m.bqCle   = AxeBriques.cleDe(state.month, axeMental, mh.code);
+    const parAxe = (mentalBriques || {})[axeMental] || [];
+    m.bqListe = (parAxe[mh.niv] || {})[mh.code] || [];
+  }
   document.getElementById('mentalCol').innerHTML=exCard(m,'m0');
+  if(window.AxeBriques) AxeBriques.brancher(document.getElementById('mentalCol'));
 }
-function exCard(ex,id){
+/* ===================================================================================
+   SES PROPRES MOTS, REMIS SOUS SES YEUX
+   Le retournement ne sert à rien s'il reste enfermé dans la carte mentale. Ce qu'il a
+   écrit lui revient ailleurs : la dernière chose qu'il a décrite précisément, et une de
+   ses dix réponses, tirée au jour — pas au hasard, sinon elle changerait à chaque
+   rafraîchissement et il la lirait comme un bandeau publicitaire au lieu de la lire
+   comme la sienne.
+   =================================================================================== */
+function bqMotDuJour(){
+  if(!window.AxeBriques) return '';
+  const toutes = AxeBriques.reponsesToutes();
+  if(!toutes.length) return '';
+  const d = dateRef() || new Date();
+  return toutes[Math.floor(d.getTime() / 86400000) % toutes.length];
+}
+function bqHaut(etiquette, texte){
+  if(!texte) return '';
+  return '<div class="bq-haut"><span>' + etiquette + '</span><i>' + axeEchappe(texte) + '</i></div>';
+}
+function renderRappelAccueil(){
+  const z = document.getElementById('bqAccueil');
+  if(!z) return;
+  if(!window.AxeBriques || !estDemarre() || !briquesOuvertes()){
+    z.innerHTML = ''; z.style.display = 'none'; return;
+  }
+  const cite = AxeBriques.derniereCitation();
+  const mot  = bqMotDuJour();
+  if(!cite && !mot){ z.innerHTML = ''; z.style.display = 'none'; return; }
+  let h = '<h3>TES PROPRES MOTS</h3>';
+  if(mot){
+    h += '<div class="bq-sous">Une de tes réponses, prise dans ce que tu as écrit.</div>'
+       + '<div class="bq-cite">' + axeEchappe(mot) + '</div>';
+  }
+  if(cite && cite !== mot){
+    h += '<div class="bq-sous" style="margin-top:11px">La dernière chose que tu m\'as racontée en détail.</div>'
+       + '<div class="bq-cite">' + axeEchappe(cite) + '</div>';
+  }
+  z.style.display = 'block';
+  z.innerHTML = h;
+}
+/* En haut d'une séance, et le jour de l'échéance : une seule ligne, la sienne.
+   Deux citations, et plus personne ne les lit. */
+function bqHautSeance(){ return bqHaut('Tes propres mots', bqMotDuJour()); }
+function bqJourJ(){
+  const mot = bqMotDuJour();
+  if(!mot) return '';
+  return '<div class="bq-accueil" style="margin:0 0 20px"><h3>TES PROPRES MOTS</h3>'
+       + '<div class="bq-cite">' + axeEchappe(mot) + '</div></div>';
+}
+/* ===================================================================================
+   LA CARTE DE L'EXERCICE MENTAL
+   Avant : un paragraphe à lire et un champ libre que presque personne n'ouvrait. Le
+   sportif lisait, et ne faisait rien.
+   Maintenant : sous le texte de la mission — qui, lui, n'a pas bougé — le retournement
+   de la semaine. Il décrit précisément ce qui s'est passé, la page recopie sa phrase et
+   lui demande l'inverse. Puis un bouton qui dit au coach si c'est fait.
+   Tant que la date d'allumage n'est pas atteinte, rien de tout ça n'apparaît : la carte
+   reste exactement celle que les sportifs connaissent.
+   =================================================================================== */
+const OEIL_SVG = '<svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+  + 'stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>'
+  + '<circle cx="12" cy="12" r="3"/></svg>';
+function carteMentale(ex, id){
+  const cle   = ex.bqCle || '';
+  const liste = ex.bqListe || [];
+  const ouvert = !!(window.AxeBriques && cle && liste.length && briquesOuvertes());
+  const briques = ouvert ? AxeBriques.rendre(liste, cle) : '';
+  const fait = ouvert ? missionFaite(cle) : false;
+  const valider = ouvert
+    ? '<button class="bq-valider' + (fait?' fait':'') + '" id="bqValider" onclick="validerMission(\'' + cle + '\')">'
+      + (fait ? '✓ Fait cette semaine' : 'Marquer comme fait') + '</button>'
+    : '';
+  const oeil = ouvert
+    ? `<div class="obs-flag">${OEIL_SVG} Ce que tu écris ici arrive à ton coach. C'est là-dessus qu'il construit ton mois suivant.</div>`
+    : `<div class="obs-flag">${OEIL_SVG} Visible par ton coach en lecture seule</div>`;
+  const aide = ouvert
+    ? `<p class="geste-aide">Le retournement se fait en deux temps : d'abord ce qui s'est passé, précisément, puis la demande qui va dans l'autre sens. Les premières réponses viendront vite, les dernières non — ce sont celles-là qui comptent.</p>`
+    : `<p class="geste-aide">Ouvre « mes notes » juste au-dessus et écris ce que tu ressens au fil du mois : c'est ce qui me sert à choisir ton exercice du mois prochain.</p>`;
   return `<div class="card">
       ${ex.loc?`<span class="day-tag" style="color:var(--mental)">${ex.loc}</span>`:''}
       <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
       <p class="desc">${ex.mission?'<b style="color:var(--ink);font-weight:600">Objectif du mois · </b>':''}${ex.desc}</p>
       ${ex.mission?`<div class="moves"><div class="move"><div class="move-n">${ex.mission.titre}${ex.phase?' · '+ex.phase.toLowerCase():''}</div><div class="move-d">${ex.mission.txt}</div></div></div>
       <p class="phys-weight-note">Pas de compétition nécessaire : cette mission se fait sur une semaine normale. Si tu as une compétition, garde-la et ouvre aussi « Ma semaine de compétition » pour le jour J.</p>`:''}
-      <button class="note-toggle" onclick="toggleNote('${id}')">＋ Mes notes sur cet exercice</button>
+      ${briques}
+      ${valider}
+      ${oeil}
+      <button class="note-toggle" onclick="toggleNote('${id}')">＋ ${ouvert ? "Autre chose à me dire ?" : "Mes notes sur cet exercice"}</button>
       <div class="note-box" id="box-${id}">
         <textarea id="note-${id}" placeholder="Ce que tu as ressenti, ce qui a marché ou non..." oninput="saveNote('${id}')"></textarea>
         <div class="note-saved" id="saved-${id}"></div>
-        <div class="obs-flag"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Visible par ton coach en lecture seule</div>
       </div>
-      <p class="geste-aide">Ouvre « mes notes » juste au-dessus et écris ce que tu ressens au fil du mois : c'est ce qui me sert à choisir ton exercice du mois prochain.</p>
+      ${aide}
     </div>`;
 }
+function exCard(ex,id){ return carteMentale(ex, id); }
 function validateEx(id){
   const b=document.getElementById('val-'+id);
   const card=document.getElementById('card-'+id);

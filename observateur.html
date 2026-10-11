@@ -613,6 +613,96 @@ function badgeAcces(r){
 }
 function departLabel(d){return d==='son'?'au son':d==='lumière'?'à la vue':'à déterminer';}
 
+/* =====================================================================================
+   LES RETOURNEMENTS, VUS DU CÔTÉ COACH
+   Le sportif décrit précisément ce qui s'est passé, la page lui recopie sa phrase et lui
+   demande l'inverse — dix choses positives à sa pire peur, la recette pour rater à coup
+   sûr, ce que son adversaire dirait de lui. Tout ça arrive dans `suivi_rituel.bq`, avec
+   des clés qui portent le mois, l'axe et la phase : « m2|portillon|M1.peur_quoi ».
+   Ici on remet ça en français : sa phrase en entier, puis ses réponses numérotées. C'est
+   la matière la plus utile du protocole, et elle se lit, elle ne se compte pas.
+   Le vocal qu'il s'enregistre à lui-même n'arrive jamais ici : il reste sur son téléphone.
+   ===================================================================================== */
+const BQ_PHASES = [
+  ['M1','Semaine 1 · à la maison'], ['E1','Semaine 2 · à l\'entraînement'],
+  ['E2','Pic du mois · à l\'entraînement'], ['M2','Semaine de bilan · à la maison']
+];
+function bqEch(t){
+  return String(t===null||t===undefined?'':t)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+/* Tout ce qui a été écrit pendant un mois, phase par phase, dans l'ordre des semaines. */
+function bqDuMois(bq, mois){
+  const prefixe = 'm' + mois + '|';
+  const cles = Object.keys(bq || {}).filter(k => k.indexOf(prefixe) === 0);
+  if(!cles.length) return '';
+  const axe = (cles[0].split('|')[1] || '');
+  let h = '<div class="rc-sub">Retournement · ' + bqEch(axe.replace(/^./, c=>c.toUpperCase())) + '</div>';
+  let vide = true;
+
+  BQ_PHASES.forEach(([ph, libPhase]) => {
+    const base = prefixe + axe + '|' + ph + '.';
+    const champs = {};
+    cles.forEach(k => { if(k.indexOf(base) === 0) champs[k.slice(base.length)] = bq[k]; });
+    const noms = Object.keys(champs);
+    if(!noms.length) return;
+    vide = false;
+
+    // on regroupe par retournement : une saisie, ses réponses, éventuellement une chaîne
+    const groupes = {};
+    const divers = [];
+    noms.forEach(n => {
+      let m;
+      if((m = /^(.+)_(quoi|quand|ou)$/.exec(n))){
+        (groupes[m[1]] = groupes[m[1]] || {rep:[], ch:[]})[m[2]] = champs[n];
+      } else if((m = /^(.+)_(\d+)$/.exec(n))){
+        (groupes[m[1]] = groupes[m[1]] || {rep:[], ch:[]}).rep.push({i:Number(m[2]), t:champs[n]});
+      } else if((m = /^(.+)_c(\d+)$/.exec(n))){
+        (groupes[m[1]] = groupes[m[1]] || {rep:[], ch:[]}).ch.push({i:Number(m[2]), t:champs[n]});
+      } else if(['fait','ours','miroir','enr'].indexOf(n) < 0){
+        divers.push({k:n, v:champs[n]});
+      }
+    });
+
+    h += '<div class="rc-line"><span>' + libPhase + '</span><span>'
+       + (champs.fait === true ? 'Fait' : '<span class="mc-non">Pas marqué fait</span>') + '</span></div>';
+
+    Object.keys(groupes).forEach(g => {
+      const o = groupes[g];
+      const ctx = [o.quand, o.ou].filter(Boolean).join(', ');
+      if(o.quoi){
+        h += '<div class="rc-note"><span class="rc-who">Ce qu\'il a décrit</span>'
+           + (ctx ? '<b>' + bqEch(ctx) + '</b> — ' : '') + bqEch(o.quoi) + '</div>';
+      }
+      if(o.rep.length){
+        o.rep.sort((a,b)=>a.i-b.i);
+        h += '<div class="rc-note"><span class="rc-who">Ses ' + o.rep.length + ' réponses</span>'
+           + o.rep.map(r => r.i + '. ' + bqEch(r.t)).join('<br>') + '</div>';
+      }
+      if(o.ch.length){
+        o.ch.sort((a,b)=>a.i-b.i);
+        h += '<div class="rc-note"><span class="rc-who">Déroulé jusqu\'au bout</span>'
+           + o.ch.map(r => '→ ' + bqEch(r.t)).join('<br>') + '</div>';
+      }
+    });
+
+    if(champs.ours !== undefined && champs.ours !== null){
+      h += '<div class="rc-line"><span>Interdiction d\'y penser</span><span>'
+         + bqEch(champs.ours) + ' retour(s) en 60 secondes</span></div>';
+    }
+    if(champs.miroir === true){
+      h += '<div class="rc-line"><span>Liste retournée</span><span>oui</span></div>';
+    }
+    if(champs.enr === true){
+      h += '<div class="rc-line"><span>Son vocal à lui (reste sur son téléphone)</span>'
+         + '<span>enregistré</span></div>';
+    }
+    divers.forEach(d => {
+      h += '<div class="rc-line"><span>Ce qu\'il a choisi</span><span>' + bqEch(d.v) + '</span></div>';
+    });
+  });
+  return vide ? '' : h;
+}
 function afficherRiders(riders){
   const grid = document.getElementById('grid');
   document.getElementById('count').textContent = riders.length + (riders.length>1?' riders':' rider');
@@ -672,6 +762,7 @@ function afficherRiders(riders){
     const vocaux   = vocauxParCode[r.code_acces]   || [];
     const rapports = rapportsParCode[r.code_acces] || [];
     const sr       = r.suivi_rituel || {};
+    const bq       = sr.bq || {};   // les réponses aux exercices mentaux
     const moisCourant = Number(r.mois_en_cours || 1);
 
     const ccCount      = sr.ccDays ? Object.keys(sr.ccDays).filter(k=>sr.ccDays[k]).length : 0;
@@ -798,7 +889,8 @@ function afficherRiders(riders){
         const s   = seancesMois[m] || {done:0, total:0};
         const sea = s.total ? (s.done + '/' + s.total) : '—';
         const id  = 'det-' + idx + '-' + m;
-        const dedans = texteVisible ? semainesDuMois(m) : (semainesDuMois(m) + ecritsDuMois(m));
+        const dedans = (texteVisible ? semainesDuMois(m) : (semainesDuMois(m) + ecritsDuMois(m)))
+                     + bqDuMois(bq, m);
         return `<div class="mois-clos">
           <div class="mc-top" onclick="basculerMois('${id}')">
             <span class="mc-nom">Mois ${m}</span>
@@ -846,6 +938,7 @@ function afficherRiders(riders){
     // Le détail du mois en cours : chaque ressenti de séance, chaque note d'exercice, du
     // sportif comme du parent. C'est la matière vivante du mois ; elle quittera la fiche
     // quand le mois sera terminé, il ne restera que les deux bilans.
+    moisBlock += bqDuMois(bq, moisCourant);
     const detail = notesDuMois(moisCourant).filter(n => !estBilanParent(n));
     const vocauxCourants = vocauxDuMois(moisCourant);
     if(detail.length || vocauxCourants){
