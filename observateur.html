@@ -135,6 +135,7 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 .rep-ligne:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
 .rep-nom{font-size:16px;font-weight:600;line-height:1.25;flex:1 1 150px;min-width:0}
 .rep-nom small{display:block;font-size:11.5px;font-weight:400;color:var(--dim);margin-top:2px}
+.rep-etat{align-self:center}
 .rep-sig{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .rep-pil{font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
   padding:3px 9px;border-radius:2px;white-space:nowrap;border:1px solid}
@@ -166,7 +167,7 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 <div class="wrap" id="loginScreen">
   <div class="login">
     <h1>ESPACE COACH</h1>
-    <div class="serif">Entre ta clé pour voir tes riders.</div>
+    <div class="serif">Entre ta clé pour voir tes sportifs.</div>
     <input type="password" id="cle" placeholder="Ta clé coach" autocomplete="off">
     <button onclick="entrer()">Ouvrir mon tableau de bord</button>
     <label class="garder"><input type="checkbox" id="garderCle"> Rester connecté sur cet appareil</label>
@@ -178,7 +179,7 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 <div class="wrap" id="board" style="display:none">
   <button class="oublier" style="margin-top:0;margin-bottom:22px" onclick="oublierCle()">Retirer ma clé de cet appareil</button>
   <div class="sec-head">
-    <h1>MES RIDERS</h1>
+    <h1>MES SPORTIFS</h1>
     <div class="serif">Chaque fiche, en direct de ta base.</div>
     <div class="count" id="count"></div>
   </div>
@@ -623,6 +624,7 @@ function brancherVocaux(){
       const cle = document.getElementById('cle').value;
       const pastille = a.parentElement.querySelector('.v-neuf');
       if(pastille) pastille.remove();
+      marquerVocalLu(id);
       db.rpc('axe_vocal_ecoute', { cle: cle, id_p: id }).catch(function(){});
     }, { once: true });
   });
@@ -734,11 +736,11 @@ function bqDuMois(bq, mois){
 }
 function afficherRiders(riders){
   const grid = document.getElementById('grid');
-  document.getElementById('count').textContent = riders.length + (riders.length>1?' riders':' rider');
+  document.getElementById('count').textContent = riders.length + (riders.length>1?' sportifs':' sportif');
   grid.innerHTML = '';
   DOSSIERS = [];
   if(!riders.length){
-    grid.innerHTML = '<div class="empty">Aucun rider inscrit pour le moment.</div>';
+    grid.innerHTML = '<div class="empty">Aucun sportif inscrit pour le moment.</div>';
     return;
   }
   riders.forEach((r, idx)=>{
@@ -749,7 +751,7 @@ function afficherRiders(riders){
 
     // nom complet du rider : priorité à la colonne "nom" (nom + prénom, saisi au questionnaire
     // ou complété manuellement), sinon le prénom du diagnostic, sinon repli neutre.
-    const nomAffiche = r.nom || p.prenom || p.profilMental || 'Rider';
+    const nomAffiche = r.nom || p.prenom || p.profilMental || 'Sportif';
 
     // profil fusionné entre la fiche directe (r, dispo dès l'inscription) et le diagnostic (p,
     // dispo après la 1re connexion) — une seule ligne, jamais de doublon entre les deux sources.
@@ -1020,23 +1022,16 @@ function afficherRiders(riders){
     /* Ce qui mérite son attention aujourd'hui, calculé ici où tout est encore sous la main.
        Ces pastilles sont la raison d'être du répertoire : sans elles, une liste de noms
        oblige à ouvrir les sept dossiers pour savoir lequel demande quelque chose. */
-    const vocauxNeufs = vocaux.filter(v => !v.lu).length;
-    const sig = [];
-    if(!estActif(r))        sig.push({t:'Accès expiré', c:'urgent'});
-    if(vocauxNeufs)         sig.push({t:vocauxNeufs + (vocauxNeufs>1?' vocaux à écouter':' vocal à écouter'), c:'urgent'});
-    if(!bilanCourant)       sig.push({t:'Bilan sportif manquant', c:'attente'});
-    if(!bilanParentCourant) sig.push({t:'Bilan parent manquant', c:'attente'});
-    if(!r.mois_en_cours)    sig.push({t:'Mois non renseigné', c:'urgent'});
-    if(!sig.length)         sig.push({t:'À jour', c:'calme'});
-
-    DOSSIERS.push({
+    const d = {
       nom: nomAffiche,
       sport: r.sport || '',
       code: r.code_acces || '',
       mois: r.mois_en_cours || null,   // null se lit « ? » : ne pas afficher un mois qu'on n'a pas
-      urgent: sig.some(x => x.c === 'urgent'),
-      attente: sig.some(x => x.c === 'attente'),
-      sig: sig,
+      actif: estActif(r),
+      aBilan: !!bilanCourant,
+      aBilanParent: !!bilanParentCourant,
+      moisConnu: !!r.mois_en_cours,
+      sig: [], urgent: false, attente: false,
       html: `<div class="rider-card">
       <div class="rc-top"><h3>${nomAffiche}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
@@ -1053,9 +1048,43 @@ function afficherRiders(riders){
       ${moisBlock}
       ${closBlock}
       ${debriefBlock}
-    </div>`});
+    </div>`};
+    majSignaux(d);
+    DOSSIERS.push(d);
   });
   rendreRepertoire();
+}
+
+/* Les pastilles d'un sportif, recalculées à partir de l'état du moment.
+   Elles ne sont jamais figées : écouter un vocal doit faire disparaître « 1 vocal à
+   écouter » tout de suite, pas au prochain chargement de la page. Le compte des vocaux
+   non écoutés se relit donc ici, dans vocauxParCode, à chaque appel. */
+function majSignaux(d){
+  const neufs = (vocauxParCode[d.code] || []).filter(v => !v.lu).length;
+  const sig = [];
+  if(neufs)           sig.push({t:neufs + (neufs>1?' vocaux à écouter':' vocal à écouter'), c:'urgent'});
+  if(!d.aBilan)       sig.push({t:'Bilan sportif manquant', c:'attente'});
+  if(!d.aBilanParent) sig.push({t:'Bilan parent manquant', c:'attente'});
+  if(!d.moisConnu)    sig.push({t:'Mois non renseigné', c:'urgent'});
+  if(!sig.length)     sig.push({t:'À jour', c:'calme'});
+  d.sig = sig;
+  // un accès expiré reste ce qui passe devant tout le reste dans le classement
+  d.urgent  = !d.actif || sig.some(x => x.c === 'urgent');
+  d.attente = sig.some(x => x.c === 'attente');
+}
+
+/* Un vocal vient d'être lancé : on le marque écouté en mémoire aussi, et on refait les
+   pastilles du sportif concerné. Sans cette ligne, le serveur savait que le message était
+   écouté mais le répertoire continuait de le réclamer. */
+function marquerVocalLu(id){
+  for(const code in vocauxParCode){
+    const v = (vocauxParCode[code] || []).find(x => Number(x.id) === Number(id));
+    if(!v) continue;
+    v.lu = true;
+    const d = DOSSIERS.find(x => x.code === code);
+    if(d) majSignaux(d);
+    return;
+  }
 }
 
 /* =====================================================================================
@@ -1092,6 +1121,8 @@ function rendreRepertoire(garderFiltre){
       h += '<button type="button" class="rep-ligne" onclick="ouvrirDossier(' + x.i + ')">'
         + '<span class="rep-nom">' + d.nom
         + '<small>' + [d.sport, 'Mois ' + (d.mois || '?'), d.code].filter(Boolean).join(' · ') + '</small></span>'
+        + '<span class="badge ' + (d.actif ? 'ok' : 'alert') + ' rep-etat">'
+        + (d.actif ? 'Actif' : 'Expiré') + '</span>'
         + '<span class="rep-sig">'
         + d.sig.map(y => '<span class="rep-pil ' + y.c + '">' + y.t + '</span>').join('')
         + '</span><span class="rep-fleche">›</span></button>';
@@ -1112,6 +1143,23 @@ function rendreRepertoire(garderFiltre){
   }
 }
 
+/* Le dossier est du HTML figé au chargement : il porte les pastilles « nouveau » telles
+   qu'elles étaient à ce moment-là. En le rouvrant après une écoute, elles revenaient.
+   On les reprend donc à chaque ouverture, d'après ce qui est réellement écouté. */
+function rafraichirPastillesVocales(racine){
+  (racine || document).querySelectorAll('audio[data-vocal-id]').forEach(function(a){
+    const id = Number(a.dataset.vocalId);
+    let lu = false;
+    for(const code in vocauxParCode){
+      const v = (vocauxParCode[code] || []).find(x => Number(x.id) === id);
+      if(v){ lu = !!v.lu; break; }
+    }
+    if(!lu) return;
+    const pastille = a.parentElement.querySelector('.v-neuf');
+    if(pastille) pastille.remove();
+  });
+}
+
 function ouvrirDossier(i){
   const d = DOSSIERS[i];
   if(!d) return;
@@ -1121,6 +1169,7 @@ function ouvrirDossier(i){
   /* Les lecteurs audio viennent d'être recréés : il faut les rebrancher, sinon lancer un
      vocal ne le marquerait plus comme écouté. */
   brancherVocaux();
+  rafraichirPastillesVocales(grid);
   window.scrollTo(0, 0);
 }
 function echapperAttr(t){
