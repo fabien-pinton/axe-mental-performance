@@ -120,6 +120,34 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 .mini:hover{border-color:var(--gold);color:var(--gold)}
 .mini.gold{border-color:rgba(168,133,42,.6);color:var(--gold)}
 .mini.gold:hover{background:rgba(168,133,42,.1)}
+/* ---- le répertoire : une ligne par sportif, le dossier s'ouvre au clic ---- */
+.rep-outils{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.rep-chercher{flex:1 1 220px;min-width:0;font-family:'DM Sans',sans-serif;font-size:14px;
+  padding:10px 13px;border:1px solid var(--line);border-radius:4px;background:var(--carte);color:var(--ink)}
+.rep-chercher:focus{outline:none;border-color:var(--gold)}
+.rep-liste{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:4px;
+  background:var(--carte);overflow:hidden}
+.rep-ligne{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;width:100%;text-align:left;
+  background:transparent;border:none;border-bottom:1px solid var(--line);padding:15px 17px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;color:var(--ink)}
+.rep-liste .rep-ligne:last-child{border-bottom:none}
+.rep-ligne:hover{background:rgba(201,162,39,.07)}
+.rep-ligne:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.rep-nom{font-size:16px;font-weight:600;line-height:1.25;flex:1 1 150px;min-width:0}
+.rep-nom small{display:block;font-size:11.5px;font-weight:400;color:var(--dim);margin-top:2px}
+.rep-sig{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rep-pil{font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+  padding:3px 9px;border-radius:2px;white-space:nowrap;border:1px solid}
+.rep-pil.urgent{color:#B0442E;border-color:rgba(176,68,46,.5);background:rgba(176,68,46,.08)}
+.rep-pil.attente{color:#B08A2E;border-color:rgba(176,138,46,.5);background:rgba(176,138,46,.08)}
+.rep-pil.calme{color:var(--dim);border-color:var(--line)}
+.rep-fleche{font-size:17px;color:var(--dim);flex-shrink:0;margin-left:auto;align-self:center}
+.rep-ligne:hover .rep-fleche{color:var(--gold)}
+.rep-vide{padding:26px 18px;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--dim)}
+.retour{display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:13px;
+  font-weight:600;color:var(--gold);background:transparent;border:1px solid rgba(201,162,39,.5);
+  border-radius:4px;padding:10px 15px;cursor:pointer;margin-bottom:18px}
+.retour:hover{background:rgba(201,162,39,.1)}
 .exp{margin-top:14px;font-size:12px;color:var(--dim);background:none;border:1px solid var(--line);border-radius:3px;padding:8px 14px;cursor:pointer;font-family:'DM Sans',sans-serif}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -600,16 +628,17 @@ function brancherVocaux(){
   });
 }
 
+/* Le dernier jour d'accès compte encore : on compare des dates à minuit, pas des instants. */
+function estActif(r){
+  if(r.statut !== 'actif' || !r.date_fin_acces) return false;
+  const p = String(r.date_fin_acces).slice(0,10).split('-');
+  const fin = new Date(Number(p[0]), Number(p[1])-1, Number(p[2]));
+  const auj = new Date(); auj.setHours(0,0,0,0);
+  return fin >= auj;
+}
 function badgeAcces(r){
-  let actif = false;
-  if(r.statut === 'actif' && r.date_fin_acces){
-    const p = String(r.date_fin_acces).slice(0,10).split('-');
-    const fin = new Date(Number(p[0]), Number(p[1])-1, Number(p[2]));
-    const auj = new Date(); auj.setHours(0,0,0,0);
-    actif = fin >= auj;
-  }
-  if(actif) return '<span class="badge ok">Actif</span>';
-  return '<span class="badge alert">Expiré</span>';
+  return estActif(r) ? '<span class="badge ok">Actif</span>'
+                     : '<span class="badge alert">Expiré</span>';
 }
 function departLabel(d){return d==='son'?'au son':d==='lumière'?'à la vue':'à déterminer';}
 
@@ -707,6 +736,7 @@ function afficherRiders(riders){
   const grid = document.getElementById('grid');
   document.getElementById('count').textContent = riders.length + (riders.length>1?' riders':' rider');
   grid.innerHTML = '';
+  DOSSIERS = [];
   if(!riders.length){
     grid.innerHTML = '<div class="empty">Aucun rider inscrit pour le moment.</div>';
     return;
@@ -987,7 +1017,27 @@ function afficherRiders(riders){
       }
     }
 
-    grid.innerHTML += `<div class="rider-card">
+    /* Ce qui mérite son attention aujourd'hui, calculé ici où tout est encore sous la main.
+       Ces pastilles sont la raison d'être du répertoire : sans elles, une liste de noms
+       oblige à ouvrir les sept dossiers pour savoir lequel demande quelque chose. */
+    const vocauxNeufs = vocaux.filter(v => !v.lu).length;
+    const sig = [];
+    if(!estActif(r))        sig.push({t:'Accès expiré', c:'urgent'});
+    if(vocauxNeufs)         sig.push({t:vocauxNeufs + (vocauxNeufs>1?' vocaux à écouter':' vocal à écouter'), c:'urgent'});
+    if(!bilanCourant)       sig.push({t:'Bilan sportif manquant', c:'attente'});
+    if(!bilanParentCourant) sig.push({t:'Bilan parent manquant', c:'attente'});
+    if(!r.mois_en_cours)    sig.push({t:'Mois non renseigné', c:'urgent'});
+    if(!sig.length)         sig.push({t:'À jour', c:'calme'});
+
+    DOSSIERS.push({
+      nom: nomAffiche,
+      sport: r.sport || '',
+      code: r.code_acces || '',
+      mois: r.mois_en_cours || null,   // null se lit « ? » : ne pas afficher un mois qu'on n'a pas
+      urgent: sig.some(x => x.c === 'urgent'),
+      attente: sig.some(x => x.c === 'attente'),
+      sig: sig,
+      html: `<div class="rider-card">
       <div class="rc-top"><h3>${nomAffiche}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
       <div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>
@@ -1003,9 +1053,78 @@ function afficherRiders(riders){
       ${moisBlock}
       ${closBlock}
       ${debriefBlock}
-    </div>`;
+    </div>`});
   });
+  rendreRepertoire();
+}
+
+/* =====================================================================================
+   LE RÉPERTOIRE
+   Sept dossiers empilés sur une seule page, c'était trois mille lignes à faire défiler
+   pour retrouver un prénom. Maintenant : une ligne par sportif, les signaux qui disent
+   lequel demande quelque chose, et le dossier complet au clic. Rien n'est perdu — c'est
+   exactement le même contenu, simplement rangé.
+   ===================================================================================== */
+let DOSSIERS = [];
+let FILTRE_REP = '';
+
+function rendreRepertoire(garderFiltre){
+  const grid = document.getElementById('grid');
+  if(!garderFiltre) FILTRE_REP = '';
+  const q = FILTRE_REP.trim().toLowerCase();
+  /* Ceux qui réclament quelque chose remontent : un répertoire qui ne hiérarchise pas
+     ne fait que déplacer le problème du défilement. */
+  const vus = DOSSIERS.map((d, i) => ({d:d, i:i}))
+    .filter(x => !q || (x.d.nom + ' ' + x.d.sport + ' ' + x.d.code).toLowerCase().indexOf(q) > -1)
+    .sort((a, b) => (b.d.urgent - a.d.urgent) || (b.d.attente - a.d.attente)
+                 || a.d.nom.localeCompare(b.d.nom, 'fr'));
+
+  let h = '<div class="rep-outils">'
+    + '<input type="search" class="rep-chercher" id="repChercher" placeholder="Chercher un sportif, un sport, un code…" '
+    + 'value="' + echapperAttr(FILTRE_REP) + '" autocomplete="off"></div>';
+
+  h += '<div class="rep-liste">';
+  if(!vus.length){
+    h += '<div class="rep-vide">Aucun sportif ne correspond à cette recherche.</div>';
+  }else{
+    vus.forEach(x => {
+      const d = x.d;
+      h += '<button type="button" class="rep-ligne" onclick="ouvrirDossier(' + x.i + ')">'
+        + '<span class="rep-nom">' + d.nom
+        + '<small>' + [d.sport, 'Mois ' + (d.mois || '?'), d.code].filter(Boolean).join(' · ') + '</small></span>'
+        + '<span class="rep-sig">'
+        + d.sig.map(y => '<span class="rep-pil ' + y.c + '">' + y.t + '</span>').join('')
+        + '</span><span class="rep-fleche">›</span></button>';
+    });
+  }
+  h += '</div>';
+  grid.innerHTML = h;
+
+  const ch = document.getElementById('repChercher');
+  if(ch){
+    ch.addEventListener('input', () => {
+      FILTRE_REP = ch.value;
+      const pos = ch.selectionStart;
+      rendreRepertoire(true);
+      const n = document.getElementById('repChercher');
+      if(n){ n.focus(); try{ n.setSelectionRange(pos, pos); }catch(e){} }
+    });
+  }
+}
+
+function ouvrirDossier(i){
+  const d = DOSSIERS[i];
+  if(!d) return;
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '<button type="button" class="retour" onclick="rendreRepertoire()">'
+    + '\u2039 Tous mes sportifs</button>' + d.html;
+  /* Les lecteurs audio viennent d'être recréés : il faut les rebrancher, sinon lancer un
+     vocal ne le marquerait plus comme écouté. */
   brancherVocaux();
+  window.scrollTo(0, 0);
+}
+function echapperAttr(t){
+  return String(t == null ? '' : t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 }
 </script>
 </body>
