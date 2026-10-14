@@ -710,7 +710,34 @@ let semVue = 0;
 function cleSeance(d, type){ return d + '|' + type; }
 function estFaite(d, type){ return !!P.fait[cleSeance(d, type)]; }
 
+/* Ce que le coach doit pouvoir lire sans ouvrir la page de Robin : où il en est, ce
+   qu'il a tenu, et ce qui traîne. Recalculé à chaque enregistrement. */
+function calculerResume(){
+  const a = auj();
+  const i = (a < DEBUT_S1) ? 0 : semaineDe(a);
+  const sem = SEMAINES[i], bl = blocDe(sem);
+  const pc = prochaineCourse(a);
+  let faits = 0, prevus = 0;
+  const retard = [];
+  JOURNEES.forEach(function(j){
+    if(j.d > a || !j.seances.length) return;
+    j.seances.forEach(function(t){
+      prevus++;
+      if(estFaite(j.d, t)) faits++;
+      else if(retard.length < 12) retard.push(j.d + '|' + t);
+    });
+  });
+  return {
+    maj: a, sem: sem.n, nbSem: NB_SEM,
+    blocN: (sem.mode === 'leger' ? 5 : sem.bl), bloc: bl.nom, mode: sem.mode,
+    debut: PREMIER,
+    prochaine: pc ? {nom:pc.nom, lieu:pc.lieu, d:pc.jours[0], maj:!!pc.maj} : null,
+    faits: faits, prevus: prevus, retard: retard
+  };
+}
+
 function enregistrer(apres){
+  P.resume = calculerResume();
   const suivi = Object.assign({}, BRUT, {
     ccDays: CC.days, ccMois: CC.mois, robin: P
   });

@@ -803,6 +803,7 @@ function afficherRiders(riders){
     const vocaux   = vocauxParCode[r.code_acces]   || [];
     const rapports = rapportsParCode[r.code_acces] || [];
     const sr       = r.suivi_rituel || {};
+    const saison   = aPlanSaison(sr);   // plan daté : pas de mois, pas de bilans mensuels
     const bq       = sr.bq || {};   // les réponses aux exercices mentaux
     const moisCourant = Number(r.mois_en_cours || 1);
 
@@ -1039,13 +1040,16 @@ function afficherRiders(riders){
       actif: estActif(r),
       aBilan: !!bilanCourant,
       aBilanParent: !!bilanParentCourant,
-      moisConnu: !!r.mois_en_cours,
+      moisConnu: saison || !!r.mois_en_cours,
+      saison: saison,
+      resume: saison ? (sr.robin.resume || null) : null,
       sig: [], urgent: false, attente: false,
       html: `<div class="rider-card">
       <div class="rc-top"><h3>${nomAffiche}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
-      <div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>
-      ${bilanLigne}
+      ${saison
+        ? `<div class="rc-line"><span>Programme</span><span>Saison datée${(sr.robin.resume)?` · semaine ${sr.robin.resume.sem} / ${sr.robin.resume.nbSem}`:''}</span></div>`
+        : `<div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>${bilanLigne}`}
       <div class="rc-line"><span>Formule</span><span>${r.formule||'?'}</span></div>
       ${estPartenaire?`<div class="rc-line"><span>Statut</span><span class="tag-part">Partenaire éligible</span></div>`:''}
       ${r.parraine_par?`<div class="rc-line"><span>Venu grâce à</span><span>${r.parraine_par}</span></div>`:''}
@@ -1053,9 +1057,7 @@ function afficherRiders(riders){
       <div class="rc-line"><span>Contact parent</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
       ${r.tel_rider?`<div class="rc-line"><span>Contact rider</span><span>${r.tel_rider}</span></div>`:''}
       ${profilBlock}
-      ${suiteBlock}
-      ${moisBlock}
-      ${closBlock}
+      ${saison ? blocSaison(sr) : `${suiteBlock}${moisBlock}${closBlock}`}
       ${debriefBlock}
     </div>`};
     majSignaux(d);
@@ -1068,10 +1070,131 @@ function afficherRiders(riders){
    Elles ne sont jamais figées : écouter un vocal doit faire disparaître « 1 vocal à
    écouter » tout de suite, pas au prochain chargement de la page. Le compte des vocaux
    non écoutés se relit donc ici, dans vocauxParCode, à chaque appel. */
+/* =====================================================================================
+   LA FICHE DE SAISON
+   Un sportif qui suit un plan daté (Robin) n'a pas de « mois en cours » : il a une
+   semaine sur quarante-cinq, un bloc de travail, des charges et deux mesures. Le calcul
+   est fait par sa page à lui, qui seule connaît le calendrier ; on se contente de lire
+   le résumé qu'elle dépose, plus ce qui se déduit des données brutes.
+   ===================================================================================== */
+function aPlanSaison(sr){ return !!(sr && sr.robin && typeof sr.robin === 'object'); }
+
+function joursDepuis(d){
+  if(!d) return null;
+  const p = String(d).slice(0,10).split('-');
+  const a = new Date(Number(p[0]), Number(p[1])-1, Number(p[2]));
+  const h = new Date(); h.setHours(0,0,0,0);
+  return Math.round((h - a) / 86400000);
+}
+function dateCourte(d){
+  if(!d) return '?';
+  const p = String(d).slice(0,10).split('-');
+  const M = ['janvier','février','mars','avril','mai','juin','juillet','août',
+             'septembre','octobre','novembre','décembre'];
+  return Number(p[2]) + ' ' + M[Number(p[1])-1];
+}
+/* La dernière chose qu'il a validée, quelle qu'elle soit : elle se déduit des clés
+   « date|type », sans rien connaître du programme. Elle ne vieillit jamais mal. */
+function derniereValidation(fait){
+  let d = '';
+  for(const k in fait){ const j = k.split('|')[0]; if(j > d) d = j; }
+  return d;
+}
+function blocSaison(sr){
+  const R  = sr.robin || {};
+  const re = R.resume || null;
+  const fait = R.fait || {};
+  const nbFait = Object.keys(fait).length;
+  let h = '<div class="rc-sub">Saison '
+        + (re ? 'semaine ' + re.sem + ' sur ' + re.nbSem : 'plan daté') + '</div>';
+
+  if(re){
+    const etiq = re.mode === 'coupure' ? ' · coupure'
+               : re.mode === 'leger'   ? ' · affûtage'
+               : re.mode === 'allege'  ? ' · semaine allégée' : '';
+    h += '<div class="rc-line"><span>Bloc en cours</span><span>Bloc ' + re.blocN
+       + ' · ' + echapperAttr(re.bloc) + etiq + '</span></div>';
+    if(re.prochaine) h += '<div class="rc-line"><span>Prochaine course</span><span>'
+       + echapperAttr(re.prochaine.nom) + (re.prochaine.lieu ? ' · ' + echapperAttr(re.prochaine.lieu) : '')
+       + ' · ' + dateCourte(re.prochaine.d) + (re.prochaine.maj ? ' (importante)' : '') + '</span></div>';
+    h += '<div class="rc-line"><span>Séances tenues</span><span>' + re.faits
+       + ' sur ' + re.prevus + ' prévues</span></div>';
+    const vieux = joursDepuis(re.maj);
+    h += '<div class="rc-line"><span>Dernier passage sur sa page</span><span>'
+       + dateCourte(re.maj) + (vieux > 1 ? ' · il y a ' + vieux + ' jours' : '') + '</span></div>';
+    if(re.retard && re.retard.length){
+      h += '<div class="rc-line"><span>Non validé</span><span>'
+         + re.retard.slice(-4).map(function(x){
+             const q = x.split('|');
+             return dateCourte(q[0]) + ' · ' + (q[1] === 'salle' ? 'salle' : q[1] === 'velo' ? 'vélo' : q[1]);
+           }).join(' · ')
+         + (re.retard.length > 4 ? ' (+' + (re.retard.length - 4) + ')' : '') + '</span></div>';
+    }
+  } else {
+    h += '<div class="mc-vide">Il n\'a pas encore ouvert sa page : rien à afficher tant qu\'il n\'a rien validé.</div>';
+  }
+  const dv = derniereValidation(fait);
+  if(dv) h += '<div class="rc-line"><span>Dernière séance validée</span><span>' + dateCourte(dv)
+            + ' · ' + nbFait + ' au total</span></div>';
+
+  /* Les charges : c'est la seule preuve qu'un bloc de force sert à quelque chose. */
+  const ch = R.charges || {};
+  const dates = Object.keys(ch).sort();
+  const parExo = {};
+  dates.forEach(function(d){ for(const k in ch[d]) (parExo[k] = parExo[k] || []).push({d:d, v:ch[d][k]}); });
+  const exos = Object.keys(parExo);
+  if(exos.length){
+    h += '<div class="rc-sub">Charges</div>';
+    exos.forEach(function(k){
+      const l = parExo[k], der = l[l.length-1], pre = l.length > 1 ? l[0] : null;
+      const suite = l.slice(-5).map(function(x){ return x.v; }).join(' → ') + ' kg';
+      h += '<div class="rc-line"><span>' + echapperAttr(k) + '</span><span>' + suite
+         + (pre ? ' · ' + (der.v >= pre.v ? '+' : '') + Math.round((der.v - pre.v)*10)/10 + ' kg depuis le ' + dateCourte(pre.d) : '')
+         + '</span></div>';
+    });
+  }
+
+  /* Les deux mesures : les seules qui disent si son départ progresse. */
+  const te = R.tests || {};
+  const cles = Object.keys(te).sort(function(a,b){ return Number(a.slice(1)) - Number(b.slice(1)); });
+  const saut = cles.filter(function(k){ return te[k].saut; });
+  const tps  = cles.filter(function(k){ return te[k].temps; });
+  if(saut.length || tps.length){
+    h += '<div class="rc-sub">Mesures</div>';
+    if(saut.length){
+      const d0 = te[saut[0]].saut, d1 = te[saut[saut.length-1]].saut;
+      h += '<div class="rc-line"><span>Saut vertical</span><span>'
+         + saut.map(function(k){ return 'S' + k.slice(1) + ' ' + te[k].saut; }).join(' · ') + ' cm'
+         + (saut.length > 1 ? ' · ' + (d1>=d0?'+':'') + Math.round((d1-d0)*10)/10 + ' cm' : '') + '</span></div>';
+    }
+    if(tps.length){
+      const t0 = te[tps[0]].temps, t1 = te[tps[tps.length-1]].temps;
+      h += '<div class="rc-line"><span>1<sup>re</sup> ligne droite</span><span>'
+         + tps.map(function(k){ return 'S' + k.slice(1) + ' ' + te[k].temps; }).join(' · ') + ' s'
+         + (tps.length > 1 ? ' · ' + (t1<=t0?'':'+') + Math.round((t1-t0)*100)/100 + ' s' : '') + '</span></div>';
+    }
+  }
+  return h;
+}
+
 function majSignaux(d){
   const neufs = (vocauxParCode[d.code] || []).filter(v => !v.lu).length;
   const sig = [];
   if(neufs)           sig.push({t:neufs + (neufs>1?' vocaux à écouter':' vocal à écouter'), c:'urgent'});
+  /* Un sportif sur plan daté n'envoie pas de bilan mensuel : lui réclamer éternellement
+     deux bilans qui n'existent pas noierait les vrais signaux. On regarde son assiduité. */
+  if(d.saison){
+    const re = d.resume;
+    const vieux = re ? joursDepuis(re.maj) : null;
+    if(!re)                      sig.push({t:"N'a jamais ouvert sa page", c:'urgent'});
+    else if(vieux !== null && vieux >= 10) sig.push({t:'Rien depuis ' + vieux + ' jours', c:'urgent'});
+    else if(re.retard && re.retard.length >= 3) sig.push({t:re.retard.length + ' séances non validées', c:'attente'});
+    if(!sig.length)              sig.push({t:'À jour', c:'calme'});
+    d.sig = sig;
+    d.urgent  = !d.actif || sig.some(x => x.c === 'urgent');
+    d.attente = sig.some(x => x.c === 'attente');
+    return;
+  }
   if(!d.aBilan)       sig.push({t:'Bilan sportif manquant', c:'attente'});
   if(!d.aBilanParent) sig.push({t:'Bilan parent manquant', c:'attente'});
   if(!d.moisConnu)    sig.push({t:'Mois non renseigné', c:'urgent'});
@@ -1151,7 +1274,10 @@ function rendreRepertoire(garderFiltre){
       const d = x.d;
       h += '<button type="button" class="rep-ligne" onclick="ouvrirDossier(' + x.i + ')">'
         + '<span class="rep-nom">' + d.nom
-        + '<small>' + [d.sport, 'Mois ' + (d.mois || '?'), d.code].filter(Boolean).join(' · ') + '</small></span>'
+        + '<small>' + [d.sport,
+              d.saison ? (d.resume ? 'Semaine ' + d.resume.sem + ' / ' + d.resume.nbSem : 'Saison datée')
+                       : 'Mois ' + (d.mois || '?'),
+              d.code].filter(Boolean).join(' · ') + '</small></span>'
         + '<span class="badge ' + (d.actif ? 'ok' : 'alert') + ' rep-etat">'
         + (d.actif ? 'Actif' : 'Expiré') + '</span>'
         + '<span class="rep-sig">'
