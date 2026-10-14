@@ -621,11 +621,20 @@ function brancherVocaux(){
     a.dataset.branche = '1';
     a.addEventListener('play', function(){
       const id = Number(a.dataset.vocalId);
-      const cle = document.getElementById('cle').value;
       const pastille = a.parentElement.querySelector('.v-neuf');
       if(pastille) pastille.remove();
       marquerVocalLu(id);
-      db.rpc('axe_vocal_ecoute', { cle: cle, id_p: id }).catch(function(){});
+      /* La requête part avec `then` et pas avec `catch` : l'objet que rend `rpc` n'est pas
+         une vraie promesse, il n'a qu'un `then`. Un `catch` dessus levait une erreur avant
+         même que la requête soit envoyée — la pastille disparaissait à l'écran, la base
+         n'apprenait rien, et « 1 vocal à écouter » revenait à la reconnexion suivante.
+         On passe aussi par `cleCoach`, la clé déjà validée, plutôt que de relire le champ
+         de connexion, qui est vidé dès qu'on se déconnecte. */
+      db.rpc('axe_vocal_ecoute', { cle: cleCoach, id_p: id }).then(function(r){
+        if(r && r.error) echecVocalLu(id, a, r.error.message);
+      }, function(e){
+        echecVocalLu(id, a, e && e.message);
+      });
     }, { once: true });
   });
 }
@@ -1085,6 +1094,28 @@ function marquerVocalLu(id){
     if(d) majSignaux(d);
     return;
   }
+}
+
+/* Si le serveur n'a pas pris note, on remet les choses comme elles étaient plutôt que de
+   laisser croire que c'est fait : le vocal redevient non écouté, la pastille revient, et
+   le coach lit pourquoi. Mieux vaut un message visible qu'un compteur qui ment. */
+function echecVocalLu(id, audio, raison){
+  for(const code in vocauxParCode){
+    const v = (vocauxParCode[code] || []).find(x => Number(x.id) === Number(id));
+    if(!v) continue;
+    v.lu = false;
+    const d = DOSSIERS.find(x => x.code === code);
+    if(d) majSignaux(d);
+    break;
+  }
+  if(audio && audio.parentElement && !audio.parentElement.querySelector('.v-neuf')){
+    const p = document.createElement('span');
+    p.className = 'v-neuf';
+    p.textContent = 'nouveau';
+    audio.parentElement.insertBefore(p, audio);
+  }
+  if(audio) audio.dataset.branche = '';
+  console.log('[AXE] vocal non marqué écouté :', raison || 'raison inconnue');
 }
 
 /* =====================================================================================
