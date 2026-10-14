@@ -191,11 +191,14 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
       <h1>DEMANDES REÇUES</h1>
       <div class="serif">Une ligne par sportif, quel que soit le nombre de fois qu'il est passé. Deux sportifs qui partagent la même adresse email restent bien deux lignes. Vide = coordonnées seules, Démo = a testé le protocole, Client = a payé.</div>
       <div class="count" id="countPros"></div>
+      <style>.cp-alerte{color:var(--gold);font-weight:700}
+      .filtre.vide{opacity:.45}</style>
     </div>
     <div class="filtres" id="filtres">
       <button class="filtre on" data-f="tous" onclick="filtrer('tous')">Tout le monde</button>
       <button class="filtre" data-f="rien" onclick="filtrer('rien')">Coordonnées seules</button>
       <button class="filtre" data-f="demo" onclick="filtrer('demo')">Ont fait la démo</button>
+      <button class="filtre" data-f="envoi" onclick="filtrer('envoi')">À envoyer</button>
       <button class="filtre" data-f="client" onclick="filtrer('client')">Clients</button>
     </div>
     <div class="tbl-wrap" id="prosWrap">
@@ -400,9 +403,21 @@ async function marquerEnvoye(id, envoye){
 }
 
 /* ce qu'on affiche sous la pastille « Démo » : à envoyer, ou envoyé le... */
+/* `demo_envoi` ne dit que ce que la personne a CLIQUÉ à la fin : « envoyez-moi mon
+   profil » ou « envoyez-moi le lien ». Beaucoup finissent la démo sans rien cliquer —
+   et jusqu'ici elles n'apparaissaient nulle part, sans bouton ni mention. Une démo
+   terminée avec une adresse valide se traite comme une demande, parce que c'en est une. */
+function aEnvoyer(p){
+  return !!(p.demo_le && p.email_parent && !p.mail_envoye_le);
+}
 function blocEnvoi(p, libelle){
-  if(!p.demo_envoi) return '';
-  if(!p.email_parent) return '<span class="src">' + libelle + ' · pas d\'email</span>';
+  /* On affiche aussi les démos terminées sans adresse : il n'y a rien à envoyer, mais
+     savoir que quelqu'un va au bout sans laisser de contact est une information. */
+  if(!p.demo_envoi && !p.demo_le) return '';
+  if(!p.email_parent) return '<span class="src">' + (libelle || 'Démo terminée') + ' · pas d\'email</span>';
+  if(!p.demo_envoi) libelle = p.demo_exercice === true
+    ? "Démo terminée, exercice compris \u2014 rien demandé"
+    : "Démo faite \u2014 rien demandé";
   if(p.mail_envoye_le){
     return '<span class="src ok">Envoyé le ' + dateFr(p.mail_envoye_le).split(' à ')[0] + '</span>'
          + '<button class="mini" onclick="marquerEnvoye(' + p.demo_id + ', false)">annuler</button>';
@@ -521,13 +536,21 @@ function afficherProspects(){
   const toutes = fusionnerFiches(prospects);
   const nbDemo = toutes.filter(function(p){ return statutDe(p) === 'demo'; }).length;
   const nbClient = toutes.filter(function(p){ return statutDe(p) === 'client'; }).length;
+  const nbEnvoi = toutes.filter(aEnvoyer).length;
   const bouts = [toutes.length + (toutes.length > 1 ? ' personnes' : ' personne')];
   if(nbDemo) bouts.push(nbDemo + ' en démo');
   if(nbClient) bouts.push(nbClient + (nbClient > 1 ? ' clients' : ' client'));
-  document.getElementById('countPros').textContent = bouts.join(' · ');
+  const c = document.getElementById('countPros');
+  c.innerHTML = bouts.join(' · ')
+    + (nbEnvoi ? ' · <b class="cp-alerte">' + nbEnvoi
+        + (nbEnvoi > 1 ? ' mails à envoyer' : ' mail à envoyer') + '</b>' : '');
+  const bf = document.querySelector('[data-f="envoi"]');
+  if(bf){ bf.textContent = 'À envoyer' + (nbEnvoi ? ' (' + nbEnvoi + ')' : '');
+          bf.classList.toggle('vide', !nbEnvoi); }
 
   const liste = toutes.filter(function(p){
-    if(filtreActif === 'tous') return true;
+    if(filtreActif === 'tous')  return true;
+    if(filtreActif === 'envoi') return aEnvoyer(p);
     return statutDe(p) === (filtreActif === 'rien' ? '' : filtreActif);
   });
 
