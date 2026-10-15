@@ -183,6 +183,17 @@ h1.titre{font-family:'Bebas Neue';font-size:46px;letter-spacing:.015em;line-heig
 .crs{padding-bottom:4px}
 .j-repos b{color:var(--ink);font-weight:700}
 
+/* ---------- le choix du vendredi soir ---------- */
+.puce.choix{background:#3B4A6B;color:#fff}
+.choix-bloc{border-top:1px solid var(--line);padding-top:14px}
+.choix-q{font-family:'Bebas Neue';font-size:20px;letter-spacing:.04em;margin-bottom:12px;line-height:1.2}
+.choix-deux{display:flex;gap:10px;flex-wrap:wrap}
+.ch-opt{flex:1 1 165px;text-align:left;padding:15px;border:1.5px solid var(--line-fort);
+  border-radius:5px;background:var(--cream);cursor:pointer;font-family:inherit;color:var(--ink)}
+.ch-opt:hover{border-color:var(--gold)}
+.ch-opt b{display:block;font-family:'Bebas Neue';font-size:19px;letter-spacing:.05em;margin-bottom:5px}
+.ch-opt span{display:block;font-size:13px;color:var(--dim);line-height:1.45}
+
 footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
   font-size:12px;color:var(--pale);text-align:center}
 @media(max-width:480px){
@@ -253,9 +264,8 @@ const PREMIER  = '2026-11-03';   // première séance
 const NB_SEM   = 45;             // jusqu'au dimanche 12 septembre 2027
 /* Tout l'horaire de la salle est compté en SECONDES depuis minuit : les repos et les
    temps de travail sont en secondes, et mélanger des minutes avec eux ferait mentir
-   l'horloge affichée. */
-const SALLE_H  = (19*60 + 45) * 60;   // 19h45
-const SALLE_FIN= 21*60*60;            // 21h00, jamais au-delà
+   l'horloge affichée. Les créneaux eux-mêmes sont dans HORAIRES, plus bas : ils
+   changent d'un jour à l'autre (13h30 le mercredi, 19h30 le vendredi, 10h le samedi). */
 
 /* ------------------------------------------------------------------ outils de date */
 const JOURS = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
@@ -453,104 +463,106 @@ resp:"Inspiration en descendant, expiration en remontant."}
 const BLOCS = {
 1:{nom:'Fondations', couleur:'#5D6F4A',
    but:"Apprendre les gestes parfaitement et préparer les tissus. On ne cherche pas le lourd : on cherche le propre. Ce que tu construis ici, c'est le droit de charger ensuite.",
-   mardi:{titre:'Salle · explosivité et haut du corps', ech:10, calme:6,
-     sous:"Après le vélo. Du ressort dans les jambes, du tirage dans les bras, et on ne vide pas les jambes — tu roules demain.",
+   a:{titre:'Salle · haut du corps et bassin', ech:8, calme:5,
+     sous:"Tu roules dans trois heures : rien ici ne doit peser sur tes jambes. On tire, on pousse, on gaine.",
      exos:[
-       {k:'cmj',     s:4, r:'5 sauts',           repos:90},
-       {k:'rowing',  s:4, r:'10 répétitions',    repos:90, app:1},
-       {k:'dc',      s:3, r:'10 répétitions',    repos:90, app:1},
-       {k:'bulgare', s:3, r:'10 par jambe',      repos:75},
-       {k:'planche', s:3, r:'40 secondes',       repos:40}]},
-   vendredi:{titre:'Salle · force', ech:12, calme:6,
-     sous:"La séance qui compte. Deux jours de repos derrière : tu peux y aller franchement, en restant propre.",
+       {k:'rowing', s:4, r:'10 répétitions', repos:90, app:1, charge:true},
+       {k:'dc',     s:3, r:'10 répétitions', repos:90, app:1},
+       {k:'hip',    s:3, r:'12 répétitions', repos:90, app:1},
+       {k:'pallof', s:3, r:'30 s par côté',  repos:45},
+       {k:'planche',s:3, r:'40 secondes',    repos:40}]},
+   b:{titre:'Salle · explosivité et force', ech:12, calme:6,
+     sous:"La séance qui compte, et la seule de la semaine où tes jambes travaillent vraiment. Les sauts d'abord, à l'état frais : c'est la qualité la plus fragile.",
      exos:[
-       {k:'squat', s:4, r:'8 répétitions',  repos:150, app:2, charge:true},
-       {k:'rdl',   s:3, r:'10 répétitions', repos:120, app:1},
-       {k:'hip',   s:3, r:'12 répétitions', repos:90,  app:1},
-       {k:'pallof',s:3, r:'30 s par côté',  repos:45}]}},
+       {k:'cmj',    s:4, r:'5 sauts',        repos:90},
+       {k:'squat',  s:4, r:'8 répétitions',  repos:150, app:2, charge:true},
+       {k:'rdl',    s:3, r:'10 répétitions', repos:120, app:1},
+       {k:'bulgare',s:3, r:'10 par jambe',   repos:75},
+       {k:'planche',s:3, r:'40 secondes',    repos:40}]}},
 
 2:{nom:'Force maximale', couleur:'#7A3B2E',
    but:"Les charges montent, les répétitions descendent. C'est le bloc qui fabrique la force brute dont ta poussée a besoin. Tu notes tes charges à chaque séance : sans ça, tu ne peux pas progresser.",
-   mardi:{titre:'Salle · force-vitesse et haut du corps', ech:10, calme:6,
-     sous:"Le squat jump remplace le saut avec élan : départ arrêté, exactement comme au portillon.",
+   a:{titre:'Salle · haut du corps et bassin', ech:8, calme:5,
+     sous:"Le tirage, c'est ce qui fait ton départ autant que les jambes. Et il ne coûte rien à la séance de piste de ce soir.",
      exos:[
-       {k:'sj',       s:4, r:'5 sauts',        repos:120},
-       {k:'traction', s:4, r:'6 répétitions',  repos:120},
-       {k:'dc',       s:4, r:'6 répétitions',  repos:120, app:1},
-       {k:'bulgare',  s:3, r:'8 par jambe',    repos:90},
-       {k:'pallof',   s:3, r:'30 s par côté',  repos:45}]},
-   vendredi:{titre:'Salle · force maximale', ech:12, calme:6,
+       {k:'traction',s:4, r:'6 répétitions', repos:120},
+       {k:'dc',      s:4, r:'6 répétitions', repos:120, app:1, charge:true},
+       {k:'hip',     s:3, r:'8 répétitions', repos:120, app:1},
+       {k:'pallof',  s:3, r:'30 s par côté', repos:45}]},
+   b:{titre:'Salle · explosivité et force maximale', ech:12, calme:6,
      sous:"Charges lourdes, peu de répétitions, longs repos. Un repos écourté ici, c'est la séance entière qui ne sert plus à rien.",
      exos:[
-       {k:'squat', s:5, r:'5 répétitions', repos:180, app:2, charge:true},
-       {k:'rdl',   s:4, r:'6 répétitions', repos:150, app:1},
-       {k:'hip',   s:3, r:'8 répétitions', repos:120, app:1},
-       {k:'planche',s:3,r:'45 secondes',   repos:45}]}},
+       {k:'sj',     s:4, r:'5 sauts',        repos:120},
+       {k:'squat',  s:5, r:'5 répétitions',  repos:180, app:2, charge:true},
+       {k:'rdl',    s:4, r:'6 répétitions',  repos:150, app:1},
+       {k:'bulgare',s:3, r:'8 par jambe',    repos:90},
+       {k:'planche',s:3, r:'45 secondes',    repos:45}]}},
 
 3:{nom:'Force-vitesse', couleur:'#A8852A',
-   but:"On transforme la force en vitesse. Le vendredi devient une séance de contraste : lourd, puis explosif juste après, pendant que le système nerveux est encore allumé.",
-   mardi:{titre:'Salle · vitesse de production', ech:10, calme:6,
-     sous:"Tout se joue sur l'intention : chaque répétition doit partir le plus vite possible, même si la barre, elle, ne va pas vite.",
+   but:"On transforme la force en vitesse. La séance lourde devient une séance de contraste : lourd, puis explosif juste après, pendant que le système nerveux est encore allumé.",
+   a:{titre:'Salle · haut du corps, en vitesse', ech:8, calme:5,
+     sous:"Même liste que d'habitude, une seule consigne en plus : chaque répétition doit PARTIR vite, même si la barre, elle, ne va pas vite.",
      exos:[
-       {k:'drop',     s:5, r:'4 sauts',       repos:120},
-       {k:'traction', s:4, r:'5 répétitions', repos:120},
-       {k:'dc',       s:4, r:'4 répétitions explosives', repos:120, app:1},
-       {k:'fentesaut',s:3, r:'6 par jambe',   repos:90},
-       {k:'pallof',   s:3, r:'30 s par côté', repos:45}]},
-   vendredi:{titre:'Salle · contraste', ech:12, calme:6,
+       {k:'traction',s:4, r:'5 répétitions explosives', repos:120},
+       {k:'dc',      s:4, r:'4 répétitions explosives', repos:120, app:1, charge:true},
+       {k:'hip',     s:4, r:'6 répétitions explosives', repos:120, app:1},
+       {k:'pallof',  s:3, r:'30 s par côté', repos:45}]},
+   b:{titre:'Salle · contraste', ech:12, calme:6,
      sous:"Méthode de contraste sur le squat : ta série lourde, trente secondes de pause, puis cinq sauts verticaux au maximum. C'est ce couplage qui apprend à ton corps à sortir vite ce qu'il sait sortir fort.",
      exos:[
-       {k:'squat', s:4, r:'3 répétitions lourdes, puis 5 sauts verticaux 30 s après', repos:180, app:2, charge:true, t:40},
-       {k:'hip',   s:4, r:'6 répétitions explosives', repos:120, app:1},
-       {k:'rdl',   s:3, r:'5 répétitions', repos:150, app:1},
-       {k:'lat',   s:3, r:'30 s par côté', repos:45}]}},
+       {k:'drop',     s:5, r:'4 sauts',      repos:120},
+       {k:'squat',    s:4, r:'3 répétitions lourdes, puis 5 sauts verticaux 30 s après', repos:180, app:2, charge:true, t:40},
+       {k:'rdl',      s:3, r:'5 répétitions', repos:150, app:1},
+       {k:'fentesaut',s:3, r:'6 par jambe',   repos:90},
+       {k:'lat',      s:3, r:'30 s par côté', repos:45}]}},
 
 4:{nom:'Puissance spécifique', couleur:'#B8761A',
    but:"Tout ressemble au portillon : départ arrêté, intention maximale, peu de répétitions, beaucoup de récupération. On n'ajoute plus de fatigue, on affûte le geste.",
-   mardi:{titre:'Salle · puissance', ech:10, calme:6,
+   a:{titre:'Salle · haut du corps, puissance', ech:8, calme:5,
      sous:"Peu de volume, qualité maximale. Si une répétition n'est pas explosive, elle ne compte pas — tu la refais après une pause.",
      exos:[
-       {k:'sj',       s:5, r:'3 sauts',       repos:150},
-       {k:'traction', s:4, r:'4 répétitions explosives', repos:120},
-       {k:'dc',       s:4, r:'4 répétitions explosives', repos:120, app:1},
-       {k:'pallof',   s:3, r:'30 s par côté', repos:45}]},
-   vendredi:{titre:'Salle · contraste court', ech:12, calme:6,
+       {k:'traction',s:4, r:'4 répétitions explosives', repos:120},
+       {k:'dc',      s:4, r:'4 répétitions explosives', repos:120, app:1, charge:true},
+       {k:'hip',     s:3, r:'5 répétitions explosives', repos:120, app:1},
+       {k:'pallof',  s:3, r:'30 s par côté', repos:45}]},
+   b:{titre:'Salle · contraste court', ech:12, calme:6,
      sous:"La même méthode qu'en janvier, en plus court. Tu sors de là avec de l'énergie, pas vidé.",
      exos:[
+       {k:'sj',    s:5, r:'3 sauts',       repos:150},
        {k:'squat', s:3, r:'3 répétitions lourdes, puis 5 squat jumps 30 s après', repos:180, app:2, charge:true, t:40},
-       {k:'hip',   s:3, r:'5 répétitions explosives', repos:120, app:1},
-       {k:'planche',s:3,r:'45 secondes', repos:45}]}},
+       {k:'rdl',   s:3, r:'5 répétitions', repos:150, app:1},
+       {k:'lat',   s:3, r:'30 s par côté', repos:45}]}},
 
 5:{nom:'Affûtage', couleur:'#1A1612',
    but:"On ne construit plus rien. Le travail est fait depuis longtemps — le seul but est d'arriver frais sur la grille, en gardant la sensation de vitesse. La fatigue tombe, la puissance monte.",
-   mardi:{titre:'Salle · entretien', ech:10, calme:6,
-     sous:"Court. Tu dois sortir de la salle en te disant que tu aurais pu en faire plus. C'est exactement l'objectif.",
+   a:{titre:'Salle · entretien', ech:8, calme:5,
+     sous:"Très court. Tu dois sortir en te disant que tu aurais pu en faire plus. C'est exactement l'objectif.",
      exos:[
-       {k:'cmj',      s:4, r:'3 sauts',       repos:120},
-       {k:'traction', s:3, r:'4 répétitions', repos:120},
-       {k:'pallof',   s:2, r:'30 s par côté', repos:45}]},
-   vendredi:{titre:'Salle · rappel de force', ech:12, calme:6,
+       {k:'traction',s:3, r:'4 répétitions', repos:120},
+       {k:'pallof',  s:2, r:'30 s par côté', repos:45}]},
+   b:{titre:'Salle · rappel de force', ech:10, calme:6,
      sous:"Lourd mais facile : des charges qui réveillent le système nerveux sans laisser de fatigue. Tu t'arrêtes bien avant la difficulté.",
      exos:[
+       {k:'cmj',   s:4, r:'3 sauts',       repos:120},
        {k:'squat', s:3, r:'3 répétitions', repos:180, app:2, charge:true},
        {k:'hip',   s:2, r:'5 répétitions', repos:120, app:1}]}},
 
 6:{nom:'Poids du corps', couleur:'#3B4A6B', libre:true,
-   but:"Quatre semaines d'été sans salle. On ne cherche pas à progresser : on garde ce qui a été construit, on soigne les écarts entre les deux jambes, et on laisse le corps souffler avant la dernière ligne droite de la saison. Ça se fait dehors, chez toi, en vacances, n'importe où.",
-   mardi:{titre:'Poids du corps · ressort', ech:8, calme:5, libre:true,
-     sous:"Sans matériel, et à l'heure que tu veux : le club est fermé, tu n'as plus de vélo avant. Le but est de garder le ressort, pas de te fatiguer.",
+   but:"Quatre semaines d'été sans salle et sans club. On ne cherche pas à progresser : on garde ce qui a été construit, on soigne les écarts entre les deux jambes, et on laisse le corps souffler avant la dernière ligne droite de la saison. Ça se fait dehors, chez toi, en vacances, n'importe où.",
+   a:{titre:'Poids du corps · haut du corps', ech:8, calme:5, libre:true,
+     sous:"Sans matériel, à l'heure que tu veux. Le but est de garder, pas de te fatiguer.",
      exos:[
-       {k:'cmj',     s:4, r:'5 sauts',      repos:90},
-       {k:'pompe',   s:3, r:'12 répétitions', repos:75},
-       {k:'bulgare', s:3, r:'12 par jambe', repos:75},
-       {k:'planche', s:3, r:'45 secondes',  repos:45}]},
-   vendredi:{titre:'Poids du corps · une jambe', ech:8, calme:5, libre:true,
-     sous:"Le travail jambe par jambe, celui qui compte le plus quand il n'y a pas de barre. Quand tu veux dans la journée.",
+       {k:'pompe',   s:3, r:'12 répétitions',      repos:75},
+       {k:'traction',s:4, r:'le maximum propre',   repos:120},
+       {k:'planche', s:3, r:'45 secondes',         repos:45},
+       {k:'lat',     s:3, r:'40 s par côté',       repos:45}]},
+   b:{titre:'Poids du corps · jambes et ressort', ech:8, calme:5, libre:true,
+     sous:"Le travail jambe par jambe, celui qui compte le plus quand il n'y a pas de barre.",
      exos:[
+       {k:'cmj',      s:4, r:'5 sauts',      repos:90},
        {k:'pistol',   s:3, r:'8 par jambe',  repos:90},
-       {k:'traction', s:4, r:'le maximum propre', repos:120},
        {k:'fentesaut',s:3, r:'8 par jambe',  repos:75},
-       {k:'lat',      s:3, r:'40 s par côté', repos:45}]}}
+       {k:'lat',      s:3, r:'40 s par côté',repos:45}]}}
 };
 
 /* =====================================================================================
@@ -611,37 +623,63 @@ const SEMAINES = [
 
 /* =====================================================================================
    LA SEMAINE DE ROBIN
-   Trois séances vélo au club (mardi, mercredi, vendredi, toutes avancées à 18h), deux
-   séances en salle accolées au vélo du mardi et du vendredi. Lundi, jeudi, samedi,
-   dimanche : rien, et c'est voulu.
+   Mardi : vélo au club le soir. Mercredi : salle à 13h30, puis vélo à 18h — c'est
+   pour ça que la salle du mercredi ne contient aucun travail de jambes. Vendredi soir :
+   Robin choisit lui-même, le jour J, entre le vélo et la salle. S'il roule, la séance
+   de salle bascule au samedi matin. Lundi, jeudi, dimanche : rien.
    ===================================================================================== */
 const GRILLE = {
-  lundi:[], mardi:['velo','salle'], mercredi:['velo'], jeudi:[],
-  vendredi:['velo','salle'], samedi:[], dimanche:[]
+  lundi:[], mardi:['velo'], mercredi:['salle','velo'], jeudi:[],
+  vendredi:['choix'], samedi:[], dimanche:[]
+};
+/* Quand chaque chose commence, et jusqu'où elle a le droit d'aller. */
+const HORAIRES = {
+  velo:     {mardi:'19h30 – 21h00', mercredi:'18h00 – 19h30', vendredi:'19h30 – 21h00'},
+  salle:    {mercredi:{debut:(13*60+30)*60, fin:(16*60)*60},
+             vendredi:{debut:(19*60+30)*60, fin:(21*60)*60},
+             samedi:  {debut:(10*60)*60,    fin:(12*60)*60}}
 };
 const REPOS_TXT = {
-  lundi:"Repos complet. Tu as roulé vendredi et tu attaques demain : aujourd'hui, le corps répare.",
+  lundi:"Repos complet. Tu as roulé ou chargé en fin de semaine : aujourd'hui, le corps répare.",
   jeudi:"Repos complet. C'est ce jour-là qui rend ton vendredi bon. Ne le remplis pas.",
   samedi:"Repos complet. Sors, vois tes potes, fais autre chose. Ça fait partie du programme.",
   dimanche:"Repos complet. Dernière journée libre avant la semaine : couche-toi tôt."
 };
 
-/* Ce que fait vraiment un jour donné, une fois le mode de la semaine appliqué. */
-function seancesDuJour(sem, jour){
+/* Le choix du vendredi, fait par Robin le jour même : 'velo' ou 'salle'. */
+function choixDe(d){ return (P.choix && P.choix[d]) || ''; }
+function vendrediDe(d){            // le vendredi de la semaine où tombe ce jour
+  const j = s2d(d).getDay();       // 0 dimanche … 5 vendredi … 6 samedi
+  return plus(d, 5 - (j === 0 ? 7 : j));
+}
+
+/* Ce que fait vraiment un jour donné, une fois le mode de la semaine appliqué et le
+   choix du vendredi connu. Calculé au rendu, et pas une fois pour toutes : le samedi
+   dépend d'une décision qui n'existe pas encore au chargement de la page. */
+function seancesDuJour(sem, jour, d){
   if(sem.mode === 'coupure') return [];
   if(sem.off && sem.off.indexOf(jour) > -1) return [];
   let s = (GRILLE[jour] || []).slice();
+
+  if(jour === 'vendredi'){
+    if(sem.clubFerme) return ['salle'];          // l'été, plus de club : la salle, point
+    const c = choixDe(d);
+    return c ? [c] : ['choix'];
+  }
+  if(jour === 'samedi'){
+    if(sem.clubFerme) return [];
+    if(sem.off && sem.off.indexOf('vendredi') > -1) return [];   // déplacement : rien
+    return choixDe(vendrediDe(d)) === 'velo' ? ['salle'] : [];
+  }
   if(sem.offSalle && sem.offSalle.indexOf(jour) > -1) s = s.filter(function(x){ return x !== 'salle'; });
   if(sem.clubFerme) s = s.filter(function(x){ return x !== 'velo'; });
   return s;
 }
-/* Le gabarit de la séance de salle d'un jour : le bloc de la semaine, sauf en mode
-   « léger » où on bascule sur l'affûtage, et sauf quand le mardi reprend la séance
-   lourde du vendredi parce qu'il part en déplacement. */
+/* Quel gabarit pour quel jour : le mercredi porte toujours la séance « haut du corps »,
+   le vendredi et le samedi portent toujours la séance lourde. */
 function gabarit(sem, jour){
   const bl = BLOCS[sem.mode === 'leger' ? 5 : sem.bl];
-  if(sem.inv) return bl.vendredi;           // le mardi hérite de la séance lourde
-  return (jour === 'mardi') ? bl.mardi : bl.vendredi;
+  return (jour === 'mercredi') ? bl.a : bl.b;
 }
 function blocDe(sem){ return BLOCS[sem.mode === 'leger' ? 5 : sem.bl]; }
 
@@ -652,12 +690,12 @@ const JOURNEES = [];
     const sem = SEMAINES[w];
     for(let k=0; k<7; k++){
       const d = plus(DEBUT_S1, w*7 + k);
-      const j = jourNom(d);
-      JOURNEES.push({ d:d, sem:sem, jour:j, seances: seancesDuJour(sem, j),
+      JOURNEES.push({ d:d, sem:sem, jour:jourNom(d),
                       course: courseDuJour(d), depart: departDuJour(d), coupure: dansCoupure(d) });
     }
   }
 })();
+function seancesDe(j){ return seancesDuJour(j.sem, j.jour, j.d); }
 function semaineDe(d){
   const i = Math.floor(ecart(DEBUT_S1, d) / 7);
   return Math.min(NB_SEM-1, Math.max(0, i));
@@ -675,10 +713,13 @@ function dureeExo(e, allege){
   const app= e.app || 0;
   return app*(40+60) + s*(t + e.repos) - e.repos + 45;
 }
-function planSeance(tpl, allege){
-  /* Une séance « libre » (l'été, sans salle ni vélo) se compte à partir de zéro : son
-     horloge donne des durées, pas des heures, parce qu'il la fera quand il voudra. */
-  let m = tpl.libre ? 0 : SALLE_H;
+function planSeance(tpl, allege, jour){
+  /* Une séance « libre » (l'été, sans salle ni club) se compte à partir de zéro : son
+     horloge donne des durées, pas des heures, parce qu'il la fera quand il voudra.
+     Sinon elle part de l'heure d'ouverture du jour : 13h30 le mercredi, 19h30 le
+     vendredi, 10h le samedi. */
+  const cr = HORAIRES.salle[jour] || HORAIRES.salle.vendredi;
+  let m = tpl.libre ? 0 : cr.debut;
   const lignes = [{nom:'Échauffement', de:m, duree:tpl.ech*60}];
   m += tpl.ech*60;
   tpl.exos.forEach(function(e){
@@ -688,8 +729,8 @@ function planSeance(tpl, allege){
   });
   lignes.push({nom:'Retour au calme', de:m, duree:tpl.calme*60});
   m += tpl.calme*60;
-  return {lignes:lignes, fin:m, libre:!!tpl.libre,
-          depasse: !tpl.libre && m > SALLE_FIN};
+  return {lignes:lignes, fin:m, libre:!!tpl.libre, debut:cr.debut, limite:cr.fin,
+          depasse: !tpl.libre && m > cr.fin};
 }
 function hAff(sec){ const m = Math.round(sec/60); return hhmm(m); }
 function duree(sec){ return Math.round(sec/60) + ' min'; }
@@ -703,7 +744,7 @@ function marque(plan, sec){ return plan.libre ? duree(sec) : hAff(sec); }
    ===================================================================================== */
 let CODE = '';
 let BRUT = {};
-let P = { fait:{}, charges:{}, tests:{} };
+let P = { fait:{}, charges:{}, tests:{}, choix:{} };
 let CC = { days:{}, mois:'' };
 let semVue = 0;
 
@@ -720,8 +761,9 @@ function calculerResume(){
   let faits = 0, prevus = 0;
   const retard = [];
   JOURNEES.forEach(function(j){
-    if(j.d > a || !j.seances.length) return;
-    j.seances.forEach(function(t){
+    const ss = seancesDe(j);
+    if(j.d > a || !ss.length || ss[0] === 'choix') return;
+    ss.forEach(function(t){
       prevus++;
       if(estFaite(j.d, t)) faits++;
       else if(retard.length < 12) retard.push(j.d + '|' + t);
@@ -730,6 +772,7 @@ function calculerResume(){
   return {
     maj: a, sem: sem.n, nbSem: NB_SEM,
     blocN: (sem.mode === 'leger' ? 5 : sem.bl), bloc: bl.nom, mode: sem.mode,
+    choix: P.choix || {},
     debut: PREMIER,
     prochaine: pc ? {nom:pc.nom, lieu:pc.lieu, d:pc.jours[0], maj:!!pc.maj} : null,
     faits: faits, prevus: prevus, retard: retard
@@ -800,9 +843,14 @@ function rendreEntete(){
   const jours = Math.max(0, ecart(a, cible.jours[0]));
 
   const fini = JOURNEES.filter(function(j){
-    return j.seances.length && j.d <= a && j.seances.every(function(t){ return estFaite(j.d, t); });
+    const ss = seancesDe(j);
+    return ss.length && ss[0] !== 'choix' && j.d <= a
+        && ss.every(function(t){ return estFaite(j.d, t); });
   }).length;
-  const total = JOURNEES.filter(function(j){ return j.seances.length; }).length;
+  const total = JOURNEES.filter(function(j){
+    const ss = seancesDe(j);
+    return ss.length && ss[0] !== 'choix';
+  }).length;
 
   document.getElementById('hCible').textContent = avant > 0
     ? "Le programme commence le mardi 3 novembre. Premier objectif : être le meilleur au départ et sur la première ligne droite, le samedi 20 mars à Bolbec."
@@ -876,10 +924,12 @@ function carteTest(n){
 
 function carteJour(j, a, sem, bl){
   const passe = j.d < a, futur = j.d > a, estAuj = j.d === a;
-  const n = j.seances.length;
+  j.seances = seancesDe(j);
+  const enAttente = j.seances.length === 1 && j.seances[0] === 'choix';
+  const n = enAttente ? 0 : j.seances.length;
   const toutFait = n>0 && j.seances.every(function(t){ return estFaite(j.d, t); });
-  const retard = passe && n>0 && !toutFait;
-  const ferme  = futur && n>0;
+  const retard = passe && (n>0 || enAttente) && !toutFait;
+  const ferme  = futur && (n>0 || enAttente);
 
   let cls = 'jour';
   if(j.course) cls += ' course';
@@ -895,7 +945,9 @@ function carteJour(j, a, sem, bl){
   if(toutFait)     puces += '<span class="puce ok">Validé</span>';
   else if(retard)  puces += '<span class="puce retard">À valider</span>';
   else if(ferme)   puces += '<span class="puce ferme">S\'ouvre le '+s2d(j.d).getDate()+'</span>';
-  if(n>0 && !ferme && gabaritLourd(sem, j.jour)) puces += '<span class="puce cle">Séance clé</span>';
+  if(n>0 && !ferme && j.seances.indexOf('salle')>-1 && j.jour!=='mercredi')
+    puces += '<span class="puce cle">Séance clé</span>';
+  if(enAttente && !ferme) puces += '<span class="puce choix">À toi de choisir</span>';
 
   let h = '<article class="'+cls+'" id="j-'+j.d+'">'
     + '<div class="j-tete"><span class="jn">'+j.jour.toUpperCase()+'</span>'
@@ -929,6 +981,10 @@ function carteJour(j, a, sem, bl){
     h += '<div class="j-repos">'+(premier ? COUPURE.txt : COUPURE.court)+'</div></article>';
     return h;
   }
+  if(enAttente){
+    h += '<div class="j-corps">' + blocChoix(j, sem) + '</div></article>';
+    return h;
+  }
   if(!n){
     /* Un lundi qui suit deux jours de course n'est pas un lundi comme les autres :
        le texte générique lui parlerait d'une séance de vélo qu'il n'a pas faite. */
@@ -946,9 +1002,12 @@ function carteJour(j, a, sem, bl){
   }
   if(ferme){
     h += '<div class="j-repos">'
-      + j.seances.map(function(t){
-          return t==='velo' ? 'Vélo au club · 18h–19h30' : 'Salle · 19h45–21h';
-        }).join(' &nbsp;·&nbsp; ')
+      + (enAttente ? 'Vélo au club <b>ou</b> salle, 19h30 – 21h00. Tu choisiras le jour même.'
+        : j.seances.map(function(t){
+            if(t === 'velo') return 'Vélo au club · ' + (HORAIRES.velo[j.jour] || '');
+            const cr = HORAIRES.salle[j.jour] || HORAIRES.salle.vendredi;
+            return 'Salle · ' + hAff(cr.debut);
+          }).join(' &nbsp;·&nbsp; '))
       + '</div></article>';
     return h;
   }
@@ -956,23 +1015,36 @@ function carteJour(j, a, sem, bl){
   h += '<div class="j-corps">';
   j.seances.forEach(function(t){
     h += (t === 'velo') ? blocVelo(j, sem) : blocSalle(j, sem, bl);
+    if(t === 'salle' && j.jour === 'mercredi') h += '';
   });
   h += '</div></article>';
   return h;
 }
-/* La « séance clé » est celle qui porte le squat lourd, quel que soit le jour où elle tombe. */
-function gabaritLourd(sem, jour){
-  if(sem.seances === 0 || sem.mode === 'coupure') return false;
-  if((GRILLE[jour]||[]).indexOf('salle') < 0) return false;
-  const tpl = gabarit(sem, jour);
-  return tpl.exos.some(function(e){ return e.charge; });
+/* Le vendredi soir, Robin tranche lui-même. Tant qu'il n'a pas tranché, la journée
+   reste ouverte et ne compte pas comme une séance manquée : ce n'est pas un oubli,
+   c'est une décision qui n'a pas encore été prise. */
+function blocChoix(j, sem){
+  const bl = blocDe(sem);
+  const plan = planSeance(bl.b, sem.mode === 'allege', 'samedi');
+  return '<div class="seance choix-bloc">'
+    + '<p class="choix-q">Ce soir, 19h30 – 21h00 : tu roules, ou tu vas en salle ?</p>'
+    + '<div class="choix-deux">'
+    + '<button class="ch-opt" data-choix-d="'+j.d+'" data-choix-v="velo">'
+      + '<b>Je roule</b><span>Vélo au club, 19h30 – 21h00.<br>La salle bascule à demain 10h.</span></button>'
+    + '<button class="ch-opt" data-choix-d="'+j.d+'" data-choix-v="salle">'
+      + '<b>Je vais en salle</b><span>' + bl.b.titre.replace('Salle · ','')
+      + ', 19h30 – ' + hAff(plan.fin - plan.debut + HORAIRES.salle.vendredi.debut) + '.<br>Samedi libre.</span></button>'
+    + '</div>'
+    + '<p class="regle">Les deux sont de bons choix. Si tu te sens lourd ou mal réveillé, '
+    + 'la salle fatigue moins la tête que vingt départs. Si tu es bien, prends le vélo : '
+    + 'la piste ne se rattrape pas en salle.</p></div>';
 }
 
 function blocVelo(j, sem){
   const fait = estFaite(j.d, 'velo');
   const leger = (sem.mode === 'leger');
   return '<div class="seance"><div class="s-tete"><span class="s-pt velo"></span>'
-    + '<b>Vélo au club</b><span class="h">18h00 – 19h30</span></div>'
+    + '<b>Vélo au club</b><span class="h">' + (HORAIRES.velo[j.jour] || '') + '</span></div>'
     + '<p class="s-sous">'+(leger
         ? 'Séance relâchée : quelques départs vifs, pas de volume. Tu gardes tout pour le week-end. '
         : '')+sem.focus+'</p>'
@@ -981,19 +1053,23 @@ function blocVelo(j, sem){
 
 function blocSalle(j, sem, bl){
   const tpl  = gabarit(sem, j.jour);
-  const plan = planSeance(tpl, sem.mode === 'allege');
+  const plan = planSeance(tpl, sem.mode === 'allege', j.jour);
   const fait = estFaite(j.d, 'salle');
   let h = '<div class="seance"><div class="s-tete"><span class="s-pt salle"></span>'
     + '<b>'+tpl.titre+'</b><span class="h">'
-      + (plan.libre ? '\u2248 '+duree(plan.fin)+', quand tu veux' : '19h45 – '+hAff(plan.fin))
+      + (plan.libre ? '\u2248 '+duree(plan.fin)+', quand tu veux'
+                    : hAff(plan.debut)+' – '+hAff(plan.fin))
       + '</span></div>'
     + '<p class="s-sous">'+tpl.sous+'</p>';
 
-  if(sem.inv && j.jour === 'mardi') h += '<p class="regle">Cette semaine, la séance lourde passe '
-    + 'au mardi : tu pars vendredi en compétition, et mieux vaut perdre la séance légère que celle-ci.</p>';
+  if(j.jour === 'mercredi' && !plan.libre) h += '<p class="regle">Tu roules à 18h. '
+    + "C'est pour ça qu'il n'y a aucun travail de jambes ici : tout ce que tu prendrais "
+    + 'maintenant, tu le perdrais ce soir sur tes départs.</p>';
+  if(j.jour === 'samedi') h += '<p class="regle">Tu as choisi de rouler hier soir : '
+    + 'la séance de salle est ici. Tu as tout le week-end derrière pour l\'encaisser.</p>';
 
   if(plan.depasse) h += '<p class="regle" style="border-color:var(--velo);color:var(--velo)">'
-    + 'Attention : cette séance dépasse 21h. Préviens ton père.</p>';
+    + 'Attention : cette séance dépasse ' + hAff(plan.limite) + '. Préviens ton père.</p>';
 
   let lettre = 65;
   plan.lignes.forEach(function(l){
@@ -1031,8 +1107,8 @@ function blocSalle(j, sem, bl){
      + (plan.libre
         ? "Pas d'horaire cette semaine : tu la fais le matin, l'après-midi, en vacances, où tu veux. "
           + "La seule règle est de ne pas sauter le premier exercice."
-        : "Si à 20h50 tu n'as pas fini, tu sautes le dernier exercice de la liste. "
-          + "Jamais le premier : c'est lui qui porte la séance.")
+        : "Si à " + hAff(plan.limite - 600) + " tu n'as pas fini, tu sautes le dernier exercice "
+          + "de la liste. Jamais le premier : c'est lui qui porte la séance.")
      + '</p>';
   h += bouton(j.d, 'salle', fait, 'La séance de salle est faite');
   return h;
@@ -1079,6 +1155,21 @@ function brancher(){
           return;
         }
         rendreSemaine(); rendreEntete();
+      });
+    });
+  });
+  document.querySelectorAll('[data-choix-d]').forEach(function(b){
+    b.addEventListener('click', function(){
+      const d = b.dataset.choixD, v = b.dataset.choixV;
+      P.choix = P.choix || {};
+      P.choix[d] = v;
+      enregistrer(function(err){
+        if(err){ delete P.choix[d]; }
+        rendreSemaine(); rendreEntete();
+        if(!err) setTimeout(function(){
+          const el = document.getElementById('j-'+d);
+          if(el) el.scrollIntoView({block:'center'});
+        }, 60);
       });
     });
   });
@@ -1144,7 +1235,8 @@ function connecter(code, msgSiFaux){
     CC.days = BRUT.ccDays || {};
     CC.mois = BRUT.ccMois || '';
     const r0 = BRUT.robin || {};
-    P = { fait: r0.fait || {}, charges: r0.charges || {}, tests: r0.tests || {} };
+    P = { fait: r0.fait || {}, charges: r0.charges || {}, tests: r0.tests || {},
+        choix: r0.choix || {} };
     try{ sessionStorage.setItem('axe_code', code);
          if(document.getElementById('vGarder').checked){ localStorage.setItem('axe_code', code); }
          else { localStorage.removeItem('axe_code'); } }catch(e){}
