@@ -120,6 +120,28 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 .mini:hover{border-color:var(--gold);color:var(--gold)}
 .mini.gold{border-color:rgba(168,133,42,.6);color:var(--gold)}
 .mini.gold:hover{background:rgba(168,133,42,.1)}
+/* ---- les séances ponctuelles : ce que j'ajoute à la main sur la page d'un sportif ---- */
+.pc-item{margin-top:9px;padding:9px 11px;border:1px solid var(--line);border-left:2px solid var(--physique);
+  border-radius:3px;background:rgba(122,59,46,.04)}
+.pc-item.pc-faite{border-left-color:#2F6B45;background:rgba(47,107,69,.05)}
+.pc-haut{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.pc-jour{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--physique);font-weight:700}
+.pc-faite .pc-jour{color:#2F6B45}
+.pc-etat{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.pc-titre{font-size:14px;font-weight:600;color:var(--ink);margin-top:3px}
+.pc-texte{font-size:12.5px;color:var(--dim);margin-top:5px;white-space:pre-wrap;line-height:1.5}
+.pc-form{margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:3px}
+.pc-form label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);font-weight:700;margin:9px 0 4px}
+.pc-form label:first-of-type{margin-top:0}
+.pc-form input,.pc-form textarea{width:100%;font-family:'DM Sans',system-ui,sans-serif;font-size:13.5px;
+  color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:3px;padding:8px 10px}
+.pc-form textarea{min-height:150px;resize:vertical;line-height:1.55}
+.pc-form input:focus,.pc-form textarea:focus{outline:none;border-color:var(--gold)}
+.pc-aide{font-size:11.5px;color:var(--dim);font-style:italic;margin-top:7px;line-height:1.5}
+.pc-msg{font-size:12px;font-weight:600;margin-top:9px}
+.pc-msg.ok{color:#2F6B45}
+.pc-msg.ko{color:#8C2B1E}
 /* ---- le répertoire : une ligne par sportif, le dossier s'ouvre au clic ---- */
 .rep-outils{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
 .rep-chercher{flex:1 1 220px;min-width:0;font-family:'DM Sans',sans-serif;font-size:14px;
@@ -608,6 +630,7 @@ let notesParCode = {};
 let rapportsParCode = {};
 let debriefsParCode = {};
 let vocauxParCode = {};
+let ponctuellesParCode = {};
 
 async function chargerNotesRapports(cle){
   // on lit toutes les notes et rapports via des fonctions coach dédiées (à créer si besoin)
@@ -621,9 +644,13 @@ async function chargerNotesRapports(cle){
     if(!v.error && v.data){ v.data.forEach(x=>{ (vocauxParCode[x.code_acces]=vocauxParCode[x.code_acces]||[]).push(x); }); }
     const d = await db.rpc('liste_debriefs', { cle: cle });
     if(!d.error && d.data){ d.data.forEach(x=>{ (debriefsParCode[x.code_acces]=debriefsParCode[x.code_acces]||[]).push(x); }); }
+    const sp = await db.rpc('axe_liste_ponctuelles', { cle: cle });
+    if(!sp.error && sp.data){ ponctuellesParCode = {};
+      sp.data.forEach(x=>{ (ponctuellesParCode[x.code_acces]=ponctuellesParCode[x.code_acces]||[]).push(x); }); }
     // re-render si on a du contenu
     if((!n.error && n.data && n.data.length) || (!r.error && r.data && r.data.length)
-       || (!d.error && d.data && d.data.length) || (!v.error && v.data && v.data.length)){
+       || (!d.error && d.data && d.data.length) || (!v.error && v.data && v.data.length)
+       || (!sp.error && sp.data && sp.data.length)){
       // relance l'affichage avec notes/rapports/débriefs
       const cle2 = document.getElementById('cle').value;
       const { data } = await db.rpc('liste_riders', { cle: cle2 });
@@ -1082,6 +1109,7 @@ function afficherRiders(riders){
       ${profilBlock}
       ${saison ? blocSaison(sr) : `${suiteBlock}${moisBlock}${closBlock}`}
       ${debriefBlock}
+      <div class="pc-zone" id="pcZone" data-code="${echapperAttr(r.code_acces || '')}"></div>
     </div>`};
     majSignaux(d);
     DOSSIERS.push(d);
@@ -1204,6 +1232,16 @@ function majSignaux(d){
   const neufs = (vocauxParCode[d.code] || []).filter(v => !v.lu).length;
   const sig = [];
   if(neufs)           sig.push({t:neufs + (neufs>1?' vocaux à écouter':' vocal à écouter'), c:'urgent'});
+  /* Une séance que j'ai ajoutée à la main mérite sa pastille : c'est la seule chose du
+     programme dont je suis l'auteur direct, donc la seule dont je dois savoir, sans ouvrir
+     le dossier, si elle est tombée dans le vide. */
+  const pcs  = ponctuellesParCode[d.code] || [];
+  const ajPc = pcAujISO();
+  const pcRat = pcs.filter(function(s){ return !s.fait_le && String(s.jour).slice(0,10) < ajPc; }).length;
+  const pcAuj = pcs.filter(function(s){ return !s.fait_le && String(s.jour).slice(0,10) === ajPc; }).length;
+  if(pcRat) sig.push({t:pcRat > 1 ? pcRat + ' séances ponctuelles non faites'
+                                  : 'Séance ponctuelle non faite', c:'attente'});
+  else if(pcAuj) sig.push({t:'Séance ponctuelle aujourd\'hui', c:'calme'});
   /* Un sportif sur plan daté n'envoie pas de bilan mensuel : lui réclamer éternellement
      deux bilans qui n'existent pas noierait les vrais signaux. On regarde son assiduité. */
   if(d.saison){
@@ -1340,6 +1378,147 @@ function rafraichirPastillesVocales(racine){
   });
 }
 
+/* =====================================================================================
+   LES SÉANCES PONCTUELLES
+   Une séance datée que j'ajoute à la main sur la page d'un sportif, en plus de son
+   programme : une muscu pour compenser une semaine de vélo allégée, un rattrapage, un
+   travail de récupération. Champ libre, parce qu'un formulaire à cases ne saurait jamais
+   écrire « squat jump départ arrêté, 3 × 5 sauts, 1 min 30 de repos ».
+
+   Elle ne vit pas dans `suivi_rituel` : `enregistrer_suivi_rituel` REMPLACE tout le JSON,
+   donc une sauvegarde faite par le sportif depuis une page ouverte avant mon ajout
+   l'effacerait. Table à part, colonnes séparées : j'écris le titre et le texte, il écrit
+   la validation, personne ne se marche dessus.
+   ===================================================================================== */
+const PC_MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août',
+                 'septembre','octobre','novembre','décembre'];
+const PC_JOURS = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+
+function pcAujISO(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0')
+       + '-' + String(d.getDate()).padStart(2,'0');
+}
+/* « mardi 20 octobre » : la date seule ne dit pas assez vite si la séance tombe un jour
+   d'entraînement. On construit la date à midi pour qu'aucun fuseau ne la décale. */
+function pcJourLong(iso){
+  if(!iso) return '?';
+  const p = String(iso).slice(0,10).split('-');
+  const d = new Date(Number(p[0]), Number(p[1])-1, Number(p[2]), 12);
+  return PC_JOURS[d.getDay()] + ' ' + Number(p[2]) + ' ' + PC_MOIS[Number(p[1])-1];
+}
+function pcEtat(s){
+  const auj = pcAujISO();
+  const j = String(s.jour).slice(0,10);
+  if(s.fait_le) return { txt:'Faite le ' + dateCourte(s.fait_le), faite:true };
+  if(j > auj)   return { txt:'À venir', faite:false };
+  if(j === auj) return { txt:"Aujourd'hui, pas encore validée", faite:false };
+  return { txt:'Pas validée', faite:false, ratee:true };
+}
+/* Les séances d'un sportif, les plus récentes en haut. */
+function pcDe(code){
+  return (ponctuellesParCode[code] || [])
+    .slice().sort(function(a,b){ return String(b.jour).localeCompare(String(a.jour)); });
+}
+
+function rendrePonctuelles(code){
+  const zone = document.getElementById('pcZone');
+  if(!zone) return;
+  const liste = pcDe(code);
+  const c = echapperAttr(code);
+
+  let h = '<div class="rc-sub">Séances ponctuelles</div>';
+  if(!liste.length){
+    h += '<div class="mc-vide">Aucune séance ajoutée à la main pour l\'instant. '
+       + 'Son programme habituel continue normalement.</div>';
+  }
+  liste.forEach(function(s){
+    const e = pcEtat(s);
+    h += '<div class="pc-item' + (e.faite ? ' pc-faite' : '') + '">'
+       + '<div class="pc-haut"><span class="pc-jour">' + pcJourLong(s.jour) + '</span>'
+       + '<span class="pc-etat"' + (e.ratee ? ' style="color:#8C2B1E"' : '') + '>' + e.txt + '</span></div>'
+       + '<div class="pc-titre">' + echapperAttr(s.titre) + '</div>'
+       + (s.texte ? '<div class="pc-texte">' + echapperAttr(s.texte) + '</div>' : '')
+       + '<button type="button" class="mini" onclick="annulerPonctuelle(' + Number(s.id)
+       + ', \'' + c + '\')">Retirer de sa page</button>'
+       + '</div>';
+  });
+
+  h += '<div class="pc-form">'
+     + '<label for="pcDate">Le jour de la séance</label>'
+     + '<input type="date" id="pcDate" value="' + pcAujISO() + '">'
+     + '<label for="pcTitre">Le titre, tel qu\'il le lira</label>'
+     + '<input type="text" id="pcTitre" maxlength="90" placeholder="Séance de force, en plus du vélo">'
+     + '<label for="pcTexte">Le contenu</label>'
+     + '<textarea id="pcTexte" placeholder="Échauffement 8 min&#10;&#10;'
+     + 'A · Squat jump départ arrêté — 3 × 5 sauts — 1 min 30 de repos&#10;'
+     + 'B · Squat barre — 4 × 6 répétitions — 2 min de repos&#10;&#10;'
+     + 'Retour au calme 5 min"></textarea>'
+     + '<div class="pc-aide">Écris comme tu lui parlerais. Les retours à la ligne sont gardés tels quels. '
+     + 'La séance apparaît sur sa page la veille, le jour dit, et jusqu\'à trois jours après '
+     + 's\'il ne l\'a pas validée.</div>'
+     + '<button type="button" class="mini gold" onclick="ajouterPonctuelle(\'' + c + '\')">Ajouter la séance</button>'
+     + '<div class="pc-msg" id="pcMsg"></div>'
+     + '</div>';
+
+  zone.innerHTML = h;
+}
+
+function pcDire(texte, ok){
+  const m = document.getElementById('pcMsg');
+  if(m){ m.className = 'pc-msg ' + (ok ? 'ok' : 'ko'); m.textContent = texte; }
+}
+
+function ajouterPonctuelle(code){
+  const jour  = (document.getElementById('pcDate')  || {}).value || '';
+  const titre = ((document.getElementById('pcTitre') || {}).value || '').trim();
+  const texte = ((document.getElementById('pcTexte') || {}).value || '').trim();
+  if(!jour){  pcDire('Il manque la date.', false); return; }
+  if(!titre){ pcDire('Il manque le titre : c\'est ce qu\'il verra en premier.', false); return; }
+  if(!texte){ pcDire('Il manque le contenu de la séance.', false); return; }
+  pcDire('Envoi…', true);
+  /* `then(ok, erreur)` et pas `catch` : l'objet rendu par `rpc` n'est pas une vraie
+     promesse, il n'a qu'un `then`. Un `catch` dessus lève avant l'envoi de la requête. */
+  db.rpc('axe_ajouter_ponctuelle',
+    { cle: cleCoach, code_p: code, jour_p: jour, titre_p: titre, texte_p: texte })
+    .then(function(r){
+      if(r && r.error){ pcDire('Pas enregistré : ' + r.error.message, false); return; }
+      const d = r && r.data;
+      if(!d || d.ok !== true){
+        pcDire(d && d.raison === 'cle' ? 'Clé refusée : reconnecte-toi.'
+             : d && d.raison === 'inconnu' ? 'Ce code d\'accès est inconnu.'
+             : 'Pas enregistré. Réessaie.', false);
+        return;
+      }
+      (ponctuellesParCode[code] = ponctuellesParCode[code] || [])
+        .push({ id: d.id, code_acces: code, jour: jour, titre: titre, texte: texte,
+                cree_le: new Date().toISOString(), fait_le: null });
+      rendrePonctuelles(code);
+      pcDire('Ajoutée à sa page pour le ' + pcJourLong(jour) + '.', true);
+      const dos = DOSSIERS.find(function(x){ return x.code === code; });
+      if(dos) majSignaux(dos);
+    }, function(e){
+      pcDire('Pas enregistré : ' + ((e && e.message) || 'erreur réseau'), false);
+    });
+}
+
+function annulerPonctuelle(id, code){
+  if(!confirm('Retirer cette séance de sa page ?')) return;
+  db.rpc('axe_supprimer_ponctuelle', { cle: cleCoach, id_p: id })
+    .then(function(r){
+      if(r && r.error){ pcDire('Pas retirée : ' + r.error.message, false); return; }
+      if(!r || !r.data || r.data.ok !== true){ pcDire('Pas retirée. Réessaie.', false); return; }
+      ponctuellesParCode[code] = (ponctuellesParCode[code] || [])
+        .filter(function(x){ return Number(x.id) !== Number(id); });
+      rendrePonctuelles(code);
+      pcDire('Retirée de sa page.', true);
+      const dos = DOSSIERS.find(function(x){ return x.code === code; });
+      if(dos) majSignaux(dos);
+    }, function(e){
+      pcDire('Pas retirée : ' + ((e && e.message) || 'erreur réseau'), false);
+    });
+}
+
 function ouvrirDossier(i){
   const d = DOSSIERS[i];
   if(!d) return;
@@ -1350,6 +1529,9 @@ function ouvrirDossier(i){
      vocal ne le marquerait plus comme écouté. */
   brancherVocaux();
   rafraichirPastillesVocales(grid);
+  /* Les séances ponctuelles sont rendues ici et pas dans `d.html`, qui est figé au
+     chargement : sans ça, une séance ajoutée n'apparaîtrait qu'au rechargement. */
+  rendrePonctuelles(d.code);
   window.scrollTo(0, 0);
 }
 function echapperAttr(t){
