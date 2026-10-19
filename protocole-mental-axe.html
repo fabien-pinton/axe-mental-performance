@@ -478,7 +478,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .move{display:flex;flex-direction:column;gap:2px;padding:11px 0;border-bottom:1px dashed var(--line)}
 .move-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .poids{font-family:'Bebas Neue';font-size:15px;letter-spacing:.04em;color:var(--physique);border:1px solid var(--physique);border-radius:2px;padding:2px 9px;white-space:nowrap}
-.phys-weight-note{font-size:12.5px;color:var(--dim);font-style:italic;font-family:'Cormorant Garamond',serif;margin-top:4px;padding:10px 0 0;border-top:1px dashed var(--line);line-height:1.4}
+.mission-note{font-size:12.5px;color:var(--dim);font-style:italic;font-family:'Cormorant Garamond',serif;margin-top:4px;padding:10px 0 0;border-top:1px dashed var(--line);line-height:1.4}
 .move-n{font-weight:600;font-size:14px}
 .move-d{font-size:13px;color:var(--dim)}
 .validate{
@@ -2157,11 +2157,11 @@ const state={mental:{},sensoriel:{},prenom:'',age:16,level:'Régional',sport:'bm
 // appartient à une semaine à part entière), une ou plusieurs semaines de "Maintien"
 // s'intercalent entre le pic et le relâchement, à intensité constante (ni montée, ni descente).
 const PHASES = {
-  1:{tag:"Mise en route",note:"Semaine d'installation. On pose les bases, on soigne l'exécution avant la charge."},
-  2:{tag:"Montée en charge",note:"On ajoute une série et on raccourcit un peu les repos. Le corps encaisse plus."},
-  3:{tag:"Pic du mois",note:"Semaine la plus exigeante. Intensité maximale, c'est là que tu progresses le plus."},
-  maintien:{tag:"Maintien",note:"On tient l'intensité du pic, sans la faire encore monter : le corps consolide avant de lever le pied."},
-  relachement:{tag:"Relâchement",note:"On lève le pied pour absorber le travail. Volume réduit, récupération active."},
+  1:{tag:"Mise en route",note:"Semaine d'installation. On formalise l'exercice au calme, chez toi : on cherche la précision du geste mental, pas encore la vitesse."},
+  2:{tag:"Mise en situation",note:"L'exercice quitte la maison et part à l'entraînement. Première confrontation au réel, sans pression ajoutée."},
+  3:{tag:"Pic du mois",note:"Semaine la plus exigeante. On ajoute la fatigue et la pression : c'est là que l'exercice cesse d'être volontaire et devient un réflexe."},
+  maintien:{tag:"Consolidation",note:"On garde le même exercice sans monter d'un cran. Ce qui vient d'être construit a besoin de se répéter pour tenir."},
+  relachement:{tag:"Bilan",note:"On lève le pied et on relit le mois. Ce que tu écris cette semaine construit ton mois suivant."},
 };
 function phaseOfWeek(w, total){
   if(w>=total) return PHASES.relachement; // toujours la toute dernière semaine réelle du mois
@@ -3403,7 +3403,7 @@ function carteMentale(ex, id){
       <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
       <p class="desc">${ex.mission?'<b style="color:var(--ink);font-weight:600">Objectif du mois · </b>':''}${ex.desc}</p>
       ${ex.mission?`<div class="moves"><div class="move"><div class="move-n">${ex.mission.titre}${ex.phase?' · '+ex.phase.toLowerCase():''}</div><div class="move-d">${ex.mission.txt}</div></div></div>
-      <p class="phys-weight-note">Pas de compétition nécessaire : cette mission se fait sur une semaine normale. Si tu as une compétition, garde-la et ouvre aussi « Ma semaine de compétition » pour le jour J.</p>`:''}
+      <p class="mission-note">Pas de compétition nécessaire : cette mission se fait sur une semaine normale. Si tu as une compétition, garde-la et ouvre aussi « Ma semaine de compétition » pour le jour J.</p>`:''}
       ${briques}
       ${valider}
       ${oeil}
