@@ -375,6 +375,17 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   color:var(--ink);line-height:1.15;margin-top:5px}
 .pc-corps{font-size:14px;color:var(--ink);line-height:1.6;margin-top:11px;white-space:pre-wrap}
 .pc-mot{font-size:12.5px;color:var(--dim);font-style:italic;margin-top:11px;line-height:1.5}
+/* ce qui est déjà posé plus loin dans la semaine : annoncé, mais sans prendre la place
+   de ce qui se joue aujourd'hui */
+.pc-suite{border:1px solid var(--line);border-radius:6px;padding:13px 16px;
+  background:rgba(255,255,255,.35);margin-bottom:12px}
+.pc-suite-head{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);font-weight:700;margin-bottom:8px}
+.pc-suite-l{display:flex;gap:10px;align-items:baseline;font-size:13.5px;color:var(--ink);
+  padding:4px 0;border-top:1px dashed var(--line)}
+.pc-suite-l:first-of-type{border-top:none}
+.pc-suite-l b{flex-shrink:0;color:var(--physique);font-weight:600}
+.pc-suite-mot{font-size:12px;color:var(--dim);font-style:italic;margin-top:8px;line-height:1.5}
 /* ---- ce qui attend le nouveau client, avant le diagnostic ---- */
 .parcours{max-width:460px;margin:34px auto 6px;text-align:left;border:1px solid var(--line-strong);
   border-radius:6px;padding:20px 22px;background:rgba(255,255,255,.35)}
@@ -1315,16 +1326,24 @@ function renderPonctuelles(){
   const auj = pcAujourdhuiISO();
   const demain = pcDansNJours(1);
 
-  /* Ce qu'on montre, et dans cet ordre : ce qui est en retard (il peut encore le faire et
-     le valider), aujourd'hui, puis demain en simple annonce. Au-delà, on ne l'encombre
-     pas : une séance de jeudi affichée le lundi ne fait que du bruit. */
+  /* Ce qu'on montre en grand, et dans cet ordre : ce qui est en retard (il peut encore le
+     faire et le valider), aujourd'hui, puis demain. Trois états, trois cartes. */
   const vues = axePonctuelles.filter(function(s){
     const j = String(s.jour).slice(0,10);
     if(s.fait_le) return j === auj;          // validée : on la garde visible le jour même
     return j <= demain;
   }).sort(function(a,b){ return String(a.jour).localeCompare(String(b.jour)); });
 
-  if(!vues.length){ zone.innerHTML = ''; return; }
+  /* Ce qui est posé plus loin dans la semaine. Une carte entière par séance à sept jours
+     noierait ce qui se joue aujourd'hui ; mais ne rien dire du tout obligerait un gamin de
+     douze ans à découvrir sa séance la veille au soir, sans son sac ni personne pour
+     l'emmener. Donc : une ligne par séance, date et titre, rien de plus. */
+  const suite = axePonctuelles.filter(function(s){
+    const j = String(s.jour).slice(0,10);
+    return !s.fait_le && j > demain;
+  }).sort(function(a,b){ return String(a.jour).localeCompare(String(b.jour)); });
+
+  if(!vues.length && !suite.length){ zone.innerHTML = ''; return; }
 
   let h = '';
   vues.forEach(function(s){
@@ -1351,6 +1370,17 @@ function renderPonctuelles(){
     }
     h += '</div>';
   });
+
+  if(suite.length){
+    h += '<div class="pc-suite"><div class="pc-suite-head">Aussi prévu dans les jours qui viennent</div>';
+    suite.forEach(function(s){
+      h += '<div class="pc-suite-l"><b>' + pcDateLongue(String(s.jour).slice(0,10)) + '</b>'
+         + '<span>' + pcEchappe(s.titre) + '</span></div>';
+    });
+    h += '<div class="pc-suite-mot">Rien à faire pour l\'instant : tu les retrouveras '
+       + 'en entier, avec le bouton pour les valider, la veille et le jour même.</div></div>';
+  }
+
   zone.innerHTML = h;
 }
 
@@ -3353,6 +3383,182 @@ function blocBarreTraction(indexSeance, relache, totalSem){
   ];
 }
 
+/* =====================================================================================
+   LE BLOC START — à partir du 1er novembre 2026
+   -------------------------------------------------------------------------------------
+   Ce qui décide d'un départ de BMX, ce n'est pas la fréquence de pédalage : la cadence
+   maximale n'est corrélée à aucune performance de start. Ce qui est corrélé, c'est la
+   puissance de sprint (r = 0,60 à 0,85) et la puissance au squat jump (r = 0,48 à 0,83).
+   Autrement dit : la force que les jambes produisent depuis l'arrêt, le tirage du haut du
+   corps sur le guidon, et le gainage qui transmet l'un à l'autre.
+
+   D'où la forme de ce bloc : deux mouvements, toujours les deux mêmes familles — un
+   mouvement de jambes depuis l'arrêt, un mouvement de tirage ou de gainage — placés en
+   OUVERTURE de séance, quand le système nerveux est frais. Peu de répétitions, intention
+   maximale sur chacune, récupération complète. Une répétition molle ne travaille pas le
+   départ : elle l'entraîne à être mou. Dès que la vitesse baisse, la série s'arrête.
+
+   Trois calibres par âge. Un pilote de 12 ans ne reçoit pas la dose d'un pilote de 20 ans :
+   à cet âge on cherche la qualité du geste et l'intention, pas la charge. Les sauts en
+   contrebas (chocs à la réception) ne sont donnés qu'à partir de 17 ans.
+   ===================================================================================== */
+const CRAN_DEBUT = '2026-11-01';
+
+/* Le cran ne s'applique pas avant sa date. En démo, c'est la date simulée qui fait foi,
+   pour que la simulation du temps montre bien le changement au 1er novembre. */
+function cranActif(){
+  const d = dateRef();
+  if(!d) return false;
+  const iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0')
+            + '-' + String(d.getDate()).padStart(2,'0');
+  return iso >= CRAN_DEBUT;
+}
+function bandeStart(){
+  const a = state.age || 13;
+  return a <= 13 ? 'jeune' : a <= 16 ? 'ado' : 'fort';
+}
+/* Les doses, par calibre. `relache` retire une série : la dernière semaine du mois reste
+   une vraie semaine d'absorption, le bloc start n'y échappe pas.
+   Un profil médical allégé garde le bloc — il est court et peu coûteux — mais au volume
+   le plus bas, avec les repos les plus longs, et jamais de saut en contrebas. */
+function doseStart(bande, relache, allege){
+  const s = n => Math.max(2, n - (relache ? 1 : 0));
+  if(allege)            return {sJ:s(3), rJ:3, repJ:'2 min 30', sT:s(3), rT:5,  repT:'2 min'};
+  if(bande === 'jeune') return {sJ:s(4), rJ:3, repJ:'2 min',    sT:s(3), rT:5,  repT:'90 s'};
+  if(bande === 'ado')   return {sJ:s(5), rJ:3, repJ:'2 min',    sT:s(4), rT:6,  repT:'90 s'};
+  return                       {sJ:s(5), rJ:4, repJ:'2 min 30', sT:s(4), rT:6,  repT:'2 min'};
+}
+
+/* --- premier mouvement : les jambes, toujours depuis l'arrêt --- */
+function mouvementsJambes(l, bande, gym, allege){
+  const dep = l.auDepartCourt || 'au départ';
+  const liste = [
+    {n:"Saut vertical départ arrêté",
+     c:"Tu descends en squat, tu t'immobilises complètement 2 secondes tout en bas, puis tu sautes le plus haut possible. La pause supprime l'élan : c'est la jambe seule qui produit la force, exactement comme "+dep+", où rien ne te lance."},
+    {n:"Saut en longueur départ arrêté",
+     c:"Même principe, mais vers l'avant : immobile, puis tu sautes le plus loin possible et tu tiens la réception sans faire un pas. Marque où tu retombes, essaie de dépasser la marque à chaque série."},
+    {n:"Démarrage 10 mètres",
+     c:"Accroupi(e), immobile, mains au sol. Au signal que tu te donnes, tu t'élances et tu cours 10 mètres à fond. Ce sont les trois premiers appuis qui comptent, pas la fin."},
+  ];
+  if(gym){
+    liste.push({n:"Fente sautée départ arrêté, haltères",
+      c:"Un haltère léger dans chaque main, en position de fente, immobile 2 secondes, puis tu sautes pour changer de jambe en l'air. Pose-toi souplement.", poids:"2 × 4 kg"});
+  } else {
+    liste.push({n:"Fente sautée départ arrêté",
+      c:"En position de fente, immobile 2 secondes, puis tu sautes pour changer de jambe en l'air. Pose-toi souplement, sans bruit."});
+  }
+  if(bande === 'fort' && !allege){
+    liste.push({n:"Saut en contrebas",
+      c:"Depuis une marche ou un banc d'environ 40 cm, tu te laisses tomber au sol et tu rebondis immédiatement vers le haut, le plus vite possible. Le sol doit te brûler les pieds : si tu restes posé(e) plus d'un instant, tu descends la hauteur."});
+  }
+  return liste;
+}
+
+/* --- second mouvement : le tirage et le gainage, ce qui transmet la poussée au vélo --- */
+function mouvementsTirage(l, bande, gym, allege, barre){
+  const guidon = l.pousseeMot ? "ta poussée" : "ta poussée";
+  const liste = [];
+  if(barre){
+    liste.push({n:"Traction explosive",
+      c:"Suspendu(e) bras tendus, tu tires le plus vite possible pour amener la poitrine vers la barre. C'est le geste du guidon "+(l.auDepartCourt||'au départ')+", en plus lent. Dès qu'une répétition ralentit, la série s'arrête.", poids:"barre de traction"});
+  }
+  if(gym){
+    liste.push({n:"Rowing explosif",
+      c:"Buste penché, dos plat, tu tires la barre vers le nombril le plus vite possible, puis tu redescends lentement. C'est la traction sur le guidon qui ajoute à "+guidon+".", poids:"20 kg"});
+    liste.push({n:"Tirage poulie explosif",
+      c:"Assis(e) face à la machine, tu tires la barre vers la poitrine d'un coup sec, puis tu laisses remonter lentement en contrôlant.", poids:"20 kg"});
+  } else {
+    liste.push({n:"Tirage sous une table",
+      c:"Allongé(e) sous une table solide, tu attrapes le bord à deux mains, corps gainé en planche, et tu tires la poitrine vers la table le plus vite possible. C'est le geste du guidon "+(l.auDepartCourt||'au départ')+"."});
+    liste.push({n:"Pompes explosives",
+      c:"Tu descends en pompe normalement, puis tu repousses assez fort pour décoller les mains du sol. Si les mains ne décollent pas, monte les mains sur une marche pour faciliter."});
+  }
+  liste.push({n:"Gainage sous tension maximale",
+    c:"En planche sur les avant-bras, tu serres TOUT en même temps — ventre, fessiers, poings — comme si quelqu'un allait te pousser. Ce n'est pas une position tenue longtemps, c'est une contraction très forte et courte. C'est ce gainage qui empêche la poussée de se perdre dans le dos."});
+  liste.push({n:"Hollow hold",
+    c:"Allongé(e) sur le dos, bas du dos collé au sol, tu décolles les épaules et les jambes tendues de quelques centimètres et tu tiens, sans jamais laisser le bas du dos se décoller."});
+  return liste;
+}
+
+/* Les deux mouvements de la séance. L'index de séance et la semaine font tourner les
+   variantes : il ne voit jamais quatre fois le même saut dans le mois, mais il retrouve
+   toujours les deux mêmes familles, dans le même ordre. */
+function blocStart(indexSeance, relache){
+  const l = L();
+  const bande = bandeStart();
+  const gym = !!state.gym;
+  const allege = !!profilSpecifique().allege;
+  const barre = !!profilSpecifique().barreTraction;
+  const d = doseStart(bande, relache, allege);
+
+  const jambes = mouvementsJambes(l, bande, gym, allege);
+  const tirage = mouvementsTirage(l, bande, gym, allege, barre);
+  const r = indexSeance + state.week + (state.month - 1);
+  const mj = jambes[((r % jambes.length) + jambes.length) % jambes.length];
+  const mt = tirage[((r % tirage.length) + tirage.length) % tirage.length];
+
+  /* Les charges du bloc suivent l'âge et le niveau comme toutes les autres — ce sont les
+     SÉRIES qui sont pré-calibrées, pas les kilos. En séance maison, aucun mouvement ne
+     porte de pastille de poids : on n'en ajoute pas une seule sur ces deux lignes. */
+  const pastille = mv => mv.poids ? adjustWeight(mv.poids)
+                       : (gym ? 'poids du corps' : undefined);
+
+  const out = [];
+  const estSprint = /Démarrage 10/.test(mj.n);
+  out.push({n:"Start · " + mj.n,
+    d: d.sJ + " × " + (estSprint ? "1 départ" : d.rJ + (/longueur|contrebas|vertical/.test(mj.n) ? " sauts" : " reps"))
+       + " · intention maximale · repos " + d.repJ,
+    c: mj.c + " Peu de répétitions, mais chacune à fond : dès que tu sens que ça ralentit, tu arrêtes la série, même s'il en reste.",
+    poids: pastille(mj)});
+
+  const tenue = /Gainage sous tension|Hollow/.test(mt.n);
+  out.push({n:"Start · " + mt.n,
+    d: d.sT + " × " + (tenue ? (bande === 'jeune' ? 15 : 20) + " s" : d.rT + " reps")
+       + " · " + (tenue ? "contraction maximale" : "le plus vite possible") + " · repos " + d.repT,
+    c: mt.c,
+    poids: pastille(mt)});
+
+  return out;
+}
+/* La phrase qui explique le bloc, sous la colonne physique. */
+function motStart(){
+  const bande = bandeStart();
+  const base = 'Depuis le 1<sup>er</sup> novembre, chaque séance s\'ouvre par ton <b>bloc start</b> : '
+    + 'un mouvement de jambes depuis l\'arrêt, un mouvement de tirage ou de gainage. '
+    + 'C\'est le travail qui décide de ta première ligne, et il passe en premier, quand tu es frais.';
+  const fin = bande === 'jeune'
+    ? ' À ton âge on ne cherche pas la charge : on cherche que chaque répétition soit vraiment à fond, '
+      + 'avec le temps de récupérer entre chaque. Deux sauts parfaits valent mieux que dix sauts fatigués.'
+    : bande === 'ado'
+    ? ' Le volume reste court exprès. Ce qui compte, c\'est l\'intention sur chaque répétition : '
+      + 'dès que la vitesse baisse, tu arrêtes la série.'
+    : ' Récupération complète entre les séries : ce bloc ne doit jamais devenir du cardio. '
+      + 'Si tu finis essoufflé(e), c\'est que tu es allé(e) trop vite entre les séries.';
+  return '<p class="phys-weight-note">' + base + fin + '</p>';
+}
+
+/* Le cran sur le RESTE de la séance. Volontairement modeste, et jamais empilé :
+   - 13 ans et moins : rien de plus. Le bloc start EST leur cran.
+   - niveau national : rien de plus, l'exigence nationale durcit déjà tout.
+   - profil médical : jamais, dans aucun cas.
+   - les autres : une répétition de plus, et des repos raccourcis d'un dixième. */
+function cranSurLeReste(){
+  if(!cranActif()) return false;
+  if(profilSpecifique().allege) return false;
+  if(state.level === 'National') return false;
+  return (state.age || 13) >= 14;
+}
+function monterDUnCran(d){
+  let t = d.replace(/×\s*(\d+)(\s*s\b)?/, (m, n, sec) =>
+    sec ? '× ' + ((+n) + 5) + ' s' : '× ' + ((+n) + 1));
+  const s = reposEnSecondes(t);
+  if(s){
+    const v = Math.max(45, Math.round(s * 0.9 / 15) * 15);
+    t = t.replace(/repos\s+\d+\s*(s|min)(\s*\d+)?/, 'repos ' + formatRepos(v));
+  }
+  return t;
+}
+
 // catégorie physique la plus citée sur les 9 questions physiques du diagnostic (explosivité / force / stabilité / vitesse)
 function poidsFaiblesseKey(){
   const scores = scoreAxis(state.physique,'physique');
@@ -4578,6 +4784,21 @@ function renderWeek(started){
       // niveau national : répétitions, repos, variantes avancées et finisher
       appliquerExigenceNational(p, isRelache);
     }
+    /* Le cran du 1er novembre sur le reste de la séance : une répétition de plus et des
+       repos un peu plus courts. Il s'applique APRÈS les ajustements ci-dessus, et jamais
+       par-dessus l'exigence nationale ni un profil médical (voir cranSurLeReste). */
+    if(cranSurLeReste() && p.moves){
+      p.moves.forEach(mv => { mv.d = monterDUnCran(mv.d); });
+    }
+    /* Le bloc start ouvre la séance. Il est ajouté en DERNIER et placé en TÊTE : son volume
+       est déjà calibré par âge, il ne doit repasser ni par l'ajustement de séries, ni par
+       l'exigence nationale, ni par le cran — sinon un pilote national de 17 ans se
+       retrouverait avec dix sauts en contrebas enchaînés. */
+    if(cranActif() && p.moves){
+      p.moves = blocStart(i, isRelache).concat(p.moves);
+      p.desc = 'Ton bloc start, puis ' + lowerFirst(p.desc);
+      if(p.dur) p.dur = p.dur.replace(/(\d+)\s*min/, (m, n) => (+n + (isRelache ? 8 : 12)) + ' min');
+    }
     // profil spécifique : bloc barre de traction ajouté à la séance (volume déjà calibré,
     // il ne repasse donc pas par les ajustements de séries ci-dessus)
     if(profilSpecifique().barreTraction && p.moves){
@@ -4612,6 +4833,15 @@ function renderWeek(started){
     if(profilSpecifique().barreTraction){
       html+='<p class="phys-weight-note">Chaque séance se termine par ton bloc barre de traction, en deux versions qui alternent : volume de tirage, puis tirage explosif et gainage suspendu. Le nombre de répétitions monte chaque semaine et chaque mois.</p>';
     }
+    if(cranActif()){
+      html += motStart();
+      if(cranSurLeReste()){
+        html += '<p class="phys-weight-note">Le reste de la séance monte aussi d\'un cran : '
+              + 'une répétition de plus sur chaque mouvement et des repos un peu plus courts. '
+              + 'La forme passe avant le compte — une répétition propre de moins vaut mieux '
+              + 'qu\'une de plus bâclée.</p>';
+      }
+    }
   }
   document.getElementById('physCol').innerHTML=html;
   monterVocaux();
@@ -4623,8 +4853,18 @@ function renderWeek(started){
    en haut sans mentir sur deux exercices. On annonce le nombre d'exercices et les séries,
    et chaque dose reste écrite sur sa propre ligne, juste en dessous. */
 function enTeteSeance(ex){
-  const n = (ex.moves || []).length;
+  const tous = ex.moves || [];
+  const n = tous.length;
   if(!n) return ex.series || '';
+  /* Le bloc start a ses propres séries, calibrées par âge : l'annoncer dans le même « N
+     séries chacun » que le reste serait faux sur deux lignes. On le compte à part. */
+  const st = tous.filter(m => /^Start · /.test(m.n)).length;
+  const reste = n - st;
+  if(st && reste){
+    return st + ' mouvement' + (st>1?'s':'') + ' de start, puis '
+         + reste + ' exercice' + (reste>1?'s':'') + ' · ' + (ex.series || '')
+         + (reste>1 ? ' chacun' : '');
+  }
   return n + ' exercice' + (n>1?'s':'') + ' · ' + (ex.series || '') + (n>1 ? ' chacun' : '');
 }
 /* ===================================================================================
