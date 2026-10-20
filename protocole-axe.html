@@ -3321,7 +3321,15 @@ const PROFILS_SPECIFIQUES = {
   // pas de finisher, pas de travail jusqu'à l'échec, charges réduites, repos allongés.
   // Aucune consigne de boisson ni d'alimentation n'est donnée ici : c'est le domaine de sa
   // nutritionniste et de son médecin. Le ressenti après séance est obligatoire.
-  'thimeo-12j': { allege:{ ressentiObligatoire:true, coefCharge:0.8 } },
+  //
+  // Palier 2 (octobre 2026) : ses ressentis de séance sont bons depuis la reprise, le coach
+  // monte d'un cran. La montée passe par la CHARGE (0,8 -> 0,9) avant de passer par le
+  // volume : chez un suivi rénal, c'est le volume excentrique et la nouveauté qui font le
+  // risque, pas le kilo de plus. Le volume ne bouge donc qu'à peine — une série de plus au
+  // maximum, des répétitions à -15 % au lieu de -25 %, des repos encore allongés.
+  // Tout le reste du cadre est intact : jamais jusqu'à l'échec, jamais de finisher, jamais
+  // d'exigence nationale, ressenti obligatoire, et la liste des signaux d'alerte affichée.
+  'thimeo-12j': { allege:{ ressentiObligatoire:true, coefCharge:0.9, palier:2 } },
 };
 function profilSpecifique(){
   return PROFILS_SPECIFIQUES[(axeCode||'').toLowerCase()] || {};
@@ -3329,26 +3337,47 @@ function profilSpecifique(){
 /* ---- séance allégée (profil médical) : l'inverse exact de l'exigence "national" ---- */
 // moins de répétitions, des maintiens plus courts, des repos nettement plus longs, et jamais
 // plus de 3 séries. On ne retire aucun mouvement : on baisse la dose, pas la qualité du travail.
+/* Le palier dit jusqu'où on a remonté le volume d'un profil allégé. Palier 1 : la reprise,
+   le plus bas. Palier 2 : les ressentis suivent depuis plusieurs semaines, on remonte d'un
+   cran — mais l'essentiel de la montée est passé par la charge (coefCharge), pas par ici. */
+function palierAllege(){
+  return ((profilSpecifique().allege || {}).palier) || 1;
+}
 function allegerLigne(d){
+  const p2 = palierAllege() >= 2;
+  /* Le plafond de séries NE BOUGE PAS au palier 2, volontairement. Chez un suivi rénal,
+     le risque tient au tonnage total et au volume excentrique, pas au kilo de plus : lever
+     le plafond sur cinq exercices à la fois aurait ajouté un tiers de volume par-dessus les
+     +12 % de charge, soit la moitié de tonnage en une seule marche. La montée passe donc
+     par le poids et par quelques répétitions, et le nombre de séries reste où il était. */
+  const maxSeries = 3;
+  const cRep      = p2 ? 0.85 : 0.75;   // répétitions : -15 % au palier 2, -25 % au palier 1
+  const cTenue    = p2 ? 0.8  : 0.7;    // maintiens   : -20 % / -30 %
+  const cRepos    = p2 ? 1.35 : 1.5;    // repos       : +35 % / +50 %
+  const reposMin  = p2 ? 80   : 90;
   let t = d;
-  t = t.replace(/^(\s*)(\d+)/, (m,sp,n)=> sp + Math.min(3, +n));      // 3 séries maximum
+  t = t.replace(/^(\s*)(\d+)/, (m,sp,n)=> sp + Math.min(maxSeries, +n));
   t = t.replace(/×\s*(\d+)(\s*s\b)?/, (m,n,sec)=>{
-    if(sec) return '× ' + Math.max(15, Math.round((+n)*0.7/5)*5) + ' s'; // maintiens : -30 %
-    return '× ' + Math.max(4, Math.round((+n)*0.75));                    // répétitions : -25 %
+    if(sec) return '× ' + Math.max(15, Math.round((+n)*cTenue/5)*5) + ' s';
+    return '× ' + Math.max(4, Math.round((+n)*cRep));
   });
   const sec = reposEnSecondes(t);
-  if(sec){ const v = Math.max(90, Math.round(sec*1.5/15)*15);            // repos : +50 %, 90 s mini
+  if(sec){ const v = Math.max(reposMin, Math.round(sec*cRepos/15)*15);
     t = t.replace(/repos\s+\d+\s*(s|min)(\s*\d+)?/, 'repos '+formatRepos(v)); }
   return t;
 }
 // Cadre affiché au-dessus des séances d'un profil allégé. Volontairement muet sur les boissons
 // et l'alimentation : ces consignes-là appartiennent à la nutritionniste et au médecin.
 function cadreMedicalHtml(){
+  const p2 = palierAllege() >= 2;
   return '<div class="med-frame">'
    + '<div class="mf-t">Séance adaptée · suivi médical en cours</div><ul>'
+   + (p2 ? '<li><b>Tes charges viennent de monter d\'un cran.</b> Tes ressentis de séance sont bons depuis plusieurs semaines, donc on charge un peu plus. '
+         + 'C\'est le poids qui monte, pas le nombre de répétitions : on garde des séries courtes et des repos longs. '
+         + 'Si quoi que ce soit change dans ce que tu ressens, dis-le dans ton ressenti — on redescend aussitôt.</li>' : '')
    + '<li><b>Jamais jusqu\'à l\'échec.</b> À la fin de chaque série, tu dois pouvoir en faire deux de plus. Si ce n\'est pas le cas, tu arrêtes la série là, même s\'il reste des répétitions écrites.</li>'
-   + '<li><b>Volume allégé, récupération allongée.</b> Moins de répétitions, des repos plus longs, aucun finisher : c\'est voulu, ce n\'est pas une erreur du programme.</li>'
-   + '<li><b>Montée en charge très progressive.</b> On ne cherche pas la performance ce mois-ci, on cherche une séance que tu répètes sans t\'abîmer.</li>'
+   + '<li><b>Volume contenu, récupération allongée.</b> Des séries courtes, des repos plus longs, aucun finisher : c\'est voulu, ce n\'est pas une erreur du programme.</li>'
+   + '<li><b>Montée en charge progressive.</b> On ne cherche pas la performance d\'un mois, on cherche une séance que tu répètes toute la saison sans t\'abîmer.</li>'
    + '<li><b>Boissons et alimentation : on ne touche à rien ici.</b> Tu suis uniquement ce que ta nutritionniste et ton médecin ont fixé, avant comme après la séance. Aucune quantité n\'est prescrite dans ce programme.</li>'
    + '<li><b>Aucun complément</b> — protéines, créatine, boissons énergisantes, gélules — sans l\'accord de ta nutritionniste et de ton médecin.</li>'
    + '<li><b>Pas d\'anti-inflammatoire</b> (type ibuprofène) pour faire passer des courbatures, sauf s\'il t\'a été prescrit par ton médecin.</li>'
@@ -3423,6 +3452,11 @@ function bandeStart(){
    le plus bas, avec les repos les plus longs, et jamais de saut en contrebas. */
 function doseStart(bande, relache, allege){
   const s = n => Math.max(2, n - (relache ? 1 : 0));
+  /* Profil allégé au palier 2 : une série de plus sur les jambes, et les repos restent
+     longs. Le bloc start reste le plus court de tous — il ne doit jamais devenir le
+     mouvement qui fatigue le plus la séance d'un sportif sous suivi médical. */
+  if(allege && palierAllege() >= 2)
+                        return {sJ:s(4), rJ:3, repJ:'2 min 30', sT:s(4), rT:5,  repT:'2 min'};
   if(allege)            return {sJ:s(3), rJ:3, repJ:'2 min 30', sT:s(3), rT:5,  repT:'2 min'};
   if(bande === 'jeune') return {sJ:s(4), rJ:3, repJ:'2 min',    sT:s(3), rT:5,  repT:'90 s'};
   if(bande === 'ado')   return {sJ:s(5), rJ:3, repJ:'2 min',    sT:s(4), rT:6,  repT:'90 s'};
@@ -4764,7 +4798,8 @@ function renderWeek(started){
     // les repos, les variantes et le finisher — voir appliquerExigenceNational — pour ne pas
     // empiler un volume de sauts excessif sur une même séance)
     let bump = state.week===2?1 : (state.week>=3 && !isRelache)?2 : 0;
-    // profil allégé : la progression du mois existe toujours, mais plafonnée à une série
+    // profil allégé : la progression du mois existe toujours, mais plafonnée à une série,
+    // aux deux paliers. Au palier 2, c'est la charge qui monte, pas le nombre de séries.
     if(profilSpecifique().allege) bump = Math.min(bump, 1);
     const ajusteSeries = txt => {
       let t = txt;
@@ -4822,6 +4857,9 @@ function renderWeek(started){
       html+='<p class="phys-weight-note">'+(n===1
         ? 'Une seule séance par semaine : elle est complète, mais tenue à une intensité modérée. Mieux vaut une séance que tu répètes toute la saison qu\'une séance dure que ton corps ne digère pas.'
         : 'Séances tenues à une intensité modérée, avec de vrais temps de récupération entre les séries.')
+        + (palierAllege() >= 2
+           ? ' Les charges ont monté d\'un cran ce mois-ci, parce que tes ressentis suivaient. C\'est le poids qui a monté, pas le nombre de répétitions.'
+           : '')
         +' Si une séance te laisse plus fatigué que d\'habitude, écris-le dans ton ressenti : la suivante sera revue à la baisse.</p>';
     }
     if(state.level==='National' && !profilSpecifique().allege){
