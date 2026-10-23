@@ -172,6 +172,12 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 .rep-ligne:hover{background:rgba(201,162,39,.07)}
 .rep-ligne:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
 .rep-nom{font-size:16px;font-weight:600;line-height:1.25;flex:1 1 150px;min-width:0}
+/* ---- le type de client, lisible d'un coup d'oeil : sportif ou parent ---- */
+.type-pill{display:inline-block;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  font-weight:700;padding:3px 8px;border-radius:2px;white-space:nowrap;vertical-align:1px}
+.type-pill.sportif{background:rgba(122,59,46,.12);color:#7A3B2E}
+.type-pill.parents{background:rgba(93,111,74,.15);color:#5D6F4A}
+.rep-nom .type-pill{margin-left:7px}
 .rep-nom small{display:block;font-size:11.5px;font-weight:400;color:var(--dim);margin-top:2px}
 .rep-etat{align-self:center}
 .rep-sig{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -859,6 +865,17 @@ function estActif(r){
   const auj = new Date(); auj.setHours(0,0,0,0);
   return fin >= auj;
 }
+/* Le type de client se lit sur sa page de destination, et nulle part ailleurs : c'est le
+   seul champ qui dit vraiment ce qu'il a acheté. Un compte sans page cible est un compte
+   historique, donc un sportif. */
+function typeClient(r){
+  return String(r && r.page_cible || '').indexOf('protocole-parents') === 0 ? 'parents' : 'sportif';
+}
+function pastilleType(r){
+  const t = typeClient(r);
+  return '<span class="type-pill ' + t + '">'
+       + (t === 'parents' ? 'Client parents' : 'Client sportif') + '</span>';
+}
 function badgeAcces(r){
   return estActif(r) ? '<span class="badge ok">Actif</span>'
                      : '<span class="badge alert">Expiré</span>';
@@ -1256,11 +1273,12 @@ function afficherRiders(riders){
       moisConnu: saison || !!r.mois_en_cours,
       saison: saison,
       parent: parent,
+      pastille: pastilleType(r),
       srParent: parent ? (sr.parent || {}) : null,
       resume: saison ? (sr.robin.resume || null) : null,
       sig: [], urgent: false, attente: false,
       html: `<div class="rider-card">
-      <div class="rc-top"><h3>${nomAffiche}</h3>${badgeAcces(r)}</div>
+      <div class="rc-top"><h3>${nomAffiche} ${pastilleType(r)}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
       ${parent
         ? `<div class="rc-line"><span>Programme</span><span>Protocole parents${(sr.parent&&sr.parent.resume)?` · ${sr.parent.resume.faites} / 4 semaines`:''}</span></div>`
@@ -1615,7 +1633,7 @@ function rendreRepertoire(garderFiltre){
     vus.forEach(x => {
       const d = x.d;
       h += '<button type="button" class="rep-ligne" onclick="ouvrirDossier(' + x.i + ')">'
-        + '<span class="rep-nom">' + d.nom
+        + '<span class="rep-nom">' + d.nom + d.pastille
         + '<small>' + [d.sport,
               d.parent ? ((d.srParent && d.srParent.resume)
                             ? d.srParent.resume.faites + ' / 4 semaines' : 'Protocole parents')
