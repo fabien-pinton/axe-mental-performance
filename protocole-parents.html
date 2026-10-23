@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le protocole parents AXE Mental Performance®</title>
+<script src="installer.js"></script>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0A0907">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="axe-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="axe-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="axe-apple-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Parents">
+<meta name="application-name" content="Parents">
+<script>
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
+  window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A1612; --cream:#FDFAF5; --gold:#A8852A; --gold-soft:#C9A94E;
+  --line:rgba(26,22,18,.14); --line-strong:rgba(26,22,18,.28); --dim:rgba(26,22,18,.55);
+  --parent:#5D6F4A; --brique:#7A3B2E; --mental:#3B4A6B;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.5px;line-height:.92}
+.serif{font-family:'Cormorant Garamond',Georgia,serif}
+.wrap{max-width:620px;margin:0 auto;padding:0 20px 90px}
+
+/* en-tete */
+.top{padding:28px 0 18px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.top .tag{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.top h1{font-size:clamp(30px,8vw,44px);margin-top:6px}
+.top .sous{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--dim);margin-top:8px}
+
+/* onglets */
+.nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px;position:sticky;top:0;z-index:20;
+  background:var(--cream);padding:10px 0;border-bottom:1px solid var(--line)}
+.nav button{font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.02em;
+  padding:7px 13px;border-radius:999px;cursor:pointer;background:transparent;
+  border:1px solid var(--line);color:var(--dim);transition:.2s var(--ease)}
+.nav button:hover{border-color:var(--gold);color:var(--gold)}
+.nav button.on{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+
+.ecran{display:none}
+.ecran.on{display:block;animation:ap .35s var(--ease)}
+@keyframes ap{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* bloc semaine */
+.sem{border:1px solid var(--line-strong);border-radius:8px;padding:22px;margin-bottom:16px;
+  background:rgba(255,255,255,.45)}
+.sem.verrou{opacity:.55;background:transparent}
+.sem.faite{border-color:rgba(93,111,74,.5);background:rgba(93,111,74,.06)}
+.sem-haut{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sem-n{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--parent);font-weight:700}
+.sem-etat{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.sem h2{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:27px;letter-spacing:.02em;
+  line-height:1.1;margin-top:5px}
+.sem .princ{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;
+  color:var(--ink);margin-top:10px;padding-left:14px;border-left:2px solid var(--gold)}
+
+.part{margin-top:18px}
+.part-t{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:7px}
+.part-t.faire{color:var(--parent)}
+.part-t.eviter{color:var(--brique)}
+.part-t.pourquoi{color:var(--mental)}
+.part-t.phrase{color:var(--gold)}
+.part p{font-size:15px;margin-bottom:9px}
+.part ul{list-style:none;margin-top:4px}
+.part li{font-size:15px;padding:5px 0 5px 17px;position:relative}
+.part li::before{content:'';position:absolute;left:2px;top:13px;width:5px;height:5px;border-radius:50%;
+  background:var(--parent)}
+.part.eviter li::before{background:var(--brique)}
+.dire{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:var(--ink);
+  background:rgba(168,133,42,.09);border-radius:6px;padding:13px 16px;margin-top:6px}
+
+.valide{width:100%;margin-top:20px;padding:13px;border:1.5px solid var(--parent);border-radius:3px;
+  background:transparent;color:var(--parent);font-family:'DM Sans';font-weight:600;font-size:13px;
+  letter-spacing:.04em;cursor:pointer;transition:.2s var(--ease)}
+.valide:hover{background:var(--parent);color:var(--cream)}
+.sem.faite .valide{background:var(--parent);border-color:var(--parent);color:var(--cream);cursor:default}
+.verrou-txt{font-size:14px;color:var(--dim);font-style:italic;margin-top:10px}
+.occ{margin-top:11px;border-top:1px dashed var(--line);padding-top:10px}
+.occ-l{padding:6px 0;border-top:1px dashed var(--line)}
+.occ-l:first-child{border-top:none}
+.occ-t{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;color:var(--brique)}
+.occ-p{display:block;font-size:14.5px;color:var(--dim);margin-top:2px}
+.val-t{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  color:var(--parent);margin-top:20px;margin-bottom:8px}
+.val-b{display:flex;gap:8px;flex-wrap:wrap}
+.valide.mini{width:auto;flex:1 1 auto;min-width:118px;margin-top:0;padding:11px 10px;font-size:12.5px}
+
+/* memo */
+.moment{border-top:1px dashed var(--line);padding:15px 0}
+.moment:first-of-type{border-top:none}
+.moment h3{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:21px;letter-spacing:.03em;
+  color:var(--brique)}
+.moment p{font-size:15px;margin-top:5px}
+.moment .non{font-size:13.5px;color:var(--brique);margin-top:6px}
+.moment .non b{font-weight:600}
+
+.cadre{border:1px solid var(--line-strong);border-radius:8px;padding:20px;margin-bottom:20px;
+  background:rgba(255,255,255,.4)}
+.cadre h3{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:22px;letter-spacing:.03em;margin-bottom:9px}
+.cadre p{font-size:15px;margin-bottom:9px}
+.cadre.alerte{border-color:rgba(122,59,46,.45);background:rgba(122,59,46,.05)}
+.cadre.alerte h3{color:var(--brique)}
+
+.vocal-bloc{border:1px solid var(--line-strong);border-radius:8px;padding:20px;
+  background:rgba(93,111,74,.06);margin-bottom:18px}
+.vocal-bloc h3{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:23px;letter-spacing:.03em}
+.vocal-bloc .aide{font-size:14px;color:var(--dim);margin:7px 0 14px}
+.oeil{font-size:12px;color:var(--dim);margin-top:11px;display:flex;align-items:center;gap:7px}
+.oeil svg{width:15px;height:15px;flex-shrink:0;opacity:.7}
+
+.fin{text-align:center;padding:28px 0 0;font-size:13.5px;color:var(--dim);font-style:italic}
+
+/* ---- la cloche : un message vocal du préparateur, comme un répondeur ---- */
+.vm-bell{display:none;position:fixed;top:14px;right:14px;z-index:60;width:42px;height:42px;
+  border-radius:50%;background:var(--ink);color:var(--cream);align-items:center;
+  justify-content:center;font-size:18px;cursor:pointer;border:none;animation:vmPulse 1.6s infinite}
+.vm-bell.on{display:flex}
+.vm-bell .vm-dot{position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;
+  background:#C0392B;border:2px solid var(--cream)}
+@keyframes vmPulse{0%,100%{box-shadow:0 0 0 0 rgba(26,22,18,.35)}50%{box-shadow:0 0 0 9px rgba(26,22,18,0)}}
+.vm-overlay{display:none;position:fixed;inset:0;background:rgba(26,22,18,.55);z-index:200;
+  align-items:center;justify-content:center;padding:20px}
+.vm-overlay.on{display:flex}
+.vm-modal{background:var(--cream);border-radius:6px;padding:32px;max-width:420px;width:100%;text-align:center}
+.vm-modal .vm-ico{font-size:34px;margin-bottom:10px}
+.vm-modal h3{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:24px;letter-spacing:.03em;margin-bottom:6px}
+.vm-modal p{font-size:14px;color:var(--dim);margin-bottom:20px}
+.vm-modal audio{width:100%;margin-bottom:20px}
+.vm-modal button{width:100%;padding:14px;border:none;border-radius:5px;background:var(--ink);
+  color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;cursor:pointer}
+
+/* ---- le questionnaire d'entrée et le bilan de fin ---- */
+.q{border-top:1px dashed var(--line);padding:14px 0}
+.q:first-of-type{border-top:none}
+.q-t{font-size:15px;font-weight:600;margin-bottom:9px}
+.q-ech{display:flex;gap:6px;flex-wrap:wrap}
+.q-ech button{flex:1 1 auto;min-width:44px;padding:9px 6px;border-radius:4px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  background:transparent;border:1px solid var(--line);color:var(--dim);transition:.15s var(--ease)}
+.q-ech button:hover{border-color:var(--parent);color:var(--parent)}
+.q-ech button.sel{background:var(--parent);border-color:var(--parent);color:var(--cream)}
+.q-bornes{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-top:5px}
+.q textarea{width:100%;min-height:92px;margin-top:4px;padding:11px 13px;border:1px solid var(--line);
+  border-radius:4px;font-family:'DM Sans',sans-serif;font-size:14.5px;color:var(--ink);
+  background:#fff;resize:vertical;line-height:1.55}
+.q textarea:focus{outline:none;border-color:var(--gold)}
+.q-ok{font-size:12.5px;font-weight:600;color:#2F6B45;margin-top:9px}
+.cmp{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px dashed var(--line);font-size:14px}
+.cmp:first-of-type{border-top:none}
+.cmp-q{flex:1}
+.cmp-v{font-weight:700;color:var(--dim);white-space:nowrap}
+.cmp-v b{color:var(--parent)}
+</style>
+</head>
+<body>
+
+<button class="vm-bell" id="vmBell" onclick="ouvrirMessageVocal()" title="Message de votre préparateur">
+  <span id="vmDot" style="display:none" class="vm-dot"></span>🎙️</button>
+
+<div class="vm-overlay" id="vmOverlay">
+  <div class="vm-modal">
+    <div class="vm-ico">🎙️</div>
+    <h3>Message de votre préparateur</h3>
+    <p>Comme sur un répondeur, écoutez-le tranquillement.</p>
+    <audio id="vmAudio" controls></audio>
+    <button onclick="fermerMessageVocal()">Fermer</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="top">
+    <div class="tag">AXE Mental Performance®</div>
+    <h1 id="titre">LE PROTOCOLE PARENTS</h1>
+    <div class="sous" id="sousTitre">Quatre semaines pour changer ce qui se joue autour de la course.</div>
+  </div>
+
+  <div class="nav">
+    <button data-e="depart" onclick="aller('depart')">Le point de départ</button>
+    <button class="on" data-e="semaines" onclick="aller('semaines')">Les 4 semaines</button>
+    <button data-e="memo" onclick="aller('memo')">Mémo course</button>
+    <button data-e="retour" onclick="aller('retour')">Mon retour</button>
+    <button data-e="bilan" onclick="aller('bilan')">Mon bilan</button>
+    <button data-e="pourquoi" onclick="aller('pourquoi')">Pourquoi ça marche</button>
+  </div>
+
+  <section class="ecran" id="e-depart">
+    <div class="cadre">
+      <h3>Avant de commencer</h3>
+      <p>Cinq questions, deux minutes. Elles ne servent pas à vous évaluer : elles me donnent
+      votre point de départ, et dans quatre semaines on les reposera à l'identique. C'est comme
+      ça qu'on verra ce qui a bougé, au lieu de s'en remettre à une impression.</p>
+      <p id="departMot"></p>
+    </div>
+    <div class="cadre"><div id="qEnfant"></div></div>
+    <div class="cadre" id="cadreQuestions"><div id="qDepart"></div></div>
+  </section>
+
+  <section class="ecran on" id="e-semaines"><div id="listeSemaines"></div></section>
+
+  <section class="ecran" id="e-memo">
+    <div class="cadre">
+      <h3>À ouvrir le jour de la course</h3>
+      <p>Chaque moment de la journée, et ce que vous faites. Rien à apprendre par cœur : vous ouvrez
+      cette page dans la voiture ou dans le parc, et vous suivez.</p>
+    </div>
+    <div id="listeMemo"></div>
+    <div class="cadre alerte" style="margin-top:20px">
+      <h3>Ce qu'on ne fait jamais</h3>
+      <div id="listeJamais"></div>
+    </div>
+  </section>
+
+  <section class="ecran" id="e-retour">
+    <div class="vocal-bloc">
+      <h3>APRÈS CHAQUE ESSAI</h3>
+      <div class="aide">Trente secondes à deux minutes, après un entraînement, une course ou un moment
+      à la maison. Ce que vous avez essayé, comment il a réagi, ce qui a été difficile à tenir. Même
+      court, mais honnête : c'est là-dessus que je règle votre semaine suivante.</div>
+      <div class="vocal" data-vocal="course"></div>
+      <div class="oeil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      Je suis le seul à l'écouter. Votre enfant n'y a pas accès.</div>
+    </div>
+    <div class="vocal-bloc" style="background:rgba(168,133,42,.07)">
+      <h3>UNE QUESTION, À TOUT MOMENT</h3>
+      <div class="aide">Une situation que vous ne savez pas gérer, un doute, quelque chose qui s'est mal
+      passé. Vous n'attendez pas le week-end de course.</div>
+      <div class="vocal" data-vocal="libre"></div>
+    </div>
+  </section>
+
+  <section class="ecran" id="e-bilan">
+    <div id="bilanZone"></div>
+  </section>
+
+  <section class="ecran" id="e-pourquoi">
+    <div class="cadre">
+      <h3>Son âge, et ce que ça change</h3>
+      <p id="pq1"></p>
+      <p>Ce que vous observez n'est donc pas une fragilité, et ce n'est pas un défaut de caractère.
+      C'est le fonctionnement normal d'un enfant de cet âge en situation de compétition.</p>
+      <p>Ce qui veut dire une chose simple et plutôt encourageante : à cet âge, <b>le levier
+      principal n'est pas dans l'enfant. Il est autour de lui.</b> Ce qui détermine son état après
+      <span id="pqUnite">une sortie</span>, c'est presque entièrement ce qui se passe dans les trois
+      minutes qui suivent. Et ça, vous le contrôlez.</p>
+    </div>
+    <div class="cadre">
+      <h3>Pourquoi quatre semaines, et pas un conseil</h3>
+      <p>Les quatre comportements de ce protocole sont simples à comprendre et difficiles à tenir,
+      parce qu'ils vont contre l'instinct. Ne pas consoler un enfant qui pleure, ne pas demander le
+      résultat, se faire plus discret au moment le plus important : rien de tout ça ne vient
+      naturellement.</p>
+      <p>Une habitude par semaine, c'est ce qui tient. Quatre d'un coup, c'est ce qui s'oublie dès
+      le premier dimanche difficile.</p>
+    </div>
+    <div class="cadre">
+      <h3>Pourquoi ça ne dépend pas du calendrier des compétitions</h3>
+      <p id="pq2"></p>
+      <p>C'est d'ailleurs l'ordre correct : <b>on n'installe pas un réflexe nouveau dans le moment
+      le plus tendu de la saison.</b> On l'installe à l'entraînement ou à la maison, où il n'y a rien
+      en jeu, et <span id="pq3">la compétition</span> devient l'examen, pas le cours.</p>
+      <p>C'est pour ça que chaque semaine vous propose trois occasions. Une seule suffit pour
+      avancer, et s'il n'y a aucune compétition pendant des semaines, votre protocole continue
+      exactement au même rythme.</p>
+    </div>
+    <div class="cadre alerte">
+      <h3>S'il dit qu'il veut arrêter</h3>
+      <p>Ce n'est ni un caprice, ni un échec. C'est une information, et elle est précieuse.</p>
+      <p>On ne négocie jamais dans l'émotion du dimanche soir. On accueille la phrase sans la
+      commenter, et on en reparle le mercredi, au calme, en écoutant vraiment. Beaucoup d'enfants
+      qui disent vouloir arrêter veulent en réalité arrêter <i>quelque chose</i> : la pression, un
+      entraînement précis, un moment de la journée de course. Rarement le sport.</p>
+      <p>Dites-le-moi dans votre message vocal. C'est exactement le genre de situation pour laquelle
+      vous avez ce protocole.</p>
+    </div>
+  </section>
+
+  <div class="fin" id="pied"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vocal.js"></script>
+<script>
+/* =====================================================================================
+   LE PROTOCOLE PARENTS
+   Pour les familles dont l'enfant est trop jeune pour un protocole à lui : entre 6 et 10
+   ans, la régulation émotionnelle volontaire n'est pas encore en place, et aucun exercice
+   mental donné à l'enfant ne la fera apparaître plus tôt. Le levier, à cet âge, est adulte.
+   D'où un protocole qui ne s'adresse jamais à l'enfant : il s'adresse au parent, et il
+   porte sur quatre moments précis de la journée de course.
+
+   Quatre semaines, un comportement par semaine. Pas quatre d'un coup : ces comportements
+   vont contre l'instinct, et l'instinct revient au premier dimanche difficile.
+   ===================================================================================== */
+
+const SUPABASE_URL  = 'https://ilsxrdvxvnvlznjuevba.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
+const axeDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+/* ---- le code d'accès : adresse, puis session ---- */
+let axeCode = (function(){
+  const u = new URLSearchParams(location.search).get('code');
+  if(u){ try{ sessionStorage.setItem('axe_code_parent', u); }catch(e){} return u; }
+  try{ return sessionStorage.getItem('axe_code_parent') || ''; }catch(e){ return ''; }
+})();
+
+const etat = {
+  prenomParent:'', prenomEnfant:'', ageEnfant:8, sport:'bmx',
+  debut:null,            // date de départ du protocole
+  fait:{},               // {1:{date, occasion}, ...}
+  mesures:{},            // {depart:{...}, bilan:{...}}
+  enfant:{}              // {prenom, age, sport} renseignés par le parent
+};
+
+/* =====================================================================================
+   LE LEXIQUE
+   Le fond de ce protocole ne dépend pas du sport : trois minutes de silence après une
+   déception, une première question qui porte sur un geste, se faire discret quand l'enjeu
+   monte, féliciter un comportement. Tout ça vaut à l'identique sur un tatami et sur une
+   piste. Seuls les mots changent, et ils tiennent en une quinzaine de jetons.
+
+   Volontairement séparé du grand SPORT_LEXICON des pages sportifs : celui-ci porte une
+   centaine de jetons dont aucun ne sert ici, et il vit en dur dans deux fichiers déjà en
+   production. Le jour où un troisième fichier en aura besoin, on l'extraira pour de bon.
+   ===================================================================================== */
+const LEX = {
+  bmx:{ uniteUne:"une manche", uniteLa:"la manche", unitesSes:"ses manches", entreUnites:"entre les manches",
+    event:"la course", eventUne:"une course", attente:"le parc à vélos", pairs:"les autres pilotes",
+    taches:"aller chercher sa gourde, tenir le vélo, enlever ses protections, vous passer un outil",
+    colere:"il s'énerve sur le vélo, il jette ses gants", equipTete:"son casque",
+    geste:"son départ", gesteQ:"Ton départ", zone:"le premier virage",
+    final:"la finale", finalQualif:"la manche qui qualifie", depart:"la grille",
+    nouveaute:"un saut qu'il n'a jamais fait", tenu:"tenu ta ligne alors qu'il arrivait sur toi",
+    bons:"son départ, sa ligne, s'amuser" },
+  motocross:{ uniteUne:"une manche", uniteLa:"la manche", unitesSes:"ses manches", entreUnites:"entre les manches",
+    event:"la course", eventUne:"une course", attente:"le paddock", pairs:"les autres pilotes",
+    taches:"aller chercher sa gourde, tenir la moto, enlever ses protections, vous passer un outil",
+    colere:"il s'énerve sur la moto, il jette ses gants", equipTete:"son casque",
+    geste:"son départ", gesteQ:"Ton départ", zone:"le premier virage",
+    final:"la finale", finalQualif:"la manche qui qualifie", depart:"la grille",
+    nouveaute:"un saut qu'il n'a jamais fait", tenu:"tenu ta trajectoire alors qu'il arrivait sur toi",
+    bons:"son départ, sa trajectoire, s'amuser" },
+  football:{ uniteUne:"un match", uniteLa:"le match", unitesSes:"ses matchs", entreUnites:"à la mi-temps",
+    event:"le match", eventUne:"un match", attente:"le banc", pairs:"les autres joueurs",
+    taches:"aller chercher sa gourde, porter le sac, ranger les plots, vous aider à plier les chasubles",
+    colere:"il s'énerve sur le terrain, il envoie le ballon au loin", equipTete:"ses protège-tibias",
+    geste:"son premier ballon", gesteQ:"Ton premier ballon", zone:"les premières minutes",
+    final:"le match décisif", finalQualif:"le match qui qualifie", depart:"le terrain",
+    nouveaute:"un poste où il n'a jamais joué", tenu:"tenu ton poste alors que ça poussait",
+    bons:"ses premiers ballons, son placement, s'amuser" },
+  tennis:{ uniteUne:"un set", uniteLa:"le set", unitesSes:"ses sets", entreUnites:"entre les sets",
+    event:"le tournoi", eventUne:"un tournoi", attente:"le banc", pairs:"les autres joueurs",
+    taches:"aller chercher sa gourde, porter le sac, remettre les balles dans le tube",
+    colere:"il s'énerve sur le court, il jette sa raquette", equipTete:"ses chaussures",
+    geste:"son service", gesteQ:"Ton service", zone:"le premier jeu",
+    final:"la finale", finalQualif:"le match qui qualifie", depart:"la ligne de fond",
+    nouveaute:"un coup qu'il vient d'apprendre", tenu:"tenu ton service sous pression",
+    bons:"son service, ses appuis, s'amuser" },
+  basket:{ uniteUne:"un match", uniteLa:"le match", unitesSes:"ses matchs", entreUnites:"entre les quarts-temps",
+    event:"le match", eventUne:"un match", attente:"le banc", pairs:"les autres joueurs",
+    taches:"aller chercher sa gourde, porter le sac, ranger les ballons",
+    colere:"il s'énerve sur le terrain, il tape dans le ballon", equipTete:"ses chaussures",
+    geste:"son premier tir", gesteQ:"Ton premier tir", zone:"les premières minutes",
+    final:"le match décisif", finalQualif:"le match qui qualifie", depart:"le terrain",
+    nouveaute:"un poste où il n'a jamais joué", tenu:"tenu ta défense jusqu'au bout",
+    bons:"ses premiers tirs, sa défense, s'amuser" },
+  natation:{ uniteUne:"une série", uniteLa:"la série", unitesSes:"ses séries", entreUnites:"entre les séries",
+    event:"la compétition", eventUne:"une compétition", attente:"le bord du bassin", pairs:"les autres nageurs",
+    taches:"aller chercher sa gourde, porter le sac, ranger son bonnet et ses lunettes",
+    colere:"il s'énerve au bord du bassin, il jette ses lunettes", equipTete:"son bonnet",
+    geste:"son plongeon", gesteQ:"Ton plongeon", zone:"les premiers mètres",
+    final:"la finale", finalQualif:"la série qui qualifie", depart:"le plot",
+    nouveaute:"une nage qu'il travaille depuis peu", tenu:"tenu ta nage jusqu'au mur",
+    bons:"son plongeon, ses virages, s'amuser" },
+  athletisme:{ uniteUne:"un essai", uniteLa:"l'essai", unitesSes:"ses essais", entreUnites:"entre les essais",
+    event:"la compétition", eventUne:"une compétition", attente:"la chambre d'appel", pairs:"les autres athlètes",
+    taches:"aller chercher sa gourde, porter le sac, ranger ses pointes",
+    colere:"il s'énerve sur la piste, il jette ses pointes", equipTete:"ses pointes",
+    geste:"son départ", gesteQ:"Ton départ", zone:"les premiers appuis",
+    final:"la finale", finalQualif:"la série qui qualifie", depart:"les blocs",
+    nouveaute:"une technique qu'il vient d'apprendre", tenu:"tenu ta foulée jusqu'au bout",
+    bons:"son départ, sa foulée, s'amuser" },
+  judo:{ uniteUne:"un combat", uniteLa:"le combat", unitesSes:"ses combats", entreUnites:"entre les combats",
+    event:"la compétition", eventUne:"une compétition", attente:"le bord du tatami", pairs:"les autres judokas",
+    taches:"aller chercher sa gourde, porter le sac, plier son kimono",
+    colere:"il s'énerve sur le tapis, il tire sur son kimono", equipTete:"sa ceinture",
+    geste:"sa première saisie", gesteQ:"Ta première saisie", zone:"les premières secondes",
+    final:"le dernier combat", finalQualif:"le combat qui qualifie", depart:"le tapis",
+    nouveaute:"une technique qu'il vient d'apprendre", tenu:"tenu ta garde alors qu'il te poussait",
+    bons:"sa saisie, sa garde, s'amuser" },
+  generique:{ uniteUne:"un passage", uniteLa:"le passage", unitesSes:"ses passages", entreUnites:"entre les passages",
+    event:"la compétition", eventUne:"une compétition", attente:"le bord", pairs:"les autres",
+    taches:"aller chercher sa gourde, porter le sac, ranger ses affaires",
+    colere:"il s'énerve, il jette ses affaires", equipTete:"ses affaires",
+    geste:"son premier geste", gesteQ:"Ton premier geste", zone:"les premières secondes",
+    final:"le moment décisif", finalQualif:"le passage qui qualifie", depart:"la ligne de départ",
+    nouveaute:"quelque chose qu'il vient d'apprendre", tenu:"tenu ce qu'on avait dit jusqu'au bout",
+    bons:"son départ, ce qu'on avait dit, s'amuser" }
+};
+function sportKey(raw){
+  const t = String(raw || '').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+  if(!t) return 'bmx';
+  if(/bmx/.test(t)) return 'bmx';
+  if(/moto.?cross|\bmx\b/.test(t)) return 'motocross';
+  if(/foot(ball)?\b|futsal/.test(t)) return 'football';
+  if(/tennis(?! de table)/.test(t)) return 'tennis';
+  if(/basket/.test(t)) return 'basket';
+  if(/natation|nage|swim/.test(t)) return 'natation';
+  if(/athle|athlet|course a pied|sprint|demi[- ]fond/.test(t)) return 'athletisme';
+  if(/judo/.test(t)) return 'judo';
+  return 'generique';
+}
+function L(){ return LEX[etat.sport] || LEX.bmx; }
+
+/* =====================================================================================
+   LE CONTENU
+   Quatre semaines, dans cet ordre, et l'ordre compte : on commence par le moment le plus
+   fréquent et le plus coûteux (juste après une mauvaise manche), on finit par le moins
+   évident (ce qu'on dit quand tout va bien), qui est pourtant celui qui décide si l'enfant
+   roulera encore à quinze ans.
+   ===================================================================================== */
+function buildSemaines(){
+  const l = L();
+  return [
+  {
+    n:1, titre:"LES TROIS MINUTES D'APRÈS",
+    principe:"Après " + l.uniteUne + " ratée, on ne parle pas pendant trois minutes. Et on ne console pas.",
+    pourquoi:"À cet âge, une déception est entière et brève. Si on la commente, on la prolonge. "
+      + "Et consoler dit à l'enfant qu'il y avait bien de quoi être consolé : on confirme l'échec "
+      + "au moment précis où il cherche à savoir si c'en était un.",
+    faire:[
+      "Préparez avant " + l.event + " une tâche concrète à lui confier dès qu'il revient : " + l.taches + ".",
+      "Donnez-la-lui tout de suite, sans commentaire sur " + l.uniteLa + ".",
+      "Laissez passer trois minutes. S'il parle, vous écoutez. S'il ne parle pas, vous ne lancez pas le sujet.",
+      "L'action occupe les mains et coupe la boucle bien plus vite que n'importe quelle phrase."
+    ],
+    eviter:[
+      "« C'est pas grave », « t'inquiète », « tu feras mieux la prochaine ».",
+      "Les bras ouverts dans la seconde : la consolation arrive avant même qu'il ait décidé s'il était triste.",
+      "Le moindre commentaire technique, même bienveillant.",
+      "Lui demander ce qui s'est passé."
+    ],
+    dire:"« Tiens, prends ça. » Puis plus rien pendant trois minutes.",
+    essai:"Préparez votre tâche à l'avance et tenez les trois minutes une seule fois. Une seule suffit pour voir la différence.",
+    occasions:{
+      entrainement:"Il rate " + l.geste + ", " + l.colere + ". C'est exactement le même moment qu'en compétition, et il est bien plus fréquent.",
+      course:"Juste après " + l.uniteUne + " ratée, quand il revient dans " + l.attente + ".",
+      maison:"Un jeu perdu contre son frère, un devoir raté, un dessin qui ne lui plaît pas. La tâche peut être « tu peux mettre la table ». Le mécanisme est identique."
+    }
+  },
+  {
+    n:2, titre:"LA PREMIÈRE QUESTION",
+    principe:"La première question que vous posez décide de ce qui compte.",
+    pourquoi:"Un enfant de cet âge ne sait pas encore ce qui est important dans ce qu'il fait. "
+      + "Il le déduit de ce que les adultes demandent en premier. Si la première question est "
+      + "toujours le classement, le classement devient la seule mesure de sa valeur, et il n'a "
+      + "presque aucune prise dessus.",
+    faire:[
+      "Préparez trois questions, écrites dans votre téléphone, qui portent sur quelque chose qu'il maîtrise.",
+      "« " + l.gesteQ + ", tu l'as senti comment ? »",
+      "« Tu as réussi à faire ce qu'on avait dit dans " + l.zone + " ? »",
+      "« Qu'est-ce qui t'a fait plaisir, aujourd'hui ? »",
+      "Le résultat, vous le saurez de toute façon. Vous pouvez le demander plus tard, ou pas du tout."
+    ],
+    eviter:[
+      "« Tu as fini en combien ? », « t'as gagné ? »",
+      "« Il était devant toi, celui-là ? » : la comparaison à un autre enfant est la question la plus coûteuse de toutes.",
+      "Poser la question du classement avant même qu'il ait enlevé " + l.equipTete + "."
+    ],
+    dire:"« " + l.gesteQ + ", tu l'as senti comment ? » Et vous laissez le silence faire le reste.",
+    essai:"Votre première phrase, quand vous le récupérez, est une de vos trois questions. Aucune autre.",
+    occasions:{
+      entrainement:"Quand vous le récupérez à la sortie de l'entraînement. Pas « ça a été ? », qui n'appelle que « ouais », mais une question sur un geste précis.",
+      course:"Après chaque " + l.uniteLa.replace(/^(le |la |l')/, "") + ", avant même qu'il ait enlevé " + l.equipTete + ".",
+      maison:"Au retour de l'école. « Tu as eu combien ? » est exactement la même erreur que « tu es sorti en combien ? »."
+    }
+  },
+  {
+    n:3, titre:"QUAND L'ENJEU MONTE",
+    principe:"Plus le moment compte, moins vous parlez et moins vous êtes présent.",
+    pourquoi:"Quand un enfant a gagné " + l.unitesSes + ", ce n'est pas " + l.final + " qui l'angoisse : c'est ce "
+      + "qu'il a désormais à perdre. Et c'est l'entourage qui le lui apprend, avec la meilleure "
+      + "intention du monde. « Bravo, t'as tout gagné, maintenant " + l.final + " ! » fabrique en une "
+      + "phrase l'enjeu que l'enfant va devoir porter seul sur " + l.depart + ".",
+    faire:[
+      "Gardez exactement la même routine avant " + l.final + " qu'avant " + l.uniteLa + " numéro un : mêmes mots, même endroit, même timing.",
+      "Écrivez cette routine une fois, et ne la changez plus de la saison.",
+      "Restez un peu plus en retrait que d'habitude, pas plus près.",
+      "Si vous devez dire quelque chose, dites exactement ce que vous dites avant " + l.uniteLa + " numéro un. Rien de plus."
+    ],
+    eviter:[
+      "Rappeler ses résultats du jour juste avant.",
+      "Ajouter un conseil technique de dernière minute : il ne pourra pas l'appliquer, mais il pourra s'inquiéter.",
+      "Faire venir toute la famille au bord de " + l.depart + " pour " + l.final + ".",
+      "Changer de ton, même un peu. Il l'entend avant d'entendre les mots."
+    ],
+    dire:"La même phrase qu'avant " + l.uniteLa + " numéro un. Toujours la même, toute la saison.",
+    essai:"Repérez le moment où l'enjeu monte, et faites-vous plus discret au lieu de vous rapprocher.",
+    occasions:{
+      entrainement:"Un passage chronométré, un exercice devant l'entraîneur, " + l.nouveaute + ". Dès qu'il y a un public, l'enjeu monte, et le mécanisme est le même qu'en " + l.final.replace(/^(le |la |l')/, "") + ".",
+      course:"Avant " + l.final + ", ou avant " + l.finalQualif + ".",
+      maison:"Un contrôle, un spectacle, un rendez-vous qu'il appréhende. Même règle : routine identique, moins de mots, moins de présence."
+    }
+  },
+  {
+    n:4, titre:"CE QU'ON DIT QUAND ÇA VA BIEN",
+    principe:"On félicite ce qu'il a fait, jamais ce qu'il a obtenu.",
+    pourquoi:"C'est la semaine la moins évidente, et c'est la plus décisive. Un enfant qu'on "
+      + "félicite pour ses résultats apprend que l'affection des adultes suit les résultats. "
+      + "Dix ans plus tard, c'est lui qui arrête, non pas parce qu'il n'aime plus son sport, mais "
+      + "parce qu'il est fatigué de décevoir. Un enfant qu'on félicite pour un comportement apprend "
+      + "qu'il contrôle ce qui compte.",
+    faire:[
+      "Un compliment précis par sortie, sur un comportement observable.",
+      "« J'ai vu que tu es reparti tout de suite après ta chute. »",
+      "« Tu as " + l.tenu + ". »",
+      "Précis, court, et une seule fois. Puis on passe à autre chose."
+    ],
+    eviter:[
+      "« Tu es le meilleur », « bravo champion » : flatteur, et sans aucune information.",
+      "Le silence quand tout s'est bien passé. C'est très fréquent : on parle beaucoup quand ça rate, et peu quand ça marche.",
+      "Promettre une récompense liée à un résultat."
+    ],
+    dire:"« J'ai vu que… » suivi d'un comportement précis que lui seul a décidé.",
+    essai:"Un compliment précis par sortie, sur quelque chose qu'il a choisi de faire.",
+    occasions:{
+      entrainement:"C'est là que vous avez le plus d'occasions, et c'est là qu'on félicite le moins : un entraînement ordinaire ne semble jamais mériter un compliment. C'est une erreur.",
+      course:"Après " + l.uniteUne + " réussie, mais aussi après une ratée où il a bien fait une chose précise.",
+      maison:"N'importe quelle réussite, même minuscule. Le compliment précis se travaille partout, et il s'use beaucoup moins vite que le compliment général."
+    }
+  }
+  ];
+}
+
+/* Les trois occasions. Un protocole qui n'avance qu'en course laisse une famille bloquée
+   pendant une coupure, une blessure ou simplement un mois sans calendrier. Or ces quatre
+   comportements ne sont pas des comportements de course : ce sont des comportements face à
+   la déception et à l'enjeu. L'entraînement en offre chaque semaine, la maison tous les
+   jours. Et pédagogiquement c'est l'ordre correct : on installe un réflexe là où il n'y a
+   rien en jeu, et on le vérifie le dimanche. */
+const OCCASIONS = [
+  {cle:'entrainement', libelle:"À l'entraînement", court:"à l'entraînement"},
+  {cle:'course',       libelle:"En course",        court:"en course"},
+  {cle:'maison',       libelle:"À la maison",      court:"à la maison"}
+];
+
+function buildMemo(){
+  const l = L();
+  return [
+  {t:"La veille", p:"Le sac se prépare avec lui, pas à sa place. Une phrase sur ce qui ferait un bon week-end, dans des termes qu'il maîtrise : " + l.bons + ".",
+   non:"On ne parle pas de résultat, pas de classement, pas des autres."},
+  {t:"Le matin, dans la voiture", p:"Musique, discussion normale, comme un trajet ordinaire. Si lui parle de " + l.event + ", vous suivez. Sinon, vous ne lancez pas le sujet.",
+   non:"Pas de dernières consignes, pas de rappel de ce qu'il doit faire."},
+  {t:"Dans " + l.attente + ", avant", p:"Votre routine, toujours la même. Vous restez en retrait et disponible. Il doit pouvoir vous trouver sans que vous soyez sur lui.",
+   non:"Pas de conseil technique, pas de comparaison avec " + l.pairs + "."},
+  {t:l.entreUnites.charAt(0).toUpperCase() + l.entreUnites.slice(1), p:"De l'eau, de l'ombre, une tâche s'il tourne en rond. S'il veut parler, vous écoutez jusqu'au bout sans corriger.",
+   non:"Rien sur le classement, rien sur ce qui reste à faire."},
+  {t:"Juste avant " + l.final, p:"Exactement la même chose qu'avant " + l.uniteLa + " numéro un. Mêmes mots, même endroit, même distance.",
+   non:"Ne rappelez pas qu'il a gagné " + l.unitesSes + ". C'est la phrase qui crée la pression."},
+  {t:"Les trois minutes après", p:"Silence, et une tâche concrète préparée à l'avance. Vous attendez qu'il parle le premier.",
+   non:"Pas de consolation, pas d'analyse, pas de « c'est pas grave »."},
+  {t:"Le trajet du retour", p:"C'est lui qui décide du sujet. Si c'est le silence, c'est le silence, et ce n'est pas grave.",
+   non:"Pas de débrief technique, même s'il a été parfait."},
+  {t:"Le soir", p:"Un compliment précis sur un comportement. Puis on passe vraiment à autre chose : jeu, repas, famille.",
+   non:"On ne refait pas " + l.event + " au dîner devant le reste de la famille."}
+  ];
+}
+
+let SEMAINES = [], MEMO = [];
+function construireContenu(){ SEMAINES = buildSemaines(); MEMO = buildMemo(); }
+
+function buildJamais(){
+  const l = L();
+  return [
+  "Commenter la performance d'un autre enfant devant lui, en bien comme en mal.",
+  "Débriefer la technique dans les minutes qui suivent " + l.uniteUne + ".",
+  "Promettre une récompense liée à un résultat.",
+  "Parler de lui à la troisième personne devant d'autres adultes alors qu'il est là.",
+  "Montrer votre propre déception, même sans un mot. Les enfants lisent les visages bien avant les phrases.",
+  "Le comparer à lui-même l'an dernier : « avant, tu y arrivais ». C'est la phrase la plus démobilisante qui existe."
+  ];
+}
+
+/* ---- l'explication développementale, adaptée à l'âge déclaré ---- */
+function textePourquoi(){
+  const a = etat.ageEnfant || 8;
+  const p = etat.prenomEnfant || 'Votre enfant';
+  if(a <= 7){
+    return p + " a " + a + " ans. À cet âge, la capacité à ravaler une déception et à repartir "
+      + "n'est pas encore construite : elle se met en place progressivement jusqu'à l'adolescence. "
+      + "Un enfant de " + a + " ans qui pleure après " + L().uniteUne + " ratée, ou qui panique au moment "
+      + "où l'enjeu monte, fait exactement ce que fait un enfant de " + a + " ans.";
+  }
+  if(a <= 10){
+    return p + " a " + a + " ans. À cet âge, l'enfant commence à comprendre qu'il est observé et "
+      + "comparé, mais il n'a pas encore les moyens de réguler ce que ça déclenche en lui. Il voit "
+      + "l'enjeu, il le ressent entièrement, et il ne sait pas encore quoi en faire. C'est le "
+      + "décalage le plus coûteux de toute sa progression.";
+  }
+  return p + " a " + a + " ans. La régulation émotionnelle se construit jusqu'à l'adolescence, et "
+    + "l'enfant perçoit l'enjeu bien avant de savoir le gérer.";
+}
+
+/* =====================================================================================
+   LE POINT DE DÉPART ET LE BILAN
+   Les cinq mêmes questions, posées deux fois : à l'entrée, puis une fois les quatre
+   semaines faites. Rien n'est réordonné en fonction des réponses, et c'est volontaire :
+   les quatre comportements se tiennent dans un ordre qui a sa logique. Ce que ces
+   questions produisent, c'est une mesure. Sans elles, « est-ce que ça a marché » se
+   répond à l'impression, et l'impression d'un parent au bout d'un mois dépend surtout
+   du dernier dimanche.
+   ===================================================================================== */
+const QUESTIONS = [
+  {cle:'apres',    t:"Après une mauvaise sortie, combien de temps lui faut-il pour revenir à lui-même ?",
+   bas:"très longtemps", haut:"tout de suite"},
+  {cle:'enjeu',    t:"Quand l'enjeu monte, à quel point tient-il son niveau habituel ?",
+   bas:"il s'effondre", haut:"il tient"},
+  {cle:'parole',   t:"À quel point arrive-t-il à vous dire ce qu'il ressent après une compétition ?",
+   bas:"il ne dit rien", haut:"il parle facilement"},
+  {cle:'plaisir',  t:"À quel point a-t-il du plaisir à y aller, en ce moment ?",
+   bas:"il y va à reculons", haut:"il a hâte"},
+  {cle:'vousmeme', t:"Et vous, à quel point êtes-vous à l'aise dans ces moments-là ?",
+   bas:"très mal à l'aise", haut:"serein"}
+];
+
+/* =====================================================================================
+   QUI EST L'ENFANT
+   Trois informations, renseignées par le parent lui-même à son arrivée : son prénom, son
+   âge et son sport. Elles ne transitent pas par le paiement, et les saisir à la main pour
+   chaque client serait une corvée qui finirait par être oubliée. Le sport pilote le
+   lexique de tout le protocole, donc le changer reconstruit le contenu à la volée.
+   ===================================================================================== */
+const AGES = [5,6,7,8,9,10,11,12];
+const SPORTS_PROPOSES = [
+  {k:'BMX Race', l:'BMX Race'}, {k:'Motocross', l:'Motocross'}, {k:'Football', l:'Football'},
+  {k:'Tennis', l:'Tennis'}, {k:'Basket', l:'Basket'}, {k:'Natation', l:'Natation'},
+  {k:'Athlétisme', l:'Athlétisme'}, {k:'Judo', l:'Judo'}, {k:'Autre', l:'Autre sport'}
+];
+function enfantComplet(){
+  const e = etat.enfant || {};
+  return !!(String(e.prenom || '').trim() && e.age && e.sport);
+}
+function majEnfant(champ, val){
+  etat.enfant = etat.enfant || {};
+  etat.enfant[champ] = val;
+  if(champ === 'prenom') etat.prenomEnfant = String(val || '').trim();
+  if(champ === 'age')    etat.ageEnfant = Number(val);
+  if(champ === 'sport'){ etat.sport = sportKey(val); construireContenu(); }
+  enregistrer();
+  if(champ === 'prenom') rendreDepart();   // le champ texte ne doit pas perdre le focus
+  else rendreTout();
+}
+function blocEnfant(){
+  const e = etat.enfant || {};
+  let h = '<div class="q"><div class="q-t">Le prénom de votre enfant</div>'
+    + '<input type="text" id="chPrenom" maxlength="40" value="' + echapperHtml(e.prenom || '') + '" '
+    + 'placeholder="Son prénom" style="width:100%;padding:11px 13px;border:1px solid var(--line);'
+    + 'border-radius:4px;font-family:\'DM Sans\',sans-serif;font-size:14.5px;background:#fff" '
+    + 'oninput="majEnfant(\'prenom\', this.value)"></div>';
+  h += '<div class="q"><div class="q-t">Son âge</div><div class="q-ech">'
+    + AGES.map(function(a){ return '<button type="button" class="' + (Number(e.age) === a ? 'sel' : '')
+        + '" onclick="majEnfant(\'age\',' + a + ')">' + a + '</button>'; }).join('')
+    + '</div></div>';
+  h += '<div class="q"><div class="q-t">Son sport</div><div class="q-ech">'
+    + SPORTS_PROPOSES.map(function(s){ return '<button type="button" class="'
+        + (e.sport === s.k ? 'sel' : '') + '" style="flex:1 1 30%" '
+        + 'onclick="majEnfant(\'sport\',\'' + s.k + '\')">' + s.l + '</button>'; }).join('')
+    + '</div></div>';
+  if(enfantComplet()) h += '<div class="q-ok">C\'est noté. Tout le protocole parle maintenant de '
+    + echapperHtml(etat.prenomEnfant) + ' et de son sport.</div>';
+  return h;
+}
+function echapperHtml(t){
+  return String(t == null ? '' : t).replace(/[&<>"]/g, function(c){
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; });
+}
+
+function reponsesDe(quand){ return (etat.mesures && etat.mesures[quand]) || {}; }
+function complet(quand){
+  const r = reponsesDe(quand);
+  return QUESTIONS.every(function(q){ return typeof r[q.cle] === 'number'; });
+}
+function repondre(quand, cle, val){
+  etat.mesures = etat.mesures || {};
+  etat.mesures[quand] = etat.mesures[quand] || {};
+  etat.mesures[quand][cle] = val;
+  if(complet(quand) && !etat.mesures[quand].le) etat.mesures[quand].le = new Date().toISOString().slice(0,10);
+  enregistrer();
+  if(quand === 'depart') rendreDepart(); else rendreBilan();
+}
+function ecrireTexte(quand, v){
+  etat.mesures = etat.mesures || {};
+  etat.mesures[quand] = etat.mesures[quand] || {};
+  etat.mesures[quand].texte = v;
+  enregistrer();
+}
+
+/* Une échelle de 1 à 5, avec ses deux bornes nommées : un chiffre seul ne veut rien dire
+   pour un parent, et « plutôt bien » ne veut rien dire pour moi. */
+function blocQuestions(quand){
+  const r = reponsesDe(quand);
+  let h = '';
+  QUESTIONS.forEach(function(q){
+    h += '<div class="q"><div class="q-t">' + q.t + '</div><div class="q-ech">';
+    for(let v = 1; v <= 5; v++){
+      h += '<button type="button" class="' + (r[q.cle] === v ? 'sel' : '') + '" '
+         + 'onclick="repondre(\'' + quand + '\',\'' + q.cle + '\',' + v + ')">' + v + '</button>';
+    }
+    h += '</div><div class="q-bornes"><span>1 · ' + q.bas + '</span><span>' + q.haut + ' · 5</span></div></div>';
+  });
+  h += '<div class="q"><div class="q-t">'
+     + (quand === 'depart'
+        ? "Si vous deviez ne changer qu'une chose ce mois-ci, ce serait quoi ?"
+        : "Ce qui a changé, et ce qui n'a pas bougé. Même court, mais honnête.")
+     + '</div><textarea oninput="ecrireTexte(\'' + quand + '\', this.value)" '
+     + 'placeholder="Quelques phrases suffisent.">' + (r.texte || '') + '</textarea></div>';
+  if(complet(quand)) h += '<div class="q-ok">C\'est enregistré, je le vois de mon côté.</div>';
+  return h;
+}
+
+function rendreDepart(){
+  const e = document.getElementById('qEnfant');
+  if(e) e.innerHTML = blocEnfant();
+  /* Les cinq questions ne s'affichent qu'une fois l'enfant identifié : plusieurs d'entre
+     elles parlent de son sport, et les poser avant reviendrait à les poser dans le vide. */
+  const c = document.getElementById('cadreQuestions');
+  if(c) c.style.display = enfantComplet() ? '' : 'none';
+  const z = document.getElementById('qDepart');
+  if(z) z.innerHTML = enfantComplet() ? blocQuestions('depart') : '';
+  const m = document.getElementById('departMot');
+  if(m) m.textContent = !enfantComplet()
+    ? "Commencez par me dire qui est votre enfant : les cinq questions arrivent juste après."
+    : complet('depart')
+    ? "C'est fait. Vous pouvez y revenir et changer une réponse tant que vous voulez."
+    : "Répondez au plus juste, pas au plus flatteur. Un point de départ honnête est ce qui rend le bilan utile.";
+}
+
+/* Le bilan ne s'ouvre qu'une fois les quatre semaines essayées : le proposer avant
+   reviendrait à mesurer une progression qui n'a pas eu lieu. */
+function rendreBilan(){
+  const z = document.getElementById('bilanZone');
+  if(!z) return;
+  const n = Object.keys(etat.fait).length;
+  if(n < 4){
+    z.innerHTML = '<div class="cadre"><h3>Votre bilan</h3>'
+      + '<p>Il s\'ouvre quand les quatre semaines ont été essayées. Vous en êtes à ' + n + ' sur 4.</p>'
+      + '<p>On y reposera exactement les cinq questions du départ, et vous verrez les deux '
+      + 'séries côte à côte. C\'est la seule façon honnête de savoir si quelque chose a bougé.</p></div>';
+    return;
+  }
+  let h = '<div class="cadre"><h3>Les quatre semaines sont faites</h3>'
+    + '<p>On repose les cinq mêmes questions. Répondez sans regarder vos réponses du départ, '
+    + 'vous les verrez juste après.</p></div>'
+    + '<div class="cadre">' + blocQuestions('bilan') + '</div>';
+
+  if(complet('bilan')){
+    const d = reponsesDe('depart'), b = reponsesDe('bilan');
+    h += '<div class="cadre"><h3>Ce qui a bougé</h3>';
+    QUESTIONS.forEach(function(q){
+      const a = d[q.cle], c = b[q.cle];
+      const ecart = (typeof a === 'number' && typeof c === 'number') ? c - a : null;
+      h += '<div class="cmp"><span class="cmp-q">' + q.t + '</span><span class="cmp-v">'
+         + (typeof a === 'number' ? a : '?') + ' <b>&rsaquo;</b> ' + (typeof c === 'number' ? c : '?')
+         + (ecart === null ? '' : (ecart > 0 ? ' (+' + ecart + ')' : ecart < 0 ? ' (' + ecart + ')' : ' (=)'))
+         + '</span></div>';
+    });
+    h += '<p style="margin-top:12px;font-size:14px;color:var(--dim)">Une case qui n\'a pas bougé '
+       + 'n\'est pas un échec : quatre semaines, c\'est court, et certaines choses se jouent sur '
+       + 'une saison. Ce qui compte, c\'est ce qu\'on en fait maintenant.</p></div>';
+  }
+
+  h += '<div class="vocal-bloc"><h3>ET DE VIVE VOIX</h3>'
+    + '<div class="aide">Deux minutes pour me raconter le mois. Ce que vous avez tenu, ce que vous '
+    + 'n\'avez pas réussi à tenir, et ce que vous avez vu changer chez lui. C\'est ce message que '
+    + 'j\'écoute en premier.</div><div class="vocal" data-vocal="bilan"></div></div>';
+  z.innerHTML = h;
+  monterVocaux();
+}
+
+/* =====================================================================================
+   LE CALENDRIER
+   Une semaine s'ouvre sept jours après la précédente, à partir de la date de départ. Une
+   semaine déjà ouverte le reste : on ne referme jamais un contenu que le parent a lu, il
+   peut avoir besoin d'y revenir un dimanche difficile.
+   ===================================================================================== */
+function jours(d, n){ const x = new Date(d); x.setDate(x.getDate() + n); x.setHours(0,0,0,0); return x; }
+function auj(){ const d = new Date(); d.setHours(0,0,0,0); return d; }
+function dateFr(d){
+  if(!d) return '';
+  const x = new Date(d);
+  return x.toLocaleDateString('fr-FR', {day:'numeric', month:'long'});
+}
+/* La date de validation d'une semaine, quelle que soit la forme enregistrée : on a d'abord
+   stocké une simple date, on stocke maintenant la date ET l'occasion. */
+function validationDe(n){
+  const f = etat.fait[n];
+  if(!f) return null;
+  const d = typeof f === 'string' ? f : f.date;
+  return d ? new Date(d + (String(d).length === 10 ? 'T12:00:00' : '')) : null;
+}
+function occasionDe(n){
+  const f = etat.fait[n];
+  return (f && typeof f === 'object' && f.occasion) ? f.occasion : null;
+}
+
+/* L'ouverture d'une semaine suit le rythme réel de la famille, pas un calendrier théorique.
+   La suivante s'ouvre dès que la précédente a été essayée, et au plus tard quatorze jours
+   après l'ouverture de celle-ci. Un parent sans aucune occasion n'arrive donc jamais à la
+   semaine 4 sans avoir rien essayé, et un parent qui a trois occasions dans la semaine
+   n'attend pas sept jours pour avancer. */
+const DELAI_MAX_J = 14;
+function dateOuverture(n){
+  if(!etat.debut) return null;
+  let d = new Date(etat.debut); d.setHours(0,0,0,0);
+  for(let k = 2; k <= n; k++){
+    const v = validationDe(k - 1);
+    const plafond = jours(d, DELAI_MAX_J);
+    d = (v && v < plafond) ? jours(v, 0) : plafond;
+  }
+  return d;
+}
+function ouverte(n){
+  if(!etat.debut) return n === 1;
+  return auj() >= dateOuverture(n);
+}
+function semaineCourante(){
+  for(let n = 1; n <= 4; n++){ if(ouverte(n) && !etat.fait[n]) return n; }
+  let c = 1;
+  for(let n = 4; n >= 1; n--){ if(ouverte(n)){ c = n; break; } }
+  return c;
+}
+
+/* =====================================================================================
+   L'AFFICHAGE
+   ===================================================================================== */
+function aller(id){
+  document.querySelectorAll('.ecran').forEach(function(s){ s.classList.toggle('on', s.id === 'e' + '-' + id); });
+  document.querySelectorAll('.nav button').forEach(function(b){ b.classList.toggle('on', b.dataset.e === id); });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function liste(items, classe){
+  return '<ul class="' + (classe || '') + '">' + items.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>';
+}
+
+function rendreSemaines(){
+  const cour = semaineCourante();
+  let h = '';
+  SEMAINES.forEach(function(s){
+    const ok = ouverte(s.n);
+    const faite = !!etat.fait[s.n];
+    if(!ok){
+      const d = dateOuverture(s.n);
+      h += '<div class="sem verrou"><div class="sem-haut"><span class="sem-n">Semaine ' + s.n + '</span>'
+         + '<span class="sem-etat">à venir</span></div>'
+         + '<h2>' + s.titre + '</h2>'
+         + '<div class="verrou-txt">Elle s\'ouvre dès que vous aurez essayé la semaine ' + (s.n - 1)
+         + ', et le ' + dateFr(d) + ' au plus tard. Une habitude à la fois : c\'est ce qui tient.</div></div>';
+      return;
+    }
+    const occ = occasionDe(s.n);
+    const libOcc = (OCCASIONS.find(function(o){ return o.cle === occ; }) || {}).court;
+    h += '<div class="sem' + (faite ? ' faite' : '') + '" id="sem' + s.n + '">'
+       + '<div class="sem-haut"><span class="sem-n">Semaine ' + s.n
+       + (s.n === cour && !faite ? ' · cette semaine' : '') + '</span>'
+       + '<span class="sem-etat">' + (faite
+            ? 'Essayée ' + (libOcc ? libOcc + ' ' : '') + 'le ' + dateFr(validationDe(s.n))
+            : 'à essayer') + '</span></div>'
+       + '<h2>' + s.titre + '</h2>'
+       + '<div class="princ">' + s.principe + '</div>'
+       + '<div class="part"><div class="part-t pourquoi">Pourquoi</div><p>' + s.pourquoi + '</p></div>'
+       + '<div class="part"><div class="part-t faire">Ce que vous faites</div>' + liste(s.faire) + '</div>'
+       + '<div class="part eviter"><div class="part-t eviter">Ce qu\'on évite</div>' + liste(s.eviter, 'eviter') + '</div>'
+       + '<div class="part"><div class="part-t phrase">La phrase préparée</div><div class="dire">' + s.dire + '</div></div>'
+       + '<div class="part"><div class="part-t faire">Votre essai</div><p>' + s.essai + '</p>'
+       + '<div class="occ">' + OCCASIONS.map(function(o){
+            return '<div class="occ-l"><span class="occ-t">' + o.libelle + '</span>'
+                 + '<span class="occ-p">' + s.occasions[o.cle] + '</span></div>'; }).join('')
+       + '</div></div>'
+       + (faite
+          ? '<button class="valide" disabled>Essayée, et racontée</button>'
+          : '<div class="val-t">Je l\'ai essayée</div><div class="val-b">'
+            + OCCASIONS.map(function(o){
+                return '<button class="valide mini" onclick="validerSemaine(' + s.n + ',\'' + o.cle + '\')">'
+                     + o.libelle + '</button>'; }).join('')
+            + '</div>')
+       + '</div>';
+  });
+  document.getElementById('listeSemaines').innerHTML = h;
+}
+
+function rendreMemo(){
+  document.getElementById('listeMemo').innerHTML = MEMO.map(function(m){
+    return '<div class="moment"><h3>' + m.t.toUpperCase() + '</h3><p>' + m.p + '</p>'
+         + '<div class="non"><b>Pas ça :</b> ' + m.non + '</div></div>';
+  }).join('');
+  document.getElementById('listeJamais').innerHTML = liste(buildJamais(), 'eviter');
+}
+
+function rendreTout(){
+  const pe = etat.prenomEnfant;
+  document.getElementById('sousTitre').textContent = pe
+    ? 'Quatre semaines pour changer ce qui se joue autour de ' + pe + '.'
+    : 'Quatre semaines pour changer ce qui se joue autour de la course.';
+  document.getElementById('pq1').textContent = textePourquoi();
+  const l = L();
+  const pu = document.getElementById('pqUnite');
+  if(pu) pu.textContent = l.uniteUne;
+  const p2 = document.getElementById('pq2');
+  if(p2) p2.textContent = "Ces quatre comportements ne sont pas des comportements de compétition. "
+    + "Ce sont des comportements face à la déception et face à l'enjeu. Un enfant qui rate "
+    + l.geste + " un mercredi soir ressent la même chose qu'un dimanche en " + l.uniteLa
+      .replace(/^(le |la |l')/, '') + ", et un jeu perdu contre son frère déclenche le même mécanisme.";
+  const p3 = document.getElementById('pq3');
+  if(p3) p3.textContent = l.event;
+  const n = Object.keys(etat.fait).length;
+  document.getElementById('pied').textContent = n >= 4
+    ? 'Les quatre semaines sont faites. Continuez à m\'envoyer vos retours après chaque course : c\'est là que ça se joue maintenant.'
+    : n + ' semaine' + (n > 1 ? 's' : '') + ' sur 4 essayée' + (n > 1 ? 's' : '') + '.';
+  rendreSemaines();
+  rendreMemo();
+  rendreDepart();
+  rendreBilan();
+}
+
+/* =====================================================================================
+   LES MESSAGES DU PRÉPARATEUR
+   Le parent enregistre des retours ; sans canal en sens inverse, il parle dans le vide et
+   la promesse de la page, « je règle votre semaine suivante », n'est tenue nulle part.
+   Même composant que les pages sportifs : une cloche qui n'apparaît que s'il y a un
+   message, et qui disparaît une fois tout écouté.
+   ===================================================================================== */
+let messagesVocaux = [];
+async function verifierMessages(){
+  if(!axeCode) return;
+  try{
+    const { data, error } = await axeDB.rpc('recuperer_messages_vocaux', { code_p: axeCode });
+    if(error){ console.log('[AXE] erreur messages vocaux :', error.message); return; }
+    messagesVocaux = (data || []).filter(function(m){ return !m.lu; });
+    const bell = document.getElementById('vmBell');
+    const dot  = document.getElementById('vmDot');
+    if(!bell) return;
+    bell.classList.toggle('on', messagesVocaux.length > 0);
+    if(dot) dot.style.display = messagesVocaux.length ? 'block' : 'none';
+  }catch(e){ console.log('[AXE] souci messages vocaux :', e.message); }
+}
+function ouvrirMessageVocal(){
+  if(!messagesVocaux.length) return;
+  const m = messagesVocaux[0];
+  document.getElementById('vmAudio').src = m.url_audio;
+  document.getElementById('vmOverlay').classList.add('on');
+  if(axeCode){
+    /* `then(ok, erreur)` et jamais `catch` : l'objet rendu par `rpc` n'est pas une vraie
+       promesse, un `catch` dessus lève avant même que la requête parte. */
+    axeDB.rpc('marquer_message_vocal_lu', { id_p: m.id, code_p: axeCode })
+      .then(function(){}, function(e){ console.log('[AXE] message non marqué lu :', e && e.message); });
+  }
+}
+function fermerMessageVocal(){
+  document.getElementById('vmOverlay').classList.remove('on');
+  const a = document.getElementById('vmAudio');
+  if(a) a.pause();
+  messagesVocaux.shift();
+  const bell = document.getElementById('vmBell');
+  const dot  = document.getElementById('vmDot');
+  if(bell) bell.classList.toggle('on', messagesVocaux.length > 0);
+  if(dot)  dot.style.display = messagesVocaux.length ? 'block' : 'none';
+}
+
+/* =====================================================================================
+   L'ENREGISTREMENT
+   Tout tient dans `suivi_rituel.parent`, pour qu'aucune colonne nouvelle ne soit
+   nécessaire. Seule cette page écrit dans ce compte : aucun risque d'écrasement croisé.
+   ===================================================================================== */
+let sauvEnCours = null;
+function enregistrer(){
+  if(!axeCode) return;
+  const e = etat.enfant || {};
+  const suivi = { parent: { fait: etat.fait, mesures: etat.mesures || {}, enfant: e,
+                            maj: new Date().toISOString(),
+                            resume: { faites: Object.keys(etat.fait).length, sem: semaineCourante(),
+                                      depart: complet('depart'), bilan: complet('bilan'),
+                                      enfantOk: enfantComplet(),
+                                      sport: e.sport || etat.sport, enfant: etat.prenomEnfant,
+                                      age: etat.ageEnfant } } };
+  clearTimeout(sauvEnCours);
+  sauvEnCours = setTimeout(function(){
+    /* `then(ok, erreur)` et jamais `catch` : l'objet rendu par `rpc` n'est pas une vraie
+       promesse, il n'a qu'un `then`, et un `catch` dessus lève avant l'envoi de la requête. */
+    axeDB.rpc('enregistrer_suivi_rituel', { code_p: axeCode, suivi_p: suivi })
+      .then(function(r){ if(r && r.error) console.log('[AXE] suivi parent non enregistré :', r.error.message); },
+            function(e){ console.log('[AXE] suivi parent non enregistré :', e && e.message); });
+  }, 400);
+}
+
+/* Tant que le point de départ n'est pas renseigné, c'est lui qu'on ouvre : sans mesure
+   initiale, le bilan de fin ne vaut rien, et on ne peut pas la reconstituer après coup. */
+function ecranInitial(){
+  if(!enfantComplet() || !complet('depart')) aller('depart');
+}
+
+function validerSemaine(n, occasion){
+  if(etat.fait[n]) return;
+  etat.fait[n] = { date: new Date().toISOString().slice(0,10), occasion: occasion || 'course' };
+  enregistrer();
+  rendreTout();
+  /* On l'emmène tout de suite vers son retour vocal : une habitude essayée et jamais
+     racontée ne me donne aucune matière pour régler la semaine suivante. */
+  setTimeout(function(){ aller('retour'); }, 450);
+}
+
+/* ---- les vocaux : même composant partagé que les pages sportifs ---- */
+function monterVocaux(){
+  if(!window.AxeVocal || !axeCode) return;
+  document.querySelectorAll('.vocal[data-vocal]').forEach(function(z){
+    if(z.dataset.monte) return;
+    z.dataset.monte = '1';
+    AxeVocal.monter(z, {
+      auteur:'parent', contexte: z.dataset.vocal,
+      libelle: z.dataset.vocal === 'libre' ? 'Poser ma question'
+             : z.dataset.vocal === 'bilan' ? 'Enregistrer mon bilan' : 'Enregistrer mon retour',
+      aide: z.dataset.vocal === 'libre'
+        ? "Deux minutes maximum. Vous vous réécoutez avant d'envoyer."
+        : z.dataset.vocal === 'bilan'
+        ? "Ce que vous avez tenu, ce que vous n'avez pas réussi à tenir, ce qui a changé chez lui."
+        : "Où vous l'avez essayé, comment il a réagi, ce qui a été difficile à tenir.",
+      mois: function(){ return semaineCourante(); }
+    });
+  });
+}
+
+/* =====================================================================================
+   L'ACCÈS
+   ===================================================================================== */
+function demanderCode(message){
+  if(document.getElementById('verrou')){
+    if(message) document.getElementById('verrouMsg').textContent = message;
+    return;
+  }
+  const d = document.createElement('div');
+  d.id = 'verrou';
+  d.setAttribute('style','position:fixed;inset:0;z-index:99999;background:#0A0907;display:flex;'
+    + 'align-items:center;justify-content:center;padding:28px;overflow:auto');
+  d.innerHTML = '<div style="width:100%;max-width:340px;text-align:center">'
+    + '<img src="axe-192.png" alt="AXE" style="width:76px;height:76px;border-radius:14px;margin-bottom:26px" onerror="this.style.display=\'none\'">'
+    + '<div id="verrouMsg" style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:17px;'
+    + 'color:rgba(232,226,216,.72);line-height:1.5;margin-bottom:26px">'
+    + (message || "Entrez votre code d'accès pour ouvrir votre protocole.") + '</div>'
+    + '<input id="verrouChamp" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" '
+    + 'autocomplete="off" placeholder="Votre code d\'accès" '
+    + 'style="width:100%;padding:15px 16px;border:1.5px solid rgba(201,162,39,.45);border-radius:6px;'
+    + 'background:rgba(255,255,255,.05);color:#E8E2D8;font-family:DM Sans,sans-serif;font-size:16px;'
+    + 'text-align:center;outline:none">'
+    + '<button onclick="validerCode()" style="width:100%;margin-top:14px;padding:15px;border:none;'
+    + 'border-radius:6px;background:#A8852A;color:#0A0907;font-family:DM Sans,sans-serif;font-weight:600;'
+    + 'font-size:15px;cursor:pointer">Ouvrir mon protocole</button></div>';
+  document.body.appendChild(d);
+  const ch = document.getElementById('verrouChamp');
+  ch.addEventListener('keydown', function(e){ if(e.key === 'Enter') validerCode(); });
+  setTimeout(function(){ ch.focus(); }, 120);
+}
+function validerCode(){
+  const v = (document.getElementById('verrouChamp').value || '').trim();
+  if(!v) return;
+  try{ sessionStorage.setItem('axe_code_parent', v); }catch(e){}
+  location.search = '?code=' + encodeURIComponent(v);
+}
+
+async function init(){
+  if(!axeCode){ demanderCode(''); return; }
+  try{
+    const { data, error } = await axeDB.rpc('axe_verifier_acces', { code: axeCode });
+    if(error){ console.log('[AXE] erreur lecture :', error.message); return; }
+    if(data && data.length && data[0].bloque === true){
+      const min = Math.max(1, Math.ceil((Number(data[0].attente_s) || 900) / 60));
+      demanderCode("Trop d'essais. Réessayez dans " + min + " minute" + (min > 1 ? 's' : '') + ".");
+      return;
+    }
+    if(!data || !data.length){
+      demanderCode("Ce code ne correspond à aucun accès. Vérifiez-le, ou écrivez-moi.");
+      return;
+    }
+    const r = data[0];
+    etat.prenomParent = r.nom || '';
+    etat.sport = r.sport || '';
+    if(r.date_debut_mois){
+      const p = String(r.date_debut_mois).split('-');
+      etat.debut = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    }
+    /* Le profil porte l'enfant : son prénom et son âge. C'est tout ce dont ce protocole a
+       besoin, et c'est volontaire : on n'interroge pas un enfant de sept ans. */
+    if(r.profil){
+      try{
+        const pr = typeof r.profil === 'string' ? JSON.parse(r.profil) : r.profil;
+        if(pr){
+          etat.prenomEnfant = pr.prenom_enfant || pr.prenom || '';
+          if(pr.age_enfant) etat.ageEnfant = Number(pr.age_enfant);
+          else if(pr.age)   etat.ageEnfant = Number(pr.age);
+          if(pr.sport) etat.sport = pr.sport;
+        }
+      }catch(e){ console.log('[AXE] profil illisible'); }
+    } else if(r.age){ etat.ageEnfant = Number(r.age); }
+
+    if(r.suivi_rituel && typeof r.suivi_rituel === 'object' && r.suivi_rituel.parent){
+      const sp = r.suivi_rituel.parent;
+      if(sp.fait && typeof sp.fait === 'object') etat.fait = sp.fait;
+      if(sp.mesures && typeof sp.mesures === 'object') etat.mesures = sp.mesures;
+      if(sp.enfant && typeof sp.enfant === 'object'){
+        etat.enfant = sp.enfant;
+        if(sp.enfant.prenom) etat.prenomEnfant = sp.enfant.prenom;
+        if(sp.enfant.age)    etat.ageEnfant    = Number(sp.enfant.age);
+        if(sp.enfant.sport)  etat.sport        = sp.enfant.sport;
+      }
+    }
+    etat.sport = sportKey(etat.sport);
+    construireContenu();
+    setTimeout(ecranInitial, 60);
+    rendreTout();
+    monterVocaux();
+    verifierMessages();
+  }catch(e){ console.log('[AXE] souci connexion :', e.message); }
+}
+
+construireContenu();
+rendreTout();
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+</script>
+</body>
+</html>

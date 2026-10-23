@@ -1016,6 +1016,7 @@ function afficherRiders(riders){
     const rapports = rapportsParCode[r.code_acces] || [];
     const sr       = r.suivi_rituel || {};
     const saison   = aPlanSaison(sr);   // plan daté : pas de mois, pas de bilans mensuels
+    const parent   = estParent(r);      // protocole parents : ni mois, ni séances, ni bilans sportifs
     const bq       = sr.bq || {};   // les réponses aux exercices mentaux
     const moisCourant = Number(r.mois_en_cours || 1);
 
@@ -1254,12 +1255,23 @@ function afficherRiders(riders){
       aBilanParent: !!bilanParentCourant,
       moisConnu: saison || !!r.mois_en_cours,
       saison: saison,
+      parent: parent,
+      srParent: parent ? (sr.parent || {}) : null,
       resume: saison ? (sr.robin.resume || null) : null,
       sig: [], urgent: false, attente: false,
       html: `<div class="rider-card">
       <div class="rc-top"><h3>${nomAffiche}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
-      ${saison
+      ${parent
+        ? `<div class="rc-line"><span>Programme</span><span>Protocole parents${(sr.parent&&sr.parent.resume)?` · ${sr.parent.resume.faites} / 4 semaines`:''}</span></div>`
+          + (function(){ const E = (sr.parent&&sr.parent.enfant) || {};
+               const nomE = E.prenom || (sr.parent&&sr.parent.resume&&sr.parent.resume.enfant) || '';
+               const ageE = E.age || (sr.parent&&sr.parent.resume&&sr.parent.resume.age) || '';
+               const spE  = E.sport || (sr.parent&&sr.parent.resume&&sr.parent.resume.sport) || '';
+               if(!nomE && !ageE && !spE) return '';
+               return `<div class="rc-line"><span>Son enfant</span><span>${echapperAttr(nomE)}`
+                    + `${ageE?` · ${ageE} ans`:''}${spE?` · ${echapperAttr(spE)}`:''}</span></div>`; })()
+        : saison
         ? `<div class="rc-line"><span>Programme</span><span>Saison datée${(sr.robin.resume)?` · semaine ${sr.robin.resume.sem} / ${sr.robin.resume.nbSem}`:''}</span></div>`
         : `<div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>${bilanLigne}`}
       <div class="rc-line"><span>Formule</span><span>${r.formule||'?'}</span></div>
@@ -1269,7 +1281,7 @@ function afficherRiders(riders){
       <div class="rc-line"><span>Contact parent</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
       ${r.tel_rider?`<div class="rc-line"><span>Contact rider</span><span>${r.tel_rider}</span></div>`:''}
       ${profilBlock}
-      ${saison ? blocSaison(sr) : `${suiteBlock}${moisBlock}${closBlock}`}
+      ${parent ? blocParent(sr) : saison ? blocSaison(sr) : `${suiteBlock}${moisBlock}${closBlock}`}
       ${debriefBlock}
       <div class="pc-zone" id="pcZone" data-code="${echapperAttr(r.code_acces || '')}"></div>
     </div>`};
@@ -1291,6 +1303,89 @@ function afficherRiders(riders){
    le résumé qu'elle dépose, plus ce qui se déduit des données brutes.
    ===================================================================================== */
 function aPlanSaison(sr){ return !!(sr && sr.robin && typeof sr.robin === 'object'); }
+
+/* =====================================================================================
+   LA FICHE PARENT
+   Un compte parent n'est pas un sportif : il n'a ni mois en cours, ni bilan mensuel, ni
+   séances. Lui réclamer éternellement deux bilans qui n'existeront jamais ferait remonter
+   Anthony en tête du répertoire avec trois alertes fausses, et noierait les vrais signaux.
+   On le reconnaît à sa page de destination, qui est déjà en base.
+   ===================================================================================== */
+function estParent(r){
+  return String(r && r.page_cible || '').indexOf('protocole-parents') === 0;
+}
+const Q_PARENT = {
+  apres:    "Temps de retour au calme après une mauvaise sortie",
+  enjeu:    "Tient son niveau quand l'enjeu monte",
+  parole:   "Arrive à dire ce qu'il ressent",
+  plaisir:  "Plaisir d'y aller",
+  vousmeme: "Aisance du parent dans ces moments"
+};
+const OCC_PARENT = {entrainement:"à l'entraînement", course:"en course", maison:"à la maison"};
+
+function blocParent(sr){
+  const P = (sr && sr.parent) || {};
+  const fait = P.fait || {};
+  const mes  = P.mesures || {};
+  const n = Object.keys(fait).length;
+  let h = '<div class="rc-sub">Protocole parents · ' + n + ' semaine' + (n > 1 ? 's' : '')
+        + ' sur 4</div>';
+
+  if(!P.maj){
+    h += '<div class="mc-vide">Il n\'a pas encore ouvert sa page : rien à afficher tant '
+       + 'qu\'il n\'a rien renseigné.</div>';
+    return h;
+  }
+  const E = P.enfant || {};
+  const enfantOk = !!(String(E.prenom || '').trim() && E.age && E.sport);
+  if(!enfantOk){
+    h += '<div class="mc-vide">Il n\'a pas encore renseigné qui est son enfant. Tant que ce '
+       + 'n\'est pas fait, ses cinq questions de départ ne lui sont même pas proposées.</div>';
+  }
+
+  /* Le point de départ : sans lui, le bilan de fin ne vaudra rien, et on ne peut pas le
+     reconstituer après coup. C'est donc la première chose à relancer. */
+  const d = mes.depart || {};
+  const b = mes.bilan  || {};
+  const aDepart = Object.keys(Q_PARENT).every(function(k){ return typeof d[k] === 'number'; });
+  const aBilan  = Object.keys(Q_PARENT).every(function(k){ return typeof b[k] === 'number'; });
+
+  for(let s = 1; s <= 4; s++){
+    const f = fait[s];
+    if(!f){ h += '<div class="rc-line"><span>Semaine ' + s + '</span><span>pas encore essayée</span></div>'; continue; }
+    const date = typeof f === 'string' ? f : f.date;
+    const occ  = (typeof f === 'object' && f.occasion) ? OCC_PARENT[f.occasion] : null;
+    h += '<div class="rc-line"><span>Semaine ' + s + '</span><span>'
+       + (occ ? occ + ' · ' : '') + dateCourte(date) + '</span></div>';
+  }
+
+  const vieux = joursDepuis(P.maj);
+  h += '<div class="rc-line"><span>Dernier passage sur sa page</span><span>'
+     + dateCourte(P.maj) + (vieux > 1 ? ' · il y a ' + vieux + ' jours' : '') + '</span></div>';
+
+  if(!aDepart){
+    h += '<div class="mc-vide">Point de départ non rempli. À relancer tout de suite : sans lui, '
+       + 'le bilan de fin ne mesurera rien.</div>';
+  } else {
+    h += '<div class="rc-sub">Point de départ' + (aBilan ? ' et bilan' : '') + '</div>';
+    Object.keys(Q_PARENT).forEach(function(k){
+      const a = d[k], c = b[k];
+      const ecart = (aBilan && typeof c === 'number') ? c - a : null;
+      h += '<div class="rc-line"><span>' + Q_PARENT[k] + '</span><span>' + a
+         + (aBilan ? ' › ' + c + (ecart > 0 ? ' (+' + ecart + ')' : ecart < 0 ? ' (' + ecart + ')' : ' (=)') : '')
+         + ' / 5</span></div>';
+    });
+    if(d.texte) h += '<div class="rc-note"><span class="rc-who">Au départ · '
+                   + dateCourte(d.le) + '</span>' + echapperAttr(d.texte) + '</div>';
+    if(b.texte) h += '<div class="rc-note"><span class="rc-who">Au bilan · '
+                   + dateCourte(b.le) + '</span>' + echapperAttr(b.texte) + '</div>';
+    if(n >= 4 && !aBilan){
+      h += '<div class="mc-vide">Les quatre semaines sont faites, le bilan n\'est pas rendu. '
+         + 'C\'est le moment de le relancer.</div>';
+    }
+  }
+  return h;
+}
 
 function joursDepuis(d){
   if(!d) return null;
@@ -1404,6 +1499,30 @@ function majSignaux(d){
   if(pcRat) sig.push({t:pcRat > 1 ? pcRat + ' séances ponctuelles non faites'
                                   : 'Séance ponctuelle non faite', c:'attente'});
   else if(pcAuj) sig.push({t:'Séance ponctuelle aujourd\'hui', c:'calme'});
+  /* Un compte parent n'a ni mois, ni bilan sportif, ni séances. Ses signaux à lui : a-t-il
+     ouvert sa page, a-t-il donné son point de départ, avance-t-il, et le bilan de fin est-il
+     rendu une fois les quatre semaines faites. */
+  if(d.parent){
+    const P = d.srParent || {};
+    const mes = P.mesures || {};
+    const nf = Object.keys(P.fait || {}).length;
+    const cles = ['apres','enjeu','parole','plaisir','vousmeme'];
+    const aDepart = cles.every(function(k){ return typeof (mes.depart || {})[k] === 'number'; });
+    const aBilan  = cles.every(function(k){ return typeof (mes.bilan  || {})[k] === 'number'; });
+    const vieux = P.maj ? joursDepuis(P.maj) : null;
+    const E = P.enfant || {};
+    const enfantOk = !!(String(E.prenom || '').trim() && E.age && E.sport);
+    if(!P.maj)                  sig.push({t:"N'a jamais ouvert sa page", c:'urgent'});
+    else if(!enfantOk)          sig.push({t:"N'a pas renseigné son enfant", c:'urgent'});
+    else if(!aDepart)           sig.push({t:'Point de départ non rempli', c:'urgent'});
+    else if(nf >= 4 && !aBilan) sig.push({t:'Bilan de fin à relancer', c:'attente'});
+    else if(vieux !== null && vieux >= 12) sig.push({t:'Rien depuis ' + vieux + ' jours', c:'attente'});
+    if(!sig.length) sig.push({t:nf + ' / 4 semaines', c:'calme'});
+    d.sig = sig;
+    d.urgent  = !d.actif || sig.some(function(x){ return x.c === 'urgent'; });
+    d.attente = sig.some(function(x){ return x.c === 'attente'; });
+    return;
+  }
   /* Un sportif sur plan daté n'envoie pas de bilan mensuel : lui réclamer éternellement
      deux bilans qui n'existent pas noierait les vrais signaux. On regarde son assiduité. */
   if(d.saison){
@@ -1498,8 +1617,10 @@ function rendreRepertoire(garderFiltre){
       h += '<button type="button" class="rep-ligne" onclick="ouvrirDossier(' + x.i + ')">'
         + '<span class="rep-nom">' + d.nom
         + '<small>' + [d.sport,
-              d.saison ? (d.resume ? 'Semaine ' + d.resume.sem + ' / ' + d.resume.nbSem : 'Saison datée')
-                       : 'Mois ' + (d.mois || '?'),
+              d.parent ? ((d.srParent && d.srParent.resume)
+                            ? d.srParent.resume.faites + ' / 4 semaines' : 'Protocole parents')
+              : d.saison ? (d.resume ? 'Semaine ' + d.resume.sem + ' / ' + d.resume.nbSem : 'Saison datée')
+                         : 'Mois ' + (d.mois || '?'),
               d.code].filter(Boolean).join(' · ') + '</small></span>'
         + '<span class="badge ' + (d.actif ? 'ok' : 'alert') + ' rep-etat">'
         + (d.actif ? 'Actif' : 'Expiré') + '</span>'

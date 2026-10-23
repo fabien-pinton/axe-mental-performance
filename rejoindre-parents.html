@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le protocole parents AXE Mental Performance®</title>
+<meta name="description" content="Quatre semaines d'accompagnement pour les parents d'un jeune sportif de 6 à 10 ans en compétition.">
+<meta name="theme-color" content="#FDFAF5">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="axe-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="axe-apple-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A1612; --cream:#FDFAF5; --gold:#A8852A; --gold-soft:#C9A94E;
+  --line:rgba(26,22,18,.14); --line-strong:rgba(26,22,18,.28); --dim:rgba(26,22,18,.58);
+  --parent:#5D6F4A; --brique:#7A3B2E; --mental:#3B4A6B;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;
+  font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.5px;line-height:.98}
+.wrap{max-width:660px;margin:0 auto;padding:0 22px}
+section{padding:46px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+.eyebrow{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
+
+/* ---- en-tête ---- */
+.hero{padding:52px 0 44px;text-align:center}
+.logo{margin-bottom:30px}
+.logo .lettres{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;
+  letter-spacing:.2em;color:var(--gold);line-height:.9;padding-right:.2em}
+.logo .sous{font-size:7.5px;letter-spacing:.34em;color:var(--gold);font-weight:700;
+  border-top:1px solid rgba(168,133,42,.4);display:inline-block;padding-top:4px;margin-top:4px}
+.hero h1{font-size:clamp(34px,8.5vw,54px);margin:22px 0 0}
+.hero .lead{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(19px,3.4vw,25px);color:var(--ink);margin:20px auto 0;max-width:30ch;line-height:1.45}
+
+h2{font-size:clamp(26px,5.5vw,34px);margin-bottom:16px}
+h3{font-size:21px;margin-bottom:6px}
+p{margin-bottom:15px}
+p:last-child{margin-bottom:0}
+b,strong{font-weight:600}
+
+/* ---- les deux scènes ---- */
+.scene{border-left:2px solid var(--brique);padding:4px 0 4px 18px;margin:20px 0}
+.scene p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;
+  color:var(--ink);margin:0}
+
+.appui{background:rgba(59,74,107,.06);border:1px solid rgba(59,74,107,.22);
+  border-radius:8px;padding:22px 24px;margin:24px 0}
+.appui .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--mental);font-weight:700;margin-bottom:8px}
+
+.franc{background:rgba(122,59,46,.05);border:1px solid rgba(122,59,46,.26);
+  border-radius:8px;padding:22px 24px;margin:24px 0}
+.franc .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--brique);font-weight:700;margin-bottom:8px}
+
+/* ---- les semaines ---- */
+.sem{display:flex;gap:16px;padding:18px 0;border-top:1px dashed var(--line)}
+.sem:first-of-type{border-top:none}
+.sem-n{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--parent);
+  color:var(--parent);display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:17px;margin-top:2px}
+.sem-c h3{color:var(--ink)}
+.sem-c p{font-size:15.5px;color:var(--dim);margin:3px 0 0}
+
+/* ---- ce que vous recevez ---- */
+.recu{padding:13px 0 13px 28px;position:relative;border-top:1px dashed var(--line);font-size:15.5px}
+.recu:first-of-type{border-top:none}
+.recu::before{content:'';position:absolute;left:5px;top:22px;width:7px;height:7px;
+  border-radius:50%;background:var(--parent)}
+.recu b{display:block}
+.recu span{color:var(--dim);font-size:14.5px}
+
+/* ---- le prix ---- */
+.prix{text-align:center;border:1.5px solid var(--gold);border-radius:10px;
+  padding:34px 26px;background:rgba(168,133,42,.05)}
+.prix .montant{font-family:'Bebas Neue',sans-serif;font-size:62px;line-height:1;color:var(--gold)}
+.prix .quoi{font-size:14.5px;color:var(--dim);margin-top:6px}
+.cta{display:inline-block;margin-top:22px;background:var(--ink);color:var(--cream);
+  text-decoration:none;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;
+  letter-spacing:.02em;padding:17px 40px;border-radius:5px;transition:.2s var(--ease)}
+.cta:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,22,18,.18)}
+.rassure{font-size:13px;color:var(--dim);margin-top:16px;line-height:1.55}
+
+/* ---- questions ---- */
+.q{padding:17px 0;border-top:1px dashed var(--line)}
+.q:first-of-type{border-top:none}
+.q b{display:block;font-size:16px;margin-bottom:5px}
+.q p{font-size:15.5px;color:var(--dim);margin:0}
+
+/* ---- qui ---- */
+.qui{font-size:15.5px}
+.qui p{margin-bottom:12px}
+.signature{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;margin-top:18px}
+
+footer{padding:34px 0 46px;text-align:center;font-size:12px;color:var(--dim);
+  border-top:1px solid var(--line)}
+footer a{color:var(--dim)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="logo">
+      <div class="lettres">AXE</div>
+      <div class="sous">MENTAL PERFORMANCE®</div>
+    </div>
+    <div class="eyebrow">Protocole parents · 6 à 10 ans</div>
+    <h1>VOTRE ENFANT N'A PAS UN PROBLÈME MENTAL.<br>IL A SON ÂGE.</h1>
+    <div class="lead">Et c'est précisément pour ça que ce qui va l'aider, à cet âge, ce n'est pas lui qu'on entraîne.</div>
+  </div>
+
+  <section>
+    <h2>DEUX SCÈNES QUE VOUS CONNAISSEZ</h2>
+
+    <div class="scene">
+      <p>Il rate sa sortie. Il revient en pleurant, ou en colère. Et ça contamine tout le reste de la journée.</p>
+    </div>
+
+    <div class="scene">
+      <p>Il gagne tout. Arrive le moment qui compte, et il n'y arrive plus. Alors qu'il venait de prouver qu'il savait faire.</p>
+    </div>
+
+    <p>Si vous reconnaissez l'une des deux, vous avez sans doute déjà cherché quoi lui dire. Vous avez essayé de le consoler, de dédramatiser, de l'encourager avant le grand moment. Et vous avez vu que ça ne changeait pas grand-chose, voire que ça n'arrangeait rien.</p>
+
+    <p>Ce n'est pas que vous vous y prenez mal. C'est que, à cet âge, ce n'est pas avec des mots que ça se règle.</p>
+  </section>
+
+  <section>
+    <h2>CE QUI SE PASSE VRAIMENT</h2>
+
+    <p>Entre 6 et 10 ans, la capacité à encaisser une déception et à repartir n'est pas encore construite. Elle se met en place progressivement, jusqu'à l'adolescence. De la même façon, un enfant de cet âge perçoit parfaitement qu'un moment compte, bien avant de savoir quoi faire de ce que ça déclenche en lui.</p>
+
+    <p>Un enfant de sept ans qui pleure après une mauvaise sortie, ou qui panique quand l'enjeu monte, fait donc exactement ce que fait un enfant de sept ans.</p>
+
+    <div class="appui">
+      <div class="t">Ce que ça change</div>
+      <p>Aucun exercice mental donné à l'enfant ne fera apparaître plus tôt quelque chose qui n'est pas encore là. En revanche, <b>ce qui détermine son état après une sortie, c'est presque entièrement ce qui se passe autour de lui dans les trois minutes qui suivent.</b></p>
+      <p style="margin-bottom:0">Et ça, vous le contrôlez entièrement.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>CE QUE CE PROTOCOLE N'EST PAS</h2>
+
+    <div class="franc">
+      <div class="t">Autant être clair tout de suite</div>
+      <p><b>Ce n'est pas un accompagnement pour votre enfant.</b> Il n'a rien à lire, rien à faire, rien à remplir. On ne lui demande rien et on ne lui parle de rien. Il ne saura même pas que ce protocole existe.</p>
+      <p style="margin-bottom:0"><b>C'est vous qui êtes accompagné.</b> Pendant quatre semaines, on travaille votre façon d'être présent dans quatre moments très précis. C'est le seul levier qui fonctionne vraiment à cet âge, et c'est celui dont personne ne parle.</p>
+    </div>
+
+    <p>Un protocole mental construit pour l'enfant lui-même, ça existe chez moi aussi. Mais à partir de dix ans, pas avant. Avant, ce serait lui vendre une autonomie qu'il n'a pas encore.</p>
+  </section>
+
+  <section>
+    <h2>QUATRE SEMAINES,<br>QUATRE COMPORTEMENTS</h2>
+    <p style="color:var(--dim);font-size:15.5px">Un seul par semaine. Pas quatre d'un coup : ils vont tous contre l'instinct, et l'instinct revient au premier dimanche difficile.</p>
+
+    <div style="margin-top:22px">
+      <div class="sem"><div class="sem-n">1</div><div class="sem-c">
+        <h3>LES TROIS MINUTES D'APRÈS</h3>
+        <p>Après une mauvaise sortie, on ne parle pas pendant trois minutes. Et surtout, on ne console pas : consoler lui confirme qu'il y avait bien de quoi l'être.</p>
+      </div></div>
+
+      <div class="sem"><div class="sem-n">2</div><div class="sem-c">
+        <h3>LA PREMIÈRE QUESTION</h3>
+        <p>La première question que vous posez décide de ce qui compte à ses yeux. À cet âge, il ne sait pas encore ce qui est important : il le déduit de ce que vous demandez en premier.</p>
+      </div></div>
+
+      <div class="sem"><div class="sem-n">3</div><div class="sem-c">
+        <h3>QUAND L'ENJEU MONTE</h3>
+        <p>Plus le moment compte, moins vous parlez et moins vous vous approchez. « Bravo, tu as tout gagné, maintenant la finale ! » fabrique en une phrase l'enjeu qu'il va devoir porter seul.</p>
+      </div></div>
+
+      <div class="sem"><div class="sem-n">4</div><div class="sem-c">
+        <h3>CE QU'ON DIT QUAND ÇA VA BIEN</h3>
+        <p>La semaine la moins évidente, et la plus décisive. Un enfant qu'on félicite pour ses résultats apprend que l'affection suit les résultats. Dix ans plus tard, c'est lui qui arrête.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>CE QUE VOUS RECEVEZ</h2>
+
+    <div class="recu"><b>Votre page personnelle, accessible en permanence</b>
+      <span>Depuis votre téléphone, installable sur l'écran d'accueil. Votre code d'accès arrive par email juste après l'inscription.</span></div>
+
+    <div class="recu"><b>Les quatre semaines, détaillées</b>
+      <span>Pour chacune : pourquoi ça marche, ce que vous faites, ce qu'on évite, et la phrase à préparer. Parce qu'un parent sous tension un dimanche n'improvise pas.</span></div>
+
+    <div class="recu"><b>Le mémo du jour de compétition</b>
+      <span>Les huit moments de la journée, de la veille au soir, et quoi faire à chacun. C'est la page que vous ouvrez dans la voiture.</span></div>
+
+    <div class="recu"><b>Un échange vocal avec moi, tout du long</b>
+      <span>Vous m'envoyez un message après chaque essai, je vous réponds et j'ajuste votre semaine suivante. C'est un accompagnement, pas un document.</span></div>
+
+    <div class="recu"><b>Un bilan chiffré à la fin</b>
+      <span>Cinq questions à l'entrée, les cinq mêmes quatre semaines plus tard, et la comparaison côte à côte. Vous voyez ce qui a bougé, au lieu de vous fier à une impression.</span></div>
+  </section>
+
+  <section>
+    <div class="prix">
+      <div class="eyebrow">Protocole parents, 4 semaines</div>
+      <div class="montant">120 €</div>
+      <div class="quoi">Paiement unique. Aucun abonnement, rien à résilier.</div>
+      <a class="cta" href="https://buy.stripe.com/3cI14m7lWaiWdlz3pk8IU0q">Commencer maintenant</a>
+      <div class="rassure">Votre code d'accès arrive par email dans les minutes qui suivent.<br>
+      Accès à votre page pendant trois mois, pour garder le mémo après la fin.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>LES QUESTIONS QU'ON ME POSE</h2>
+
+    <div class="q"><b>Il n'y a aucune compétition prévue ce mois-ci.</b>
+      <p>Ce n'est pas un problème. Les quatre comportements ne sont pas des comportements de compétition : ce sont des comportements face à la déception et à l'enjeu. Chaque semaine vous propose trois occasions, à l'entraînement, en compétition ou à la maison. Une seule suffit pour avancer. Et c'est même l'ordre correct : on installe un réflexe là où il n'y a rien en jeu, et la compétition devient l'examen.</p></div>
+
+    <div class="q"><b>Mon enfant a 12 ans, 14 ans.</b>
+      <p>Alors ce protocole-ci n'est pas le bon. À partir de dix ans, c'est lui qu'on accompagne, directement, avec son propre protocole. Écrivez-moi, je vous dirai ce qui correspond.</p></div>
+
+    <div class="q"><b>Je n'ai pas beaucoup de temps.</b>
+      <p>Vous n'avez rien à ajouter à votre semaine. On ne vous demande pas de faire quelque chose en plus, on change ce que vous faites déjà dans des moments où vous êtes de toute façon présent. La lecture, c'est dix minutes par semaine.</p></div>
+
+    <div class="q"><b>Et si je m'y prends mal depuis des années ?</b>
+      <p>Vous ne vous y prenez pas mal. Vous faites ce que fait n'importe quel parent qui tient à son enfant : vous le consolez quand il a de la peine, et vous l'encouragez avant un moment important. Ce sont deux réflexes justes, qui se trouvent être contre-productifs à cet âge précis. Personne ne vous l'a jamais dit, c'est tout.</p></div>
+
+    <div class="q"><b>Est-ce que ça marche vraiment ?</b>
+      <p>Sur quatre semaines, certaines choses bougent nettement et d'autres pas du tout. C'est pour ça que le bilan est chiffré : vous verrez les deux. Je préfère vous le dire avant plutôt que de vous promettre un enfant transformé en un mois.</p></div>
+  </section>
+
+  <section class="qui">
+    <h2>QUI VOUS ACCOMPAGNE</h2>
+    <p>Je m'appelle Fabien Pinton. J'ai passé trente ans dans le football de compétition, comme joueur jusqu'au plus haut niveau régional, puis comme recruteur.</p>
+    <p>Pendant dix ans, j'ai accompagné de jeunes footballeurs sur la gestion de leurs émotions avant les grandes échéances et sur leurs choix de carrière. Plusieurs sont professionnels aujourd'hui.</p>
+    <p>Je connais aussi tout ça comme père. Mon fils aîné a joué jusqu'en U19 National, mon second est pilote Junior en BMX Race. Je sais ce que ça demande à un enfant, et ce que ça demande à sa famille. On ne parle jamais de la seconde.</p>
+    <p>Ce protocole est né de là, et des familles qui sont venues me voir avec un enfant trop jeune pour que je l'accompagne lui.</p>
+    <div class="signature">Fabien Pinton</div>
+  </section>
+
+  <section style="text-align:center">
+    <h2>COMMENCER</h2>
+    <p style="color:var(--dim);max-width:44ch;margin:0 auto 24px">Quatre semaines, à partir du jour où vous ouvrez votre page. Pas besoin d'attendre la reprise des compétitions.</p>
+    <a class="cta" href="https://buy.stripe.com/3cI14m7lWaiWdlz3pk8IU0q">Rejoindre le protocole parents · 120 €</a>
+    <div class="rassure">Une question avant de vous lancer ? Écrivez-moi à
+      <a href="mailto:f.pinton@outlook.fr" style="color:var(--gold)">f.pinton@outlook.fr</a>,
+      je réponds personnellement.</div>
+  </section>
+
+  <footer>
+    AXE Mental Performance® · Préparation mentale et physique du jeune sportif<br>
+    <a href="https://fabien-pinton.fr">fabien-pinton.fr</a>
+  </footer>
+
+</div>
+</body>
+</html>
