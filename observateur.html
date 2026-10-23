@@ -142,6 +142,22 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
 .pc-msg{font-size:12px;font-weight:600;margin-top:9px}
 .pc-msg.ok{color:#2F6B45}
 .pc-msg.ko{color:#8C2B1E}
+/* ---- le suivi des relances : une personne qui a laissé son contact et qui attend ---- */
+.rel{display:block;margin-top:6px;font-size:11px;line-height:1.5}
+.rel-l{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:2px 0}
+.rel-t{color:var(--dim)}
+.rel-du{font-weight:700;color:var(--dim)}
+.rel-du.retard{color:#8C2B1E}
+.rel-du.bientot{color:var(--gold)}
+.rel-du.faite{color:#2F6B45}
+.rel-b{font-family:'DM Sans',system-ui,sans-serif;font-size:10.5px;font-weight:600;
+  padding:2px 8px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  background:transparent;border:1px solid var(--line);color:var(--dim)}
+.rel-b:hover{border-color:var(--gold);color:var(--gold)}
+.rel-b.on{border-color:rgba(47,107,69,.55);color:#2F6B45;background:rgba(47,107,69,.07)}
+.rel-b.urg{border-color:rgba(140,43,30,.5);color:#8C2B1E}
+.rel-b.urg:hover{background:rgba(140,43,30,.07)}
+.rel-rep{font-weight:700;color:#2F6B45}
 /* ---- le répertoire : une ligne par sportif, le dossier s'ouvre au clic ---- */
 .rep-outils{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
 .rep-chercher{flex:1 1 220px;min-width:0;font-family:'DM Sans',sans-serif;font-size:14px;
@@ -221,6 +237,7 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
       <button class="filtre" data-f="rien" onclick="filtrer('rien')">Coordonnées seules</button>
       <button class="filtre" data-f="demo" onclick="filtrer('demo')">Ont fait la démo</button>
       <button class="filtre" data-f="envoi" onclick="filtrer('envoi')">À envoyer</button>
+      <button class="filtre" data-f="relance" onclick="filtrer('relance')">À relancer</button>
       <button class="filtre" data-f="client" onclick="filtrer('client')">Clients</button>
     </div>
     <div class="tbl-wrap" id="prosWrap">
@@ -481,6 +498,126 @@ function estClient(p){
   return clientsMailSansNom.has(m);
 }
 
+/* =====================================================================================
+   LE SUIVI DES RELANCES
+   Une personne qui laisse son contact et qu'on ne rappelle pas est une vente perdue en
+   silence. Le calendrier se tient tout seul : la première relance tombe 30 jours après le
+   contact, la seconde 15 jours après que la première a été faite. Rien n'est stocké comme
+   date « prévue », tout se recalcule, donc une relance faite en retard décale la suivante
+   au lieu de la rendre caduque.
+   Dès qu'une réponse est notée, la séquence s'arrête : on ne relance pas quelqu'un qui a
+   déjà répondu, c'est le meilleur moyen de le perdre.
+   ===================================================================================== */
+const RELANCE_1_J = 30;   // jours après le premier contact
+const RELANCE_2_J = 15;   // jours après la première relance
+
+function jourPlus(d, n){
+  if(!d) return null;
+  const x = new Date(d);
+  if(isNaN(x)) return null;
+  x.setDate(x.getDate() + n);
+  x.setHours(0,0,0,0);
+  return x;
+}
+function ecartJours(d){
+  if(!d) return null;
+  const h = new Date(); h.setHours(0,0,0,0);
+  return Math.round((d - h) / 86400000);   // négatif = en retard
+}
+/* L'état de la séquence pour une personne. Rendu null pour un client : on ne relance
+   jamais quelqu'un qui a déjà payé, ce serait le pire message à lui envoyer. */
+function relanceEtat(p){
+  if(estClient(p)) return null;
+  if(p.repondu_le) return {fini:true, repondu:true, le:p.repondu_le};
+  if(!p.relance1_le){
+    const du = jourPlus(p.clique_le, RELANCE_1_J);
+    return {numero:1, du:du, dans:ecartJours(du)};
+  }
+  if(!p.relance2_le){
+    const du = jourPlus(p.relance1_le, RELANCE_2_J);
+    return {numero:2, du:du, dans:ecartJours(du), faite1:p.relance1_le};
+  }
+  return {fini:true, repondu:false, faite1:p.relance1_le, faite2:p.relance2_le};
+}
+/* Vrai quand une relance est due aujourd'hui ou l'était déjà : c'est ce qui alimente le
+   compteur et le filtre, et c'est la seule chose qui demande une action aujourd'hui. */
+function aRelancer(p){
+  const e = relanceEtat(p);
+  return !!(e && !e.fini && e.dans !== null && e.dans <= 0);
+}
+function blocRelance(p){
+  const e = relanceEtat(p);
+  if(!e) return '';
+  // on écrit toujours sur la fiche qui porte déjà l'historique de relance, s'il y en a une
+  const id = Number(p.relance_id !== undefined ? p.relance_id : p.id);
+  const bRep = '<button type="button" class="rel-b' + (p.repondu_le ? ' on' : '') + '" '
+    + 'onclick="marquerReponse(' + id + ',' + (p.repondu_le ? 'false' : 'true') + ')">'
+    + (p.repondu_le ? 'A répondu' : 'Noter une réponse') + '</button>';
+
+  if(e.fini && e.repondu){
+    return '<span class="rel"><span class="rel-l"><span class="rel-rep">A répondu le '
+      + dateFr(e.le).split(' à ')[0] + '</span>' + bRep + '</span></span>';
+  }
+  if(e.fini){
+    return '<span class="rel"><span class="rel-l"><span class="rel-t">2 relances faites, '
+      + 'sans réponse</span>' + bRep + '</span>'
+      + '<span class="rel-l"><span class="rel-t">Relance 2 faite le '
+      + dateFr(e.faite2).split(' à ')[0] + '</span>'
+      + '<button type="button" class="rel-b" onclick="marquerRelance(' + id + ',2,false)">Annuler</button>'
+      + '</span></span>';
+  }
+
+  const d = e.dans;
+  const classe = d <= 0 ? 'retard' : (d <= 3 ? 'bientot' : '');
+  const quand = d === null ? 'date inconnue'
+              : d < 0  ? 'en retard de ' + (-d) + (d === -1 ? ' jour' : ' jours')
+              : d === 0 ? "aujourd'hui"
+              : d === 1 ? 'demain'
+              : 'dans ' + d + ' jours';
+  let h = '<span class="rel">';
+  if(e.numero === 2){
+    h += '<span class="rel-l"><span class="rel-du faite">Relance 1 faite le '
+       + dateFr(e.faite1).split(' à ')[0] + '</span>'
+       + '<button type="button" class="rel-b" onclick="marquerRelance(' + id + ',1,false)">Annuler</button>'
+       + '</span>';
+  }
+  h += '<span class="rel-l"><span class="rel-t">Relance ' + e.numero + '</span>'
+     + '<span class="rel-du ' + classe + '">' + quand + '</span>'
+     + '<button type="button" class="rel-b' + (d <= 0 ? ' urg' : '') + '" '
+     + 'onclick="marquerRelance(' + id + ',' + e.numero + ',true)">Fait</button>'
+     + bRep + '</span></span>';
+  return h;
+}
+
+/* Les écritures. `then(ok, erreur)` et jamais `catch` : l'objet rendu par `rpc` n'est pas
+   une vraie promesse, un `catch` dessus lève avant même que la requête parte. */
+function majFicheProspect(id, champs){
+  prospects.forEach(function(f){ if(Number(f.id) === Number(id)) Object.assign(f, champs); });
+  afficherProspects();
+}
+function marquerRelance(id, numero, fait){
+  db.rpc('axe_marquer_relance', { cle: cleCoach, prospect_id: id, numero: numero, fait: !!fait })
+    .then(function(r){
+      if(r && r.error){ alert('Pas enregistré : ' + r.error.message); return; }
+      const d = r && r.data;
+      if(!d || d.ok !== true){ alert('Pas enregistré. Réessaie.'); return; }
+      const champs = {};
+      champs['relance' + numero + '_le'] = d.le || null;
+      // annuler la première relance annule forcément la seconde, qui en découle
+      if(numero === 1 && !fait) champs.relance2_le = null;
+      majFicheProspect(id, champs);
+    }, function(e){ alert('Pas enregistré : ' + ((e && e.message) || 'erreur réseau')); });
+}
+function marquerReponse(id, repondu){
+  db.rpc('axe_marquer_reponse', { cle: cleCoach, prospect_id: id, repondu: !!repondu })
+    .then(function(r){
+      if(r && r.error){ alert('Pas enregistré : ' + r.error.message); return; }
+      const d = r && r.data;
+      if(!d || d.ok !== true){ alert('Pas enregistré. Réessaie.'); return; }
+      majFicheProspect(id, { repondu_le: d.le || null });
+    }, function(e){ alert('Pas enregistré : ' + ((e && e.message) || 'erreur réseau')); });
+}
+
 // "" = a seulement laissé ses coordonnées · "demo" = a testé · "client" = a payé
 function statutDe(p){
   if(estClient(p)) return 'client';
@@ -530,6 +667,19 @@ function fusionnerFiches(liste){
     });
     if(vraiContact) base.nom_parent = vraiContact.nom_parent;
 
+    /* Les relances : elles ont pu être notées sur n'importe laquelle des fiches de cette
+       personne. On garde la plus récente de chaque, et on retient SUR QUELLE FICHE elle a
+       été posée, pour que le prochain clic écrive au même endroit au lieu d'éparpiller
+       l'historique sur trois lignes de la même famille. */
+    ['relance1_le','relance2_le','repondu_le'].forEach(function(c){
+      let val = null, src = null;
+      fiches.forEach(function(f){
+        if(f[c] && (!val || new Date(f[c]) > new Date(val))){ val = f[c]; src = f.id; }
+      });
+      if(val){ base[c] = val; if(base.relance_id === undefined) base.relance_id = src; }
+      else base[c] = null;
+    });
+
     base.clique_le = fiches.slice().sort(recent)[0].clique_le;
     out.push(base);
   });
@@ -559,20 +709,27 @@ function afficherProspects(){
   const nbDemo = toutes.filter(function(p){ return statutDe(p) === 'demo'; }).length;
   const nbClient = toutes.filter(function(p){ return statutDe(p) === 'client'; }).length;
   const nbEnvoi = toutes.filter(aEnvoyer).length;
+  const nbRel = toutes.filter(aRelancer).length;
   const bouts = [toutes.length + (toutes.length > 1 ? ' personnes' : ' personne')];
   if(nbDemo) bouts.push(nbDemo + ' en démo');
   if(nbClient) bouts.push(nbClient + (nbClient > 1 ? ' clients' : ' client'));
   const c = document.getElementById('countPros');
   c.innerHTML = bouts.join(' · ')
     + (nbEnvoi ? ' · <b class="cp-alerte">' + nbEnvoi
-        + (nbEnvoi > 1 ? ' mails à envoyer' : ' mail à envoyer') + '</b>' : '');
+        + (nbEnvoi > 1 ? ' mails à envoyer' : ' mail à envoyer') + '</b>' : '')
+    + (nbRel ? ' · <b class="cp-alerte">' + nbRel
+        + (nbRel > 1 ? ' relances à faire' : ' relance à faire') + '</b>' : '');
   const bf = document.querySelector('[data-f="envoi"]');
   if(bf){ bf.textContent = 'À envoyer' + (nbEnvoi ? ' (' + nbEnvoi + ')' : '');
           bf.classList.toggle('vide', !nbEnvoi); }
+  const br = document.querySelector('[data-f="relance"]');
+  if(br){ br.textContent = 'À relancer' + (nbRel ? ' (' + nbRel + ')' : '');
+          br.classList.toggle('vide', !nbRel); }
 
   const liste = toutes.filter(function(p){
-    if(filtreActif === 'tous')  return true;
-    if(filtreActif === 'envoi') return aEnvoyer(p);
+    if(filtreActif === 'tous')    return true;
+    if(filtreActif === 'envoi')   return aEnvoyer(p);
+    if(filtreActif === 'relance') return aRelancer(p);
     return statutDe(p) === (filtreActif === 'rien' ? '' : filtreActif);
   });
 
@@ -592,11 +749,11 @@ function afficherProspects(){
     const st = statutDe(p);
     const envoi = LIB_ENVOI[p.demo_envoi] || '';
     const suite = st === 'client' ? '<span class="etat cli">Client</span>'
-                : st === 'demo'   ? ('<span class="etat demo">Démo</span>' + blocEnvoi(p, envoi))
-                : '';
+                : st === 'demo'   ? ('<span class="etat demo">Démo</span>' + blocEnvoi(p, envoi) + blocRelance(p))
+                : blocRelance(p);
     body.innerHTML += '<tr>'
       + '<td>' + (p.nom_parent||'') + (origine ? '<span class="src">' + origine + '</span>' : '') + '</td>'
-      + '<td>' + (p.nom_rider || (estSurMesure ? '—' : '')) + '</td>'
+      + '<td>' + (p.nom_rider || (estSurMesure ? '·' : '')) + '</td>'
       + '<td>' + sportCell + '</td>'
       + '<td class="mail">' + (p.email_parent||'') + '</td>'
       + '<td class="date">' + dateFr(p.clique_le) + '</td>'
@@ -609,14 +766,19 @@ function exporterProspects(){
   const liste = fusionnerFiches(prospects);
   if(!liste.length) return;
   const LIB_ETAT = {client:'Client', demo:'Démo', '':''};
-  const lignes = [['Contact','Sportif','Sport','Niveau','Email','Dernière activité','Origine','Statut','Démo faite le','Email demandé','Mail envoyé le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait']];
+  const lignes = [['Contact','Sportif','Sport','Niveau','Email','Dernière activité','Origine','Statut','Démo faite le','Email demandé','Mail envoyé le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait','Relance 1 faite le','Relance 2 faite le','A répondu le','Prochaine relance']];
   liste.forEach(function(p){
     lignes.push([
       p.nom_parent||'', p.nom_rider||'', p.sport||'', p.niveau||'', p.email_parent||'',
       dateFr(p.clique_le), LIB_SOURCE[p.source] || p.source || '', LIB_ETAT[statutDe(p)],
       p.demo_le ? dateFr(p.demo_le) : '', LIB_ENVOI[p.demo_envoi] || '',
       p.mail_envoye_le ? dateFr(p.mail_envoye_le) : '', p.demo_profil||'', p.demo_entree||'',
-      p.demo_canal||'', p.demo_oeil||'', p.demo_exercice === true ? 'oui' : (p.demo_le ? 'non' : '')
+      p.demo_canal||'', p.demo_oeil||'', p.demo_exercice === true ? 'oui' : (p.demo_le ? 'non' : ''),
+      p.relance1_le ? dateFr(p.relance1_le).split(' à ')[0] : '',
+      p.relance2_le ? dateFr(p.relance2_le).split(' à ')[0] : '',
+      p.repondu_le  ? dateFr(p.repondu_le).split(' à ')[0]  : '',
+      (function(){ const e = relanceEtat(p);
+        return (e && !e.fini && e.du) ? e.du.toLocaleDateString('fr-FR') : ''; })()
     ]);
   });
   const csv = '\ufeff' + lignes.map(function(l){ return l.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(';'); }).join('\n');
