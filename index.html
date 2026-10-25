@@ -65,14 +65,14 @@
         "https://www.linkedin.com/in/fabien-pinton-252728190"
       ],
       "description": "Préparation mentale et physique pour tout sportif de compétition et sa famille, quel que soit le sport et l'âge. Méthode AXE Mental Performance® : Alignement, eXigence, Engagement. Protocole complet par abonnement, personnalisé chaque mois.",
-      "knowsAbout": ["Préparation mentale", "BMX Race", "Gestion du stress en compétition", "Psychologie du sport", "Coaching mental jeunes sportifs"],
+      "knowsAbout": ["Préparation mentale", "Préparation physique du jeune sportif", "Gestion du stress en compétition", "Psychologie du sport", "Coaching mental jeunes sportifs", "Accompagnement des parents de jeunes sportifs", "BMX Race", "Football", "Tennis", "Judo", "Natation", "Athlétisme"],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Offres AXE Mental Performance®",
         "itemListElement": [
-          { "@type": "Offer", "name": "Protocole AXE, engagement annuel en une fois", "description": "12 mois d'accès au protocole complet, mental et physique, payable en une fois. Statut partenaire inclus.", "price": "900", "priceCurrency": "EUR", "url": "https://fabien-pinton.fr/rejoindre.html" },
-          { "@type": "Offer", "name": "Protocole AXE, engagement annuel en 3 fois", "description": "12 mois d'accès au protocole complet, mental et physique, réglés en 3 mensualités. Statut partenaire inclus.", "price": "300", "priceCurrency": "EUR", "url": "https://fabien-pinton.fr/rejoindre.html" },
-          { "@type": "Offer", "name": "Protocole AXE, mensuel sans engagement", "description": "Accès au protocole complet, mental et physique, mois par mois, résiliable à tout moment.", "price": "89", "priceCurrency": "EUR", "url": "https://fabien-pinton.fr/rejoindre.html" }
+          { "@type": "Offer", "name": "Protocole complet, mental et physique", "description": "Préparation mentale et physique du sportif à partir de 12 ans, tous sports. Sur mesure selon l'âge, le sport, le niveau et le diagnostic d'entrée. Mensuel, sans engagement, résiliable à tout moment.", "price": "89", "priceCurrency": "EUR", "url": "https://fabien-pinton.fr/rejoindre.html#complet" },
+          { "@type": "Offer", "name": "Protocole mental seul", "description": "Préparation mentale seule, à partir de 12 ans, pour un sportif dont la préparation physique est déjà programmée et suivie par ailleurs. Mensuel, sans engagement.", "price": "49", "priceCurrency": "EUR", "url": "https://fabien-pinton.fr/rejoindre.html#mental" },
+          { "@type": "Offer", "name": "Protocole parents, 4 semaines", "description": "Accompagnement du parent d'un enfant sportif de 6 à 12 ans. Quatre semaines, quatre comportements, un bilan chiffré. Paiement unique.", "price": "120", "priceCurrency": "EUR", "url": "https://fabien-pinton.fr/rejoindre.html#parents" }
         ]
       }
     },
@@ -478,21 +478,15 @@ nav.topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;just
     <li><a href="#avis">Témoignages</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
-  <a href="#offres" class="nav-cta">Découvrir le protocole</a>
+  <a href="#offres" class="nav-cta">Les trois accès</a>
   <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="floating">
-  <a href="#offres" class="float-btn">Découvrir le protocole →</a>
+  <a href="#offres" class="float-btn">Les trois accès →</a>
 </div>
 
 <div class="wrap">
-
-<!-- BANDEAU PARRAINAGE -->
-<div class="parrain-banner" id="parrainBanner" style="display:none">
-  <span class="pb-ico">★</span>
-  <span>Tu arrives grâce à un membre du protocole. Bienvenue, tu es au bon endroit.</span>
-</div>
 
 <!-- HERO -->
 <div class="hero" id="hero">
@@ -501,10 +495,10 @@ nav.topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;just
     <span class="hero-role">Fabien Pinton · Préparateur Mental du Sportif</span>
   </h1>
   <p class="lead">Vous vous entraînez sérieusement toute la semaine. Et puis l'échéance arrive, et vous n'êtes plus tout à fait vous-même.</p>
-  <p class="sub">Ce n'est pas un manque de travail. C'est un profil mental précis, identifiable, et qui se travaille, mois après mois, avec le protocole AXE Mental Performance®, mental et physique réunis.</p>
+  <p class="sub">Ce n'est pas un manque de travail. C'est un profil mental précis, identifiable, et qui se travaille, mois après mois, avec le protocole AXE Mental Performance®, mental et physique réunis. Tous sports, à partir de 12 ans. Et pour un enfant de 6 à 12 ans, c'est le parent qu'on accompagne, pas lui.</p>
   <div class="hero-actions">
-    <a href="#offres" class="btn">Découvrir le protocole</a>
-    <a href="#methode" class="btn-outline">Comprendre la méthode AXE</a>
+    <a href="#offres" class="btn">Voir les trois accès</a>
+    <a href="demo-axe.html" class="btn-outline">Essayer, 2 minutes</a>
   </div>
   <div class="trust-row">
     <div class="trust-item"><b>10+ ans</b>&nbsp;de terrain, au contact de sportifs de compétition</div>
@@ -658,118 +652,102 @@ nav.topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;just
 <!-- OFFRES -->
 <div class="sec" id="offres">
   <div class="sec-tag reveal">Le protocole</div>
-  <h2 class="reveal">CHOISIS TA FORMULE</h2>
-  <p class="intro reveal">Un seul protocole. Une formule complète, mental et physique, une autre mental seul — quel que soit ton sport, quel que soit ton âge. Après ton inscription, un parent valide l'accord parental avant toute chose si tu es mineur.</p>
+  <h2 class="reveal">TROIS ACCÈS.<br>UN SEUL EST LE VÔTRE.</h2>
+  <p class="intro reveal">Tous sports, sans exception. Le seul critère qui tranche vraiment, c'est l'âge : avant douze ans, ce n'est pas l'enfant qu'on accompagne, c'est le parent. Toute inscription et tout paiement sont faits par un adulte.</p>
 
-  <!-- vue 1 : choix du protocole -->
-  <div class="offer-choice reveal" id="choiceView">
-    <button class="choice-card" type="button" id="choiceBmx">
-      <span class="choice-tag bmx">Mental &amp; physique</span>
-      <div class="choice-name">PROTOCOLE COMPLET</div>
-      <div class="choice-price">À partir de 89<small>€/mois</small></div>
-      <p class="choice-desc">Mental et physique, suivi complet, semaine après semaine.</p>
-      <span class="choice-cta">Voir les formules →</span>
-    </button>
-    <button class="choice-card" type="button" id="choiceMental">
-      <span class="choice-tag mental">Mental seul</span>
-      <div class="choice-name">PROTOCOLE MENTAL</div>
-      <div class="choice-price">À partir de 49<small>€/mois</small></div>
-      <p class="choice-desc">Le suivi mental seul, sans le volet physique.</p>
-      <span class="choice-cta">Voir les formules →</span>
-    </button>
+  <style>
+  .acces-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;margin:26px 0 0}
+  @media(max-width:900px){.acces-grid{grid-template-columns:1fr}}
+  .acc{display:flex;flex-direction:column;background:rgba(255,255,255,.55);border:1px solid rgba(26,22,18,.14);
+    border-top:3px solid #A8852A;border-radius:7px;padding:24px 22px}
+  .acc.mental{border-top-color:#3B4A6B}
+  .acc.parents{border-top-color:#5D6F4A}
+  .acc-rang{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#A8852A}
+  .acc.mental .acc-rang{color:#3B4A6B}
+  .acc.parents .acc-rang{color:#5D6F4A}
+  .acc-nom{font-family:'Bebas Neue',Impact,sans-serif;font-size:27px;letter-spacing:.03em;line-height:1;margin:9px 0 4px}
+  .acc-devise{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16.5px;color:#5D6F4A;margin-bottom:8px;line-height:1.35}
+  .acc-pour{font-size:14px;color:rgba(26,22,18,.6);line-height:1.5;margin-bottom:14px}
+  .acc-prix{display:flex;align-items:baseline;gap:7px;padding:12px 0;border-top:1px dashed rgba(26,22,18,.14);border-bottom:1px dashed rgba(26,22,18,.14)}
+  .acc-montant{font-family:'Bebas Neue',Impact,sans-serif;font-size:40px;line-height:1;color:#A8852A}
+  .acc.mental .acc-montant{color:#3B4A6B}
+  .acc.parents .acc-montant{color:#5D6F4A}
+  .acc-unite{font-size:13.5px;color:rgba(26,22,18,.6)}
+  .acc-cond{font-size:12px;color:rgba(26,22,18,.6);margin-top:6px}
+  .acc ul{list-style:none;margin:14px 0 0;padding:0;flex:1}
+  .acc li{position:relative;padding:7px 0 7px 18px;font-size:14.5px;line-height:1.5;border-top:1px dashed rgba(26,22,18,.1)}
+  .acc li:first-child{border-top:none}
+  .acc li::before{content:'';position:absolute;left:2px;top:15px;width:5px;height:5px;border-radius:50%;background:#A8852A}
+  .acc.mental li::before{background:#3B4A6B}
+  .acc.parents li::before{background:#5D6F4A}
+  .acc-btn{display:block;text-align:center;margin-top:18px;background:#1A1612;color:#FDFAF5;text-decoration:none;
+    font-weight:600;font-size:14.5px;padding:14px 16px;border-radius:4px;transition:.18s}
+  .acc-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,22,18,.18)}
+  .acces-note{text-align:center;font-size:13.5px;color:rgba(26,22,18,.6);margin-top:18px;line-height:1.6}
+  </style>
+
+  <div class="acces-grid reveal">
+
+    <div class="acc">
+      <div class="acc-rang">Accès 01 · Dès 12 ans</div>
+      <div class="acc-nom">LE PROTOCOLE COMPLET</div>
+      <div class="acc-pour">Le mental et le physique, construits ensemble et jamais l'un sans l'autre. C'est l'accès par défaut.</div>
+      <div class="acc-prix"><span class="acc-montant">89 €</span><span class="acc-unite">par mois</span></div>
+      <div class="acc-cond">Sans engagement, résiliable à tout moment</div>
+      <ul>
+        <li>Un diagnostic d'entrée qui dit ce qui bloque, avant qu'on ne construise quoi que ce soit.</li>
+        <li>Le travail physique calé sur son sport, son âge et son niveau, deux à trois séances par semaine.</li>
+        <li>Le travail mental sur ce qui le gêne à lui : l'enjeu, le départ, la chute, le regard des autres.</li>
+        <li>Un programme reconstruit chaque mois à partir de son propre bilan.</li>
+      </ul>
+      <a class="acc-btn" href="rejoindre.html#complet">Voir cet accès</a>
+    </div>
+
+    <div class="acc mental">
+      <div class="acc-rang">Accès 02 · Dès 12 ans</div>
+      <div class="acc-nom">LE PROTOCOLE MENTAL</div>
+      <div class="acc-pour">Tout le volet mental, et rien du physique. Pour celui dont la préparation physique est déjà programmée et suivie par quelqu'un, plusieurs séances par semaine.</div>
+      <div class="acc-prix"><span class="acc-montant">49 €</span><span class="acc-unite">par mois</span></div>
+      <div class="acc-cond">Sans engagement, résiliable à tout moment</div>
+      <ul>
+        <li>Le même diagnostic d'entrée, et la même construction sur mesure.</li>
+        <li>Sa page personnelle, avec le travail mental seul : aucun exercice physique ne s'y affiche.</li>
+        <li>Aucune interférence avec son entraînement : je ne touche pas au travail de son coach.</li>
+        <li>Attention, être inscrit dans un club ne suffit pas. L'entraînement du sport n'est pas de la préparation physique.</li>
+      </ul>
+      <a class="acc-btn" href="rejoindre.html#mental">Voir cet accès</a>
+    </div>
+
+    <div class="acc parents">
+      <div class="acc-rang">Accès 03 · Enfant de 6 à 12 ans</div>
+      <div class="acc-nom">LE PROTOCOLE PARENTS</div>
+      <div class="acc-devise">L'enfant « sportif » se construit, le parent aussi.</div>
+      <div class="acc-pour">Quatre semaines pendant lesquelles l'enfant n'a rien à faire. Rien à lire, rien à remplir. Il ne saura même pas que ce protocole existe.</div>
+      <div class="acc-prix"><span class="acc-montant">120 €</span><span class="acc-unite">pour 4 semaines</span></div>
+      <div class="acc-cond">Paiement unique, rien à résilier</div>
+      <ul>
+        <li>Un comportement par semaine, dans quatre moments précis autour de la compétition.</li>
+        <li>Le mémo du jour de course, de la veille au soir. C'est la page qu'on ouvre dans la voiture.</li>
+        <li>Un échange vocal avec moi après chaque essai, et j'ajuste la semaine suivante.</li>
+        <li>Un bilan chiffré : cinq questions à l'entrée, les cinq mêmes à la fin, et la comparaison.</li>
+      </ul>
+      <a class="acc-btn" href="rejoindre.html#parents">Voir cet accès</a>
+    </div>
+
   </div>
 
-  <!-- vue 2a : detail formule complète -->
-  <div class="offer-detail" id="detailBmx" style="display:none">
-    <button class="back-btn" type="button" data-back>← Retour aux deux offres</button>
-    <div class="offer-group-head">
-      <span class="offer-group-tag bmx">Le protocole complet</span>
-      <div class="offer-group-title">LE PROTOCOLE COMPLET<br>MENTAL &amp; PHYSIQUE</div>
-    </div>
-    <div class="offers">
-      <div class="offer">
-        <div class="oname">MENSUEL</div>
-        <div class="op">89<small> €/mois</small></div>
-        <div class="odesc">Toute la liberté. Sans engagement, tu arrêtes quand tu veux, l'accès s'arrête avec, sans justification.</div>
-        <a class="obtn o" href="#" id="btn-mensuel">Choisir le mensuel</a>
-      </div>
-      <div class="offer feat">
-        <div class="ribbon">Le plus choisi</div>
-        <div class="oname">ANNUEL · EN 1 FOIS</div>
-        <div class="op">900<small> €/an</small></div>
-        <div class="odesc">12 mois d'accès d'un coup, mental et physique. Tu deviens <b>partenaire</b> : chaque famille que tu amènes te rapporte 150 euros.</div>
-        <a class="obtn g" href="#" id="btn-900">Payer en une fois</a>
-      </div>
-      <div class="offer">
-        <div class="oname">ANNUEL · EN 3 FOIS</div>
-        <div class="op">3 × 300<small> €</small></div>
-        <div class="odesc">Le même accès de 12 mois, mental et physique, réglé en trois fois pour étaler. Toi aussi tu deviens <b>partenaire</b>, avec 150 euros par famille parrainée.</div>
-        <a class="obtn o" href="#" id="btn-3fois">Payer en trois fois</a>
-      </div>
-    </div>
-    <p class="partenaire-note serif">Devenir partenaire, c'est simple : après ton inscription annuelle au protocole complet (900€), tu reçois un lien personnel. Chaque famille qui s'inscrit grâce à lui pour cette même formule te fait gagner 150 euros.</p>
-    <div class="incl">
-      <span class="sec-tag">CE QUE COMPREND CETTE FORMULE</span>
-      <div class="incl-grid">
-        <div class="incl-item"><span class="ck">✓</span><div><b>Diagnostic complet</b> <span>mental et physique, dès l'entrée dans le protocole</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>1 exercice mental par semaine</b> <span>calé sur ton profil</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>2 à 3 séances physiques par semaine</b> <span>en salle ou au poids du corps</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Programme réadapté chaque mois</b> <span>selon ton rapport</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Carnet de notes personnel</b> <span>sur tes exercices mentaux</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Espace accompagnant</b> <span>une clé mensuelle pour l'adulte qui te suit</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Accès multi-support</b> <span>téléphone, tablette, ordinateur</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Filet de vigilance</b> <span>avec droit de m'alerter directement</span></div></div>
-      </div>
-    </div>
-    <div class="bmx-grid" style="margin-top:34px">
-      <div>
-        <p>En compétition, tout se joue souvent en quelques secondes, et tout commence dans la tête, au moment de se présenter sur la ligne ou le terrain. C'est précisément pour ça que <strong>le mental pèse aussi lourd que la technique</strong>, quel que soit le sport.</p>
-        <p>Un sportif peut avoir un excellent niveau à l'entraînement, et perdre tout ça en compétition, parce que la pression du moment, le regard des autres ou la peur de l'échec prennent le dessus. <strong>Le niveau est là. C'est l'accès au niveau qui se bloque.</strong> Cette formule associe le travail mental à un vrai suivi physique, pour que les deux avancent ensemble.</p>
-      </div>
-      <div class="profils-box">
-        <div class="ptitle">LES BLOCAGES LES PLUS FRÉQUENTS</div>
-        <p class="psub">Chaque sportif bloque différemment. Le diagnostic identifie le sien, et donne le programme qui va avec :</p>
-        <ul class="profils-list">
-          <li>La tension au moment de se présenter en compétition</li>
-          <li>La rumination après une contre-performance</li>
-          <li>Le manque de confiance dans son geste</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <p class="acces-note reveal">Vous hésitez entre deux accès ? Ne tranchez pas seul.
+  <a href="demo-axe.html" style="color:#A8852A;font-weight:600">Essayez le protocole en 2 minutes</a>, ou écrivez-moi depuis la page d'inscription : je vous dis franchement lequel correspond, y compris quand la réponse est « rien pour le moment ».</p>
 
-  <!-- vue 2b : detail mental -->
-  <div class="offer-detail" id="detailMental" style="display:none">
-    <button class="back-btn" type="button" data-back>← Retour aux deux offres</button>
-    <div class="offer-group-head">
-      <span class="offer-group-tag mental">Le suivi mental seul</span>
-      <div class="offer-group-title">PROTOCOLE MENTAL<br>SANS LE VOLET PHYSIQUE</div>
-    </div>
-    <div class="offers">
-      <div class="offer feat">
-        <div class="ribbon">Le plus choisi</div>
-        <div class="oname">EN UNE FOIS</div>
-        <div class="op">500<small> €</small></div>
-        <div class="odesc">Un seul paiement, protocole mental sur mesure, sans le volet physique.</div>
-        <a class="obtn g" href="#" id="btn-mental-annuel">Payer en une fois</a>
-      </div>
-      <div class="offer">
-        <div class="oname">MENSUEL</div>
-        <div class="op">49<small> €/mois</small></div>
-        <div class="odesc">Sans engagement, tu arrêtes quand tu veux, l'accès s'arrête avec, sans justification.</div>
-        <a class="obtn o" href="#" id="btn-mental-mensuel">Choisir le mensuel</a>
-      </div>
-    </div>
-    <div class="incl">
-      <span class="sec-tag">CE QUE COMPREND CETTE FORMULE</span>
-      <div class="incl-grid">
-        <div class="incl-item"><span class="ck">✓</span><div><b>Diagnostic mental complet</b> <span>dès l'entrée dans le protocole</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>1 exercice mental par semaine</b> <span>calé sur ton profil</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Programme réadapté chaque mois</b> <span>selon ton rapport</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Carnet de notes personnel</b> <span>sur tes exercices mentaux</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Accès multi-support</b> <span>téléphone, tablette, ordinateur</span></div></div>
-        <div class="incl-item"><span class="ck">✓</span><div><b>Filet de vigilance</b> <span>avec droit de m'alerter directement</span></div></div>
-      </div>
+  <div class="incl reveal" style="margin-top:30px">
+    <span class="sec-tag">CE QUE LES TROIS ONT EN COMMUN</span>
+    <div class="incl-grid">
+      <div class="incl-item"><span class="ck">✓</span><div><b>Construit pour lui</b> <span>âge, sport, niveau et résultat du diagnostic, jamais une catégorie</span></div></div>
+      <div class="incl-item"><span class="ck">✓</span><div><b>Reconstruit chaque mois</b> <span>à partir du bilan écrit par le sportif ou le parent</span></div></div>
+      <div class="incl-item"><span class="ck">✓</span><div><b>Tout tient sur un téléphone</b> <span>une page personnelle, installable sur l'écran d'accueil</span></div></div>
+      <div class="incl-item"><span class="ck">✓</span><div><b>Vous me parlez, pas à un support</b> <span>les vocaux arrivent chez moi, et c'est moi qui réponds</span></div></div>
+      <div class="incl-item"><span class="ck">✓</span><div><b>Je dis non quand c'est non</b> <span>trop jeune, sujet médical, entraîneur qui fait déjà le travail</span></div></div>
+      <div class="incl-item"><span class="ck">✓</span><div><b>Un diagnostic d'entrée</b> <span>mental, physique selon l'accès, et sensoriel</span></div></div>
     </div>
   </div>
 
@@ -784,10 +762,11 @@ nav.topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;just
   <div class="worth reveal">
     <div class="sec-tag" style="color:var(--gold-soft)">METTONS LES CHOSES EN PERSPECTIVE</div>
     <h2>POURQUOI <span class="g">CE PRIX</span> SE DÉFEND</h2>
-    <p>Une séance de préparation mentale en cabinet, c'est 60 à 90 euros, une seule fois, sans suivi entre deux rendez-vous. Le protocole donne un accompagnement mental continu, semaine après semaine, plus un cadre physique (selon la formule) et un vrai suivi humain, pour le prix d'une à deux séances par mois.</p>
+    <p>Une séance de préparation mentale en cabinet, c'est 60 à 90 euros, elle dure une heure, et le sportif repart seul jusqu'à la suivante. Or c'est précisément entre les séances que tout se joue. Le protocole complet coûte le prix d'une seule de ces séances, et il couvre le mois entier : le travail physique, le travail mental, et moi au bout du fil quand ça ne va pas. Le protocole mental, lui, coûte moins qu'une séance.</p>
     <div class="compare">
-      <div class="cc"><div class="lbl">Une séance de prépa mentale</div><div class="v">60 à 90 €</div><small>une fois, sans suivi</small></div>
-      <div class="cc"><div class="lbl">Le protocole complet</div><div class="v">Dès 49 € / mois</div><small>suivi mental continu, chaque semaine</small></div>
+      <div class="cc"><div class="lbl">Une séance en cabinet</div><div class="v">60 à 90 €</div><small>une heure, une fois, sans suivi</small></div>
+      <div class="cc"><div class="lbl">Le protocole mental</div><div class="v">49 € / mois</div><small>le mois entier, sans engagement</small></div>
+      <div class="cc"><div class="lbl">Le protocole complet</div><div class="v">89 € / mois</div><small>mental et physique, sans engagement</small></div>
     </div>
   </div>
 </div>
@@ -836,8 +815,12 @@ nav.topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;just
       <div class="faq-a">C'est un travail structuré sur ce qui se passe dans la tête de l'athlète avant et pendant la compétition : la pression au moment de se présenter sur le terrain ou la piste, la rumination après une contre-performance, la confiance dans son geste. La méthode AXE Mental Performance® identifie d'abord le blocage principal du sportif, puis lui donne des exercices concrets adaptés à ce blocage et à son profil.</div>
     </details>
     <details class="faq-item">
-      <summary>Y a-t-il une limite d'âge pour commencer ?</summary>
-      <div class="faq-a">Non. La préparation mentale s'adresse à tout sportif, à partir de 10 ans et sans limite haute — les deux formules, mentale seule ou complète (mental et physique), sont ouvertes à tout âge. Le diagnostic et les exercices s'adaptent à chaque tranche d'âge : formats ludiques pour les plus jeunes, approche différente pour un ado ou un adulte. Un enfant de 10 ans ne travaille pas comme un adulte de 40 ans, mais chacun a un protocole adapté à son profil.</div>
+      <summary>Y a-t-il un âge pour commencer ?</summary>
+      <div class="faq-a">Oui, et c'est le seul critère qui tranche vraiment. À partir de douze ans, c'est le sportif lui-même qu'on accompagne, avec le protocole complet ou le protocole mental seul, sans limite d'âge haute. Avant douze ans, c'est différent : la capacité à encaisser une déception et à repartir est encore en construction, et aucun exercice mental ne la fera apparaître plus tôt. Ce qui décide de l'état d'un enfant de cet âge après une compétition, ce sont les trois minutes autour de lui. C'est pour ça que, de 6 à 12 ans, c'est le parent qui est accompagné, avec le protocole parents.</div>
+    </details>
+    <details class="faq-item">
+      <summary>Le protocole parents, c'est quoi exactement ?</summary>
+      <div class="faq-a">Quatre semaines, un comportement par semaine, dans quatre moments précis : les trois minutes qui suivent une mauvaise sortie, la première question qu'on pose, ce qu'on fait quand l'enjeu monte, et ce qu'on dit quand ça se passe bien. L'enfant n'a rien à lire et rien à remplir, il ne saura même pas que ce protocole existe. Chaque semaine propose trois occasions de travailler, à l'entraînement, en compétition ou à la maison, donc un mois sans course n'est pas un problème. Cinq questions au début, les cinq mêmes à la fin, et la comparaison des deux : vous voyez ce qui a bougé au lieu de vous fier à une impression.</div>
     </details>
     <details class="faq-item">
       <summary>Comment se passe le diagnostic ?</summary>
@@ -865,9 +848,10 @@ nav.topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;just
 <!-- CTA FINAL -->
 <div class="final reveal">
   <h2>PRÊT À VOIR SON VRAI NIVEAU, LE JOUR J ?</h2>
-  <p>Un parent valide l'accord parental après l'inscription. C'est cette étape qui ouvre l'accès au protocole, jamais l'inverse.</p>
-  <a href="#offres" class="btn">Découvrir le protocole →</a>
-  <p class="disc">J'accompagne la préparation mentale, et physique selon la formule, du sportif et, le cas échéant, de sa famille. Mon accompagnement ne se substitue pas à une prise en charge médicale ou thérapeutique en cas de trouble de santé. Aucune promesse de résultat sportif n'est faite.</p>
+  <p>Trois accès, tous sports, et un diagnostic d'entrée qui dit ce qui bloque avant qu'on ne construise quoi que ce soit. Si ce n'est pas le moment pour votre enfant, je vous le dis.</p>
+  <a href="rejoindre.html" class="btn">Voir les trois accès →</a>
+  <p style="margin-top:14px"><a href="demo-axe.html" style="color:var(--gold);font-weight:600;text-decoration:none">Ou essayez d'abord, 2 minutes, sans rien donner →</a></p>
+  <p class="disc">J'accompagne la préparation mentale, et physique selon l'accès choisi, du sportif et, le cas échéant, de sa famille. Mon accompagnement ne se substitue pas à une prise en charge médicale ou thérapeutique en cas de trouble de santé. Aucune promesse de résultat sportif n'est faite.</p>
 </div>
 
 </div>
@@ -953,17 +937,9 @@ function publierEtNotifier(){
   }
 }
 
-/* ============================================================
-   VIDEO DE VENTE + LIENS DE PAIEMENT STRIPE
-   Meme mecanique que presentation.html.
-   ============================================================ */
+/* La vidéo de présentation. Les paiements ne vivent plus ici :
+   ils sont tous sur rejoindre.html, un seul endroit à maintenir. */
 var VIDEO_VENTE = 'https://youtube.com/shorts/KAlhJaJ27-4';
-
-var LIENS = {
-  mensuel : 'https://buy.stripe.com/00wdR86hScr4dlz2lg8IU0n',
-  annuel  : 'https://buy.stripe.com/4gM3cucGgfDgftHe3Y8IU0l',
-  trois   : 'https://buy.stripe.com/28E28q9u4fDg0yNf828IU0m'
-};
 
 function poserVideo(){
   if(typeof VIDEO_VENTE !== 'string' || VIDEO_VENTE.indexOf('http') !== 0) return;
@@ -981,61 +957,6 @@ function poserVideo(){
 }
 poserVideo();
 
-/* ============================================================
-   CHOIX DE FORMULE EN 2 ETAPES
-   ============================================================ */
-function afficherDetail(quel){
-  document.getElementById('choiceView').style.display = 'none';
-  document.getElementById('detailBmx').style.display = quel === 'bmx' ? 'block' : 'none';
-  document.getElementById('detailMental').style.display = quel === 'mental' ? 'block' : 'none';
-  document.getElementById('offres').scrollIntoView({behavior:'smooth', block:'start'});
-}
-function revenirAuChoix(){
-  document.getElementById('detailBmx').style.display = 'none';
-  document.getElementById('detailMental').style.display = 'none';
-  document.getElementById('choiceView').style.display = 'grid';
-  document.getElementById('offres').scrollIntoView({behavior:'smooth', block:'start'});
-}
-document.getElementById('choiceBmx').addEventListener('click', function(){ afficherDetail('bmx'); });
-document.getElementById('choiceMental').addEventListener('click', function(){ afficherDetail('mental'); });
-document.querySelectorAll('[data-back]').forEach(function(b){ b.addEventListener('click', revenirAuChoix); });
-
-(function(){
-  var map = { 'btn-mensuel':LIENS.mensuel, 'btn-900':LIENS.annuel, 'btn-3fois':LIENS.trois };
-  Object.keys(map).forEach(function(id){
-    var b = document.getElementById(id);
-    if(b && map[id] && map[id].indexOf('http') === 0){ b.setAttribute('href', map[id]); }
-  });
-  var btnMentalAnnuel = document.getElementById('btn-mental-annuel');
-  var btnMentalMensuel = document.getElementById('btn-mental-mensuel');
-  if(btnMentalAnnuel) btnMentalAnnuel.setAttribute('href', 'questionnaire-sur-mesure.html?formule=annuel');
-  if(btnMentalMensuel) btnMentalMensuel.setAttribute('href', 'questionnaire-sur-mesure.html?formule=mensuel');
-
-  var params = new URLSearchParams(window.location.search);
-  var codeParrain = params.get('parrain');
-  if(!codeParrain) return;
-
-  var banner = document.getElementById('parrainBanner');
-  if(banner) banner.style.display = 'flex';
-
-  afficherDetail('bmx');
-
-  ['btn-mensuel','btn-900','btn-3fois'].forEach(function(id){
-    var b = document.getElementById(id);
-    if(!b) return;
-    var url = b.getAttribute('href');
-    if(url.indexOf('http') !== 0) return;
-    var sep = url.indexOf('?') === -1 ? '?' : '&';
-    b.setAttribute('href', url + sep + 'client_reference_id=' + encodeURIComponent(codeParrain));
-  });
-
-  [btnMentalAnnuel, btnMentalMensuel].forEach(function(b){
-    if(!b) return;
-    var urlM = b.getAttribute('href');
-    var sepM = urlM.indexOf('?') === -1 ? '?' : '&';
-    b.setAttribute('href', urlM + sepM + 'parrain=' + encodeURIComponent(codeParrain));
-  });
-})();
 </script>
 
 </body>
