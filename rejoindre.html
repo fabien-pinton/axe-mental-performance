@@ -3,301 +3,445 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Avant de continuer · AXE Mental Performance®</title>
+<title>Rejoindre · AXE Mental Performance®</title>
+<meta name="description" content="Préparation mentale et physique du jeune sportif, tous sports. Trois accès : protocole complet 89 €/mois, protocole mental 49 €/mois, protocole parents 120 € pour quatre semaines.">
+<meta name="theme-color" content="#FDFAF5">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="axe-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="axe-apple-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1A1612;--cream:#FDFAF5;--gold:#A8852A;--parent:#5D6F4A;--line:rgba(26,22,18,.14);--dim:rgba(26,22,18,.62)}
+:root{
+  --ink:#1A1612; --cream:#FDFAF5; --gold:#A8852A; --gold-soft:#C9A94E;
+  --line:rgba(26,22,18,.14); --line-strong:rgba(26,22,18,.28); --dim:rgba(26,22,18,.58);
+  --parent:#5D6F4A; --brique:#7A3B2E; --mental:#3B4A6B;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px;line-height:1.6}
-.card{max-width:500px;width:100%}
-.logo{text-align:center;margin-bottom:6px}
-.logo .l{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:42px;letter-spacing:.18em;color:var(--gold);padding-right:.18em}
-.logo .s{font-family:'DM Sans';font-weight:600;font-size:8px;letter-spacing:.34em;color:var(--gold);border-top:1px solid rgba(168,133,42,.4);padding-top:6px;margin-top:5px;display:inline-block}
-h1{font-family:'Bebas Neue';font-weight:400;font-size:30px;letter-spacing:.03em;text-align:center;margin:30px 0 10px;line-height:1.05}
-.intro{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--dim);text-align:center;margin-bottom:28px}
-.box{background:rgba(93,111,74,.06);border:1px solid rgba(93,111,74,.28);border-radius:8px;padding:22px 24px;margin-bottom:22px}
-.box p{font-size:14.5px;color:var(--ink);margin-bottom:12px}
-.box p:last-child{margin-bottom:0}
-.check{display:flex;gap:12px;align-items:flex-start;margin:22px 0;cursor:pointer}
-.check input{margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:var(--gold);cursor:pointer}
-.check label{font-size:14.5px;color:var(--ink);cursor:pointer}
-.btn{width:100%;padding:15px;border:none;border-radius:6px;background:var(--ink);color:var(--cream);font-family:'DM Sans';font-weight:600;font-size:15px;letter-spacing:.02em;cursor:pointer;transition:.18s;opacity:.45;pointer-events:none}
-.btn.on{opacity:1;pointer-events:auto}
-.btn.on:hover{background:#000}
-.mini{font-size:12px;color:var(--dim);text-align:center;margin-top:18px;line-height:1.55}
-.age-row{display:flex;gap:10px;margin-bottom:6px}
-.age-btn{flex:1;padding:13px;border:1.5px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font-family:'DM Sans';font-weight:600;font-size:14px;cursor:pointer;transition:.15s}
-.age-btn.sel{border-color:var(--gold);background:rgba(168,133,42,.08);color:var(--gold)}
-.lien-btn{display:block;width:100%;padding:16px;border-radius:6px;background:var(--gold);color:#fff;font-weight:600;font-size:15px;letter-spacing:.02em;text-align:center;text-decoration:none;transition:.18s}
-.lien-btn .s{display:block;font-size:12px;font-weight:400;opacity:.85;margin-top:3px}
-.lien-btn.sec{background:transparent;color:var(--ink);border:1.5px solid var(--line);font-weight:500;margin-top:10px}
-.step{display:none}
-.step.on{display:block}
-.rider-msg{display:none;background:rgba(168,133,42,.08);border:1px solid rgba(168,133,42,.3);border-radius:8px;padding:20px 22px;font-size:14.5px;color:var(--ink);margin-top:4px}
-.rider-msg.on{display:block}
-.rider-msg b{color:var(--gold)}
-.champ{margin-bottom:13px}
-.champ.hidden{display:none}
-.champ label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:5px;font-weight:600}
-.champ input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:15px;background:#fff;color:var(--ink)}
-.champ input:focus{outline:none;border-color:var(--gold)}
-.champ-err{border-color:#9B2C2C!important}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;
+  font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.5px;line-height:.98}
+.wrap{max-width:660px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+section{padding:46px 0;border-top:1px solid var(--line)}
+.eyebrow{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
 
-/* ===== MANTRA · la lumière ===== */
-.lum{position:relative;text-align:center;margin-top:32px;padding-top:24px;border-top:1px solid rgba(168,133,42,.25)}
-.lum .s{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:12px}
-.lum p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;line-height:1.5;color:var(--dim);max-width:34ch;margin:0 auto}
+/* piste en fond */
+.piste{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45}
+.piste svg{width:100%;height:100%}
+
+/* ---- en-tête ---- */
+.hero{padding:52px 0 40px;text-align:center}
+.logo{margin-bottom:30px}
+.logo .lettres{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;
+  letter-spacing:.2em;color:var(--gold);line-height:.9;padding-right:.2em}
+.logo .sous{font-size:7.5px;letter-spacing:.34em;color:var(--gold);font-weight:700;
+  border-top:1px solid rgba(168,133,42,.4);display:inline-block;padding-top:4px;margin-top:4px}
+.hero h1{font-size:clamp(32px,8vw,52px);margin:22px 0 0}
+.hero .lead{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(19px,3.4vw,25px);color:var(--ink);margin:20px auto 0;max-width:32ch;line-height:1.45}
+.sports{margin-top:24px;font-size:12.5px;letter-spacing:.07em;color:var(--dim);line-height:1.9}
+.sports b{color:var(--ink);font-weight:600}
+
+h2{font-size:clamp(26px,5.5vw,34px);margin-bottom:16px}
+h3{font-size:21px;margin-bottom:6px}
+p{margin-bottom:15px}
+p:last-child{margin-bottom:0}
+b,strong{font-weight:600}
+a{color:var(--gold)}
+
+/* ---- l'aiguillage ---- */
+.aiguillage{background:#fff;border:1px solid var(--line-strong);border-radius:10px;padding:22px 24px}
+.aig-t{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+  font-weight:700;margin-bottom:14px}
+.aig-l{display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px dashed var(--line)}
+.aig-l:first-of-type{border-top:none}
+.aig-age{flex-shrink:0;width:92px;font-family:'Bebas Neue',sans-serif;font-size:19px;
+  letter-spacing:.04em;color:var(--ink)}
+.aig-q{font-size:15px;color:var(--dim);line-height:1.5}
+.aig-q a{font-weight:600;text-decoration:none;border-bottom:1px solid rgba(168,133,42,.45)}
+
+/* ---- les trois accès ---- */
+.offre{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:8px;
+  background:#fff;padding:26px 24px 24px;margin-top:20px}
+.offre:first-of-type{margin-top:0}
+.offre.mental{border-left-color:var(--mental)}
+.offre.parents{border-left-color:var(--parent)}
+.o-rang{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+.offre.mental .o-rang{color:var(--mental)}
+.offre.parents .o-rang{color:var(--parent)}
+.offre h3{font-size:25px;margin:8px 0 2px}
+.o-pour{font-size:14.5px;color:var(--dim);margin-bottom:16px}
+.o-prix{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;
+  padding:14px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line)}
+.o-montant{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;color:var(--gold)}
+.offre.mental .o-montant{color:var(--mental)}
+.offre.parents .o-montant{color:var(--parent)}
+.o-unite{font-size:14.5px;color:var(--dim)}
+.o-cond{font-size:13px;color:var(--dim);margin-left:auto;text-align:right}
+.o-liste{margin:16px 0 0;list-style:none}
+.o-liste li{position:relative;padding:8px 0 8px 22px;font-size:15.5px;line-height:1.55;
+  border-top:1px dashed var(--line)}
+.o-liste li:first-child{border-top:none}
+.o-liste li::before{content:'';position:absolute;left:3px;top:17px;width:6px;height:6px;
+  border-radius:50%;background:var(--gold)}
+.offre.mental .o-liste li::before{background:var(--mental)}
+.offre.parents .o-liste li::before{background:var(--parent)}
+.o-cta{display:block;text-align:center;margin-top:20px;background:var(--ink);color:var(--cream);
+  text-decoration:none;font-weight:600;font-size:15.5px;letter-spacing:.02em;
+  padding:16px 22px;border-radius:5px;transition:.2s var(--ease)}
+.o-cta:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,22,18,.18)}
+.o-note{font-size:12.5px;color:var(--dim);margin-top:11px;line-height:1.55;text-align:center}
+.o-devise{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18.5px;
+  color:var(--parent);margin:2px 0 14px;line-height:1.4}
+
+/* ---- essai ---- */
+.essai{text-align:center;border:1.5px dashed var(--line-strong);border-radius:10px;
+  padding:26px 24px;margin-top:26px;background:rgba(255,255,255,.5)}
+.essai h3{margin-bottom:8px}
+.essai p{font-size:15px;color:var(--dim);max-width:44ch;margin:0 auto 18px}
+.essai a{display:inline-block;background:var(--gold);color:var(--cream);text-decoration:none;
+  font-weight:600;font-size:15px;padding:14px 32px;border-radius:5px;transition:.2s var(--ease)}
+.essai a:hover{transform:translateY(-2px)}
+
+/* ---- blocs d'appui ---- */
+.appui{background:rgba(59,74,107,.06);border:1px solid rgba(59,74,107,.22);
+  border-radius:8px;padding:22px 24px;margin:24px 0}
+.appui .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--mental);font-weight:700;margin-bottom:8px}
+.franc{background:rgba(122,59,46,.05);border:1px solid rgba(122,59,46,.26);
+  border-radius:8px;padding:22px 24px;margin:24px 0}
+.franc .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--brique);font-weight:700;margin-bottom:8px}
+
+/* ---- commun ---- */
+.commun{padding:13px 0 13px 28px;position:relative;border-top:1px dashed var(--line);font-size:15.5px}
+.commun:first-of-type{border-top:none}
+.commun::before{content:'';position:absolute;left:5px;top:22px;width:7px;height:7px;
+  border-radius:50%;background:var(--gold)}
+.commun b{display:block}
+.commun span{color:var(--dim);font-size:14.5px}
+
+/* ---- questions ---- */
+.q{padding:17px 0;border-top:1px dashed var(--line)}
+.q:first-of-type{border-top:none}
+.q b{display:block;font-size:16px;margin-bottom:5px}
+.q p{font-size:15.5px;color:var(--dim);margin:0}
+
+.qui{font-size:15.5px}
+.qui p{margin-bottom:12px}
+.signature{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;margin-top:18px}
+
+/* ---- écrire d'abord ---- */
+.form-bloc{background:#fff;border:1px solid var(--line-strong);border-radius:10px;padding:24px}
+.champ{margin-bottom:13px}
+.champ label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:5px;font-weight:600}
+.champ input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:6px;
+  font-family:'DM Sans',sans-serif;font-size:15px;background:var(--cream);color:var(--ink)}
+.champ input:focus{outline:none;border-color:var(--gold)}
+.form-bloc button{width:100%;margin-top:6px;padding:15px;border:none;border-radius:6px;
+  background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:600;
+  font-size:15px;cursor:pointer;transition:.18s}
+.form-bloc button:disabled{opacity:.45;cursor:default}
+.form-msg{font-size:14px;text-align:center;margin-top:12px;min-height:20px;color:var(--parent)}
+.form-msg.err{color:#9B2C2C}
+
+/* ---- mantra ---- */
+.lum{text-align:center;padding:50px 0 10px;border-top:1px solid var(--line)}
+.lum .s{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);
+  font-weight:700;margin-bottom:14px}
+.lum p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(19px,3vw,25px);
+  line-height:1.5;color:var(--ink);max-width:28ch;margin:0 auto}
 .lum p .g{color:var(--gold)}
+
+.cta{display:inline-block;margin-top:22px;background:var(--ink);color:var(--cream);
+  text-decoration:none;font-weight:600;font-size:16px;letter-spacing:.02em;
+  padding:17px 40px;border-radius:5px;transition:.2s var(--ease)}
+.rassure{font-size:13px;color:var(--dim);margin-top:16px;line-height:1.55}
+
+footer{padding:34px 0 46px;text-align:center;font-size:12px;color:var(--dim);
+  border-top:1px solid var(--line)}
+footer a{color:var(--dim)}
+.disc{font-size:11.5px;color:var(--dim);max-width:60ch;margin:14px auto 0;font-style:italic;line-height:1.6}
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="logo">
-    <div class="l">AXE</div><br>
-    <div class="s">MENTAL PERFORMANCE®</div>
-  </div>
 
-  <h1>UNE SECONDE<br>AVANT DE CONTINUER</h1>
-  <div class="intro">Une question de sécurité, avant de découvrir le protocole.</div>
+<div class="piste">
+<svg viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" fill="none">
+<path d="M-50 700 C 220 700 260 460 460 460 C 660 460 690 260 900 260 C 1080 260 1140 140 1260 140" stroke="#1A1612" stroke-width="1" opacity="0.08"/>
+<path d="M-50 760 C 240 760 300 540 520 540 C 740 540 780 340 980 340 C 1140 340 1200 220 1260 220" stroke="#A8852A" stroke-width="1.2" opacity="0.14" stroke-dasharray="2 11" stroke-linecap="round"/>
+</svg>
+</div>
 
-  <!-- Étape 1 : majeur ou mineur -->
-  <div id="step1" class="step on">
-    <div class="box">
-      <p><b>Tu es mineur&nbsp;?</b> Bienvenue, tu es au bon endroit. Mais l'inscription et le paiement doivent se faire avec ton parent ou ton responsable légal, à côté de toi.</p>
-      <p><b>Tu es majeur&nbsp;?</b> Parfait, tu peux découvrir le protocole toi-même, que ce soit pour toi ou pour quelqu'un d'autre.</p>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="logo">
+      <div class="lettres">AXE</div>
+      <div class="sous">MENTAL PERFORMANCE®</div>
     </div>
-    <p style="font-size:14px;color:var(--dim);text-align:center;margin-bottom:10px">Es-tu majeur ou mineur&nbsp;?</p>
-    <div class="age-row">
-      <button class="age-btn" id="ab-majeur" onclick="choix('majeur')">Je suis majeur</button>
-      <button class="age-btn" id="ab-mineur" onclick="choix('mineur')">Je suis mineur</button>
-    </div>
-  </div>
-
-  <!-- Message si mineur -->
-  <div class="rider-msg" id="riderMsg">
-    <p>Super de te voir motivé&nbsp;! <b>Va chercher ton parent ou ton responsable légal</b>, et revenez ensemble sur cette page. C'est lui qui pourra remplir la suite et découvrir le protocole avec toi.</p>
-    <p style="margin-top:12px">Quand il est à côté de toi, appuie ci-dessous.</p>
-    <button class="age-btn" style="margin-top:14px;width:100%" onclick="confirmerMineur()">Mon parent est là, on continue</button>
-  </div>
-
-  <!-- Étape 1bis : pour qui, si majeur -->
-  <div id="stepPourQui" class="step">
-    <p style="font-size:14px;color:var(--dim);text-align:center;margin-bottom:10px">Tu t'inscris pour toi-même, ou pour quelqu'un d'autre&nbsp;?</p>
-    <div class="age-row">
-      <button class="age-btn" id="ab-solo" onclick="choixPourQui('solo')">Pour moi-même</button>
-      <button class="age-btn" id="ab-autre" onclick="choixPourQui('autre')">Pour quelqu'un d'autre</button>
+    <div class="eyebrow">Tous sports · à partir de 6 ans</div>
+    <h1>TROIS ACCÈS.<br>UN SEUL EST LE VÔTRE.</h1>
+    <div class="lead">Préparation mentale et physique du jeune sportif en compétition, construite sur mesure, sport par sport.</div>
+    <div class="sports">
+      <b>BMX Race · Motocross · Football · Tennis · Judo</b><br>
+      <b>Natation · Athlétisme · Basket · Handball · Gymnastique</b><br>
+      et tous les autres : la mécanique ne change pas, l'exemple change.
     </div>
   </div>
 
-  <!-- Étape 2 : confirmation -->
-  <div class="step" id="step2">
-    <div class="box">
-      <p id="txtIntro">En tant que parent ou responsable légal, je confirme les points suivants avant d'accéder à la présentation et aux formules.</p>
+  <section style="border-top:none">
+    <h2>COMMENCEZ PAR L'ÂGE</h2>
+    <p style="color:var(--dim);font-size:15.5px">C'est le seul critère qui tranche vraiment. Avant douze ans, ce n'est pas l'enfant qu'on accompagne.</p>
+
+    <div class="aiguillage">
+      <div class="aig-t">En trois secondes</div>
+      <div class="aig-l">
+        <div class="aig-age">6 à 12 ans</div>
+        <div class="aig-q">C'est vous qu'on accompagne, pas lui. <a href="#parents">Le protocole parents</a></div>
+      </div>
+      <div class="aig-l">
+        <div class="aig-age">12 ans et plus</div>
+        <div class="aig-q">Un vrai travail physique est déjà programmé à côté ? <a href="#mental">Le protocole mental</a>. Sinon, <a href="#complet">le protocole complet</a>.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>LES TROIS ACCÈS</h2>
+
+    <div class="offre" id="complet">
+      <div class="o-rang">Accès 01 · Dès 12 ans</div>
+      <h3>LE PROTOCOLE COMPLET</h3>
+      <div class="o-pour">Le mental et le physique, construits ensemble et jamais l'un sans l'autre. C'est l'accès par défaut, et celui que prennent neuf sportifs sur dix.</div>
+
+      <div class="o-prix">
+        <span class="o-montant">89 €</span>
+        <span class="o-unite">par mois</span>
+        <span class="o-cond">Sans engagement<br>Résiliable à tout moment</span>
+      </div>
+
+      <ul class="o-liste">
+        <li>Un diagnostic d'entrée dès l'ouverture de sa page : ce qui bloque vraiment, avant qu'on ne construise quoi que ce soit.</li>
+        <li>Sa page personnelle, sur son téléphone, qui lui donne quoi faire et quand.</li>
+        <li>Le travail physique construit pour son sport, son âge et son niveau, deux à trois séances par semaine, en salle ou au poids du corps.</li>
+        <li>Le travail mental sur ce qui le gêne à lui : l'enjeu, le départ, la chute, le regard des autres.</li>
+        <li>Un programme qui se remoule chaque mois à partir de son propre bilan, et des échanges vocaux avec moi.</li>
+      </ul>
+
+      <a class="o-cta" href="https://buy.stripe.com/00wdR86hScr4dlz2lg8IU0n">Rejoindre le protocole complet · 89 €/mois</a>
+      <div class="o-note">Votre code d'accès arrive par email dans les minutes qui suivent. Le diagnostic se fait sur sa page, rien à remplir avant. L'inscription et le paiement sont faits par un adulte.</div>
     </div>
 
-    <div class="champ">
-      <label for="f_parent" id="lbl_parent">Nom et prénom du parent</label>
-      <input type="text" id="f_parent" autocomplete="name" oninput="maj()">
-    </div>
-    <div class="champ" id="champ_rider">
-      <label for="f_rider" id="lbl_rider">Nom et prénom du mineur concerné</label>
-      <input type="text" id="f_rider" autocomplete="off" oninput="maj()">
-    </div>
-    <div class="champ">
-      <label for="f_mail" id="lbl_mail">Email du parent</label>
-      <input type="email" id="f_mail" autocomplete="email" oninput="maj()">
+    <div class="offre mental" id="mental">
+      <div class="o-rang">Accès 02 · Dès 12 ans</div>
+      <h3>LE PROTOCOLE MENTAL</h3>
+      <div class="o-pour">Tout le volet mental, et rien du physique. Pour celui dont la préparation physique est déjà prise en charge sérieusement : plusieurs séances par semaine, programmées et suivies par quelqu'un.</div>
+
+      <div class="o-prix">
+        <span class="o-montant">49 €</span>
+        <span class="o-unite">par mois</span>
+        <span class="o-cond">Sans engagement<br>Résiliable à tout moment</span>
+      </div>
+
+      <ul class="o-liste">
+        <li>Le même diagnostic d'entrée, et la même construction sur mesure selon l'âge, le sport et le niveau.</li>
+        <li>Sa page personnelle, avec le travail mental seul : aucun exercice physique ne s'y affichera.</li>
+        <li>La préparation des moments qui comptent, et ce qu'on fait de ce qui s'est mal passé.</li>
+        <li>Le même suivi, les mêmes échanges vocaux, le même programme qui se remoule chaque mois.</li>
+        <li>Aucune interférence avec son entraînement actuel : je ne touche pas au travail de celui qui le prépare physiquement.</li>
+      </ul>
+
+      <a class="o-cta" href="https://buy.stripe.com/3cI7sKbCc4YCgxL3pk8IU0p">Rejoindre le protocole mental · 49 €/mois</a>
+      <div class="o-note">Attention au contresens : être inscrit dans un club ne suffit pas. L'entraînement du sport n'est pas de la préparation physique. Si personne ne programme vraiment son travail physique, prenez le protocole complet.</div>
     </div>
 
-    <div class="check" onclick="tog('c1')"><input type="checkbox" id="c1" onclick="event.stopPropagation();maj()"><label id="lbl_c1">Je suis le parent ou le responsable légal du mineur concerné.</label></div>
-    <div class="check" onclick="tog('c2')"><input type="checkbox" id="c2" onclick="event.stopPropagation();maj()"><label id="lbl_c2">Je comprends que toute inscription et tout paiement seront réalisés par moi, adulte, et sous ma responsabilité.</label></div>
-    <div class="check" onclick="tog('c3')"><input type="checkbox" id="c3" onclick="event.stopPropagation();maj()"><label>Je comprends que ce protocole est un accompagnement à la préparation mentale (et physique selon la formule choisie), et qu'il ne se substitue pas à une prise en charge médicale ou thérapeutique.</label></div>
-    <button class="btn" id="go" onclick="continuer()">Découvrir le protocole</button>
-    <p class="mini">En continuant, vous accédez à la présentation et aux formules. Vos coordonnées sont enregistrées uniquement pour le suivi de votre demande, et ne sont jamais transmises à un tiers.</p>
-  </div>
+    <div class="offre parents" id="parents">
+      <div class="o-rang">Accès 03 · Enfant de 6 à 12 ans</div>
+      <h3>LE PROTOCOLE PARENTS</h3>
+      <div class="o-devise">L'enfant « sportif » se construit, le parent aussi.</div>
+      <div class="o-pour">Quatre semaines pendant lesquelles votre enfant n'a rien à faire. Rien à lire, rien à remplir. Il ne saura même pas que ce protocole existe.</div>
 
-  <!-- Étape 3 : on fait essayer avant de montrer les prix -->
-  <div class="step" id="stepFin">
-    <div class="box" style="background:rgba(168,133,42,.07);border-color:rgba(168,133,42,.35)">
-      <p><b>C'est noté, merci.</b> Avant de regarder les formules, prenez cinq minutes pour essayer le protocole : un vrai diagnostic, votre profil mental, et un exercice à faire tout de suite, debout.</p>
-      <p>C'est la façon la plus honnête de savoir si c'est fait pour vous.</p>
+      <div class="o-prix">
+        <span class="o-montant">120 €</span>
+        <span class="o-unite">pour 4 semaines</span>
+        <span class="o-cond">Paiement unique<br>Rien à résilier</span>
+      </div>
+
+      <ul class="o-liste">
+        <li>Un comportement par semaine, dans quatre moments précis : les trois minutes d'après, la première question, quand l'enjeu monte, et ce qu'on dit quand ça va bien.</li>
+        <li>Le mémo du jour de compétition, de la veille au soir. C'est la page que vous ouvrez dans la voiture.</li>
+        <li>Trois occasions par semaine, à l'entraînement, en compétition ou à la maison. Une seule suffit, donc un mois sans course n'est pas un problème.</li>
+        <li>Un échange vocal avec moi après chaque essai, et j'ajuste la semaine suivante.</li>
+        <li>Un bilan chiffré : cinq questions à l'entrée, les cinq mêmes à la fin, et la comparaison côte à côte.</li>
+      </ul>
+
+      <a class="o-cta" href="https://buy.stripe.com/3cI14m7lWaiWdlz3pk8IU0q">Commencer le protocole parents · 120 €</a>
+      <div class="o-note">Votre code d'accès arrive par email dans les minutes qui suivent. Page accessible trois mois, pour garder le mémo après la fin.</div>
     </div>
-    <a class="lien-btn" id="lienDemo" href="demo-axe.html">Essayer le protocole<span class="s">5 minutes · diagnostic, profil et exercice</span></a>
-    <a class="lien-btn sec" id="lienVente" href="presentation.html">Voir directement les formules</a>
-  </div>
+
+    <div class="essai">
+      <h3>PAS ENVIE DE PAYER SANS AVOIR VU ?</h3>
+      <p>Deux minutes. Un test debout dès les trente premières secondes, votre profil, et un exercice chronométré qui vous donne un chiffre avant et un chiffre après. C'est la façon la plus honnête de savoir si c'est fait pour vous.</p>
+      <a href="demo-axe.html">Essayer le protocole · 2 minutes</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>CE QUE LES TROIS ONT EN COMMUN</h2>
+
+    <div class="commun"><b>C'est construit pour lui, pas pour une catégorie</b>
+      <span>Âge, sport, niveau et résultat du diagnostic. Deux sportifs du même club ne reçoivent pas la même chose.</span></div>
+
+    <div class="commun"><b>Ça se remoule chaque mois</b>
+      <span>À la fin de chaque mois, il fait son bilan, et le programme du mois suivant est reconstruit à partir de ce qu'il a écrit. Ce n'est pas un contenu figé qu'on déroule.</span></div>
+
+    <div class="commun"><b>Tout tient sur un téléphone</b>
+      <span>Une page personnelle, installable sur l'écran d'accueil. Rien à télécharger, rien à imprimer.</span></div>
+
+    <div class="commun"><b>Vous me parlez, pas à un support</b>
+      <span>Les vocaux arrivent directement chez moi, et c'est moi qui réponds. Je n'ai pas d'équipe.</span></div>
+
+    <div class="commun"><b>Je dis non quand c'est non</b>
+      <span>Trop jeune, sujet qui relève du médecin, entraîneur qui fait déjà le travail : dans ces cas-là je vous le dis, et je vous rembourse.</span></div>
+  </section>
+
+  <section>
+    <h2>POURQUOI CE PRIX</h2>
+
+    <p>Une séance de préparation mentale en cabinet coûte entre 60 et 90 €, et elle dure une heure. Après quoi votre enfant repart seul jusqu'à la suivante, et c'est précisément entre les séances que tout se joue.</p>
+
+    <div class="appui">
+      <div class="t">Ce que vous payez vraiment</div>
+      <p style="margin-bottom:0">Le protocole complet coûte le prix d'une séance en cabinet, mais il couvre le mois entier : le travail physique, le travail mental, et moi au bout du fil quand ça ne va pas. Le protocole mental, lui, coûte moins qu'une séance.</p>
+    </div>
+
+    <div class="franc">
+      <div class="t">Autant être clair tout de suite</div>
+      <p>Je ne peux pas vous promettre qu'il gagnera. Personne ne contrôle les autres concurrents, le tirage, sa croissance ni la chance, et c'est l'essentiel du résultat.</p>
+      <p style="margin-bottom:0">Ce qui se contrôle, c'est ce qu'il fait des vingt secondes avant, et de la minute après. C'est ça que je travaille, et c'est ça que je vends. Si on vous promet autre chose, méfiez-vous.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>LES QUESTIONS QU'ON ME POSE</h2>
+
+    <div class="q"><b>Mon enfant a exactement 12 ans. Lequel des trois ?</b>
+      <p>Les deux se défendent, et ça dépend de lui, pas du chiffre. S'il est capable d'ouvrir sa page seul et de faire ce qui y est écrit sans qu'on le lui rappelle, prenez un protocole sportif. Sinon, commencez par le protocole parents, et il basculera quand il sera prêt. Dans le doute, écrivez-moi avant de payer.</p></div>
+
+    <div class="q"><b>Comment savoir si sa préparation physique est vraiment suivie ?</b>
+      <p>Posez-vous une question simple : est-ce que quelqu'un décide, chaque semaine, du contenu de son travail physique, et est-ce qu'il ajuste quand votre enfant fatigue ? Si la réponse est non, ce qu'il fait est de l'entraînement de son sport, pas de la préparation physique. Dans ce cas, c'est le protocole complet qu'il lui faut.</p></div>
+
+    <div class="q"><b>Mon sport n'est pas dans votre liste.</b>
+      <p>Ce n'est pas un problème. Le départ en BMX, le service au tennis, le plot en natation et le penalty au football posent la même question, et elle n'a rien de technique. Le diagnostic me donne ce qu'il me faut pour construire sur votre sport.</p></div>
+
+    <div class="q"><b>Sans engagement, ça veut dire quoi au juste ?</b>
+      <p>Vous payez au mois, et vous arrêtez quand vous voulez, sans préavis et sans justification. Le bouton de résiliation est dans sa page, vous n'avez pas à m'écrire pour ça. L'accès reste ouvert jusqu'à la date anniversaire du dernier mois payé. Le protocole parents, lui, n'est pas un abonnement : c'est un paiement unique, il n'y a rien à résilier.</p></div>
+
+    <div class="q"><b>Combien de temps avant de voir quelque chose ?</b>
+      <p>Certaines choses bougent en trois semaines, d'autres pas en trois mois. C'est pour ça qu'il y a un diagnostic à l'entrée et des mesures ensuite : vous verrez les deux, au lieu de vous fier à une impression. Je préfère vous le dire maintenant plutôt que de vous promettre un enfant transformé en un mois.</p></div>
+
+    <div class="q"><b>Est-ce que je peux changer d'accès en cours de route ?</b>
+      <p>Oui, dans les deux sens, et sans frais. Un enfant qui passe le protocole parents et qui grandit bascule naturellement vers un protocole sportif. Un sportif qui perd son préparateur physique passe du mental au complet. Écrivez-moi, je m'en occupe.</p></div>
+
+    <div class="q"><b>Mon enfant est mineur, c'est un problème ?</b>
+      <p>Non, c'est le cas de la quasi-totalité des sportifs que j'accompagne. L'inscription et le paiement se font simplement par vous, l'adulte, et sous votre responsabilité.</p></div>
+  </section>
+
+  <section class="qui">
+    <h2>QUI VOUS ACCOMPAGNE</h2>
+    <p>Je m'appelle Fabien Pinton. J'ai passé trente ans dans le football de compétition, comme joueur jusqu'au plus haut niveau régional, puis comme recruteur.</p>
+    <p>Pendant dix ans, j'ai accompagné de jeunes footballeurs sur la gestion de leurs émotions avant les grandes échéances et sur leurs choix de carrière. Plusieurs sont professionnels aujourd'hui, certains portent le maillot de l'équipe de France chez les jeunes.</p>
+    <p>Je connais aussi tout ça comme père. Mon fils aîné a joué jusqu'en U19 National, mon second est pilote Junior en BMX Race. Je sais ce que ça demande à un enfant, et ce que ça demande à sa famille. On ne parle jamais de la seconde.</p>
+    <p>Je ne suis pas entraîneur technique, et je vous le dis franchement : mon terrain, c'est le lien entre le corps et la tête. Un corps en forme fabrique un mental en forme, et les deux se nourrissent en permanence.</p>
+    <div class="signature">Fabien Pinton</div>
+  </section>
+
+  <section>
+    <h2>VOUS PRÉFÉREZ M'ÉCRIRE D'ABORD</h2>
+    <p style="color:var(--dim);font-size:15.5px">Si vous hésitez entre deux accès, ou si votre situation ne rentre dans aucune case, laissez-moi vos coordonnées. Je vous réponds personnellement, et je vous dis franchement ce qui correspond, y compris quand la réponse est « rien pour le moment ».</p>
+
+    <div class="form-bloc">
+      <div id="formZone">
+        <div class="champ">
+          <label for="f_parent">Votre nom et prénom</label>
+          <input type="text" id="f_parent" autocomplete="name">
+        </div>
+        <div class="champ">
+          <label for="f_rider">Nom et prénom du sportif</label>
+          <input type="text" id="f_rider" autocomplete="off">
+        </div>
+        <div class="champ">
+          <label for="f_mail">Votre email</label>
+          <input type="email" id="f_mail" autocomplete="email">
+        </div>
+        <button type="button" id="btnEnvoi">Envoyer ma demande</button>
+      </div>
+      <div class="form-msg" id="formMsg"></div>
+    </div>
+  </section>
+
   <div class="lum">
     <div class="s">Le mantra</div>
-    <p>« Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres <span class="g">la permission que leur lumière brille. »</span></p>
+    <p>« Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres <span class="g">la permission que leur lumière brille. »</span></p>
   </div>
+
+  <footer>
+    AXE Mental Performance® · Préparation mentale et physique du jeune sportif, tous sports<br>
+    <a href="https://fabien-pinton.fr">fabien-pinton.fr</a> · <a href="mailto:f.pinton@outlook.fr">f.pinton@outlook.fr</a>
+    <p class="disc">J'accompagne la préparation mentale, et physique selon l'accès choisi, du sportif et de sa famille. Mon accompagnement ne se substitue pas à une prise en charge médicale ou thérapeutique en cas de trouble de santé. Aucune promesse de résultat sportif n'est faite. Toute inscription et tout paiement sont réalisés par un adulte, sous sa responsabilité.</p>
+  </footer>
 
 </div>
 
 <script>
-// La page de vente vers laquelle on redirige. Conserve un éventuel code de parrain.
-var PAGE_VENTE = 'presentation.html';
-var params = new URLSearchParams(window.location.search);
-var parrain = params.get('parrain');
+/* Les trois liens de paiement sont écrits directement dans les boutons ci-dessus.
+   Un paiement confirmé crée l'accès tout seul et envoie le code par email : il n'y a
+   plus de questionnaire intermédiaire, le diagnostic se fait dans la page du protocole. */
 
-// mode : 'majeur_solo' (s'inscrit pour lui-même), 'majeur_autre' (majeur, inscrit quelqu'un
-// d'autre), ou 'mineur' (parent/responsable légal d'un mineur)
-var mode = null;
-
-var TXT = {
-  majeur_solo: {
-    intro: "En tant que personne majeure, je confirme les points suivants avant d'accéder à la présentation et aux formules.",
-    lblParent: "Nom et prénom",
-    lblMail: "Email",
-    c1: "Je confirme être majeur(e) et m'inscrire pour moi-même.",
-    c2: "Je comprends que toute inscription et tout paiement seront réalisés par moi-même, sous ma responsabilité.",
-    champRider: false
-  },
-  majeur_autre: {
-    intro: "En tant que personne majeure, je confirme les points suivants avant d'accéder à la présentation et aux formules.",
-    lblParent: "Ton nom et prénom",
-    lblRider: "Nom et prénom du sportif",
-    lblMail: "Ton email",
-    c1: "Je confirme être majeur(e) et inscrire cette personne avec son accord, ou en tant que responsable légal si elle est mineure.",
-    c2: "Je comprends que toute inscription et tout paiement seront réalisés par moi, sous ma responsabilité.",
-    champRider: true
-  },
-  mineur: {
-    intro: "En tant que parent ou responsable légal, je confirme les points suivants avant d'accéder à la présentation et aux formules.",
-    lblParent: "Nom et prénom du parent",
-    lblRider: "Nom et prénom du mineur concerné",
-    lblMail: "Email du parent",
-    c1: "Je suis le parent ou le responsable légal du mineur concerné.",
-    c2: "Je comprends que toute inscription et tout paiement seront réalisés par moi, adulte, et sous ma responsabilité.",
-    champRider: true
-  }
-};
-
-function montrer(id){
-  ['step1','riderMsg','stepPourQui','step2','stepFin'].forEach(function(s){
-    document.getElementById(s).classList.remove('on');
-  });
-  document.getElementById(id).classList.add('on');
-}
-
-function appliquerTextes(m){
-  var t = TXT[m];
-  document.getElementById('txtIntro').textContent = t.intro;
-  document.getElementById('lbl_parent').textContent = t.lblParent;
-  document.getElementById('lbl_mail').textContent = t.lblMail;
-  document.getElementById('lbl_c1').textContent = t.c1;
-  document.getElementById('lbl_c2').textContent = t.c2;
-  document.getElementById('champ_rider').classList.toggle('hidden', !t.champRider);
-  if(t.champRider){ document.getElementById('lbl_rider').textContent = t.lblRider; }
-}
-
-function choix(qui){
-  document.getElementById('ab-majeur').classList.toggle('sel', qui==='majeur');
-  document.getElementById('ab-mineur').classList.toggle('sel', qui==='mineur');
-  if(qui === 'mineur'){
-    montrer('riderMsg');
-  } else {
-    montrer('stepPourQui');
-  }
-}
-
-function choixPourQui(qui){
-  document.getElementById('ab-solo').classList.toggle('sel', qui==='solo');
-  document.getElementById('ab-autre').classList.toggle('sel', qui==='autre');
-  mode = (qui === 'solo') ? 'majeur_solo' : 'majeur_autre';
-  appliquerTextes(mode);
-  montrer('step2');
-  maj();
-}
-
-function confirmerMineur(){
-  mode = 'mineur';
-  appliquerTextes('mineur');
-  montrer('step2');
-  maj();
-}
-
-function tog(id){ var c=document.getElementById(id); c.checked=!c.checked; maj(); }
-
-function val(id){ return document.getElementById(id).value.trim(); }
-function mailOk(m){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m); }
-
-function maj(){
-  var cases = document.getElementById('c1').checked && document.getElementById('c2').checked && document.getElementById('c3').checked;
-  var champs;
-  if(mode === 'majeur_solo'){
-    champs = val('f_parent').length > 2 && mailOk(val('f_mail'));
-  } else {
-    champs = val('f_parent').length > 2 && val('f_rider').length > 2 && mailOk(val('f_mail'));
-  }
-  document.getElementById('go').classList.toggle('on', cases && champs);
-}
-
-// ===== Enregistrement du prospect dans Supabase =====
+/* Demande de contact : même enregistrement que l'ancienne page rejoindre, pour que la
+   fiche apparaisse dans « demandes reçues » et entre dans le suivi des relances. */
 var SB_URL = 'https://ilsxrdvxvnvlznjuevba.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
-var envoye = false;
 
-function continuer(){
-  var btn = document.getElementById('go');
+var envoye = false;
+function val(id){ return (document.getElementById(id).value || '').trim(); }
+function mailOk(m){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m); }
+
+document.getElementById('btnEnvoi').addEventListener('click', function(){
   if(envoye) return;
+  var msg = document.getElementById('formMsg');
+  var nom = val('f_parent'), rider = val('f_rider'), mail = val('f_mail');
+
+  msg.className = 'form-msg';
+  if(nom.length < 2){ msg.className = 'form-msg err'; msg.textContent = "Merci d'indiquer votre nom."; return; }
+  if(rider.length < 2){ msg.className = 'form-msg err'; msg.textContent = "Merci d'indiquer le nom du sportif."; return; }
+  if(!mailOk(mail)){ msg.className = 'form-msg err'; msg.textContent = "Merci d'indiquer un email valide."; return; }
+
   envoye = true;
+  var btn = document.getElementById('btnEnvoi');
+  btn.disabled = true;
   btn.textContent = 'Un instant...';
 
-  var suffixe = parrain ? ('?parrain=' + encodeURIComponent(parrain)) : '';
-  document.getElementById('lienVente').setAttribute('href', PAGE_VENTE + suffixe);
-
-  // nom_parent_p = la personne qui inscrit (celle qui remplit ce formulaire)
-  // nom_rider_p  = le sportif qui suivra le protocole (peut être la même personne)
-  var nomInscripteur = val('f_parent');
-  var nomSportif = (mode === 'majeur_solo') ? nomInscripteur : val('f_rider');
-
-  var affiche = false;
-  function montrerSuite(jeton){
-    if(affiche) return;
-    affiche = true;
-    // le jeton relie la démo à cette fiche : le coach voit les deux au même endroit
-    var d = 'demo-axe.html';
-    var sep = '?';
-    if(jeton){ d += sep + 't=' + encodeURIComponent(jeton); sep = '&'; }
-    if(parrain){ d += sep + 'parrain=' + encodeURIComponent(parrain); }
-    document.getElementById('lienDemo').setAttribute('href', d);
-    // Les coordonnées viennent d'être données ici : on les dépose sur cet appareil, rattachées
-    // au jeton, pour que la démo n'ait pas à les redemander. Rien ne part ailleurs, et la démo
-    // les efface dès qu'elle s'en est servie.
-    try{
-      if(jeton){
-        localStorage.setItem('axe_demo_invite', JSON.stringify({
-          t: jeton,
-          nom: nomInscripteur || '',
-          email: val('f_mail') || ''
-        }));
-      }
-    }catch(e){}
-    montrer('stepFin');
-    window.scrollTo({top:0,behavior:'smooth'});
+  function fini(){
+    document.getElementById('formZone').style.display = 'none';
+    msg.className = 'form-msg';
+    msg.innerHTML = "C'est enregistré. Je vous réponds personnellement, sous deux jours ouvrés.";
   }
-
-  // filet de sécurité : si la base ne répond pas, on avance quand même, sans jeton
-  setTimeout(function(){ montrerSuite(null); }, 4000);
+  var fait = false;
+  setTimeout(function(){ if(!fait){ fait = true; fini(); } }, 4000);
 
   fetch(SB_URL + '/rest/v1/rpc/axe_rejoindre', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SB_KEY,
-      'Authorization': 'Bearer ' + SB_KEY
-    },
-    body: JSON.stringify({
-      nom_p: nomInscripteur,
-      nom_rider_p: nomSportif,
-      email_p: val('f_mail'),
-      parrain_p: parrain || ''
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(d){ montrerSuite(d && d.token ? d.token : null); })
-  .catch(function(){ montrerSuite(null); });
-}
+    headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY },
+    body: JSON.stringify({ nom_p: nom, nom_rider_p: rider, email_p: mail, parrain_p: '' })
+  }).then(function(){ if(!fait){ fait = true; fini(); } },
+          function(){ if(!fait){ fait = true; fini(); } });
+});
 </script>
 </body>
 </html>

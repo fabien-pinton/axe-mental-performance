@@ -241,9 +241,9 @@ h2.t{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:clamp(
 <section class="screen on" id="s-accueil">
   <div class="tag">Préparation mentale · tout sport, tout âge</div>
   <h1 class="t">DÉCOUVREZ<br>LE PROTOCOLE<br><span style="color:var(--gold)">DE L'INTÉRIEUR</span></h1>
-  <p class="lead">Pas une brochure. Un vrai diagnostic, votre profil, et un exercice à faire maintenant, debout, ici.</p>
+  <p class="lead">Pas une brochure. Dans trente secondes, j'aurai mesuré sur vous quelque chose que vous ne savez probablement pas.</p>
   <div style="margin-top:26px">
-    <button class="btn gold" onclick="demarrer()">Commencer la démonstration<span class="sub">5 minutes · diagnostic, profil, semaine type et exercice</span></button>
+    <button class="btn gold" onclick="demarrer()">Commencer<span class="sub">2 minutes · un test debout, votre profil, un exercice chronométré</span></button>
   </div>
   <p class="small" style="margin-top:22px">C'est un extrait, et il est écrit comme tel. Le diagnostic du protocole est plus long, et <b>il ne reprend aucune des questions posées ici</b> : ce que vous découvrez aujourd'hui ne sera pas à refaire.</p>
   <div class="mantra">
@@ -279,6 +279,32 @@ h2.t{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:clamp(
   </div>
 
   <button class="btn" id="btnProfil" style="margin-top:26px" disabled onclick="lancerDiag()">Commencer le diagnostic</button>
+</section>
+
+
+<!-- ============ LE TEST (en premier, volontairement) ============ -->
+<section class="screen" id="s-oeil">
+  <div class="tag">Un test, tout de suite</div>
+  <h2 class="t" id="oeTitre">LEVEZ-VOUS<br>DIX SECONDES</h2>
+  <p class="lead" id="oeIntro">Tendez les deux bras devant vous. Formez un petit triangle avec vos mains, pouces et index joints. Visez un objet lointain, bien au centre du triangle.</p>
+  <p class="lead" id="oeConsigne" style="color:var(--gold)">Maintenant, sans bouger les mains : fermez l'œil gauche.</p>
+
+  <div class="choices" id="oeChoix">
+    <button type="button" class="ch" onclick="repondreOeil('droit')">L'objet est resté au centre du triangle</button>
+    <button type="button" class="ch" onclick="repondreOeil('gauche')">L'objet a sauté sur le côté</button>
+  </div>
+
+  <div id="oeResultat" style="display:none">
+    <div class="ex-stage" style="padding:8px 0 2px">
+      <div class="chrono" id="oeGrand" style="font-size:38px">—</div>
+    </div>
+    <p class="lead" id="oeStat" style="margin-top:10px"></p>
+    <div class="card gold" style="margin-top:14px">
+      <div class="ctag">Ce que ça change, concrètement</div>
+      <p id="oeQuoi"></p>
+    </div>
+    <button class="btn gold" style="margin-top:20px" onclick="apresOeil()">Continuer</button>
+  </div>
 </section>
 
 <!-- ============ QUESTIONS ============ -->
@@ -389,12 +415,8 @@ h2.t{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:clamp(
 <!-- ============ ET APRÈS ============ -->
 <section class="screen" id="s-suite">
   <div class="tag">Étape 6 · Ce qui se passe ensuite</div>
-  <h2 class="t">RIEN N'EST FIGÉ</h2>
-  <p class="lead">Ce que vous venez de faire, c'est le mois 1. Le mois 2 ne ressemblera pas au mois 1.</p>
-
-  <div class="card"><div class="ctag">Chaque semaine</div><h3>Vous travaillez</h3><p>Un exercice mental, à l'entraînement ou à la maison — c'est précisé à chaque fois, parce qu'il n'y a pas compétition toutes les semaines. Et le cross crawl, tous les jours.</p></div>
-  <div class="card"><div class="ctag">Fin de mois</div><h3>Vous faites votre bilan</h3><p>Quatre questions, écrites avec vos mots. Ce que vous avez senti, ce qui a bloqué, ce que vous voulez réussir.</p></div>
-  <div class="card gold"><div class="ctag">Et là</div><h3>Je reconstruis votre mois</h3><p>Je lis votre bilan. Le mois suivant est recentré sur ce qui a coincé. C'est pour ça que ce n'est pas un accompagnement de plus : personne ne reçoit le même programme, et personne ne reçoit deux fois le même mois.</p></div>
+  <h2 class="t">CE QUE VOUS VENEZ<br>DE VOIR, ET CE QUI MANQUE</h2>
+  <p class="lead">Un test, un profil, un exercice qui se mesure. C'est réel, et c'est une démonstration : ça s'arrête ici.</p>
 
   <div class="cmpbox">
     <div class="ctag">Pour être clair</div>
@@ -647,33 +669,11 @@ function construireQuestions(){
       ["Je me dis que j'ai eu de la chance, que ça ne se refera pas","confiance"],
         ["Je savoure, et je retiens ce qui a marché","neutre"]
     ]});
-  Q.push({id:'d6',type:'mental',
-    q:"Après deux semaines de coupure, au moment de reprendre :",
-    opts:[
-      ["J'appréhende le premier vrai "+l.geste,"portillon"],
-      ["Je repense à mon niveau d'avant la coupure et ça me pèse","rumination"],
-      ["J'ai peur d'avoir pris du retard sur "+l.pairs,"confiance"],
-      ["Je reprends progressivement, sans me poser de question","neutre"]
-    ]});
-
-  // test comportemental : œil directeur (le moment "on teste vraiment", dans les deux modes)
-  Q.push({id:'oeil',type:'oeil',
-    q:"Un test, maintenant : tendez les bras, formez un petit triangle avec vos mains, et visez un objet lointain au centre. Fermez l'œil gauche. L'objet reste dans le triangle ?",
-    help:"Ce test révèle l'œil directeur. S'il reste, c'est l'œil droit. S'il saute sur le côté, c'est le gauche. Dans le protocole, il détermine de quel côté placer les repères visuels.",
-    opts:[["Oui, il reste bien au centre","droit"],["Non, il saute sur le côté","gauche"]]});
 
   Q.push({id:'c1',type:'canal',
       q:"En repensant à la meilleure performance des derniers mois, ce qui revient en premier :",
       help:"Le canal par lequel la mémoire d'une performance se reconstruit est presque toujours le canal dominant.",
       opts:[["Les sons : les voix, les bruits, ce qu'on m'a dit","auditif"],["Les images : ce que je voyais à ce moment-là","visuel"]]});
-  Q.push({id:'c2',type:'canal',
-    q:"Pour se concentrer juste avant de commencer, ce qui marche le mieux :",
-      help:"La façon dont on se met en condition trahit le canal le plus efficace.",
-      opts:[["Me parler intérieurement, ou écouter quelque chose","auditif"],["Fermer les yeux et revoir le geste","visuel"]]});
-  Q.push({id:'c3',type:'canal',
-    q:"Quand un conseil du coach revient en tête :",
-      help:"Dans le protocole, ce canal détermine la forme que prennent les exercices de départ.",
-    opts:[["J'entends sa voix, ses mots exacts","auditif"],["Je revois le geste qu'il a montré","visuel"]]});
   return Q;
 }
 
@@ -682,14 +682,52 @@ function lancerDiag(){
   st.age = parseInt(document.getElementById('f-age').value,10);
   st.questions = construireQuestions();
   st.idx = 0;
+  // Le test physique passe devant les questions : en trente secondes, le visiteur a
+  // un résultat mesuré sur lui. C'est ça qui le fait rester.
+  document.getElementById('oeChoix').style.display = 'flex';
+  document.getElementById('oeResultat').style.display = 'none';
+  document.getElementById('oeConsigne').style.display = 'block';
+  progres(14);
+  go('s-oeil');
+}
+
+const OEIL_INFO = {
+  droit: {
+    grand: "ŒIL DIRECTEUR : DROIT",
+    stat: "Deux personnes sur trois. C'est l'œil que votre cerveau croit quand les deux ne voient pas exactement la même chose.",
+    quoi: "Vos repères visuels doivent se placer à droite, et votre regard s'accrocher à droite avant de partir. Un départ pris avec le repère du mauvais côté coûte quelques centièmes, à chaque fois, sans que personne ne sache pourquoi."
+  },
+  gauche: {
+    grand: "ŒIL DIRECTEUR : GAUCHE",
+    stat: "Une personne sur trois seulement. C'est moins courant, et presque personne ne le sait sur soi-même.",
+    quoi: "Vos repères visuels doivent se placer à gauche. Si on vous a toujours fait travailler sur le repère de droite, comme tout le monde, vous avez compensé pendant des années. C'est exactement le genre de détail qui ne se voit pas à l'entraînement et qui se paie en course."
+  }
+};
+
+function repondreOeil(val){
+  st.oeil = val;
+  const i = OEIL_INFO[val];
+  document.getElementById('oeChoix').style.display = 'none';
+  document.getElementById('oeConsigne').style.display = 'none';
+  document.getElementById('oeGrand').textContent = i.grand;
+  document.getElementById('oeStat').textContent = i.stat;
+  document.getElementById('oeQuoi').textContent = i.quoi;
+  document.getElementById('oeResultat').style.display = 'block';
+  document.getElementById('oeTitre').textContent = 'MESURÉ.';
+  document.getElementById('oeIntro').textContent = "Vous venez de faire, en dix secondes, un test que la plupart des sportifs ne font jamais.";
+  progres(20);
+}
+
+function apresOeil(){
   afficherQuestion();
+  go('s-question');
 }
 
 function afficherQuestion(){
   const q = st.questions[st.idx];
   if(!q){ construire(); return; }
   const total = st.questions.length;
-  progres(10 + (st.idx/total)*46);
+  progres(22 + (st.idx/total)*34);
   document.getElementById('qNum').textContent = 'Question ' + (st.idx+1) + ' / ' + total;
   document.getElementById('qTxt').textContent = q.q;
   const h = document.getElementById('qHelp');
@@ -810,15 +848,15 @@ function afficherResultat(r){
     : "Les consignes passent mieux par l'œil. Dans le protocole, les exercices de départ s'appuient sur une image mentale précise, et les repères visuels se placent côté œil " + oeil + ".";
   document.getElementById('rSensoriel').style.display = 'block';
 
-  document.getElementById('btnApresProfil').textContent = 'Voir ma semaine type';
+  document.getElementById('btnApresProfil').textContent = "Passer à l'exercice";
   progres(68);
   go('s-resultat');
 }
 
 function apresProfil(){
-  preparerSemaine();
-  go('s-semaine');
-  progres(76);
+  preparerExercice();
+  go('s-exercice');
+  progres(70);
 }
 
 /* ---------- semaine type ---------- */
@@ -898,124 +936,169 @@ const EXOS = {
 
 let exEtat = 'pret';
 
+function cote(){ return st.oeil === 'gauche' ? 'à gauche' : 'à droite'; }
+
+/* Un seul exercice, et il se mesure. Avant, quarante secondes d'ancrage, après.
+   L'écart est réel : la respiration lente et le regard verrouillé améliorent
+   l'équilibre monopodal. Ce que la démonstration ne donne pas, volontairement,
+   c'est quoi faire de ce chiffre. */
+const MES_MAX = 45;
+let exT0 = 0;
+
+function majChrono(){
+  const s = (Date.now() - exT0) / 1000;
+  document.getElementById('exChrono').textContent = s.toFixed(1);
+  if(s >= MES_MAX) arreterMesure();
+}
+
 function preparerExercice(){
   stopChrono();
-  const e = EXOS[st.dominant] || EXOS.neutre;
   exEtat = 'pret';
-  document.getElementById('exTitre').textContent = e.titre;
-  document.getElementById('exIntro').textContent = e.intro;
+  st.mes1 = null; st.mes2 = null;
+  document.getElementById('exTitre').textContent = "UN SEUL EXERCICE, ET IL SE MESURE";
+  document.getElementById('exIntro').textContent =
+    "Debout, chaussures enlevées si possible. Choisissez un point fixe " + cote()
+    + ", à hauteur des yeux : c'est le côté de votre œil directeur, celui que vous venez de trouver.";
   const bt = document.getElementById('exBtn');
-  bt.textContent = "Démarrer l'exercice";
+  bt.textContent = "Je suis debout, on y va";
   bt.disabled = false;
   const sk = document.getElementById('exSkip');
   sk.style.display = 'block';
   sk.textContent = 'Passer cette étape';
-  document.getElementById('exLigne').textContent = '';
-  document.getElementById('exSteps').innerHTML = '';
+  document.getElementById('exLigne').textContent =
+    "Premier temps : vous tenez sur une seule jambe, les yeux sur votre point. On chronomètre jusqu'à ce que vous posiez le pied.";
+  document.getElementById('exSteps').innerHTML = '<i class="on"></i><i></i><i></i>';
   document.getElementById('exBreath').style.display = 'none';
   document.getElementById('exChrono').style.display = 'none';
-  const champs = document.getElementById('exChamps');
-  if(e.type === 'ecrire'){
-    document.getElementById('exL1').textContent = e.l1;
-    document.getElementById('exL2').textContent = e.l2;
-    champs.style.display = 'block';
+  document.getElementById('exChamps').style.display = 'none';
+}
+
+function demarrerMesure(num){
+  exEtat = (num === 1) ? 'mesure1' : 'mesure2';
+  exT0 = Date.now();
+  const c = document.getElementById('exChrono');
+  c.style.display = 'block';
+  c.textContent = '0.0';
+  document.getElementById('exBreath').style.display = 'none';
+  document.getElementById('exSteps').innerHTML =
+    num === 1 ? '<i class="on"></i><i></i><i></i>' : '<i class="on"></i><i class="on"></i><i class="on"></i>';
+  document.getElementById('exLigne').textContent =
+    "Sur une jambe. Les yeux ne quittent pas le point " + cote() + ". Dès que vous posez le pied, vous appuyez.";
+  const b = document.getElementById('exBtn');
+  b.textContent = "J'ai posé le pied";
+  b.disabled = false;
+  stopChrono();
+  chronoTimer = setInterval(majChrono, 100);
+}
+
+function arreterMesure(){
+  stopChrono();
+  const s = Math.min(MES_MAX, (Date.now() - exT0) / 1000);
+  const b = document.getElementById('exBtn');
+  if(exEtat === 'mesure1'){
+    st.mes1 = s;
+    exEtat = 'pretAncrage';
+    document.getElementById('exChrono').textContent = s.toFixed(1);
+    document.getElementById('exSteps').innerHTML = '<i class="on"></i><i class="on"></i><i></i>';
+    document.getElementById('exLigne').textContent =
+      "Noté : " + s.toFixed(1) + " secondes. Deuxième temps, quarante secondes d'ancrage. Vous ne bougez plus, vous suivez le cercle, et votre regard reste sur le point.";
+    b.textContent = "Lancer l'ancrage · 40 secondes";
+    b.disabled = false;
   } else {
-    champs.style.display = 'none';
+    st.mes2 = s;
+    document.getElementById('exChrono').textContent = s.toFixed(1);
+    finirExercice();
   }
 }
 
+function demarrerAncrage(){
+  exEtat = 'ancrage';
+  const b = document.getElementById('exBtn');
+  b.textContent = 'Ancrage en cours…';
+  b.disabled = true;
+  document.getElementById('exChrono').style.display = 'none';
+  const br = document.getElementById('exBreath');
+  br.style.display = 'flex';
+  const lbl = document.getElementById('exBreathLbl');
+  document.getElementById('exLigne').textContent =
+    "Le regard ne quitte pas le point " + cote() + ". C'est le regard qui tient, pas la jambe.";
+  let t = 0;
+  function cycle(){
+    if(exEtat !== 'ancrage') return;
+    if(t >= 40){ finAncrage(); return; }
+    br.classList.remove('out'); lbl.textContent = 'Inspire';
+    chronoTimer = setTimeout(function(){
+      if(exEtat !== 'ancrage') return;
+      br.classList.add('out'); lbl.textContent = 'Expire';
+      chronoTimer = setTimeout(function(){ t += 10; cycle(); }, 6000);
+    }, 4000);
+  }
+  cycle();
+}
+
+function finAncrage(){
+  stopChrono();
+  exEtat = 'pretMesure2';
+  document.getElementById('exBreath').classList.remove('out');
+  document.getElementById('exBreathLbl').textContent = 'Voilà';
+  document.getElementById('exLigne').textContent =
+    "Troisième temps, et c'est celui qui compte : exactement le même test qu'au début, même jambe, même point.";
+  const b = document.getElementById('exBtn');
+  b.textContent = 'Refaire le test';
+  b.disabled = false;
+}
+
+function finirExercice(){
+  stopChrono();
+  exEtat = 'fini';
+  st.exFait = true;
+  document.getElementById('exBreath').style.display = 'none';
+  const a = st.mes1 || 0, z = st.mes2 || 0;
+  const ecart = a > 0 ? Math.round(((z - a) / a) * 100) : 0;
+  document.getElementById('exSteps').innerHTML = '<i class="on"></i><i class="on"></i><i class="on"></i>';
+  document.getElementById('exChrono').style.display = 'block';
+  document.getElementById('exChrono').textContent = (ecart > 0 ? '+' : '') + ecart + ' %';
+  let txt;
+  if(ecart > 0){
+    txt = "Avant : " + a.toFixed(1) + " s. Après quarante secondes : " + z.toFixed(1) + " s. "
+        + "Votre corps a répondu en moins d'une minute, et l'écart est mesurable, pas ressenti.\n\n"
+        + "Ce que vous n'avez pas : lequel de ces leviers est le vôtre, à quel moment de la journée de compétition il sert, "
+        + "et quoi faire de ce chiffre le mois prochain. Un exercice ne règle rien. Un exercice placé au bon endroit, oui.";
+  } else {
+    txt = "Avant : " + a.toFixed(1) + " s. Après : " + z.toFixed(1) + " s. Pas de progression, et c'est une information, pas un échec.\n\n"
+        + "Un corps qui ne répond pas à quarante secondes d'ancrage est soit déjà fatigué, soit occupé ailleurs. "
+        + "Lequel des deux ? C'est exactement ce que le diagnostic sépare, et c'est exactement ce qu'un exercice seul ne vous dira jamais.";
+  }
+  document.getElementById('exLigne').style.whiteSpace = 'pre-line';
+  document.getElementById('exLigne').textContent = txt;
+  const b = document.getElementById('exBtn');
+  b.disabled = false;
+  b.textContent = 'Voir ce que ça donne sur un mois';
+  document.getElementById('exSkip').style.display = 'none';
+}
+
 function exAction(){
-  const e = EXOS[st.dominant] || EXOS.neutre;
-  if(exEtat === 'fini'){ finExercice(); return; }
-  if(exEtat === 'encours'){ return; }
-  exEtat = 'encours';
-  document.getElementById('exBtn').textContent = 'En cours…';
-  document.getElementById('exBtn').disabled = true;
-  const sk = document.getElementById('exSkip');
-  sk.style.display = 'block';
-  sk.textContent = 'Terminer maintenant';
-  if(e.type === 'souffle') lancerSouffle(e); else lancerEcriture(e);
+  if(exEtat === 'pret'){ demarrerMesure(1); return; }
+  if(exEtat === 'mesure1'){ arreterMesure(); return; }
+  if(exEtat === 'pretAncrage'){ demarrerAncrage(); return; }
+  if(exEtat === 'ancrage'){ return; }
+  if(exEtat === 'pretMesure2'){ demarrerMesure(2); return; }
+  if(exEtat === 'mesure2'){ arreterMesure(); return; }
+  finExercice();
 }
 
 function stopChrono(){
   if(chronoTimer !== null){ clearInterval(chronoTimer); clearTimeout(chronoTimer); chronoTimer = null; }
 }
 
-function lancerSouffle(e){
-  const cercle = document.getElementById('exBreath');
-  const lbl = document.getElementById('exBreathLbl');
-  const ligne = document.getElementById('exLigne');
-  const steps = document.getElementById('exSteps');
-  cercle.style.display = 'flex';
-  steps.innerHTML = '';
-  e.lignes.forEach(function(){ const i = document.createElement('i'); steps.appendChild(i); });
-
-  let phase = 0;         // 0..3 : les 4 temps
-  let cycle = 0;         // cycles de respiration dans le temps 2
-  const marquer = function(n){
-    steps.querySelectorAll('i').forEach(function(x,i){ x.classList.toggle('on', i <= n); });
-  };
-
-  const sequence = [
-    {t:6000, txt:e.lignes[0], lbl:'Regardez', out:false},
-    {t:4000, txt:e.lignes[1], lbl:'Inspire', out:false},
-    {t:6000, txt:e.lignes[1], lbl:'Souffle', out:true},
-    {t:4000, txt:e.lignes[1], lbl:'Inspire', out:false},
-    {t:6000, txt:e.lignes[1], lbl:'Souffle', out:true},
-    {t:4000, txt:e.lignes[2], lbl:'Votre mot', out:false},
-    {t:6000, txt:e.lignes[2], lbl:'Souffle', out:true},
-    {t:6000, txt:e.lignes[3], lbl:'Le geste', out:false}
-  ];
-  const etapePourIndex = [0,1,1,1,1,2,2,3];
-
-  let i = 0;
-  const jouer = function(){
-    if(i >= sequence.length){ terminerExercice(); return; }
-    const s = sequence[i];
-    ligne.textContent = s.txt;
-    lbl.textContent = s.lbl;
-    cercle.classList.toggle('out', s.out);
-    marquer(etapePourIndex[i]);
-    i++;
-    chronoTimer = setTimeout(jouer, s.t);
-  };
-  jouer();
-}
-
-function lancerEcriture(e){
-  const chrono = document.getElementById('exChrono');
-  const ligne = document.getElementById('exLigne');
-  chrono.style.display = 'block';
-  ligne.textContent = 'Écrivez court. Le but n\'est pas de bien écrire, c\'est de sortir ce qui tourne.';
-  let reste = e.duree;
-  chrono.textContent = reste;
-  const t1 = document.getElementById('exT1');
-  if(t1) t1.focus();
-  chronoTimer = setInterval(function(){
-    reste--;
-    chrono.textContent = reste;
-    if(reste <= 0){ stopChrono(); terminerExercice(); }
-  }, 1000);
-}
-
-function terminerExercice(){
-  stopChrono();
-  exEtat = 'fini';
-  st.exFait = true;
-  const b = document.getElementById('exBtn');
-  b.disabled = false;
-  b.textContent = 'Terminé — continuer';
-  document.getElementById('exBreath').classList.remove('out');
-  document.getElementById('exBreathLbl').textContent = 'Voilà';
-  document.getElementById('exLigne').textContent =
-    "C'est tout. Dans le protocole, cet exercice revient chaque semaine, un peu plus exigeant, jusqu'à devenir un réflexe.";
-  const sk2 = document.getElementById('exSkip');
-  sk2.style.display = 'none';
-}
+function terminerExercice(){ finirExercice(); }
 
 // « Passer » avant l'exercice, « Terminer maintenant » pendant : on ne bloque jamais le visiteur
 function sortirExercice(){
-  if(exEtat === 'encours'){ terminerExercice(); return; }
+  stopChrono();
+  if(exEtat === 'mesure1' || exEtat === 'ancrage' || exEtat === 'pretAncrage' || exEtat === 'pretMesure2' || exEtat === 'mesure2'){
+    finExercice(); return;
+  }
   finExercice();
 }
 
@@ -1034,17 +1117,17 @@ function remplirComparaison(){
     : 'douze mois périodisés, avec option physique selon la formule';
   const lignes = [
     ['Le diagnostic',
-     nbQ + ' questions, écrites pour la démonstration',
-     '15 questions, dont aucune de celles d\'aujourd\'hui — plus le test de l\'œil directeur et 5 tests de canal'],
+     nbQ + ' questions et le test de l\'œil, écrits pour la démonstration',
+     '15 questions, dont aucune de celles d\'aujourd\'hui, plus les tests sensoriels complets'],
     ['Le profil',
      'votre axe dominant, désigné',
      'les trois axes chiffrés, le canal sensoriel, l\'œil directeur, et un profil relu à chaque mois'],
     ['Le programme',
-     'une semaine reconstituée pour l\'exemple',
+     'rien, aujourd\'hui vous avez vu la mécanique',
      phys],
     ['Les exercices',
-     'un exercice, niveau 1, version courte',
-     'trois niveaux par axe — repérer, exposer, ancrer — qui montent d\'un mois sur l\'autre'],
+     'un seul, et personne ne vous dit quoi faire du chiffre obtenu',
+     'celui qui correspond à votre axe, au bon moment de la semaine, et ce qu\'on fait du résultat le mois suivant'],
     ['Le suivi',
      'une démonstration, elle s\'arrête ici',
      'un bilan de fin de mois lu par Fabien, le mois suivant reconstruit dessus, et des messages vocaux en cours de route']
