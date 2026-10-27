@@ -195,6 +195,10 @@ html:not(.js) .voir-plus{display:none}
   font-weight:600;font-size:15px;padding:14px 26px;border-radius:8px;border:1.5px solid var(--ink);
   transition:.2s var(--ease)}
 .essai a:hover{background:var(--ink);color:var(--cream)}
+.essai-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.essai-btns a{flex:1 1 220px;justify-content:center}
+.essai-btns a+a{border-color:var(--parent);color:var(--parent)}
+.essai-btns a+a:hover{background:var(--parent);color:var(--cream)}
 
 /* ---------- blocs d'appui ---------- */
 .appui,.franc{border-radius:12px;padding:22px 24px;margin:22px 0}
@@ -294,7 +298,18 @@ footer a{color:var(--dim)}
 .barre-txt span{display:block;font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .barre a{flex-shrink:0;background:var(--ink);color:var(--cream);text-decoration:none;font-weight:600;font-size:14.5px;
   padding:13px 18px;border-radius:8px;transition:background .2s var(--ease)}
-.barre.choisi a{background:var(--gold)}
+.barre.choisi #barreLien{background:var(--gold)}
+.barre-btns{display:flex;gap:8px;flex-shrink:0}
+.barre a.essayer{background:transparent;color:var(--ink);border:1.5px solid var(--ink);padding:11.5px 16px}
+.barre a.essayer:hover{background:var(--ink);color:var(--cream)}
+@media(max-width:620px){
+  .barre-in{flex-direction:column;align-items:stretch;gap:8px}
+  .barre-txt{text-align:center}
+  .barre-btns{width:100%}
+  .barre-btns a{flex:1;text-align:center;font-size:13.5px;padding:11px 8px;line-height:1.25;
+    display:flex;align-items:center;justify-content:center}
+  .barre a.essayer{padding:9.5px 8px}
+}
 
 /* ---------- apparitions ---------- */
 .js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
@@ -470,7 +485,7 @@ footer a{color:var(--dim)}
           <span class="lib">Commencer le protocole parents · 120 €</span>
           <span class="fl" aria-hidden="true">→</span></a>
         <div class="o-secu"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5.2" width="8" height="5.6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 5.2V3.8a2 2 0 0 1 4 0v1.4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>Paiement sécurisé par Stripe · Carte, Apple Pay, Google Pay</div>
-        <div class="o-note">Page accessible trois mois, pour garder le mémo après la fin.</div>
+        <div class="o-note">Page accessible trois mois, pour garder le mémo après la fin. <a href="demo-parents.html" style="font-weight:600">Essayer la démo parents, 2 minutes</a></div>
       </article>
     </div>
 
@@ -485,8 +500,11 @@ footer a{color:var(--dim)}
 
     <div class="essai rv">
       <h3>PAS ENVIE DE PAYER SANS AVOIR VU ?</h3>
-      <p>Deux minutes. Un test debout dès les trente premières secondes, votre profil, et un exercice chronométré qui vous donne un chiffre avant et un chiffre après. C'est la façon la plus honnête de savoir si c'est fait pour vous.</p>
-      <a href="demo-axe.html">Essayer le protocole · 2 minutes <span aria-hidden="true">→</span></a>
+      <p>Deux minutes, sans rien payer. Côté sportif : un test debout dès les trente premières secondes, son profil, et un exercice chronométré avec un chiffre avant et un chiffre après. Côté parents : quatre situations du quotidien, vos réflexes, et la phrase à essayer dès la prochaine compétition.</p>
+      <div class="essai-btns">
+        <a href="demo-axe.html">Démo sportif · dès 12 ans <span aria-hidden="true">→</span></a>
+        <a href="demo-parents.html">Démo parents · 6 à 12 ans <span aria-hidden="true">→</span></a>
+      </div>
     </div>
   </section>
 
@@ -614,7 +632,10 @@ footer a{color:var(--dim)}
 <div class="barre" id="barre">
   <div class="barre-in">
     <div class="barre-txt"><small id="barreSur">3 accès · sans engagement</small><span id="barreNom">Quel accès pour votre enfant ?</span></div>
-    <a href="#trouver" id="barreLien">Trouver le mien</a>
+    <div class="barre-btns">
+      <a href="demo-axe.html" class="essayer" id="barreEssai">Essayer avant de vous lancer</a>
+      <a href="#trouver" id="barreLien">Trouver le mien</a>
+    </div>
   </div>
 </div>
 
@@ -660,6 +681,7 @@ footer a{color:var(--dim)}
     $('barreLien').textContent = 'Rejoindre';
     $('barreLien').setAttribute('href', o.querySelector('.o-cta').getAttribute('href'));
     barre.classList.add('choisi');
+    $('barreEssai').setAttribute('href', cible === 'parents' ? 'demo-parents.html' : 'demo-axe.html');
     try{ localStorage.setItem('axe_rejoindre_choix', cible); }catch(e){}
     if(defiler){
       setTimeout(function(){
