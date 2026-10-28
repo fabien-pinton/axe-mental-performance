@@ -3155,27 +3155,33 @@ function validatedBtnHtml(){
 // jours de la semaine (lundi..dimanche) réellement compris dans la semaine 1 du mois, qui
 // peut être incomplète si le mois ne démarre pas un lundi (ex : démarrage un mardi -> la
 // semaine 1 va du mardi au dimanche suivant, elle n'a pas de lundi du tout).
-function joursPresentsSemaine1(){
+function joursPresentsSemaine(w){
   if(!state.startDate) return new Set(JOURS_SEMAINE);
-  const dow = state.startDate.getDay(); // 0=dimanche ... 1=lundi ... 6=samedi
-  const joursAvantSemaine2 = ((8 - dow) % 7) || 7;
+  const finMois = finDeMois(state.startDate);
+  const total   = nbSemainesMois();
+  const debut   = weekOpenDate(w);
+  // la semaine s'arrête la veille de l'ouverture de la suivante, et jamais après le dernier
+  // jour du mois : la toute dernière semaine déborde presque toujours sur le mois suivant.
+  let fin = (w < total) ? addDays(weekOpenDate(w+1), -1) : finMois;
+  if(fin > finMois) fin = finMois;
   const set = new Set();
-  for(let i=0;i<joursAvantSemaine2;i++){
-    const jsDow = (dow+i)%7;
-    set.add(JOURS_SEMAINE[(jsDow+6)%7]);
+  for(let d = new Date(debut); d <= fin; d = addDays(d,1)){
+    set.add(JOURS_SEMAINE[(d.getDay()+6)%7]);
   }
   return set;
 }
+// gardée pour compatibilité : c'est le même filtre, appliqué à la semaine 1.
+function joursPresentsSemaine1(){ return joursPresentsSemaine(1); }
 // les jours qui reçoivent réellement une séance cette semaine (les premiers de la semaine
-// en priorité si le nombre de jours cochés dépasse le plafond d'âge). En semaine 1, on
-// retire d'abord les jours qui ne tombent pas vraiment dans cette semaine (incomplète) —
-// jamais de "séance du lundi" si le mois a démarré après le lundi de cette semaine-là.
+// en priorité si le nombre de jours cochés dépasse le plafond d'âge).
 function joursSeance(){
   let jours = joursTries(state.trainingDays);
-  if(state.week===1){
-    const presents = joursPresentsSemaine1();
-    jours = jours.filter(j=>presents.has(j));
-  }
+  // La première ET la dernière semaine d'un mois sont presque toujours incomplètes. On retire
+  // donc les jours d'entraînement qui ne tombent pas vraiment dedans : jamais de "séance du
+  // lundi" si le mois a démarré un jeudi, jamais de "séance du vendredi" si le mois s'arrête
+  // le mercredi. Avant ce correctif, seule la semaine 1 était filtrée.
+  const presents = joursPresentsSemaine(state.week);
+  jours = jours.filter(j=>presents.has(j));
   return jours.slice(0,physSessions());
 }
 function intensityLabel(){
@@ -4754,15 +4760,18 @@ function renderWeek(started){
   document.getElementById('mentalCol').innerHTML=exCard(m,true,'m0');
   if(window.AxeBriques) AxeBriques.brancher(document.getElementById('mentalCol'));
   // physique
-  let n=physSessions();
-  if(isRelache)n=Math.max(1,n-1); // semaine de relâchement : une séance en moins
-  let joursSem=joursSeance().slice(0,n);
-  // la semaine 1 peut être incomplète (le mois ne démarre pas forcément un lundi) : jamais
-  // plus de séances affichées que de jours d'entraînement qui tombent vraiment dedans.
-  n = joursSem.length;
+  // La semaine de relâchement garde la même fréquence : ce sont les séries, les repos et le
+  // finisher qui changent (voir le bump plus bas), pas le nombre de jours. Retirer une séance
+  // revenait à couper la fin de la semaine, et comme la dernière semaine du mois est aussi la
+  // semaine de relâchement, le mois se terminait sur un mercredi avec trois jours vides
+  // derrière : le pilote croyait son programme fini alors qu'il lui restait des jours.
+  let joursSem=joursSeance();
+  // la première comme la dernière semaine peuvent être incomplètes : jamais plus de séances
+  // affichées que de jours d'entraînement qui tombent vraiment dedans.
+  let n = joursSem.length;
   document.getElementById('physCount').textContent = n>0
     ? (n+' exercice'+(n>1?'s':'')+' · '+wp.tag.toLowerCase())
-    : 'Pas de séance cette semaine (le mois démarre en cours de semaine)';
+    : 'Pas de séance cette semaine : aucun de tes jours d\'entraînement ne tombe dedans.';
   const pool=state.gym?physPool.gym:physPool.home;
   const cadreMed = profilSpecifique().allege ? cadreMedicalHtml() : '';
   // le cycle de séances avance chaque mois (aucune répétition figée sur un abonnement long),
