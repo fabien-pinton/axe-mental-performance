@@ -2,801 +2,730 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rejoindre · AXE Mental Performance®</title>
 <meta name="description" content="Préparation mentale et physique du jeune sportif, tous sports. Trois accès : protocole complet 89 €/mois, protocole mental 49 €/mois, protocole parents 120 € pour quatre semaines.">
 <meta name="theme-color" content="#FDFAF5">
-<link rel="canonical" href="https://fabien-pinton.fr/rejoindre.html">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:site_name" content="AXE Mental Performance®">
-<meta property="og:title" content="Trois accès. Un seul est le vôtre. · AXE Mental Performance®">
-<meta property="og:description" content="Préparation mentale et physique du jeune sportif, construite sur mesure, sport par sport. Sans engagement.">
-<meta property="og:url" content="https://fabien-pinton.fr/rejoindre.html">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="axe-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="axe-apple-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://buy.stripe.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js');</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#1A1612; --cream:#FDFAF5; --paper:#FFFFFF; --gold:#A8852A; --gold-soft:#C9A94E;
-  --gold-wash:rgba(168,133,42,.08);
-  --line:rgba(26,22,18,.12); --line-strong:rgba(26,22,18,.24); --dim:rgba(26,22,18,.6);
-  --parent:#5D6F4A; --brique:#7A3B2E; --mental:#3B4A6B; --ok:#4E6B3A; --err:#9B2C2C;
+  --ink:#1A1612; --cream:#FDFAF5; --gold:#A8852A; --gold-soft:#C9A94E;
+  --line:rgba(26,22,18,.14); --line-strong:rgba(26,22,18,.28); --dim:rgba(26,22,18,.58);
+  --parent:#5D6F4A; --brique:#7A3B2E; --mental:#3B4A6B;
   --ease:cubic-bezier(.22,.61,.36,1);
-  --shadow-sm:0 1px 2px rgba(26,22,18,.05),0 4px 14px rgba(26,22,18,.05);
-  --shadow-lg:0 2px 4px rgba(26,22,18,.05),0 18px 44px rgba(26,22,18,.12);
-  --bar-h:0px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth}
 body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;
-  font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased;
-  padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom))}
+  font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.5px;line-height:.98}
-.wrap{max-width:680px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
-section{padding:56px 0;border-top:1px solid var(--line)}
-[id]{scroll-margin-top:20px}
+.wrap{max-width:660px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+section{padding:46px 0;border-top:1px solid var(--line)}
 .eyebrow{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700}
-h2{font-size:clamp(28px,6vw,38px);margin-bottom:14px}
-h3{font-size:21px;margin-bottom:6px}
-p{margin-bottom:15px}
-p:last-child{margin-bottom:0}
-b,strong{font-weight:600}
-a{color:var(--gold)}
-.intro{color:var(--dim);font-size:15.5px;max-width:52ch}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
 
-/* ---------- piste en fond, qui se trace au chargement ---------- */
-.piste{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+/* piste en fond */
+.piste{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45}
 .piste svg{width:100%;height:100%}
-.piste .trace{stroke-dasharray:2200;stroke-dashoffset:2200;animation:trace 2.6s var(--ease) .2s forwards}
-@keyframes trace{to{stroke-dashoffset:0}}
 
-/* ---------- en-tête ---------- */
-.hero{padding:56px 0 44px;text-align:center}
+/* ---- en-tête ---- */
+.hero{padding:52px 0 40px;text-align:center}
 .logo{margin-bottom:30px}
 .logo .lettres{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;
   letter-spacing:.2em;color:var(--gold);line-height:.9;padding-right:.2em}
 .logo .sous{font-size:7.5px;letter-spacing:.34em;color:var(--gold);font-weight:700;
   border-top:1px solid rgba(168,133,42,.4);display:inline-block;padding-top:4px;margin-top:4px}
-.hero h1{font-size:clamp(40px,10.5vw,68px);margin:20px 0 0}
-.hero h1 .g{color:var(--gold)}
+.hero h1{font-size:clamp(32px,8vw,52px);margin:22px 0 0}
 .hero .lead{font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:clamp(19px,3.6vw,25px);margin:20px auto 0;max-width:32ch;line-height:1.45}
-.garanties{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:26px}
-.garanties span{font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:99px;
-  background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow-sm);
-  display:inline-flex;align-items:center;gap:7px}
-.garanties span::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold)}
-.sports{margin-top:26px;font-size:12.5px;letter-spacing:.06em;color:var(--dim);line-height:1.9}
+  font-size:clamp(19px,3.4vw,25px);color:var(--ink);margin:20px auto 0;max-width:32ch;line-height:1.45}
+.sports{margin-top:24px;font-size:12.5px;letter-spacing:.07em;color:var(--dim);line-height:1.9}
 .sports b{color:var(--ink);font-weight:600}
-.descendre{display:inline-flex;align-items:center;gap:10px;margin-top:30px;
-  background:var(--ink);color:var(--cream);text-decoration:none;font-weight:600;font-size:15.5px;
-  padding:16px 30px;border-radius:6px;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
-.descendre:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(26,22,18,.2)}
-.descendre svg{transition:transform .25s var(--ease)}
-.descendre:hover svg{transform:translateY(3px)}
 
-/* ---------- sélecteur ---------- */
-.selecteur{background:var(--paper);border:1px solid var(--line-strong);border-radius:14px;
-  padding:22px;box-shadow:var(--shadow-sm);margin-top:22px}
-.sel-t{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+h2{font-size:clamp(26px,5.5vw,34px);margin-bottom:16px}
+h3{font-size:21px;margin-bottom:6px}
+p{margin-bottom:15px}
+p:last-child{margin-bottom:0}
+b,strong{font-weight:600}
+a{color:var(--gold)}
+
+/* ---- l'aiguillage ---- */
+.aiguillage{background:#fff;border:1px solid var(--line-strong);border-radius:10px;padding:22px 24px}
+.aig-t{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
   font-weight:700;margin-bottom:14px}
-.choix{display:grid;gap:10px}
-.choix button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:14px;
-  padding:15px 16px;border:1.5px solid var(--line);border-radius:10px;background:var(--cream);
-  transition:border-color .2s var(--ease),background .2s var(--ease),transform .15s var(--ease)}
-.choix button:hover{border-color:var(--gold)}
-.choix button:active{transform:scale(.99)}
-.choix button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.choix .age{flex-shrink:0;min-width:78px;font-family:'Bebas Neue',sans-serif;font-size:21px;line-height:1}
-.choix .txt{font-size:14.5px;color:var(--dim);line-height:1.45;flex:1}
-.choix .rond{flex-shrink:0;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line-strong);
-  display:grid;place-items:center;transition:.2s var(--ease)}
-.choix .rond::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--cream);transform:scale(0);transition:transform .2s var(--ease)}
-.choix button[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-wash)}
-.choix button[aria-pressed="true"] .rond{background:var(--gold);border-color:var(--gold)}
-.choix button[aria-pressed="true"] .rond::after{transform:scale(1)}
-.verdict{margin-top:16px;padding:14px 16px;border-radius:10px;background:var(--ink);color:var(--cream);
-  display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.verdict.on{display:flex;animation:monte .35s var(--ease)}
-.verdict p{margin:0;font-size:14.5px;line-height:1.4}
-.verdict p b{color:var(--gold-soft)}
-.verdict a{color:var(--cream);font-weight:600;font-size:14px;text-decoration:none;
-  border-bottom:1px solid var(--gold-soft);white-space:nowrap}
-@keyframes monte{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.aig-l{display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px dashed var(--line)}
+.aig-l:first-of-type{border-top:none}
+.aig-age{flex-shrink:0;width:92px;font-family:'Bebas Neue',sans-serif;font-size:19px;
+  letter-spacing:.04em;color:var(--ink)}
+.aig-q{font-size:15px;color:var(--dim);line-height:1.5}
+.aig-q a{font-weight:600;text-decoration:none;border-bottom:1px solid rgba(168,133,42,.45)}
 
-/* ---------- les trois accès ---------- */
-.offres{display:grid;gap:20px;margin-top:6px}
-.offre{position:relative;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;
-  background:var(--paper);padding:28px 24px 24px;box-shadow:var(--shadow-sm);
-  transition:box-shadow .35s var(--ease),transform .35s var(--ease),border-color .35s var(--ease),opacity .35s var(--ease)}
+/* ---- les trois accès ---- */
+.offre{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:8px;
+  background:#fff;padding:26px 24px 24px;margin-top:20px}
+.offre:first-of-type{margin-top:0}
 .offre.mental{border-left-color:var(--mental)}
 .offre.parents{border-left-color:var(--parent)}
-.offre.reco{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--line-strong)}
-.offres.filtre .offre:not(.reco){opacity:.62}
-.offres.filtre .offre:not(.reco):hover{opacity:1}
-.badge{position:absolute;top:-11px;right:18px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-  font-weight:700;padding:5px 11px;border-radius:99px;background:var(--gold);color:var(--paper)}
-.badge.pour-vous{background:var(--ink);display:none}
-.offre.reco .badge.pour-vous{display:inline-block;animation:monte .35s var(--ease)}
-.offre.reco .badge.defaut{display:none}
 .o-rang{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--gold)}
 .offre.mental .o-rang{color:var(--mental)}
 .offre.parents .o-rang{color:var(--parent)}
-.offre h3{font-size:28px;margin:8px 0 4px}
-.o-pour{font-size:15px;color:var(--dim);margin-bottom:16px}
+.offre h3{font-size:25px;margin:8px 0 2px}
+.o-pour{font-size:14.5px;color:var(--dim);margin-bottom:16px}
 .o-prix{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;
   padding:14px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line)}
-.o-montant{font-family:'Bebas Neue',sans-serif;font-size:50px;line-height:1;color:var(--gold)}
+.o-montant{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;color:var(--gold)}
 .offre.mental .o-montant{color:var(--mental)}
 .offre.parents .o-montant{color:var(--parent)}
 .o-unite{font-size:14.5px;color:var(--dim)}
-.o-cond{font-size:12.5px;color:var(--dim);margin-left:auto;text-align:right;line-height:1.45}
-.o-liste{margin:14px 0 0;list-style:none}
-.o-liste li{position:relative;padding:8px 0 8px 26px;font-size:15.5px;line-height:1.55}
-.o-liste li::before{content:'';position:absolute;left:0;top:12px;width:16px;height:16px;border-radius:50%;
-  background:var(--gold-wash) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.2 2.2 4.8-4.8' fill='none' stroke='%23A8852A' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
-.offre.mental .o-liste li::before{background-color:rgba(59,74,107,.08);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.2 2.2 4.8-4.8' fill='none' stroke='%233B4A6B' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-.offre.parents .o-liste li::before{background-color:rgba(93,111,74,.09);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.2 2.2 4.8-4.8' fill='none' stroke='%235D6F4A' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-.o-plus{display:none}
-.offre.ouverte .o-plus{display:block}
-.voir-plus{all:unset;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--dim);margin-top:6px;
-  display:inline-flex;align-items:center;gap:6px;padding:4px 0}
-.voir-plus:hover{color:var(--ink)}
-.voir-plus svg{transition:transform .25s var(--ease)}
-.offre.ouverte .voir-plus svg{transform:rotate(180deg)}
-.no-js .voir-plus{display:none}
-html:not(.js) .o-plus{display:block}
-html:not(.js) .voir-plus{display:none}
-.o-cta{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px;
-  background:var(--ink);color:var(--cream);text-decoration:none;font-weight:600;font-size:15.5px;
-  padding:17px 22px;border-radius:8px;min-height:54px;
-  transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s var(--ease)}
-.o-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(26,22,18,.2)}
-.offre.reco .o-cta{background:var(--gold)}
-.o-cta .fl{transition:transform .2s var(--ease)}
-.o-cta:hover .fl{transform:translateX(3px)}
-.o-cta.charge{pointer-events:none;opacity:.8}
-.o-cta.charge .fl{display:none}
-.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(253,250,245,.35);border-top-color:var(--cream);
-  animation:tourne .7s linear infinite;display:none}
-.o-cta.charge .spin{display:inline-block}
-@keyframes tourne{to{transform:rotate(360deg)}}
-.o-secu{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--dim);margin-top:10px}
-.o-note{font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.55;text-align:center}
-.o-note.alerte{background:rgba(59,74,107,.06);border-radius:8px;padding:10px 12px;text-align:left;color:var(--ink)}
-.o-devise{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;
-  color:var(--parent);margin:2px 0 12px;line-height:1.4}
+.o-cond{font-size:13px;color:var(--dim);margin-left:auto;text-align:right}
+.o-liste{margin:16px 0 0;list-style:none}
+.o-liste li{position:relative;padding:8px 0 8px 22px;font-size:15.5px;line-height:1.55;
+  border-top:1px dashed var(--line)}
+.o-liste li:first-child{border-top:none}
+.o-liste li::before{content:'';position:absolute;left:3px;top:17px;width:6px;height:6px;
+  border-radius:50%;background:var(--gold)}
+.offre.mental .o-liste li::before{background:var(--mental)}
+.offre.parents .o-liste li::before{background:var(--parent)}
+.o-cta{display:block;text-align:center;margin-top:20px;background:var(--ink);color:var(--cream);
+  text-decoration:none;font-weight:600;font-size:15.5px;letter-spacing:.02em;
+  padding:16px 22px;border-radius:5px;transition:.2s var(--ease)}
+.o-cta:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,22,18,.18)}
+.o-note{font-size:12.5px;color:var(--dim);margin-top:11px;line-height:1.55;text-align:center}
+.o-devise{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18.5px;
+  color:var(--parent);margin:2px 0 14px;line-height:1.4}
 
-/* ---------- après le paiement ---------- */
-.etapes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px;counter-reset:e}
-.etape{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 16px;position:relative}
-.etape::before{counter-increment:e;content:counter(e,decimal-leading-zero);display:block;
-  font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--gold);line-height:1;margin-bottom:8px}
-.etape b{display:block;font-size:15px;line-height:1.35;margin-bottom:4px}
-.etape span{font-size:13.5px;color:var(--dim);line-height:1.5;display:block}
-@media(max-width:560px){.etapes{grid-template-columns:1fr}.etape{display:grid;grid-template-columns:44px 1fr;column-gap:10px}
-  .etape::before{grid-row:span 2;margin:0}}
-
-/* ---------- essai ---------- */
-.essai{text-align:center;border:1.5px dashed var(--line-strong);border-radius:14px;
-  padding:30px 24px;margin-top:28px;background:rgba(255,255,255,.55)}
-.essai h3{font-size:26px;margin-bottom:8px}
+/* ---- essai ---- */
+.essai{text-align:center;border:1.5px dashed var(--line-strong);border-radius:10px;
+  padding:26px 24px;margin-top:26px;background:rgba(255,255,255,.5)}
+.essai h3{margin-bottom:8px}
 .essai p{font-size:15px;color:var(--dim);max-width:44ch;margin:0 auto 18px}
-.essai a{display:inline-flex;align-items:center;gap:9px;background:transparent;color:var(--ink);text-decoration:none;
-  font-weight:600;font-size:15px;padding:14px 26px;border-radius:8px;border:1.5px solid var(--ink);
-  transition:.2s var(--ease)}
-.essai a:hover{background:var(--ink);color:var(--cream)}
-.essai-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.essai-btns a{flex:1 1 220px;justify-content:center}
-.essai-btns a+a{border-color:var(--parent);color:var(--parent)}
-.essai-btns a+a:hover{background:var(--parent);color:var(--cream)}
+.essai a{display:inline-block;background:var(--gold);color:var(--cream);text-decoration:none;
+  font-weight:600;font-size:15px;padding:14px 32px;border-radius:5px;transition:.2s var(--ease)}
+.essai a:hover{transform:translateY(-2px)}
 
-/* ---------- blocs d'appui ---------- */
-.appui,.franc{border-radius:12px;padding:22px 24px;margin:22px 0}
-.appui{background:rgba(59,74,107,.06);border:1px solid rgba(59,74,107,.2)}
-.franc{background:rgba(122,59,46,.05);border:1px solid rgba(122,59,46,.24)}
-.appui .t,.franc .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin-bottom:8px}
-.appui .t{color:var(--mental)}
-.franc .t{color:var(--brique)}
-.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}
-.compare div{border-radius:12px;padding:18px;border:1px solid var(--line);background:var(--paper)}
-.compare div:last-child{border-color:var(--gold);background:var(--gold-wash)}
-.compare small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--dim)}
-.compare div:last-child small{color:var(--gold)}
-.compare strong{display:block;font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:34px;line-height:1.1;margin:6px 0 4px}
-.compare span{font-size:13.5px;color:var(--dim);line-height:1.45;display:block}
+/* ---- blocs d'appui ---- */
+.appui{background:rgba(59,74,107,.06);border:1px solid rgba(59,74,107,.22);
+  border-radius:8px;padding:22px 24px;margin:24px 0}
+.appui .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--mental);font-weight:700;margin-bottom:8px}
+.franc{background:rgba(122,59,46,.05);border:1px solid rgba(122,59,46,.26);
+  border-radius:8px;padding:22px 24px;margin:24px 0}
+.franc .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--brique);font-weight:700;margin-bottom:8px}
 
-/* ---------- commun ---------- */
-.commun{display:grid;gap:10px;margin-top:6px}
-.commun div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
-.commun b{display:block;font-size:15.5px;margin-bottom:3px}
-.commun span{color:var(--dim);font-size:14.5px;line-height:1.55;display:block}
+/* ---- commun ---- */
+.commun{padding:13px 0 13px 28px;position:relative;border-top:1px dashed var(--line);font-size:15.5px}
+.commun:first-of-type{border-top:none}
+.commun::before{content:'';position:absolute;left:5px;top:22px;width:7px;height:7px;
+  border-radius:50%;background:var(--gold)}
+.commun b{display:block}
+.commun span{color:var(--dim);font-size:14.5px}
 
-/* ---------- questions ---------- */
-.faq details{border-top:1px solid var(--line)}
-.faq details:last-child{border-bottom:1px solid var(--line)}
-.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
-  padding:18px 0;font-weight:600;font-size:16px;line-height:1.4}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary .pm{flex-shrink:0;width:26px;height:26px;border-radius:50%;border:1px solid var(--line-strong);
-  position:relative;transition:transform .25s var(--ease),background .2s var(--ease)}
-.faq summary .pm::before,.faq summary .pm::after{content:'';position:absolute;left:50%;top:50%;
-  width:10px;height:1.5px;background:var(--ink);transform:translate(-50%,-50%)}
-.faq summary .pm::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .25s var(--ease)}
-.faq details[open] summary .pm{background:var(--ink)}
-.faq details[open] summary .pm::before{background:var(--cream)}
-.faq details[open] summary .pm::after{transform:translate(-50%,-50%) rotate(0);background:var(--cream)}
-.faq .rep{padding:0 0 18px;font-size:15.5px;color:var(--dim)}
-.faq details[open] .rep{animation:monte .3s var(--ease)}
-.faq .rep a{font-weight:600}
+/* ---- questions ---- */
+.q{padding:17px 0;border-top:1px dashed var(--line)}
+.q:first-of-type{border-top:none}
+.q b{display:block;font-size:16px;margin-bottom:5px}
+.q p{font-size:15.5px;color:var(--dim);margin:0}
 
-/* ---------- qui ---------- */
 .qui{font-size:15.5px}
 .qui p{margin-bottom:12px}
-.signature{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;margin-top:18px;color:var(--gold)}
+.signature{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;margin-top:18px}
 
-/* ---------- écrire d'abord ---------- */
-.form-bloc{background:var(--paper);border:1px solid var(--line-strong);border-radius:14px;padding:24px;
-  box-shadow:var(--shadow-sm);margin-top:20px}
-.champ{margin-bottom:14px}
+/* ---- écrire d'abord ---- */
+.form-bloc{background:#fff;border:1px solid var(--line-strong);border-radius:10px;padding:24px}
+.champ{margin-bottom:13px}
 .champ label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--dim);margin-bottom:6px;font-weight:600}
-.champ input{width:100%;padding:14px;border:1.5px solid var(--line);border-radius:8px;
-  font-family:'DM Sans',sans-serif;font-size:16px;background:var(--cream);color:var(--ink);
-  transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
-.champ input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(168,133,42,.14)}
-.champ.err input{border-color:var(--err)}
-.champ.ok input{border-color:rgba(78,107,58,.55)}
-.champ .aide{font-size:12.5px;color:var(--err);margin-top:5px;min-height:0;display:none}
-.champ.err .aide{display:block}
-.form-bloc button{width:100%;margin-top:4px;padding:16px;border:none;border-radius:8px;min-height:54px;
+  color:var(--dim);margin-bottom:5px;font-weight:600}
+.champ input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:6px;
+  font-family:'DM Sans',sans-serif;font-size:15px;background:var(--cream);color:var(--ink)}
+.champ input:focus{outline:none;border-color:var(--gold)}
+.form-bloc button{width:100%;margin-top:6px;padding:15px;border:none;border-radius:6px;
   background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:600;
-  font-size:15.5px;cursor:pointer;transition:.2s var(--ease);display:flex;align-items:center;justify-content:center;gap:10px}
-.form-bloc button:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(26,22,18,.18)}
-.form-bloc button:disabled{opacity:.6;cursor:default;transform:none;box-shadow:none}
-.form-bloc button.charge .spin{display:inline-block}
-.form-rgpd{font-size:12px;color:var(--dim);text-align:center;margin-top:12px;line-height:1.5}
-.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.merci{display:none;text-align:center;padding:12px 4px}
-.merci.on{display:block;animation:monte .4s var(--ease)}
-.merci svg{display:block;margin:0 auto 14px}
-.merci .cercle{stroke-dasharray:160;stroke-dashoffset:160;animation:dessine .6s var(--ease) forwards}
-.merci .coche{stroke-dasharray:40;stroke-dashoffset:40;animation:dessine .35s var(--ease) .5s forwards}
-@keyframes dessine{to{stroke-dashoffset:0}}
-.merci h3{font-size:26px;margin-bottom:8px}
-.merci p{color:var(--dim);font-size:15px;max-width:40ch;margin:0 auto}
+  font-size:15px;cursor:pointer;transition:.18s}
+.form-bloc button:disabled{opacity:.45;cursor:default}
+.form-msg{font-size:14px;text-align:center;margin-top:12px;min-height:20px;color:var(--parent)}
+.form-msg.err{color:#9B2C2C}
 
-/* ---------- mantra ---------- */
-.lum{text-align:center;padding:56px 0 14px;border-top:1px solid var(--line)}
-.lum .s{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
-.lum p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,3.4vw,26px);
-  line-height:1.5;max-width:28ch;margin:0 auto}
+/* ---- mantra ---- */
+.lum{text-align:center;padding:50px 0 10px;border-top:1px solid var(--line)}
+.lum .s{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);
+  font-weight:700;margin-bottom:14px}
+.lum p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(19px,3vw,25px);
+  line-height:1.5;color:var(--ink);max-width:28ch;margin:0 auto}
 .lum p .g{color:var(--gold)}
 
-footer{padding:36px 0 50px;text-align:center;font-size:12px;color:var(--dim);border-top:1px solid var(--line);margin-top:40px}
+.cta{display:inline-block;margin-top:22px;background:var(--ink);color:var(--cream);
+  text-decoration:none;font-weight:600;font-size:16px;letter-spacing:.02em;
+  padding:17px 40px;border-radius:5px;transition:.2s var(--ease)}
+.rassure{font-size:13px;color:var(--dim);margin-top:16px;line-height:1.55}
+
+footer{padding:34px 0 46px;text-align:center;font-size:12px;color:var(--dim);
+  border-top:1px solid var(--line)}
 footer a{color:var(--dim)}
+
+/* ---- portail d'entrée ---- */
+body.verrou .wrap{display:none}
+body:not(.verrou) #portail{display:none}
+#portail{max-width:560px;margin:0 auto;padding:30px 22px 60px;position:relative;z-index:2}
+.pt-logo{text-align:center;margin-bottom:6px}
+.pt-logo .l{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:36px;letter-spacing:.2em;color:var(--gold);padding-right:.2em;line-height:.9}
+.pt-logo .s{font-size:7.5px;letter-spacing:.34em;color:var(--gold);font-weight:700;border-top:1px solid rgba(168,133,42,.4);display:inline-block;padding-top:5px;margin-top:5px}
+#portail h2{font-size:clamp(25px,6vw,33px);text-align:center;margin:26px 0 10px;line-height:1.02}
+.pt-intro{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--dim);text-align:center;margin-bottom:26px}
+.pt-etape{display:none}
+.pt-etape.on{display:block}
+.pt-choix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+@media(max-width:520px){.pt-choix{grid-template-columns:1fr}}
+.pt-btn{border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);
+  font-family:'DM Sans',sans-serif;font-size:15.5px;font-weight:600;padding:18px 14px;cursor:pointer;
+  transition:.16s;text-align:center;line-height:1.35}
+.pt-btn:hover{border-color:var(--gold);transform:translateY(-2px)}
+.pt-btn small{display:block;font-weight:400;font-size:13px;color:var(--dim);margin-top:4px}
+.pt-bloc{background:rgba(93,111,74,.06);border:1px solid rgba(93,111,74,.28);border-radius:9px;padding:20px 22px;margin:18px 0}
+.pt-bloc p{font-size:14.5px;margin-bottom:11px}
+.pt-bloc p:last-child{margin-bottom:0}
+.pt-sec{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.pt-sec-t{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
+.pt-champ{margin-bottom:12px}
+.pt-duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.pt-duo{grid-template-columns:1fr}}
+.pt-champ label{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:5px}
+.pt-champ input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:6px;
+  font-family:'DM Sans',sans-serif;font-size:15px;background:#fff;color:var(--ink)}
+.pt-champ input:focus{outline:none;border-color:var(--gold)}
+.pt-champ input.faux{border-color:#9B2C2C}
+.pt-puces{display:flex;flex-wrap:wrap;gap:7px}
+.pt-puce{border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:20px;
+  padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13.5px;cursor:pointer;transition:.14s}
+.pt-puce.sel{border-color:var(--gold);background:rgba(168,133,42,.1);color:var(--gold);font-weight:600}
+.pt-case{display:flex;gap:11px;align-items:flex-start;margin:13px 0;cursor:pointer}
+.pt-case input{margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:var(--gold);cursor:pointer}
+.pt-case span{font-size:14px;line-height:1.5}
+.pt-go{width:100%;margin-top:18px;padding:16px;border:none;border-radius:6px;background:var(--ink);
+  color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:600;font-size:15.5px;cursor:pointer;transition:.18s}
+.pt-go:disabled{opacity:.42;cursor:default}
+.pt-err{font-size:14px;color:#9B2C2C;text-align:center;margin-top:12px;min-height:19px}
+.pt-retour{background:none;border:none;color:var(--dim);font-family:'DM Sans',sans-serif;font-size:14px;
+  cursor:pointer;padding:0;margin-bottom:16px}
+.pt-retour:hover{color:var(--ink)}
+.pt-mini{font-size:12px;color:var(--dim);text-align:center;margin-top:16px;line-height:1.6}
+.pt-prog{height:2px;background:var(--line);border-radius:2px;margin:0 0 26px;overflow:hidden}
+.pt-prog i{display:block;height:100%;width:0;background:var(--gold);transition:width .35s var(--ease)}
+.pt-pas{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);text-align:center;margin-bottom:6px}
+.pt-gros{display:flex;flex-direction:column;gap:11px;margin-top:4px}
+.pt-gros .pt-btn{text-align:left;padding:19px 20px;font-size:16px}
+.pt-gros .pt-btn small{margin-top:3px}
+.pt-ligne{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-top:1px dashed var(--line);font-size:14.5px;line-height:1.5}
+.pt-ligne:first-of-type{border-top:none}
+.pt-ligne b{color:var(--ink)}
+.pt-ligne i{flex-shrink:0;width:6px;height:6px;border-radius:50%;background:var(--parent);margin-top:8px}
+.pt-confirm{font-size:12.5px;color:var(--dim);line-height:1.55;text-align:center;margin-top:16px}
+.reco{display:none;align-items:flex-start;gap:12px;background:rgba(168,133,42,.09);
+  border:1px solid rgba(168,133,42,.34);border-radius:9px;padding:16px 18px;margin:0 0 6px;font-size:15px;line-height:1.5}
+.reco.on{display:flex}
+.reco b{font-weight:600}
+.reco a{font-weight:600;text-decoration:none;border-bottom:1px solid rgba(168,133,42,.5)}
+
+
 .disc{font-size:11.5px;color:var(--dim);max-width:60ch;margin:14px auto 0;font-style:italic;line-height:1.6}
-
-/* ---------- barre d'action fixe ---------- */
-.barre{position:fixed;left:0;right:0;bottom:0;z-index:20;
-  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
-  background:rgba(253,250,245,.88);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);
-  border-top:1px solid var(--line);transform:translateY(110%);transition:transform .35s var(--ease)}
-.barre.on{transform:none}
-.barre-in{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.barre-txt{flex:1;min-width:0;line-height:1.25}
-.barre-txt small{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700}
-.barre-txt span{display:block;font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.barre a{flex-shrink:0;background:var(--ink);color:var(--cream);text-decoration:none;font-weight:600;font-size:14.5px;
-  padding:13px 18px;border-radius:8px;transition:background .2s var(--ease)}
-.barre.choisi #barreLien{background:var(--gold)}
-.barre-btns{display:flex;gap:8px;flex-shrink:0}
-.barre a.essayer{background:transparent;color:var(--ink);border:1.5px solid var(--ink);padding:11.5px 16px}
-.barre a.essayer:hover{background:var(--ink);color:var(--cream)}
-@media(max-width:620px){
-  .barre-in{flex-direction:column;align-items:stretch;gap:8px}
-  .barre-txt{text-align:center}
-  .barre-btns{width:100%}
-  .barre-btns a{flex:1;text-align:center;font-size:13.5px;padding:11px 8px;line-height:1.25;
-    display:flex;align-items:center;justify-content:center}
-  .barre a.essayer{padding:9.5px 8px}
-}
-
-/* ---------- apparitions ---------- */
-.js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.js .rv.in{opacity:1;transform:none}
-.flash{animation:flash 1.4s var(--ease)}
-@keyframes flash{0%{box-shadow:0 0 0 0 rgba(168,133,42,.5)}100%{box-shadow:0 0 0 18px rgba(168,133,42,0),var(--shadow-lg)}}
-
-@media(max-width:420px){
-  .o-cond{margin-left:0;text-align:left;width:100%}
-  .compare{grid-template-columns:1fr}
-  .choix .age{min-width:64px;font-size:19px}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-  html{scroll-behavior:auto}
-  .piste .trace{stroke-dashoffset:0}
-  .js .rv{opacity:1;transform:none}
-  .merci .cercle,.merci .coche{stroke-dashoffset:0}
-}
 </style>
 </head>
 <body>
+<script>
+/* Posé avant le premier rendu : la page reste masquée tant que le portail n'est pas passé.
+   Si le visiteur l'a déjà rempli sur cet appareil, on ne le lui redemande pas. */
+(function(){
+  try{ if(localStorage.getItem('axe_portail_v1')) return; }catch(e){}
+  document.body.className = (document.body.className + ' verrou').trim();
+})();
+</script>
 
-<div class="piste" aria-hidden="true">
+<div class="piste">
 <svg viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" fill="none">
-<path class="trace" d="M-50 700 C 220 700 260 460 460 460 C 660 460 690 260 900 260 C 1080 260 1140 140 1260 140" stroke="#1A1612" stroke-width="1" opacity="0.09"/>
-<path d="M-50 760 C 240 760 300 540 520 540 C 740 540 780 340 980 340 C 1140 340 1200 220 1260 220" stroke="#A8852A" stroke-width="1.2" opacity="0.16" stroke-dasharray="2 11" stroke-linecap="round"/>
+<path d="M-50 700 C 220 700 260 460 460 460 C 660 460 690 260 900 260 C 1080 260 1140 140 1260 140" stroke="#1A1612" stroke-width="1" opacity="0.08"/>
+<path d="M-50 760 C 240 760 300 540 520 540 C 740 540 780 340 980 340 C 1140 340 1200 220 1260 220" stroke="#A8852A" stroke-width="1.2" opacity="0.14" stroke-dasharray="2 11" stroke-linecap="round"/>
 </svg>
+</div>
+
+
+<div id="portail">
+  <div class="pt-logo"><div class="l">AXE</div><br><div class="s">MENTAL PERFORMANCE®</div></div>
+  <div class="pt-pas" id="ptPas">Étape 1 sur 3</div>
+  <div class="pt-prog"><i id="ptBarre" style="width:33%"></i></div>
+
+  <!-- 1. pour qui, en un seul geste -->
+  <div class="pt-etape on" id="pt1">
+    <h2>C'EST POUR QUI ?</h2>
+    <p class="pt-intro">Une question, et je vous emmène directement au bon endroit.</p>
+    <div class="pt-gros">
+      <button type="button" class="pt-btn" onclick="ptProfil('majeur_parent')">Pour mon enfant<small>Ou pour un sportif dont je suis responsable</small></button>
+      <button type="button" class="pt-btn" onclick="ptProfil('majeur_sportif')">Pour moi, je suis majeur<small>Je suis le sportif</small></button>
+      <button type="button" class="pt-btn" onclick="ptEtape('pt1b')">Je suis mineur<small>J'ai moins de 18 ans</small></button>
+    </div>
+  </div>
+
+  <!-- 1 bis. le cadre, court -->
+  <div class="pt-etape" id="pt1b">
+    <button type="button" class="pt-retour" onclick="ptEtape('pt1')">← Retour</button>
+    <h2>APPELLE UN DE TES PARENTS</h2>
+    <p class="pt-intro">Trente secondes, et on continue ensemble.</p>
+    <div class="pt-ligne"><i></i><div><b>Tu ne peux pas souscrire seul.</b> C'est la loi, et c'est une protection pour toi.</div></div>
+    <div class="pt-ligne"><i></i><div><b>C'est lui qui s'inscrit et qui paie</b>, sous sa responsabilité.</div></div>
+    <div class="pt-ligne"><i></i><div><b>Le protocole reste le tien.</b> Ton espace est à toi, et ce que tu y écris t'appartient.</div></div>
+    <div class="pt-ligne"><i style="background:var(--brique)"></i><div><b>Ce n'est pas un suivi médical.</b> Ça ne remplace pas un médecin.</div></div>
+    <button type="button" class="pt-go" onclick="ptProfil('mineur')">Il est à côté de moi, on continue</button>
+  </div>
+
+  <!-- 2. le sportif -->
+  <div class="pt-etape" id="pt2">
+    <button type="button" class="pt-retour" onclick="ptRetour()">← Retour</button>
+    <h2 id="pt2Titre">LE SPORTIF</h2>
+    <p class="pt-intro" id="pt2Sous">Cinq secondes, et c'est ce qui me permet de vous orienter.</p>
+    <div class="pt-duo">
+      <div class="pt-champ"><label for="rp">Prénom</label><input type="text" id="rp" autocomplete="off"></div>
+      <div class="pt-champ"><label for="rn">Nom</label><input type="text" id="rn" autocomplete="off"></div>
+    </div>
+    <div class="pt-champ" style="max-width:140px"><label for="rage">Âge</label><input type="number" id="rage" min="4" max="99" inputmode="numeric"></div>
+    <div class="pt-champ"><label>Sport</label><div class="pt-puces" id="ptSports"></div></div>
+    <div class="pt-champ" id="ptAutreSport" style="display:none"><label for="rsportautre">Lequel ?</label><input type="text" id="rsportautre"></div>
+    <div class="pt-champ"><label>Niveau</label><div class="pt-puces" id="ptNiveaux"></div></div>
+    <button type="button" class="pt-go" id="ptGo2" disabled onclick="ptVersContact()">Continuer</button>
+  </div>
+
+  <!-- 3. le contact -->
+  <div class="pt-etape" id="pt3">
+    <button type="button" class="pt-retour" onclick="ptEtape('pt2')">← Retour</button>
+    <h2 id="pt3Titre">OÙ JE VOUS RÉPONDS</h2>
+    <p class="pt-intro" id="pt3Sous">Je réponds personnellement, et je ne transmets rien à personne.</p>
+
+    <div id="ptBlocParent">
+      <div class="pt-duo">
+        <div class="pt-champ"><label for="pp">Votre prénom</label><input type="text" id="pp" autocomplete="given-name"></div>
+        <div class="pt-champ"><label for="pn">Votre nom</label><input type="text" id="pn" autocomplete="family-name"></div>
+      </div>
+    </div>
+    <div class="pt-duo">
+      <div class="pt-champ"><label for="pe" id="lpe">Votre email</label><input type="email" id="pe" autocomplete="email" inputmode="email"></div>
+      <div class="pt-champ"><label for="ptel" id="lptel">Votre téléphone</label><input type="tel" id="ptel" autocomplete="tel" inputmode="tel"></div>
+    </div>
+    <div class="pt-duo" id="ptBlocRider">
+      <div class="pt-champ"><label for="re">Email du sportif <span style="text-transform:none;letter-spacing:0">(si il en a un)</span></label><input type="email" id="re" inputmode="email"></div>
+      <div class="pt-champ"><label for="rtel">Son téléphone <span style="text-transform:none;letter-spacing:0">(facultatif)</span></label><input type="tel" id="rtel" inputmode="tel"></div>
+    </div>
+
+    <button type="button" class="pt-go" id="ptGo" disabled onclick="ptEnvoyer()">Voir les trois accès</button>
+    <p class="pt-confirm" id="ptConfirm"></p>
+    <div class="pt-err" id="ptErr"></div>
+  </div>
 </div>
 
 <div class="wrap">
 
-  <header class="hero" id="haut">
+  <div class="reco" id="reco"><span style="color:var(--gold);font-size:17px;line-height:1.2">★</span><div id="recoTxt"></div></div>
+
+  <div class="hero">
     <div class="logo">
       <div class="lettres">AXE</div>
       <div class="sous">MENTAL PERFORMANCE®</div>
     </div>
     <div class="eyebrow">Tous sports · à partir de 6 ans</div>
-    <h1>TROIS ACCÈS.<br><span class="g">UN SEUL EST LE VÔTRE.</span></h1>
-    <p class="lead">Préparation mentale et physique du jeune sportif en compétition, construite sur mesure, sport par sport.</p>
-    <div class="garanties">
-      <span>Sans engagement</span>
-      <span>Accès ouvert en quelques minutes</span>
-      <span>Je réponds moi-même</span>
-    </div>
-    <a class="descendre" href="#trouver">Trouver le bon accès en 3 secondes
-      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 2v10M2.5 7.5 7 12l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <h1>TROIS ACCÈS.<br>UN SEUL EST LE VÔTRE.</h1>
+    <div class="lead">Préparation mentale et physique du jeune sportif en compétition, construite sur mesure, sport par sport.</div>
     <div class="sports">
       <b>BMX Race · Motocross · Football · Tennis · Judo</b><br>
       <b>Natation · Athlétisme · Basket · Handball · Gymnastique</b><br>
       et tous les autres : la mécanique ne change pas, l'exemple change.
     </div>
-  </header>
+  </div>
 
-  <section id="trouver" style="border-top:none;padding-top:20px">
-    <h2 class="rv">COMMENCEZ PAR L'ÂGE</h2>
-    <p class="intro rv">C'est le seul critère qui tranche vraiment. Avant douze ans, ce n'est pas l'enfant qu'on accompagne.</p>
+  <section style="border-top:none">
+    <h2>COMMENCEZ PAR L'ÂGE</h2>
+    <p style="color:var(--dim);font-size:15.5px">C'est le seul critère qui tranche vraiment. Avant douze ans, ce n'est pas l'enfant qu'on accompagne.</p>
 
-    <div class="selecteur rv" role="group" aria-label="Choisir la situation du sportif">
-      <div class="sel-t">Votre situation</div>
-      <div class="choix">
-        <button type="button" data-cible="parents" aria-pressed="false">
-          <span class="age">6 à 12 ans</span>
-          <span class="txt">C'est vous qu'on accompagne, pas lui.</span>
-          <span class="rond" aria-hidden="true"></span>
-        </button>
-        <button type="button" data-cible="complet" aria-pressed="false">
-          <span class="age">12 ans +</span>
-          <span class="txt">Personne ne programme vraiment son travail physique.</span>
-          <span class="rond" aria-hidden="true"></span>
-        </button>
-        <button type="button" data-cible="mental" aria-pressed="false">
-          <span class="age">12 ans +</span>
-          <span class="txt">Un vrai travail physique est déjà programmé et suivi à côté.</span>
-          <span class="rond" aria-hidden="true"></span>
-        </button>
+    <div class="aiguillage">
+      <div class="aig-t">En trois secondes</div>
+      <div class="aig-l">
+        <div class="aig-age">6 à 12 ans</div>
+        <div class="aig-q">C'est vous qu'on accompagne, pas lui. <a href="#parents">Le protocole parents</a></div>
       </div>
-      <div class="verdict" id="verdict" aria-live="polite">
-        <p>Pour vous : <b id="verdictNom"></b></p>
-        <a href="#" id="verdictLien">Voir le détail ↓</a>
+      <div class="aig-l">
+        <div class="aig-age">12 ans et plus</div>
+        <div class="aig-q">Un vrai travail physique est déjà programmé à côté ? <a href="#mental">Le protocole mental</a>. Sinon, <a href="#complet">le protocole complet</a>.</div>
       </div>
     </div>
   </section>
 
-  <section id="acces">
-    <h2 class="rv">LES TROIS ACCÈS</h2>
+  <section>
+    <h2>LES TROIS ACCÈS</h2>
 
-    <div class="offres" id="offres">
+    <div class="offre" id="complet">
+      <div class="o-rang">Accès 01 · Dès 12 ans</div>
+      <h3>LE PROTOCOLE COMPLET</h3>
+      <div class="o-pour">Le mental et le physique, construits ensemble et jamais l'un sans l'autre. C'est l'accès par défaut, et celui que prennent neuf sportifs sur dix.</div>
 
-      <article class="offre rv" id="complet" data-nom="Le protocole complet" data-prix="89 €/mois">
-        <span class="badge defaut">Accès par défaut</span>
-        <span class="badge pour-vous">Recommandé pour vous</span>
-        <div class="o-rang">Accès 01 · Dès 12 ans</div>
-        <h3>LE PROTOCOLE COMPLET</h3>
-        <div class="o-pour">Le mental et le physique, construits ensemble et jamais l'un sans l'autre. C'est l'accès par défaut, et celui que prennent neuf sportifs sur dix.</div>
-        <div class="o-prix">
-          <span class="o-montant">89 €</span>
-          <span class="o-unite">par mois</span>
-          <span class="o-cond">Sans engagement<br>Résiliable en un clic</span>
-        </div>
-        <ul class="o-liste">
-          <li>Un diagnostic d'entrée dès l'ouverture de sa page : ce qui bloque vraiment, avant qu'on ne construise quoi que ce soit.</li>
-          <li>Le travail physique construit pour son sport, son âge et son niveau, deux à trois séances par semaine, en salle ou au poids du corps.</li>
-          <li>Le travail mental sur ce qui le gêne à lui : l'enjeu, le départ, la chute, le regard des autres.</li>
-        </ul>
-        <ul class="o-liste o-plus">
-          <li>Sa page personnelle, sur son téléphone, qui lui donne quoi faire et quand.</li>
-          <li>Un programme qui se remoule chaque mois à partir de son propre bilan, et des échanges vocaux avec moi.</li>
-        </ul>
-        <button type="button" class="voir-plus" aria-expanded="false">Tout ce qui est inclus
-          <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <a class="o-cta" href="https://buy.stripe.com/00wdR86hScr4dlz2lg8IU0n">
-          <span class="spin" aria-hidden="true"></span>
-          <span class="lib">Rejoindre le protocole complet · 89 €/mois</span>
-          <span class="fl" aria-hidden="true">→</span></a>
-        <div class="o-secu"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5.2" width="8" height="5.6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 5.2V3.8a2 2 0 0 1 4 0v1.4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>Paiement sécurisé par Stripe · Carte, Apple Pay, Google Pay</div>
-        <div class="o-note">Votre code d'accès arrive par email dans les minutes qui suivent. Le diagnostic se fait sur sa page, rien à remplir avant.</div>
-      </article>
-
-      <article class="offre mental rv" id="mental" data-nom="Le protocole mental" data-prix="49 €/mois">
-        <span class="badge pour-vous">Recommandé pour vous</span>
-        <div class="o-rang">Accès 02 · Dès 12 ans</div>
-        <h3>LE PROTOCOLE MENTAL</h3>
-        <div class="o-pour">Tout le volet mental, et rien du physique. Pour celui dont la préparation physique est déjà prise en charge sérieusement : plusieurs séances par semaine, programmées et suivies par quelqu'un.</div>
-        <div class="o-prix">
-          <span class="o-montant">49 €</span>
-          <span class="o-unite">par mois</span>
-          <span class="o-cond">Sans engagement<br>Résiliable en un clic</span>
-        </div>
-        <ul class="o-liste">
-          <li>Le même diagnostic d'entrée, et la même construction sur mesure selon l'âge, le sport et le niveau.</li>
-          <li>La préparation des moments qui comptent, et ce qu'on fait de ce qui s'est mal passé.</li>
-          <li>Aucune interférence avec son entraînement actuel : je ne touche pas au travail de celui qui le prépare physiquement.</li>
-        </ul>
-        <ul class="o-liste o-plus">
-          <li>Sa page personnelle, avec le travail mental seul : aucun exercice physique ne s'y affichera.</li>
-          <li>Le même suivi, les mêmes échanges vocaux, le même programme qui se remoule chaque mois.</li>
-        </ul>
-        <button type="button" class="voir-plus" aria-expanded="false">Tout ce qui est inclus
-          <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <div class="o-note alerte"><b>Attention au contresens :</b> être inscrit dans un club ne suffit pas. L'entraînement du sport n'est pas de la préparation physique. Si personne ne programme vraiment son travail physique, prenez le protocole complet.</div>
-        <a class="o-cta" href="https://buy.stripe.com/3cI7sKbCc4YCgxL3pk8IU0p">
-          <span class="spin" aria-hidden="true"></span>
-          <span class="lib">Rejoindre le protocole mental · 49 €/mois</span>
-          <span class="fl" aria-hidden="true">→</span></a>
-        <div class="o-secu"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5.2" width="8" height="5.6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 5.2V3.8a2 2 0 0 1 4 0v1.4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>Paiement sécurisé par Stripe · Carte, Apple Pay, Google Pay</div>
-      </article>
-
-      <article class="offre parents rv" id="parents" data-nom="Le protocole parents" data-prix="120 €">
-        <span class="badge pour-vous">Recommandé pour vous</span>
-        <div class="o-rang">Accès 03 · Enfant de 6 à 12 ans</div>
-        <h3>LE PROTOCOLE PARENTS</h3>
-        <div class="o-devise">L'enfant « sportif » se construit, le parent aussi.</div>
-        <div class="o-pour">Quatre semaines pendant lesquelles votre enfant n'a rien à faire. Rien à lire, rien à remplir. Il ne saura même pas que ce protocole existe.</div>
-        <div class="o-prix">
-          <span class="o-montant">120 €</span>
-          <span class="o-unite">pour 4 semaines</span>
-          <span class="o-cond">Paiement unique<br>Rien à résilier</span>
-        </div>
-        <ul class="o-liste">
-          <li>Un comportement par semaine, dans quatre moments précis : les trois minutes d'après, la première question, quand l'enjeu monte, et ce qu'on dit quand ça va bien.</li>
-          <li>Le mémo du jour de compétition, de la veille au soir. C'est la page que vous ouvrez dans la voiture.</li>
-          <li>Un échange vocal avec moi après chaque essai, et j'ajuste la semaine suivante.</li>
-        </ul>
-        <ul class="o-liste o-plus">
-          <li>Trois occasions par semaine, à l'entraînement, en compétition ou à la maison. Une seule suffit, donc un mois sans course n'est pas un problème.</li>
-          <li>Un bilan chiffré : cinq questions à l'entrée, les cinq mêmes à la fin, et la comparaison côte à côte.</li>
-        </ul>
-        <button type="button" class="voir-plus" aria-expanded="false">Tout ce qui est inclus
-          <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <a class="o-cta" href="https://buy.stripe.com/3cI14m7lWaiWdlz3pk8IU0q">
-          <span class="spin" aria-hidden="true"></span>
-          <span class="lib">Commencer le protocole parents · 120 €</span>
-          <span class="fl" aria-hidden="true">→</span></a>
-        <div class="o-secu"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5.2" width="8" height="5.6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 5.2V3.8a2 2 0 0 1 4 0v1.4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>Paiement sécurisé par Stripe · Carte, Apple Pay, Google Pay</div>
-        <div class="o-note">Page accessible trois mois, pour garder le mémo après la fin. <a href="demo-parents.html" style="font-weight:600">Essayer la démo parents, 2 minutes</a></div>
-      </article>
-    </div>
-
-    <div class="rv">
-      <h3 style="font-size:24px;margin-top:40px">ET JUSTE APRÈS LE PAIEMENT</h3>
-      <div class="etapes">
-        <div class="etape"><b>Vous payez</b><span>Une minute, sur la page sécurisée de Stripe.</span></div>
-        <div class="etape"><b>Le code arrive</b><span>Par email, dans les minutes qui suivent.</span></div>
-        <div class="etape"><b>Sa page s'ouvre</b><span>Le diagnostic se fait dedans. Rien à remplir avant.</span></div>
+      <div class="o-prix">
+        <span class="o-montant">89 €</span>
+        <span class="o-unite">par mois</span>
+        <span class="o-cond">Sans engagement<br>Résiliable à tout moment</span>
       </div>
+
+      <ul class="o-liste">
+        <li>Un diagnostic d'entrée dès l'ouverture de sa page : ce qui bloque vraiment, avant qu'on ne construise quoi que ce soit.</li>
+        <li>Sa page personnelle, sur son téléphone, qui lui donne quoi faire et quand.</li>
+        <li>Le travail physique construit pour son sport, son âge et son niveau, deux à trois séances par semaine, en salle ou au poids du corps.</li>
+        <li>Le travail mental sur ce qui le gêne à lui : l'enjeu, le départ, la chute, le regard des autres.</li>
+        <li>Un programme qui se remoule chaque mois à partir de son propre bilan, et des échanges vocaux avec moi.</li>
+      </ul>
+
+      <a class="o-cta" href="https://buy.stripe.com/00wdR86hScr4dlz2lg8IU0n">Rejoindre le protocole complet · 89 €/mois</a>
+      <div class="o-note">Votre code d'accès arrive par email dans les minutes qui suivent. Le diagnostic se fait sur sa page, rien à remplir avant. L'inscription et le paiement sont faits par un adulte.</div>
     </div>
 
-    <div class="essai rv">
+    <div class="offre mental" id="mental">
+      <div class="o-rang">Accès 02 · Dès 12 ans</div>
+      <h3>LE PROTOCOLE MENTAL</h3>
+      <div class="o-pour">Tout le volet mental, et rien du physique. Pour celui dont la préparation physique est déjà prise en charge sérieusement : plusieurs séances par semaine, programmées et suivies par quelqu'un.</div>
+
+      <div class="o-prix">
+        <span class="o-montant">49 €</span>
+        <span class="o-unite">par mois</span>
+        <span class="o-cond">Sans engagement<br>Résiliable à tout moment</span>
+      </div>
+
+      <ul class="o-liste">
+        <li>Le même diagnostic d'entrée, et la même construction sur mesure selon l'âge, le sport et le niveau.</li>
+        <li>Sa page personnelle, avec le travail mental seul : aucun exercice physique ne s'y affichera.</li>
+        <li>La préparation des moments qui comptent, et ce qu'on fait de ce qui s'est mal passé.</li>
+        <li>Le même suivi, les mêmes échanges vocaux, le même programme qui se remoule chaque mois.</li>
+        <li>Aucune interférence avec son entraînement actuel : je ne touche pas au travail de celui qui le prépare physiquement.</li>
+      </ul>
+
+      <a class="o-cta" href="https://buy.stripe.com/3cI7sKbCc4YCgxL3pk8IU0p">Rejoindre le protocole mental · 49 €/mois</a>
+      <div class="o-note">Attention au contresens : être inscrit dans un club ne suffit pas. L'entraînement du sport n'est pas de la préparation physique. Si personne ne programme vraiment son travail physique, prenez le protocole complet.</div>
+    </div>
+
+    <div class="offre parents" id="parents">
+      <div class="o-rang">Accès 03 · Enfant de 6 à 12 ans</div>
+      <h3>LE PROTOCOLE PARENTS</h3>
+      <div class="o-devise">L'enfant « sportif » se construit, le parent aussi.</div>
+      <div class="o-pour">Quatre semaines pendant lesquelles votre enfant n'a rien à faire. Rien à lire, rien à remplir. Il ne saura même pas que ce protocole existe.</div>
+
+      <div class="o-prix">
+        <span class="o-montant">120 €</span>
+        <span class="o-unite">pour 4 semaines</span>
+        <span class="o-cond">Paiement unique<br>Rien à résilier</span>
+      </div>
+
+      <ul class="o-liste">
+        <li>Un comportement par semaine, dans quatre moments précis : les trois minutes d'après, la première question, quand l'enjeu monte, et ce qu'on dit quand ça va bien.</li>
+        <li>Le mémo du jour de compétition, de la veille au soir. C'est la page que vous ouvrez dans la voiture.</li>
+        <li>Trois occasions par semaine, à l'entraînement, en compétition ou à la maison. Une seule suffit, donc un mois sans course n'est pas un problème.</li>
+        <li>Un échange vocal avec moi après chaque essai, et j'ajuste la semaine suivante.</li>
+        <li>Un bilan chiffré : cinq questions à l'entrée, les cinq mêmes à la fin, et la comparaison côte à côte.</li>
+      </ul>
+
+      <a class="o-cta" href="https://buy.stripe.com/3cI14m7lWaiWdlz3pk8IU0q">Commencer le protocole parents · 120 €</a>
+      <div class="o-note">Votre code d'accès arrive par email dans les minutes qui suivent. Page accessible trois mois, pour garder le mémo après la fin.</div>
+    </div>
+
+    <div class="essai">
       <h3>PAS ENVIE DE PAYER SANS AVOIR VU ?</h3>
-      <p>Deux minutes, sans rien payer. Côté sportif : un test debout dès les trente premières secondes, son profil, et un exercice chronométré avec un chiffre avant et un chiffre après. Côté parents : quatre situations du quotidien, vos réflexes, et la phrase à essayer dès la prochaine compétition.</p>
-      <div class="essai-btns">
-        <a href="demo-axe.html">Démo sportif · dès 12 ans <span aria-hidden="true">→</span></a>
-        <a href="demo-parents.html">Démo parents · 6 à 12 ans <span aria-hidden="true">→</span></a>
-      </div>
+      <p>Deux minutes. Un test debout dès les trente premières secondes, votre profil, et un exercice chronométré qui vous donne un chiffre avant et un chiffre après. C'est la façon la plus honnête de savoir si c'est fait pour vous.</p>
+      <a href="demo-axe.html">Essayer le protocole · 2 minutes</a>
     </div>
   </section>
 
   <section>
-    <h2 class="rv">CE QUE LES TROIS ONT EN COMMUN</h2>
-    <div class="commun">
-      <div class="rv"><b>C'est construit pour lui, pas pour une catégorie</b>
-        <span>Âge, sport, niveau et résultat du diagnostic. Deux sportifs du même club ne reçoivent pas la même chose.</span></div>
-      <div class="rv"><b>Ça se remoule chaque mois</b>
-        <span>À la fin de chaque mois, il fait son bilan, et le programme du mois suivant est reconstruit à partir de ce qu'il a écrit. Ce n'est pas un contenu figé qu'on déroule.</span></div>
-      <div class="rv"><b>Tout tient sur un téléphone</b>
-        <span>Une page personnelle, installable sur l'écran d'accueil. Rien à télécharger, rien à imprimer.</span></div>
-      <div class="rv"><b>Vous me parlez, pas à un support</b>
-        <span>Les vocaux arrivent directement chez moi, et c'est moi qui réponds. Je n'ai pas d'équipe.</span></div>
-      <div class="rv"><b>Je dis non quand c'est non</b>
-        <span>Trop jeune, sujet qui relève du médecin, entraîneur qui fait déjà le travail : dans ces cas-là je vous le dis, et je vous rembourse.</span></div>
-    </div>
+    <h2>CE QUE LES TROIS ONT EN COMMUN</h2>
+
+    <div class="commun"><b>C'est construit pour lui, pas pour une catégorie</b>
+      <span>Âge, sport, niveau et résultat du diagnostic. Deux sportifs du même club ne reçoivent pas la même chose.</span></div>
+
+    <div class="commun"><b>Ça se remoule chaque mois</b>
+      <span>À la fin de chaque mois, il fait son bilan, et le programme du mois suivant est reconstruit à partir de ce qu'il a écrit. Ce n'est pas un contenu figé qu'on déroule.</span></div>
+
+    <div class="commun"><b>Tout tient sur un téléphone</b>
+      <span>Une page personnelle, installable sur l'écran d'accueil. Rien à télécharger, rien à imprimer.</span></div>
+
+    <div class="commun"><b>Vous me parlez, pas à un support</b>
+      <span>Les vocaux arrivent directement chez moi, et c'est moi qui réponds. Je n'ai pas d'équipe.</span></div>
+
+    <div class="commun"><b>Je dis non quand c'est non</b>
+      <span>Trop jeune, sujet qui relève du médecin, entraîneur qui fait déjà le travail : dans ces cas-là je vous le dis, et je vous rembourse.</span></div>
   </section>
 
   <section>
-    <h2 class="rv">POURQUOI CE PRIX</h2>
-    <p class="rv">Une séance de préparation mentale en cabinet coûte entre 60 et 90 €, et elle dure une heure. Après quoi votre enfant repart seul jusqu'à la suivante, et c'est précisément entre les séances que tout se joue.</p>
+    <h2>POURQUOI CE PRIX</h2>
 
-    <div class="compare rv">
-      <div><small>Une séance en cabinet</small><strong>60 à 90 €</strong><span>Une heure. Puis seul jusqu'à la suivante.</span></div>
-      <div><small>Le protocole complet</small><strong>89 € / mois</strong><span>Le mois entier : physique, mental, et moi au bout du fil.</span></div>
-    </div>
+    <p>Une séance de préparation mentale en cabinet coûte entre 60 et 90 €, et elle dure une heure. Après quoi votre enfant repart seul jusqu'à la suivante, et c'est précisément entre les séances que tout se joue.</p>
 
-    <div class="appui rv">
+    <div class="appui">
       <div class="t">Ce que vous payez vraiment</div>
-      <p>Le protocole complet coûte le prix d'une séance en cabinet, mais il couvre le mois entier : le travail physique, le travail mental, et moi au bout du fil quand ça ne va pas. Le protocole mental, lui, coûte moins qu'une séance.</p>
+      <p style="margin-bottom:0">Le protocole complet coûte le prix d'une séance en cabinet, mais il couvre le mois entier : le travail physique, le travail mental, et moi au bout du fil quand ça ne va pas. Le protocole mental, lui, coûte moins qu'une séance.</p>
     </div>
 
-    <div class="franc rv">
+    <div class="franc">
       <div class="t">Autant être clair tout de suite</div>
       <p>Je ne peux pas vous promettre qu'il gagnera. Personne ne contrôle les autres concurrents, le tirage, sa croissance ni la chance, et c'est l'essentiel du résultat.</p>
-      <p>Ce qui se contrôle, c'est ce qu'il fait des vingt secondes avant, et de la minute après. C'est ça que je travaille, et c'est ça que je vends. Si on vous promet autre chose, méfiez-vous.</p>
+      <p style="margin-bottom:0">Ce qui se contrôle, c'est ce qu'il fait des vingt secondes avant, et de la minute après. C'est ça que je travaille, et c'est ça que je vends. Si on vous promet autre chose, méfiez-vous.</p>
     </div>
   </section>
 
-  <section class="faq">
-    <h2 class="rv">LES QUESTIONS QU'ON ME POSE</h2>
+  <section>
+    <h2>LES QUESTIONS QU'ON ME POSE</h2>
 
-    <details class="rv"><summary>Mon enfant a exactement 12 ans. Lequel des trois ?<span class="pm" aria-hidden="true"></span></summary>
-      <div class="rep">Les deux se défendent, et ça dépend de lui, pas du chiffre. S'il est capable d'ouvrir sa page seul et de faire ce qui y est écrit sans qu'on le lui rappelle, prenez un protocole sportif. Sinon, commencez par le protocole parents, et il basculera quand il sera prêt. Dans le doute, <a href="#ecrire">écrivez-moi avant de payer</a>.</div></details>
+    <div class="q"><b>Mon enfant a exactement 12 ans. Lequel des trois ?</b>
+      <p>Les deux se défendent, et ça dépend de lui, pas du chiffre. S'il est capable d'ouvrir sa page seul et de faire ce qui y est écrit sans qu'on le lui rappelle, prenez un protocole sportif. Sinon, commencez par le protocole parents, et il basculera quand il sera prêt. Dans le doute, écrivez-moi avant de payer.</p></div>
 
-    <details class="rv"><summary>Comment savoir si sa préparation physique est vraiment suivie ?<span class="pm" aria-hidden="true"></span></summary>
-      <div class="rep">Posez-vous une question simple : est-ce que quelqu'un décide, chaque semaine, du contenu de son travail physique, et est-ce qu'il ajuste quand votre enfant fatigue ? Si la réponse est non, ce qu'il fait est de l'entraînement de son sport, pas de la préparation physique. Dans ce cas, c'est <a href="#complet">le protocole complet</a> qu'il lui faut.</div></details>
+    <div class="q"><b>Comment savoir si sa préparation physique est vraiment suivie ?</b>
+      <p>Posez-vous une question simple : est-ce que quelqu'un décide, chaque semaine, du contenu de son travail physique, et est-ce qu'il ajuste quand votre enfant fatigue ? Si la réponse est non, ce qu'il fait est de l'entraînement de son sport, pas de la préparation physique. Dans ce cas, c'est le protocole complet qu'il lui faut.</p></div>
 
-    <details class="rv"><summary>Mon sport n'est pas dans votre liste.<span class="pm" aria-hidden="true"></span></summary>
-      <div class="rep">Ce n'est pas un problème. Le départ en BMX, le service au tennis, le plot en natation et le penalty au football posent la même question, et elle n'a rien de technique. Le diagnostic me donne ce qu'il me faut pour construire sur votre sport.</div></details>
+    <div class="q"><b>Mon sport n'est pas dans votre liste.</b>
+      <p>Ce n'est pas un problème. Le départ en BMX, le service au tennis, le plot en natation et le penalty au football posent la même question, et elle n'a rien de technique. Le diagnostic me donne ce qu'il me faut pour construire sur votre sport.</p></div>
 
-    <details class="rv"><summary>Sans engagement, ça veut dire quoi au juste ?<span class="pm" aria-hidden="true"></span></summary>
-      <div class="rep">Vous payez au mois, et vous arrêtez quand vous voulez, sans préavis et sans justification. Le bouton de résiliation est dans sa page, vous n'avez pas à m'écrire pour ça. L'accès reste ouvert jusqu'à la date anniversaire du dernier mois payé. Le protocole parents, lui, n'est pas un abonnement : c'est un paiement unique, il n'y a rien à résilier.</div></details>
+    <div class="q"><b>Sans engagement, ça veut dire quoi au juste ?</b>
+      <p>Vous payez au mois, et vous arrêtez quand vous voulez, sans préavis et sans justification. Le bouton de résiliation est dans sa page, vous n'avez pas à m'écrire pour ça. L'accès reste ouvert jusqu'à la date anniversaire du dernier mois payé. Le protocole parents, lui, n'est pas un abonnement : c'est un paiement unique, il n'y a rien à résilier.</p></div>
 
-    <details class="rv"><summary>Combien de temps avant de voir quelque chose ?<span class="pm" aria-hidden="true"></span></summary>
-      <div class="rep">Certaines choses bougent en trois semaines, d'autres pas en trois mois. C'est pour ça qu'il y a un diagnostic à l'entrée et des mesures ensuite : vous verrez les deux, au lieu de vous fier à une impression. Je préfère vous le dire maintenant plutôt que de vous promettre un enfant transformé en un mois.</div></details>
+    <div class="q"><b>Combien de temps avant de voir quelque chose ?</b>
+      <p>Certaines choses bougent en trois semaines, d'autres pas en trois mois. C'est pour ça qu'il y a un diagnostic à l'entrée et des mesures ensuite : vous verrez les deux, au lieu de vous fier à une impression. Je préfère vous le dire maintenant plutôt que de vous promettre un enfant transformé en un mois.</p></div>
 
-    <details class="rv"><summary>Est-ce que je peux changer d'accès en cours de route ?<span class="pm" aria-hidden="true"></span></summary>
-      <div class="rep">Oui, dans les deux sens, et sans frais. Un enfant qui passe le protocole parents et qui grandit bascule naturellement vers un protocole sportif. Un sportif qui perd son préparateur physique passe du mental au complet. Écrivez-moi, je m'en occupe.</div></details>
+    <div class="q"><b>Est-ce que je peux changer d'accès en cours de route ?</b>
+      <p>Oui, dans les deux sens, et sans frais. Un enfant qui passe le protocole parents et qui grandit bascule naturellement vers un protocole sportif. Un sportif qui perd son préparateur physique passe du mental au complet. Écrivez-moi, je m'en occupe.</p></div>
 
-    <details class="rv"><summary>Mon enfant est mineur, c'est un problème ?<span class="pm" aria-hidden="true"></span></summary>
-      <div class="rep">Non, c'est le cas de la quasi-totalité des sportifs que j'accompagne. L'inscription et le paiement se font simplement par vous, l'adulte, et sous votre responsabilité.</div></details>
+    <div class="q"><b>Mon enfant est mineur, c'est un problème ?</b>
+      <p>Non, c'est le cas de la quasi-totalité des sportifs que j'accompagne. L'inscription et le paiement se font simplement par vous, l'adulte, et sous votre responsabilité.</p></div>
   </section>
 
   <section class="qui">
-    <h2 class="rv">QUI VOUS ACCOMPAGNE</h2>
-    <p class="rv">Je m'appelle Fabien Pinton. J'ai passé trente ans dans le football de compétition, comme joueur jusqu'au plus haut niveau régional, puis comme recruteur.</p>
-    <p class="rv">Pendant dix ans, j'ai accompagné de jeunes footballeurs sur la gestion de leurs émotions avant les grandes échéances et sur leurs choix de carrière. Plusieurs sont professionnels aujourd'hui, certains portent le maillot de l'équipe de France chez les jeunes.</p>
-    <p class="rv">Je connais aussi tout ça comme père. Mon fils aîné a joué jusqu'en U19 National, mon second est pilote Junior en BMX Race. Je sais ce que ça demande à un enfant, et ce que ça demande à sa famille. On ne parle jamais de la seconde.</p>
-    <p class="rv">Je ne suis pas entraîneur technique, et je vous le dis franchement : mon terrain, c'est le lien entre le corps et la tête. Un corps en forme fabrique un mental en forme, et les deux se nourrissent en permanence.</p>
-    <div class="signature rv">Fabien Pinton</div>
+    <h2>QUI VOUS ACCOMPAGNE</h2>
+    <p>Je m'appelle Fabien Pinton. J'ai passé trente ans dans le football de compétition, comme joueur jusqu'au plus haut niveau régional, puis comme recruteur.</p>
+    <p>Pendant dix ans, j'ai accompagné de jeunes footballeurs sur la gestion de leurs émotions avant les grandes échéances et sur leurs choix de carrière. Plusieurs sont professionnels aujourd'hui, certains portent le maillot de l'équipe de France chez les jeunes.</p>
+    <p>Je connais aussi tout ça comme père. Mon fils aîné a joué jusqu'en U19 National, mon second est pilote Junior en BMX Race. Je sais ce que ça demande à un enfant, et ce que ça demande à sa famille. On ne parle jamais de la seconde.</p>
+    <p>Je ne suis pas entraîneur technique, et je vous le dis franchement : mon terrain, c'est le lien entre le corps et la tête. Un corps en forme fabrique un mental en forme, et les deux se nourrissent en permanence.</p>
+    <div class="signature">Fabien Pinton</div>
   </section>
 
-  <section id="ecrire">
-    <h2 class="rv">VOUS PRÉFÉREZ M'ÉCRIRE D'ABORD</h2>
-    <p class="intro rv">Si vous hésitez entre deux accès, ou si votre situation ne rentre dans aucune case, laissez-moi vos coordonnées. Je vous réponds personnellement, et je vous dis franchement ce qui correspond, y compris quand la réponse est « rien pour le moment ».</p>
-
-    <div class="form-bloc rv">
-      <form id="formZone" novalidate>
-        <div class="champ" id="c_parent">
-          <label for="f_parent">Votre nom et prénom</label>
-          <input type="text" id="f_parent" name="name" autocomplete="name" autocapitalize="words" enterkeyhint="next" required>
-          <div class="aide" id="e_parent">Merci d'indiquer votre nom.</div>
-        </div>
-        <div class="champ" id="c_rider">
-          <label for="f_rider">Nom et prénom du sportif</label>
-          <input type="text" id="f_rider" autocomplete="off" autocapitalize="words" enterkeyhint="next" required>
-          <div class="aide" id="e_rider">Merci d'indiquer le nom du sportif.</div>
-        </div>
-        <div class="champ" id="c_mail">
-          <label for="f_mail">Votre email</label>
-          <input type="email" id="f_mail" name="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="send" required>
-          <div class="aide" id="e_mail">Merci d'indiquer un email valide.</div>
-        </div>
-        <div class="hp" aria-hidden="true"><label>Laisser vide <input type="text" id="f_site" tabindex="-1" autocomplete="off"></label></div>
-        <button type="submit" id="btnEnvoi"><span class="spin" aria-hidden="true"></span><span class="lib">Envoyer ma demande</span></button>
-        <div class="form-rgpd">Vos coordonnées servent uniquement à vous répondre. Aucune liste, aucune revente.</div>
-      </form>
-      <div class="merci" id="merci" role="status" aria-live="polite">
-        <svg width="62" height="62" viewBox="0 0 62 62" aria-hidden="true">
-          <circle class="cercle" cx="31" cy="31" r="25" fill="none" stroke="#A8852A" stroke-width="2"/>
-          <path class="coche" d="M21 31.5l7 7 13-14" fill="none" stroke="#A8852A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <h3>C'EST ENREGISTRÉ</h3>
-        <p>Je vous réponds personnellement, sous deux jours ouvrés. Pensez à jeter un œil dans vos courriers indésirables.</p>
-      </div>
-    </div>
+  <section style="text-align:center">
+    <h2>UNE QUESTION AVANT DE VOUS LANCER</h2>
+    <p style="color:var(--dim);max-width:46ch;margin:0 auto 10px">Si vous hésitez entre deux accès, ou si votre situation ne rentre dans aucune case, écrivez-moi. Je réponds personnellement, et je vous dis franchement ce qui correspond, y compris quand la réponse est « rien pour le moment ».</p>
+    <p><a href="mailto:f.pinton@outlook.fr" style="font-weight:600">f.pinton@outlook.fr</a></p>
   </section>
 
-  <div class="lum rv">
+  <div class="lum">
     <div class="s">Le mantra</div>
     <p>« Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres <span class="g">la permission que leur lumière brille. »</span></p>
   </div>
 
   <footer>
     AXE Mental Performance® · Préparation mentale et physique du jeune sportif, tous sports<br>
-    <a href="https://fabien-pinton.fr">fabien-pinton.fr</a> · <a href="mailto:contact@fabien-pinton.fr">contact@fabien-pinton.fr</a>
+    <a href="https://fabien-pinton.fr">fabien-pinton.fr</a> · <a href="mailto:f.pinton@outlook.fr">f.pinton@outlook.fr</a>
     <p class="disc">J'accompagne la préparation mentale, et physique selon l'accès choisi, du sportif et de sa famille. Mon accompagnement ne se substitue pas à une prise en charge médicale ou thérapeutique en cas de trouble de santé. Aucune promesse de résultat sportif n'est faite. Toute inscription et tout paiement sont réalisés par un adulte, sous sa responsabilité.</p>
   </footer>
 
 </div>
 
-<!-- barre d'action fixe : propose toujours la prochaine étape -->
-<div class="barre" id="barre">
-  <div class="barre-in">
-    <div class="barre-txt"><small id="barreSur">3 accès · sans engagement</small><span id="barreNom">Quel accès pour votre enfant ?</span></div>
-    <div class="barre-btns">
-      <a href="demo-axe.html" class="essayer" id="barreEssai">Essayer avant de vous lancer</a>
-      <a href="#trouver" id="barreLien">Trouver le mien</a>
-    </div>
-  </div>
-</div>
-
 <script>
-(function(){
-  var reduit = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function $(id){ return document.getElementById(id); }
-  function aller(el){ el.scrollIntoView({behavior: reduit ? 'auto' : 'smooth', block:'start'}); }
+/* Les trois liens de paiement sont écrits dans les boutons de la page. Un paiement confirmé
+   crée l'accès et envoie le code tout seul.
 
-  /* ---------- apparitions au défilement ---------- */
-  var rv = document.querySelectorAll('.rv');
-  if('IntersectionObserver' in window && !reduit){
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, {rootMargin:'0px 0px -8% 0px', threshold:.06});
-    rv.forEach(function(el){ io.observe(el); });
-  } else { rv.forEach(function(el){ el.classList.add('in'); }); }
+   Le portail d'entrée tient en trois gestes. Il protège (mineur, responsabilité, cadre
+   médical) et il collecte, mais il ne se vit pas comme un péage : chaque écran ne demande
+   qu'une chose, la confirmation se fait par le bouton lui-même plutôt que par des cases à
+   cocher, et à la sortie le visiteur est emmené sur l'accès qui le concerne. */
 
-  /* ---------- « tout ce qui est inclus » ---------- */
-  document.querySelectorAll('.voir-plus').forEach(function(b){
-    b.addEventListener('click', function(){
-      var o = b.closest('.offre'), ouvert = o.classList.toggle('ouverte');
-      b.setAttribute('aria-expanded', ouvert);
-      b.firstChild.nodeValue = ouvert ? 'Masquer le détail ' : 'Tout ce qui est inclus ';
-    });
-  });
-
-  /* ---------- sélecteur : recommande, met en avant, alimente la barre ---------- */
-  var offres = $('offres'), barre = $('barre'), choisi = null;
-  function choisir(cible, defiler){
-    var o = $(cible); if(!o) return;
-    choisi = o;
-    document.querySelectorAll('.choix button').forEach(function(b){
-      b.setAttribute('aria-pressed', b.getAttribute('data-cible') === cible);
-    });
-    document.querySelectorAll('.offre').forEach(function(x){ x.classList.toggle('reco', x === o); });
-    offres.classList.add('filtre');
-    $('verdictNom').textContent = o.getAttribute('data-nom') + ' · ' + o.getAttribute('data-prix');
-    $('verdictLien').setAttribute('href', '#' + cible);
-    $('verdict').classList.add('on');
-    $('barreSur').textContent = 'Recommandé pour vous';
-    $('barreNom').textContent = o.getAttribute('data-nom') + ' · ' + o.getAttribute('data-prix');
-    $('barreLien').textContent = 'Rejoindre';
-    $('barreLien').setAttribute('href', o.querySelector('.o-cta').getAttribute('href'));
-    barre.classList.add('choisi');
-    $('barreEssai').setAttribute('href', cible === 'parents' ? 'demo-parents.html' : 'demo-axe.html');
-    try{ localStorage.setItem('axe_rejoindre_choix', cible); }catch(e){}
-    if(defiler){
-      setTimeout(function(){
-        aller(o);
-        o.classList.remove('flash'); void o.offsetWidth; o.classList.add('flash');
-      }, reduit ? 0 : 380);
-    }
-  }
-  document.querySelectorAll('.choix button').forEach(function(b){
-    b.addEventListener('click', function(){ choisir(b.getAttribute('data-cible'), true); });
-  });
-  $('verdictLien').addEventListener('click', function(e){
-    if(!choisi) return; e.preventDefault(); aller(choisi);
-  });
-
-  /* un lien partagé vers #parents, #mental ou #complet arrive directement sur le bon accès */
-  var h = (location.hash || '').replace('#','');
-  if(h === 'parents' || h === 'mental' || h === 'complet'){ choisir(h, false); }
-  else { try{ var m = localStorage.getItem('axe_rejoindre_choix'); if(m && $(m)) choisir(m, false); }catch(e){} }
-
-  /* ---------- barre fixe : visible après l'en-tête, cachée sur le formulaire ---------- */
-  var hero = document.querySelector('.hero'), ecrire = $('ecrire'), passeHero = false, surForm = false;
-  function majBarre(){
-    var on = passeHero && !surForm;
-    barre.classList.toggle('on', on);
-    document.body.style.setProperty('--bar-h', on ? barre.offsetHeight + 'px' : '0px');
-  }
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(es){ passeHero = !es[0].isIntersecting; majBarre(); }).observe(hero);
-    new IntersectionObserver(function(es){ surForm = es[0].isIntersecting; majBarre(); }, {threshold:.15}).observe(ecrire);
-  }
-  $('barreLien').addEventListener('click', function(e){
-    if(this.getAttribute('href').charAt(0) === '#'){ e.preventDefault(); aller($('trouver')); }
-    else { this.textContent = 'Ouverture…'; }
-  });
-
-  /* ---------- boutons de paiement : retour visuel immédiat ---------- */
-  document.querySelectorAll('.o-cta').forEach(function(a){
-    a.addEventListener('click', function(e){
-      if(e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
-      a.classList.add('charge');
-      a.querySelector('.lib').textContent = 'Ouverture du paiement sécurisé…';
-    });
-  });
-  /* retour arrière depuis Stripe : on remet les boutons dans leur état normal */
-  window.addEventListener('pageshow', function(){
-    document.querySelectorAll('.o-cta.charge').forEach(function(a){
-      a.classList.remove('charge');
-      var o = a.closest('.offre');
-      a.querySelector('.lib').textContent =
-        (o.id === 'parents' ? 'Commencer ' : 'Rejoindre ') + o.getAttribute('data-nom').replace('Le ','le ') + ' · ' + o.getAttribute('data-prix');
-    });
-    if(choisi) $('barreLien').textContent = 'Rejoindre';
-  });
-})();
-
-/* ---------- demande de contact ----------
-   Même enregistrement que l'ancienne page rejoindre, pour que la fiche apparaisse
-   dans « demandes reçues » et entre dans le suivi des relances. */
 var SB_URL = 'https://ilsxrdvxvnvlznjuevba.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
 
-(function(){
-  var envoye = false;
-  function $(id){ return document.getElementById(id); }
-  function val(id){ return ($(id).value || '').trim(); }
-  function mailOk(m){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m); }
-  var regles = {
-    f_parent: { c:'c_parent', ok:function(v){ return v.length >= 2; } },
-    f_rider:  { c:'c_rider',  ok:function(v){ return v.length >= 2; } },
-    f_mail:   { c:'c_mail',   ok:mailOk }
-  };
-  function verifier(id, montrer){
-    var r = regles[id], v = val(id), bon = r.ok(v), c = $(r.c), inp = $(id);
-    c.classList.toggle('ok', bon);
-    if(montrer) c.classList.toggle('err', !bon);
-    else if(bon) c.classList.remove('err');
-    inp.setAttribute('aria-invalid', montrer && !bon ? 'true' : 'false');
-    return bon;
-  }
-  Object.keys(regles).forEach(function(id){
-    var inp = $(id);
-    inp.addEventListener('input', function(){ verifier(id, $(regles[id].c).classList.contains('err')); });
-    inp.addEventListener('blur', function(){ if(val(id)) verifier(id, true); });
-  });
+var SPORTS  = ['BMX Race','Motocross','Football','Tennis','Judo','Natation','Athlétisme','Basket','Handball','Gymnastique','Autre'];
+var NIVEAUX = ['Départemental','Régional','National'];
+var pt = { profil:null, sport:null, niveau:null, envoye:false };
 
-  $('formZone').addEventListener('submit', function(e){
-    e.preventDefault();
-    if(envoye) return;
-    var premierFaux = null;
-    ['f_parent','f_rider','f_mail'].forEach(function(id){
-      if(!verifier(id, true) && !premierFaux) premierFaux = id;
+function $(id){ return document.getElementById(id); }
+function val(id){ var e = $(id); return e ? (e.value||'').trim() : ''; }
+function mailOk(m){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m); }
+function sportChoisi(){ return pt.sport === 'Autre' ? val('rsportautre') : pt.sport; }
+
+var PAS = { pt1:1, pt1b:1, pt2:2, pt3:3 };
+function ptEtape(id){
+  ['pt1','pt1b','pt2','pt3'].forEach(function(k){ $(k).classList.toggle('on', k === id); });
+  var p = PAS[id] || 1;
+  $('ptPas').textContent = 'Étape ' + p + ' sur 3';
+  $('ptBarre').style.width = Math.round(p / 3 * 100) + '%';
+  window.scrollTo({ top:0, behavior:'instant' });
+  // le premier champ prend le focus : sur mobile le clavier s'ouvre tout seul
+  var prem = $(id).querySelector('input');
+  if(prem && window.matchMedia('(min-width:700px)').matches) setTimeout(function(){ prem.focus(); }, 60);
+}
+function ptRetour(){ ptEtape(pt.profil === 'mineur' ? 'pt1b' : 'pt1'); }
+
+var T = {
+  majeur_sportif: { t2:'VOUS, EN TROIS LIGNES', s2:"C'est ce qui me permet de vous orienter vers le bon accès.",
+    t3:'OÙ JE VOUS RÉPONDS', s3:'Je réponds personnellement, et je ne transmets rien à personne.',
+    confirm:"En continuant, vous confirmez être majeur, vous inscrire pour vous-même, et avoir lu que ce protocole ne remplace pas un médecin." },
+  majeur_parent: { t2:'LE SPORTIF', s2:"Cinq secondes, et je sais déjà quel accès le concerne.",
+    t3:'OÙ JE VOUS RÉPONDS', s3:'Je réponds personnellement, et je ne transmets rien à personne.',
+    confirm:"En continuant, vous confirmez inscrire ce sportif avec son accord ou comme responsable légal, être celui qui paie, et avoir lu que ce protocole ne remplace pas un médecin." },
+  mineur: { t2:'LE SPORTIF', s2:"À remplir avec ton parent, il est à côté de toi.",
+    t3:'LES COORDONNÉES DU PARENT', s3:"C'est à cette adresse que part le code d'accès.",
+    confirm:"En continuant, vous confirmez être le parent ou le responsable légal du mineur, être celui qui s'inscrit et qui paie, et avoir lu que ce protocole ne remplace pas un médecin." }
+};
+
+function ptProfil(p){
+  pt.profil = p;
+  var t = T[p];
+  $('pt2Titre').textContent = t.t2;  $('pt2Sous').textContent = t.s2;
+  $('pt3Titre').textContent = t.t3;  $('pt3Sous').textContent = t.s3;
+  $('ptConfirm').textContent = t.confirm;
+  $('ptBlocParent').style.display = (p === 'majeur_sportif') ? 'none' : 'block';
+  $('ptBlocRider').style.display  = (p === 'majeur_sportif') ? 'none' : 'grid';
+  $('lpe').textContent   = (p === 'mineur') ? 'Email du parent' : 'Votre email';
+  $('lptel').textContent = (p === 'mineur') ? 'Téléphone du parent' : 'Votre téléphone';
+  ptMaj2(); ptMaj3();
+  ptEtape('pt2');
+}
+
+(function puces(){
+  function monter(cont, liste, sur){
+    liste.forEach(function(x){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'pt-puce'; b.textContent = x;
+      b.onclick = function(){
+        [].forEach.call(cont.children, function(e){ e.classList.toggle('sel', e === b); });
+        sur(x);
+      };
+      cont.appendChild(b);
     });
-    if(premierFaux){ $(premierFaux).focus(); return; }
-    if(val('f_site')){ fini(); return; } /* robot : on fait semblant */
-
-    envoye = true;
-    var btn = $('btnEnvoi');
-    btn.disabled = true; btn.classList.add('charge');
-    btn.querySelector('.lib').textContent = 'Envoi en cours…';
-
-    var fait = false;
-    function fini(){
-      if(fait) return; fait = true;
-      $('formZone').style.display = 'none';
-      $('merci').classList.add('on');
-    }
-    setTimeout(fini, 4000);
-
-    fetch(SB_URL + '/rest/v1/rpc/axe_rejoindre', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY },
-      body: JSON.stringify({ nom_p: val('f_parent'), nom_rider_p: val('f_rider'), email_p: val('f_mail'), parrain_p: '' })
-    }).then(fini, fini);
+  }
+  monter($('ptSports'), SPORTS, function(x){
+    pt.sport = x;
+    $('ptAutreSport').style.display = (x === 'Autre') ? 'block' : 'none';
+    if(x === 'Autre') $('rsportautre').focus();
+    ptMaj2();
   });
+  monter($('ptNiveaux'), NIVEAUX, function(x){ pt.niveau = x; ptMaj2(); });
+})();
+
+function ptMaj2(){
+  var a = parseInt(val('rage'), 10);
+  var ok = val('rp').length >= 2 && val('rn').length >= 2 && a >= 4 && a <= 99 && !!sportChoisi() && !!pt.niveau;
+  $('ptGo2').disabled = !ok;
+}
+function ptMaj3(){
+  var ok;
+  if(pt.profil === 'majeur_sportif') ok = mailOk(val('pe')) && val('ptel').length >= 6;
+  else ok = val('pp').length >= 2 && val('pn').length >= 2 && mailOk(val('pe')) && val('ptel').length >= 6;
+  $('ptGo').disabled = !ok;
+}
+['rp','rn','rage','rsportautre'].forEach(function(id){ $(id).addEventListener('input', ptMaj2); });
+['pp','pn','pe','ptel'].forEach(function(id){ $(id).addEventListener('input', ptMaj3); });
+
+/* Entrée fait avancer, comme dans n'importe quel formulaire bien élevé. */
+['pt2','pt3'].forEach(function(ec){
+  $(ec).addEventListener('keydown', function(e){
+    if(e.key !== 'Enter') return;
+    e.preventDefault();
+    var b = $(ec === 'pt2' ? 'ptGo2' : 'ptGo');
+    if(!b.disabled){ b.click(); return; }
+    var champs = [].slice.call($(ec).querySelectorAll('input'));
+    var i = champs.indexOf(document.activeElement);
+    if(i > -1 && champs[i+1]) champs[i+1].focus();
+  });
+});
+
+function ptVersContact(){
+  // un enfant porte presque toujours le nom du parent : on le propose, il reste modifiable
+  if(pt.profil !== 'majeur_sportif' && !val('pn')) $('pn').value = val('rn');
+  // un sportif majeur s'est déjà nommé à l'étape 2 : on ne le redemande pas
+  ptMaj3();
+  ptEtape('pt3');
+}
+
+/* L'adresse qui paiera : c'est elle qui rattache le paiement à la fiche. */
+function ptEmailContact(){ return val('pe'); }
+
+/* La sortie n'est pas une porte qui s'ouvre, c'est une réponse : on emmène le visiteur
+   sur l'accès qui le concerne, déduit de l'âge qu'il vient de donner. */
+function ptRecommander(){
+  var a = parseInt(val('rage'), 10);
+  var prenom = val('rp');
+  var qui = (pt.profil === 'majeur_sportif') ? 'Pour vous' : ('Pour ' + (prenom || 'votre sportif') + ', ' + a + ' ans');
+  var txt, cible;
+  if(a <= 11 && pt.profil !== 'majeur_sportif'){
+    cible = 'parents';
+    txt = '<b>' + qui + ', c\'est le protocole parents.</b> À cet âge, ce n\'est pas lui qu\'on accompagne, c\'est vous. Les deux autres accès s\'ouvrent à partir de douze ans.';
+  } else if(a === 12 && pt.profil !== 'majeur_sportif'){
+    cible = 'complet';
+    txt = '<b>' + qui + ', les deux se défendent.</b> S\'il ouvre sa page seul sans qu\'on le lui rappelle, prenez un protocole sportif. Sinon, commencez par <a href="#parents">le protocole parents</a>.';
+  } else if(a <= 11){
+    cible = 'parents';
+    txt = '<b>' + qui + ', regardez d\'abord le protocole parents.</b>';
+  } else {
+    cible = 'complet';
+    txt = '<b>' + qui + ', c\'est un protocole sportif.</b> Le complet si personne ne programme vraiment son travail physique, <a href="#mental">le mental seul</a> si c\'est déjà le cas.';
+  }
+  var r = $('reco');
+  $('recoTxt').innerHTML = txt;
+  r.classList.add('on');
+  var el = $(cible);
+  if(el) setTimeout(function(){ el.scrollIntoView({ behavior:'smooth', block:'start' }); }, 420);
+}
+
+function ptPrefill(email){
+  if(!email) return;
+  [].forEach.call(document.querySelectorAll('a[href*="buy.stripe.com"]'), function(a){
+    var u = a.getAttribute('href');
+    if(u.indexOf('prefilled_email') === -1) a.setAttribute('href', u + (u.indexOf('?') === -1 ? '?' : '&') + 'prefilled_email=' + encodeURIComponent(email));
+  });
+}
+
+function ptOuvrir(email, avecReco){
+  try{ localStorage.setItem('axe_portail_v1', email || '1'); }catch(e){}
+  document.body.className = document.body.className.replace(/\bverrou\b/g, '').trim();
+  ptPrefill(email);
+  window.scrollTo({ top:0, behavior:'instant' });
+  if(avecReco) ptRecommander();
+}
+
+function ptEnvoyer(){
+  if(pt.envoye) return;
+  pt.envoye = true;
+  var email = ptEmailContact();
+  var b = $('ptGo');
+  b.disabled = true; b.textContent = 'Un instant...';
+
+  var fait = false;
+  function suite(){ if(fait) return; fait = true; ptOuvrir(email, true); }
+  setTimeout(suite, 4000);   // la base ne répond pas : on n'enferme jamais le visiteur dehors
+
+  fetch(SB_URL + '/rest/v1/rpc/axe_rejoindre_complet', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', 'apikey':SB_KEY, 'Authorization':'Bearer ' + SB_KEY },
+    body: JSON.stringify({
+      profil_p: pt.profil,
+      parent_prenom_p: (pt.profil === 'majeur_sportif') ? val('rp') : (val('pp') || null),
+      parent_nom_p:    (pt.profil === 'majeur_sportif') ? val('rn') : (val('pn') || null),
+      parent_email_p:  val('pe') || null,
+      parent_tel_p:    val('ptel') || null,
+      rider_prenom_p:  val('rp'),
+      rider_nom_p:     val('rn'),
+      rider_email_p:   (pt.profil === 'majeur_sportif') ? (val('pe') || null) : (val('re') || null),
+      rider_tel_p:     (pt.profil === 'majeur_sportif') ? (val('ptel') || null) : (val('rtel') || null),
+      age_p:           parseInt(val('rage'), 10),
+      sport_p:         sportChoisi(),
+      niveau_p:        pt.niveau,
+      accords_p:       { responsable:true, paiement_adulte:true, cadre_medical:true, profil:pt.profil, le:new Date().toISOString() }
+    })
+  }).then(suite, suite);
+}
+
+/* Déjà passé par le portail sur cet appareil : on ne redemande rien, on repose juste l'email. */
+(function(){
+  var e = null;
+  try{ e = localStorage.getItem('axe_portail_v1'); }catch(x){}
+  if(e && e !== '1' && !document.body.classList.contains('verrou')) ptPrefill(e);
 })();
 </script>
 </body>

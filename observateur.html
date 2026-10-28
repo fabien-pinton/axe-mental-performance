@@ -474,7 +474,11 @@ function blocEnvoi(p, libelle){
 // Ce que le visiteur a DEMANDÉ en fin de démonstration. L'envoi, lui, est manuel :
 // tant que tu n'as pas écrit à cette personne, elle n'a rien reçu. D'où « à envoyer ».
 const LIB_ENVOI = {profil:'Profil à envoyer', lien:'Lien à envoyer'};
-const CHAMPS_COMBLE = ['nom_rider','sport','niveau','age','sexe','tel','parraine_par','formule','code_acces','source'];
+const CHAMPS_COMBLE = ['nom_rider','sport','niveau','age','sexe','tel','parraine_par','formule','code_acces','source',
+  'profil_visiteur','parent_prenom','parent_nom','rider_prenom','rider_nom','rider_email','rider_tel','accords'];
+/* Qui a rempli le portail d'entrée de la page rejoindre : ça change à qui on écrit,
+   et ça dit tout de suite si un adulte est dans la boucle. */
+const LIB_PROFIL = { mineur:'sportif mineur', majeur_parent:'parent', majeur_sportif:'sportif majeur' };
 const LIB_SOURCE = {rejoindre:'Lien rejoindre', questionnaire:'Questionnaire', demo:'Salon / démo', demo_lien:'Démo via lien'};
 
 // Clients : on reconnaît un abonné par son code d'accès, ou par « email + nom ».
@@ -751,7 +755,7 @@ function afficherProspects(){
     if(p.demo_id) parDemoId[p.demo_id] = p;
     const estSurMesure = (p.formule || '').indexOf('Sur mesure') === 0;
     const sportCell = p.sport ? (p.sport + (p.niveau ? (' · '+p.niveau) : '')) : '';
-    const origine = [LIB_SOURCE[p.source] || '', p.parraine_par ? 'parrainé' : ''].filter(Boolean).join(' · ');
+    const origine = [LIB_SOURCE[p.source] || '', LIB_PROFIL[p.profil_visiteur] || '', p.parraine_par ? 'parrainé' : ''].filter(Boolean).join(' · ');
     const st = statutDe(p);
     const envoi = LIB_ENVOI[p.demo_envoi] || '';
     const suite = st === 'client' ? '<span class="etat cli">Client</span>'
@@ -759,9 +763,9 @@ function afficherProspects(){
                 : blocRelance(p);
     body.innerHTML += '<tr>'
       + '<td>' + (p.nom_parent||'') + (origine ? '<span class="src">' + origine + '</span>' : '') + '</td>'
-      + '<td>' + (p.nom_rider || (estSurMesure ? '·' : '')) + '</td>'
+      + '<td>' + (p.nom_rider || (estSurMesure ? '·' : '')) + (p.age ? '<span class="src">' + p.age + ' ans</span>' : '') + '</td>'
       + '<td>' + sportCell + '</td>'
-      + '<td class="mail">' + (p.email_parent||'') + '</td>'
+      + '<td class="mail">' + (p.email_parent||'') + (p.tel ? '<span class="src">' + p.tel + '</span>' : '') + '</td>'
       + '<td class="date">' + dateFr(p.clique_le) + '</td>'
       + '<td>' + suite + '</td>'
       + '</tr>';
@@ -772,10 +776,15 @@ function exporterProspects(){
   const liste = fusionnerFiches(prospects);
   if(!liste.length) return;
   const LIB_ETAT = {client:'Client', demo:'Démo', '':''};
-  const lignes = [['Contact','Sportif','Sport','Niveau','Email','Dernière activité','Origine','Statut','Démo faite le','Email demandé','Mail envoyé le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait','Relance 1 faite le','Relance 2 faite le','A répondu le','Prochaine relance']];
+  const lignes = [['Contact','Qui remplit','Prénom parent','Nom parent','Email parent','Téléphone parent',
+    'Sportif','Prénom sportif','Nom sportif','Email sportif','Téléphone sportif','Âge','Sport','Niveau',
+    'Email','Dernière activité','Origine','Statut','Démo faite le','Email demandé','Mail envoyé le','Profil démo','Point d\'entrée','Canal','Œil directeur','Exercice fait','Relance 1 faite le','Relance 2 faite le','A répondu le','Prochaine relance']];
   liste.forEach(function(p){
     lignes.push([
-      p.nom_parent||'', p.nom_rider||'', p.sport||'', p.niveau||'', p.email_parent||'',
+      p.nom_parent||'', LIB_PROFIL[p.profil_visiteur] || '',
+      p.parent_prenom||'', p.parent_nom||'', p.email_parent||'', p.tel||'',
+      p.nom_rider||'', p.rider_prenom||'', p.rider_nom||'', p.rider_email||'', p.rider_tel||'',
+      p.age||'', p.sport||'', p.niveau||'', p.email_parent||'',
       dateFr(p.clique_le), LIB_SOURCE[p.source] || p.source || '', LIB_ETAT[statutDe(p)],
       p.demo_le ? dateFr(p.demo_le) : '', LIB_ENVOI[p.demo_envoi] || '',
       p.mail_envoye_le ? dateFr(p.mail_envoye_le) : '', p.demo_profil||'', p.demo_entree||'',
