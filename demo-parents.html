@@ -411,10 +411,18 @@ a.btn{text-align:center;text-decoration:none}
     <h3 id="recapTitre"></h3>
     <p id="recapLigne"></p>
   </div>
-  <div class="field"><label for="f-mail">Votre email</label><input id="f-mail" type="email" inputmode="email" autocomplete="email" placeholder="prenom@exemple.fr" oninput="majMailBtn()"></div>
-  <div class="field"><label for="f-nom">Votre nom (facultatif)</label><input id="f-nom" type="text" autocomplete="name" placeholder="Pour que Fabien vous retrouve"></div>
+  <div class="card" id="recapConnu" style="display:none;margin-top:14px">
+    <div class="ctag">Vos coordonnées sont déjà enregistrées</div>
+    <p id="recapConnuTxt"></p>
+  </div>
+
+  <div id="recapChamps">
+    <div class="field"><label for="f-mail">Votre email</label><input id="f-mail" type="email" inputmode="email" autocomplete="email" placeholder="prenom@exemple.fr" oninput="majMailBtn()"></div>
+    <div class="field"><label for="f-nom">Votre nom (facultatif)</label><input id="f-nom" type="text" autocomplete="name" placeholder="Pour que Fabien vous retrouve"></div>
+  </div>
+
   <button class="btn gold" id="btnMail" style="margin-top:20px" disabled onclick="terminer('profil')">Recevoir mon résultat</button>
-  <button class="linkbtn" onclick="terminer(null)">Je préfère ne rien laisser</button>
+  <button class="linkbtn" id="btnRien" onclick="terminer(null)">Je préfère ne rien laisser</button>
   <p class="small" style="margin-top:14px">Votre email sert uniquement à vous envoyer ce résultat et à vous recontacter. Rien d'autre, aucune liste.</p>
 </section>
 
@@ -424,9 +432,10 @@ a.btn{text-align:center;text-decoration:none}
     <div class="tag v" id="finTag">Merci</div>
     <h2 class="t">À TRÈS VITE</h2>
     <p class="lead" id="finSous">Votre phrase est prête. La prochaine compétition est le bon moment pour l'essayer.</p>
+    <p class="small" id="finRetour" style="display:none"></p>
   </div>
   <a class="btn gold" href="rejoindre.html#parents" style="display:block;margin-top:22px">Commencer le protocole parents · 120 €</a>
-  <a class="btn ghost" href="rejoindre.html#trouver" style="display:block;margin-top:10px">Voir les trois accès</a>
+  <a class="btn ghost" href="rejoindre.html" style="display:block;margin-top:10px">Voir les trois accès</a>
   <div class="mantra">
     <div class="s">Le mantra</div>
     <p>«&nbsp;Si nous laissons notre lumière briller, nous donnons inconsciemment aux autres <span class="g">la permission que leur lumière brille.</span>&nbsp;»</p>
@@ -720,8 +729,28 @@ function remplirComparaison(){
 function majRecap(){
   $('recapTitre').textContent = REFLEXE[st.dominant].titre;
   $('recapLigne').textContent = 'Par où commencer : ' + ENTREES[st.priorite].titre.toLowerCase() + '. La phrase à essayer : ' + ENTREES[st.priorite].apres(L());
+
+  /* Deux publics, deux fins. Celui qui arrive par la page rejoindre a déjà donné ses
+     coordonnées : sa fiche existe et le jeton la désigne, donc lui redemander son email
+     donnerait l'impression qu'on n'a rien retenu. Celui qui arrive en direct, lui, n'a
+     jamais rien laissé : il garde le formulaire. */
+  if(st.token){
+    if(st.invite){
+      if(!$('f-mail').value) $('f-mail').value = st.invite.email;
+      if(st.invite.nom && !$('f-nom').value) $('f-nom').value = st.invite.nom;
+    }
+    $('recapChamps').style.display = 'none';
+    $('recapConnu').style.display = 'block';
+    $('recapConnuTxt').textContent = (st.invite && st.invite.email)
+      ? ('Fabien vous envoie vos réflexes et votre phrase à ' + st.invite.email + '. Rien à retaper.')
+      : "Fabien vous envoie vos réflexes et votre phrase à l'adresse que vous avez laissée en arrivant. Rien à retaper.";
+    $('btnMail').disabled = false;
+    const rien = $('btnRien');
+    if(rien) rien.style.display = 'none';   // ses coordonnées sont déjà là, la phrase n'a plus de sens
+  }
 }
 function majMailBtn(){
+  if(st.token){ $('btnMail').disabled = false; return; }
   const v = ($('f-mail').value||'').trim();
   $('btnMail').disabled = !(v.length > 4 && v.indexOf('@') > 0 && v.lastIndexOf('.') > v.indexOf('@'));
 }
@@ -756,10 +785,11 @@ async function transmettre(lead){
 function terminer(envoi){
   const email = envoi ? ($('f-mail').value||'').trim() : '';
   const nom = ($('f-nom').value||'').trim();
-  if(email){
+  if(email || st.token){
     const lead = {
       id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
-      date: new Date().toISOString(), token:'', source:'demo_parents',
+      date: new Date().toISOString(), token: st.token || '',
+      source: st.token ? 'demo_parents_lien' : 'demo_parents',
       nom: nom, email: email,
       sport: L().nom, age: st.age, niveau: 'Parent',
       profil: REFLEXE[st.dominant].titre, entree: ENTREES[st.priorite].titre,
@@ -770,16 +800,42 @@ function terminer(envoi){
     const a = lireLeads(); a.push(lead); ecrireLeads(a);
     transmettre(lead);
     $('finTag').textContent = "C'est noté";
-    $('finSous').textContent = "Fabien vous envoie votre résultat et votre phrase. En attendant, la prochaine compétition est le bon moment pour l'essayer.";
+    $('finSous').textContent = email
+      ? "Fabien vous envoie votre résultat et votre phrase. En attendant, la prochaine compétition est le bon moment pour l'essayer."
+      : "Votre résultat est transmis à Fabien, sur votre fiche. La prochaine compétition est le bon moment pour essayer votre phrase.";
+    try{ localStorage.removeItem('axe_demo_invite'); }catch(e){}
+    st.invite = null;
   }
   progres(100);
   go('s-fin');
+  /* Venu de la page rejoindre : il a son résultat, c'est le moment où il est le plus
+     convaincu. On le ramène devant les trois accès. Le portail ne se repassera pas,
+     son appareil se souvient qu'il l'a déjà rempli. */
+  if(st.token) retourAccès();
+}
+
+function retourAccès(){
+  const el = document.getElementById('finRetour');
+  let reste = 6;
+  function dire(){
+    if(el){ el.style.display='block';
+      el.textContent = 'Retour aux trois accès dans ' + reste + ' seconde' + (reste>1?'s':'') + '…'; }
+  }
+  dire();
+  const minuteur = setInterval(function(){
+    reste--;
+    if(reste <= 0){ clearInterval(minuteur); window.location.href = 'rejoindre.html'; return; }
+    dire();
+  }, 1000);
 }
 
 /* ---------- remise à zéro ---------- */
 function recommencer(volontaire){
   st.sport=null; st.age=null; st.prenom=''; st.idx=0; st.rep={}; st.score={analyse:0,protege:0,enjeu:0,juste:0};
-  st.dominant=null; st.priorite=null; st.avant=''; st.lead=null;
+  st.dominant=null; st.priorite=null; st.avant=''; st.lead=null; st.token=null; st.invite=null;
+  const ch = $('recapChamps'); if(ch) ch.style.display = 'block';
+  const cn = $('recapConnu');  if(cn) cn.style.display = 'none';
+  const br = $('btnRien');     if(br) br.style.display = 'block';
   ['f-prenom','f-age','f-mail','f-nom','f-avant'].forEach(function(id){ $(id).value=''; });
   document.querySelectorAll('#sportChips .chip').forEach(function(c){ c.classList.remove('sel'); });
   majProfilBtn(); majMailBtn(); progres(0); go('s-accueil');
@@ -797,6 +853,15 @@ function recommencer(volontaire){
     if(sp && LEX[sp]) choisirSport(sp);
     majProfilBtn();
     if(p.get('age') || sp){ go('s-profil'); progres(10); }
+    // un jeton relie cette démo à une fiche déjà créée sur la page rejoindre
+    const t = (p.get('t') || '').trim();
+    if(/^[0-9a-fA-F-]{32,36}$/.test(t)){
+      st.token = t;
+      try{
+        const inv = JSON.parse(localStorage.getItem('axe_demo_invite') || 'null');
+        if(inv && inv.t === t && inv.email) st.invite = inv;
+      }catch(e){}
+    }
   }catch(e){}
 })();
 </script>

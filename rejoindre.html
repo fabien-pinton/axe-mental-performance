@@ -265,6 +265,9 @@ body:not(.verrou) #portail{display:none}
       <button type="button" class="pt-btn" onclick="ptProfil('majeur_sportif')">Pour moi, je suis majeur<small>Je suis le sportif</small></button>
       <button type="button" class="pt-btn" onclick="ptEtape('pt1b')">Je suis mineur<small>J'ai moins de 18 ans</small></button>
     </div>
+    <p class="pt-mini">Vous préférez regarder avant de donner quoi que ce soit ? Essayez en 2 minutes, sans rien remplir :
+      <a href="demo-axe.html" style="font-weight:600">la démo du sportif</a> ou
+      <a href="demo-parents.html" style="font-weight:600">celle du parent</a>.</p>
   </div>
 
   <!-- 1 bis. le cadre, court -->
@@ -432,9 +435,10 @@ body:not(.verrou) #portail{display:none}
     </div>
 
     <div class="essai">
-      <h3>PAS ENVIE DE PAYER SANS AVOIR VU ?</h3>
-      <p>Deux minutes. Un test debout dès les trente premières secondes, votre profil, et un exercice chronométré qui vous donne un chiffre avant et un chiffre après. C'est la façon la plus honnête de savoir si c'est fait pour vous.</p>
-      <a href="demo-axe.html">Essayer le protocole · 2 minutes</a>
+      <h3 id="essaiT">PAS ENVIE DE PAYER SANS AVOIR VU ?</h3>
+      <p id="essaiP">Deux minutes. Un test debout dès les trente premières secondes, votre profil, et un exercice chronométré qui vous donne un chiffre avant et un chiffre après. C'est la façon la plus honnête de savoir si c'est fait pour vous.</p>
+      <a id="essaiA" href="demo-axe.html">Essayer le protocole · 2 minutes</a>
+      <p id="essaiB" style="margin:14px auto 0;font-size:14px"></p>
     </div>
   </section>
 
@@ -541,7 +545,7 @@ var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 
 var SPORTS  = ['BMX Race','Motocross','Football','Tennis','Judo','Natation','Athlétisme','Basket','Handball','Gymnastique','Autre'];
 var NIVEAUX = ['Départemental','Régional','National'];
-var pt = { profil:null, sport:null, niveau:null, envoye:false };
+var pt = { profil:null, sport:null, niveau:null, envoye:false, token:null };
 
 function $(id){ return document.getElementById(id); }
 function val(id){ var e = $(id); return e ? (e.value||'').trim() : ''; }
@@ -681,10 +685,44 @@ function ptPrefill(email){
   });
 }
 
+/* La démo écrit dans la même fiche que le portail, à condition de lui passer le jeton.
+   Sans ça, le même visiteur apparaîtrait deux fois dans les demandes reçues. On dépose
+   aussi ses coordonnées sur cet appareil pour que la démo ne les redemande pas. */
+function ptRelierDemo(email){
+  /* Un parent n'a rien à faire dans la démo du sportif : elle lui demanderait de se lever
+     et de fermer un œil. On l'envoie dans la sienne, qui parle de ses réflexes à lui. */
+  var a = parseInt(val('rage'), 10);
+  var pourParent = (pt.profil === 'majeur_parent');
+  var cible = pourParent ? 'demo-parents.html' : 'demo-axe.html';
+  var eA = $('essaiA'), eT = $('essaiT'), eP = $('essaiP'), eB = $('essaiB');
+  if(eA){
+    eA.setAttribute('href', cible);
+    if(pourParent){
+      eT.textContent = 'ET SI ON COMMENÇAIT PAR VOUS ?';
+      eP.textContent = "Deux minutes, et sans rien demander à votre enfant. Une scène que vous connaissez par cœur, vos réflexes mis à plat, et la phrase à essayer à la prochaine compétition.";
+      eA.textContent = 'Essayer la démo du parent · 2 minutes';
+      if(eB && a >= 12) eB.innerHTML = 'Et si vous voulez qu\'il la fasse lui-même, <a href="demo-axe.html" style="font-weight:600">voici la sienne</a>.';
+    }
+  }
+  if(!pt.token) return;
+  [].forEach.call(document.querySelectorAll('a[href^="demo-axe.html"], a[href^="demo-parents.html"]'), function(x){
+    var u = x.getAttribute('href');
+    if(u.indexOf('t=') === -1) x.setAttribute('href', u + (u.indexOf('?') === -1 ? '?' : '&') + 't=' + encodeURIComponent(pt.token));
+  });
+  try{
+    localStorage.setItem('axe_demo_invite', JSON.stringify({
+      t: pt.token,
+      nom: (val('pp') || val('rp') || ''),
+      email: email || ''
+    }));
+  }catch(e){}
+}
+
 function ptOuvrir(email, avecReco){
   try{ localStorage.setItem('axe_portail_v1', email || '1'); }catch(e){}
   document.body.className = document.body.className.replace(/\bverrou\b/g, '').trim();
   ptPrefill(email);
+  ptRelierDemo(email);
   window.scrollTo({ top:0, behavior:'instant' });
   if(avecReco) ptRecommander();
 }
@@ -718,7 +756,9 @@ function ptEnvoyer(){
       niveau_p:        pt.niveau,
       accords_p:       { responsable:true, paiement_adulte:true, cadre_medical:true, profil:pt.profil, le:new Date().toISOString() }
     })
-  }).then(suite, suite);
+  }).then(function(r){
+    return r.json().then(function(d){ if(d && d.token) pt.token = d.token; }, function(){});
+  }, function(){}).then(suite, suite);
 }
 
 /* Déjà passé par le portail sur cet appareil : on ne redemande rien, on repose juste l'email. */
