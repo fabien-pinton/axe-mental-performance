@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Robin · Saison 2027</title>
 <script src="installer.js"></script>
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest-robin.webmanifest">
 <meta name="theme-color" content="#0A0907">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="axe-32.png">
@@ -16,6 +16,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Robin">
 <meta name="application-name" content="Robin">
+<script>
+/* Installation sur l'écran d'accueil. Android ne propose « installer l'application » que si
+   un service worker est enregistré : c'est ce bloc qui manquait ici, alors qu'il est présent
+   sur les autres pages du protocole. iPhone n'en a pas besoin, mais ça ne le gêne pas. */
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">

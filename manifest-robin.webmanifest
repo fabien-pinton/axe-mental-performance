@@ -1,0 +1,17 @@
+{
+  "name": "Robin · AXE Mental Performance",
+  "short_name": "Robin",
+  "description": "Le protocole de Robin, saison 2027.",
+  "start_url": "robin.html",
+  "scope": "./",
+  "id": "/robin",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0907",
+  "theme_color": "#0A0907",
+  "lang": "fr",
+  "icons": [
+    { "src": "axe-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "axe-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" }
+  ]
+}
