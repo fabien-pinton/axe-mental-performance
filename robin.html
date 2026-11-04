@@ -477,8 +477,8 @@ const BLOCS = {
      sous:"Tu roules dans trois heures : rien ici ne doit peser sur tes jambes. On tire, on pousse, on gaine.",
      exos:[
        {k:'rowing', s:4, r:'10 répétitions', repos:90, app:1, charge:true},
-       {k:'dc',     s:3, r:'10 répétitions', repos:90, app:1},
-       {k:'hip',    s:3, r:'12 répétitions', repos:90, app:1},
+       {k:'dc',     s:3, r:'10 répétitions', repos:90, app:1, charge:true},
+       {k:'hip',    s:3, r:'12 répétitions', repos:90, app:1, charge:true},
        {k:'pallof', s:3, r:'30 s par côté',  repos:45},
        {k:'planche',s:3, r:'40 secondes',    repos:40}]},
    b:{titre:'Salle · explosivité et force', ech:12, calme:6,
@@ -486,7 +486,7 @@ const BLOCS = {
      exos:[
        {k:'cmj',    s:4, r:'5 sauts',        repos:90},
        {k:'squat',  s:4, r:'8 répétitions',  repos:150, app:2, charge:true},
-       {k:'rdl',    s:3, r:'10 répétitions', repos:120, app:1},
+       {k:'rdl',    s:3, r:'10 répétitions', repos:120, app:1, charge:true},
        {k:'bulgare',s:3, r:'10 par jambe',   repos:75},
        {k:'planche',s:3, r:'40 secondes',    repos:40}]}},
 
@@ -497,14 +497,14 @@ const BLOCS = {
      exos:[
        {k:'traction',s:4, r:'6 répétitions', repos:120},
        {k:'dc',      s:4, r:'6 répétitions', repos:120, app:1, charge:true},
-       {k:'hip',     s:3, r:'8 répétitions', repos:120, app:1},
+       {k:'hip',     s:3, r:'8 répétitions', repos:120, app:1, charge:true},
        {k:'pallof',  s:3, r:'30 s par côté', repos:45}]},
    b:{titre:'Salle · explosivité et force maximale', ech:12, calme:6,
      sous:"Charges lourdes, peu de répétitions, longs repos. Un repos écourté ici, c'est la séance entière qui ne sert plus à rien.",
      exos:[
        {k:'sj',     s:4, r:'5 sauts',        repos:120},
        {k:'squat',  s:5, r:'5 répétitions',  repos:180, app:2, charge:true},
-       {k:'rdl',    s:4, r:'6 répétitions',  repos:150, app:1},
+       {k:'rdl',    s:4, r:'6 répétitions',  repos:150, app:1, charge:true},
        {k:'bulgare',s:3, r:'8 par jambe',    repos:90},
        {k:'planche',s:3, r:'45 secondes',    repos:45}]}},
 
@@ -515,14 +515,14 @@ const BLOCS = {
      exos:[
        {k:'traction',s:4, r:'5 répétitions explosives', repos:120},
        {k:'dc',      s:4, r:'4 répétitions explosives', repos:120, app:1, charge:true},
-       {k:'hip',     s:4, r:'6 répétitions explosives', repos:120, app:1},
+       {k:'hip',     s:4, r:'6 répétitions explosives', repos:120, app:1, charge:true},
        {k:'pallof',  s:3, r:'30 s par côté', repos:45}]},
    b:{titre:'Salle · contraste', ech:12, calme:6,
      sous:"Méthode de contraste sur le squat : ta série lourde, trente secondes de pause, puis cinq sauts verticaux au maximum. C'est ce couplage qui apprend à ton corps à sortir vite ce qu'il sait sortir fort.",
      exos:[
        {k:'drop',     s:5, r:'4 sauts',      repos:120},
        {k:'squat',    s:4, r:'3 répétitions lourdes, puis 5 sauts verticaux 30 s après', repos:180, app:2, charge:true, t:40},
-       {k:'rdl',      s:3, r:'5 répétitions', repos:150, app:1},
+       {k:'rdl',      s:3, r:'5 répétitions', repos:150, app:1, charge:true},
        {k:'fentesaut',s:3, r:'6 par jambe',   repos:90},
        {k:'lat',      s:3, r:'30 s par côté', repos:45}]}},
 
@@ -533,14 +533,14 @@ const BLOCS = {
      exos:[
        {k:'traction',s:4, r:'4 répétitions explosives', repos:120},
        {k:'dc',      s:4, r:'4 répétitions explosives', repos:120, app:1, charge:true},
-       {k:'hip',     s:3, r:'5 répétitions explosives', repos:120, app:1},
+       {k:'hip',     s:3, r:'5 répétitions explosives', repos:120, app:1, charge:true},
        {k:'pallof',  s:3, r:'30 s par côté', repos:45}]},
    b:{titre:'Salle · contraste court', ech:12, calme:6,
      sous:"La même méthode qu'en janvier, en plus court. Tu sors de là avec de l'énergie, pas vidé.",
      exos:[
        {k:'sj',    s:5, r:'3 sauts',       repos:150},
        {k:'squat', s:3, r:'3 répétitions lourdes, puis 5 squat jumps 30 s après', repos:180, app:2, charge:true, t:40},
-       {k:'rdl',   s:3, r:'5 répétitions', repos:150, app:1},
+       {k:'rdl',   s:3, r:'5 répétitions', repos:150, app:1, charge:true},
        {k:'lat',   s:3, r:'30 s par côté', repos:45}]}},
 
 5:{nom:'Affûtage', couleur:'#1A1612',
@@ -555,7 +555,7 @@ const BLOCS = {
      exos:[
        {k:'cmj',   s:4, r:'3 sauts',       repos:120},
        {k:'squat', s:3, r:'3 répétitions', repos:180, app:2, charge:true},
-       {k:'hip',   s:2, r:'5 répétitions', repos:120, app:1}]}},
+       {k:'hip',   s:2, r:'5 répétitions', repos:120, app:1, charge:true}]}},
 
 6:{nom:'Poids du corps', couleur:'#3B4A6B', libre:true,
    but:"Quatre semaines d'été sans salle et sans club. On ne cherche pas à progresser : on garde ce qui a été construit, on soigne les écarts entre les deux jambes, et on laisse le corps souffler avant la dernière ligne droite de la saison. Ça se fait dehors, chez toi, en vacances, n'importe où.",
@@ -754,7 +754,7 @@ function marque(plan, sec){ return plan.libre ? duree(sec) : hAff(sec); }
    ===================================================================================== */
 let CODE = '';
 let BRUT = {};
-let P = { fait:{}, charges:{}, tests:{}, choix:{} };
+let P = { fait:{}, charges:{}, tests:{}, choix:{}, ref:{} };
 let CC = { days:{}, mois:'' };
 let semVue = 0;
 
@@ -1110,7 +1110,7 @@ function blocSalle(j, sem, bl){
         + (plan.libre ? ' · compte ' + duree(l.duree) + ' pour cet exercice'
                       : ' · créneau ' + hAff(l.de) + ' – ' + hAff(l.de + l.duree)) + '</p>'
       + '</div></div>';
-    if(e.charge) h += champCharge(j.d, e.k, ex.nom);
+    if(e.charge) h += champCharge(j.d, e.k, ex.nom, sem.bl, sem.mode, /lourde/i.test(e.r));
   });
 
   h += '<p class="regle">'
@@ -1124,15 +1124,79 @@ function blocSalle(j, sem, bl){
   return h;
 }
 
-function champCharge(d, k, nom){
+/* =====================================================================================
+   LA CHARGE EST PRESCRITE, PLUS DEVINÉE
+   Robin entre UN repère par mouvement : la charge avec laquelle il fait 5 répétitions
+   propres en gardant une répétition en réserve. Tout le reste en découle.
+
+   De ce repère on estime un maximum théorique (formule d'Epley), puis chaque bloc prend
+   son pourcentage. Les valeurs sont volontairement prudentes : à 17 ans on ne cherche
+   jamais la charge maximale, et une répétition en réserve est toujours gardée.
+
+   Fabien : les quatre pourcentages ci-dessous sont les seuls chiffres à toucher si tu
+   veux durcir ou alléger. Tout le reste s'ajuste tout seul.
+   ===================================================================================== */
+const PCT = {
+  1: { normal:0.65 },               // bloc 1, apprendre le geste : léger, 10 répétitions
+  2: { normal:0.80 },               // bloc 2, force maximale : 5 à 6 répétitions
+  3: { normal:0.70, lourd:0.85 },   // bloc 3, explosivité : vite et léger, lourd sur le contraste
+  4: { normal:0.80 }                // bloc 4, affûtage : lourd mais facile, 3 répétitions
+};
+const ALLEGE = 0.85;                // semaine de reprise : on redescend franchement
+
+/* Toujours un nombre rond et pair : pas de virgule, pas de kilo impair. */
+function arrondiPair(x){ return Math.max(2, 2 * Math.round(x / 2)); }
+function affKg(x){ return String(Math.round(x)); }
+
+/* maximum théorique à partir d'un 5 répétitions gardé facile */
+function maxEstime(k){
+  const r = Number(P.ref && P.ref[k]);
+  if(!r || r <= 0) return 0;
+  return r * (1 + 5 / 30);
+}
+
+function chargePrescrite(k, bl, mode, lourd){
+  const m = maxEstime(k);
+  if(!m) return 0;
+  const bloc = PCT[bl] || PCT[1];
+  let p = (lourd && bloc.lourd) ? bloc.lourd : bloc.normal;
+  if(mode === 'allege') p *= ALLEGE;
+  return arrondiPair(m * p);
+}
+
+function champRepere(k, nom){
+  const v = (P.ref && P.ref[k]) || '';
+  return '<div class="charge" style="border-color:var(--gold)">'
+    + '<label for="rf-' + k + '"><b>Règle ton repère sur le ' + nom.split(',')[0].toLowerCase() + '.</b> '
+    + 'La charge avec laquelle tu fais 5 répétitions propres en gardant une répétition en réserve. '
+    + "Tant qu'il est vide, je ne peux pas te donner de charge.</label>"
+    + '<input type="number" inputmode="decimal" id="rf-' + k + '" data-ref-k="' + k + '" '
+    + 'value="' + v + '" placeholder="kg">'
+    + '</div>';
+}
+
+function champCharge(d, k, nom, bl, mode, lourd){
   const v = (P.charges[d] && P.charges[d][k]) || '';
   const prec = chargePrecedente(d, k);
-  return '<div class="charge">'
-    + '<label for="ch-'+d+'-'+k+'">Charge de travail sur le '+nom.split(',')[0].toLowerCase()+' (kg)</label>'
+  const kg = chargePrescrite(k, bl, mode, lourd);
+  let h = '';
+  if(!kg) h += champRepere(k, nom);
+  else {
+    h += '<p class="regle" style="border-color:var(--gold);color:var(--ink)">'
+       + '<b>Ta charge aujourd\'hui sur le ' + nom.split(',')[0].toLowerCase() + ' : ' + affKg(kg) + ' kg.</b> '
+       + (mode === 'allege'
+          ? 'Semaine de reprise, on redescend volontairement : ce n\'est pas une erreur.'
+          : 'Si une répétition sort moins propre que les autres, tu enlèves 5 kg et tu finis la séance comme ça. '
+            + 'Si les séries passent toutes sans forcer, tu montes de 2 kg la prochaine fois.')
+       + '</p>';
+  }
+  h += '<div class="charge">'
+    + '<label for="ch-'+d+'-'+k+'">Ce que tu as vraiment soulevé (kg)</label>'
     + '<input type="number" inputmode="decimal" id="ch-'+d+'-'+k+'" data-charge-d="'+d+'" data-charge-k="'+k+'" '
-    + 'value="'+v+'" placeholder="—">'
+    + 'value="'+v+'" placeholder="'+(kg ? affKg(kg) : '—')+'">'
     + (prec ? '<span class="last">La dernière fois : '+prec.v+' kg, le '+jourLong(prec.d)+'.</span>' : '')
     + '</div>';
+  return h;
 }
 function chargePrecedente(d, k){
   const dates = Object.keys(P.charges).filter(function(x){ return x < d && P.charges[x] && P.charges[x][k]; }).sort();
@@ -1181,6 +1245,14 @@ function brancher(){
           if(el) el.scrollIntoView({block:'center'});
         }, 60);
       });
+    });
+  });
+  document.querySelectorAll('[data-ref-k]').forEach(function(i){
+    i.addEventListener('change', function(){
+      P.ref = P.ref || {};
+      if(i.value === '') delete P.ref[i.dataset.refK]; else P.ref[i.dataset.refK] = Number(i.value);
+      enregistrer();
+      rendreSemaine(); rendreEntete();   // le repère vient d'arriver : les charges s'affichent
     });
   });
   document.querySelectorAll('[data-charge-d]').forEach(function(i){
@@ -1246,7 +1318,7 @@ function connecter(code, msgSiFaux){
     CC.mois = BRUT.ccMois || '';
     const r0 = BRUT.robin || {};
     P = { fait: r0.fait || {}, charges: r0.charges || {}, tests: r0.tests || {},
-        choix: r0.choix || {} };
+        choix: r0.choix || {}, ref: r0.ref || {} };
     try{ sessionStorage.setItem('axe_code', code);
          if(document.getElementById('vGarder').checked){ localStorage.setItem('axe_code', code); }
          else { localStorage.removeItem('axe_code'); } }catch(e){}
