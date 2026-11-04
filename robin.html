@@ -1092,7 +1092,8 @@ function blocSalle(j, sem, bl){
     }
     const e = l.exo, ex = EXOS[e.k];
     const s = Math.max(1, e.s - (sem.mode === 'allege' ? 1 : 0));
-    const dose = s + (s>1?' séries':' série') + ' × ' + e.r;
+    const dose = s + (s>1?' séries':' série') + ' × ' + e.r
+               + (e.repos ? ' · repos ' + reposTexte(e.repos) : '');
     h += '<div class="exo"><div class="e-tete" onclick="this.parentElement.classList.toggle(\'on\')">'
       + '<span class="e-lettre">'+String.fromCharCode(lettre++)+'</span>'
       + '<span class="e-nom">'+ex.nom+'</span>'
@@ -1105,8 +1106,7 @@ function blocSalle(j, sem, bl){
       + '<p class="pq">'+ex.pq+'</p>'
       + (e.app ? '<h5>Avant de charger</h5><p>'+e.app+' série'+(e.app>1?'s':'')
           +' d\'approche à charge légère, pour préparer le mouvement. Elles ne comptent pas dans les '+s+'.</p>' : '')
-      + '<p class="e-horloge">Repos entre les séries : '
-        + (e.repos>=60 ? Math.floor(e.repos/60)+' min'+(e.repos%60?' '+(e.repos%60)+' s':'') : e.repos+' s')
+      + '<p class="e-horloge">Repos entre les séries : ' + reposTexte(e.repos)
         + (plan.libre ? ' · compte ' + duree(l.duree) + ' pour cet exercice'
                       : ' · créneau ' + hAff(l.de) + ' – ' + hAff(l.de + l.duree)) + '</p>'
       + '</div></div>';
@@ -1173,6 +1173,14 @@ function champRepere(k, nom){
     + '<input type="number" inputmode="decimal" id="rf-' + k + '" data-ref-k="' + k + '" '
     + 'value="' + v + '" placeholder="kg">'
     + '</div>';
+}
+
+/* Le temps de repos est aussi important que la charge : sur un travail de force, c'est lui
+   qui décide si la série suivante sera utile ou juste fatigante. Il était écrit dans le
+   détail de l'exercice, donc invisible tant qu'on n'ouvrait pas la fiche. Il passe en tête. */
+function reposTexte(r){
+  if(!r) return '';
+  return r >= 60 ? Math.floor(r / 60) + ' min' + (r % 60 ? ' ' + (r % 60) + ' s' : '') : r + ' s';
 }
 
 function champCharge(d, k, nom, bl, mode, lourd){
