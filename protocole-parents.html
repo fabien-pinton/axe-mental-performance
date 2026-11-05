@@ -856,6 +856,36 @@ function aller(id){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
+/* =====================================================================================
+   OUVERTURE CIBLÉE DEPUIS L'ESPACE COACH
+   L'observateur ouvre cette page avec ?code=…&vue=… pour arriver sur le bon écran.
+   `coach=1` affiche un bandeau : ici tout ce qu'on coche est écrit au nom du parent.
+   ===================================================================================== */
+function ouvrirVueCoach(){
+  var q = new URLSearchParams(location.search);
+  if(q.get('coach') === '1') bandeauCoach();
+  var vue = q.get('vue');
+  if(!vue) return;
+  setTimeout(function(){
+    try{ aller(vue); }catch(e){}
+  }, 650);
+}
+function bandeauCoach(){
+  if(document.getElementById('coachBar')) return;
+  var d = document.createElement('div');
+  d.id = 'coachBar';
+  d.setAttribute('style', 'position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#7A3B2E;'
+    + 'color:#FDFAF5;font-family:inherit;font-size:13px;line-height:1.45;padding:11px 16px;'
+    + 'text-align:center;box-shadow:0 -4px 14px rgba(0,0,0,.22)');
+  d.innerHTML = 'Vue préparateur. Tu es dans son espace : ne coche rien et ne valide rien, '
+    + "ce serait enregistré à sa place."
+    + '<button type="button" style="margin-left:10px;background:rgba(253,250,245,.16);color:inherit;'
+    + 'border:1px solid rgba(253,250,245,.5);border-radius:4px;padding:3px 10px;font:inherit;cursor:pointer">Masquer</button>';
+  d.querySelector('button').onclick = function(){ d.remove(); };
+  document.body.appendChild(d);
+}
+window.addEventListener('load', ouvrirVueCoach);
+
 function liste(items, classe){
   return '<ul class="' + (classe || '') + '">' + items.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>';
 }

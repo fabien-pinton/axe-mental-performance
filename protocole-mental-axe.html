@@ -1076,6 +1076,50 @@ if(!axeCode && !axeModeDemoUrl){ if(document.readyState==='loading'){ document.a
 // on la recalcule nous-mêmes une fois les infos du rider chargées, avec exactement la même
 // règle que acces.html, plutôt que de rester bloqué sur l'écran d'inscription par défaut.
 let axeEtape = axeParams.get('etape') || '';
+
+/* =====================================================================================
+   OUVERTURE CIBLÉE DEPUIS L'ESPACE COACH
+   L'observateur ouvre cette page avec ?code=…&vue=… pour tomber directement au bon
+   endroit : le rituel, le carnet des starts, une semaine précise du programme.
+   `coach=1` ajoute un bandeau d'avertissement : sur cette page, tout ce qu'on coche
+   est écrit au nom du sportif, et le préparateur ne doit jamais valider à sa place.
+   ===================================================================================== */
+function axeOuvrirVue(){
+  const vue = axeParams.get('vue');
+  if(axeParams.get('coach') === '1') axeBandeauCoach();
+  if(!vue) return;
+  const sem = parseInt(axeParams.get('sem'), 10);
+  const ancre = axeParams.get('ancre') || '';
+  setTimeout(function(){
+    try{
+      if(sem >= 1 && typeof buildProgram === 'function'){
+        state.week = sem; state.weekAuto = false; buildProgram();
+      }
+      if(typeof go === 'function') go(vue);
+      if(ancre){
+        const el = document.getElementById(ancre) || document.querySelector('.' + ancre);
+        if(el) setTimeout(function(){ el.scrollIntoView({ behavior:'smooth', block:'center' }); }, 300);
+      }
+    }catch(e){ console.log('[AXE] vue ciblée impossible :', e.message); }
+  }, 650);
+}
+
+function axeBandeauCoach(){
+  if(document.getElementById('axeCoachBar')) return;
+  const d = document.createElement('div');
+  d.id = 'axeCoachBar';
+  d.setAttribute('style', 'position:fixed;left:0;right:0;bottom:0;z-index:9999;'
+    + 'background:#7A3B2E;color:#FDFAF5;font-family:inherit;font-size:13px;line-height:1.45;'
+    + 'padding:11px 16px;text-align:center;box-shadow:0 -4px 14px rgba(0,0,0,.22)');
+  d.innerHTML = 'Vue préparateur. Tu es dans son espace : ne coche rien et ne valide rien, '
+    + 'ce serait enregistré à sa place.'
+    + '<button type="button" style="margin-left:10px;background:rgba(253,250,245,.16);color:inherit;'
+    + 'border:1px solid rgba(253,250,245,.5);border-radius:4px;padding:3px 10px;font:inherit;cursor:pointer">'
+    + 'Masquer</button>';
+  d.querySelector('button').onclick = function(){ d.remove(); };
+  document.body.appendChild(d);
+}
+
 // true seulement en démo locale (sans code réel). Un vrai pilote ne doit jamais voir
 // le panneau de simulation, ni dépendre d'une date simulée : son mois vient de Supabase.
 const modeDemo = !axeCode;
@@ -1154,6 +1198,7 @@ async function axeInit(){
       axeDemanderCode('Ce code ne correspond à aucun accès. Vérifie-le, ou écris-nous.');
     }
     axeVerifierMessagesVocaux();
+    axeOuvrirVue();
   }catch(e){ console.log('[AXE] Souci connexion :', e.message); }
 }
 
