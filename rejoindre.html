@@ -211,10 +211,6 @@ body:not(.verrou) #portail{display:none}
 .pt-retour{background:none;border:none;color:var(--dim);font-family:'DM Sans',sans-serif;font-size:14px;
   cursor:pointer;padding:0;margin-bottom:16px}
 .pt-retour:hover{color:var(--ink)}
-.pt-video{margin:0 0 22px}
-.pt-video-cadre{aspect-ratio:16/9;border-radius:9px;overflow:hidden;border:1px solid var(--line-strong);background:#F1ECE3}
-.pt-video-cadre iframe{width:100%;height:100%;display:block;border:0}
-.pt-video-leg{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--dim);text-align:center;margin-top:9px;line-height:1.45}
 .pt-mini{font-size:12px;color:var(--dim);text-align:center;margin-top:16px;line-height:1.6}
 .pt-prog{height:2px;background:var(--line);border-radius:2px;margin:0 0 26px;overflow:hidden}
 .pt-prog i{display:block;height:100%;width:0;background:var(--gold);transition:width .35s var(--ease)}
@@ -264,12 +260,6 @@ body:not(.verrou) #portail{display:none}
   <div class="pt-etape on" id="pt1">
     <h2>C'EST POUR QUI ?</h2>
     <p class="pt-intro">Une question, et je vous emmène directement au bon endroit.</p>
-    <div class="pt-video">
-      <div class="pt-video-cadre">
-        <iframe src="https://www.youtube-nocookie.com/embed/m4IKqKoYWdQ?rel=0&amp;modestbranding=1" title="Présentation de Fabien Pinton · AXE Mental Performance®" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
-      <p class="pt-video-leg">Deux minutes pour me connaître avant de choisir.</p>
-    </div>
     <div class="pt-gros">
       <button type="button" class="pt-btn" onclick="ptProfil('majeur_parent')">Pour mon enfant<small>Ou pour un sportif dont je suis responsable</small></button>
       <button type="button" class="pt-btn" onclick="ptProfil('majeur_sportif')">Pour moi, je suis majeur<small>Je suis le sportif</small></button>
@@ -557,6 +547,25 @@ var SPORTS  = ['BMX Race','Motocross','Football','Tennis','Judo','Natation','Ath
 var NIVEAUX = ['Départemental','Régional','National'];
 var pt = { profil:null, sport:null, niveau:null, envoye:false, token:null };
 
+/* =====================================================================================
+   LE PARRAINAGE
+   Un abonné partage fabien-pinton.fr/rejoindre.html?p=SONCODE. Ce code n'a aucun rapport
+   avec son code d'accès : même partagé dans un groupe, il n'ouvre l'espace de personne.
+   On le garde sur l'appareil, parce qu'un visiteur revient rarement par le même lien, et
+   on le transmet deux fois : sur la fiche dès le portail, et à Stripe au paiement, ce qui
+   inscrit le parrain sur la fiche du nouveau client sans aucune intervention.
+   Le protocole parents n'entre pas dans le parrainage, son bouton n'emporte donc rien. */
+var CLE_PARRAIN = 'axe_parrain_v1';
+var ptParrain = (function(){
+  var v = '';
+  try{
+    v = (new URLSearchParams(location.search).get('p') || '').trim().toUpperCase();
+    if(v && /^[A-Z0-9]{4,12}$/.test(v)) localStorage.setItem(CLE_PARRAIN, v);
+    else v = localStorage.getItem(CLE_PARRAIN) || '';
+  }catch(e){}
+  return /^[A-Z0-9]{4,12}$/.test(v) ? v : '';
+})();
+
 function $(id){ return document.getElementById(id); }
 function val(id){ var e = $(id); return e ? (e.value||'').trim() : ''; }
 function mailOk(m){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m); }
@@ -688,10 +697,17 @@ function ptRecommander(){
 }
 
 function ptPrefill(email){
-  if(!email) return;
   [].forEach.call(document.querySelectorAll('a[href*="buy.stripe.com"]'), function(a){
     var u = a.getAttribute('href');
-    if(u.indexOf('prefilled_email') === -1) a.setAttribute('href', u + (u.indexOf('?') === -1 ? '?' : '&') + 'prefilled_email=' + encodeURIComponent(email));
+    if(email && u.indexOf('prefilled_email') === -1){
+      u += (u.indexOf('?') === -1 ? '?' : '&') + 'prefilled_email=' + encodeURIComponent(email);
+    }
+    // le parrainage ne concerne pas le protocole parents : on reconnaît son bouton à son lien
+    var estParents = a.closest('.offre') && a.closest('.offre').classList.contains('parents');
+    if(ptParrain && !estParents && u.indexOf('client_reference_id') === -1){
+      u += (u.indexOf('?') === -1 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(ptParrain);
+    }
+    a.setAttribute('href', u);
   });
 }
 
@@ -764,7 +780,8 @@ function ptEnvoyer(){
       age_p:           parseInt(val('rage'), 10),
       sport_p:         sportChoisi(),
       niveau_p:        pt.niveau,
-      accords_p:       { responsable:true, paiement_adulte:true, cadre_medical:true, profil:pt.profil, le:new Date().toISOString() }
+      accords_p:       { responsable:true, paiement_adulte:true, cadre_medical:true, profil:pt.profil,
+                         le:new Date().toISOString(), parrain: ptParrain || null }
     })
   }).then(function(r){
     return r.json().then(function(d){ if(d && d.token) pt.token = d.token; }, function(){});
@@ -775,7 +792,7 @@ function ptEnvoyer(){
 (function(){
   var e = null;
   try{ e = localStorage.getItem('axe_portail_v1'); }catch(x){}
-  if(e && e !== '1' && !document.body.classList.contains('verrou')) ptPrefill(e);
+  if(!document.body.classList.contains('verrou')) ptPrefill(e && e !== '1' ? e : '');
 })();
 </script>
 </body>

@@ -100,6 +100,12 @@ a.rc-line:hover .rc-fl{color:var(--or,#A8852A)}
   color:#fff;background:var(--gold);padding:2px 7px;border-radius:2px}
 .rc-who{display:block;font-family:'DM Sans';font-style:normal;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
 .rc-sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:16px 0 4px}
+/* N'apparaît que chez un parrain qui a réellement amené quelqu'un : c'est le seul moment
+   où on a besoin d'ouvrir son abonnement, pour y poser le coupon du mois offert. */
+.rc-stripe{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;
+  padding:11px 14px;border:1.5px solid #635BFF;border-radius:6px;background:rgba(99,91,255,.07);
+  color:#4B45C6;font-size:13.5px;font-weight:600;text-decoration:none;transition:.16s}
+.rc-stripe:hover{background:#635BFF;color:#fff}
 .empty{color:var(--dim);font-style:italic;font-size:13px;margin-top:20px}
 /* Prospects */
 .sec-block{margin-top:56px;padding-top:30px;border-top:1px solid var(--line)}
@@ -1012,7 +1018,32 @@ function bqDuMois(bq, mois){
   });
   return vide ? '' : h;
 }
+/* Qui se cache derrière un code de parrainage. Sans ça la fiche affiche « Venu grâce à
+   2THWMS », et il faut aller chercher à qui appartient ce code. */
+let TOUS_RIDERS = [];
+function nbFilleuls(r){
+  const c = String((r && r.code_parrain) || '').toUpperCase();
+  if(!c) return 0;
+  return TOUS_RIDERS.filter(x => String(x.parraine_par||'').toUpperCase() === c).length;
+}
+function boutonStripe(r){
+  const n = nbFilleuls(r);
+  if(!n || !r.stripe_id) return '';
+  return '<a class="rc-stripe" href="https://dashboard.stripe.com/customers/'
+       + encodeURIComponent(r.stripe_id) + '" target="_blank" rel="noopener">'
+       + 'Ouvrir son abonnement Stripe'
+       + (n > 1 ? ' · ' + n + ' filleuls' : '') + ' →</a>';
+}
+
+function nomDuParrain(code){
+  if(!code) return '';
+  const c = String(code).trim().toUpperCase();
+  const p = TOUS_RIDERS.find(x => String(x.code_parrain||'').toUpperCase() === c);
+  return p ? (p.nom || p.code_acces || '') : '';
+}
+
 function afficherRiders(riders){
+  TOUS_RIDERS = riders || [];
   const grid = document.getElementById('grid');
   document.getElementById('count').textContent = riders.length + (riders.length>1?' sportifs':' sportif');
   grid.innerHTML = '';
@@ -1322,6 +1353,7 @@ function afficherRiders(riders){
       html: `<div class="rider-card">
       <div class="rc-top"><h3>${nomAffiche} ${pastilleType(r)}</h3>${badgeAcces(r)}</div>
       <div class="rc-line"><span>Code</span><span class="mono">${r.code_acces||''}</span></div>
+      ${r.code_parrain?`<div class="rc-line"><span>Son lien de parrainage</span><span class="mono" style="word-break:break-all">fabien-pinton.fr/rejoindre.html?p=${r.code_parrain}</span></div>`:''}
       ${parent
         ? `<div class="rc-line"><span>Programme</span><span>Protocole parents${(sr.parent&&sr.parent.resume)?` · ${sr.parent.resume.faites} / 4 semaines`:''}</span></div>`
           + (function(){ const E = (sr.parent&&sr.parent.enfant) || {};
@@ -1336,8 +1368,9 @@ function afficherRiders(riders){
         : `<div class="rc-line"><span>Mois en cours</span><span>${r.mois_en_cours||'?'}</span></div>${bilanLigne}`}
       <div class="rc-line"><span>Formule</span><span>${r.formule||'?'}</span></div>
       ${estPartenaire?`<div class="rc-line"><span>Statut</span><span class="tag-part">Partenaire éligible</span></div>`:''}
-      ${r.parraine_par?`<div class="rc-line"><span>Venu grâce à</span><span>${r.parraine_par}</span></div>`:''}
+      ${r.parraine_par?`<div class="rc-line"><span>Venu grâce à</span><span>${echapperAttr(nomDuParrain(r.parraine_par) || r.parraine_par)}</span></div>`:''}
       <div class="rc-line"><span>Fin d'accès</span><span>${r.date_fin_acces||'?'}</span></div>
+      ${boutonStripe(r)}
       <div class="rc-line"><span>Contact parent</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
       ${r.tel_rider?`<div class="rc-line"><span>Contact rider</span><span>${r.tel_rider}</span></div>`:''}
       ${profilBlock}
