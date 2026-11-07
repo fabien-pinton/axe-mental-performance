@@ -757,6 +757,8 @@ function majMailBtn(){
 
 const SB_URL = 'https://ilsxrdvxvnvlznjuevba.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
+/* D'où vient le visiteur : ?src=salon posé par le QR code du stand. */
+var AXE_SRC = (function(){ try{ return (new URLSearchParams(location.search).get('src')||'').toLowerCase(); }catch(e){ return ''; } })();
 const CLE = 'axe_salon_leads_v1';   // même liste que la démo sportif : l'espace coach voit tout
 function lireLeads(){ try{ return JSON.parse(localStorage.getItem(CLE) || '[]'); }catch(e){ return []; } }
 function ecrireLeads(a){ try{ localStorage.setItem(CLE, JSON.stringify(a)); }catch(e){} }
@@ -771,7 +773,7 @@ async function transmettre(lead){
         sport_p: lead.sport || null, age_p: lead.age || null, niveau_p: 'Parent',
         profil_p: lead.profil || null, entree_p: lead.entree || null,
         axes_p: lead.axes || null, exercice_p: !!lead.exercice,
-        source_p: 'demo_parents', envoi_p: lead.envoi || null
+        source_p: lead.source || 'demo_parents', envoi_p: lead.envoi || null
       })
     });
     if(rep.ok){
@@ -789,7 +791,7 @@ function terminer(envoi){
     const lead = {
       id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
       date: new Date().toISOString(), token: st.token || '',
-      source: st.token ? 'demo_parents_lien' : 'demo_parents',
+      source: AXE_SRC === 'salon' ? 'salon_parents' : (st.token ? 'demo_parents_lien' : 'demo_parents'),
       nom: nom, email: email,
       sport: L().nom, age: st.age, niveau: 'Parent',
       profil: REFLEXE[st.dominant].titre, entree: ENTREES[st.priorite].titre,

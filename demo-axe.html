@@ -1256,7 +1256,7 @@ async function synchroniser(silencieux){
             canal_p: l.canal || null,
             oeil_p: l.oeil || null,
             exercice_p: !!l.exercice,
-            source_p: l.token ? 'demo_lien' : 'demo',
+            source_p: l.source || (l.token ? 'demo_lien' : 'demo'),
             envoi_p: l.envoi || null
           })
         });
@@ -1279,6 +1279,9 @@ async function synchroniser(silencieux){
 // Fin du parcours. "envoi" vaut 'profil' (email complet), 'lien' (email court avec le seul
 // lien), ou null quand la personne ne laisse pas d'adresse — dans ce cas aucun mail n'est
 // préparé, mais la démo est quand même enregistrée si elle vient d'un lien personnel.
+/* D'où vient le visiteur : ?src=salon posé par le QR code du stand. */
+var AXE_SRC = (function(){ try{ return (new URLSearchParams(location.search).get('src')||'').toLowerCase(); }catch(e){ return ''; } })();
+
 function terminer(envoi){
   const r = resumeTexte();
   const email = envoi ? (document.getElementById('f-mail').value||'').trim() : '';
@@ -1297,6 +1300,7 @@ function terminer(envoi){
       canal: r.canal || '', oeil: r.oeil || '',
       exercice: !!st.exFait,
       envoi: envoi || null,
+      source: AXE_SRC === 'salon' ? 'salon' : (st.token ? 'demo_lien' : 'demo'),
       sync: false
     };
     st.lead = lead;

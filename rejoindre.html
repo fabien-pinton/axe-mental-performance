@@ -166,6 +166,18 @@ footer{padding:34px 0 46px;text-align:center;font-size:12px;color:var(--dim);
   border-top:1px solid var(--line)}
 footer a{color:var(--dim)}
 
+/* ---- carte de visite, tout en haut ---- */
+.carte-vis{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+  max-width:340px;margin:0 auto 4px;padding:11px 16px;border:1.5px solid rgba(168,133,42,.45);
+  border-radius:999px;background:#fff;color:var(--gold);text-decoration:none;
+  font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;cursor:pointer;transition:.18s var(--ease)}
+.carte-vis svg{width:16px;height:16px;flex:none}
+.carte-vis:hover{border-color:var(--gold);background:rgba(168,133,42,.07);transform:translateY(-1px)}
+.carte-vis:active{transform:scale(.985)}
+.carte-ok{display:none;text-align:center;font-size:12.5px;color:var(--dim);margin:7px auto 0;max-width:340px;line-height:1.5}
+.carte-ok.on{display:block}
+
 /* ---- portail d'entrée ---- */
 body.verrou .wrap{display:none}
 body:not(.verrou) #portail{display:none}
@@ -252,7 +264,13 @@ body:not(.verrou) #portail{display:none}
 
 
 <div id="portail">
-  <div class="pt-logo"><div class="l">AXE</div><br><div class="s">MENTAL PERFORMANCE®</div></div>
+  <a class="carte-vis js-vcard" href="fabien-pinton.vcf" download="fabien-pinton.vcf">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+    Enregistrer le contact
+  </a>
+  <div class="carte-ok js-vcard-ok">Ouvrez le fichier téléchargé, puis « Ajouter aux contacts ».</div>
+
+  <div class="pt-logo" style="margin-top:22px"><div class="l">AXE</div><br><div class="s">MENTAL PERFORMANCE®</div></div>
   <div class="pt-pas" id="ptPas">Étape 1 sur 3</div>
   <div class="pt-prog"><i id="ptBarre" style="width:33%"></i></div>
 
@@ -326,6 +344,12 @@ body:not(.verrou) #portail{display:none}
 </div>
 
 <div class="wrap">
+
+  <a class="carte-vis js-vcard" style="margin-top:26px" href="fabien-pinton.vcf" download="fabien-pinton.vcf">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+    Enregistrer le contact
+  </a>
+  <div class="carte-ok js-vcard-ok">Ouvrez le fichier téléchargé, puis « Ajouter aux contacts ».</div>
 
   <div class="reco" id="reco"><span style="color:var(--gold);font-size:17px;line-height:1.2">★</span><div id="recoTxt"></div></div>
 
@@ -793,6 +817,19 @@ function ptEnvoyer(){
   var e = null;
   try{ e = localStorage.getItem('axe_portail_v1'); }catch(x){}
   if(!document.body.classList.contains('verrou')) ptPrefill(e && e !== '1' ? e : '');
+})();
+
+/* Carte de visite. Le .vcf part par le lien lui-même, c'est la méthode la plus fiable sur
+   iPhone. On affiche la consigne après le geste, parce qu'iOS dépose le fichier dans
+   Téléchargements au lieu d'ouvrir Contacts directement. */
+(function(){
+  [].forEach.call(document.querySelectorAll('.js-vcard'), function(a){
+    a.addEventListener('click', function(){
+      setTimeout(function(){
+        [].forEach.call(document.querySelectorAll('.js-vcard-ok'), function(o){ o.classList.add('on'); });
+      }, 500);
+    });
+  });
 })();
 </script>
 </body>

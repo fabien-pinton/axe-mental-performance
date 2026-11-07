@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fabien Pinton · AXE Mental Performance®</title>
+<meta name="description" content="Préparation mentale et physique des jeunes sportifs en compétition.">
+<meta name="theme-color" content="#0B0A09">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23C9A94E'>A</text></svg>">
+<style>
+:root{
+  --noir:#0B0A09; --noir2:#131110;
+  --or:#C9A94E; --or-clair:#E6D29A; --or-fonce:#8C6F27;
+  --txt:#F3EEE3; --dim:rgba(243,238,227,.56);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  background:var(--noir);color:var(--txt);
+  font-family:'DM Sans',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:max(26px,env(safe-area-inset-top)) 20px max(26px,env(safe-area-inset-bottom));
+  position:relative;overflow-x:hidden;
+}
+/* halo doré très léger, comme le vernis de la carte */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(90% 55% at 50% -10%, rgba(201,169,78,.16), transparent 62%),
+    radial-gradient(70% 45% at 50% 112%, rgba(201,169,78,.09), transparent 60%);
+}
+/* filets d'angle */
+.cadre{position:fixed;inset:13px;border:1px solid rgba(201,169,78,.26);border-radius:3px;z-index:0;pointer-events:none}
+.cadre::after{content:'';position:absolute;inset:6px;border:1px solid rgba(201,169,78,.1);border-radius:2px}
+
+main{position:relative;z-index:1;width:100%;max-width:430px;text-align:center}
+
+/* en-tête */
+.marque{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-weight:600;
+  font-size:clamp(40px,13vw,56px);letter-spacing:.2em;padding-right:.2em;line-height:.92;
+  background:linear-gradient(175deg,#F4E3AE 0%,var(--or) 42%,var(--or-fonce) 72%,#F0DFA8 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.sous{font-size:8px;letter-spacing:.38em;color:var(--or);font-weight:700;text-transform:uppercase;
+  border-top:1px solid rgba(201,169,78,.42);display:inline-block;padding-top:7px;margin-top:9px}
+.nom{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:25px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--or-clair);margin-top:30px;line-height:1.1}
+.role{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-style:italic;
+  font-size:16.5px;color:var(--dim);margin-top:7px;line-height:1.45}
+
+/* séparateur losange */
+.sep{display:flex;align-items:center;gap:12px;margin:30px 0 26px}
+.sep i{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,78,.5),transparent)}
+.sep b{width:6px;height:6px;border:1px solid var(--or);transform:rotate(45deg);flex:none}
+
+/* boutons */
+.actions{display:flex;flex-direction:column;gap:13px}
+.b{
+  display:flex;align-items:center;gap:14px;text-align:left;text-decoration:none;
+  border:1px solid rgba(201,169,78,.38);border-radius:9px;background:rgba(255,255,255,.028);
+  color:var(--txt);padding:17px 18px;font-family:inherit;font-size:16px;cursor:pointer;
+  transition:.2s var(--ease);position:relative;overflow:hidden;width:100%;
+}
+.b::after{content:'›';margin-left:auto;font-size:24px;color:rgba(201,169,78,.6);line-height:1;flex:none;transition:.2s var(--ease)}
+.b:active{transform:scale(.985)}
+.b:hover{border-color:var(--or);background:rgba(201,169,78,.08)}
+.b:hover::after{transform:translateX(3px);color:var(--or)}
+.b .ic{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:linear-gradient(160deg,var(--or-clair),var(--or-fonce));color:#17130A}
+.b .ic svg{width:19px;height:19px;display:block}
+.b .t{font-weight:600;line-height:1.25;letter-spacing:.01em}
+.b .s{display:block;font-weight:400;font-size:12.5px;color:var(--dim);margin-top:3px;line-height:1.4}
+
+/* le premier bouton, celui qui compte, est plein */
+.b.plein{background:linear-gradient(160deg,rgba(230,210,154,.17),rgba(140,111,39,.1));border-color:rgba(201,169,78,.62)}
+
+/* confirmation après enregistrement du contact */
+.ok{display:none;font-size:13px;color:var(--or-clair);margin-top:12px;line-height:1.5}
+.ok.on{display:block;animation:ap .4s var(--ease)}
+@keyframes ap{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* pied */
+.devise{margin-top:32px;font-family:'Cormorant Garamond',Garamond,Georgia,serif;
+  font-size:14.5px;letter-spacing:.1em;color:rgba(201,169,78,.78)}
+.devise b{font-weight:600;color:var(--or-clair)}
+.coord{margin-top:16px;font-size:12.5px;color:rgba(243,238,227,.4);line-height:1.8}
+.coord a{color:rgba(243,238,227,.55);text-decoration:none;border-bottom:1px solid rgba(201,169,78,.26)}
+
+@media(max-height:680px){
+  .nom{margin-top:20px}.sep{margin:20px 0 18px}.devise{margin-top:20px}
+  .b{padding:14px 16px}
+}
+</style>
+</head>
+<body>
+<div class="cadre"></div>
+
+<main>
+  <div class="marque">A·X·E</div>
+  <div class="sous">Mental Performance®</div>
+
+  <div class="nom">Fabien Pinton</div>
+  <div class="role">Préparateur mental<br>Fondateur de la Méthode AXE Mental&nbsp;Performance®</div>
+
+  <div class="sep"><i></i><b></b><i></i></div>
+
+  <div class="actions">
+
+    <a class="b plein" id="btnContact" href="fabien-pinton.vcf" download="fabien-pinton.vcf">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></span>
+      <span class="t">Enregistrer le contact<span class="s">Ma carte dans votre répertoire</span></span>
+    </a>
+    <div class="ok" id="okContact">Ouvrez le fichier téléchargé, puis « Ajouter aux contacts ».</div>
+
+    <a class="b" href="demo-axe.html?src=salon">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z"/></svg></span>
+      <span class="t">Démo sportif<span class="s">Dès 12 ans · 2 minutes</span></span>
+    </a>
+
+    <a class="b" href="demo-parents.html?src=salon">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="3.5"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16.5 3.6a4 4 0 0 1 0 6.8"/></svg></span>
+      <span class="t">Démo parents<span class="s">Enfant de 6 à 12 ans · 2 minutes</span></span>
+    </a>
+
+  </div>
+
+  <div class="devise"><b>Alignement</b> · <b>eXigence</b> · <b>Engagement</b></div>
+  <div class="coord">
+    07 72 28 94 57<br>
+    <a href="https://www.fabien-pinton.fr">www.fabien-pinton.fr</a>
+  </div>
+</main>
+
+<script>
+/* Le fichier .vcf part directement par le lien, c'est ce qui marche le mieux sur iPhone.
+   On affiche juste la consigne après le geste, parce que iOS dépose le fichier dans
+   Téléchargements au lieu d'ouvrir Contacts tout de suite. */
+(function(){
+  var b = document.getElementById('btnContact');
+  var ok = document.getElementById('okContact');
+  if(!b || !ok) return;
+  b.addEventListener('click', function(){
+    setTimeout(function(){ ok.classList.add('on'); }, 500);
+  });
+})();
+</script>
+</body>
+</html>
