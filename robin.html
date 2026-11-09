@@ -110,6 +110,9 @@ h1.titre{font-family:'Bebas Neue';font-size:46px;letter-spacing:.015em;line-heig
 .jour.retard{border-color:#B8761A}
 .jour.fini{background:rgba(93,111,74,.05);border-color:rgba(93,111,74,.3)}
 .jour.ferme{opacity:.5}
+.jour.demain{border-color:rgba(168,133,42,.55);border-style:dashed}
+.j-avance{margin:0 0 12px;padding:10px 12px;border-left:2px solid var(--gold);
+  background:rgba(168,133,42,.07);border-radius:0 4px 4px 0;font-size:13px;line-height:1.5}
 .j-tete{display:flex;align-items:center;gap:10px;padding:14px 16px;flex-wrap:wrap}
 .j-tete .jn{font-family:'Bebas Neue';font-size:21px;letter-spacing:.06em;flex:none}
 .j-tete .jd{font-size:13px;color:var(--pale);flex:1}
@@ -120,6 +123,7 @@ h1.titre{font-family:'Bebas Neue';font-size:46px;letter-spacing:.015em;line-heig
 .puce.retard{background:#B8761A;color:#fff}
 .puce.cle{background:var(--ink);color:var(--cream)}
 .puce.ferme{border:1px solid var(--line-fort);color:var(--pale)}
+.puce.demain{border:1px dashed var(--gold);color:var(--gold)}
 .j-corps{padding:0 16px 16px}
 .j-repos{padding:0 16px 14px;font-size:14px;color:var(--pale)}
 
@@ -934,19 +938,23 @@ function carteTest(n){
 
 function carteJour(j, a, sem, bl){
   const passe = j.d < a, futur = j.d > a, estAuj = j.d === a;
+  // La séance du lendemain est ouverte dès la veille : si le jour prévu tombe mal,
+  // un férié, un déplacement, une course, Robin peut l'avancer sans attendre.
+  const estDemain = j.d === plus(a, 1);
   j.seances = seancesDe(j);
   const enAttente = j.seances.length === 1 && j.seances[0] === 'choix';
   const n = enAttente ? 0 : j.seances.length;
   const toutFait = n>0 && j.seances.every(function(t){ return estFaite(j.d, t); });
   const retard = passe && (n>0 || enAttente) && !toutFait;
-  const ferme  = futur && (n>0 || enAttente);
+  const ferme  = futur && !estDemain && (n>0 || enAttente);
 
   let cls = 'jour';
   if(j.course) cls += ' course';
   if(estAuj) cls += ' auj';
   else if(retard) cls += ' retard';
   else if(toutFait) cls += ' fini';
-  if(ferme) cls += ' ferme';
+  else if(estDemain) cls += ' demain';
+  if(ferme && !enAttente) cls += ' ferme';
 
   let puces = '';
   if(estAuj)       puces += '<span class="puce auj">Aujourd\'hui</span>';
@@ -954,10 +962,11 @@ function carteJour(j, a, sem, bl){
                           + (j.course.maj?'Course importante':'Course')+'</span>';
   if(toutFait)     puces += '<span class="puce ok">Validé</span>';
   else if(retard)  puces += '<span class="puce retard">À valider</span>';
-  else if(ferme)   puces += '<span class="puce ferme">S\'ouvre le '+s2d(j.d).getDate()+'</span>';
+  else if(estDemain && (n>0 || enAttente)) puces += '<span class="puce demain">Demain · déjà ouverte</span>';
+  else if(ferme && !enAttente) puces += '<span class="puce ferme">S\'ouvre le '+s2d(j.d).getDate()+'</span>';
   if(n>0 && !ferme && j.seances.indexOf('salle')>-1 && j.jour!=='mercredi')
     puces += '<span class="puce cle">Séance clé</span>';
-  if(enAttente && !ferme) puces += '<span class="puce choix">À toi de choisir</span>';
+  if(enAttente) puces += '<span class="puce choix">À toi de choisir</span>';
 
   let h = '<article class="'+cls+'" id="j-'+j.d+'">'
     + '<div class="j-tete"><span class="jn">'+j.jour.toUpperCase()+'</span>'
@@ -1023,6 +1032,8 @@ function carteJour(j, a, sem, bl){
   }
 
   h += '<div class="j-corps">';
+  if(estDemain && !toutFait) h += '<div class="j-avance">C\'est la séance de demain, ouverte en avance. '
+    + 'Si demain ne va pas, tu peux la faire aujourd\'hui : coche-la ici, elle restera comptée sur demain.</div>';
   j.seances.forEach(function(t){
     h += (t === 'velo') ? blocVelo(j, sem) : blocSalle(j, sem, bl);
     if(t === 'salle' && j.jour === 'mercredi') h += '';
