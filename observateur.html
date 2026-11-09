@@ -1045,7 +1045,13 @@ function nomDuParrain(code){
 function afficherRiders(riders){
   TOUS_RIDERS = riders || [];
   const grid = document.getElementById('grid');
-  document.getElementById('count').textContent = riders.length + (riders.length>1?' sportifs':' sportif');
+  // Les accès offerts (formule « Cadeau ») sont affichés mais ne comptent pas comme clients.
+  const nbClients = riders.filter(function(r){
+    return String(r.formule || '').trim().toLowerCase() !== 'cadeau';
+  }).length;
+  document.getElementById('count').textContent =
+    riders.length + (riders.length > 1 ? ' sportifs' : ' sportif')
+    + ' · ' + nbClients + (nbClients > 1 ? ' clients' : ' client');
   grid.innerHTML = '';
   DOSSIERS = [];
   if(!riders.length){
