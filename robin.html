@@ -169,6 +169,16 @@ h1.titre{font-family:'Bebas Neue';font-size:46px;letter-spacing:.015em;line-heig
 .etat{font-size:13px;margin-top:9px;min-height:17px;color:var(--vert)}
 .etat.alerte{color:var(--velo)}
 
+.calib{border:1.5px dashed var(--gold);border-radius:5px;padding:13px 15px;margin-bottom:12px;
+  background:rgba(168,133,42,.05)}
+.calib > b{font-family:'Bebas Neue';font-size:17px;letter-spacing:.05em;display:block;margin-bottom:5px;color:var(--gold)}
+.calib p b{font-weight:700;color:var(--ink)}
+.calib p{font-size:13.5px;line-height:1.5;margin-bottom:10px}
+.calib label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.calib input{width:100%;padding:10px;font-size:16px;font-family:inherit;text-align:center;
+  border:1px solid var(--line-fort);border-radius:4px;background:var(--carte);color:var(--ink)}
+.calib .last{display:block;margin-top:7px;font-size:12px;color:var(--dim)}
+
 .test{border:1.5px solid var(--ink);border-radius:5px;padding:14px 16px;margin-bottom:12px;background:var(--carte)}
 .test b{font-family:'Bebas Neue';font-size:19px;letter-spacing:.05em;display:block;margin-bottom:5px}
 .test p{font-size:14px;color:var(--dim)}
@@ -590,28 +600,28 @@ const BLOCS = {
 const SEMAINES = [
 {n:1,  bl:1, mode:'plein',   test:true, focus:"Le placement sur la grille. À chaque départ, tu vérifies la même chose : pied avant, hauteur de selle, position des mains, regard. Toujours identique."},
 {n:2,  bl:1, mode:'plein',   focus:"Le temps de réaction au son. Tu demandes à quelqu'un de déclencher sans prévenir, et tu pars au son, pas à la vue."},
-{n:3,  bl:1, mode:'plein',   focus:"La première pédale. Vingt départs sur lesquels tu ne regardes que ça : est-ce qu'elle part complète, ou est-ce qu'elle patine ?"},
+{n:3,  bl:1, mode:'plein',   calib:true, focus:"La première pédale. Vingt départs sur lesquels tu ne regardes que ça : est-ce qu'elle part complète, ou est-ce qu'elle patine ?"},
 {n:4,  bl:1, mode:'allege',  focus:"Semaine allégée en salle. Sur le vélo, tu roules relâché et tu travailles les trajectoires, pas l'intensité."},
-{n:5,  bl:2, mode:'plein',   test:true, focus:"Les cinq premiers mètres, rien d'autre. Tu pars, tu comptes cinq mètres, tu te relèves. Quinze fois."},
+{n:5,  bl:2, mode:'plein',   calib:true, test:true, focus:"Les cinq premiers mètres, rien d'autre. Tu pars, tu comptes cinq mètres, tu te relèves. Quinze fois."},
 {n:6,  bl:2, mode:'plein',   focus:"Les départs côte à côte. Quelqu'un à côté de toi change tout : tu dois garder ta ligne et ton rythme, pas le sien."},
 {n:7,  bl:2, mode:'plein',   focus:"Dernière semaine avant la coupure. Tu finis propre : le vendredi 18 est ta dernière séance de l'année."},
 {n:8,  bl:2, mode:'coupure', focus:"Coupure de Noël."},
 {n:9,  bl:2, mode:'coupure', focus:"Coupure de Noël."},
 {n:10, bl:2, mode:'allege',  focus:"Reprise le mardi 5. Tu reprends à charges réduites : ton corps a deux semaines de retard, pas toi. Ne cherche pas à rattraper."},
-{n:11, bl:2, mode:'plein',   test:true, focus:"Tu refais exactement les repères de la semaine 1, pour voir ce qui a bougé pendant l'automne."},
+{n:11, bl:2, mode:'plein',   calib:true, test:true, focus:"Tu refais exactement les repères de la semaine 1, pour voir ce qui a bougé pendant l'automne."},
 {n:12, bl:2, mode:'plein', inv:true, off:['vendredi'], focus:"Semaine de Tours. La séance lourde passe au mardi, parce que tu pars vendredi. L'indoor, c'est de l'entraînement : tu y vas pour les départs, pas pour le résultat."},
 {n:13, bl:2, mode:'plein',   focus:"Retour au sol. Tu reprends tes repères de piste extérieure, qui ne sont pas ceux de l'indoor."},
-{n:14, bl:3, mode:'plein',   test:true, focus:"Départs chronométrés. Tu notes ton temps sur la première ligne droite à chaque séance, toujours au même repère."},
+{n:14, bl:3, mode:'plein',   calib:true, test:true, focus:"Départs chronométrés. Tu notes ton temps sur la première ligne droite à chaque séance, toujours au même repère."},
 {n:15, bl:3, mode:'plein',   focus:"Départ au son, les yeux fermés jusqu'au déclenchement. Ça force l'oreille et supprime l'anticipation visuelle."},
 {n:16, bl:3, mode:'plein', inv:true, off:['vendredi'], focus:"Semaine de Caen. Séance lourde au mardi. Sur place, tu travailles une seule chose : tes vingt secondes avant le départ."},
 {n:17, bl:3, mode:'plein', inv:true, off:['vendredi'], focus:"Semaine de Sarrians. Coupe du Monde : il y aura du niveau, et c'est tant mieux. Tu regardes comment les meilleurs se placent sur la grille."},
-{n:18, bl:4, mode:'plein',   test:true, focus:"Les départs en condition de fatigue : cinq en fin de séance, quand tu n'en as plus envie. C'est ce qui arrivera au troisième tour à Bolbec."},
+{n:18, bl:4, mode:'plein',   calib:true, test:true, focus:"Les départs en condition de fatigue : cinq en fin de séance, quand tu n'en as plus envie. C'est ce qui arrivera au troisième tour à Bolbec."},
 {n:19, bl:4, mode:'plein',   focus:"La ligne droite complète, à fond, cinq fois. Puis tu rentres. Qualité maximale, volume minimum."},
 {n:20, bl:5, mode:'leger', off:['vendredi'], focus:"Semaine de Bolbec. Tout est en place. Mardi tu roules court et vite, mercredi tu roules léger, vendredi tu pars. Tu ne cherches plus rien de nouveau."},
 {n:21, bl:5, mode:'leger', off:['vendredi'], focus:"Semaine de Zolder. Tu sors de Bolbec : récupération d'abord. Zolder est un déplacement de plaisir et d'expérience, pas un objectif."},
 {n:22, bl:5, mode:'leger', off:['vendredi'], focus:"Semaine de La Roche-sur-Yon. Deuxième manche importante. Même protocole qu'à Bolbec, tu connais maintenant."},
 {n:23, bl:1, mode:'allege',  focus:"Trois week-ends de course d'affilée dans les jambes. Cette semaine tu décompresses : vélo relâché, salle légère, et tu dors."},
-{n:24, bl:2, mode:'plein',   test:true, focus:"Reprise du travail de fond. C'est la première vraie fenêtre depuis mars pour regagner de la force avant le bloc de mai."},
+{n:24, bl:2, mode:'plein',   calib:true, test:true, focus:"Reprise du travail de fond. C'est la première vraie fenêtre depuis mars pour regagner de la force avant le bloc de mai."},
 {n:25, bl:2, mode:'plein',   focus:"Charges lourdes. Sur le vélo, tu reprends les départs chronométrés : tu dois être plus rapide qu'en janvier."},
 {n:26, bl:3, mode:'plein',   focus:"On remet de la vitesse. Les départs se font tous à intensité maximale, et peu nombreux."},
 {n:27, bl:3, mode:'plein',   focus:"Dernière semaine pleine avant le bloc de mai. Tu finis fort, tu ne te blesses pas."},
@@ -619,7 +629,7 @@ const SEMAINES = [
 {n:29, bl:5, mode:'leger', off:['vendredi'], focus:"Coupe de France à Besançon. Deuxième week-end du bloc. Tu gères ta récupération comme une partie de l'entraînement : sommeil, repas, étirements."},
 {n:30, bl:5, mode:'leger', off:['mercredi','vendredi'], focus:"Coupe d'Europe à Besançon, départ dès le mercredi. Mardi est ta seule séance de la semaine : courte, et uniquement pour garder la sensation."},
 {n:31, bl:1, mode:'allege',  focus:"Trois week-ends de course en trois semaines, c'est beaucoup. Cette semaine, tu répares : volume minimum, sommeil maximum. Si tu es fatigué, dis-le à ton père."},
-{n:32, bl:2, mode:'plein',   test:true, focus:"Quatre semaines avant Troyes, et c'est la dernière fenêtre de l'année pour construire de la force. On ne la rate pas."},
+{n:32, bl:2, mode:'plein',   calib:true, test:true, focus:"Quatre semaines avant Troyes, et c'est la dernière fenêtre de l'année pour construire de la force. On ne la rate pas."},
 {n:33, bl:2, mode:'plein',   focus:"Charges lourdes. Sur la piste, tu travailles les départs en situation de championnat : une seule chance, pas de deuxième essai."},
 {n:34, bl:3, mode:'plein',   focus:"On repasse la force en vitesse. Dernière semaine de travail avant l'affûtage."},
 {n:35, bl:5, mode:'leger', off:['vendredi'], focus:"Championnat de France, Troyes. C'est la course la plus importante de ta saison. Mardi court et vif, mercredi relâché, vendredi tu pars. Tu arrives frais, et tu le sais."},
@@ -628,7 +638,7 @@ const SEMAINES = [
 {n:38, bl:6, mode:'plein', clubFerme:true, focus:"Poids du corps. Si tu pars en vacances, tu emportes le programme : il ne demande qu'un sol et une barre de traction."},
 {n:39, bl:6, mode:'plein', clubFerme:true, focus:"Poids du corps. C'est aussi la semaine où tu peux rouler ailleurs, autrement, sans chrono et sans objectif."},
 {n:40, bl:6, mode:'plein', clubFerme:true, focus:"Dernière semaine sans rien. Le club rouvre et la barre revient le mardi 10 août."},
-{n:41, bl:1, mode:'plein',   test:true, focus:"Reprise en salle le mardi 10. Charges modérées pendant une semaine, le temps que les tendons se rappellent. Tu refais les deux mesures."},
+{n:41, bl:1, mode:'plein',   calib:true, test:true, focus:"Reprise en salle le mardi 10. Charges modérées pendant une semaine, le temps que les tendons se rappellent. Tu refais les deux mesures."},
 {n:42, bl:2, mode:'plein',   focus:"Les charges remontent. Cinq semaines avant la dernière Coupe de France : le compte est juste, chaque séance compte."},
 {n:43, bl:2, mode:'plein',   focus:"Force maximale. Sur le vélo, tu reprends les départs chronométrés, au même repère que d'habitude."},
 {n:44, bl:3, mode:'plein',   focus:"Force-vitesse. Dernière semaine pleine de la saison."},
@@ -758,7 +768,7 @@ function marque(plan, sec){ return plan.libre ? duree(sec) : hAff(sec); }
    ===================================================================================== */
 let CODE = '';
 let BRUT = {};
-let P = { fait:{}, charges:{}, tests:{}, choix:{}, ref:{} };
+let P = { fait:{}, charges:{}, tests:{}, choix:{}, ref:{}, calib:{} };
 let CC = { days:{}, mois:'' };
 let semVue = 0;
 
@@ -1103,7 +1113,8 @@ function blocSalle(j, sem, bl){
     }
     const e = l.exo, ex = EXOS[e.k];
     const s = Math.max(1, e.s - (sem.mode === 'allege' ? 1 : 0));
-    const dose = s + (s>1?' séries':' série') + ' × ' + e.r
+    const calib = !!(sem.calib && e.charge);
+    const dose = s + (s>1?' séries':' série') + (calib ? ' + 1 (max)' : '') + ' × ' + e.r
                + (e.repos ? ' · repos ' + reposTexte(e.repos) : '');
     h += '<div class="exo"><div class="e-tete" onclick="this.parentElement.classList.toggle(\'on\')">'
       + '<span class="e-lettre">'+String.fromCharCode(lettre++)+'</span>'
@@ -1121,7 +1132,7 @@ function blocSalle(j, sem, bl){
         + (plan.libre ? ' · compte ' + duree(l.duree) + ' pour cet exercice'
                       : ' · créneau ' + hAff(l.de) + ' – ' + hAff(l.de + l.duree)) + '</p>'
       + '</div></div>';
-    if(e.charge) h += champCharge(j.d, e.k, ex.nom, sem.bl, sem.mode, /lourde/i.test(e.r));
+    if(e.charge) h += champCharge(j.d, e.k, ex.nom, sem.bl, sem.mode, /lourde/i.test(e.r), calib);
   });
 
   h += '<p class="regle">'
@@ -1155,13 +1166,51 @@ const PCT = {
 };
 const ALLEGE = 0.85;                // semaine de reprise : on redescend franchement
 
-/* Toujours un nombre rond et pair : pas de virgule, pas de kilo impair. */
-function arrondiPair(x){ return Math.max(2, 2 * Math.round(x / 2)); }
+/* Les repères, fixés par Fabien et plus par Robin.
+   Chacun est la charge pour 5 répétitions propres en gardant une répétition en réserve.
+   Robin les avait déclarés lui-même et les avait largement sous-estimés, sauf au squat :
+   il annonçait 40 kg au développé couché pour un squat à 110, ce qui n'est pas cohérent
+   et donnait des séances trop faciles. Ces cinq nombres sont désormais la seule source
+   des charges. Pour durcir ou alléger, c'est ici, et nulle part ailleurs. */
+const REF_COACH = {
+  squat:  110,   // inchangé : vérifié en séance réelle, il a poussé 85 kg le 6 novembre
+  rdl:    102,
+  hip:    124,
+  rowing:  66,
+  dc:      58
+};
+
+/* Toujours un multiple de 5 : c'est ce qui se charge vraiment sur une barre, avec les
+   disques de 2,5 kg de chaque côté. Pas de virgule, pas de kilo impossible à monter. */
+function arrondiPair(x){ return Math.max(5, 5 * Math.round(x / 5)); }
 function affKg(x){ return String(Math.round(x)); }
 
 /* maximum théorique à partir d'un 5 répétitions gardé facile */
+/* Le repère de départ est celui que Fabien a posé. Dès que Robin fait une série max
+   de calibrage, on le remplace par ce que la série dit vraiment : une série de n
+   répétitions à P kilos donne un maximum théorique de P × (1 + n/30), et le repère
+   est ce maximum ramené à cinq répétitions. On borne le saut à 20 % dans un sens
+   comme dans l'autre : une seule mauvaise série ne doit pas emporter le programme. */
+function derniereCalib(k){
+  let d0 = '', v = null;
+  Object.keys(P.calib || {}).forEach(function(d){
+    const c = P.calib[d] && P.calib[d][k];
+    if(c && c.kg > 0 && c.reps > 0 && d > d0){ d0 = d; v = c; }
+  });
+  return v;
+}
+function repereEffectif(k){
+  const base = Number(REF_COACH[k]) || 0;
+  const c = derniereCalib(k);
+  if(!base || !c) return base;
+  const max = c.kg * (1 + Math.min(c.reps, 12) / 30);
+  let r = max / (1 + 5 / 30);
+  r = Math.min(base * 1.2, Math.max(base * 0.8, r));
+  return Math.round(r);
+}
+
 function maxEstime(k){
-  const r = Number(P.ref && P.ref[k]);
+  const r = Number(repereEffectif(k));
   if(!r || r <= 0) return 0;
   return r * (1 + 5 / 30);
 }
@@ -1194,7 +1243,7 @@ function reposTexte(r){
   return r >= 60 ? Math.floor(r / 60) + ' min' + (r % 60 ? ' ' + (r % 60) + ' s' : '') : r + ' s';
 }
 
-function champCharge(d, k, nom, bl, mode, lourd){
+function champCharge(d, k, nom, bl, mode, lourd, calib){
   const v = (P.charges[d] && P.charges[d][k]) || '';
   const prec = chargePrecedente(d, k);
   const kg = chargePrescrite(k, bl, mode, lourd);
@@ -1205,8 +1254,9 @@ function champCharge(d, k, nom, bl, mode, lourd){
        + '<b>Ta charge aujourd\'hui sur le ' + nom.split(',')[0].toLowerCase() + ' : ' + affKg(kg) + ' kg.</b> '
        + (mode === 'allege'
           ? 'Semaine de reprise, on redescend volontairement : ce n\'est pas une erreur.'
-          : 'Si une répétition sort moins propre que les autres, tu enlèves 5 kg et tu finis la séance comme ça. '
-            + 'Si les séries passent toutes sans forcer, tu montes de 2 kg la prochaine fois.')
+          : 'Cette charge est calculée pour toi, tu ne la choisis pas. Elle doit être dure sur les deux dernières répétitions de chaque série. '
+            + 'Si une répétition sort moins propre que les autres, tu enlèves 5 kg et tu finis la séance comme ça. '
+            + 'Et si une série entière passe sans forcer, note la vraie charge juste en dessous : c\'est comme ça que je règle la suivante.')
        + '</p>';
   }
   h += '<div class="charge">'
@@ -1215,7 +1265,36 @@ function champCharge(d, k, nom, bl, mode, lourd){
     + 'value="'+v+'" placeholder="'+(kg ? affKg(kg) : '—')+'">'
     + (prec ? '<span class="last">La dernière fois : '+prec.v+' kg, le '+jourLong(prec.d)+'.</span>' : '')
     + '</div>';
+  if(calib && kg) h += champCalibrage(d, k, nom);
   return h;
+}
+
+/* Série de calibrage : une série de plus, à la même charge, jusqu'à la répétition
+   où la technique se dégrade. Le nombre tenu suffit à recalculer le repère. */
+function champCalibrage(d, k, nom){
+  const kg = arrondiPair(repereEffectif(k));   // la série max se fait au repère lui-même
+  const c = (P.calib[d] && P.calib[d][k]) || {};
+  const avant = repereEffectif(k);
+  let apres = null;
+  if(c.reps > 0 && c.kg > 0){
+    const m = c.kg * (1 + Math.min(c.reps, 12) / 30);
+    const base = Number(REF_COACH[k]) || 0;
+    apres = Math.round(Math.min(base * 1.2, Math.max(base * 0.8, m / (1 + 5 / 30))));
+  }
+  return '<div class="calib">'
+    + '<b>Série max · ' + affKg(kg) + ' kg</b>'
+    + '<p>Celle-là, tu la fais <b>en premier</b>, juste après tes séries d\'approche, '
+    + 'pendant que tu es frais. Elle est plus lourde que ta charge du jour, c\'est normal. '
+    + 'Tu vas jusqu\'à la répétition où le geste se dégrade, tu t\'arrêtes là, pas une de plus, '
+    + 'et tu notes combien tu en as tenues. Ensuite tu redescends à ta charge du jour pour le reste.</p>'
+    + '<label for="cb-'+d+'-'+k+'">Répétitions tenues sur la série max</label>'
+    + '<input type="number" inputmode="numeric" min="1" id="cb-'+d+'-'+k+'" '
+    + 'data-calib-d="'+d+'" data-calib-k="'+k+'" data-calib-kg="'+kg+'" max="12" '
+    + 'value="'+(c.reps || '')+'" placeholder="—">'
+    + (apres
+        ? '<span class="last">Repère mis à jour : ' + avant + ' kg. Tes charges suivantes sont recalculées.</span>'
+        : '<span class="last">Tant que c\'est vide, je garde le repère de départ.</span>')
+    + '</div>';
 }
 function chargePrecedente(d, k){
   const dates = Object.keys(P.charges).filter(function(x){ return x < d && P.charges[x] && P.charges[x][k]; }).sort();
@@ -1282,6 +1361,17 @@ function brancher(){
       enregistrer();
     });
   });
+  document.querySelectorAll('[data-calib-d]').forEach(function(i){
+    i.addEventListener('change', function(){
+      const d = i.dataset.calibD, k = i.dataset.calibK, kg = Number(i.dataset.calibKg);
+      P.calib[d] = P.calib[d] || {};
+      const n = Number(i.value);
+      if(!n || n < 1) delete P.calib[d][k];
+      else P.calib[d][k] = { kg: kg, reps: Math.min(12, n) };
+      enregistrer();
+      rendreSemaine();   // le repère change : toutes les charges se recalculent
+    });
+  });
   document.querySelectorAll('[data-test]').forEach(function(i){
     i.addEventListener('change', function(){
       const s = i.dataset.test, c = i.dataset.champ;
@@ -1336,7 +1426,7 @@ function connecter(code, msgSiFaux){
     CC.days = BRUT.ccDays || {};
     CC.mois = BRUT.ccMois || '';
     const r0 = BRUT.robin || {};
-    P = { fait: r0.fait || {}, charges: r0.charges || {}, tests: r0.tests || {},
+    P = { fait: r0.fait || {}, charges: r0.charges || {}, tests: r0.tests || {}, calib: r0.calib || {},
         choix: r0.choix || {}, ref: r0.ref || {} };
     try{ sessionStorage.setItem('axe_code', code);
          if(document.getElementById('vGarder').checked){ localStorage.setItem('axe_code', code); }
