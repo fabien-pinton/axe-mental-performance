@@ -844,7 +844,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
 
     <div class="cols mental-only">
       <div>
-        <div class="col-head"><span class="dot m"></span><h2>Mental</h2><small>1 exercice / semaine</small></div>
+        <div class="col-head"><span class="dot m"></span><h2>Mental</h2><small>l'axe du mois</small></div>
         <div id="mentalCol"></div>
       </div>
     </div>
@@ -3522,15 +3522,11 @@ function carteMentale(ex, id){
   const oeil = ouvert
     ? `<div class="obs-flag">${OEIL_SVG} Ce que tu écris ici arrive à ton coach. C'est là-dessus qu'il construit ton mois suivant.</div>`
     : `<div class="obs-flag">${OEIL_SVG} Visible par ton coach en lecture seule</div>`;
-  const aide = `<p class="geste-aide">Cette mission se valide dans ton rendez-vous du dimanche, tout en haut de ton accueil. C'est là que tu écris, et c'est là que tu la coches.</p>`;
+  const aide = `<p class="geste-aide">Ta mission de la semaine et sa validation sont dans ton rendez-vous du dimanche, tout en haut de ton accueil.</p>`;
   return `<div class="card">
-      ${ex.loc?`<span class="day-tag" style="color:var(--mental)">${ex.loc}</span>`:''}
+      <span class="day-tag" style="color:var(--mental)">Ce mois-ci</span>
       <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>
       <p class="desc">${ex.mission?'<b style="color:var(--ink);font-weight:600">Objectif du mois · </b>':''}${ex.desc}</p>
-      ${ex.mission?`<div class="moves"><div class="move"><div class="move-n">${ex.mission.titre}${ex.phase?' · '+ex.phase.toLowerCase():''}</div><div class="move-d">${ex.mission.txt}</div></div></div>
-      <p class="mission-note">Pas de compétition nécessaire : cette mission se fait sur une semaine normale. Si tu as une compétition, garde-la et ouvre aussi « Ma semaine de compétition » pour le jour J.</p>`:''}
-      ${briques}
-      ${valider}
       ${oeil}
       <button class="note-toggle" onclick="toggleNote('${id}')">＋ ${ouvert ? "Autre chose à me dire ?" : "Mes notes sur cet exercice"}</button>
       <div class="note-box" id="box-${id}">
