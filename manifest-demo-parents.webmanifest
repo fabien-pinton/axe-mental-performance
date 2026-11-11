@@ -1,0 +1,18 @@
+{
+  "id": "/demo-parents.html",
+  "name": "AXE · Démo parents",
+  "short_name": "Démo parents",
+  "description": "Le test AXE pour les parents d'enfants de 6 à 12 ans. Deux minutes, vos réflexes et une phrase.",
+  "start_url": "/demo-parents.html?src=salon",
+  "scope": "/demo-parents.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FDFAF5",
+  "theme_color": "#0B0A09",
+  "lang": "fr",
+  "icons": [
+    { "src": "/demo-app/icone-parents-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/demo-app/icone-parents-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/demo-app/icone-parents-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
