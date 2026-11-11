@@ -168,6 +168,46 @@ h1{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.5px;line-
 .cmp-q{flex:1}
 .cmp-v{font-weight:700;color:var(--dim);white-space:nowrap}
 .cmp-v b{color:var(--parent)}
+/* ---- rendez-vous mental du dimanche ---- */
+#rdvZone{margin:18px 0 6px}
+.rdv-alerte{border:none;border-radius:8px;color:#17130A;padding:17px 19px;margin-bottom:14px;
+  background:linear-gradient(100deg,#8C6F27 0%,#C9A94E 16%,#F7E9BC 38%,#D8BB68 56%,#A8852A 76%,#EBD79F 94%);
+  box-shadow:0 6px 22px rgba(168,133,42,.42);animation:rdvHalo 2.6s ease-in-out infinite}
+.rdv-alerte b{display:block;font-family:'Bebas Neue',Impact,sans-serif;font-size:23px;letter-spacing:.06em;line-height:1.05}
+.rdv-alerte p{font-size:14px;line-height:1.5;margin-top:7px;color:rgba(23,19,10,.86)}
+@keyframes rdvHalo{0%,100%{box-shadow:0 6px 22px rgba(168,133,42,.42)}50%{box-shadow:0 8px 32px rgba(168,133,42,.72)}}
+@media(prefers-reduced-motion:reduce){.rdv-alerte{animation:none}}
+
+.rdv-amorce{font-size:12.5px;letter-spacing:.02em;color:var(--parent);font-weight:600;margin-bottom:8px;line-height:1.45}
+.rdv-tard-liseré{display:none}
+.rdv{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+.rdv.tard{border-color:rgba(168,133,42,.6);border-width:2px}
+.rdv-tete{background:var(--ink);color:var(--cream);padding:16px 18px}
+.rdv-tete .q{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(253,250,245,.55);font-weight:700}
+.rdv-tete .t{font-family:'Bebas Neue',Impact,sans-serif;font-size:27px;letter-spacing:.05em;margin-top:5px;line-height:1}
+.rdv-tete .s{font-size:12.5px;color:rgba(253,250,245,.68);margin-top:3px;line-height:1.45}
+.rdv-serie{display:flex;gap:5px;margin-top:11px;align-items:center}
+.rdv-serie i{width:13px;height:13px;border-radius:50%;background:rgba(253,250,245,.2);display:block;flex:none}
+.rdv-serie i.on{background:var(--gold)}
+.rdv-serie span{font-size:11px;color:rgba(253,250,245,.6);margin-left:6px}
+.rdv-corps{padding:18px}
+.rdv-bloc{border:1px solid var(--line);border-radius:6px;background:#FEFCF8;padding:16px 17px;margin-bottom:13px}
+.rdv-bloc.ok{border-color:rgba(93,111,74,.45);background:rgba(93,111,74,.05)}
+.rdv-bloc h3{font-family:'Bebas Neue',Impact,sans-serif;font-size:18px;letter-spacing:.05em;margin-bottom:8px;line-height:1}
+.rdv-cit{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16.5px;line-height:1.5;
+  color:var(--dim);border-left:2px solid var(--line-strong);padding-left:12px;margin-bottom:13px}
+.rdv-cons{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;line-height:1.5;
+  color:var(--dim);margin-bottom:12px}
+.rdv-q{font-family:'Bebas Neue',Impact,sans-serif;font-size:21px;line-height:1.12;letter-spacing:.03em}
+.rdv-q em{font-style:normal;color:var(--parent)}
+.rdv-p{font-size:13px;color:var(--dim);margin-top:5px;line-height:1.5}
+.rdv-champ{width:100%;margin-top:11px;border:1px solid var(--line);border-radius:5px;padding:12px 13px;
+  font-family:inherit;font-size:15px;line-height:1.55;background:#fff;color:var(--ink);min-height:92px;resize:vertical}
+.rdv-champ:focus{outline:none;border-color:var(--gold)}
+.rdv-ok{display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  font-weight:700;color:var(--parent);margin-top:11px;line-height:1.4}
+.rdv-rappel{font-size:12.5px;color:var(--dim);border-left:2px solid var(--gold);padding-left:12px;line-height:1.5}
+.rdv-amorce{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--parent);font-weight:700;margin-bottom:9px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -213,7 +253,10 @@ h1{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.5px;line-
     <div class="cadre" id="cadreQuestions"><div id="qDepart"></div></div>
   </section>
 
-  <section class="ecran on" id="e-semaines"><div id="listeSemaines"></div></section>
+  <section class="ecran on" id="e-semaines">
+    <div id="rdvZone"></div>
+    <div id="listeSemaines"></div>
+  </section>
 
   <section class="ecran" id="e-memo">
     <div class="cadre">
@@ -297,6 +340,7 @@ h1{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.5px;line-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="vocal.js"></script>
+<script src="rdv.js"></script>
 <script>
 /* =====================================================================================
    LE PROTOCOLE PARENTS
@@ -326,6 +370,7 @@ const etat = {
   debut:null,            // date de départ du protocole
   fait:{},               // {1:{date, occasion}, ...}
   mesures:{},            // {depart:{...}, bilan:{...}}
+  rdv:{},                // le rendez-vous du dimanche : {'2026-11-22':{note, suite, sem}}
   enfant:{}              // {prenom, age, sport} renseignés par le parent
 };
 
@@ -890,7 +935,35 @@ function liste(items, classe){
   return '<ul class="' + (classe || '') + '">' + items.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>';
 }
 
+/* Le rendez-vous du dimanche. Chez le parent, la matière n'est jamais ce que l'enfant a
+   raté : c'est le réflexe que l'adulte a laissé revenir. Et la relance de la semaine
+   suivante ne demande pas ce qu'il a ressenti, elle demande ce qu'il a vu changer chez
+   son enfant, parce que c'est là que le bénéfice se constate. */
+if(window.AxeRdv){
+  AxeRdv.init({
+    profil: 'parent',
+    lire:   function(){ return etat.rdv || (etat.rdv = {}); },
+    ecrire: function(v){ etat.rdv = v; },
+    date:   function(){ return new Date(); },
+    enfant: function(){ return etat.prenomEnfant || ''; },
+    semaine:function(){
+      var n = semaineCourante();
+      var sm = (SEMAINES || []).find(function(x){ return x.n === n; });
+      return { n:n, titre: sm ? sm.titre.charAt(0) + sm.titre.slice(1).toLowerCase() : '' };
+    },
+    enregistrer: function(){ try{ enregistrer(); }catch(e){} }
+  });
+}
+function rendreRdv(){
+  var z = document.getElementById('rdvZone');
+  if(!z) return;
+  // tant que le point de départ n'est pas posé, le rendez-vous n'a pas de sens
+  if(window.AxeRdv && etat.debut && complet('depart')) AxeRdv.monter(z);
+  else z.innerHTML = '';
+}
+
 function rendreSemaines(){
+  rendreRdv();
   const cour = semaineCourante();
   let h = '';
   SEMAINES.forEach(function(s){
@@ -1024,6 +1097,7 @@ function enregistrer(){
   if(!axeCode) return;
   const e = etat.enfant || {};
   const suivi = { parent: { fait: etat.fait, mesures: etat.mesures || {}, enfant: e,
+                            rdv: etat.rdv || {},
                             maj: new Date().toISOString(),
                             resume: { faites: Object.keys(etat.fait).length, sem: semaineCourante(),
                                       depart: complet('depart'), bilan: complet('bilan'),
@@ -1152,6 +1226,7 @@ async function init(){
       const sp = r.suivi_rituel.parent;
       if(sp.fait && typeof sp.fait === 'object') etat.fait = sp.fait;
       if(sp.mesures && typeof sp.mesures === 'object') etat.mesures = sp.mesures;
+      if(sp.rdv && typeof sp.rdv === 'object') etat.rdv = sp.rdv;
       if(sp.enfant && typeof sp.enfant === 'object'){
         etat.enfant = sp.enfant;
         if(sp.enfant.prenom) etat.prenomEnfant = sp.enfant.prenom;

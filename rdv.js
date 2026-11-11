@@ -21,6 +21,7 @@
 'use strict';
 
 var C = null;          // le contexte fourni par la page
+var PROFIL = 'sportif'; // 'sportif' ou 'parent'
 var ZONE = null;       // le conteneur où tout est rendu
 
 /* ---------------------------------------------------------------- dates */
@@ -63,6 +64,9 @@ function fiche(k){ var t = tout(); return t[k] || null; }
 function ecrire(k, champ, val){
   var t = tout();
   t[k] = t[k] || {};
+  if(champ === 'note' && val && !t[k].sem && C && C.semaine){
+    var sm = C.semaine(); if(sm && sm.n) t[k].sem = sm.n + ' · ' + (sm.titre || '');
+  }
   if(val === '' || val === null || val === undefined) delete t[k][champ];
   else t[k][champ] = val;
   if(!t[k].note && !t[k].suite) delete t[k];
@@ -162,6 +166,28 @@ var BANQUE = {
     ]
   }
 };
+/* Le parent ne travaille pas un axe mental : il travaille, semaine après semaine, un
+   réflexe à lui. La matière n'est donc jamais ce que l'enfant a raté, c'est ce que
+   l'adulte a fait. Lui demander l'inverse le remettrait en position de juge, ce que ce
+   protocole existe précisément pour défaire. */
+var PARENT = {
+  consigne: "Notez le moment de la semaine où vous avez fait l'inverse de ce qu'on travaille. "
+          + "Pas ce que votre enfant a raté : ce que vous, vous avez fait.",
+  amorce:   "Un réflexe qui est revenu, c'est de la matière. Pas une faute.",
+  suite:    "Qu'est-ce que ça a <em>CONCRÈTEMENT</em> changé chez ",
+  suiteP:   "Pas ce que vous avez ressenti, vous. Ce que vous avez vu chez lui, dans les faits, cette semaine.",
+  rappel:   "Je l'ai fait moi-même, et pendant des années. Ce qui n'a pas marché cette semaine "
+          + "est la seule chose qui vous apprenne quelque chose, et c'est pour ça qu'on l'écrit. "
+          + "Personne ne note personne ici.",
+  titreSuite: "CE QUE LA SEMAINE DERNIÈRE VOUS A RAPPORTÉ",
+  attente:  "VOTRE RENDEZ-VOUS VOUS ATTEND",
+  attenteP: function(j, reste){ return "Celui de " + j + " n'est pas encore fait, et ce n'est pas grave : "
+            + "il reste ouvert " + (reste > 0 ? reste + " jour" + (reste > 1 ? "s" : "") : "encore un peu")
+            + ". Un quart d'heure, et vous repartez avec quelque chose."; },
+  ok1:      "✓ Voilà ce que cette semaine vous a rapporté. C'est exactement ce qu'on cherche.",
+  ok2:      "✓ Noté. Dimanche prochain, on regarde ce que ça a changé chez lui."
+};
+
 function axe(){
   var a = (C && C.axe && C.axe()) || 'portillon';
   return BANQUE[a] ? a : 'portillon';
@@ -170,12 +196,17 @@ function axe(){
 function rang(d){ return Math.floor((d.getTime() / 86400000 + 4) / 7); }
 
 function consigne(d){
+  if(PROFIL === 'parent') return PARENT.consigne;
   var b = BANQUE[axe()], bloc = (C && C.bloc && C.bloc()) || '';
   var t = b.notes[rang(d) % b.notes.length];
   if(bloc) t += ' Si tu peux, prends-le sur « ' + bloc + ' », c\'est ce que tu travailles ce mois-ci.';
   return t;
 }
 function relance(d, noteAvant){
+  if(PROFIL === 'parent'){
+    var pe = (C && C.enfant && C.enfant()) || '';
+    return { q: PARENT.suite + (pe || 'lui') + '&nbsp;?', p: PARENT.suiteP };
+  }
   var b = BANQUE[axe()];
   var r = recurrent();
   if(r && r.n >= 3 && (rang(d) % 2 === 0)){
@@ -206,7 +237,9 @@ function html(){
          + '<p>Il n\'a pas été fait depuis un moment. On ne rattrape pas les précédents et '
          + 'on ne compte pas les points : celui-ci suffit. Un quart d\'heure, juste en dessous.</p></div>';
     } else {
-      h += '<div class="rdv-alerte"><b>TON RENDEZ-VOUS T\'ATTEND</b>'
+      h += PROFIL === 'parent'
+        ? '<div class="rdv-alerte"><b>' + PARENT.attente + '</b><p>' + PARENT.attenteP(joli(f.dim), reste) + '</p></div>'
+        : '<div class="rdv-alerte"><b>TON RENDEZ-VOUS T\'ATTEND</b>'
          + '<p>Celui de ' + joli(f.dim) + ' n\'est pas encore fait, et ce n\'est pas grave : '
          + 'il reste ouvert ' + (reste > 0 ? reste + ' jour' + (reste > 1 ? 's' : '') : 'encore un peu')
          + '. Un quart d\'heure, et tu repars avec quelque chose.</p></div>';
@@ -214,11 +247,18 @@ function html(){
   }
 
   h += '<div class="rdv' + (moi.note ? ' fait' : '') + (f.statut === 'retard' && !moi.note ? ' tard' : '') + '">';
-  h += '<div class="rdv-tete"><div class="q">Rendez-vous mental</div>'
+  h += '<div class="rdv-tete"><div class="q">'
+     + (PROFIL === 'parent' ? 'Rendez-vous parent' : 'Rendez-vous mental') + '</div>'
      + '<div class="t">DIMANCHE</div>'
      + '<div class="s">Un quart d\'heure, une fois par semaine. Celui du ' + joli(f.dim) + '.</div>';
   var n = serie(), tot = dimanches().filter(function(k){ var e = tout()[k]; return e && e.note; }).length;
-  if(tot > 0){
+  if(PROFIL === 'parent'){
+    var sm = (C && C.semaine && C.semaine()) || {n:1};
+    h += '<div class="rdv-serie">';
+    for(var i=0;i<4;i++) h += '<i class="' + (i < Math.min(tot,4) ? 'on' : '') + '"></i>';
+    h += '<span>Semaine ' + Math.min(sm.n || 1, 4) + ' sur 4 · ' + tot + ' rendez-vous fait'
+       + (tot>1?'s':'') + '</span></div>';
+  } else if(tot > 0){
     h += '<div class="rdv-serie">';
     for(var i=0;i<7;i++) h += '<i class="' + (i < Math.min(n,7) ? 'on' : '') + '"></i>';
     h += '<span>' + tot + ' rendez-vous fait' + (tot>1?'s':'')
@@ -230,29 +270,42 @@ function html(){
   if(avant && avant.note){
     var r = relance(f.dim, avant.note);
     h += '<div class="rdv-bloc' + (avant.suite ? ' ok' : '') + '">'
-       + '<h3>CE QUE LA SEMAINE DERNIÈRE T\'A RAPPORTÉ</h3>'
+       + '<h3>' + (PROFIL === 'parent' ? PARENT.titreSuite : 'CE QUE LA SEMAINE DERNIÈRE T\'A RAPPORTÉ') + '</h3>'
+       + (avant.sem ? '<div class="rdv-amorce">Semaine ' + esc(avant.sem) + '</div>' : '')
        + '<div class="rdv-cit">«&nbsp;' + esc(avant.note) + '&nbsp;»</div>'
        + '<div class="rdv-q">' + r.q + '</div>'
        + '<div class="rdv-p">' + esc(r.p).replace('&lt;em&gt;','<em>') + '</div>'
        + '<textarea class="rdv-champ" data-rdv="suite" data-cle="' + kAvant + '" '
-       + 'placeholder="Écris ici, deux ou trois lignes suffisent.">' + esc(avant.suite || '') + '</textarea>'
-       + (avant.suite ? '<div class="rdv-ok">✓ Voilà ce que cette semaine t\'a rapporté. C\'est exactement ce qu\'on cherche.</div>' : '')
+       + 'placeholder="' + (PROFIL === 'parent' ? 'Ce que vous avez vu, deux ou trois lignes.'
+            : 'Écris ici, deux ou trois lignes suffisent.') + '">' + esc(avant.suite || '') + '</textarea>'
+       + (avant.suite ? '<div class="rdv-ok">' + (PROFIL === 'parent' ? PARENT.ok1
+            : '✓ Voilà ce que cette semaine t\'a rapporté. C\'est exactement ce qu\'on cherche.') + '</div>' : '')
        + '</div>';
   }
 
   /* --- 2. la note de cette semaine --- */
   h += '<div class="rdv-bloc' + (moi.note ? ' ok' : '') + '">'
      + '<h3>' + (avant && avant.note ? 'ENSUITE, CETTE SEMAINE' : 'CETTE SEMAINE') + '</h3>'
-     + '<div class="rdv-amorce">Un moment qui n\'a pas marché, c\'est de la matière. Pas un problème.</div>'
+     + (function(){
+         if(PROFIL !== 'parent') return '<div class="rdv-amorce">Un moment qui n\'a pas marché, c\'est de la matière. Pas un problème.</div>';
+         var sm = (C && C.semaine && C.semaine()) || null;
+         return (sm && sm.n ? '<div class="rdv-amorce">Semaine ' + sm.n + ' · ' + esc(sm.titre || '') + '</div>' : '')
+              + '<div class="rdv-amorce" style="color:var(--dim);letter-spacing:0;text-transform:none;font-weight:400">'
+              + PARENT.amorce + '</div>';
+       })()
      + '<div class="rdv-cons">' + esc(consigne(f.dim)) + '</div>'
      + '<textarea class="rdv-champ" data-rdv="note" data-cle="' + k + '" '
-     + 'placeholder="Un moment précis. Le jour, l\'endroit, ce qui s\'est passé.">' + esc(moi.note || '') + '</textarea>'
-     + (moi.note ? '<div class="rdv-ok">✓ Noté. Dimanche prochain, on regarde ce que ça t\'a rapporté.</div>' : '')
+     + 'placeholder="' + (PROFIL === 'parent'
+          ? 'Le jour, l\'endroit, ce que vous avez dit ou fait. Deux ou trois lignes.'
+          : 'Un moment précis. Le jour, l\'endroit, ce qui s\'est passé.') + '">' + esc(moi.note || '') + '</textarea>'
+     + (moi.note ? '<div class="rdv-ok">' + (PROFIL === 'parent' ? PARENT.ok2
+          : '✓ Noté. Dimanche prochain, on regarde ce que ça t\'a rapporté.') + '</div>' : '')
      + '</div>';
 
-  h += '<div class="rdv-rappel">Ici, on ne note rien et on ne juge rien. Ce qui n\'a pas marché cette '
-     + 'semaine est la seule chose qui t\'apprenne quelque chose, et c\'est pour ça qu\'on l\'écrit. '
-     + 'Fabien lit ces notes : c\'est à partir d\'elles qu\'il construit ton mois suivant.</div>';
+  h += '<div class="rdv-rappel">' + (PROFIL === 'parent' ? PARENT.rappel
+     : 'Ici, on ne note rien et on ne juge rien. Ce qui n\'a pas marché cette semaine est la seule '
+     + 'chose qui t\'apprenne quelque chose, et c\'est pour ça qu\'on l\'écrit. Fabien lit ces notes : '
+     + 'c\'est à partir d\'elles qu\'il construit ton mois suivant.') + '</div>';
   h += '</div></div>';
   return h;
 }
@@ -278,6 +331,7 @@ function etat(){
            retard:f.retard, serie:serie(), sautes:sautes() };
 }
 
-window.AxeRdv = { init:function(o){ C = o || {}; }, monter:monter, html:html, etat:etat,
+window.AxeRdv = { init:function(o){ C = o || {}; PROFIL = (C.profil === 'parent') ? 'parent' : 'sportif'; },
+                  monter:monter, html:html, etat:etat,
                   fenetre:fenetre, recurrent:recurrent };
 })();

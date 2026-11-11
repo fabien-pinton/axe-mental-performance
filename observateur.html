@@ -62,6 +62,8 @@ body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .rc-line span:last-child{color:var(--ink);text-align:right}
 /* Une ligne qui ouvre son espace. Elle reste une ligne : juste un chevron et un survol,
    sinon le dossier deviendrait un mur de boutons. */
+.rc-sem{display:inline-block;font-size:9.5px;letter-spacing:.1em;font-weight:700;color:var(--gold);
+  border:1px solid rgba(168,133,42,.45);border-radius:2px;padding:1px 5px;vertical-align:1px}
 .rdv-al{margin:7px 0;padding:9px 12px;border-radius:4px;background:rgba(122,59,46,.09);
   border-left:3px solid var(--brique);font-size:12.5px;line-height:1.5;color:var(--brique);font-weight:600}
 a.rc-line{text-decoration:none;cursor:pointer}
@@ -696,12 +698,15 @@ function rdvDimancheCourant(){
   return d.toISOString().slice(0,10);
 }
 function blocRdv(r, sr){
-  const rdv = (sr && sr.rdv && typeof sr.rdv === 'object') ? sr.rdv : null;
+  const brut = (sr && sr.rdv) || (sr && sr.parent && sr.parent.rdv) || null;
+  const rdv = (brut && typeof brut === 'object') ? brut : null;
+  const estP = !!(sr && sr.parent && sr.parent.rdv);
   const cible = rdvDimancheCourant();
   if(!rdv || !Object.keys(rdv).length){
     return `<div class="rc-sub">Rendez-vous du dimanche</div>`
          + `<div class="mc-vide">Aucun rendez-vous fait pour l'instant</div>`;
   }
+  const vueR = estP ? 'semaines' : 'dash';
   const cles = Object.keys(rdv).filter(k => rdv[k] && rdv[k].note).sort().reverse();
   const total = cles.length;
   // combien de dimanches d'affilée en remontant depuis le dernier attendu
@@ -716,8 +721,8 @@ function blocRdv(r, sr){
     sautes++; e.setDate(e.getDate() - 7);
   }
   let h = `<div class="rc-sub">Rendez-vous du dimanche</div>`;
-  h += murLigne(r, 'dash', {ancre:'rdvZone'}, 'Rendez-vous honorés',
-        `${total} · ${serie} d'affilée`);
+  h += murLigne(r, vueR, {ancre:'rdvZone'}, 'Rendez-vous honorés',
+        estP ? `${total} sur 4` : `${total} · ${serie} d'affilée`);
   if(sautes >= 2){
     h += `<div class="rdv-al">Pas de rendez-vous depuis ${sautes} semaines. Le dernier remonte au `
        + `${cles.length ? dateCourte(cles[0]) : '—'}.</div>`;
@@ -727,10 +732,16 @@ function blocRdv(r, sr){
     h += `<div class="rc-note"><span class="rc-who">Ce qui revient dans ses notes</span>`
        + `« ${rec.mot} » apparaît dans ${rec.n} de ses notes.</div>`;
   }
+  if(estP){
+    const sansSuite = cles.filter(k => !rdv[k].suite).length;
+    if(total >= 4 && sansSuite) h += `<div class="rdv-al">Les 4 semaines sont écrites, `
+      + `${sansSuite} relance${sansSuite>1?'s':''} sans réponse. C'est le moment d'en parler.</div>`;
+  }
   cles.slice(0,6).forEach(k=>{
     const e = rdv[k];
     const court = e.note.length > 92 ? e.note.slice(0,92) + '…' : e.note;
-    h += murLigne(r, 'dash', {ancre:'rdvZone'}, `<b>${dateCourte(k)}</b> · ${echapperAttr(court)}`,
+    const et = e.sem ? ` <span class="rc-sem">S${echapperAttr(String(e.sem).split(' ')[0])}</span>` : '';
+    h += murLigne(r, vueR, {ancre:'rdvZone'}, `<b>${dateCourte(k)}</b>${et} · ${echapperAttr(court)}`,
           e.suite ? '<span class="tag-env">répondu</span>' : '<span class="tag-att">sans suite</span>');
   });
   return h;
@@ -1457,7 +1468,7 @@ function afficherRiders(riders){
       <div class="rc-line"><span>Contact parent</span><span>${[r.email_parent, r.tel_parent].filter(Boolean).join(' · ')||'non renseigné'}</span></div>
       ${r.tel_rider?`<div class="rc-line"><span>Contact rider</span><span>${r.tel_rider}</span></div>`:''}
       ${profilBlock}
-      ${parent ? blocParent(sr) : saison ? blocSaison(sr) : `${suiteBlock}${moisBlock}${closBlock}`}
+      ${parent ? blocParent(sr, r) : saison ? blocSaison(sr) : `${suiteBlock}${moisBlock}${closBlock}`}
       ${debriefBlock}
       <div class="pc-zone" id="pcZone" data-code="${echapperAttr(r.code_acces || '')}"></div>
     </div>`};
@@ -1499,13 +1510,14 @@ const Q_PARENT = {
 };
 const OCC_PARENT = {entrainement:"à l'entraînement", course:"en course", maison:"à la maison"};
 
-function blocParent(sr){
+function blocParent(sr, r){
   const P = (sr && sr.parent) || {};
   const fait = P.fait || {};
   const mes  = P.mesures || {};
   const n = Object.keys(fait).length;
   let h = '<div class="rc-sub">Protocole parents · ' + n + ' semaine' + (n > 1 ? 's' : '')
         + ' sur 4</div>';
+  if(P.rdv && Object.keys(P.rdv).length) h += blocRdv(r || {}, sr);
 
   if(!P.maj){
     h += '<div class="mc-vide">Il n\'a pas encore ouvert sa page : rien à afficher tant '
