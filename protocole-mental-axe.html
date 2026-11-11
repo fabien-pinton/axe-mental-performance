@@ -605,6 +605,11 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .rdv-champ:focus{outline:none;border-color:var(--gold)}
 .rdv-ok{display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.11em;text-transform:uppercase;
   font-weight:700;color:var(--parent);margin-top:11px;line-height:1.4}
+.rdv-valider{display:block;width:100%;margin-top:14px;padding:13px;border:1.5px solid var(--ink);
+  border-radius:5px;background:var(--ink);color:var(--cream);font-family:inherit;font-size:13px;
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.18s var(--ease)}
+.rdv-valider.fait{background:transparent;color:var(--parent);border-color:var(--parent)}
+.rdv-valider:active{transform:scale(.99)}
 .rdv-rappel{font-size:12.5px;color:var(--dim);border-left:2px solid var(--gold);padding-left:12px;line-height:1.5}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2668,6 +2673,17 @@ if(window.AxeRdv){
     date:   function(){ return (typeof dateRef === 'function' && dateRef()) || new Date(); },
     axe:    function(){ try{ return blocageKey(); }catch(e){ return 'portillon'; } },
     bloc:   function(){ return (state.month > 1 && state.report && state.report.bloc) || ''; },
+    /* La mission de la semaine ne vit plus dans sa propre carte : elle est le troisième
+       temps du rendez-vous. Un seul rendez-vous hebdomadaire, un seul endroit où valider. */
+    mission:function(){
+      try{
+        if(!window.AxeBriques || !briquesOuvertes()) return null;
+        var h = pickMentalHebdo(), m = pickMental(), cle = cleMission();
+        if(!cle) return null;
+        return { loc:h.loc, dur:h.dur, txt:h.txt, titre:m.title, cle:cle, fait:missionFaite(cle) };
+      }catch(e){ return null; }
+    },
+    valider:function(cle){ try{ validerMission(cle); }catch(e){} },
     enregistrer: function(){ debounceEnregistrerSuiviRituel(); try{ renderTodo(); }catch(e){} }
   });
 }
@@ -3186,12 +3202,9 @@ function renderTodo(){
   /* La mission mentale de la semaine. Ce n'est pas un geste quotidien : on ne la rappelle
      donc pas chaque matin, ce serait un reproche plutôt qu'un rappel. À partir du jeudi,
      si elle n'est pas marquée faite, la page le dit — il reste trois jours pour la faire. */
-  const jourSem = (function(){ const d = dateRef(); return d ? (d.getDay()+6)%7 : 0; })();
-  if(briquesOuvertes() && jourSem >= 3 && !missionFaite()){
-    lignes.push({ titre:'Ton retournement de la semaine',
-                  sous:'Pas encore fait. Il te reste quelques jours.',
-                  aller:'mentalCol' });
-  }
+  /* Plus de rappel séparé pour la mission : depuis novembre, elle est le troisième temps
+     du rendez-vous du dimanche, et c'est lui qui relance. Deux rappels hebdomadaires
+     concurrents faisaient décrocher au lieu d'aider. */
   if(state.imageryDays < 7){
     lignes.push({ titre:'Ton film du start',
                   sous:state.imageryDays + ' soir' + (state.imageryDays>1?'s':'') + ' sur 7 ce mois-ci, à faire le soir dans ton lit',
@@ -3495,7 +3508,11 @@ const OEIL_SVG = '<svg class="eye" viewBox="0 0 24 24" fill="none" stroke="curre
 function carteMentale(ex, id){
   const cle   = ex.bqCle || '';
   const liste = ex.bqListe || [];
-  const ouvert = !!(window.AxeBriques && cle && liste.length && briquesOuvertes());
+  /* Le retournement hebdomadaire a déménagé : il est devenu le rendez-vous du dimanche,
+     en haut de l'accueil. On ne le propose donc plus une deuxième fois ici, et la carte
+     redevient ce qu'elle était : le texte de la mission, et rien d'autre. Ce qui a été
+     écrit dans les briques avant le déménagement reste en base et dans l'espace coach. */
+  const ouvert = false;
   const briques = ouvert ? AxeBriques.rendre(liste, cle) : '';
   const fait = ouvert ? missionFaite(cle) : false;
   const valider = ouvert
@@ -3505,9 +3522,7 @@ function carteMentale(ex, id){
   const oeil = ouvert
     ? `<div class="obs-flag">${OEIL_SVG} Ce que tu écris ici arrive à ton coach. C'est là-dessus qu'il construit ton mois suivant.</div>`
     : `<div class="obs-flag">${OEIL_SVG} Visible par ton coach en lecture seule</div>`;
-  const aide = ouvert
-    ? `<p class="geste-aide">Le retournement se fait en deux temps : d'abord ce qui s'est passé, précisément, puis la demande qui va dans l'autre sens. Les premières réponses viendront vite, les dernières non — ce sont celles-là qui comptent.</p>`
-    : `<p class="geste-aide">Ouvre « mes notes » juste au-dessus et écris ce que tu ressens au fil du mois : c'est ce qui me sert à choisir ton exercice du mois prochain.</p>`;
+  const aide = `<p class="geste-aide">Cette mission se valide dans ton rendez-vous du dimanche, tout en haut de ton accueil. C'est là que tu écris, et c'est là que tu la coches.</p>`;
   return `<div class="card">
       ${ex.loc?`<span class="day-tag" style="color:var(--mental)">${ex.loc}</span>`:''}
       <div class="ex-top"><h3>${ex.title}</h3><span class="lvl">${ex.lvl}</span></div>

@@ -302,6 +302,22 @@ function html(){
           : '✓ Noté. Dimanche prochain, on regarde ce que ça t\'a rapporté.') + '</div>' : '')
      + '</div>';
 
+  /* --- 3. la mission de la semaine, qui vivait avant dans sa propre carte --- */
+  var mi = (PROFIL !== 'parent' && C && C.mission) ? C.mission() : null;
+  if(mi && mi.txt){
+    h += '<div class="rdv-bloc' + (mi.fait ? ' ok' : '') + '">'
+       + '<h3>ENFIN, TA MISSION DE LA SEMAINE</h3>'
+       + (mi.titre ? '<div class="rdv-amorce">' + esc(mi.titre) + '</div>' : '')
+       + '<div class="rdv-cons" style="font-style:normal;font-family:inherit;font-size:15px;'
+       + 'color:var(--ink);line-height:1.6">' + esc(mi.txt) + '</div>'
+       + (mi.loc || mi.dur
+            ? '<div class="rdv-p" style="margin-top:8px">' + esc([mi.loc, mi.dur].filter(Boolean).join(' · ')) + '</div>'
+            : '')
+       + '<button type="button" class="rdv-valider' + (mi.fait ? ' fait' : '') + '" data-rdv-valider="'
+       + esc(mi.cle) + '">' + (mi.fait ? '✓ Faite cette semaine' : 'Marquer la mission faite') + '</button>'
+       + '</div>';
+  }
+
   h += '<div class="rdv-rappel">' + (PROFIL === 'parent' ? PARENT.rappel
      : 'Ici, on ne note rien et on ne juge rien. Ce qui n\'a pas marché cette semaine est la seule '
      + 'chose qui t\'apprenne quelque chose, et c\'est pour ça qu\'on l\'écrit. Fabien lit ces notes : '
@@ -314,6 +330,11 @@ function monter(zone){
   ZONE = zone || ZONE;
   if(!ZONE) return;
   ZONE.innerHTML = html();
+  ZONE.querySelectorAll('[data-rdv-valider]').forEach(function(b){
+    b.addEventListener('click', function(){
+      if(C && C.valider) C.valider(b.dataset.rdvValider);
+    });
+  });
   ZONE.querySelectorAll('[data-rdv]').forEach(function(t){
     t.addEventListener('input', function(){
       ecrire(t.dataset.cle, t.dataset.rdv, t.value.trim());
