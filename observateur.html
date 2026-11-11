@@ -719,7 +719,7 @@ function blocRdv(r, sr){
   h += murLigne(r, 'dash', {ancre:'rdvZone'}, 'Rendez-vous honorés',
         `${total} · ${serie} d'affilée`);
   if(sautes >= 2){
-    h += `<div class="rdv-al">${sautes} rendez-vous sautés d'affilée. Le dernier remonte au `
+    h += `<div class="rdv-al">Pas de rendez-vous depuis ${sautes} semaines. Le dernier remonte au `
        + `${cles.length ? dateCourte(cles[0]) : '—'}.</div>`;
   }
   const rec = rdvRecurrent(rdv);

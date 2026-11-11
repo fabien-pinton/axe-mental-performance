@@ -623,16 +623,18 @@ textarea:focus{outline:none;border-color:var(--gold)}
 
 /* ---- rendez-vous mental du dimanche ---- */
 #rdvZone{margin:18px 0 6px}
-.rdv-alerte{border:2px solid var(--physique);border-radius:8px;background:var(--physique);color:var(--cream);
-  padding:16px 18px;margin-bottom:14px;animation:rdvPulse 1.8s ease-in-out infinite}
-.rdv-alerte b{display:block;font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;letter-spacing:.06em;line-height:1.05}
-.rdv-alerte p{font-size:14px;line-height:1.5;margin-top:7px;color:rgba(253,250,245,.9)}
-.rdv-alerte.grave{background:#8E2A19;border-color:#8E2A19}
-@keyframes rdvPulse{0%,100%{box-shadow:0 0 0 0 rgba(122,59,46,.5)}50%{box-shadow:0 0 0 10px rgba(122,59,46,0)}}
+.rdv-alerte{border:none;border-radius:8px;color:#17130A;padding:17px 19px;margin-bottom:14px;
+  background:linear-gradient(100deg,#8C6F27 0%,#C9A94E 16%,#F7E9BC 38%,#D8BB68 56%,#A8852A 76%,#EBD79F 94%);
+  box-shadow:0 6px 22px rgba(168,133,42,.42);animation:rdvHalo 2.6s ease-in-out infinite}
+.rdv-alerte b{display:block;font-family:'Bebas Neue',Impact,sans-serif;font-size:23px;letter-spacing:.06em;line-height:1.05}
+.rdv-alerte p{font-size:14px;line-height:1.5;margin-top:7px;color:rgba(23,19,10,.86)}
+@keyframes rdvHalo{0%,100%{box-shadow:0 6px 22px rgba(168,133,42,.42)}50%{box-shadow:0 8px 32px rgba(168,133,42,.72)}}
 @media(prefers-reduced-motion:reduce){.rdv-alerte{animation:none}}
 
+.rdv-amorce{font-size:12.5px;letter-spacing:.02em;color:var(--parent);font-weight:600;margin-bottom:8px;line-height:1.45}
+.rdv-tard-liseré{display:none}
 .rdv{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
-.rdv.tard{border-color:var(--physique);border-width:2px}
+.rdv.tard{border-color:rgba(168,133,42,.6);border-width:2px}
 .rdv-tete{background:var(--ink);color:var(--cream);padding:16px 18px}
 .rdv-tete .q{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(253,250,245,.55);font-weight:700}
 .rdv-tete .t{font-family:'Bebas Neue',Impact,sans-serif;font-size:27px;letter-spacing:.05em;margin-top:5px;line-height:1}

@@ -128,9 +128,9 @@ var BANQUE = {
       "Note une situation de la semaine où tu aurais voulu appuyer sur pause deux secondes."
     ],
     suites: [
-      "Qu'est-ce que ça a CONCRÈTEMENT changé ?",
-      "Qu'est-ce que tu as fait DIFFÉREMMENT depuis, en vrai ?",
-      "Est-ce que ça s'est reproduit cette semaine ? Raconte où et quand, précisément."
+      "Qu'est-ce que ça t'a CONCRÈTEMENT rapporté ?",
+      "Qu'est-ce que tu sais aujourd'hui que tu ne savais pas dimanche dernier ?",
+      "Qu'est-ce que tu as fait DIFFÉREMMENT depuis, grâce à ça ?"
     ]
   },
   rumination: {
@@ -142,9 +142,9 @@ var BANQUE = {
       "Note un moment où tu es resté énervé alors que c'était déjà fini."
     ],
     suites: [
-      "Qu'est-ce que ça a CONCRÈTEMENT changé ?",
-      "Combien de temps ça t'a pris cette fois-ci, et combien la fois d'avant ?",
-      "Qu'est-ce que tu as fait pour sortir de là ? Décris le geste, pas l'état d'esprit."
+      "Qu'est-ce que ça t'a CONCRÈTEMENT rapporté ?",
+      "Combien de temps ça t'a pris cette fois-ci, et combien la fois d'avant ? Le progrès est là.",
+      "Qu'est-ce que tu as trouvé pour sortir de là ? Décris le geste, il te resservira."
     ]
   },
   confiance: {
@@ -156,7 +156,7 @@ var BANQUE = {
       "Note un moment où tu t'es comparé à quelqu'un d'autre, et ce que ça a donné."
     ],
     suites: [
-      "Qu'est-ce que ça a CONCRÈTEMENT changé ?",
+      "Qu'est-ce que ça t'a CONCRÈTEMENT rapporté ?",
       "Est-ce que tu l'as refait depuis ? Dis où et quand.",
       "Si ça se représentait demain, tu ferais quoi exactement ? Une action, pas une intention."
     ]
@@ -179,12 +179,13 @@ function relance(d, noteAvant){
   var b = BANQUE[axe()];
   var r = recurrent();
   if(r && r.n >= 3 && (rang(d) % 2 === 0)){
-    return { q: 'Qu\'est-ce que ça a <em>CONCRÈTEMENT</em> changé&nbsp;?',
+    return { q: 'Qu\'est-ce que ça t\'a <em>CONCRÈTEMENT</em> rapporté&nbsp;?',
              p: 'Et une remarque : le mot « ' + r.mot + ' » revient dans ' + r.n
-                + ' de tes notes. Tu en penses quoi, toi ?' };
+                + ' de tes notes. Tu as mis le doigt sur quelque chose. Tu en penses quoi, toi ?' };
   }
-  return { q: b.suites[rang(d) % b.suites.length].replace('CONCRÈTEMENT','<em>CONCRÈTEMENT</em>'),
-           p: 'Pas ce que tu as ressenti. Ce qui a changé dans les faits, sept jours après.' };
+  return { q: b.suites[rang(d) % b.suites.length].replace(/CONCRÈTEMENT|DIFFÉREMMENT/, function(m){ return '<em>'+m+'</em>'; }),
+           p: 'Un truc raté, c\'est une information que les autres n\'ont pas. Reste à savoir ce que tu en as fait. '
+              + 'Pas ce que tu as ressenti : ce qui a bougé dans les faits.' };
 }
 
 /* ---------------------------------------------------------------- rendu */
@@ -199,15 +200,16 @@ function html(){
   /* --- l'alerte, du plus calme au plus voyant --- */
   if(f.statut === 'retard' && !moi.note){
     var s = sautes();
+    var reste = Math.max(0, 5 - f.retard);
     if(s >= 2){
-      h += '<div class="rdv-alerte grave"><b>' + (s+1) + ' RENDEZ-VOUS SAUTÉS</b>'
-         + '<p>Ça fait ' + (s+1) + ' semaines que tu ne l\'as pas fait. Ce n\'est pas grave, '
-         + 'mais ça ne sert plus à rien si ça continue. Fais celui-ci maintenant, il est juste en dessous.</p></div>';
+      h += '<div class="rdv-alerte"><b>ON REPART DE CELUI-CI</b>'
+         + '<p>Il n\'a pas été fait depuis un moment. On ne rattrape pas les précédents et '
+         + 'on ne compte pas les points : celui-ci suffit. Un quart d\'heure, juste en dessous.</p></div>';
     } else {
-      h += '<div class="rdv-alerte"><b>TU AS SAUTÉ TON RENDEZ-VOUS DE DIMANCHE</b>'
-         + '<p>C\'était ' + joli(f.dim) + '. Tu peux encore le faire, ça prend un quart d\'heure, '
-         + 'et il reste ' + Math.max(0, 5 - f.retard) + ' jour' + (5 - f.retard > 1 ? 's' : '')
-         + ' avant le prochain.</p></div>';
+      h += '<div class="rdv-alerte"><b>TON RENDEZ-VOUS T\'ATTEND</b>'
+         + '<p>Celui de ' + joli(f.dim) + ' n\'est pas encore fait, et ce n\'est pas grave : '
+         + 'il reste ouvert ' + (reste > 0 ? reste + ' jour' + (reste > 1 ? 's' : '') : 'encore un peu')
+         + '. Un quart d\'heure, et tu repars avec quelque chose.</p></div>';
     }
   }
 
@@ -215,11 +217,12 @@ function html(){
   h += '<div class="rdv-tete"><div class="q">Rendez-vous mental</div>'
      + '<div class="t">DIMANCHE</div>'
      + '<div class="s">Un quart d\'heure, une fois par semaine. Celui du ' + joli(f.dim) + '.</div>';
-  var n = serie();
-  if(n > 0){
+  var n = serie(), tot = dimanches().filter(function(k){ var e = tout()[k]; return e && e.note; }).length;
+  if(tot > 0){
     h += '<div class="rdv-serie">';
     for(var i=0;i<7;i++) h += '<i class="' + (i < Math.min(n,7) ? 'on' : '') + '"></i>';
-    h += '<span>' + n + ' semaine' + (n>1?'s':'') + ' d\'affilée</span></div>';
+    h += '<span>' + tot + ' rendez-vous fait' + (tot>1?'s':'')
+       + (n > 1 ? ' · ' + n + ' d\'affilée' : '') + '</span></div>';
   }
   h += '</div><div class="rdv-corps">';
 
@@ -227,26 +230,29 @@ function html(){
   if(avant && avant.note){
     var r = relance(f.dim, avant.note);
     h += '<div class="rdv-bloc' + (avant.suite ? ' ok' : '') + '">'
-       + '<h3>D\'ABORD, LA SEMAINE DERNIÈRE</h3>'
+       + '<h3>CE QUE LA SEMAINE DERNIÈRE T\'A RAPPORTÉ</h3>'
        + '<div class="rdv-cit">«&nbsp;' + esc(avant.note) + '&nbsp;»</div>'
        + '<div class="rdv-q">' + r.q + '</div>'
        + '<div class="rdv-p">' + esc(r.p).replace('&lt;em&gt;','<em>') + '</div>'
        + '<textarea class="rdv-champ" data-rdv="suite" data-cle="' + kAvant + '" '
        + 'placeholder="Écris ici, deux ou trois lignes suffisent.">' + esc(avant.suite || '') + '</textarea>'
+       + (avant.suite ? '<div class="rdv-ok">✓ Voilà ce que cette semaine t\'a rapporté. C\'est exactement ce qu\'on cherche.</div>' : '')
        + '</div>';
   }
 
   /* --- 2. la note de cette semaine --- */
   h += '<div class="rdv-bloc' + (moi.note ? ' ok' : '') + '">'
      + '<h3>' + (avant && avant.note ? 'ENSUITE, CETTE SEMAINE' : 'CETTE SEMAINE') + '</h3>'
+     + '<div class="rdv-amorce">Un moment qui n\'a pas marché, c\'est de la matière. Pas un problème.</div>'
      + '<div class="rdv-cons">' + esc(consigne(f.dim)) + '</div>'
      + '<textarea class="rdv-champ" data-rdv="note" data-cle="' + k + '" '
      + 'placeholder="Un moment précis. Le jour, l\'endroit, ce qui s\'est passé.">' + esc(moi.note || '') + '</textarea>'
-     + (moi.note ? '<div class="rdv-ok">✓ Noté. Je te reposerai la question dimanche prochain.</div>' : '')
+     + (moi.note ? '<div class="rdv-ok">✓ Noté. Dimanche prochain, on regarde ce que ça t\'a rapporté.</div>' : '')
      + '</div>';
 
-  h += '<div class="rdv-rappel">Fabien lit ce que tu écris ici. C\'est fait pour ça : '
-     + 'c\'est à partir de ces notes qu\'il construit ton mois suivant.</div>';
+  h += '<div class="rdv-rappel">Ici, on ne note rien et on ne juge rien. Ce qui n\'a pas marché cette '
+     + 'semaine est la seule chose qui t\'apprenne quelque chose, et c\'est pour ça qu\'on l\'écrit. '
+     + 'Fabien lit ces notes : c\'est à partir d\'elles qu\'il construit ton mois suivant.</div>';
   h += '</div></div>';
   return h;
 }
