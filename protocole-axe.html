@@ -620,10 +620,49 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .lum-foot .s{margin-top:13px;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:rgba(168,133,42,.9);font-weight:700}
 .regen p.regen-lum{margin:26px auto 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;line-height:1.5;color:var(--dim);max-width:34ch}
 .regen p.regen-lum .g{color:var(--gold)}
+
+/* ---- rendez-vous mental du dimanche ---- */
+#rdvZone{margin:18px 0 6px}
+.rdv-alerte{border:2px solid var(--physique);border-radius:8px;background:var(--physique);color:var(--cream);
+  padding:16px 18px;margin-bottom:14px;animation:rdvPulse 1.8s ease-in-out infinite}
+.rdv-alerte b{display:block;font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;letter-spacing:.06em;line-height:1.05}
+.rdv-alerte p{font-size:14px;line-height:1.5;margin-top:7px;color:rgba(253,250,245,.9)}
+.rdv-alerte.grave{background:#8E2A19;border-color:#8E2A19}
+@keyframes rdvPulse{0%,100%{box-shadow:0 0 0 0 rgba(122,59,46,.5)}50%{box-shadow:0 0 0 10px rgba(122,59,46,0)}}
+@media(prefers-reduced-motion:reduce){.rdv-alerte{animation:none}}
+
+.rdv{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+.rdv.tard{border-color:var(--physique);border-width:2px}
+.rdv-tete{background:var(--ink);color:var(--cream);padding:16px 18px}
+.rdv-tete .q{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(253,250,245,.55);font-weight:700}
+.rdv-tete .t{font-family:'Bebas Neue',Impact,sans-serif;font-size:27px;letter-spacing:.05em;margin-top:5px;line-height:1}
+.rdv-tete .s{font-size:12.5px;color:rgba(253,250,245,.68);margin-top:3px;line-height:1.45}
+.rdv-serie{display:flex;gap:5px;margin-top:11px;align-items:center}
+.rdv-serie i{width:13px;height:13px;border-radius:50%;background:rgba(253,250,245,.2);display:block;flex:none}
+.rdv-serie i.on{background:var(--gold)}
+.rdv-serie span{font-size:11px;color:rgba(253,250,245,.6);margin-left:6px}
+.rdv-corps{padding:18px}
+.rdv-bloc{border:1px solid var(--line);border-radius:6px;background:#FEFCF8;padding:16px 17px;margin-bottom:13px}
+.rdv-bloc.ok{border-color:rgba(93,111,74,.45);background:rgba(93,111,74,.05)}
+.rdv-bloc h3{font-family:'Bebas Neue',Impact,sans-serif;font-size:18px;letter-spacing:.05em;margin-bottom:8px;line-height:1}
+.rdv-cit{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16.5px;line-height:1.5;
+  color:var(--dim);border-left:2px solid var(--line-strong);padding-left:12px;margin-bottom:13px}
+.rdv-cons{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;line-height:1.5;
+  color:var(--dim);margin-bottom:12px}
+.rdv-q{font-family:'Bebas Neue',Impact,sans-serif;font-size:21px;line-height:1.12;letter-spacing:.03em}
+.rdv-q em{font-style:normal;color:var(--physique)}
+.rdv-p{font-size:13px;color:var(--dim);margin-top:5px;line-height:1.5}
+.rdv-champ{width:100%;margin-top:11px;border:1px solid var(--line);border-radius:5px;padding:12px 13px;
+  font-family:inherit;font-size:15px;line-height:1.55;background:#fff;color:var(--ink);min-height:92px;resize:vertical}
+.rdv-champ:focus{outline:none;border-color:var(--gold)}
+.rdv-ok{display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  font-weight:700;color:var(--parent);margin-top:11px;line-height:1.4}
+.rdv-rappel{font-size:12.5px;color:var(--dim);border-left:2px solid var(--gold);padding-left:12px;line-height:1.5}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="vocal.js"></script>
 <script src="briques.js"></script>
+<script src="rdv.js"></script>
 </head>
 <body>
 
@@ -824,6 +863,9 @@ textarea:focus{outline:none;border-color:var(--gold)}
     <div class="pc-zone" id="pcBanner"></div>
     <!-- ce qu'il reste à faire aujourd'hui : rempli par renderTodo() -->
     <div class="todo" id="todoBanner"></div>
+
+    <!-- le rendez-vous du dimanche, rempli par AxeRdv -->
+    <div id="rdvZone"></div>
 
     <!-- juste sous les bandeaux : ce qui ne se planifie pas, mais qui doit rester à portée -->
     <div class="raccourcis">
@@ -1268,6 +1310,7 @@ async function axeInit(){
         if(sr.badgeCinema === true) state.badgeCinema = true;
         if(sr.startRoutine) state.startRoutine = sr.startRoutine;
         if(Array.isArray(sr.startJournal)) state.startJournal = sr.startJournal;
+        if(sr.rdv && typeof sr.rdv === 'object') state.rdv = sr.rdv;
         // les réponses aux briques des exercices mentaux : preuves, consignes, chronos,
         // cases, notes sur 10. Un seul objet plat, qui porte aussi les mois précédents —
         // c'est lui qui permet à une preuve de mois 1 de ressortir au mois 3.
@@ -2772,7 +2815,7 @@ function applySportBranding(){
   }
 }
 
-const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',naissance:'',ccDays:{},ccMois:'',imageryDays:0,badgeCinema:false,noteMentaleFaite:false,startRoutine:{mot:'',geste:''},startJournal:[],
+const state={mental:{},physique:{},sensoriel:{},prenom:'',age:13,trainingDays:['lundi','mercredi','vendredi'],level:'Régional',gym:true,sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',phoneParent:'',naissance:'',ccDays:{},ccMois:'',imageryDays:0,badgeCinema:false,noteMentaleFaite:false,startRoutine:{mot:'',geste:''},startJournal:[],rdv:{},
   bq:{},                // les briques des exercices mentaux : un objet plat, clés "m3|confiance|M1.preuve1"
   physSeances:{},       // séances physiques validées, par clé "mois-semaine" : {ids:{p0:true,...}, total:n, done:n}
   weekAuto:true,        // tant que vrai, la semaine affichée suit la vraie date (calcul auto) ; passe à false dès qu'un vrai pilote clique lui-même sur un onglet SEM
@@ -3801,6 +3844,24 @@ if(window.AxeBriques){
     }
   });
 }
+/* Le rendez-vous du dimanche. Il reçoit l'axe travaillé ce mois-ci, le moment désigné
+   dans le dernier bilan, et la date de référence (pour que la démo garde sa date simulée). */
+if(window.AxeRdv){
+  AxeRdv.init({
+    lire:   function(){ return state.rdv || (state.rdv = {}); },
+    ecrire: function(v){ state.rdv = v; },
+    date:   function(){ return (typeof dateRef === 'function' && dateRef()) || new Date(); },
+    axe:    function(){ try{ return blocageKey(); }catch(e){ return 'portillon'; } },
+    bloc:   function(){ return (state.month > 1 && state.report && state.report.bloc) || ''; },
+    enregistrer: function(){ debounceEnregistrerSuiviRituel(); try{ renderTodo(); }catch(e){} }
+  });
+}
+function renderRdv(){
+  var z = document.getElementById('rdvZone');
+  if(z && window.AxeRdv && estDemarre()) AxeRdv.monter(z);
+  else if(z) z.innerHTML = '';
+}
+
 /* La clé de la mission affichée : mois AXE, axe du blocage, phase de la semaine.
    C'est elle qui permet de comparer un mois 1 et un mois 3 côté coach. */
 function cleMission(){
@@ -3905,6 +3966,7 @@ async function axeEnregistrerSuiviRituel(){
     badgeCinema: !!state.badgeCinema,
     startRoutine: state.startRoutine,
     startJournal: state.startJournal,
+    rdv: state.rdv,
     bq: state.bq,
     physSeances: state.physSeances
   };
@@ -4498,6 +4560,7 @@ function fermerAide(){
 }
 
 function renderTodo(){
+  renderRdv();
   const zone = document.getElementById('todoBanner');
   if(!zone) return;
   // tant que le programme n'a pas démarré, il n'y a rien à faire : on n'affiche rien

@@ -62,10 +62,12 @@ body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .rc-line span:last-child{color:var(--ink);text-align:right}
 /* Une ligne qui ouvre son espace. Elle reste une ligne : juste un chevron et un survol,
    sinon le dossier deviendrait un mur de boutons. */
+.rdv-al{margin:7px 0;padding:9px 12px;border-radius:4px;background:rgba(122,59,46,.09);
+  border-left:3px solid var(--brique);font-size:12.5px;line-height:1.5;color:var(--brique);font-weight:600}
 a.rc-line{text-decoration:none;cursor:pointer}
 a.rc-line:hover{background:rgba(168,133,42,.07)}
 a.rc-line:hover span:first-child{color:var(--or,#A8852A)}
-a.rc-line .rc-val{color:var(--ink);text-align:right;margin-left:auto}
+a.rc-line .rc-val{color:var(--ink);text-align:right;margin-left:auto;white-space:nowrap}
 a.rc-line .rc-fl{color:rgba(26,22,18,.3);font-size:11px;flex:none;align-self:center;margin-left:2px}
 a.rc-line:hover .rc-fl{color:var(--or,#A8852A)}
 .mono{font-family:ui-monospace,monospace;font-size:12px;background:rgba(26,22,18,.05);padding:2px 6px;border-radius:3px}
@@ -658,6 +660,80 @@ function murUrl(r, vue, opts){
   if(opts && opts.ancre) u += '&ancre=' + encodeURIComponent(opts.ancre);
   if(opts && opts.sem)   u += '&sem='   + encodeURIComponent(opts.sem);
   return u;
+}
+/* ---------------------------------------------------------------------------
+   LE RENDEZ-VOUS MENTAL DU DIMANCHE
+   Ce que le sportif écrit chaque dimanche, et surtout ce qu'il répond sept jours
+   plus tard. Chaque ligne ouvre son espace au bon endroit. Un mot qui revient dans
+   trois notes différentes est remonté : c'est souvent son vrai sujet.
+   --------------------------------------------------------------------------- */
+const RDV_VIDES = ('alors apres après aussi autre autres avait avant avec avoir bien cela cette '
+ + 'chez comme comment dans deja déjà depuis donc elle elles encore entre etait était etre être '
+ + 'fait faire fois jamais juste leur leurs mais meme même moins beaucoup pour pourquoi quand '
+ + 'quelque quelques sans sous suis sur tout toute toutes tous très trop vers voila voilà vraiment '
+ + 'peut peux plus rien parce quil cest jai etc jour jours semaine moment').split(/\s+/);
+function rdvMots(t){
+  return String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z\s'-]/g,' ').split(/[\s'-]+/)
+    .filter(m => m.length >= 5 && RDV_VIDES.indexOf(m) === -1);
+}
+function rdvRecurrent(rdv){
+  const cpt = {};
+  Object.keys(rdv).forEach(k=>{
+    if(!rdv[k] || !rdv[k].note) return;
+    const vus = {};
+    rdvMots(rdv[k].note).forEach(m=>{ if(!vus[m]){ vus[m]=1; cpt[m]=(cpt[m]||0)+1; } });
+  });
+  let best = null;
+  Object.keys(cpt).forEach(m=>{ if(cpt[m] >= 3 && (!best || cpt[m] > cpt[best])) best = m; });
+  return best ? {mot:best, n:cpt[best]} : null;
+}
+function rdvDimancheCourant(){
+  const d = new Date(); d.setHours(0,0,0,0);
+  const j = d.getDay();
+  const dec = (j === 5 && new Date().getHours() >= 18) ? 2 : (j === 6 ? 1 : (j === 0 ? 0 : -j));
+  d.setDate(d.getDate() + dec);
+  return d.toISOString().slice(0,10);
+}
+function blocRdv(r, sr){
+  const rdv = (sr && sr.rdv && typeof sr.rdv === 'object') ? sr.rdv : null;
+  const cible = rdvDimancheCourant();
+  if(!rdv || !Object.keys(rdv).length){
+    return `<div class="rc-sub">Rendez-vous du dimanche</div>`
+         + `<div class="mc-vide">Aucun rendez-vous fait pour l'instant</div>`;
+  }
+  const cles = Object.keys(rdv).filter(k => rdv[k] && rdv[k].note).sort().reverse();
+  const total = cles.length;
+  // combien de dimanches d'affilée en remontant depuis le dernier attendu
+  let serie = 0, d = new Date(cible + 'T00:00:00');
+  if(!(rdv[cible] && rdv[cible].note)) d.setDate(d.getDate() - 7);
+  while(true){
+    const k = d.toISOString().slice(0,10);
+    if(rdv[k] && rdv[k].note){ serie++; d.setDate(d.getDate() - 7); } else break;
+  }
+  let sautes = 0; let e = new Date(cible + 'T00:00:00');
+  while(sautes < 12 && !(rdv[e.toISOString().slice(0,10)] && rdv[e.toISOString().slice(0,10)].note)){
+    sautes++; e.setDate(e.getDate() - 7);
+  }
+  let h = `<div class="rc-sub">Rendez-vous du dimanche</div>`;
+  h += murLigne(r, 'dash', {ancre:'rdvZone'}, 'Rendez-vous honorés',
+        `${total} · ${serie} d'affilée`);
+  if(sautes >= 2){
+    h += `<div class="rdv-al">${sautes} rendez-vous sautés d'affilée. Le dernier remonte au `
+       + `${cles.length ? dateCourte(cles[0]) : '—'}.</div>`;
+  }
+  const rec = rdvRecurrent(rdv);
+  if(rec){
+    h += `<div class="rc-note"><span class="rc-who">Ce qui revient dans ses notes</span>`
+       + `« ${rec.mot} » apparaît dans ${rec.n} de ses notes.</div>`;
+  }
+  cles.slice(0,6).forEach(k=>{
+    const e = rdv[k];
+    const court = e.note.length > 92 ? e.note.slice(0,92) + '…' : e.note;
+    h += murLigne(r, 'dash', {ancre:'rdvZone'}, `<b>${dateCourte(k)}</b> · ${echapperAttr(court)}`,
+          e.suite ? '<span class="tag-env">répondu</span>' : '<span class="tag-att">sans suite</span>');
+  });
+  return h;
 }
 function murLigne(r, vue, opts, gauche, droite){
   return '<a class="rc-line" href="' + murUrl(r, vue, opts) + '" target="_blank" rel="noopener" '
@@ -1272,6 +1348,7 @@ function afficherRiders(riders){
     if(imgDays)      moisBlock += murLigne(r, 'start', null, 'Cinéma du start', `${imgDays} / 7 soirs`);
     if(routineOk)    moisBlock += murLigne(r, 'start', null, "Rituel d'avant-départ", `"${sr.startRoutine.mot}" · ${sr.startRoutine.geste}`);
     if(journalCount) moisBlock += murLigne(r, 'start', {ancre:'jlog'}, 'Carnet des starts', `${journalCount} entrée${journalCount>1?'s':''}`);
+    moisBlock += blocRdv(r, sr);
     (semainesMois[moisCourant] || []).forEach(s=>{
       moisBlock += murLigne(r, 'dash', {sem:s.semaine, ancre:'physCol'}, `Semaine ${s.semaine}`,
         `${s.done} / ${s.total} séance${s.total>1?'s':''} validée${s.total>1?'s':''}`);
