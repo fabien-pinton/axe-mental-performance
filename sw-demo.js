@@ -10,12 +10,12 @@ const FICHIERS = [
   '/demo-parents.html',
   '/manifest-demo-sportif.webmanifest',
   '/manifest-demo-parents.webmanifest',
-  '/demo-app/icone-sportif-192.png',
-  '/demo-app/icone-sportif-512.png',
-  '/demo-app/icone-sportif-180.png',
-  '/demo-app/icone-parents-192.png',
-  '/demo-app/icone-parents-512.png',
-  '/demo-app/icone-parents-180.png'
+  '/axe-icone-sportif-192.png',
+  '/axe-icone-sportif-512.png',
+  '/axe-icone-sportif-180.png',
+  '/axe-icone-parents-192.png',
+  '/axe-icone-parents-512.png',
+  '/axe-icone-parents-180.png'
 ];
 
 self.addEventListener('install', function(e){
