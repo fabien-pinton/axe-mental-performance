@@ -637,7 +637,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
   </div>
   <div class="bar-right">
     <button class="vm-bell" id="vmBell" onclick="ouvrirMessageVocal()" title="Message de ton coach"><span id="vmDot" style="display:none" class="vm-dot"></span>🎙️</button>
-    <div class="role" id="roleTag">Espace pilote</div>
+    <div class="role" id="roleTag">Espace sportif</div>
   </div>
 </div>
 
@@ -658,7 +658,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
 <!-- ============ HERO ============ -->
 <section class="screen on" id="hero">
   <div class="hero">
-    <div class="eyebrow" id="heroEyebrow">Préparation mentale · BMX Race</div>
+    <div class="eyebrow" id="heroEyebrow">Préparation mentale</div>
     <h1 id="heroTitle">
       <div>ROULE AVEC</div>
       <div class="line2">UNE LONGUEUR</div>
@@ -1801,7 +1801,11 @@ function normalizeTxt(s){
 }
 function sportKey(raw){
   const t = normalizeTxt(raw);
-  if(!t) return 'bmx'; // pas de sport en base (anciens comptes) : on garde le comportement d'origine
+  // Pas de sport en base : on part du lexique générique, jamais du BMX.
+  // AXE n'est plus un protocole BMX, et un compte sans sport renseigné ne doit
+  // plus lire « sur la gate » ni « Espace pilote ». Les comptes BMX ont tous
+  // leur sport en base, ils ne passent donc jamais par ici.
+  if(!t) return 'generique';
   if(/bmx/.test(t)) return 'bmx';
   if(/moto.?cross|\bmx\b/.test(t)) return 'motocross';
   if(/foot(ball)?\b|futsal/.test(t)) return 'football';
@@ -1813,14 +1817,14 @@ function sportKey(raw){
   return 'generique';
 }
 // jeton actif pour la session en cours (mis à jour dans axeInit() dès qu'on connaît le sport du client)
-function L(){ return SPORT_LEXICON[state.sport] || SPORT_LEXICON.bmx; }
+function L(){ return SPORT_LEXICON[state.sport] || SPORT_LEXICON.generique; }
 
 /* ============ DATA ============ */
 // Diagnostic 100% mental à 15 questions (9 mental, 6 sensoriel). Chaque question a un id stable
 // (les réponses sont enregistrées par id, plus par position, pour rester fiables même si l'ordre change).
 // Chaque question mentale porte un "tags" = une catégorie par option. Le profil final se
 // construit en cumulant les réponses sur les 9 questions, pas sur une seule question.
-let diagQuestions=buildDiagQuestions(SPORT_LEXICON.bmx, 'ado');
+let diagQuestions=buildDiagQuestions(SPORT_LEXICON.generique, 'ado');
 // tranche d'âge du sportif : conditionne la formulation des questions du diagnostic et des
 // exercices mentaux (formats plus courts et plus concrets pour les 10-12 ans, la formulation
 // standard, déjà adaptée à un lecteur ado/adulte, sert aussi bien les 13-17 ans que les 18 ans et +).
@@ -2048,7 +2052,7 @@ function buildMentalPools(l, tier){
   ]},
   };
 }
-let mentalPools=buildMentalPools(SPORT_LEXICON.bmx, 'ado');
+let mentalPools=buildMentalPools(SPORT_LEXICON.generique, 'ado');
 
 /* ============ MISSIONS MENTALES HEBDOMADAIRES ============ */
 // L'exercice du mois (ci-dessus) fixe la compétence travaillée. Chaque semaine, il se traduit
@@ -2212,11 +2216,11 @@ function missionsAdulte(l){
 function buildMentalMissions(l, tier){
   return tier==='enfant' ? missionsEnfant(l) : tier==='adulte' ? missionsAdulte(l) : missionsAdo(l);
 }
-let mentalMissions=buildMentalMissions(SPORT_LEXICON.bmx, 'ado');
+let mentalMissions=buildMentalMissions(SPORT_LEXICON.generique, 'ado');
 // Les briques interactives qui accompagnent ces missions : mêmes axes, mêmes niveaux,
 // mêmes phases. Elles sont reconstruites avec les missions dès que le sport ou l'âge
 // du sportif est connu (rebuildSportContent), pour parler sa discipline et son âge.
-let mentalBriques = window.AxeBriques ? AxeBriques.table(SPORT_LEXICON.bmx, 'ado') : null;
+let mentalBriques = window.AxeBriques ? AxeBriques.table(SPORT_LEXICON.generique, 'ado') : null;
 // mission de la semaine affichée, selon la phase réelle du mois (voir phaseOfWeek)
 function pickMentalHebdo(){
   const key = blocageKey();
@@ -2234,7 +2238,7 @@ function pickMentalHebdo(){
   return {loc:ms.loc, dur:ms.dur, txt:ms.txt, rappel, code, niv};
 }
 
-const state={mental:{},sensoriel:{},prenom:'',age:16,level:'Régional',sport:'bmx',qi:0,month:1,week:1,report:{},phoneRider:'',naissance:'',ccDays:{},ccMois:'',imageryDays:0,badgeCinema:false,noteMentaleFaite:false,startRoutine:{mot:'',geste:''},startJournal:[],rdv:{},
+const state={mental:{},sensoriel:{},prenom:'',age:16,level:'Régional',sport:'generique',qi:0,month:1,week:1,report:{},phoneRider:'',naissance:'',ccDays:{},ccMois:'',imageryDays:0,badgeCinema:false,noteMentaleFaite:false,startRoutine:{mot:'',geste:''},startJournal:[],rdv:{},
   bq:{},                // les briques des exercices mentaux : un objet plat, clés "m3|confiance|M1.preuve1"
   weekAuto:true,        // tant que vrai, la semaine affichée suit la vraie date (calcul auto) ; passe à false dès qu'un vrai pilote clique lui-même sur un onglet SEM
   signupDay:4,          // jour d'inscription simulé (le 4 par défaut)
@@ -2680,11 +2684,18 @@ if(window.AxeRdv){
         if(!window.AxeBriques || !briquesOuvertes()) return null;
         var h = pickMentalHebdo(), m = pickMental(), cle = cleMission();
         if(!cle) return null;
-        return { loc:h.loc, dur:h.dur, txt:h.txt, titre:m.title, cle:cle, fait:missionFaite(cle) };
+        return { loc:h.loc, dur:h.dur, txt:h.txt, titre:m.title, cle:cle,
+                 fait:missionFaite(cle), amorce:amorceMission(blocageKey(), h.niv) };
       }catch(e){ return null; }
     },
     valider:function(cle){ try{ validerMission(cle); }catch(e){} },
-    enregistrer: function(){ debounceEnregistrerSuiviRituel(); try{ renderTodo(); }catch(e){} }
+    // On enregistre toujours, mais on ne redessine pas tant qu'il a le doigt dans un
+    // champ : reconstruire le bandeau pendant la frappe ferme le clavier du téléphone.
+    enregistrer: function(){
+      debounceEnregistrerSuiviRituel();
+      if(window.AxeRdv && AxeRdv.saisie && AxeRdv.saisie()) return;
+      try{ renderTodo(); }catch(e){}
+    }
   });
 }
 function renderRdv(){
@@ -2695,6 +2706,33 @@ function renderRdv(){
 
 /* La clé de la mission affichée : mois AXE, axe du blocage, phase de la semaine.
    C'est elle qui permet de comparer un mois 1 et un mois 3 côté coach. */
+/* Ce dont parle la mission de la semaine, nommé en une phrase.
+   Les textes de missions se suivent d'une semaine sur l'autre : « ta routine », « ta
+   consigne », « l'image » renvoient à ce qui a été construit en début de mois. Affichée
+   seule dans le rendez-vous du dimanche, une mission de semaine 4 n'avait donc plus de
+   référent, et un sportif de douze ans ne peut pas deviner. Cette ligne le redit à chaque
+   fois, sans l'obliger à se souvenir. */
+function amorceMission(axeCle, niv){
+  const T = {
+    portillon:[
+      "Ta routine, c'est tes 4 temps avant de partir : le regard, la respiration, ton mot-clé, la poussée.",
+      "Ta routine, c'est toujours les mêmes 4 temps. Cette fois, on la met sous pression.",
+      "Ta routine, c'est tes 4 temps, compressés en 10 secondes."
+    ],
+    rumination:[
+      "Ton carnet de débrief, c'est tes trois colonnes : une chose ratée, une chose réussie, la consigne.",
+      "Ta consigne, c'est la phrase courte que tu t'écris après une erreur : « la prochaine fois, je… »",
+      "Ta consigne, c'est cette même phrase courte, et elle doit maintenant sortir toute seule, sans carnet."
+    ],
+    confiance:[
+      "Ton carnet des preuves, c'est la liste des moments où ça a marché. Des gestes, pas des résultats.",
+      "Tes preuves, ce sont les moments écrits dans ton carnet, ceux où tu te revois le plus nettement.",
+      "Ton image, c'est ta meilleure preuve revue en entier : le lieu, ce que tu voyais, ce que tu entendais. Celle que tu as choisie en début de mois."
+    ]
+  };
+  const l = T[axeCle] || T.portillon;
+  return l[Math.min(Math.max(Number(niv) || 0, 0), l.length - 1)];
+}
 function cleMission(){
   // si briques.js n'a pas été chargé, on ne casse rien : la page garde son ancien
   // comportement et le bouton de validation n'apparaît simplement pas.

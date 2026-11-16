@@ -16,6 +16,12 @@
    notes quand un mot est déjà apparu trois fois.
 
    Cette page ne connaît rien du protocole : elle reçoit tout par `init`.
+
+   SAISIE AU CLAVIER, et c'est important : tant qu'un champ est en cours d'écriture, ce
+   fichier ne reconstruit plus rien à l'écran. Sur téléphone, remplacer le champ pendant
+   la frappe ferme le clavier et avale le caractère qui vient d'être tapé. C'est ce qui
+   rendait l'espace impossible à saisir. La valeur est donc écrite brute et en différé,
+   et elle n'est nettoyée qu'une fois le champ quitté.
    ===================================================================================== */
 (function(){
 'use strict';
@@ -23,6 +29,8 @@
 var C = null;          // le contexte fourni par la page
 var PROFIL = 'sportif'; // 'sportif' ou 'parent'
 var ZONE = null;       // le conteneur où tout est rendu
+var SAISIE = false;    // vrai tant qu'un champ a le focus : on ne reconstruit rien
+var ATTENTE = null;    // l'enregistrement différé pendant la frappe
 
 /* ---------------------------------------------------------------- dates */
 function j0(d){ var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); return x; }
@@ -219,9 +227,62 @@ function relance(d, noteAvant){
               + 'Pas ce que tu as ressenti : ce qui a bougé dans les faits.' };
 }
 
+/* ------------------------------------------- le pont entre sa note et sa mission
+   La mission de la semaine ne tombe plus de nulle part : on lit ce qu'il vient d'écrire,
+   on reconnaît de quoi il parle à l'intérieur de son axe du mois, et on lui dit en une
+   phrase pourquoi la mission qui suit répond à ça. L'axe du mois ne change pas : c'est
+   son bilan qui le fixe, et la progression des quatre semaines perdrait son sens si on
+   en changeait en cours de route. Ce qui change, c'est qu'il voit le lien.
+   Les motifs sont testés sur le texte mis en minuscules et désaccentué. */
+var THEMES = {
+  portillon: [
+    { rx:/pression|stress|angois|peur|trembl|coeur|boule|ventre|nerveu|flipp/,
+      p:"La pression est montée avant que tu sois prêt. C'est exactement ce que ta routine sert à couper, et c'est pour ça que la mission de la semaine porte dessus." },
+    { rx:/trop vite|precipit|parti trop|anticip|faux depart|brul|impatien/,
+      p:"Tu es parti avant d'être posé. La mission de la semaine sert à te rendre les deux secondes qui te manquaient." },
+    { rx:/pas dans ma tete|pas dans la tete|tete ailleurs|concentr|distrait|pense a autre/,
+      p:"Le corps était prêt, la tête non. La mission de la semaine remet les deux au même endroit." },
+    { rx:null,
+      p:"Tu as noté un moment qui s'est joué avant le départ. C'est précisément ce moment-là que la mission de la semaine travaille." }
+  ],
+  rumination: [
+    { rx:/enerv|colere|injust|arbitr|pas juste|rage|crie|gueul|rancun/,
+      p:"Tu es resté énervé après coup. La mission de la semaine te donne quoi faire de cette colère, au lieu de la garder." },
+    { rx:/soir|dormi|dormir|nuit|lendemain|toute la journee|longtemps|ressass|boucle/,
+      p:"Ça t'a suivi longtemps après. C'est exactement cette durée-là qu'on cherche à faire baisser cette semaine." },
+    { rx:/erreur|rate|faute|chute|tombe|loupe|foire|plante/,
+      p:"Une erreur t'est restée dans la tête. La mission de la semaine ne sert pas à éviter l'erreur, elle sert à raccourcir le temps d'après." },
+    { rx:null,
+      p:"Tu as noté quelque chose qui a tourné en boucle. C'est là-dessus que la mission de la semaine travaille." }
+  ],
+  confiance: [
+    { rx:/compar|plus fort que|mieux que moi|moins bien|aussi bien que|les autres|devant moi/,
+      p:"Tu t'es comparé à quelqu'un. C'est exactement ce que ton carnet des preuves sert à remplacer : te mesurer à toi, pas à lui." },
+    { rx:/pas ose|recul|abandonn|renonc|laisse tomber|hesit|doute/,
+      p:"Tu as reculé alors que tu savais faire. La mission de la semaine sert à te remettre la preuve que tu sais, avant d'y aller." },
+    { rx:/reussi|bien fait|fier|content|marche bien|progres/,
+      p:"Tu as noté quelque chose qui a marché. C'est une preuve, et la mission de la semaine consiste justement à t'en servir." },
+    { rx:null,
+      p:"Tu as noté un moment où tu ne t'es pas fait confiance. C'est exactement ce que la mission de la semaine travaille." }
+  ]
+};
+function nu(t){
+  return String(t||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+}
+function pont(txt){
+  var l = THEMES[axe()] || THEMES.portillon, t = nu(txt);
+  for(var i = 0; i < l.length; i++) if(l[i].rx && l[i].rx.test(t)) return l[i].p;
+  return l[l.length - 1].p;
+}
+
 /* ---------------------------------------------------------------- rendu */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+/* Les attributs qui rendent un champ écrivable au pouce : majuscule en début de phrase,
+   correction et dictée actives, touche « retour à la ligne » plutôt que « envoyer ». */
+var ATTRS = 'autocapitalize="sentences" autocorrect="on" autocomplete="off" '
+          + 'spellcheck="true" enterkeyhint="enter" rows="4"';
 
 function html(){
   var f = fenetre(), k = cle(f.dim), moi = fiche(k) || {};
@@ -275,7 +336,7 @@ function html(){
        + '<div class="rdv-cit">«&nbsp;' + esc(avant.note) + '&nbsp;»</div>'
        + '<div class="rdv-q">' + r.q + '</div>'
        + '<div class="rdv-p">' + esc(r.p).replace('&lt;em&gt;','<em>') + '</div>'
-       + '<textarea class="rdv-champ" data-rdv="suite" data-cle="' + kAvant + '" '
+       + '<textarea class="rdv-champ" ' + ATTRS + ' data-rdv="suite" data-cle="' + kAvant + '" '
        + 'placeholder="' + (PROFIL === 'parent' ? 'Ce que vous avez vu, deux ou trois lignes.'
             : 'Écris ici, deux ou trois lignes suffisent.') + '">' + esc(avant.suite || '') + '</textarea>'
        + (avant.suite ? '<div class="rdv-ok">' + (PROFIL === 'parent' ? PARENT.ok1
@@ -294,7 +355,7 @@ function html(){
               + PARENT.amorce + '</div>';
        })()
      + '<div class="rdv-cons">' + esc(consigne(f.dim)) + '</div>'
-     + '<textarea class="rdv-champ" data-rdv="note" data-cle="' + k + '" '
+     + '<textarea class="rdv-champ" ' + ATTRS + ' data-rdv="note" data-cle="' + k + '" '
      + 'placeholder="' + (PROFIL === 'parent'
           ? 'Le jour, l\'endroit, ce que vous avez dit ou fait. Deux ou trois lignes.'
           : 'Un moment précis. Le jour, l\'endroit, ce qui s\'est passé.') + '">' + esc(moi.note || '') + '</textarea>'
@@ -305,13 +366,25 @@ function html(){
   /* --- 3. la mission de la semaine, qui vivait avant dans sa propre carte --- */
   var mi = (PROFIL !== 'parent' && C && C.mission) ? C.mission() : null;
   if(mi && mi.txt){
+    /* On part de ce qu'il vient d'écrire. S'il n'a pas encore écrit cette semaine, on
+       part de sa note de dimanche dernier. S'il n'a jamais rien écrit, pas de pont :
+       on ne fabrique pas un lien avec une note qui n'existe pas. */
+    var src = (moi.note && moi.note.trim()) ? { t:moi.note, quand:'ce que tu viens d’écrire' }
+            : (avant && avant.note && avant.note.trim()) ? { t:avant.note, quand:'ce que tu as écrit dimanche dernier' }
+            : null;
     h += '<div class="rdv-bloc' + (mi.fait ? ' ok' : '') + '">'
        + '<h3>ENFIN, TA MISSION DE LA SEMAINE</h3>'
        + (mi.titre ? '<div class="rdv-amorce">' + esc(mi.titre) + '</div>' : '')
+       + (src ? '<div class="rdv-q" style="font-size:15px">D’après ' + src.quand + '&nbsp;:</div>'
+              + '<div class="rdv-p">' + esc(pont(src.t)) + '</div>' : '')
+       + (mi.amorce ? '<div class="rdv-amorce" style="letter-spacing:0;text-transform:none;'
+              + 'font-weight:400;font-style:italic;margin-top:12px">' + esc(mi.amorce) + '</div>' : '')
        + '<div class="rdv-cons" style="font-style:normal;font-family:inherit;font-size:15px;'
        + 'color:var(--ink);line-height:1.6">' + esc(mi.txt) + '</div>'
        + (mi.loc || mi.dur
-            ? '<div class="rdv-p" style="margin-top:8px">' + esc([mi.loc, mi.dur].filter(Boolean).join(' · ')) + '</div>'
+            ? '<div class="rdv-p" style="margin-top:8px">'
+              + esc([mi.loc, mi.dur].filter(Boolean).join(' · ').replace(/^./, function(c){ return c.toUpperCase(); }))
+              + '</div>'
             : '')
        + '<button type="button" class="rdv-valider' + (mi.fait ? ' fait' : '') + '" data-rdv-valider="'
        + esc(mi.cle) + '">' + (mi.fait ? '✓ Faite cette semaine' : 'Marquer la mission faite') + '</button>'
@@ -329,6 +402,9 @@ function html(){
 function monter(zone){
   ZONE = zone || ZONE;
   if(!ZONE) return;
+  /* Il est en train d'écrire : on ne remplace rien, sinon le clavier se ferme et le
+     caractère en cours est perdu. Le bloc sera remis à jour quand il quittera le champ. */
+  if(SAISIE) return;
   ZONE.innerHTML = html();
   ZONE.querySelectorAll('[data-rdv-valider]').forEach(function(b){
     b.addEventListener('click', function(){
@@ -336,11 +412,26 @@ function monter(zone){
     });
   });
   ZONE.querySelectorAll('[data-rdv]').forEach(function(t){
+    t.addEventListener('focus', function(){ SAISIE = true; });
+    /* Pendant la frappe : on enregistre la valeur BRUTE, en différé, et surtout sans
+       jamais nettoyer. Un .trim() ici effacerait l'espace à l'instant où il le tape,
+       ce qui rendait l'écriture impossible au téléphone. */
     t.addEventListener('input', function(){
-      ecrire(t.dataset.cle, t.dataset.rdv, t.value.trim());
+      SAISIE = true;
+      if(ATTENTE) clearTimeout(ATTENTE);
+      ATTENTE = setTimeout(function(){
+        ATTENTE = null;
+        ecrire(t.dataset.cle, t.dataset.rdv, t.value);
+      }, 700);
     });
+    /* Champ quitté : là seulement on nettoie, on enregistre et on redessine. */
     t.addEventListener('blur', function(){
-      var av = ZONE.scrollTop; monter(ZONE); ZONE.scrollTop = av;
+      if(ATTENTE){ clearTimeout(ATTENTE); ATTENTE = null; }
+      SAISIE = false;
+      var av = ZONE.scrollTop;
+      ecrire(t.dataset.cle, t.dataset.rdv, t.value.trim());
+      monter(ZONE);
+      ZONE.scrollTop = av;
     });
   });
 }
@@ -354,5 +445,7 @@ function etat(){
 
 window.AxeRdv = { init:function(o){ C = o || {}; PROFIL = (C.profil === 'parent') ? 'parent' : 'sportif'; },
                   monter:monter, html:html, etat:etat,
-                  fenetre:fenetre, recurrent:recurrent };
+                  fenetre:fenetre, recurrent:recurrent,
+                  /* la page hôte s'en sert pour ne rien redessiner pendant qu'il écrit */
+                  saisie:function(){ return SAISIE; } };
 })();
