@@ -3435,6 +3435,12 @@ const PROFILS_SPECIFIQUES = {
   // Tout le reste du cadre est intact : jamais jusqu'à l'échec, jamais de finisher, jamais
   // d'exigence nationale, ressenti obligatoire, et la liste des signaux d'alerte affichée.
   'thimeo-12j': { allege:{ ressentiObligatoire:true, coefCharge:0.9, palier:2 } },
+  // Lenzo, 12 ans, régional, pas de salle. Son diagnostic dit force faible dans les jambes
+  // et percussion forte au démarrage : il a déjà le geste, il lui manque ce qu'il met
+  // dedans. Le coach oriente donc tout son physique sur la mise en action. À cet âge il n'y
+  // a pas de muscle à prendre, seulement du recrutement à gagner : peu de répétitions, à
+  // intention maximale, et de longues récupérations. Deux séances, mercredi et samedi.
+  'lenzo21v': { objectif:'start' },
 };
 function profilSpecifique(){
   return PROFILS_SPECIFIQUES[(axeCode||'').toLowerCase()] || {};
@@ -3673,7 +3679,14 @@ function motStart(){
       + 'dès que la vitesse baisse, tu arrêtes la série.'
     : ' Récupération complète entre les séries : ce bloc ne doit jamais devenir du cardio. '
       + 'Si tu finis essoufflé(e), c\'est que tu es allé(e) trop vite entre les séries.';
-  return '<p class="phys-weight-note">' + base + fin + '</p>';
+  /* Quand le coach a posé un objectif, le sportif doit lire pourquoi son programme a
+     changé. Un programme qu'on ne comprend pas se fait à moitié. */
+  const obj = (profilSpecifique().objectif === 'start')
+    ? ' Et depuis cette semaine, tout ton programme physique est calé sur la mise en action : '
+      + 'explosivité, puissance, vitesse. Les séances de force et de gainage reviennent moins '
+      + 'souvent, elles ne disparaissent pas : sans elles il n\'y aurait rien sur quoi pousser.'
+    : '';
+  return '<p class="phys-weight-note">' + base + fin + obj + '</p>';
 }
 
 /* Le cran sur le RESTE de la séance. Volontairement modeste, et jamais empilé :
@@ -3706,6 +3719,12 @@ function poidsFaiblesseKey(){
 // catégories physiques à renforcer, dérivées de la catégorie dominante du diagnostic
 const PHYS_LVL_MAP={explosivite:['Explosivité'],force:['Force'],stabilite:['Stabilité','Rotation'],vitesse:['Vitesse','Puissance']};
 function poidsFaiblesse(){
+  /* Un objectif posé par le coach passe avant le diagnostic d'inscription : c'est une
+     décision plus récente et mieux informée qu'un questionnaire rempli le premier jour.
+     'start' fait revenir deux fois plus souvent les séances d'explosivité, de puissance et
+     de vitesse, sans jamais faire disparaître la force ni le gainage : un cycle qui ne
+     contiendrait que de l'explosif ne construirait rien à tenir dessus. */
+  if(profilSpecifique().objectif === 'start') return ['Explosivité','Puissance','Vitesse'];
   const key = poidsFaiblesseKey();
   return key ? (PHYS_LVL_MAP[key]||[]) : []; // diagnostic physique pas encore répondu : rotation neutre, sans priorité
 }
