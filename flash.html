@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<title>Protocole Flash · AXE</title>
+<link rel="apple-touch-icon" href="/axe-icone-sportif-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<style>
+:root{
+  --noir:#000; --carte:#15130F; --carte2:#1C1915;
+  --or:#DCA94D; --or-clair:#FBEAB7; --or-fonce:#7F5110;
+  --creme:#F3EEE3; --pale:rgba(243,238,227,.62); --trait:rgba(220,169,77,.26);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--noir);color:var(--creme);
+  font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  padding:env(safe-area-inset-top,0) 0 calc(env(safe-area-inset-bottom,0) + 28px);
+  -webkit-font-smoothing:antialiased}
+.page{max-width:560px;margin:0 auto;padding:20px 18px 0}
+.marque{text-align:center;margin-bottom:22px}
+.marque b{display:block;font-size:29px;letter-spacing:.34em;color:var(--or);font-weight:600;text-indent:.34em}
+.marque i{display:block;font-style:normal;font-size:8.5px;letter-spacing:.3em;color:var(--pale);margin-top:6px}
+.marque s{display:block;text-decoration:none;font-size:10px;letter-spacing:.26em;color:var(--or-fonce);
+  margin-top:13px;text-transform:uppercase;font-weight:700}
+h1{font-size:23px;line-height:1.25;font-weight:600;text-wrap:balance}
+.sous{color:var(--pale);font-size:14.5px;margin-top:9px}
+.btn{display:block;width:100%;text-align:left;background:var(--carte);color:var(--creme);
+  border:1px solid var(--trait);border-radius:13px;padding:15px 17px;font:inherit;font-size:16px;
+  line-height:1.4;cursor:pointer;margin-top:9px}
+.btn:active{background:var(--carte2)}
+.btn:focus-visible{outline:2px solid var(--or);outline-offset:2px}
+.btn.or{background:linear-gradient(180deg,var(--or-clair),var(--or));color:#17120A;border-color:var(--or);
+  font-weight:700;text-align:center;letter-spacing:.02em}
+.btn.vide{background:transparent;color:var(--pale);border-style:dashed;text-align:center;font-size:14.5px;padding:13px}
+.btn .pt{display:block;font-size:13px;color:var(--pale);margin-top:3px}
+.fam{font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--or);font-weight:700;margin:24px 0 4px}
+.fam:first-of-type{margin-top:18px}
+label{display:block;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--pale);
+  font-weight:600;margin-top:14px}
+input,select{width:100%;margin-top:6px;background:var(--carte);border:1px solid var(--trait);
+  border-radius:12px;padding:14px 16px;font:inherit;font-size:17px;color:var(--creme)}
+input:focus,select:focus{outline:none;border-color:var(--or)}
+input.code{text-align:center;letter-spacing:.14em;font-size:20px;text-transform:uppercase}
+.err{color:#E8896F;font-size:14px;margin-top:11px;text-align:center;min-height:20px}
+.ok{color:#9BC48A}
+.garder{display:flex;align-items:center;gap:11px;margin-top:16px;font-size:14.5px;color:var(--pale)}
+.garder input{width:20px;height:20px;margin:0;accent-color:var(--or);flex:0 0 auto}
+.bandeau{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.tag{font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;padding:5px 11px;
+  border-radius:30px;border:1px solid var(--trait);color:var(--or)}
+.tag.plein{background:var(--or);color:#17120A;border-color:var(--or)}
+.perso{border-left:3px solid var(--or);background:rgba(220,169,77,.07);padding:13px 15px;
+  border-radius:0 10px 10px 0;margin-bottom:16px;font-size:15.5px}
+.acte{border:1px solid var(--trait);border-radius:15px;background:var(--carte);padding:18px;margin-top:13px;
+  opacity:.4;transition:opacity .25s ease}
+.acte.on{opacity:1;border-color:var(--or)}
+.acte.fini{opacity:.62}
+.acte .haut{display:flex;align-items:center;gap:11px;margin-bottom:5px}
+.acte .ico{flex:0 0 32px;height:32px;border-radius:50%;background:var(--or);color:#17120A;
+  font-size:15px;display:grid;place-items:center}
+.acte.fini .ico{background:transparent;color:var(--or);border:1px solid var(--or)}
+.acte .ty{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--or);font-weight:700}
+.acte h3{font-size:17px;font-weight:700;line-height:1.25}
+.acte .sec{margin-left:auto;font-size:12px;color:var(--pale);font-variant-numeric:tabular-nums}
+.acte p{font-size:16px;line-height:1.62;margin-top:8px}
+.chrono{height:3px;background:rgba(243,238,227,.1);border-radius:3px;margin-top:14px;overflow:hidden}
+.chrono i{display:block;height:100%;width:0;background:var(--or);border-radius:3px}
+.fin{margin-top:24px;padding-top:20px;border-top:1px solid var(--trait)}
+.fin p{color:var(--pale);font-size:15px}
+.fin b{color:var(--creme)}
+.pied{margin-top:28px;text-align:center;font-size:12.5px;color:rgba(243,238,227,.34);line-height:1.7}
+.lien{display:block;text-align:center;margin-top:16px;color:var(--pale);font-size:14px;background:none;
+  border:none;font:inherit;width:100%;cursor:pointer;text-decoration:underline}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="marque"><b>AXE</b><i>MENTAL PERFORMANCE®</i><s>Protocole Flash</s></div>
+  <div id="vue"></div>
+  <div class="pied" id="pied"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="flash.js"></script>
+<script>
+/* =====================================================================================
+   Trois règles commandent cette page.
+
+   1. LE PROTOCOLE NE DÉPEND JAMAIS DU RÉSEAU. Un sportif au bord d'une piste en 4G
+      instable doit avoir ses actions. Le profil est mis en cache, et l'enregistrement
+      du scan part sans qu'on l'attende.
+   2. LE CODE N'EST DEMANDÉ QU'UNE FOIS par appareil. Personne ne tape un code en
+      compétition.
+   3. DEUX TAPS entre le scan et les actions : le blocage, puis le moment.
+   ===================================================================================== */
+'use strict';
+var URL_SB='https://ilsxrdvxvnvlznjuevba.supabase.co';
+var ANON_SB='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3hyZHZ4dm52bHpuanVldmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjI3MDMsImV4cCI6MjEwMjMzODcwM30.stJYjKv0bp2qwYk2iW2WxFjP3m8KXNbtZZc49zeuTDk';
+var DM='https://www.instagram.com/fabien_pinton/';
+var db=null; try{ db = window.supabase ? supabase.createClient(URL_SB,ANON_SB) : null; }catch(e){ db=null; }
+
+var F=window.AxeFlash, vue=document.getElementById('vue');
+var profil=null, scanId=null, bloc=null, mom=null, actif=null;
+
+function lire(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
+function garde(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function oublie(k){ try{ localStorage.removeItem(k); }catch(e){} }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function rpc(f,a){ return db ? db.rpc(f,a).then(function(r){ return r&&r.data; },function(){ return null; })
+                             : Promise.resolve(null); }
+
+/* ---------------------------------------------------------------- écran 1 : j'arrive */
+function ecranAccueil(){
+  vue.innerHTML =
+    '<h1>Bienvenue. On commence par une seule chose.</h1>'
+  + '<p class="sous">Si tu viens de recevoir ta gourde, active-la maintenant, tranquillement. '
+  + 'Ça prend deux minutes et tu ne le referas jamais.</p>'
+  + '<button class="btn or" id="act" style="margin-top:20px">J’active ma gourde</button>'
+  + '<button class="btn" id="dej">J’ai déjà mon code</button>'
+  + '<button class="btn vide" id="cli">Je suis déjà accompagné par AXE</button>';
+  document.getElementById('act').onclick = ecranActivation;
+  document.getElementById('dej').onclick = function(){ ecranCode('Ton code personnel'); };
+  document.getElementById('cli').onclick = function(){ ecranCode('Ton code d’accès AXE'); };
+  pied();
+}
+
+/* ---------------------------------------------------------------- écran 2 : activation */
+function ecranActivation(msg){
+  vue.innerHTML =
+    '<h1>Première connexion</h1>'
+  + '<p class="sous">Entre le code d’activation reçu par mail avec ta commande. '
+  + 'Il ne sert qu’une fois.</p>'
+  + '<label for="ac">Code d’activation</label>'
+  + '<input type="text" id="ac" class="code" autocomplete="off" autocapitalize="characters" '
+  + 'spellcheck="false" enterkeyhint="go" placeholder="AXE-0000-000">'
+  + '<div class="err" id="e">' + esc(msg||'') + '</div>'
+  + '<button class="btn or" id="go">Continuer</button>'
+  + '<button class="lien" id="ret">Revenir</button>';
+  var c=document.getElementById('ac');
+  function val(){
+    var v=(c.value||'').trim(); if(!v) return;
+    document.getElementById('e').textContent='Vérification…';
+    rpc('flash_verifier_activation',{code_p:v}).then(function(r){
+      if(!r||!r.ok){ document.getElementById('e').textContent =
+        'Ce code d’activation n’est pas reconnu. Vérifie-le sur ton mail.'; return; }
+      if(r.deja){ document.getElementById('e').textContent =
+        'Cette gourde est déjà activée. Entre plutôt ton code personnel.'; return; }
+      ecranChoix(v,r);
+    });
+  }
+  document.getElementById('go').onclick=val;
+  c.addEventListener('keydown',function(e){ if(e.key==='Enter') val(); });
+  document.getElementById('ret').onclick=ecranAccueil;
+  c.focus();
+}
+
+/* ---------------------------------------------------------------- écran 3 : le code choisi */
+function ecranChoix(activation, info, msg){
+  var sugg = String(info.prenom||'').normalize('NFD').replace(/[̀-ͯ]/g,'')
+             .toUpperCase().replace(/[^A-Z]/g,'').slice(0,8);
+  vue.innerHTML =
+    '<h1>Choisis ton code</h1>'
+  + '<p class="sous">C’est lui que tu retaperas si tu changes de téléphone. '
+  + 'Prends quelque chose que tu retiendras sans y penser.</p>'
+  + '<label for="ch">Ton code</label>'
+  + '<input type="text" id="ch" class="code" autocomplete="off" autocapitalize="characters" '
+  + 'spellcheck="false" placeholder="' + esc(sugg||'TONCODE') + '" value="' + esc(sugg) + '">'
+  + '<label for="p">Prénom du sportif</label><input type="text" id="p" value="' + esc(info.prenom||'') + '">'
+  + '<label for="nm">Nom</label><input type="text" id="nm" value="' + esc(info.nom||'') + '">'
+  + '<label for="sp">Sport</label><input type="text" id="sp" value="' + esc(info.sport||'') + '">'
+  + '<label for="ag">Âge</label><input type="number" id="ag" min="6" max="90" value="' + (info.age||'') + '">'
+  + '<label for="nv">Niveau</label><select id="nv">'
+  + ['Loisir','Départemental','Régional','National'].map(function(x){
+      return '<option' + (x===info.niveau?' selected':'') + '>' + x + '</option>'; }).join('')
+  + '</select>'
+  + '<div class="garder"><input type="checkbox" id="mem" checked>'
+  + '<label for="mem" style="margin:0;text-transform:none;letter-spacing:0;font-size:14.5px;font-weight:400">'
+  + 'Retenir ce code sur ce téléphone, pour ne plus avoir à le taper</label></div>'
+  + '<div class="err" id="e">' + esc(msg||'') + '</div>'
+  + '<button class="btn or" id="go">C’est bon, j’active</button>';
+  document.getElementById('go').onclick=function(){
+    var v=(document.getElementById('ch').value||'').trim().toUpperCase();
+    var e=document.getElementById('e');
+    if(v.length<4){ e.textContent='Ton code doit faire au moins 4 caractères.'; return; }
+    if(!/^[A-Z0-9-]{4,24}$/.test(v)){ e.textContent='Lettres, chiffres et tirets seulement.'; return; }
+    e.textContent='Activation…';
+    rpc('flash_activer',{ activation_p:activation, choisi_p:v,
+      prenom_p:document.getElementById('p').value, nom_p:document.getElementById('nm').value,
+      sport_p:document.getElementById('sp').value,
+      age_p:parseInt(document.getElementById('ag').value,10)||null,
+      niveau_p:document.getElementById('nv').value }).then(function(r){
+      if(!r||!r.ok){
+        e.textContent = (r&&r.err==='pris') ? 'Ce code est déjà pris. Essaie-en un autre.'
+                      : 'Ça n’a pas marché. Réessaie dans un instant.';
+        return;
+      }
+      rpc('flash_ouvrir',{code_p:v}).then(function(p){
+        if(p&&p.ok){ p.code=v; profil=p;
+          if(document.getElementById('mem').checked) garde('axe_flash_profil',p);
+          ecranFait(v);
+        } else ecranCode('Ton code personnel');
+      });
+    });
+  };
+}
+function ecranFait(code){
+  vue.innerHTML =
+    '<h1>C’est activé.</h1>'
+  + '<p class="sous">Ton code est <b style="color:var(--or)">' + esc(code) + '</b>. '
+  + 'Note-le quelque part, une fois, et oublie-le : ce téléphone s’en souvient.</p>'
+  + '<div class="perso" style="margin-top:20px">À partir de maintenant, tu scannes ta gourde '
+  + 'et tu tombes directement sur tes blocages. Plus rien à taper.</div>'
+  + '<button class="btn or" id="go">Voir à quoi ça ressemble</button>';
+  document.getElementById('go').onclick=ecranBlocages;
+  pied();
+}
+
+/* ---------------------------------------------------------------- écran : code connu */
+function ecranCode(titre,msg){
+  vue.innerHTML =
+    '<h1>' + esc(titre) + '</h1>'
+  + '<p class="sous">Une seule fois : ce téléphone s’en souviendra ensuite.</p>'
+  + '<input type="text" id="c" class="code" autocomplete="off" autocapitalize="characters" '
+  + 'spellcheck="false" enterkeyhint="go" placeholder="TON CODE" style="margin-top:18px">'
+  + '<div class="err" id="e">' + esc(msg||'') + '</div>'
+  + '<button class="btn or" id="go">Ouvrir</button>'
+  + '<button class="lien" id="ret">Revenir</button>';
+  var c=document.getElementById('c');
+  function val(){
+    var v=(c.value||'').trim(); if(!v) return;
+    document.getElementById('e').textContent='Vérification…';
+    rpc('flash_ouvrir',{code_p:v}).then(function(p){
+      if(!p||!p.ok){ document.getElementById('e').textContent=
+        'Ce code n’est pas reconnu. Vérifie les majuscules.'; return; }
+      p.code=v; profil=p; garde('axe_flash_profil',p); ecranBlocages();
+    });
+  }
+  document.getElementById('go').onclick=val;
+  c.addEventListener('keydown',function(e){ if(e.key==='Enter') val(); });
+  document.getElementById('ret').onclick=ecranAccueil;
+  c.focus();
+}
+
+/* ---------------------------------------------------------------- les blocages */
+function familleDuMois(){
+  if(!profil || profil.type!=='client') return null;
+  var t=String(profil.profilMental||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  if(/ancrage|gate|depart|portillon|grille|plot/.test(t)) return 'a';
+  if(/vider|sac|rumin|erreur/.test(t)) return 'b';
+  if(/preuve|carnet|confiance/.test(t)) return 'c';
+  return null;
+}
+function ecranBlocages(){
+  var jeune = profil && profil.age && profil.age < 12;
+  var mois = familleDuMois();
+  var h='<h1>Qu’est-ce qui bloque, là, maintenant&nbsp;?</h1>';
+  h += jeune
+    ? '<p class="sous">Votre enfant a moins de douze ans : les actions s’adressent à vous.</p>'
+    : '<p class="sous">Choisis la phrase la plus proche. Si rien ne colle exactement, prends la moins fausse.</p>';
+  if(mois && !jeune && profil.mFaible){
+    h += '<div class="perso" style="margin-top:16px;margin-bottom:0">Ce mois-ci tu travailles <b>'
+       + esc(profil.mFaible) + '</b>, alors je l’ai mise en premier. Mais regarde tout : '
+       + 'aujourd’hui c’est peut-être autre chose.</div>';
+  }
+  var fams=F.FAMILLES.slice();
+  if(mois) fams.sort(function(a,b){ return (b.cle===mois)-(a.cle===mois); });
+  fams.forEach(function(fa){
+    h += '<div class="fam">' + esc(fa.nom)
+       + (fa.cle===mois ? ' <span style="color:var(--pale);font-weight:400">· ton axe du mois</span>' : '')
+       + '</div>';
+    F.BLOCAGES.filter(function(b){ return b.f===fa.cle; }).forEach(function(b){
+      h += '<button class="btn" data-b="' + b.k + '">' + esc(b.t) + '</button>';
+    });
+  });
+  h += '<button class="lien" id="chg">Ce n’est pas mon code</button>';
+  vue.innerHTML=h;
+  vue.querySelectorAll('[data-b]').forEach(function(b){
+    b.onclick=function(){ bloc=b.dataset.b; ecranMoments(); };
+  });
+  document.getElementById('chg').onclick=function(){ oublie('axe_flash_profil'); profil=null; ecranAccueil(); };
+  pied();
+}
+
+/* ---------------------------------------------------------------- les moments */
+function ecranMoments(){
+  var ok=F.momentsDe(bloc);
+  var h='<h1>C’est quand&nbsp;?</h1><p class="sous">' + esc(F.libelle(bloc)) + '</p>';
+  F.MOMENTS.forEach(function(m){
+    if(ok.indexOf(m.k)>=0){
+      h += '<button class="btn" data-m="' + m.k + '">' + esc(m.t) + '</button>';
+    } else {
+      var r=F.renvoiDe(bloc,m.k);
+      if(r) h += '<button class="btn vide" data-m="' + m.k + '" data-r="' + r + '" style="text-align:left">'
+               + esc(m.t) + '<span class="pt">À ce moment-là ce n’est plus la même chose, '
+               + 'je t’emmène sur « ' + esc(F.libelle(r)) + ' »</span></button>';
+    }
+  });
+  h += '<button class="lien" id="ret">Changer de blocage</button>';
+  vue.innerHTML=h;
+  vue.querySelectorAll('[data-m]').forEach(function(b){
+    b.onclick=function(){ if(b.dataset.r) bloc=b.dataset.r; mom=b.dataset.m; ecranActions(); };
+  });
+  document.getElementById('ret').onclick=ecranBlocages;
+}
+
+/* ---------------------------------------------------------------- les actions */
+function ecranActions(){
+  var p=F.composer(bloc,mom,profil||{});
+  if(!p){ ecranBlocages(); return; }
+  if(db && profil){
+    var d=new Date();
+    rpc('flash_scan',{code_p:profil.code,blocage_p:bloc,moment_p:mom,
+                      heure_p:d.getHours(),jour_p:d.getDay()}).then(function(id){ scanId=id; });
+  }
+  var h='<div class="bandeau"><span class="tag plein">' + Math.ceil(p.total/60) + ' min</span>'
+      + '<span class="tag">' + esc(F.libelle(bloc)) + '</span>'
+      + '<span class="tag">' + esc(F.libelle(mom)) + '</span></div>';
+  if(p.bande==='enfant') h += '<div class="perso">' + esc(p.mot) + '</div>';
+  else if(p.perso)       h += '<div class="perso">' + esc(p.perso) + '</div>';
+  p.actions.forEach(function(a,i){
+    h += '<div class="acte' + (i===0?' on':'') + '">'
+       + '<div class="haut"><span class="ico">' + (F.ICONE[a.type]||'•') + '</span>'
+       + '<span><span class="ty">' + esc(F.NOM_TYPE[a.type]||'') + '</span>'
+       + '<h3>' + esc(a.titre) + '</h3></span>'
+       + '<span class="sec">' + a.sec + ' s</span></div>'
+       + '<p>' + esc(a.txt) + '</p><div class="chrono"><i></i></div></div>';
+  });
+  h += '<button class="btn or" id="suiv" style="margin-top:18px">C’est fait</button>'
+     + '<div id="apres"></div>'
+     + '<button class="lien" id="ret">Ce n’est pas ça, je reprends</button>';
+  vue.innerHTML=h;
+
+  var i=0, t=null, blocs=[].slice.call(vue.querySelectorAll('.acte'));
+  function lancer(){
+    var e=blocs[i], barre=e.querySelector('.chrono i'), dur=p.actions[i].sec*1000, t0=Date.now();
+    e.scrollIntoView({behavior:'smooth',block:'center'});
+    clearInterval(t);
+    t=setInterval(function(){
+      var pc=Math.min(1,(Date.now()-t0)/dur); barre.style.width=(pc*100)+'%';
+      if(pc>=1) clearInterval(t);
+    },120);
+  }
+  document.getElementById('suiv').onclick=function(){
+    blocs[i].classList.remove('on'); blocs[i].classList.add('fini'); i++;
+    if(i<blocs.length){ blocs[i].classList.add('on'); lancer(); return; }
+    clearInterval(t); this.remove();
+    if(scanId) rpc('flash_fin',{scan_p:scanId,termine_p:true,cta_p:null});
+    fini(p);
+  };
+  document.getElementById('ret').onclick=function(){ clearInterval(t); ecranBlocages(); };
+  lancer();
+}
+function fini(p){
+  var z=document.getElementById('apres');
+  z.innerHTML='<div class="fin"><p><b>C’est fini.</b> ' + esc(p.niveau||'') + ' '
+    + 'Et si ça revient dans une heure, tu rescannes et tu refais les deux actions. '
+    + 'Ça reviendra, ce n’est pas un échec : c’est le fonctionnement normal d’une tête '
+    + 'qui a encore quelque chose à faire. Ce qui compte, c’est que tu saches quoi faire quand ça revient.</p>'
+    + '<button class="btn or" id="dm" style="margin-top:16px">Écris-moi AXE en DM</button>'
+    + '<button class="btn vide" id="enc">Un autre blocage</button></div>';
+  document.getElementById('dm').onclick=function(){
+    if(scanId) rpc('flash_fin',{scan_p:scanId,termine_p:null,cta_p:true});
+    window.open(DM,'_blank','noopener');
+  };
+  document.getElementById('enc').onclick=ecranBlocages;
+  z.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function pied(){
+  document.getElementById('pied').innerHTML = profil
+    ? esc(profil.prenom||'') + (profil.sport?' · '+esc(profil.sport):'')
+      + '<br>Fabien voit quand tu scannes et ce que tu choisis.'
+    : 'Une question&nbsp;? f.pinton@outlook.fr';
+}
+
+(function(){
+  var c=lire('axe_flash_profil');
+  if(c&&c.code){
+    profil=c; ecranBlocages();
+    rpc('flash_ouvrir',{code_p:c.code}).then(function(p){
+      if(p&&p.ok){ p.code=c.code; profil=p; garde('axe_flash_profil',p); pied(); }
+    });
+  } else ecranAccueil();
+})();
+</script>
+</body>
+</html>

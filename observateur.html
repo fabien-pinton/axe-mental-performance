@@ -212,6 +212,58 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
   border-radius:4px;padding:10px 15px;cursor:pointer;margin-bottom:18px}
 .retour:hover{background:rgba(201,162,39,.1)}
 .exp{margin-top:14px;font-size:12px;color:var(--dim);background:none;border:1px solid var(--line);border-radius:3px;padding:8px 14px;cursor:pointer;font-family:'DM Sans',sans-serif}
+/* ---- Protocole Flash ---- */
+.fl-chiffres{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.fl-chiffres div{flex:1 1 118px;min-width:0;border:1px solid var(--line);border-radius:4px;
+  background:var(--cream);padding:13px 15px}
+.fl-chiffres b{display:block;font-family:'Bebas Neue';font-size:30px;letter-spacing:.03em;
+  font-weight:400;font-variant-numeric:tabular-nums;line-height:1.05}
+.fl-chiffres span{display:block;font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--dim);margin-top:3px}
+.fl-chiffres .g b{color:var(--gold)}
+.fl-barres{margin-bottom:22px}
+.fl-b{display:flex;align-items:center;gap:11px;padding:5px 0}
+.fl-b .t{flex:0 0 46%;font-size:13.5px;line-height:1.35;min-width:0}
+.fl-b .j{flex:1 1 auto;height:9px;background:rgba(26,22,18,.07);border-radius:9px;overflow:hidden}
+.fl-b .j i{display:block;height:100%;background:var(--gold);border-radius:9px}
+.fl-b .n{flex:0 0 34px;text-align:right;font-size:12.5px;color:var(--dim);
+  font-variant-numeric:tabular-nums}
+.fl-fam{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);
+  font-weight:700;margin:14px 0 2px}
+.fl-fam:first-child{margin-top:0}
+.fl-vide{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;
+  color:var(--dim);padding:22px 0;line-height:1.5}
+table.fl{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+table.fl th,table.fl td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:center;
+  font-size:13px;white-space:nowrap}
+table.fl thead th{font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
+  font-weight:600;background:var(--cream);position:sticky;top:0;z-index:2}
+table.fl tbody td:first-child,table.fl thead th:first-child{text-align:left;white-space:normal;
+  min-width:150px}
+table.fl .qui{font-weight:600;font-size:13.5px}
+table.fl .typ{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);font-weight:400;margin-top:1px}
+table.fl .typ.cli{color:var(--gold)}
+.fl-creer{margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+.fl-creer h2{font-family:'Bebas Neue';font-weight:400;font-size:24px;letter-spacing:.03em}
+.fl-creer > p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;
+  color:var(--dim);margin-top:4px;line-height:1.45}
+.fl-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}
+.fl-form2{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-top:12px}
+.fl-form2 .plein{flex:1 1 190px}
+.fl-creer label{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--dim);font-weight:600}
+.fl-creer input,.fl-creer select{width:100%;margin-top:5px;padding:10px 12px;font:inherit;
+  font-size:15px;border:1px solid var(--line);border-radius:4px;background:var(--cream);
+  color:var(--ink);letter-spacing:0;text-transform:none}
+.fl-creer input:focus,.fl-creer select:focus{outline:none;border-color:var(--gold)}
+.fl-ok{margin-top:16px;border:1px solid var(--gold);border-left:3px solid var(--gold);
+  border-radius:4px;background:rgba(168,133,42,.07);padding:14px 16px}
+.fl-ok .code{font-family:'Bebas Neue';font-size:30px;letter-spacing:.1em;color:var(--gold);
+  line-height:1.1}
+.fl-ok .mail{margin-top:10px;font-size:13.5px;line-height:1.65;white-space:pre-wrap;
+  border-top:1px dashed var(--line);padding-top:10px}
+.fl-ko{margin-top:14px;color:var(--physique);font-size:14px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -273,6 +325,43 @@ table.pros .conv{font-size:10px;letter-spacing:.08em;text-transform:uppercase;pa
       </table>
     </div>
     <button class="exp" onclick="exporterProspects()">Exporter en tableur (CSV)</button>
+  </div>
+
+  <!-- Protocole Flash : les scans, et ce qu'ils disent -->
+  <div class="sec-block">
+    <div class="sec-head">
+      <h1>PROTOCOLE FLASH</h1>
+      <div class="serif">Ce que les sportifs ouvrent quand ça bloque, au moment où ça bloque. Les acheteurs Flash ne comptent pas dans tes clients.</div>
+      <div class="count" id="flCount"></div>
+    </div>
+    <div id="flZone"></div>
+
+    <div class="fl-creer">
+      <h2>Donner un accès Flash</h2>
+      <p>Après un paiement Stripe, ou pour offrir une gourde. Le code d'activation est créé tout de suite, avec le mail prêt à copier : délai de 21 jours, procédure, et marche à suivre au premier scan.</p>
+      <div class="fl-form">
+        <label>Prénom du sportif<input type="text" id="flPrenom" autocomplete="off" placeholder="Théo"></label>
+        <label>Nom<input type="text" id="flNom" autocomplete="off" placeholder="Martin"></label>
+        <label>Sport<input type="text" id="flSport" autocomplete="off" placeholder="Football"></label>
+        <label>Âge<input type="number" id="flAge" min="8" max="80" placeholder="14"></label>
+        <label>Niveau<select id="flNiveau">
+          <option value="Loisir">Loisir</option>
+          <option value="Départemental">Départemental</option>
+          <option value="Régional" selected>Régional</option>
+          <option value="National">National</option>
+        </select></label>
+        <label>Email<input type="email" id="flEmail" autocomplete="off" placeholder="parent@exemple.fr"></label>
+        <label>Club ou département<input type="text" id="flClub" autocomplete="off" placeholder="BMX Club de ..."></label>
+      </div>
+      <div class="fl-form2">
+        <label class="plein">Comment<select id="flSource">
+          <option value="achat">Achat Stripe</option>
+          <option value="cadeau">Offert</option>
+        </select></label>
+        <button class="exp" id="flGo" style="margin-top:0">Créer le code</button>
+      </div>
+      <div id="flRes"></div>
+    </div>
   </div>
 </div>
 
@@ -342,7 +431,207 @@ async function entrer(){
     afficherRiders(riders);
     afficherProspects();
     chargerNotesRapports(cle);
+    chargerFlash(cle);
+    const bGo = document.getElementById('flGo');
+    if(bGo) bGo.onclick = flCreer;
   }catch(e){ msg.textContent = 'Souci : ' + e.message; }
+}
+
+
+/* ====================== PROTOCOLE FLASH ======================
+   Deux appels, et aucun ne bloque le reste du tableau de bord : si les fonctions Flash
+   n'existent pas encore côté base, la section reste simplement vide.
+
+   Le classement des blocages est la vraie valeur de ce bloc. C'est un chiffre que ni les
+   clubs ni les fédérations n'ont : ce qui bloque vraiment les jeunes, compté, daté, par
+   sport. Il dit quels protocoles soigner, et il donne des publications que personne
+   d'autre ne peut écrire. */
+const FL_BLOCAGES = {
+  a_rater:"J'ai peur de rater devant tout le monde", a_mal:"J'ai peur de me faire mal",
+  a_decevoir:"J'ai peur de décevoir quelqu'un", a_nouveau:"C'est nouveau pour moi",
+  a_vite:"Je pars toujours trop vite", b_erreur:"Je repasse mon erreur en boucle",
+  b_injustice:"Je rumine une injustice", b_colere:"Je suis en colère contre quelqu'un",
+  b_dormir:"Je n'arrive pas à dormir après", c_compare:"Je me compare aux autres",
+  c_echauffement:"Mon échauffement était nul", c_blessure:"Je reviens de blessure",
+  c_niveau:"On m'a dit que je n'avais pas le niveau"
+};
+const FL_FAMILLES = [
+  { c:'a', n:'Quand ça monte avant' },
+  { c:'b', n:'Quand ça tourne en boucle' },
+  { c:'c', n:"Quand je ne me sens pas à la hauteur" }
+];
+const FL_MOMENTS = { veille:"La veille au soir", matin:"Le matin", avant:"Les minutes juste avant",
+  pendant:"Pendant, ou entre deux", apres:"Juste après", soir:"Le soir même" };
+
+function flDate(iso){
+  if(!iso) return '—';
+  const d = new Date(iso);
+  if(isNaN(d)) return '—';
+  const j = ['dim','lun','mar','mer','jeu','ven','sam'][d.getDay()];
+  return j + ' ' + d.getDate() + '/' + (d.getMonth()+1) + ' ' + String(d.getHours()).padStart(2,'0') + 'h';
+}
+function flEsc(t){ return String(t==null?'':t).replace(/[&<>"]/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]); }
+
+function flBarres(liste, libelles, total){
+  if(!liste || !liste.length) return '';
+  const max = Math.max.apply(null, liste.map(x => x.n));
+  return liste.map(x =>
+    '<div class="fl-b"><span class="t">' + flEsc(libelles[x.k] || x.k) + '</span>'
+    + '<span class="j"><i style="width:' + Math.round(x.n / max * 100) + '%"></i></span>'
+    + '<span class="n">' + x.n + '</span></div>').join('');
+}
+
+
+/* ---- donner un accès Flash ----------------------------------------------
+   Le code est lisible et se retape au pouce : le prénom, puis quatre caractères
+   d'un alphabet sans ambiguïté (ni O ni 0, ni I ni 1). Il ne s'agit pas d'un mot de
+   passe : il protège un protocole de cinq minutes, pas un compte bancaire. Ce qui
+   compte, c'est qu'un gamin stressé puisse le retaper sans se tromper. */
+function flCodeNeuf(){
+  /* Code d'ACTIVATION, pas le code final : il ne sert qu'une fois, le sportif choisit
+     ensuite le sien. Alphabet sans ambiguite, ni O ni 0, ni I ni 1, parce qu'il sera
+     recopie depuis un mail par un parent presse. */
+  const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const t = n => Array.from({length:n}, () => A[Math.floor(Math.random()*A.length)]).join('');
+  return 'AXE-' + t(4) + '-' + t(3);
+}
+function flMailType(prenom, code){
+  const p = prenom || 'votre sportif';
+  return 'Bonjour,\n\n'
+   + 'Merci pour votre commande du Protocole Flash.\n\n'
+   + 'LA GOURDE\n'
+   + 'Elle part sous 21 jours maximum. Vous n\'avez rien à faire d\'ici là.\n\n'
+   + 'LE CODE D\'ACTIVATION DE ' + p.toUpperCase() + '\n'
+   + '    ' + code + '\n'
+   + 'Gardez ce mail jusqu\'à la réception de la gourde.\n\n'
+   + 'À FAIRE DÈS RÉCEPTION, UNE SEULE FOIS, TRANQUILLEMENT À LA MAISON\n'
+   + '1. Scannez le QR code de la gourde avec l\'appareil photo du téléphone.\n'
+   + '2. Choisissez « J\'active ma gourde ».\n'
+   + '3. Entrez le code d\'activation ci-dessus.\n'
+   + '4. ' + p + ' choisit alors SON code personnel, celui qu\'il retiendra.\n'
+   + '5. Vérifiez le sport, l\'âge et le niveau, puis validez.\n\n'
+   + 'Comptez deux minutes. Ne le faites pas le jour d\'une compétition.\n\n'
+   + 'ENSUITE\n'
+   + 'Il scanne la gourde quand ça bloque, et il tombe directement sur ses blocages.\n'
+   + 'Plus rien à taper : le téléphone se souvient de lui.\n'
+   + 'Son code personnel ne sert que s\'il change de téléphone.\n\n'
+   + 'L\'accès est permanent. Il n\'y a rien à résilier.\n\n'
+   + 'Une question, vous me répondez directement sur ce mail.\n\n'
+   + 'Fabien Pinton\nAXE Mental Performance\nf.pinton@outlook.fr';
+}
+async function flCreer(){
+  const res = document.getElementById('flRes');
+  const prenom = document.getElementById('flPrenom').value.trim();
+  if(!prenom){ res.innerHTML = '<div class="fl-ko">Il faut au moins un prénom.</div>'; return; }
+  const code = flCodeNeuf();
+  res.innerHTML = '<div class="fl-ko" style="color:var(--dim)">Création…</div>';
+  try{
+    const r = await db.rpc('flash_creer', {
+      cle: cleCoach, code_p: code, prenom_p: prenom,
+      nom_p: document.getElementById('flNom').value.trim(),
+      sport_p: document.getElementById('flSport').value.trim(),
+      age_p: parseInt(document.getElementById('flAge').value, 10) || null,
+      niveau_p: document.getElementById('flNiveau').value,
+      club_p: document.getElementById('flClub').value.trim(),
+      email_p: document.getElementById('flEmail').value.trim(),
+      source_p: document.getElementById('flSource').value });
+    if(r.error || !r.data || !r.data.ok){
+      res.innerHTML = '<div class="fl-ko">Refusé par la base. Recharge la page et réessaie.</div>'; return;
+    }
+    const mail = flMailType(prenom, code);
+    res.innerHTML = '<div class="fl-ok"><div class="code">' + code + '</div>'
+      + '<div style="font-size:12px;color:var(--dim);margin-top:2px">code d\'activation, a usage unique</div>'
+      + '<div class="mail">' + flEsc(mail) + '</div>'
+      + '<button class="exp" style="margin-top:12px" onclick="flCopier(this)">Copier le mail</button>'
+      + '<button class="exp" style="margin-top:12px;margin-left:8px" onclick="chargerFlash(cleCoach)">Rafraîchir la liste</button>'
+      + '</div>';
+    res.dataset.mail = mail;
+    ['flPrenom','flNom','flSport','flAge','flEmail','flClub'].forEach(id => document.getElementById(id).value = '');
+  }catch(e){
+    res.innerHTML = '<div class="fl-ko">Souci : ' + flEsc(e.message) + '</div>';
+  }
+}
+function flCopier(b){
+  const t = document.getElementById('flRes').dataset.mail || '';
+  navigator.clipboard.writeText(t).then(
+    () => { b.textContent = '✓ copié'; setTimeout(() => b.textContent = 'Copier le mail', 1800); },
+    () => { b.textContent = 'copie refusée'; });
+}
+
+async function chargerFlash(cle){
+  const zone = document.getElementById('flZone');
+  const cpt  = document.getElementById('flCount');
+  if(!zone) return;
+  let st = null, li = null;
+  try{
+    const a = await db.rpc('flash_stats', { cle: cle });
+    const b = await db.rpc('flash_liste', { cle: cle });
+    st = (a && a.data && a.data.ok) ? a.data : null;
+    li = (b && b.data && b.data.ok) ? b.data.gens : null;
+  }catch(e){ st = null; }
+
+  if(!st){ zone.innerHTML = '<div class="fl-vide">Le Protocole Flash n\'est pas encore branché sur cette base.</div>'; return; }
+  if(!st.total){
+    cpt.textContent = 'Aucun scan pour l\'instant.';
+    zone.innerHTML = '<div class="fl-vide">Personne n\'a encore scanné. Les chiffres apparaîtront au premier scan, et c\'est probablement toi qui le feras.</div>';
+    return;
+  }
+
+  const finis = st.finis || 0, dm = st.dm || 0;
+  const pcF = Math.round(finis / st.total * 100);
+  cpt.textContent = st.total + (st.total > 1 ? ' scans' : ' scan') + ' · ' + pcF + ' % vont au bout';
+
+  let h = '<div class="fl-chiffres">'
+    + '<div><b>' + st.total + '</b><span>Ouverts</span></div>'
+    + '<div><b>' + finis + '</b><span>Allés au bout</span></div>'
+    + '<div class="g"><b>' + dm + '</b><span>Ont écrit en DM</span></div>'
+    + '<div><b>' + pcF + '%</b><span>Taux de fin</span></div></div>';
+
+  /* Le classement, par famille, parce que c'est comme ça qu'il se lit. */
+  h += '<div class="fl-barres">';
+  FL_FAMILLES.forEach(f => {
+    const l = (st.blocages || []).filter(x => String(x.k).charAt(0) === f.c);
+    if(!l.length) return;
+    h += '<div class="fl-fam">' + flEsc(f.n) + '</div>' + flBarres(l, FL_BLOCAGES, st.total);
+  });
+  h += '</div>';
+
+  if(st.moments && st.moments.length){
+    h += '<div class="fl-barres"><div class="fl-fam">À quel moment</div>'
+       + flBarres(st.moments, FL_MOMENTS, st.total) + '</div>';
+  }
+  if(st.sports && st.sports.length > 1){
+    const lx = {}; st.sports.forEach(x => lx[x.k] = x.k);
+    h += '<div class="fl-barres"><div class="fl-fam">Par sport</div>'
+       + flBarres(st.sports, lx, st.total) + '</div>';
+  }
+
+  if(li && li.length){
+    h += '<div class="tbl-wrap"><table class="fl"><thead><tr>'
+       + '<th>Qui</th><th>Ouverts</th><th>Au bout</th><th>DM</th><th>Ce qui revient</th><th>Dernier scan</th>'
+       + '</tr></thead><tbody>';
+    li.forEach(g => {
+      h += '<tr><td><span class="qui">' + flEsc(g.nom || g.code) + '</span>'
+         + '<span class="typ' + (g.type === 'client' ? ' cli' : '') + '">'
+         + (g.type === 'client' ? 'client' : 'Flash') + (g.sport ? ' · ' + flEsc(g.sport) : '') + '</span></td>'
+         + '<td>' + (g.scans || 0) + '</td><td>' + (g.finis || 0) + '</td><td>' + (g.dm || 0) + '</td>'
+         + '<td style="white-space:normal;text-align:left;font-size:12.5px">'
+         + flEsc(g.top ? (FL_BLOCAGES[g.top] || g.top) : '—') + '</td>'
+         + '<td>' + flDate(g.dernier) + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  }
+
+  /* Ce qu'il faut en faire, dit en une phrase, pour que le bloc ne soit pas qu'un tableau. */
+  const top = (st.blocages || [])[0];
+  if(top){
+    h += '<div class="count" style="margin-top:14px;line-height:1.6">Le blocage le plus fréquent est <b>'
+       + flEsc(FL_BLOCAGES[top.k] || top.k) + '</b>, ' + top.n + ' fois sur ' + st.total + '. '
+       + 'C\'est le protocole à soigner en premier, et c\'est aussi le sujet de publication '
+       + 'que personne d\'autre que toi ne peut écrire avec un chiffre dessus.</div>';
+  }
+  zone.innerHTML = h;
 }
 
 /* un mois terminé s'ouvre et se referme d'un clic sur sa ligne */
