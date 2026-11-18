@@ -322,11 +322,117 @@ function composer(blocage, moment, profil){
 function momentsDe(b){ return (GRILLE[b]||[]).slice(); }
 function renvoiDe(b,m){ return (RENVOI[b]||{})[m] || null; }
 function libelle(k){
+  if(k === 'libre') return "Ce que tu as écrit";
   var b=BLOCAGES.filter(function(x){return x.k===k;})[0];
   if(b) return b.t;
   var m=MOMENTS.filter(function(x){return x.k===k;})[0];
   return m ? m.t : k;
 }
+/* ---------------------------------------------------------------- la porte libre
+
+   Vingt-et-unième porte : le sportif écrit sa phrase lui-même. Elle s'ajoute à la
+   liste, elle ne la remplace pas. Deux raisons. Il n'est jamais bloqué, même si
+   ce qu'il vit n'existe pas encore dans le protocole. Et les mots réels remontent
+   dans observateur, ce qui fait grandir la liste avec leur vocabulaire, pas le nôtre.
+
+   Tout se passe sur le téléphone : une table de mots, un score, et un aveu honnête
+   quand on ne reconnaît rien. Pas de réseau, pas de modèle de langage, rien qui
+   sorte de l'appareil. Mieux vaut dire « je ne suis pas sûr » et demander, que
+   proposer le mauvais exercice avec assurance. */
+
+function sansAccent(s){
+  return String(s||'').toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[’'`]/g,' ').replace(/[^a-z0-9 ]/g,' ')
+    .replace(/\s+/g,' ').trim();
+}
+
+/* Un motif en plusieurs mots vaut 3, un mot seul vaut 1 : « j'ai mal au ventre »
+   est bien plus sûr que « ventre » tout seul. Les motifs sont des débuts de mot,
+   donc « rate » attrape raté, ratée, rater, mais pas « arrête ». */
+var MOTS = {
+  a_rater: ['rate','loupe','louper','foire','me planter','je vais me planter','echoue',
+            'tout le monde me regarde','ils me regardent','devant tout le monde','le public',
+            'si je rate','peur de rater','me ridiculiser'],
+  a_mal: ['me faire mal','faire mal','me blesser','mal au genou','mal au dos','blesse','tomber',
+          'chute','me casser','peur de tomber','dangereux','danger','me planter dedans','la gamelle'],
+  a_decevoir: ['decevoir','decu','deception','fier de moi','pas fier','je vais les decevoir',
+               'mon pere','ma mere','pour eux'],
+  a_nouveau: ['nouveau','nouvelle','premiere fois','jamais fait','je connais pas','inconnu',
+              'je sais pas a quoi m attendre','je decouvre','je sais pas comment ca se passe'],
+  a_vite: ['trop vite','surexcite','excite','survolte','speed','trop d energie','electrique',
+           'je tiens pas en place','je pars trop fort','je bouillonne'],
+  a_concentre: ['concentre','concentrer','concentration','deconcentre','distrait',
+                'je pense a autre chose','la tete ailleurs','j arrive pas a me focaliser',
+                'je suis ailleurs','dans la lune'],
+  a_ventre: ['ventre','vomir','nausee','mal au coeur','boule au ventre','noeud a l estomac',
+             'estomac','gerber','barbouille','envie d aller aux toilettes','les boyaux'],
+  b_erreur: ['mon erreur','erreur','ma faute','en boucle','je repense','j arrete pas d y penser',
+             'ressasse','je revois','je rejoue','ca tourne dans ma tete','mon rate'],
+  b_injustice: ['injuste','injustice','arbitre','arbitrage','selection','pas pris','triche',
+                'favoritisme','c est pas normal','je le meritais','ils ont favorise'],
+  b_colere: ['colere','enerve','rage','furieux','la haine','je deteste','j en veux a','vener',
+             'ca me soule','ca me gave'],
+  b_abandon: ['tout arreter','arreter le','abandonner','abandon','laisser tomber','j en peux plus',
+              'j en ai marre','plus envie de continuer','envie de tout lacher','ca sert a rien'],
+  b_relance: ['la pause','apres la pause','me remettre dedans','repartir','relancer','mi temps',
+              'la coupure','je suis refroidi','retrouver le rythme','entre deux'],
+  c_compare: ['compare','comparer','meilleur que moi','moins bien que','ils sont tous',
+              'je suis le moins','les autres sont','a cote d eux','par rapport aux autres'],
+  c_echauffement: ['lourd','raide','mon corps repond pas','mon corps ne repond pas','jambes en coton',
+                   'jambes en bois','pas reveille','je me sens mou','pas dans mon corps','engourdi'],
+  c_blessure: ['blessure','ma blessure','operation','opere','reprise','rechute','mon genou',
+               'ma cheville','mon epaule','peur que ca recommence','peur que ca lache'],
+  c_niveau: ['pas le niveau','le niveau','pas capable','je vaux rien','je suis nul','pas fait pour',
+             'on m a dit que','pas ma place','je suis pas assez'],
+  c_serie: ['j enchaine','serie','toujours pareil','j y crois plus','mes resultats','encore rate',
+            'ca marche jamais','ca fait des semaines','je progresse plus','je recule'],
+  c_pression: ['pression','mes parents','mon coach','mon entraineur','ils attendent','ils exigent',
+               'on me force','on compte sur moi','faut que je fasse','obligation de resultat'],
+  d_honte: ['honte','je m en veux','honteux','ridicule','humilie','j ose plus','je peux plus les regarder',
+            'devant eux apres','je veux plus y retourner'],
+  d_dormir: ['dormir','sommeil','insomnie','la nuit','je me reveille','je tourne dans mon lit',
+             'je m endors pas','je rumine le soir','les yeux ouverts']
+};
+
+/* Des phrases qui dépassent la compétition. Volontairement peu nombreuses et toutes
+   explicites : un faux positif enverrait un message grave à un gamin qui parlait
+   seulement de son sport. « J'ai envie de tout arrêter » n'est pas là, c'est b_abandon. */
+var ALERTE = ['envie de mourir','veux mourir','envie de disparaitre','suicid','en finir avec',
+              'plus envie de vivre','me faire du mal','me fais du mal','me mutiler','scarif',
+              'me frappe','me tape dessus','me cogne','harcel'];
+
+function inquiet(phrase){
+  var t = sansAccent(phrase);
+  return ALERTE.some(function(m){ return t.indexOf(m) >= 0; });
+}
+
+function deviner(phrase){
+  var t = sansAccent(phrase);
+  if(t.length < 4) return [];
+  var out = [];
+  Object.keys(MOTS).forEach(function(k){
+    var s = 0;
+    MOTS[k].forEach(function(m){
+      var re = new RegExp('(^| )' + m.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '[a-z]*');
+      if(re.test(t)) s += (m.indexOf(' ') >= 0 ? 3 : 1);
+    });
+    if(s >= 2) out.push({ cle:k, score:s });
+  });
+  out.sort(function(a,b){ return b.score - a.score; });
+  if(!out.length) return [];
+  /* On ne propose un second choix que s'il est vraiment proche du premier.
+     Trois pistes vagues valent moins qu'une seule assumée. */
+  return out.length > 1 && out[1].score >= out[0].score * 0.6
+       ? out.slice(0, 2) : out.slice(0, 1);
+}
+
+/* Les deux actions quand on n'a rien reconnu. Elles valent pour n'importe quel
+   blocage : nommer, puis réduire à une seule chose faisable tout de suite. */
+GRILLE.libre = ['veille','veille_soir','jour','pendant','apres','lendemain'];
+A1.libre = { type:'attention', titre:'Relis ta phrase, puis une seule chose', sec:60,
+  txt:"Tu viens de l'écrire, et c'était le plus dur : ce qui n'a pas de nom reste flou et prend toute la place. Relis ta phrase dans ta tête, une fois, lentement, sans la corriger. Puis choisis une seule chose, la plus petite, que tu peux faire dans la minute qui vient : {action}. Pas la suite, pas le reste. Celle-là." };
+
 var ICONE = { respiration:'◉', mouvement:'➤', visualisation:'◆', parole:'❝', attention:'✦' };
 var NOM_TYPE = { respiration:'Respiration', mouvement:'Mouvement', visualisation:'Visualisation',
                  parole:'À dire', attention:'Attention' };
@@ -335,6 +441,7 @@ window.AxeFlash = {
   FAMILLES:FAMILLES, BLOCAGES:BLOCAGES, MOMENTS:MOMENTS, GRILLE:GRILLE, LEX:LEX,
   ICONE:ICONE, NOM_TYPE:NOM_TYPE,
   composer:composer, momentsDe:momentsDe, renvoiDe:renvoiDe,
-  libelle:libelle, sportKey:sportKey, bande:bande
+  libelle:libelle, sportKey:sportKey, bande:bande,
+  deviner:deviner, inquiet:inquiet, sansAccent:sansAccent
 };
 })();

@@ -42,9 +42,16 @@ h1{font-size:23px;line-height:1.25;font-weight:600;text-wrap:balance}
 .fam:first-of-type{margin-top:18px}
 label{display:block;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--pale);
   font-weight:600;margin-top:14px}
-input,select{width:100%;margin-top:6px;background:var(--carte);border:1px solid var(--trait);
+input,select,textarea{width:100%;margin-top:6px;background:var(--carte);border:1px solid var(--trait);
   border-radius:12px;padding:14px 16px;font:inherit;font-size:17px;color:var(--creme)}
-input:focus,select:focus{outline:none;border-color:var(--or)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--or)}
+textarea{min-height:132px;line-height:1.55;resize:vertical}
+.note{font-size:12.5px;color:var(--pale);margin-top:9px;line-height:1.55}
+.doux{border:1px solid var(--trait);border-radius:15px;background:var(--carte);
+  padding:18px;margin-top:16px;font-size:15.5px;line-height:1.65}
+.doux b{color:var(--or)}
+.cite{border-left:3px solid var(--or);background:rgba(220,169,77,.07);padding:13px 15px;
+  border-radius:0 10px 10px 0;margin-bottom:16px;font-size:15.5px;font-style:italic}
 input.code{text-align:center;letter-spacing:.14em;font-size:20px;text-transform:uppercase}
 .err{color:#E8896F;font-size:14px;margin-top:11px;text-align:center;min-height:20px}
 .ok{color:#9BC48A}
@@ -107,6 +114,11 @@ var db=null; try{ db = window.supabase ? supabase.createClient(URL_SB,ANON_SB) :
 
 var F=window.AxeFlash, vue=document.getElementById('vue');
 var profil=null, scanId=null, bloc=null, mom=null, actif=null;
+/* La phrase écrite par le sportif, quand il passe par la porte libre. Elle est
+   remise à zéro dès qu'il repart de la liste, pour qu'elle ne colle pas au scan
+   suivant. `devine` garde le blocage reconnu, même s'il a répondu non, parce que
+   savoir qu'on s'est trompé vaut autant que savoir qu'on a eu juste. */
+var texteLibre='', devine=null, devineOk=null;
 
 function lire(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
 function garde(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
@@ -279,13 +291,97 @@ function ecranBlocages(){
       h += '<button class="btn" data-b="' + b.k + '">' + esc(b.t) + '</button>';
     });
   });
-  h += '<button class="lien" id="chg">Ce n’est pas mon code</button>';
+  h += '<button class="btn vide" id="libre" style="margin-top:18px;text-align:center">'
+     + 'Rien ne correspond, je l’écris moi-même</button>'
+     + '<button class="lien" id="chg">Ce n’est pas mon code</button>';
   vue.innerHTML=h;
   vue.querySelectorAll('[data-b]').forEach(function(b){
-    b.onclick=function(){ bloc=b.dataset.b; ecranMoments(); };
+    b.onclick=function(){ texteLibre=''; devine=null; bloc=b.dataset.b; ecranMoments(); };
   });
+  document.getElementById('libre').onclick=function(){ devine=null; devineOk=null; ecranEcrire(); };
   document.getElementById('chg').onclick=function(){ oublie('axe_flash_profil'); profil=null; ecranAccueil(); };
   pied();
+}
+
+/* ---------------------------------------------------------------- la porte libre
+
+   Il écrit sa phrase. On essaie de la relier à un blocage connu, et SURTOUT on lui
+   demande si on a vu juste au lieu de décider à sa place. S'il dit non, ou si on
+   n'a rien reconnu, il a quand même deux actions : nommer puis réduire à une seule
+   chose, ça vaut pour n'importe quel blocage. Il n'est jamais renvoyé les mains vides. */
+function ecranEcrire(){
+  vue.innerHTML =
+    '<h1>Écris-le avec tes mots.</h1>'
+  + '<p class="sous">Une phrase suffit. Tu n’as pas besoin de bien l’écrire, '
+  + 'personne ne corrige rien ici.</p>'
+  + '<textarea id="ph" autocapitalize="sentences" spellcheck="false" '
+  + 'placeholder="Ce qui se passe dans ta tête, là, maintenant."></textarea>'
+  + '<p class="note">Pour parler au lieu d’écrire, touche le micro de ton clavier.</p>'
+  + '<p class="note">Fabien lit ces phrases, pour compléter le protocole avec ce que vous '
+  + 'vivez vraiment. Si tu préfères que ça reste entre toi et toi, reviens à la liste.</p>'
+  + '<div class="err" id="e"></div>'
+  + '<button class="btn or" id="go">Continuer</button>'
+  + '<button class="lien" id="ret">Revenir à la liste</button>';
+  var ta=document.getElementById('ph');
+  ta.value = texteLibre || '';
+  try{ ta.focus(); }catch(e){}
+  document.getElementById('go').onclick=function(){
+    var v=(ta.value||'').trim();
+    if(v.length < 4){ document.getElementById('e').textContent='Écris au moins quelques mots.'; return; }
+    texteLibre = v.slice(0, 500);
+    if(F.inquiet(texteLibre)){ ecranAttention(); return; }
+    suiteEcrire();
+  };
+  document.getElementById('ret').onclick=ecranBlocages;
+}
+
+function suiteEcrire(){
+  var pistes = F.deviner(texteLibre);
+  if(!pistes.length){ devine=null; devineOk=null; bloc='libre'; ecranMoments(); return; }
+  ecranPistes(pistes);
+}
+
+function ecranPistes(pistes){
+  var h='<h1>C’est bien ça&nbsp;?</h1>'
+      + '<p class="sous">' + (pistes.length>1
+          ? 'Ta phrase ressemble à deux choses. Prends la plus juste des deux.'
+          : 'Ta phrase ressemble à ça. Si je me trompe, dis-le, ça marchera quand même.') + '</p>'
+      + '<div class="cite">« ' + esc(texteLibre) + ' »</div>';
+  pistes.forEach(function(p){
+    h += '<button class="btn" data-k="' + p.cle + '">' + esc(F.libelle(p.cle)) + '</button>';
+  });
+  h += '<button class="btn vide" id="non" style="text-align:center">Non, rien de tout ça</button>'
+     + '<button class="lien" id="ret">Changer ma phrase</button>';
+  vue.innerHTML=h;
+  vue.querySelectorAll('[data-k]').forEach(function(b){
+    b.onclick=function(){ devine=b.dataset.k; devineOk=true; bloc=b.dataset.k; ecranMoments(); };
+  });
+  document.getElementById('non').onclick=function(){
+    devine=pistes[0].cle; devineOk=false; bloc='libre'; ecranMoments();
+  };
+  document.getElementById('ret').onclick=ecranEcrire;
+}
+
+/* Quelques phrases dépassent le sport. On ne bloque rien, on ne dramatise rien,
+   on ouvre une porte et on le laisse continuer s'il veut. */
+function ecranAttention(){
+  vue.innerHTML =
+    '<h1>Attends deux secondes.</h1>'
+  + '<div class="doux">'
+  + '<p>Ce que tu viens d’écrire est plus grand qu’une compétition, et ce n’est pas une '
+  + 'respiration de trente secondes qui va s’en occuper.</p>'
+  + '<p style="margin-top:12px">Ne reste pas seul avec ça. Parles-en aujourd’hui à quelqu’un '
+  + 'en qui tu as confiance : un parent, ton entraîneur, l’infirmière du collège, un ami.</p>'
+  + '<p style="margin-top:12px">Si tu ne vois personne à qui le dire, il y a le <b>3114</b>. '
+  + 'C’est gratuit, c’est ouvert jour et nuit, et au bout du fil il y a quelqu’un dont c’est '
+  + 'le métier d’écouter exactement ça.</p>'
+  + '</div>'
+  + '<button class="btn or" id="tel" style="margin-top:16px">Appeler le 3114</button>'
+  + '<button class="btn vide" id="go" style="text-align:center">Continuer le protocole</button>'
+  + '<button class="lien" id="ret">Revenir à la liste</button>';
+  document.getElementById('tel').onclick=function(){ location.href='tel:3114'; };
+  document.getElementById('go').onclick=suiteEcrire;
+  document.getElementById('ret').onclick=ecranBlocages;
 }
 
 /* ---------------------------------------------------------------- les moments */
@@ -316,12 +412,24 @@ function ecranActions(){
   if(!p){ ecranBlocages(); return; }
   if(db && profil){
     var d=new Date();
-    rpc('flash_scan',{code_p:profil.code,blocage_p:bloc,moment_p:mom,
-                      heure_p:d.getHours(),jour_p:d.getDay()}).then(function(id){ scanId=id; });
+    /* Deux fonctions plutôt qu'une avec des paramètres en plus : la version courte
+       reste exactement celle d'avant, donc un scan par la liste ne peut pas être
+       cassé par ce qu'on vient d'ajouter. */
+    var a={code_p:profil.code,blocage_p:bloc,moment_p:mom,heure_p:d.getHours(),jour_p:d.getDay()};
+    var appel;
+    if(texteLibre){
+      a.texte_p=texteLibre; a.devine_p=devine||null; a.devine_ok_p=devineOk;
+      a.alerte_p=F.inquiet(texteLibre);
+      appel=rpc('flash_scan_libre',a);
+    } else {
+      appel=rpc('flash_scan',a);
+    }
+    appel.then(function(id){ scanId=id; });
   }
   var h='<div class="bandeau"><span class="tag plein">' + Math.ceil(p.total/60) + ' min</span>'
       + '<span class="tag">' + esc(F.libelle(bloc)) + '</span>'
       + '<span class="tag">' + esc(F.libelle(mom)) + '</span></div>';
+  if(texteLibre) h += '<div class="cite">« ' + esc(texteLibre) + ' »</div>';
   if(p.bande==='enfant') h += '<div class="perso">' + esc(p.mot) + '</div>';
   else if(p.perso)       h += '<div class="perso">' + esc(p.perso) + '</div>';
   p.actions.forEach(function(a,i){

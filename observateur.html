@@ -244,6 +244,28 @@ table.fl .qui{font-weight:600;font-size:13.5px}
 table.fl .typ{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--dim);font-weight:400;margin-top:1px}
 table.fl .typ.cli{color:var(--gold)}
+/* Les phrases écrites par les sportifs : c'est de la matière première, pas une
+   statistique. On les montre en entier, avec leurs fautes, dans leur ordre d'arrivée. */
+.ph-tete{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  margin:26px 0 10px;flex-wrap:wrap}
+.ph-tete .fl-fam{margin:0}
+.ph-aide{font-size:12px;color:var(--dim);line-height:1.5;max-width:560px}
+.ph{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;
+  background:#fff;padding:13px 15px;margin-top:9px}
+.ph.alerte{border-color:#A33B2E;border-left-color:#A33B2E;background:#FFF6F4}
+.ph.lu{opacity:.52}
+.ph q{display:block;font-family:'Cormorant Garamond',serif;font-size:18.5px;line-height:1.45;
+  quotes:'« ' ' »'}
+.ph .meta{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:9px;
+  font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.ph .meta b{color:var(--ink);font-weight:600;letter-spacing:.06em}
+.ph .ét{padding:2px 8px;border:1px solid var(--line);border-radius:20px}
+.ph .ét.ko{border-color:var(--gold);color:var(--gold)}
+.ph .ét.al{border-color:#A33B2E;color:#A33B2E;font-weight:700}
+.ph .lire{margin-left:auto;background:none;border:1px solid var(--line);border-radius:20px;
+  padding:3px 11px;font:inherit;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--dim);cursor:pointer}
+.ph .lire:hover{border-color:var(--gold);color:var(--gold)}
 .fl-creer{margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
 .fl-creer h2{font-family:'Bebas Neue';font-weight:400;font-size:24px;letter-spacing:.03em}
 .fl-creer > p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;
@@ -338,19 +360,19 @@ table.fl .typ.cli{color:var(--gold)}
 
     <div class="fl-creer">
       <h2>Donner un accès Flash</h2>
-      <p>Après un paiement Stripe, ou pour offrir une gourde. Le code d'activation est créé tout de suite, avec le mail prêt à copier : délai de 21 jours, procédure, et marche à suivre au premier scan.</p>
+      <p>Après un paiement Stripe, ou pour offrir une gourde. Seul l'email est obligatoire, c'est là que part le code. Le reste, le sportif le remplit lui-même au premier scan, remplis-le seulement si tu le connais déjà.</p>
       <div class="fl-form">
-        <label>Prénom du sportif<input type="text" id="flPrenom" autocomplete="off" placeholder="Théo"></label>
-        <label>Nom<input type="text" id="flNom" autocomplete="off" placeholder="Martin"></label>
-        <label>Sport<input type="text" id="flSport" autocomplete="off" placeholder="Football"></label>
-        <label>Âge<input type="number" id="flAge" min="8" max="80" placeholder="14"></label>
+        <label>Prénom du sportif<input type="text" id="flPrenom" autocomplete="off" placeholder="si tu le connais"></label>
+        <label>Nom<input type="text" id="flNom" autocomplete="off" placeholder="nom du payeur"></label>
+        <label>Sport<input type="text" id="flSport" autocomplete="off" placeholder="si tu le connais"></label>
+        <label>Âge<input type="number" id="flAge" min="8" max="80" placeholder="si tu le connais"></label>
         <label>Niveau<select id="flNiveau">
           <option value="Loisir">Loisir</option>
           <option value="Départemental">Départemental</option>
           <option value="Régional" selected>Régional</option>
           <option value="National">National</option>
         </select></label>
-        <label>Email<input type="email" id="flEmail" autocomplete="off" placeholder="parent@exemple.fr"></label>
+        <label>Email (obligatoire)<input type="email" id="flEmail" autocomplete="off" placeholder="parent@exemple.fr"></label>
         <label>Club ou département<input type="text" id="flClub" autocomplete="off" placeholder="BMX Club de ..."></label>
       </div>
       <div class="fl-form2">
@@ -447,21 +469,41 @@ async function entrer(){
    sport. Il dit quels protocoles soigner, et il donne des publications que personne
    d'autre ne peut écrire. */
 const FL_BLOCAGES = {
-  a_rater:"J'ai peur de rater devant tout le monde", a_mal:"J'ai peur de me faire mal",
-  a_decevoir:"J'ai peur de décevoir quelqu'un", a_nouveau:"C'est nouveau pour moi",
-  a_vite:"Je pars toujours trop vite", b_erreur:"Je repasse mon erreur en boucle",
-  b_injustice:"Je rumine une injustice", b_colere:"Je suis en colère contre quelqu'un",
-  b_dormir:"Je n'arrive pas à dormir après", c_compare:"Je me compare aux autres",
-  c_echauffement:"Mon échauffement était nul", c_blessure:"Je reviens de blessure",
-  c_niveau:"On m'a dit que je n'avais pas le niveau"
+  a_rater:"J'ai peur de rater devant tout le monde",
+  a_mal:"J'ai peur de me faire mal",
+  a_decevoir:"J'ai peur de décevoir quelqu'un",
+  a_nouveau:"C'est nouveau, je ne sais pas à quoi m'attendre",
+  a_vite:"Je suis surexcité, je pars toujours trop vite",
+  a_concentre:"Je n'arrive pas à me concentrer, je pense à autre chose",
+  a_ventre:"J'ai mal au ventre, j'ai envie de vomir",
+  b_erreur:"Je repasse mon erreur en boucle",
+  b_injustice:"Je rumine une injustice, un arbitrage, une sélection",
+  b_colere:"Je suis en colère contre quelqu'un",
+  b_abandon:"J'ai envie de tout arrêter là, maintenant",
+  b_relance:"Je n'arrive pas à me remettre dedans après la pause",
+  c_compare:"Je me compare aux autres",
+  c_echauffement:"Mon corps ne répond pas, je me sens lourd",
+  c_blessure:"Je reviens de blessure et j'ai peur",
+  c_niveau:"On m'a dit que je n'avais pas le niveau",
+  c_serie:"J'enchaîne les mauvais résultats, je n'y crois plus",
+  c_pression:"On me met la pression, mes parents ou mon coach",
+  d_honte:"Je m'en veux, j'ai honte de ce que j'ai fait",
+  d_dormir:"Je n'arrive pas à dormir après"
 };
 const FL_FAMILLES = [
-  { c:'a', n:'Quand ça monte avant' },
-  { c:'b', n:'Quand ça tourne en boucle' },
-  { c:'c', n:"Quand je ne me sens pas à la hauteur" }
+  { c:"a", n:"Avant, quand ça monte" },
+  { c:"b", n:"Pendant, quand ça tourne en boucle" },
+  { c:"c", n:"Quand je ne me sens pas à la hauteur" },
+  { c:"d", n:"Après, quand ça ne redescend pas" }
 ];
-const FL_MOMENTS = { veille:"La veille au soir", matin:"Le matin", avant:"Les minutes juste avant",
-  pendant:"Pendant, ou entre deux", apres:"Juste après", soir:"Le soir même" };
+const FL_MOMENTS = {
+  veille:"La veille, dans la journée",
+  veille_soir:"La veille au soir",
+  jour:"Le jour même, avant",
+  pendant:"Pendant, ou entre deux",
+  apres:"Juste après",
+  lendemain:"Le lendemain"
+};
 
 function flDate(iso){
   if(!iso) return '—';
@@ -502,7 +544,7 @@ function flMailType(prenom, code){
    + 'Merci pour votre commande du Protocole Flash.\n\n'
    + 'LA GOURDE\n'
    + 'Elle part sous 21 jours maximum. Vous n\'avez rien à faire d\'ici là.\n\n'
-   + 'LE CODE D\'ACTIVATION DE ' + p.toUpperCase() + '\n'
+   + (prenom ? 'LE CODE D\'ACTIVATION DE ' + prenom.toUpperCase() : 'LE CODE D\'ACTIVATION') + '\n'
    + '    ' + code + '\n'
    + 'Gardez ce mail jusqu\'à la réception de la gourde.\n\n'
    + 'À FAIRE DÈS RÉCEPTION, UNE SEULE FOIS, TRANQUILLEMENT À LA MAISON\n'
@@ -523,7 +565,9 @@ function flMailType(prenom, code){
 async function flCreer(){
   const res = document.getElementById('flRes');
   const prenom = document.getElementById('flPrenom').value.trim();
-  if(!prenom){ res.innerHTML = '<div class="fl-ko">Il faut au moins un prénom.</div>'; return; }
+  const email  = document.getElementById('flEmail').value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+    res.innerHTML = '<div class="fl-ko">Il faut un email valide, c\'est là que part le code.</div>'; return; }
   const code = flCodeNeuf();
   res.innerHTML = '<div class="fl-ko" style="color:var(--dim)">Création…</div>';
   try{
@@ -534,7 +578,7 @@ async function flCreer(){
       age_p: parseInt(document.getElementById('flAge').value, 10) || null,
       niveau_p: document.getElementById('flNiveau').value,
       club_p: document.getElementById('flClub').value.trim(),
-      email_p: document.getElementById('flEmail').value.trim(),
+      email_p: email,
       source_p: document.getElementById('flSource').value });
     if(r.error || !r.data || !r.data.ok){
       res.innerHTML = '<div class="fl-ko">Refusé par la base. Recharge la page et réessaie.</div>'; return;
@@ -631,7 +675,64 @@ async function chargerFlash(cle){
        + 'C\'est le protocole à soigner en premier, et c\'est aussi le sujet de publication '
        + 'que personne d\'autre que toi ne peut écrire avec un chiffre dessus.</div>';
   }
+
+  h += await flPhrases(cle);
   zone.innerHTML = h;
+}
+
+/* ---------------------------------------------------------------- ce qu'ils écrivent
+
+   La vingt-et-unième porte de flash.html. Quand rien dans la liste ne colle, le
+   sportif écrit sa phrase. Ces phrases valent plus que les compteurs : elles disent
+   les blocages qui manquent encore, avec les mots de ceux qui les vivent.
+   Les phrases signalées remontent en haut et ne se laissent pas rater. */
+async function flPhrases(cle){
+  let r;
+  try{ r = await db.rpc('flash_phrases', { cle: cle }); }catch(e){ return ''; }
+  const d = r && r.data;
+  if(!d || !d.ok) return '';
+  const ph = d.phrases || [];
+  if(!ph.length) return '';
+
+  const nAlerte = ph.filter(p => p.alerte && !p.lu).length;
+  const nNeuf   = ph.filter(p => !p.lu).length;
+
+  let h = '<div class="ph-tete"><div class="fl-fam">Ce qu\'ils ont écrit eux-mêmes'
+        + (nNeuf ? ' · ' + nNeuf + ' à lire' : '') + '</div>'
+        + '<div class="ph-aide">Chaque phrase est un blocage que ta liste ne nomme pas encore. '
+        + 'Quand la même revient trois fois, c\'est un blocage à ajouter, écrit avec leurs mots.</div></div>';
+
+  if(nAlerte){
+    h += '<div class="fl-ko" style="border-left:3px solid #A33B2E;background:#FFF6F4;'
+       + 'padding:12px 14px;color:#A33B2E;font-weight:600">'
+       + nAlerte + ' phrase' + (nAlerte > 1 ? 's' : '') + ' dépasse' + (nAlerte > 1 ? 'nt' : '')
+       + ' le cadre du sport. À lire maintenant, pas ce soir.</div>';
+  }
+
+  ph.forEach(p => {
+    const dev = p.devine ? (FL_BLOCAGES[p.devine] || p.devine) : null;
+    h += '<div class="ph' + (p.alerte ? ' alerte' : '') + (p.lu ? ' lu' : '') + '" id="ph' + p.id + '">'
+       + '<q>' + flEsc(p.texte || '') + '</q>'
+       + '<div class="meta">'
+       + '<b>' + flEsc(p.qui || '') + '</b>'
+       + (p.age ? '<span>' + p.age + ' ans</span>' : '')
+       + (p.sport ? '<span>' + flEsc(p.sport) + '</span>' : '')
+       + (p.moment ? '<span>' + flEsc(FL_MOMENTS[p.moment] || p.moment) + '</span>' : '')
+       + (p.alerte ? '<span class="ét al">à lire</span>' : '')
+       + (dev && p.devine_ok ? '<span class="ét">reconnu · ' + flEsc(dev) + '</span>' : '')
+       + (dev && p.devine_ok === false ? '<span class="ét ko">proposé · ' + flEsc(dev) + ' · refusé</span>' : '')
+       + (!dev ? '<span class="ét ko">rien reconnu</span>' : '')
+       + '<span>' + flDate(p.quand) + '</span>'
+       + '<button class="lire" onclick="flMarquerLue(' + p.id + ',' + (p.lu ? 'false' : 'true') + ')">'
+       + (p.lu ? 'à relire' : 'traitée') + '</button>'
+       + '</div></div>';
+  });
+  return h;
+}
+
+function flMarquerLue(id, lu){
+  db.rpc('flash_phrase_lue', { cle: cleCoach, id_p: id, lu_p: lu })
+    .then(() => chargerFlash(cleCoach));
 }
 
 /* un mois terminé s'ouvre et se referme d'un clic sur sa ligne */
