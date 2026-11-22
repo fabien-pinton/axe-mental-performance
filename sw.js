@@ -1,56 +1,78 @@
-/* AXE Mental Performance — service worker minimal.
-   Rôle : permettre l'installation sur l'écran d'accueil, servir les icônes hors ligne,
-   et afficher une page d'attente si le réseau est coupé.
-   Choix volontaire : le RÉSEAU D'ABORD pour les pages. Une mise à jour du protocole est
-   donc visible immédiatement par les riders, sans avoir à vider quoi que ce soit.       */
+/* =====================================================================================
+   Protocole Flash · service worker
 
-const VERSION = 'axe-v2';   // changé : force le rafraîchissement du cache des icônes
-const FOND = [
-  'axe-192.png',
-  'axe-512.png',
-  'axe-512-maskable.png',
-  'axe-apple-180.png'
+   Son seul rôle : que la page s'ouvre quand il n'y a pas de réseau.
+
+   Un terrain de BMX, un gymnase, un bord de bassin, c'est zéro barre. Sans ce
+   fichier, le sportif scanne sa gourde le jour de la compétition et tombe sur une
+   page blanche, c'est-à-dire au seul moment qui compte.
+
+   Au premier passage, celui qui se fait tranquillement à la maison, tout est mis
+   en cache. Ensuite la page s'ouvre hors ligne, instantanément.
+
+   Les appels à Supabase ne sont JAMAIS mis en cache : des données périmées seraient
+   pires que pas de données. Le scan non parti est gardé par la page elle-même, dans
+   sa file d'attente, et repart quand le signal revient.
+
+   POUR PUBLIER UNE MISE À JOUR : changer le numéro de CACHE ci-dessous. Sans ça, les
+   téléphones qui ont déjà la page garderont l'ancienne version pendant un bon moment.
+   ===================================================================================== */
+var CACHE = 'axe-flash-v1';
+
+var FICHIERS = [
+  '/flash.html',
+  '/flash.js',
+  '/F/',
+  '/axe-icone-sportif-192.png',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(FOND)).then(() => self.skipWaiting()));
+self.addEventListener('install', function(e){
+  self.skipWaiting();
+  e.waitUntil(caches.open(CACHE).then(function(c){
+    /* Un fichier manquant ne doit pas faire échouer toute l'installation. */
+    return Promise.all(FICHIERS.map(function(u){
+      return c.add(new Request(u, {cache:'reload'})).catch(function(){});
+    }));
+  }));
 });
 
-self.addEventListener('activate', e => {
+self.addEventListener('activate', function(e){
   e.waitUntil(
-    caches.keys()
-      .then(noms => Promise.all(noms.filter(n => n !== VERSION).map(n => caches.delete(n))))
-      .then(() => self.clients.claim())
+    caches.keys().then(function(noms){
+      return Promise.all(noms.map(function(n){
+        return n === CACHE ? null : caches.delete(n);
+      }));
+    }).then(function(){ return self.clients.claim(); })
   );
 });
 
-self.addEventListener('fetch', e => {
-  const req = e.request;
-  // on ne touche qu'aux lectures de notre propre site : jamais aux appels Supabase/Stripe
-  if (req.method !== 'GET') return;
-  if (new URL(req.url).origin !== self.location.origin) return;
+self.addEventListener('fetch', function(e){
+  var r = e.request;
+  if(r.method !== 'GET') return;
+
+  var u;
+  try { u = new URL(r.url); } catch(err){ return; }
+
+  /* Les données restent toujours fraîches ou absentes, jamais périmées. */
+  if(u.hostname.indexOf('supabase.co') >= 0) return;
 
   e.respondWith(
-    fetch(req)
-      .then(rep => {
-        if (rep && rep.status === 200 && rep.type === 'basic') {
-          const copie = rep.clone();
-          caches.open(VERSION).then(c => c.put(req, copie));
+    caches.match(r).then(function(hit){
+      var reseau = fetch(r).then(function(rep){
+        if(rep && rep.status === 200 && (rep.type === 'basic' || rep.type === 'cors')){
+          var copie = rep.clone();
+          caches.open(CACHE).then(function(c){ c.put(r, copie); });
         }
         return rep;
-      })
-      .catch(() => caches.match(req).then(c => c || (
-        req.mode === 'navigate'
-          ? new Response(
-              '<!doctype html><html lang="fr"><head><meta charset="utf-8">' +
-              '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-              '<title>AXE</title><style>body{margin:0;min-height:100vh;display:flex;align-items:center;' +
-              'justify-content:center;background:#0A0907;color:#C9A227;font-family:Georgia,serif;text-align:center;padding:32px}' +
-              'p{font-size:16px;line-height:1.6;max-width:320px;color:#E8E2D8}b{letter-spacing:.3em;font-size:26px;display:block;margin-bottom:18px;color:#C9A227}</style>' +
-              '</head><body><div><b>AXE</b><p>Pas de connexion pour le moment. Ton protocole revient dès que le réseau est là.</p></div></body></html>',
-              { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
-            )
-          : Response.error()
-      )))
+      }).catch(function(){
+        /* Hors ligne : la version en cache, ou à défaut le protocole lui-même,
+           pour qu'une adresse inconnue ne donne jamais une page blanche. */
+        return hit || (r.mode === 'navigate' ? caches.match('/flash.html') : undefined);
+      });
+      /* En cache, on sert tout de suite et on rafraîchit derrière : le sportif
+         n'attend jamais le réseau. */
+      return hit || reseau;
+    })
   );
 });

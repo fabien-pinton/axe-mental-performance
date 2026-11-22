@@ -488,7 +488,12 @@ const FL_BLOCAGES = {
   c_serie:"J'enchaîne les mauvais résultats, je n'y crois plus",
   c_pression:"On me met la pression, mes parents ou mon coach",
   d_honte:"Je m'en veux, j'ai honte de ce que j'ai fait",
-  d_dormir:"Je n'arrive pas à dormir après"
+  d_dormir:"Je n'arrive pas à dormir après",
+  /* Pas un blocage : la marque d'une phrase que le protocole n'a pas su relier.
+     Le sportif a quand même reçu ses deux actions universelles. Cette clé ne
+     commence par aucune lettre de famille, elle est donc volontairement absente
+     des barres et comptée à part, dans sa propre ligne. */
+  libre:"Phrase non reconnue par le protocole"
 };
 const FL_FAMILLES = [
   { c:"a", n:"Avant, quand ça monte" },
@@ -640,6 +645,24 @@ async function chargerFlash(cle){
     h += '<div class="fl-fam">' + flEsc(f.n) + '</div>' + flBarres(l, FL_BLOCAGES, st.total);
   });
   h += '</div>';
+
+  /* Les phrases non reconnues ne tombent dans aucune famille, donc elles
+     disparaissaient des barres tout en comptant dans le total. C'est pourtant le
+     chiffre le plus utile du tableau : il dit à quel point le protocole entend
+     ce qu'on lui écrit. */
+  const nLibre = ((st.blocages || []).find(x => x.k === 'libre') || {}).n || 0;
+  if(nLibre){
+    const pcL = Math.round(nLibre / st.total * 100);
+    h += '<div class="count" style="margin:14px 0 26px;line-height:1.6">'
+       + '<b>' + nLibre + ' scan' + (nLibre > 1 ? 's' : '') + ' sur ' + st.total
+       + ', soit ' + pcL + ' %</b>, sont partis d\'une phrase que le protocole n\'a pas '
+       + 'su relier à un blocage. Ces sportifs ont reçu les deux actions universelles, '
+       + 'ils ne sont pas repartis les mains vides. '
+       + (pcL >= 25
+          ? 'Au-dessus d\'un quart, c\'est le vocabulaire de reconnaissance qu\'il faut enrichir en priorité.'
+          : 'En dessous d\'un quart, la reconnaissance fait son travail.')
+       + '</div>';
+  }
 
   if(st.moments && st.moments.length){
     h += '<div class="fl-barres"><div class="fl-fam">À quel moment</div>'

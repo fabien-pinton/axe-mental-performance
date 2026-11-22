@@ -99,12 +99,16 @@ input.code{text-align:center;letter-spacing:.14em;font-size:20px;text-transform:
 /* =====================================================================================
    Trois règles commandent cette page.
 
-   1. LE PROTOCOLE NE DÉPEND JAMAIS DU RÉSEAU. Un sportif au bord d'une piste en 4G
-      instable doit avoir ses actions. Le profil est mis en cache, et l'enregistrement
-      du scan part sans qu'on l'attende.
+   1. LE PROTOCOLE NE DÉPEND JAMAIS DU RÉSEAU. Un sportif au bord d'une piste n'a pas
+      de barres. La page entière est mise en cache par le service worker au premier
+      scan, celui tranquille à la maison. Ensuite elle s'ouvre hors ligne, et le scan
+      est mis en file d'attente pour partir quand le signal revient.
    2. LE CODE N'EST DEMANDÉ QU'UNE FOIS par appareil. Personne ne tape un code en
       compétition.
-   3. DEUX TAPS entre le scan et les actions : le blocage, puis le moment.
+   3. IL ÉCRIT, ON TROUVE. Plus de liste de blocages. Le sportif écrit sa phrase, le
+      protocole la lit et propose ce qu'il a compris. Le seul menu restant est le
+      moment, parce que le même blocage la veille au soir et au portillon n'appelle
+      pas la même action.
    ===================================================================================== */
 'use strict';
 var URL_SB='https://ilsxrdvxvnvlznjuevba.supabase.co';
@@ -118,11 +122,59 @@ var profil=null, scanId=null, bloc=null, mom=null, actif=null;
    remise à zéro dès qu'il repart de la liste, pour qu'elle ne colle pas au scan
    suivant. `devine` garde le blocage reconnu, même s'il a répondu non, parce que
    savoir qu'on s'est trompé vaut autant que savoir qu'on a eu juste. */
+/* La phrase du sportif NE QUITTE JAMAIS SON TÉLÉPHONE. Elle sert à trouver le
+   blocage, elle lui est réaffichée pendant ses actions, et elle meurt là. Ce qui
+   remonte à Fabien, c'est le blocage, le moment, et si le protocole a vu juste. */
 var texteLibre='', devine=null, devineOk=null;
 
 function lire(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
 function garde(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 function oublie(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+/* ------------------------------------------------------- la file d'attente hors ligne
+
+   Au bord d'une piste il n'y a pas de réseau, et le protocole doit marcher quand même.
+   Le scan n'est donc jamais perdu : s'il ne part pas, il est gardé sous le coude et
+   renvoyé au prochain lancement, ou dès que le navigateur annonce qu'il est en ligne.
+   Les heures et les jours voyagent avec le scan, donc les statistiques de Fabien
+   restent justes même si l'envoi a trois jours de retard. */
+var FILE='axe_flash_file', enAttente=null;
+function enfiler(args){
+  var f=lire(FILE)||[];
+  var e={a:args,t:false,c:false,d:Date.now()+Math.random()};
+  f.push(e); if(f.length>80) f=f.slice(-80);
+  garde(FILE,f); enAttente=e; return e;
+}
+function majAttente(champ,val){
+  if(!enAttente) return;
+  enAttente[champ]=val;
+  var f=lire(FILE)||[];
+  for(var i=f.length-1;i>=0;i--){ if(f[i].d===enAttente.d){ f[i][champ]=val; break; } }
+  garde(FILE,f);
+}
+function remettre(e){
+  /* Cinq essais, puis on abandonne ce scan. Mieux vaut en perdre un que faire
+     tourner indéfiniment la même erreur sur le téléphone d'un gamin. */
+  if((e.n||0) >= 5) return;
+  var g=lire(FILE)||[]; g.push(e); garde(FILE,g);
+}
+function vider(){
+  if(!db) return;
+  var f=lire(FILE)||[]; if(!f.length) return;
+  garde(FILE,[]);
+  f.forEach(function(e){
+    e.n=(e.n||0)+1;
+    db.rpc('flash_scan_libre',e.a).then(function(r){
+      var id = r && r.data;
+      /* Pas d'identifiant en retour veut dire que ce n'est pas passé. On le
+         remet dans la file plutôt que de le perdre en silence. */
+      if(!id){ remettre(e); return; }
+      if(e.t||e.c) db.rpc('flash_fin',{scan_p:id,termine_p:e.t||null,cta_p:e.c||null});
+    }, function(){ remettre(e); });
+  });
+  setTimeout(function(){ try{ pied(); }catch(err){} },1500);
+}
+window.addEventListener('online',vider);
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function rpc(f,a){ return db ? db.rpc(f,a).then(function(r){ return r&&r.data; },function(){ return null; })
@@ -228,9 +280,9 @@ function ecranFait(code){
   + '<p class="sous">Ton code est <b style="color:var(--or)">' + esc(code) + '</b>. '
   + 'Note-le quelque part, une fois, et oublie-le : ce téléphone s’en souvient.</p>'
   + '<div class="perso" style="margin-top:20px">À partir de maintenant, tu scannes ta gourde '
-  + 'et tu tombes directement sur tes blocages. Plus rien à taper.</div>'
+  + 'et tu écris ce qui bloque. Plus rien à taper, plus rien à chercher.</div>'
   + '<button class="btn or" id="go">Voir à quoi ça ressemble</button>';
-  document.getElementById('go').onclick=ecranBlocages;
+  document.getElementById('go').onclick=ecranEcrire;
   pied();
 }
 
@@ -251,7 +303,7 @@ function ecranCode(titre,msg){
     rpc('flash_ouvrir',{code_p:v}).then(function(p){
       if(!p||!p.ok){ document.getElementById('e').textContent=
         'Ce code n’est pas reconnu. Vérifie les majuscules.'; return; }
-      p.code=v; profil=p; garde('axe_flash_profil',p); ecranBlocages();
+      p.code=v; profil=p; garde('axe_flash_profil',p); ecranEcrire();
     });
   }
   document.getElementById('go').onclick=val;
@@ -269,59 +321,37 @@ function familleDuMois(){
   if(/preuve|carnet|confiance/.test(t)) return 'c';
   return null;
 }
-function ecranBlocages(){
+/* ---------------------------------------------------------------- la porte unique
+
+   Il n'y a plus de liste. Le sportif écrit sa phrase, le protocole la lit, et lui
+   demande s'il a vu juste au lieu de décider à sa place. S'il dit non, ou si on n'a
+   rien reconnu, il a quand même deux actions : nommer, puis réduire à une seule
+   chose. Ça vaut pour n'importe quel blocage, il n'est jamais renvoyé les mains
+   vides. C'est aussi l'écran d'accueil d'un sportif déjà activé : il scanne, il
+   écrit, c'est tout. */
+function ecranEcrire(){
   var jeune = profil && profil.age && profil.age < 12;
   var mois = familleDuMois();
   var h='<h1>Qu’est-ce qui bloque, là, maintenant&nbsp;?</h1>';
   h += jeune
-    ? '<p class="sous">Votre enfant a moins de douze ans : les actions s’adressent à vous.</p>'
-    : '<p class="sous">Choisis la phrase la plus proche. Si rien ne colle exactement, prends la moins fausse.</p>';
+    ? '<p class="sous">Votre enfant a moins de douze ans : écrivez ce que vous observez, '
+      + 'les actions s’adressent à vous.</p>'
+    : '<p class="sous">Écris-le avec tes mots. Une phrase suffit, et tu n’as pas besoin '
+      + 'de bien l’écrire : personne ne corrige rien ici.</p>';
   if(mois && !jeune && profil.mFaible){
     h += '<div class="perso" style="margin-top:16px;margin-bottom:0">Ce mois-ci tu travailles <b>'
-       + esc(profil.mFaible) + '</b>, alors je l’ai mise en premier. Mais regarde tout : '
-       + 'aujourd’hui c’est peut-être autre chose.</div>';
+       + esc(profil.mFaible) + '</b>. Mais écris ce qui se passe aujourd’hui, '
+       + 'c’est peut-être tout autre chose.</div>';
   }
-  var fams=F.FAMILLES.slice();
-  if(mois) fams.sort(function(a,b){ return (b.cle===mois)-(a.cle===mois); });
-  fams.forEach(function(fa){
-    h += '<div class="fam">' + esc(fa.nom)
-       + (fa.cle===mois ? ' <span style="color:var(--pale);font-weight:400">· ton axe du mois</span>' : '')
-       + '</div>';
-    F.BLOCAGES.filter(function(b){ return b.f===fa.cle; }).forEach(function(b){
-      h += '<button class="btn" data-b="' + b.k + '">' + esc(b.t) + '</button>';
-    });
-  });
-  h += '<button class="btn vide" id="libre" style="margin-top:18px;text-align:center">'
-     + 'Rien ne correspond, je l’écris moi-même</button>'
+  h += '<textarea id="ph" autocapitalize="sentences" spellcheck="false" '
+     + 'placeholder="Ce qui se passe dans ta tête, là, maintenant."></textarea>'
+     + '<p class="note">Pour parler au lieu d’écrire, touche le micro de ton clavier.</p>'
+     + '<p class="note">Ta phrase ne sort pas de ce téléphone. Personne ne la lit, '
+     + 'pas même Fabien : il voit seulement que tu as scanné et sur quoi ça portait.</p>'
+     + '<div class="err" id="e"></div>'
+     + '<button class="btn or" id="go">Continuer</button>'
      + '<button class="lien" id="chg">Ce n’est pas mon code</button>';
   vue.innerHTML=h;
-  vue.querySelectorAll('[data-b]').forEach(function(b){
-    b.onclick=function(){ texteLibre=''; devine=null; bloc=b.dataset.b; ecranMoments(); };
-  });
-  document.getElementById('libre').onclick=function(){ devine=null; devineOk=null; ecranEcrire(); };
-  document.getElementById('chg').onclick=function(){ oublie('axe_flash_profil'); profil=null; ecranAccueil(); };
-  pied();
-}
-
-/* ---------------------------------------------------------------- la porte libre
-
-   Il écrit sa phrase. On essaie de la relier à un blocage connu, et SURTOUT on lui
-   demande si on a vu juste au lieu de décider à sa place. S'il dit non, ou si on
-   n'a rien reconnu, il a quand même deux actions : nommer puis réduire à une seule
-   chose, ça vaut pour n'importe quel blocage. Il n'est jamais renvoyé les mains vides. */
-function ecranEcrire(){
-  vue.innerHTML =
-    '<h1>Écris-le avec tes mots.</h1>'
-  + '<p class="sous">Une phrase suffit. Tu n’as pas besoin de bien l’écrire, '
-  + 'personne ne corrige rien ici.</p>'
-  + '<textarea id="ph" autocapitalize="sentences" spellcheck="false" '
-  + 'placeholder="Ce qui se passe dans ta tête, là, maintenant."></textarea>'
-  + '<p class="note">Pour parler au lieu d’écrire, touche le micro de ton clavier.</p>'
-  + '<p class="note">Fabien lit ces phrases, pour compléter le protocole avec ce que vous '
-  + 'vivez vraiment. Si tu préfères que ça reste entre toi et toi, reviens à la liste.</p>'
-  + '<div class="err" id="e"></div>'
-  + '<button class="btn or" id="go">Continuer</button>'
-  + '<button class="lien" id="ret">Revenir à la liste</button>';
   var ta=document.getElementById('ph');
   ta.value = texteLibre || '';
   try{ ta.focus(); }catch(e){}
@@ -329,10 +359,14 @@ function ecranEcrire(){
     var v=(ta.value||'').trim();
     if(v.length < 4){ document.getElementById('e').textContent='Écris au moins quelques mots.'; return; }
     texteLibre = v.slice(0, 500);
+    devine=null; devineOk=null;
     if(F.inquiet(texteLibre)){ ecranAttention(); return; }
     suiteEcrire();
   };
-  document.getElementById('ret').onclick=ecranBlocages;
+  document.getElementById('chg').onclick=function(){
+    oublie('axe_flash_profil'); profil=null; texteLibre=''; ecranAccueil();
+  };
+  pied();
 }
 
 function suiteEcrire(){
@@ -375,13 +409,16 @@ function ecranAttention(){
   + '<p style="margin-top:12px">Si tu ne vois personne à qui le dire, il y a le <b>3114</b>. '
   + 'C’est gratuit, c’est ouvert jour et nuit, et au bout du fil il y a quelqu’un dont c’est '
   + 'le métier d’écouter exactement ça.</p>'
+  + '<p style="margin-top:12px;font-size:14px;color:var(--pale)">Fabien saura que tu as écrit '
+  + 'quelque chose d’important aujourd’hui, pour pouvoir prendre de tes nouvelles. '
+  + 'Il ne verra pas tes mots.</p>'
   + '</div>'
   + '<button class="btn or" id="tel" style="margin-top:16px">Appeler le 3114</button>'
   + '<button class="btn vide" id="go" style="text-align:center">Continuer le protocole</button>'
-  + '<button class="lien" id="ret">Revenir à la liste</button>';
+  + '<button class="lien" id="ret">Revenir</button>';
   document.getElementById('tel').onclick=function(){ location.href='tel:3114'; };
   document.getElementById('go').onclick=suiteEcrire;
-  document.getElementById('ret').onclick=ecranBlocages;
+  document.getElementById('ret').onclick=ecranEcrire;
 }
 
 /* ---------------------------------------------------------------- les moments */
@@ -398,33 +435,35 @@ function ecranMoments(){
                + 'je t’emmène sur « ' + esc(F.libelle(r)) + ' »</span></button>';
     }
   });
-  h += '<button class="lien" id="ret">Changer de blocage</button>';
+  h += '<button class="lien" id="ret">Changer ma phrase</button>';
   vue.innerHTML=h;
   vue.querySelectorAll('[data-m]').forEach(function(b){
     b.onclick=function(){ if(b.dataset.r) bloc=b.dataset.r; mom=b.dataset.m; ecranActions(); };
   });
-  document.getElementById('ret').onclick=ecranBlocages;
+  document.getElementById('ret').onclick=ecranEcrire;
 }
 
 /* ---------------------------------------------------------------- les actions */
 function ecranActions(){
   var p=F.composer(bloc,mom,profil||{});
-  if(!p){ ecranBlocages(); return; }
-  if(db && profil){
+  if(!p){ ecranEcrire(); return; }
+  /* L'enregistrement ne doit JAMAIS retarder les actions, ni échouer bruyamment.
+     S'il part, on garde l'identifiant pour la fin. S'il ne part pas, le scan va
+     dans la file et repartira tout seul plus tard. Dans les deux cas le sportif
+     ne voit rien et n'attend rien. */
+  scanId=null; enAttente=null;
+  if(profil){
     var d=new Date();
-    /* Deux fonctions plutôt qu'une avec des paramètres en plus : la version courte
-       reste exactement celle d'avant, donc un scan par la liste ne peut pas être
-       cassé par ce qu'on vient d'ajouter. */
-    var a={code_p:profil.code,blocage_p:bloc,moment_p:mom,heure_p:d.getHours(),jour_p:d.getDay()};
-    var appel;
-    if(texteLibre){
-      a.texte_p=texteLibre; a.devine_p=devine||null; a.devine_ok_p=devineOk;
-      a.alerte_p=F.inquiet(texteLibre);
-      appel=rpc('flash_scan_libre',a);
+    var a={code_p:profil.code, blocage_p:bloc, moment_p:mom,
+           heure_p:d.getHours(), jour_p:d.getDay(),
+           texte_p: null,                       /* jamais, dans aucun cas */
+           devine_p: devine||null, devine_ok_p: devineOk,
+           alerte_p: F.inquiet(texteLibre)};
+    if(db && navigator.onLine!==false){
+      rpc('flash_scan_libre',a).then(function(id){ if(id) scanId=id; else enfiler(a); });
     } else {
-      appel=rpc('flash_scan',a);
+      enfiler(a);
     }
-    appel.then(function(id){ scanId=id; });
   }
   var h='<div class="bandeau"><span class="tag plein">' + Math.ceil(p.total/60) + ' min</span>'
       + '<span class="tag">' + esc(F.libelle(bloc)) + '</span>'
@@ -442,7 +481,7 @@ function ecranActions(){
   });
   h += '<button class="btn or" id="suiv" style="margin-top:18px">C’est fait</button>'
      + '<div id="apres"></div>'
-     + '<button class="lien" id="ret">Ce n’est pas ça, je reprends</button>';
+     + '<button class="lien" id="ret">Ce n’est pas ça, je réécris</button>';
   vue.innerHTML=h;
 
   var i=0, t=null, blocs=[].slice.call(vue.querySelectorAll('.acte'));
@@ -460,9 +499,10 @@ function ecranActions(){
     if(i<blocs.length){ blocs[i].classList.add('on'); lancer(); return; }
     clearInterval(t); this.remove();
     if(scanId) rpc('flash_fin',{scan_p:scanId,termine_p:true,cta_p:null});
+    else majAttente('t',true);
     fini(p);
   };
-  document.getElementById('ret').onclick=function(){ clearInterval(t); ecranBlocages(); };
+  document.getElementById('ret').onclick=function(){ clearInterval(t); ecranEcrire(); };
   lancer();
 }
 function fini(p){
@@ -472,26 +512,38 @@ function fini(p){
     + 'Ça reviendra, ce n’est pas un échec : c’est le fonctionnement normal d’une tête '
     + 'qui a encore quelque chose à faire. Ce qui compte, c’est que tu saches quoi faire quand ça revient.</p>'
     + '<button class="btn or" id="dm" style="margin-top:16px">Écris-moi AXE en DM</button>'
-    + '<button class="btn vide" id="enc">Un autre blocage</button></div>';
+    + '<button class="btn vide" id="enc">Autre chose</button></div>';
   document.getElementById('dm').onclick=function(){
     if(scanId) rpc('flash_fin',{scan_p:scanId,termine_p:null,cta_p:true});
+    else majAttente('c',true);
     window.open(DM,'_blank','noopener');
   };
-  document.getElementById('enc').onclick=ecranBlocages;
+  document.getElementById('enc').onclick=ecranEcrire;
   z.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function pied(){
+  var f=(lire(FILE)||[]).length;
   document.getElementById('pied').innerHTML = profil
     ? esc(profil.prenom||'') + (profil.sport?' · '+esc(profil.sport):'')
-      + '<br>Fabien voit quand tu scannes et ce que tu choisis.'
+      + '<br>Fabien voit quand tu scannes, pas ce que tu écris.'
+      + (f ? '<br>' + f + (f>1?' scans attendent':' scan attend') + ' le réseau.' : '')
     : 'Une question&nbsp;? f.pinton@outlook.fr';
+}
+
+/* Le service worker met la page et son script en cache au premier passage, celui
+   qui se fait tranquillement à la maison avec du réseau. Après ça, le protocole
+   s'ouvre au bord de la piste même sans une seule barre. */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
 }
 
 (function(){
   var c=lire('axe_flash_profil');
   if(c&&c.code){
-    profil=c; ecranBlocages();
+    profil=c; ecranEcrire(); vider();
     rpc('flash_ouvrir',{code_p:c.code}).then(function(p){
       if(p&&p.ok){ p.code=c.code; profil=p; garde('axe_flash_profil',p); pied(); }
     });
