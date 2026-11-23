@@ -1829,10 +1829,19 @@ let diagQuestions=buildDiagQuestions(SPORT_LEXICON.generique, 'ado');
 // exercices mentaux (formats plus courts et plus concrets pour les 10-12 ans, la formulation
 // standard, déjà adaptée à un lecteur ado/adulte, sert aussi bien les 13-17 ans que les 18 ans et +).
 function ageTier(age){ return age<=12 ? 'enfant' : (age<=17 ? 'ado' : 'adulte'); }
+// « à » suivi d'un article : au match suivant, à la manche suivante, à l'épreuve suivante.
+// Sans ça, les sports au masculin donnaient « à le match suivant » dans le diagnostic.
+function aArt(s){
+  s = String(s||'');
+  if(/^le /.test(s)) return 'au '+s.slice(3);
+  return 'à '+s;                       /* la ... / l'... : « à » ne se contracte pas */
+}
 function buildDiagQuestions(l, tier){
   const kid = tier === 'enfant';
   return [
-  // ---- MENTAL (9 questions, 3 catégories : portillon / rumination / confiance, + une option neutre) ----
+  // ---- MENTAL (12 questions, 4 catégories : portillon / rumination / confiance / avantage, + une option neutre) ----
+  // 'avantage' = tenir l'avantage et savoir finir. Les trois premières catégories décrivent la peur
+  // de l'échec ; celle-ci décrit la difficulté inverse, celle qui arrive quand ça se passe bien.
   {id:'mental_1',axis:'mental',
     q: kid ? ("Juste avant "+l.auDepart+", qu'est-ce qui se passe dans ta tête ?") : ("Au moment de te présenter "+l.auDepart+", qu'est-ce qui se passe dans ta tête ?"),
     opts: kid ? ["Je repense à mes erreurs d'avant","Mon cœur bat très fort, je perds mes moyens","Je me dis que les autres sont meilleurs que moi","Je suis calme et concentré(e)"]
@@ -1840,8 +1849,8 @@ function buildDiagQuestions(l, tier){
     tags:['rumination','portillon','confiance','neutre']},
   {id:'mental_2',axis:'mental',
     q: kid ? ("Quand "+l.uniteIndef+" se passe mal, qu'est-ce que tu fais le plus souvent ?") : ("Quand "+l.uniteIndef+" se passe mal, ta réaction la plus fréquente ?"),
-    opts: kid ? ["Je repense à ça encore et encore","J'ai peur de refaire la même erreur à "+l.uniteSuivante,"Je me dis que je ne suis pas assez fort(e)","Je passe vite à autre chose"]
-              : ["Je rejoue la scène en boucle dans ma tête","J'ai peur de refaire la même erreur à "+l.uniteSuivante,"Je me dis que je ne suis pas assez bon","Je passe vite à la suivante, sans y repenser"],
+    opts: kid ? ["Je repense à ça encore et encore","J'ai peur de refaire la même erreur "+aArt(l.uniteSuivante),"Je me dis que je ne suis pas assez fort(e)","Je passe vite à autre chose"]
+              : ["Je rejoue la scène en boucle dans ma tête","J'ai peur de refaire la même erreur "+aArt(l.uniteSuivante),"Je me dis que je ne suis pas assez bon","Je passe vite à la suivante, sans y repenser"],
     tags:['rumination','portillon','confiance','neutre']},
   {id:'mental_3',axis:'mental',q:"La nuit avant "+l.grosseCompet+" :",
     opts: kid ? ["Je dors mal, j'y pense tout le temps","J'ai du mal à m'endormir, mon cœur bat vite","Je me dis que je ne suis pas prêt(e)","Je dors plutôt bien, tranquille"]
@@ -1857,7 +1866,7 @@ function buildDiagQuestions(l, tier){
     tags:['rumination','portillon','confiance','neutre']},
   {id:'mental_6',axis:'mental',q:l.plateauDepart+" :",
     opts: kid ? ["Je suis stressé(e), j'ai peur de mal commencer","Je pense déjà à une erreur possible","Je me compare aux autres et je doute","Je me sens à ma place, "+l.pretVerbe]
-              : ["Je me sens tendu, j'ai peur de mal démarrer","Je pense déjà à l'erreur que je pourrais refaire","Je me compare à "+l.pairs+" et je doute","Je me sens à ma place, "+l.pretVerbe],
+              : ["Je me sens tendu, j'ai peur de mal démarrer","Je pense déjà à l'erreur que je pourrais refaire","Je me compare aux "+l.pairs.replace(/^les /,'')+" et je doute","Je me sens à ma place, "+l.pretVerbe],
     tags:['portillon','rumination','confiance','neutre']},
   {id:'mental_7',axis:'mental',
     q: kid ? ("Juste avant "+l.uniteDecisive+", pendant que tu t'échauffes :") : ("Pendant l'échauffement avant "+l.uniteDecisive+" :"),
@@ -1871,8 +1880,23 @@ function buildDiagQuestions(l, tier){
     tags:['portillon','rumination','confiance','neutre']},
   {id:'mental_9',axis:'mental',q:l.lieuInconnu+" :",
     opts: kid ? ["Je me demande si je vais réussir à bien démarrer","Je pense à ce qui pourrait mal se passer","Je me sens moins à l'aise que "+l.pairsQuiConnaissent,"Je prends le temps de regarder, sans stress"]
-              : ["Je me demande si je vais réussir à bien démarrer","Je pense déjà à ce qui pourrait mal tourner","Je me sens moins à l'aise que "+l.pairsQuiConnaissent,"Je prends le temps de la découvrir, sans stress"],
+              : ["Je me demande si je vais réussir à bien démarrer","Je pense déjà à ce qui pourrait mal tourner","Je me sens moins à l'aise que "+l.pairsQuiConnaissent,"Je prends le temps de bien l'observer, sans stress"],
     tags:['portillon','rumination','confiance','neutre']},
+  {id:'mental_10',axis:'mental',
+    q: kid ? ("Quand tu es largement en train de gagner, qu'est-ce qui se passe dans ta tête ?") : ("Quand tu mènes largement, qu'est-ce qui se passe dans ta tête ?"),
+    opts: kid ? ["Je me mets à protéger, je n'ose plus rien tenter","Je pense déjà à la bêtise qui pourrait tout gâcher","J'ai peur qu'on attende la même chose la prochaine fois","Je continue exactement pareil"]
+              : ["Je passe en protection, je n'ose plus rien tenter","Je pense déjà à l'erreur qui pourrait tout renverser","J'appréhende ce qu'on attendra de moi ensuite","Je continue exactement pareil"],
+    tags:['avantage','rumination','confiance','neutre']},
+  {id:'mental_11',axis:'mental',
+    q: kid ? ("On te dit que tu es le ou la plus fort(e) avant "+l.uniteIndef+" :") : ("On te donne favori avant "+l.uniteIndef+" :"),
+    opts: kid ? ["Ça me pèse, je préférerais qu'on ne dise rien","Je me mets à penser à toutes les façons de rater","Je me dis que je ne le mérite pas vraiment","Ça ne change rien à ce que je fais"]
+              : ["Ça me pèse, je préférerais qu'on ne dise rien","Je me mets à lister toutes les façons de rater","Je me dis que je ne le mérite pas vraiment","Ça ne change rien à ce que je fais"],
+    tags:['avantage','rumination','confiance','neutre']},
+  {id:'mental_12',axis:'mental',
+    q: kid ? ("Quand c'est bientôt la fin et que tout peut encore basculer :") : ("Quand la fin approche et que tout peut encore basculer :"),
+    opts: kid ? ["Je fais tout pour ne pas perdre, plus rien pour gagner","Je repense à l'occasion que j'ai déjà manquée","Je ne me sens pas capable de tenir jusqu'au bout","Je vais chercher la suite, comme au début"]
+              : ["Je fais tout pour ne pas perdre, plus rien pour gagner","Je repense à l'occasion que j'ai déjà laissée passer","Je ne me sens pas capable de tenir jusqu'au bout","Je continue à aller chercher, comme au début"],
+    tags:['avantage','rumination','confiance','neutre']},
   // ---- SENSORIEL (1 test comportemental + 5 questions de canal dominant, majorité sur 5) ----
   {id:'sens_oeil',axis:'sensoriel',
     q: kid ? "Essaie ce petit jeu : tends les bras, fais un petit triangle avec tes mains, et regarde à travers un objet loin devant toi. Ferme l'œil gauche. Est-ce que l'objet reste dans le triangle ?" : "Fais le test : tends les bras, forme un petit triangle avec tes mains, et vise un objet lointain au centre. Ferme l'œil gauche. L'objet reste dans le triangle ?",
@@ -1897,8 +1921,8 @@ function rebuildSportContent(){
   const tier = ageTier(state.age);
   diagQuestions = buildDiagQuestions(l, tier);
   const faceAuxPairs = "face aux "+l.pairs.replace(/^les /,'');
-  mentalFaibleLabels = {portillon:"la gestion de la pression "+l.auDepart,rumination:"la gestion des erreurs passées",confiance:"la confiance en soi "+faceAuxPairs};
-  mentalFortLabels = {portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en compétition"};
+  mentalFaibleLabels = {portillon:"la gestion de la pression "+l.auDepart,rumination:"la gestion des erreurs passées",confiance:"la confiance en soi "+faceAuxPairs,avantage:"le fait de tenir l'avantage jusqu'au bout"};
+  mentalFortLabels = {portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en compétition",avantage:"la capacité à finir ce qui est engagé"};
   mentalPools = buildMentalPools(l, tier);
   mentalMissions = buildMentalMissions(l, tier);
   if(window.AxeBriques) mentalBriques = AxeBriques.table(l, tier);
@@ -1953,33 +1977,53 @@ function scoreAxis(axisState, axis){
   });
   return scores;
 }
+// nombre de fois où chaque catégorie a été proposée dans un axe. Toutes ne sont pas offertes
+// partout : « tenir l'avantage » ne se pose que sur les trois questions de fin de match, la
+// rumination sur les douze. On s'en sert pour comparer des proportions plutôt que des totaux
+// bruts, sinon une catégorie proposée 3 fois ne pourrait jamais gagner contre une proposée 12 fois.
+function tagOccasions(axis){
+  const occ={};
+  diagQuestions.filter(function(q){return q.axis===axis;}).forEach(function(q){
+    (q.tags||[]).forEach(function(t){ if(t && t!=='neutre') occ[t]=(occ[t]||0)+1; });
+  });
+  return occ;
+}
 // catégorie la plus présente, priorité à l'ordre donné en cas d'égalité ; null si rien de marquant
-function topTag(scores, order, fallback){
+function topTag(scores, order, fallback, occ){
   let best=null, bestN=0;
-  order.forEach(function(k){ const n=scores[k]||0; if(n>bestN){bestN=n;best=k;} });
+  order.forEach(function(k){
+    const d = (occ && occ[k]) ? occ[k] : 1;            /* sans occasions : totaux bruts, comportement d'origine */
+    const n = (scores[k]||0)/d;
+    if(n>bestN){bestN=n;best=k;}
+  });
   return best!==null ? best : fallback;
 }
 // catégorie la moins présente (pour le point fort), en évitant si possible la catégorie du point faible
-function lowTag(scores, order, excludeKey){
+function lowTag(scores, order, excludeKey, occ){
   const candidates = order.filter(function(k){return k!==excludeKey;});
   const pool = candidates.length ? candidates : order;
   let best=pool[0], bestN=Infinity;
-  pool.forEach(function(k){ const n=scores[k]||0; if(n<bestN){bestN=n;best=k;} });
+  pool.forEach(function(k){
+    const d = (occ && occ[k]) ? occ[k] : 1;
+    const n = (scores[k]||0)/d;
+    if(n<bestN){bestN=n;best=k;}
+  });
   return best;
 }
-const MENTAL_ORDER=['rumination','confiance','portillon'];
+const MENTAL_ORDER=['rumination','confiance','portillon','avantage'];
 
 // libellés affichés pour le point faible / le point fort de chaque catégorie (valeurs par
 // défaut BMX ; reconstruits pour le bon sport dans rebuildSportContent(), appelé dès qu'on
 // connaît le sport du client).
-let mentalFaibleLabels={portillon:"la gestion de la pression sur la gate",rumination:"la gestion des erreurs passées",confiance:"la confiance en soi face aux autres pilotes"};
-let mentalFortLabels={portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en course"};
+let mentalFaibleLabels={portillon:"la gestion de la pression sur la gate",rumination:"la gestion des erreurs passées",confiance:"la confiance en soi face aux autres pilotes",avantage:"le fait de tenir l'avantage jusqu'au bout"};
+let mentalFortLabels={portillon:"la sérénité avant le départ",rumination:"le passage à autre chose après une erreur",confiance:"la lucidité et la confiance en course",avantage:"la capacité à finir ce qui est engagé"};
 
-// analyse du point fort et du point faible mental à partir des 9 questions du diagnostic
+// analyse du point fort et du point faible mental à partir des 12 questions du diagnostic
 function analyse(){
   const mScores=scoreAxis(state.mental,'mental');
-  const mTop=topTag(mScores, MENTAL_ORDER, null);
-  const mLow=mTop ? lowTag(mScores, ['portillon','rumination','confiance'], mTop) : null;
+  const mOcc=tagOccasions('mental');
+  const mTop=topTag(mScores, MENTAL_ORDER, null, mOcc);
+  const mLow=mTop ? lowTag(mScores, ['portillon','rumination','confiance','avantage'], mTop, mOcc) : null;
   const mFaible = mTop ? mentalFaibleLabels[mTop] : 'non évalué';
   const mFort = mLow ? mentalFortLabels[mLow] : 'non évalué';
   return {mFaible,mFort};
@@ -2040,6 +2084,15 @@ function buildMentalPools(l, tier){
     {lvl:"Niveau 1 · Repérer",desc:"Après chaque séance ou "+l.jourMot+", 90 secondes pour écrire une chose ratée et une chose réussie. On coupe la boucle avant qu'elle tourne."},
     {lvl:"Niveau 2 · Exposer",desc:"Tu gardes tes 90 secondes après chaque séance ou "+l.jourMot+", et tu ajoutes une question : qu'est-ce que je ferais différemment la prochaine fois, en une phrase courte. Le but n'est plus seulement de vider, c'est de transformer ce qui reste en une consigne simple pour "+l.uniteSuivante+"."},
     {lvl:"Niveau 3 · Ancrer",desc:"Ta consigne du niveau 2 doit maintenant apparaître toute seule, dans les 10 secondes qui suivent "+l.uniteMauvaise+", avant même que tu aies eu le temps de ruminer. Continue d'écrire une fois par semaine, pour vérifier qu'elle est toujours là."},
+  ]},
+  'avantage':{title:"Finir ce qui est engagé",niveaux: kid ? [
+    {lvl:"Niveau 1 · Repérer",desc:"Après chaque "+l.unite+" où tu étais devant, tu écris une seule phrase : à quel moment tu as arrêté d'attaquer et tu t'es mis à protéger. Juste le moment, tu n'as pas besoin d'expliquer pourquoi."},
+    {lvl:"Niveau 2 · Exposer",desc:"Avant chaque "+l.unite+", tu décides à l'avance d'une chose que tu feras quand tu seras devant. Une vraie action, pas « rester concentré ». À l'entraînement, tu te mets exprès en situation de mener, et tu la fais."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Quand tu passes devant, ta première pensée doit être ta prochaine action, pas la fin qui approche. Dix secondes après avoir pris l'avance, tu dis dans ta tête ce que tu vas faire maintenant."},
+  ] : [
+    {lvl:"Niveau 1 · Repérer",desc:"Après chaque "+l.unite+" où tu étais devant, une phrase : le moment exact où tu as basculé de jouer à protéger. On ne cherche pas la cause, on repère le basculement. Tant qu'il n'a pas de moment précis, il reste insaisissable."},
+    {lvl:"Niveau 2 · Exposer",desc:"Avant chaque "+l.unite+", tu écris la seule action offensive que tu feras une fois devant. Une action, pas une intention : « continuer à aller chercher » est une action, « rester concentré » n'en est pas une. Puis tu la répètes à l'entraînement, dans les situations où tu mènes déjà."},
+    {lvl:"Niveau 3 · Ancrer",desc:"Dès que tu prends l'avantage, ta prochaine action doit te venir toute seule, dans les dix secondes, avant même d'avoir pensé à la fin. Continue à l'écrire une fois par semaine, pour vérifier qu'elle est toujours là."},
   ]},
   'confiance':{title:"Le carnet des preuves",niveaux: kid ? [
     {lvl:"Niveau 1 · Repérer",desc:"Chaque semaine, tu notes 3 moments où "+pratique+" a bien marché. Comme ça, tu vois par toi-même que tu progresses, pas juste dans ta tête."},
@@ -2556,11 +2609,11 @@ function cleBlocageDuBilan(){
   return (cle && mentalPools && mentalPools[cle]) ? cle : null;
 }
 function blocageKey(){
-  // priorité au dernier bilan ; à défaut, le blocage dominant des 9 questions du diagnostic
+  // priorité au dernier bilan ; à défaut, le blocage dominant des 12 questions du diagnostic
   const duBilan = cleBlocageDuBilan();
   if(duBilan) return duBilan;
   const scores = scoreAxis(state.mental,'mental');
-  return topTag(scores, MENTAL_ORDER, null) || 'portillon';
+  return topTag(scores, MENTAL_ORDER, null, tagOccasions('mental')) || 'portillon';
 }
 function pickMental(){
   // le niveau (1 à 3) est calé sur le mois en cours, pas sur un compteur en mémoire :
@@ -2969,6 +3022,9 @@ function renderTrimestre(){
 function texteBlocageMentalSemaine(){
   const key = blocageKey();
   const l = L();
+  if(key==='avantage') return "Cette semaine, avant chaque "+l.unite+", écris en une ligne la seule "
+    +"action que tu feras une fois devant. Relis-la juste après avoir pris l'avantage, pas avant : "
+    +"c'est à ce moment-là que la tête bascule de jouer à protéger.";
   if(key==='portillon') return "Ressors ton rituel des 20 secondes construit dans \""+l.bossTitre.charAt(0)+l.bossTitre.slice(1).toLowerCase()+"\", et utilise-le à chaque "+l.unite+" de la semaine, même à l'entraînement. Ne l'improvise jamais le jour J, il doit déjà être automatique.";
   if(key==='rumination') return "Prépare ta consigne de retour au calme "+l.avantCompet+", pas après "+l.uniteMauvaise+". Relis-la la veille : elle doit être prête à l'avance, pas inventée à chaud.";
   return "Relis ton carnet des preuves avant chaque journée de "+l.jourMot+". Le but : que ta dernière pensée avant de "+l.verbePratique+" soit un souvenir solide, pas un doute.";
