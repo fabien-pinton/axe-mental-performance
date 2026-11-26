@@ -17,16 +17,16 @@
    POUR PUBLIER UNE MISE À JOUR : changer le numéro de CACHE ci-dessous. Sans ça, les
    téléphones qui ont déjà la page garderont l'ancienne version pendant un bon moment.
    ===================================================================================== */
-var CACHE = 'axe-flash-v2';
+var CACHE = 'axe-flash-v3';
 
 var FICHIERS = [
   '/flash.html',
   '/flash.js',
   '/F/',
-  '/manifest.webmanifest',
-  '/axe-icone-sportif-192.png',
-  '/axe-icone-sportif-512.png',
-  '/axe-icone-sportif-512-maskable.png',
+  '/manifest-flash.webmanifest',
+  '/axe-flash-192.png',
+  '/axe-flash-512.png',
+  '/axe-flash-512-maskable.png',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 ];
 

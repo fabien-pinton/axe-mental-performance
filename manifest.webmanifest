@@ -1,18 +1,16 @@
 {
-  "name": "Protocole Flash · AXE Mental Performance",
-  "short_name": "FLASH",
-  "description": "Écris ce qui bloque, repars avec une action à faire tout de suite. Soixante secondes, sans réseau.",
+  "name": "Le protocole AXE Mental Performance®",
+  "short_name": "Sportif",
   "lang": "fr",
   "dir": "ltr",
-  "start_url": "/flash.html",
+  "start_url": "/protocole-axe.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#0A0907",
+  "theme_color": "#0A0907",
   "icons": [
     { "src": "/axe-icone-sportif-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/axe-icone-sportif-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/axe-icone-sportif-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/axe-icone-sportif-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
   ]
 }

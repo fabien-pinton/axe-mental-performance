@@ -1,0 +1,18 @@
+{
+  "name": "Protocole Flash · AXE Mental Performance",
+  "short_name": "FLASH",
+  "description": "Écris ce qui bloque, repars avec une action à faire tout de suite. Soixante secondes, sans réseau.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "/flash.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    { "src": "/axe-flash-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/axe-flash-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/axe-flash-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
