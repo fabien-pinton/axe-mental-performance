@@ -7,8 +7,13 @@
 <meta name="theme-color" content="#000000">
 <title>Protocole Flash · AXE</title>
 <link rel="apple-touch-icon" href="/axe-icone-sportif-192.png">
+<link rel="manifest" href="/manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!-- Le nom affiche sous l'icone, une fois posee sur l'ecran d'accueil.
+     iOS lit cette balise, Android lit short_name dans le manifeste. -->
+<meta name="apple-mobile-web-app-title" content="FLASH">
+<meta name="application-name" content="FLASH">
 <style>
 :root{
   --noir:#000; --carte:#15130F; --carte2:#1C1915;
@@ -279,10 +284,42 @@ function ecranFait(code){
     '<h1>C’est activé.</h1>'
   + '<p class="sous">Ton code est <b style="color:var(--or)">' + esc(code) + '</b>. '
   + 'Note-le quelque part, une fois, et oublie-le : ce téléphone s’en souvient.</p>'
-  + '<div class="perso" style="margin-top:20px">À partir de maintenant, tu scannes ta gourde '
-  + 'et tu écris ce qui bloque. Plus rien à taper, plus rien à chercher.</div>'
-  + '<button class="btn or" id="go">Voir à quoi ça ressemble</button>';
-  document.getElementById('go').onclick=ecranEcrire;
+  + '<div class="perso" style="margin-top:20px">Il reste une chose \u00E0 faire, une seule, '
+  + 'et tu ne t\u2019en occuperas plus jamais.</div>'
+  + '<button class="btn or" id="go">La derni\u00E8re \u00E9tape</button>';
+  document.getElementById('go').onclick=function(){ ecranInstaller(); };
+  pied();
+}
+
+/* ---------------------------------------------------------------- écran : l'icône
+   Le QR imprimé sur la gourde encode une adresse sans « https:// » devant. Un
+   iPhone la lit comme du texte et propose une recherche au lieu d'ouvrir la page.
+   Ça ne se corrige pas depuis ici : la décision se prend dans le téléphone, avant
+   le moindre appel au serveur. L'icône contourne le problème, et elle est de
+   toute façon plus rapide qu'un scan. */
+function posee(){
+  return (window.navigator.standalone === true) ||
+         (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+}
+function ecranInstaller(){
+  if(posee()){ ecranEcrire(); return; }
+  var ios = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+  var geste = ios
+    ? 'Touche le bouton <b>Partager</b> en bas de ton \u00E9cran, celui avec la fl\u00E8che '
+      + 'qui monte. Fais d\u00E9filer, puis touche <b>Sur l\u2019\u00E9cran d\u2019accueil</b>.'
+    : 'Touche les <b>trois points</b> en haut \u00E0 droite de ton navigateur, '
+      + 'puis <b>Ajouter \u00E0 l\u2019\u00E9cran d\u2019accueil</b>.';
+  vue.innerHTML =
+    '<h1>Pose-moi sur ton \u00E9cran d\u2019accueil.</h1>'
+  + '<p class="sous">C\u2019est comme \u00E7a que tu reviendras, le jour de la comp\u00E9tition. '
+  + 'Un appui et tu es dedans, sans appareil photo \u00E0 sortir et sans r\u00E9seau \u00E0 chercher.</p>'
+  + '<div class="perso" style="margin-top:20px">' + geste + '</div>'
+  + '<div class="perso" style="margin-top:12px">L\u2019ic\u00F4ne AXE se posera avec tes applis. '
+  + 'Ta gourde, elle, reste ton rappel\u00A0: quand tu la vois, tu sais que c\u2019est l\u00E0.</div>'
+  + '<button class="btn or" id="ok">C\u2019est fait</button>'
+  + '<button class="btn vide" id="plus">Plus tard</button>';
+  document.getElementById('ok').onclick   = ecranEcrire;
+  document.getElementById('plus').onclick = ecranEcrire;
   pied();
 }
 
@@ -524,10 +561,19 @@ function fini(p){
 
 function pied(){
   var f=(lire(FILE)||[]).length;
+  /* Tant que l'icône n'est pas posée, on le rappelle une fois en bas : c'est le
+     seul chemin de retour qui ne dépende ni du scan ni du réseau. */
+  var rappel = (profil && typeof posee === 'function' && !posee())
+    ? '<br><button type="button" onclick="ecranInstaller()" style="background:none;'
+      + 'border:none;padding:0;margin-top:6px;color:var(--or);font:inherit;'
+      + 'text-decoration:underline;cursor:pointer">Pose l\u2019ic\u00F4ne sur ton '
+      + '\u00E9cran d\u2019accueil</button>'
+    : '';
   document.getElementById('pied').innerHTML = profil
     ? esc(profil.prenom||'') + (profil.sport?' · '+esc(profil.sport):'')
       + '<br>Fabien voit quand tu scannes, pas ce que tu écris.'
       + (f ? '<br>' + f + (f>1?' scans attendent':' scan attend') + ' le réseau.' : '')
+      + rappel
     : 'Une question&nbsp;? f.pinton@outlook.fr';
 }
 
