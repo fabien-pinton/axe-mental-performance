@@ -547,22 +547,28 @@ function flMailType(prenom, code){
   const p = prenom || 'votre sportif';
   return 'Bonjour,\n\n'
    + 'Merci pour votre commande du Protocole Flash.\n\n'
-   + 'LA GOURDE\n'
-   + 'Elle part sous 21 jours maximum. Vous n\'avez rien à faire d\'ici là.\n\n'
+   + 'Vous n\'avez pas besoin d\'attendre la gourde pour commencer : le protocole\n'
+   + 's\'active dès maintenant, depuis n\'importe quel téléphone.\n\n'
    + (prenom ? 'LE CODE D\'ACTIVATION DE ' + prenom.toUpperCase() : 'LE CODE D\'ACTIVATION') + '\n'
    + '    ' + code + '\n'
-   + 'Gardez ce mail jusqu\'à la réception de la gourde.\n\n'
-   + 'À FAIRE DÈS RÉCEPTION, UNE SEULE FOIS, TRANQUILLEMENT À LA MAISON\n'
-   + '1. Scannez le QR code de la gourde avec l\'appareil photo du téléphone.\n'
-   + '2. Choisissez « J\'active ma gourde ».\n'
-   + '3. Entrez le code d\'activation ci-dessus.\n'
-   + '4. ' + p + ' choisit alors SON code personnel, celui qu\'il retiendra.\n'
-   + '5. Vérifiez le sport, l\'âge et le niveau, puis validez.\n\n'
-   + 'Comptez deux minutes. Ne le faites pas le jour d\'une compétition.\n\n'
+   + 'Il ne sert qu\'une fois. Gardez ce mail, et en cas de perte vous me répondez,\n'
+   + 'je vous le renvoie.\n\n'
+   + 'À FAIRE MAINTENANT, DEUX MINUTES, TRANQUILLEMENT\n'
+   + '1. Ouvrez https://fabien-pinton.fr/F/ sur le téléphone du sportif.\n'
+   + '2. Touchez « J\'active ma gourde » et entrez le code ci-dessus.\n'
+   + '3. ' + p + ' choisit son code personnel, celui qu\'il retiendra sans y penser.\n'
+   + '4. Vérifiez le sport, l\'âge et le niveau, puis validez.\n'
+   + '5. À la fin, posez l\'icône sur l\'écran d\'accueil quand le protocole vous le\n'
+   + '   demande. Elle s\'appelle FLASH.\n\n'
+   + 'Ne le faites pas un jour de compétition.\n\n'
    + 'ENSUITE\n'
-   + 'Il scanne la gourde quand ça bloque, et il tombe directement sur ses blocages.\n'
-   + 'Plus rien à taper : le téléphone se souvient de lui.\n'
+   + 'La gourde devient le rappel. Quand il la voit, il sait que c\'est là. Quand ça\n'
+   + 'bloque, il ouvre FLASH, il écrit ce qui se passe avec ses mots, et il repart\n'
+   + 'avec une action à faire tout de suite. Soixante secondes, et ça marche sans\n'
+   + 'réseau, au bord d\'une piste comme dans un gymnase.\n\n'
    + 'Son code personnel ne sert que s\'il change de téléphone.\n\n'
+   + 'Ce qu\'il écrit reste sur son téléphone. Je vois seulement qu\'il a scanné et\n'
+   + 'sur quoi ça portait, jamais ses mots.\n\n'
    + 'L\'accès est permanent. Il n\'y a rien à résilier.\n\n'
    + 'Une question, vous me répondez directement sur ce mail.\n\n'
    + 'Fabien Pinton\nAXE Mental Performance\nf.pinton@outlook.fr';
@@ -699,63 +705,66 @@ async function chargerFlash(cle){
        + 'que personne d\'autre que toi ne peut écrire avec un chiffre dessus.</div>';
   }
 
-  h += await flPhrases(cle);
+  h += await flJustesse(cle);
   zone.innerHTML = h;
 }
 
-/* ---------------------------------------------------------------- ce qu'ils écrivent
+/* ---------------------------------------------------------------- est-ce qu'il lit juste
 
-   La vingt-et-unième porte de flash.html. Quand rien dans la liste ne colle, le
-   sportif écrit sa phrase. Ces phrases valent plus que les compteurs : elles disent
-   les blocages qui manquent encore, avec les mots de ceux qui les vivent.
-   Les phrases signalées remontent en haut et ne se laissent pas rater. */
-async function flPhrases(cle){
+   Les phrases ne quittent plus le téléphone du sportif, et c'est voulu. Ce qui reste
+   suffit pour piloter : quand le protocole propose un blocage, est-ce que le sportif
+   confirme ? Un blocage souvent refusé, c'est un vocabulaire de reconnaissance qui
+   attrape les mauvaises phrases. Un fort taux de muettes, c'est un vocabulaire trop
+   pauvre. Les deux se corrigent dans flash.js, mais pas au même endroit. */
+async function flJustesse(cle){
   let r;
-  try{ r = await db.rpc('flash_phrases', { cle: cle }); }catch(e){ return ''; }
+  try{ r = await db.rpc('flash_justesse', { cle: cle }); }catch(e){ return ''; }
   const d = r && r.data;
-  if(!d || !d.ok) return '';
-  const ph = d.phrases || [];
-  if(!ph.length) return '';
+  if(!d || !d.ok || !d.ecrits) return '';
+  const li = d.lignes || [];
+  const pcM = Math.round(d.muets / d.ecrits * 100);
 
-  const nAlerte = ph.filter(p => p.alerte && !p.lu).length;
-  const nNeuf   = ph.filter(p => !p.lu).length;
+  let h = '<div class="ph-tete"><div class="fl-fam">Est-ce que le protocole lit juste&nbsp;?</div>'
+        + '<div class="ph-aide">Leurs phrases ne sortent pas de leur téléphone. Ce tableau dit '
+        + 'l\'essentiel à leur place, sans trahir personne.</div></div>';
 
-  let h = '<div class="ph-tete"><div class="fl-fam">Ce qu\'ils ont écrit eux-mêmes'
-        + (nNeuf ? ' · ' + nNeuf + ' à lire' : '') + '</div>'
-        + '<div class="ph-aide">Chaque phrase est un blocage que ta liste ne nomme pas encore. '
-        + 'Quand la même revient trois fois, c\'est un blocage à ajouter, écrit avec leurs mots.</div></div>';
+  h += '<div class="fl-chiffres">'
+     + '<div><b>' + d.ecrits + '</b><span>Phrases écrites</span></div>'
+     + '<div><b>' + d.muets + '</b><span>Rien reconnu</span></div>'
+     + '<div' + (d.refuses ? ' class="g"' : '') + '><b>' + d.refuses + '</b><span>Propositions refusées</span></div>'
+     + '<div><b>' + pcM + '%</b><span>Part de muettes</span></div></div>';
 
-  if(nAlerte){
-    h += '<div class="fl-ko" style="border-left:3px solid #A33B2E;background:#FFF6F4;'
-       + 'padding:12px 14px;color:#A33B2E;font-weight:600">'
-       + nAlerte + ' phrase' + (nAlerte > 1 ? 's' : '') + ' dépasse' + (nAlerte > 1 ? 'nt' : '')
-       + ' le cadre du sport. À lire maintenant, pas ce soir.</div>';
+  if(li.length){
+    h += '<div class="tbl-wrap"><table class="fl"><thead><tr>'
+       + '<th>Blocage proposé</th><th>Proposé</th><th>Confirmé</th><th>Refusé</th><th>Justesse</th>'
+       + '</tr></thead><tbody>';
+    li.forEach(x => {
+      const pc = x.p ? Math.round(x.o / x.p * 100) : 0;
+      h += '<tr><td style="white-space:normal;text-align:left;font-size:12.5px">'
+         + flEsc(FL_BLOCAGES[x.k] || x.k) + '</td>'
+         + '<td>' + x.p + '</td><td>' + x.o + '</td>'
+         + '<td' + (x.x ? ' style="color:#A33B2E;font-weight:700"' : '') + '>' + x.x + '</td>'
+         + '<td' + (pc < 70 ? ' style="color:#A33B2E;font-weight:700"' : '') + '>' + pc + '%</td></tr>';
+    });
+    h += '</tbody></table></div>';
   }
 
-  ph.forEach(p => {
-    const dev = p.devine ? (FL_BLOCAGES[p.devine] || p.devine) : null;
-    h += '<div class="ph' + (p.alerte ? ' alerte' : '') + (p.lu ? ' lu' : '') + '" id="ph' + p.id + '">'
-       + '<q>' + flEsc(p.texte || '') + '</q>'
-       + '<div class="meta">'
-       + '<b>' + flEsc(p.qui || '') + '</b>'
-       + (p.age ? '<span>' + p.age + ' ans</span>' : '')
-       + (p.sport ? '<span>' + flEsc(p.sport) + '</span>' : '')
-       + (p.moment ? '<span>' + flEsc(FL_MOMENTS[p.moment] || p.moment) + '</span>' : '')
-       + (p.alerte ? '<span class="ét al">à lire</span>' : '')
-       + (dev && p.devine_ok ? '<span class="ét">reconnu · ' + flEsc(dev) + '</span>' : '')
-       + (dev && p.devine_ok === false ? '<span class="ét ko">proposé · ' + flEsc(dev) + ' · refusé</span>' : '')
-       + (!dev ? '<span class="ét ko">rien reconnu</span>' : '')
-       + '<span>' + flDate(p.quand) + '</span>'
-       + '<button class="lire" onclick="flMarquerLue(' + p.id + ',' + (p.lu ? 'false' : 'true') + ')">'
-       + (p.lu ? 'à relire' : 'traitée') + '</button>'
-       + '</div></div>';
-  });
+  /* Une seule consigne à la fois, celle qui compte aujourd'hui. */
+  const pire = li.filter(x => x.p >= 3 && x.o / x.p < 0.7).sort((a, b) => b.x - a.x)[0];
+  if(pire){
+    h += '<div class="count" style="margin-top:14px;line-height:1.6"><b>'
+       + flEsc(FL_BLOCAGES[pire.k] || pire.k) + '</b> est proposé ' + pire.p + ' fois et refusé '
+       + pire.x + ' fois. Ses mots-clés attrapent des phrases qui parlent d\'autre chose. '
+       + 'C\'est celui à resserrer en premier dans MOTS, dans flash.js.</div>';
+  } else if(pcM >= 25){
+    h += '<div class="count" style="margin-top:14px;line-height:1.6">Les propositions sont justes, '
+       + 'mais <b>' + pcM + ' % des phrases ne déclenchent rien</b>. Le problème n\'est pas la précision, '
+       + 'c\'est la couverture : il manque des mots dans MOTS, pas de la finesse.</div>';
+  } else if(li.length){
+    h += '<div class="count" style="margin-top:14px;line-height:1.6">Rien à corriger pour l\'instant. '
+       + 'Le protocole propose juste, et il comprend la grande majorité de ce qu\'on lui écrit.</div>';
+  }
   return h;
-}
-
-function flMarquerLue(id, lu){
-  db.rpc('flash_phrase_lue', { cle: cleCoach, id_p: id, lu_p: lu })
-    .then(() => chargerFlash(cleCoach));
 }
 
 /* un mois terminé s'ouvre et se referme d'un clic sur sa ligne */
