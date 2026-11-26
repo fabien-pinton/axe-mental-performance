@@ -5,28 +5,37 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 <!--
-  Cette page est la porte du Protocole Flash, celle que vise le QR imprimé
-  sur la gourde.
+  LA PORTE DU PROTOCOLE FLASH, celle que vise le QR imprimé sur la gourde.
 
-  Le QR encode « FABIEN-PINTON.FR/F », sans « https:// » devant. Un iPhone
+  Le QR encode « FABIEN-PINTON.FR/F », sans « https:// » devant. Le téléphone
   lit donc du texte, pas une adresse, et propose une recherche au lieu
   d'ouvrir la page. Ça ne se corrige pas côté serveur : la décision se prend
-  dans le téléphone avant le moindre appel.
+  dans l'appareil avant le moindre appel. Ni Android ni iPhone n'y échappent.
 
-  Ce qui se corrige, c'est où atterrit cette recherche. Pour ça il faut que
-  Google connaisse cette page. D'où les deux changements par rapport à la
-  version précédente :
-    - plus de « noindex », sinon Google n'a rien à proposer et comble le vide
-      avec la publicité d'un concurrent ;
-    - plus de redirection automatique, parce qu'une page qui renvoie ailleurs
-      ne s'indexe pas. Un bouton à la place, au milieu de l'écran.
+  Ce qui se corrige, c'est tout ce qui vient après ce premier geste.
 
-  Le titre reprend exactement la chaîne scannée, pour que le résultat de
-  recherche soit reconnaissable au premier coup d'œil.
+  1. LE RACCOURCI POUR CELUI QUI A DÉJÀ SA GOURDE ACTIVÉE
+     Le protocole garde le profil du sportif dans le stockage local du
+     navigateur, sur ce même domaine. Cette page peut donc le lire. S'il est
+     là, on ne montre rien : on l'envoie directement dans son protocole, déjà
+     reconnu. Un geste de gagné sur les deux.
+
+     Googlebot, lui, n'a pas de profil en stockage. Il voit la page normale et
+     l'indexe. C'est pour ça que le renvoi est conditionnel et non automatique :
+     une page qui renvoie ailleurs pour tout le monde ne s'indexe jamais, et
+     c'est l'erreur qu'on avait avant.
+
+     Pour forcer l'affichage de la page malgré un profil présent, ajouter
+     ?rester à l'adresse.
+
+  2. L'INDEXATION
+     Plus de « noindex », plus de redirection automatique. Le titre reprend
+     exactement la chaîne scannée, pour que le résultat de recherche soit
+     reconnaissable au premier coup d'œil et sorte en tête sur cette requête.
 -->
 
 <title>fabien-pinton.fr/F · Protocole Flash · AXE Mental Performance</title>
-<meta name="description" content="Protocole Flash AXE. Scanne ta gourde, écris ce qui bloque, repars avec une action à faire tout de suite. Soixante secondes, sans réseau.">
+<meta name="description" content="fabien-pinton.fr/F, la porte du Protocole Flash AXE. Scanne ta gourde, écris ce qui bloque, repars avec une action à faire tout de suite. Soixante secondes, sans réseau.">
 <link rel="canonical" href="https://fabien-pinton.fr/F/">
 <link rel="apple-touch-icon" href="/axe-flash-192.png">
 <link rel="manifest" href="/manifest-flash.webmanifest">
@@ -37,6 +46,20 @@
 <meta property="og:title" content="Protocole Flash · AXE Mental Performance">
 <meta property="og:description" content="Scanne ta gourde, écris ce qui bloque, repars avec une action. Soixante secondes, sans réseau.">
 <meta property="og:url" content="https://fabien-pinton.fr/F/">
+
+<script>
+/* Le raccourci. Il doit s'exécuter avant le moindre affichage, sinon le
+   sportif voit la page clignoter pour rien. */
+(function(){
+  try{
+    if(/(^|[?&])rester/.test(location.search)) return;
+    var brut = localStorage.getItem('axe_flash_profil');
+    if(!brut) return;
+    var p = JSON.parse(brut);
+    if(p && p.code) location.replace('/flash.html');
+  }catch(e){ /* navigation privée, stockage bloqué : on montre la page */ }
+})();
+</script>
 
 <style>
 :root{--or:#DCA94D;--fond:#000;--encre:#F2EDE4;--pale:rgba(242,237,228,.62)}
@@ -73,7 +96,8 @@ footer{margin-top:34px;font-size:12px;color:rgba(242,237,228,.4)}
 
   <div class="note">Première fois&nbsp;? Garde ton code d’activation sous la main,
   il est dans le mail reçu avec ta commande. Tu peux activer ta gourde avant
-  même de l’avoir reçue.</div>
+  même de l’avoir reçue. À la fin, pose l’icône&nbsp;: elle s’appelle FLASH, et
+  c’est par elle que tu reviendras en un seul appui.</div>
 
   <footer>fabien-pinton.fr/F</footer>
 
