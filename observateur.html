@@ -378,7 +378,8 @@ table.fl .typ.cli{color:var(--gold)}
       <div class="fl-form2">
         <label class="plein">Comment<select id="flSource">
           <option value="achat">Achat Stripe</option>
-          <option value="cadeau">Offert</option>
+          <option value="main_propre">Vendue en main propre</option>
+          <option value="cadeau">Offerte</option>
         </select></label>
         <button class="exp" id="flGo" style="margin-top:0">Créer le code</button>
       </div>
@@ -543,12 +544,25 @@ function flCodeNeuf(){
   const t = n => Array.from({length:n}, () => A[Math.floor(Math.random()*A.length)]).join('');
   return 'AXE-' + t(4) + '-' + t(3);
 }
-function flMailType(prenom, code){
+function flMailType(prenom, code, source){
   const p = prenom || 'votre sportif';
+  /* La première phrase change selon la façon dont la gourde est partie. Écrire
+     « vous n'avez pas besoin de l'attendre » à quelqu'un qui repart avec sous le
+     bras, ça se voit tout de suite, et ça décrédibilise le reste du mail. */
+  const ouverture =
+    source === 'main_propre'
+      ? 'Merci pour votre achat du Protocole Flash.\n\n'
+      + 'Vous avez la gourde en main. Il reste deux minutes à y passer, une seule\n'
+      + 'fois, et ce sera réglé pour de bon.\n\n'
+    : source === 'cadeau'
+      ? 'Voici votre Protocole Flash.\n\n'
+      + 'Vous n\'avez pas besoin d\'attendre la gourde pour commencer : le protocole\n'
+      + 's\'active dès maintenant, depuis n\'importe quel téléphone.\n\n'
+      : 'Merci pour votre commande du Protocole Flash.\n\n'
+      + 'Vous n\'avez pas besoin d\'attendre la gourde pour commencer : le protocole\n'
+      + 's\'active dès maintenant, depuis n\'importe quel téléphone.\n\n';
   return 'Bonjour,\n\n'
-   + 'Merci pour votre commande du Protocole Flash.\n\n'
-   + 'Vous n\'avez pas besoin d\'attendre la gourde pour commencer : le protocole\n'
-   + 's\'active dès maintenant, depuis n\'importe quel téléphone.\n\n'
+   + ouverture
    + (prenom ? 'LE CODE D\'ACTIVATION DE ' + prenom.toUpperCase() : 'LE CODE D\'ACTIVATION') + '\n'
    + '    ' + code + '\n'
    + 'Il ne sert qu\'une fois. Gardez ce mail, et en cas de perte vous me répondez,\n'
@@ -561,11 +575,15 @@ function flMailType(prenom, code){
    + '5. À la fin, posez l\'icône sur l\'écran d\'accueil quand le protocole vous le\n'
    + '   demande. Elle s\'appelle FLASH.\n\n'
    + 'Ne le faites pas un jour de compétition.\n\n'
+   + 'LE JOUR J\n'
+   + 'Il entre dans son application FLASH, ou il flashe le code de sa gourde.\n'
+   + 'Dans les deux cas il tombe sur son protocole, et le téléphone le reconnaît.\n'
+   + 'L\'icône reste le chemin le plus court : un appui, même sans réseau, au bord\n'
+   + 'd\'une piste comme dans un gymnase.\n\n'
    + 'ENSUITE\n'
    + 'La gourde devient le rappel. Quand il la voit, il sait que c\'est là. Quand ça\n'
    + 'bloque, il ouvre FLASH, il écrit ce qui se passe avec ses mots, et il repart\n'
-   + 'avec une action à faire tout de suite. Soixante secondes, et ça marche sans\n'
-   + 'réseau, au bord d\'une piste comme dans un gymnase.\n\n'
+   + 'avec une action à faire tout de suite. Soixante secondes.\n\n'
    + 'Son code personnel ne sert que s\'il change de téléphone.\n\n'
    + 'Ce qu\'il écrit reste sur son téléphone. Je vois seulement qu\'il a scanné et\n'
    + 'sur quoi ça portait, jamais ses mots.\n\n'
@@ -577,6 +595,8 @@ async function flCreer(){
   const res = document.getElementById('flRes');
   const prenom = document.getElementById('flPrenom').value.trim();
   const email  = document.getElementById('flEmail').value.trim();
+  /* Lu ici et pas plus bas : le menu commande à la fois la fiche et le mail. */
+  const source = document.getElementById('flSource').value;
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
     res.innerHTML = '<div class="fl-ko">Il faut un email valide, c\'est là que part le code.</div>'; return; }
   const code = flCodeNeuf();
@@ -590,11 +610,11 @@ async function flCreer(){
       niveau_p: document.getElementById('flNiveau').value,
       club_p: document.getElementById('flClub').value.trim(),
       email_p: email,
-      source_p: document.getElementById('flSource').value });
+      source_p: source });
     if(r.error || !r.data || !r.data.ok){
       res.innerHTML = '<div class="fl-ko">Refusé par la base. Recharge la page et réessaie.</div>'; return;
     }
-    const mail = flMailType(prenom, code);
+    const mail = flMailType(prenom, code, source);
     res.innerHTML = '<div class="fl-ok"><div class="code">' + code + '</div>'
       + '<div style="font-size:12px;color:var(--dim);margin-top:2px">code d\'activation, a usage unique</div>'
       + '<div class="mail">' + flEsc(mail) + '</div>'
